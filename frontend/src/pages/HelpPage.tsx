@@ -134,9 +134,9 @@ const HelpPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="min-h-screen search-page pt-16">
-            <div className="help-conent">
-              <section className="p-6 space-y-4 w-full max-w-4xl mx-auto help-search-background">
+          <div className="help-search-background">
+            <div className="help-search-inner">
+              <section>
                 <h1>How Can We Help?</h1>
                 <HelpSearch
                   onSearch={handleSearch}
@@ -144,7 +144,9 @@ const HelpPage: React.FC = () => {
                 />
               </section>
             </div>
+          </div>
 
+          <div className="min-h-screen search-page pt-16">
             <div className="flex-1 overflow-y-auto p-6 scrollable-content">
               <div className="p-6 w-full">
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">

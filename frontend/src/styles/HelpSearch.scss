@@ -1,0 +1,76 @@
+html,
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--bg-tir);
+  color: var(--text-theme);
+  border-radius: 9999px;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s;
+
+  &:focus-within {
+    box-shadow:
+            0 0 2px #f00a50,
+            0 0 12px #f00a50;
+  }
+
+  .search-icon {
+    color: var(--text-theme);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-theme);
+    width: 100%;
+    font-size: 1rem;
+
+    &::placeholder {
+      color: color-mix(in srgb, var(--text-theme) 70%, transparent);
+    }
+  }
+}
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 0.2rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background-color: var(--bg-tir);
+  color: var(--text-theme);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.suggestion-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--accent-color);
+    color: var(--text-dark);
+  }
+}
+
+.MuiAutocomplete-option:hover {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+}
