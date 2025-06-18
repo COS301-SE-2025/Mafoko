@@ -55,6 +55,15 @@ const HelpSearch: FC<HelpSearchProps> = ({
 
   return (
     <Autocomplete
+      sx={{
+        input: {
+          color: 'var(--text-theme)',
+          backgroundColor: 'var(--text-secondary)',
+          border: 'none',
+          focus: 'none',
+          focusHighlight: 'none'
+        },
+      }}
       freeSolo
       options={options}
       inputValue={value}
@@ -68,13 +77,21 @@ const HelpSearch: FC<HelpSearchProps> = ({
       }}
       renderInput={(params) => (
         <TextField
+
           {...params}
           placeholder={placeholder}
           variant="outlined"
           fullWidth
           sx={{
-            input: {
-              color: 'var(--text-theme)',
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // or use var(--bg-tir)
+              borderRadius: '0.5rem',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none',
+            },
+            '& input': {
+              color: 'var(--bg-tri)',
             },
           }}
           onKeyDown={(e) => {
