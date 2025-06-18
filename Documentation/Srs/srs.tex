@@ -666,6 +666,145 @@ This section outlines the high-level user goals and core system interactions tha
     \item Devices with screen widths less than or equal to 768 pixels are considered mobile, and touch interaction is expected on these devices.
 \end{itemize}
 
+\subsection{User Story \#9: Dictionary Term Display}
+\textbf{ID:} US09 (Mavito Project) \\
+\textbf{Title:} Comprehensive Term Presentation \\
+\textbf{As a:} user who has found a term through search, \\
+\textbf{I want:} to view complete information about a specific term, \\
+\textbf{So that:} I can understand its full definition and translations.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Definition Display:}
+    \begin{itemize}
+        \item \textbf{Given} I have selected a term from search results,
+        \item \textbf{Then} I should see its complete definition,
+        \item \textbf{And} its assigned category with clickable link to the full glossary.
+    \end{itemize}
+
+    \item \textbf{Translation Panel:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing a term,
+        \item \textbf{Then} all available translations should be displayed in a structured table,
+        \item \textbf{With} clear language code labels (e.g., "afr", "zul").
+    \end{itemize}
+
+    \item \textbf{Missing Data Handling:}
+    \begin{itemize}
+        \item \textbf{Given} a term lacks translation for certain languages,
+        \item \textbf{Then} those fields should display "Translation not available",
+        \item \textbf{And} be visually distinct from complete entries.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Integrates with US003 search results
+    \item Preserves all existing search filters when navigating from results to term view
+\end{itemize}
+
+\subsection{User Story \#10: Glossary Category Navigation}
+\textbf{ID:} US010 (Mavito Project) \\
+\textbf{Title:} Browse Terms by Subject Area \\
+\textbf{As a:} user interested in exploring specific domains (e.g., Agriculture, Legal), \\
+\textbf{I want:} to browse all terms within a particular category, \\
+\textbf{So that:} I can discover related terminology.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Category Selection:}
+    \begin{itemize}
+        \item \textbf{Given} I access the glossary browser,
+        \item \textbf{Then} I should see all available categories,
+        \item \textbf{And} be able to sort them alphabetically or by term count.
+    \end{itemize}
+
+    \item \textbf{Term Listing:}
+    \begin{itemize}
+        \item \textbf{Given} I select a category (e.g., "Agriculture"),
+        \item \textbf{Then} I should see paginated results of all terms,
+        \item \textbf{With} options to filter by language availability.
+    \end{itemize}
+
+    \item \textbf{Cross-Referencing:}
+    \begin{itemize}
+        \item \textbf{Given} I view a term in a glossary,
+        \item \textbf{Then} I should see related terms from the same category,
+        \item \textbf{And} options to navigate to similar categories.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Categories are predefined based on dataset taxonomy
+    \item Works both online and for downloaded glossaries
+\end{itemize}
+
+\subsection{User Story \#11: Term Bank Translations}
+\textbf{ID:} US011 (Mavito Project) \\
+\textbf{Title:} Access Multilingual Translations \\
+\textbf{As a:} multilingual user, \\
+\textbf{I want:} to toggle between translations for a term, \\
+\textbf{So that:} I can understand it in my preferred language.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Translation Toggle:}
+    \begin{itemize}
+        \item \textbf{Given} I view a term,
+        \item \textbf{When} I click a language tab (e.g., "Zulu"),
+        \item \textbf{Then} I should see the translation ("Imbewu kawoyela").
+    \end{itemize}
+
+    \item \textbf{Missing Translations:}
+    \begin{itemize}
+        \item \textbf{Given} a term has no translation for a language,
+        \item \textbf{Then} display "Translation not available."
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Uses the \texttt{translations} field from the dataset.
+\end{itemize}
+
+\subsection{User Story \#12: Admin-Managed Categories}
+\textbf{ID:} US012 (Mavito Project) \\
+\textbf{Title:} Update Term Categories \\
+\textbf{As a:} admin, \\
+\textbf{I want:} to assign or edit categories for terms, \\
+\textbf{So that:} glossaries remain accurate and organised.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Edit Categories:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged in as an admin,
+        \item \textbf{And} I edit a term's category (e.g., "Agriculture" $\rightarrow$ "Farming"),
+        \item \textbf{Then} the change should reflect in all glossary views.
+    \end{itemize}
+
+    \item \textbf{Validation:}
+    \begin{itemize}
+        \item \textbf{Given} I submit an invalid category (e.g., empty string),
+        \item \textbf{Then} I should see an error message.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Requires admin authentication.
+    \item Changes are audited in a log.
+\end{itemize}
+
 \subsection{Repository Reference}
 All detailed use case specifications and diagrams are located at:  
 \newline
