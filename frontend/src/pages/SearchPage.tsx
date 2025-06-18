@@ -105,6 +105,9 @@ const SearchPage: React.FC = () => {
     } else if (item === 'analytics') {
       void navigate('/analytics');
     }
+    else if (item === 'help') {
+      void navigate('/help');
+    }
   };
 
   useEffect(() => {

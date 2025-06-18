@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import HelpSearch from '../components/ui/HelpSearch';
-import '../styles/HelpPage.scss';
+import HelpSearch from '../../components/ui/HelpSearch.tsx';
+import '../../styles/HelpPage.scss';
 import { useNavigate } from 'react-router-dom';
-import LeftPane from '../components/dashboard/LeftPane.tsx';
+import LeftPane from '../../components/dashboard/LeftPane.tsx';
 
 interface Term {
   id: string;
@@ -23,7 +23,7 @@ const HelpPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activeMenuItem, setActiveMenuItem] = useState('search');
+  const [activeMenuItem, setActiveMenuItem] = useState('help');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -39,6 +39,8 @@ const HelpPage: React.FC = () => {
       void navigate('/saved-terms');
     } else if (item === 'analytics') {
       void navigate('/analytics');
+    } else if (item === 'help') {
+      void navigate('/help');
     }
   };
 
@@ -147,6 +149,37 @@ const HelpPage: React.FC = () => {
           </div>
 
           <div className="min-h-screen search-page pt-16">
+
+            <section className="help-topics-section w-full px-4">
+              <h2 className="help-topics-heading">Common Topics</h2>
+              <div className="help-topics-grid">
+                {[
+                  { title: 'Getting Started', desc: 'Learn how to quickly get the most out of the platform.', count: 12 },
+                  { title: 'Desktop App', desc: 'Get to know the basics of using the desktop app.', count: 22 },
+                  { title: 'Dashboard', desc: 'Manage users, folders, and your account settings.', count: 6 },
+                  { title: 'Releases', desc: "Learn what's new, improved or fixed.", count: 39 },
+                  { title: 'FAQs', desc: 'Answers to common questions about the platform.', count: 12 },
+                  { title: 'How To', desc: 'Find various tips on how to do things efficiently.', count: 20 },
+                ].map((topic, index) => (
+                  <div key={index} className="help-topic-card">
+                    <h3>{topic.title}</h3>
+                    <p>{topic.desc}</p>
+                    <a href="#" className="article-link">
+                      See all {topic.count} articles →
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="help-support-cta">
+              <h3>Can’t find what you’re looking for?</h3>
+              <a href="#" className="support-link">
+                Submit a request →
+              </a>
+            </section>
+
+
             <div className="flex-1 overflow-y-auto p-6 scrollable-content">
               <div className="p-6 w-full">
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">

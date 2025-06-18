@@ -88,14 +88,6 @@ $text-dark: #ffffff;
           radial-gradient(circle at top, #ffffff 0%, transparent 60%);
   background-blend-mode: screen; // optional for smooth blending
 
-
-  /*background: radial-gradient(
-                  circle at top,
-                  #ffffff 10%,
-                  #00ceaf 25%,
-                  #ec6d93 80%,
-                  #f2d001 100%
-  );*/
   background-size: cover;
   background-position: center;
   color: #ffffff;
@@ -108,6 +100,13 @@ $text-dark: #ffffff;
   margin-right: auto;
   width: 100%;
   max-width: 64rem; // equivalent to Tailwind's max-w-4xl
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--text-theme);
+    margin-bottom: 2rem; // 👈 adds space below the heading
+  }
 }
 
 .help-main-content {
@@ -178,3 +177,92 @@ html {
   padding: 1rem;
   box-sizing: border-box;
 }
+
+.help-topic-card {
+  background-color: var(--bg-tir);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.help-topics-section {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.help-topics-heading {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--text-theme);
+  margin-bottom: 2rem;
+}
+
+.help-topics-grid {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.help-topic-card {
+  background-color: var(--bg-tir);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--text-theme);
+  }
+
+  p {
+    color: var(--text-theme);
+    opacity: 0.8;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-link {
+    color: #007aff;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.help-support-cta {
+  width:90%;
+
+  background-color: rgba(0, 0, 0, 0.05); // subtle light box (adjust if needed)
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  margin: 4rem auto 0;
+  max-width: 100%;
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-theme);
+    margin-bottom: 1rem;
+  }
+
+  .support-link {
+    color: #007aff;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+

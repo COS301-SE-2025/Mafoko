@@ -6,7 +6,7 @@ import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
 import SavedTermsPage from './pages/SavedTermsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
-import HelpPage from './pages/HelpPage';
+import HelpPage from './pages/help/HelpPage.tsx';
 import './App.css';
 
 function App() {
