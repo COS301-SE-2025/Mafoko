@@ -56,8 +56,15 @@ jobs:
 
       - name: Format check with Black
         run: black --check .
-
+  
       - name: Run tests for all services
+        env:
+          SECRET_KEY: "a-secret-key-for-testing"
+          DB_USER: "testuser"
+          DB_PASSWORD: "testpassword"
+          DB_NAME: "testdb"
+          DB_HOST: "localhost"
+          DB_PORT: "5432"
         run: |
           echo "--- Running tests for Auth Service ---"
           (cd auth-service && PYTHONPATH=. pytest)
