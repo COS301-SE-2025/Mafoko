@@ -26,8 +26,6 @@ const HelpPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('help');
 
-
-
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -80,9 +78,7 @@ const HelpPage: React.FC = () => {
     <div
       className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
-      <div
-        className={`help-page-container`}
-      >
+      <div className={`help-page-container`}>
         {/* Top bar for mobile only */}
         {isMobile ? (
           <Navbar />
