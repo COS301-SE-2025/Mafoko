@@ -10,8 +10,12 @@ import logging
 from mavito_common.core.config import settings
 from app.crud.crud_user import crud_user  # Your user CRUD operations
 from mavito_common.schemas.token import TokenPayload  # Pydantic schema for token data
-from mavito_common.schemas.user import User as UserSchema  # Pydantic schema for API response
-from mavito_common.models.user import User as UserModel  # SQLAlchemy model for DB operations
+from mavito_common.schemas.user import (
+    User as UserSchema,
+)  # Pydantic schema for API response
+from mavito_common.models.user import (
+    User as UserModel,
+)  # SQLAlchemy model for DB operations
 from mavito_common.db.session import get_db  # Your DB session dependency
 
 logger = logging.getLogger(__name__)

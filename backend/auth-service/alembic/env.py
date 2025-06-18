@@ -9,7 +9,7 @@ from alembic import context
 # --- Project Imports ---
 from mavito_common.core.config import settings
 from mavito_common.db.base_class import Base
-from app.db import base  # Ensure all models are imported and registered with Base
+from app.db import base  # noqa: F401
 
 # --- Alembic Config ---
 config = context.config
@@ -38,7 +38,7 @@ def do_run_migrations(connection):
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
-        compare_type=True  # optional: detects column type changes
+        compare_type=True,  # optional: detects column type changes
     )
 
     with context.begin_transaction():

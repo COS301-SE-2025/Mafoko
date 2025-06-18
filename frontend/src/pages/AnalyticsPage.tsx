@@ -5,6 +5,7 @@ import { FaCheckCircle, FaBookmark, FaComments, FaGlobe } from 'react-icons/fa';
 import StatCard from '../components/data/StatCard';
 import PieChart from '../components/data/PieChart';
 import Navbar from '../components/ui/Navbar';
+import { API_ENDPOINTS } from '../config';
 
 import {
   Chart as ChartJS,
@@ -146,14 +147,7 @@ const AnalyticsPage: React.FC = () => {
   const [categoryData, setCategoryData] = useState<TermData[]>([]);
 
   useEffect(() => {
-    fetch(
-      'https://7ecc-197-185-168-28.ngrok-free.app/api/v1/analytics/descriptive',
-      {
-        headers: {
-          'ngrok-skip-browser-warning': 'true', // This bypasses the warning page
-        },
-      },
-    )
+    fetch(API_ENDPOINTS.descriptiveAnalytics)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch analytics data');
         return res.json();

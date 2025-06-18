@@ -17,6 +17,7 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
 app.include_router(search.router, prefix="/api/v1/search", tags=["Search"])
 app.include_router(suggest.router, prefix="/api/v1/suggest", tags=["Suggest"])
 
+
 @app.get("/", tags=["Health Check"])
 async def read_root():
     return {"service": "Mavito Search Service", "status": "ok"}

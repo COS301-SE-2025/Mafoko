@@ -10,7 +10,7 @@ from mavito_common.core.security import create_access_token
 from mavito_common.core.config import settings
 from mavito_common.db.session import get_db
 from app.api import deps
-from mavito_common.models.user import User as UserModel
+from mavito_common.models.user import User as UserModel  # noqa: F401
 from app.crud.crud_user import crud_user
 
 router = APIRouter()

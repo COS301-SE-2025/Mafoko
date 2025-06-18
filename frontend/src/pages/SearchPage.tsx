@@ -6,6 +6,7 @@ import ToggleSwitch from '../components/ui/ToggleSwtich';
 import TermCard from '../components/ui/TermCard';
 import { Brain, Wand2 } from 'lucide-react';
 import '../styles/SearchPage.scss';
+import { API_ENDPOINTS } from '../config';
 
 /**
  * Represents a single suggestion for the search bar autocomplete.
@@ -152,7 +153,9 @@ const SearchPage: React.FC = () => {
 
   const fetchSuggestions = async (term: string): Promise<Suggestion[]> => {
     const params = new URLSearchParams({ query: term });
-    const response = await fetch(`${BACKEND_URL}/suggest?${params.toString()}`);
+    const response = await fetch(
+      `${API_ENDPOINTS.suggest}?${params.toString()}`,
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch suggestions');
@@ -161,8 +164,6 @@ const SearchPage: React.FC = () => {
     const data = (await response.json()) as Suggestion[];
     return data;
   };
-
-  const BACKEND_URL: string = 'http://localhost:8000/api/v1';
 
   /**
    * Mock fetcher for search results.
@@ -196,7 +197,9 @@ const SearchPage: React.FC = () => {
       page_size: pageSize.toString(),
     });
 
-    const response = await fetch(`${BACKEND_URL}/search?${params.toString()}`);
+    const response = await fetch(
+      `${API_ENDPOINTS.search}?${params.toString()}`,
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch search results');

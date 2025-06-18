@@ -16,6 +16,7 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
 
 app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["Analytics"])
 
+
 @app.get("/", tags=["Health Check"])
 async def read_root():
     return {"service": "Mavito Analytics Service", "status": "ok"}

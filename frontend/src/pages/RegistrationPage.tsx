@@ -5,6 +5,7 @@ import '../styles/RegistrationPage.css';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import LsImage from '/LS_image.png';
 import DfsiLogo from '/DFSI_Logo.png';
+import { API_ENDPOINTS } from '../config';
 
 // SVG for Google Logo
 const GoogleLogo = () => (
@@ -77,9 +78,6 @@ const RegistrationPage: React.FC = () => {
 
     setIsLoading(true);
 
-    const NGROK_BASE_URL = 'https://7ecc-197-185-168-28.ngrok-free.app'; // <-- REPLACE WITH YOUR NGROK URL
-    const API_ENDPOINT = `${NGROK_BASE_URL}/api/v1/auth/register`;
-
     // CORRECTED userData object creation:
     const userData = {
       first_name: firstName,
@@ -89,10 +87,10 @@ const RegistrationPage: React.FC = () => {
     };
 
     console.log('Registration attempt with:', userData);
-    console.log('Calling API endpoint:', API_ENDPOINT);
 
     try {
-      const response = await fetch(API_ENDPOINT, {
+      const response = await fetch(API_ENDPOINTS.register, {
+        // <-- Use the new endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

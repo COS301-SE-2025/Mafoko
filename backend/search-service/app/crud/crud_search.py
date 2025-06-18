@@ -15,7 +15,7 @@ import json
 import spacy
 import os
 from uuid import uuid4
-from pathlib import Path
+from pathlib import Path  # noqa: F401
 from typing import List, Optional, Dict
 from mavito_common.schemas.term import Term
 
