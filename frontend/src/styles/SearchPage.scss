@@ -27,7 +27,7 @@ search-page-container {
   box-sizing: border-box;
   background-color: transparent;
   font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* Theme Class Definitions */
@@ -70,7 +70,7 @@ search-page-container {
   }
 }
 
-.app-title{
+.app-title {
   color: var(--bg-secondary) !important;
 }
 
@@ -86,14 +86,12 @@ search-page-container {
   margin-left: 280px;
   padding: 32px;
   padding-bottom: 40px;
-
 }
 
-.left-pane{
+.left-pane {
   background-color: var(--bg-tir) !important;
   color: var(--bg-secondary) !important;
 }
-
 
 .fixed-background {
   position: fixed;

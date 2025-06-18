@@ -41,7 +41,6 @@ const SearchPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-
   const [activeMenuItem, setActiveMenuItem] = useState('search');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -166,125 +165,160 @@ const SearchPage: React.FC = () => {
   };
 
   const fetchDomains = async (): Promise<string[]> => {
-    return Promise.resolve(['Construction', 'Agriculture', 'Education', 'Business']);
+    return Promise.resolve([
+      'Construction',
+      'Agriculture',
+      'Education',
+      'Business',
+    ]);
   };
 
   return (
-    <div className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
-    <div className={`search-page-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} `}>
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-menu-overlay"
-          onClick={() => {setIsMobileMenuOpen(false)}}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') setIsMobileMenuOpen(false);
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Close menu"
+    <div
+      className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+    >
+      <div
+        className={`search-page-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} `}
+      >
+        {isMobileMenuOpen && (
+          <div
+            className="mobile-menu-overlay"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setIsMobileMenuOpen(false);
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Close menu"
+          />
+        )}
+
+        <LeftPane
+          activeItem={activeMenuItem}
+          onItemClick={handleMenuItemClick}
         />
-      )}
 
-      <LeftPane activeItem={activeMenuItem} onItemClick={handleMenuItemClick} />
-
-      <div className="search-main-content">
-        <div className="top-bar">
-          <button
-            className="hamburger-icon"
-            onClick={() => {setIsMobileMenuOpen(!isMobileMenuOpen)}}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-            type="button"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-          <button
-            onClick={() => setIsDarkMode((prev) => !prev)}
-            className="theme-toggle-btn"
-          >
-            {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-
-        </div>
-
-        <div className="min-h-screen search-page pt-16">
-          <div className="search-conent">
-            <section className="p-6 space-y-4 w-full max-w-4xl mx-auto">
-              <SearchBar onSearch={handleSearch} fetchSuggestions={fetchSuggestions} />
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="flex flex-wrap gap-4">
-                  <DropdownFilter label="Language" options={languages} selected={language} onSelect={setLanguage} />
-                  <DropdownFilter label="Domain" options={domainOptions} selected={domain} onSelect={setDomain} />
-                </div>
-                <div className="flex gap-4 flex-wrap">
-                  <ToggleSwitch
-                    label="AI Search"
-                    icon={<Brain size={16} />}
-                    checked={aiSearch}
-                    onChange={setAiSearch}
-                  />
-                  <ToggleSwitch
-                    label="Fuzzy Search"
-                    icon={<Wand2 size={16} />}
-                    checked={fuzzySearch}
-                    onChange={setFuzzySearch}
-                  />
-                </div>
-              </div>
-            </section>
+        <div className="search-main-content">
+          <div className="top-bar">
+            <button
+              className="hamburger-icon"
+              onClick={() => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+              type="button"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setIsDarkMode((prev) => !prev);
+              }}
+              className="theme-toggle-btn"
+            >
+              {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+            </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 scrollable-content">
-            <div className="p-6 w-full">
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
-                {results.map((res) => (
-                  <TermCard
-                    key={res.id}
-                    id={res.id}
-                    term={res.term}
-                    language={res.language}
-                    domain={res.domain}
-                    upvotes={res.upvotes}
-                    downvotes={res.downvotes}
-                    definition={res.definition}
-                    onView={() => {
-                      void navigate(`/term/${res.id}`);
-                    }}
-                  />
-                ))}
-                {results.length === 0 && term && (
-                  <p className="text-theme opacity-60">
-                    No results found for "{term}".
-                  </p>
-                )}
-              </div>
+          <div className="min-h-screen search-page pt-16">
+            <div className="search-conent">
+              <section className="p-6 space-y-4 w-full max-w-4xl mx-auto">
+                <SearchBar
+                  onSearch={handleSearch}
+                  fetchSuggestions={fetchSuggestions}
+                />
+                <div className="flex flex-wrap gap-4 items-center">
+                  <div className="flex flex-wrap gap-4">
+                    <DropdownFilter
+                      label="Language"
+                      options={languages}
+                      selected={language}
+                      onSelect={setLanguage}
+                    />
+                    <DropdownFilter
+                      label="Domain"
+                      options={domainOptions}
+                      selected={domain}
+                      onSelect={setDomain}
+                    />
+                  </div>
+                  <div className="flex gap-4 flex-wrap">
+                    <ToggleSwitch
+                      label="AI Search"
+                      icon={<Brain size={16} />}
+                      checked={aiSearch}
+                      onChange={setAiSearch}
+                    />
+                    <ToggleSwitch
+                      label="Fuzzy Search"
+                      icon={<Wand2 size={16} />}
+                      checked={fuzzySearch}
+                      onChange={setFuzzySearch}
+                    />
+                  </div>
+                </div>
+              </section>
             </div>
 
-            <div className="pagination-controls flex justify-center space-x-4 p-4">
-              <button
-                type="button"
-                disabled={currentPage === 1}
-                onClick={() => {setCurrentPage(currentPage - 1)}}
-                className="px-4 py-2 bg-theme rounded disabled:opacity-50"
-              >
-                Previous
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                type="button"
-                disabled={currentPage === totalPages}
-                onClick={() => {setCurrentPage(currentPage + 1)}}
-                className="px-4 py-2 bg-theme rounded disabled:opacity-50"
-              >
-                Next
-              </button>
+            <div className="flex-1 overflow-y-auto p-6 scrollable-content">
+              <div className="p-6 w-full">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
+                  {results.map((res) => (
+                    <TermCard
+                      key={res.id}
+                      id={res.id}
+                      term={res.term}
+                      language={res.language}
+                      domain={res.domain}
+                      upvotes={res.upvotes}
+                      downvotes={res.downvotes}
+                      definition={res.definition}
+                      onView={() => {
+                        void navigate(`/term/${res.id}`);
+                      }}
+                    />
+                  ))}
+                  {results.length === 0 && term && (
+                    <p className="text-theme opacity-60">
+                      No results found for "{term}".
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="pagination-controls flex justify-center space-x-4 p-4">
+                <button
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() => {
+                    setCurrentPage(currentPage - 1);
+                  }}
+                  className="px-4 py-2 bg-theme rounded disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span>
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  type="button"
+                  disabled={currentPage === totalPages}
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1);
+                  }}
+                  className="px-4 py-2 bg-theme rounded disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
