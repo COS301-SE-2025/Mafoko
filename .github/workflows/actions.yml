@@ -38,9 +38,17 @@ jobs:
 
       - name: Lint with Ruff
         run: ruff check .
-
+        
       - name: Type check with mypy
-        run: PYTHONPATH=. mypy app
+        run: |
+          echo "Running mypy on auth-service..."
+          PYTHONPATH=. mypy auth-service/app
+  
+          echo "Running mypy on search-service..."
+          PYTHONPATH=. mypy search-service/app
+  
+          echo "Running mypy on analytics-service..."
+          PYTHONPATH=. mypy analytics-service/app
 
       - name: Format check with Black
         run: black --check .
