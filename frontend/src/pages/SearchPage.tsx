@@ -6,7 +6,8 @@ import TermCard from '../components/ui/TermCard';
 import { Brain, Wand2 } from 'lucide-react';
 import '../styles/SearchPage.scss';
 import { useNavigate } from 'react-router-dom';
-import LeftPane from '../components/dashboard/LeftPane.tsx';
+import Navbar from '../components/ui/Navbar.tsx';
+import LeftNav from '../components/ui/LeftNav.tsx';
 
 interface Suggestion {
   id: string;
@@ -44,6 +45,18 @@ const SearchPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('search');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (!term) return;
@@ -91,23 +104,6 @@ const SearchPage: React.FC = () => {
     },
     [language, domain, aiSearch, fuzzySearch],
   );
-
-  const handleMenuItemClick = (item: string) => {
-    setActiveMenuItem(item);
-    if (window.innerWidth <= 768) setIsMobileMenuOpen(false);
-
-    if (item === 'dashboard') {
-      void navigate('/dashboard');
-    } else if (item === 'search') {
-      void navigate('/search');
-    } else if (item === 'saved') {
-      void navigate('/saved-terms');
-    } else if (item === 'analytics') {
-      void navigate('/analytics');
-    } else if (item === 'help') {
-      void navigate('/help');
-    }
-  };
 
   useEffect(() => {
     void fetchDomains().then(setDomainOptions);
@@ -182,25 +178,15 @@ const SearchPage: React.FC = () => {
       <div
         className={`search-page-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} `}
       >
-        {isMobileMenuOpen && (
-          <div
-            className="mobile-menu-overlay"
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') setIsMobileMenuOpen(false);
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label="Close menu"
+        {/* Top bar for mobile only */}
+        {isMobile ? (
+          <Navbar />
+        ) : (
+          <LeftNav
+            activeItem={activeMenuItem}
+            setActiveItem={setActiveMenuItem}
           />
         )}
-
-        <LeftPane
-          activeItem={activeMenuItem}
-          onItemClick={handleMenuItemClick}
-        />
 
         <div className="search-main-content">
           <div className="top-bar">

@@ -1,4 +1,5 @@
 /* Left Navigation Bar*/
+
 .left-nav {
   width: 280px;
   min-height: 100vh;
@@ -56,11 +57,11 @@
 
 .left-nav-menu-item:hover {
   background-color: #3a4050;
-  border-left-color: var(--accent-color);
+  border-left-color: #F00A50FF;
 }
 
 .left-nav-menu-item.active {
-  background-color: var(--accent-color);
+  background-color: #F00A50FF;
   border-left-color: #b10338ff;
   box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.2);
 }

@@ -30,7 +30,7 @@ const Navbar = () => {
   const [active, setActive] = useState('');
 
   const navItems = useMemo(
-    () => ['Dashboard', 'Search', 'Saved Terms', 'Analytics'],
+    () => ['Dashboard', 'Search', 'Saved Terms', 'Analytics','Help'],
     [],
   );
 

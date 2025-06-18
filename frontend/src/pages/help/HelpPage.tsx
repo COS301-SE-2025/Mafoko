@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import HelpSearch from '../../components/ui/HelpSearch.tsx';
 import '../../styles/HelpPage.scss';
 import { useNavigate } from 'react-router-dom';
-import LeftPane from '../../components/dashboard/LeftPane.tsx';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/ui/Navbar.tsx';
 import LeftNav from '../../components/ui/LeftNav.tsx';
@@ -26,8 +25,8 @@ const HelpPage: React.FC = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('help');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
+
+
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -40,23 +39,6 @@ const HelpPage: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  const handleMenuItemClick = (item: string) => {
-    setActiveMenuItem(item);
-    if (window.innerWidth <= 768) setIsMobileMenuOpen(false);
-
-    if (item === 'dashboard') {
-      void navigate('/dashboard');
-    } else if (item === 'search') {
-      void navigate('/search');
-    } else if (item === 'saved') {
-      void navigate('/saved-terms');
-    } else if (item === 'analytics') {
-      void navigate('/analytics');
-    } else if (item === 'help') {
-      void navigate('/help');
-    }
-  };
 
   useEffect(() => {
     const stored = localStorage.getItem('darkMode');
@@ -99,7 +81,7 @@ const HelpPage: React.FC = () => {
       className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       <div
-        className={`help-page-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} `}
+        className={`help-page-container`}
       >
         {/* Top bar for mobile only */}
         {isMobile ? (
@@ -137,7 +119,7 @@ const HelpPage: React.FC = () => {
                   {
                     title: 'Community Feature',
                     desc: 'Get to know the basics of using the community feature.',
-                    link: '/help/getting-started',
+                    link: '/help/community-feature',
                   },
                   {
                     title: 'Terms',
@@ -173,7 +155,7 @@ const HelpPage: React.FC = () => {
 
             <section className="help-support-cta">
               <h3>Can’t find what you’re looking for?</h3>
-              <a href="#" className="support-link">
+              <a href="mailto:veloxcapstone@gmail.com" className="support-link">
                 Submit a request →
               </a>
             </section>

@@ -9,6 +9,7 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import HelpPage from './pages/help/HelpPage.tsx';
 import GettingStarted from './pages/help/GettingStarted';
 import './App.css';
+import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
+        <Route path="/help/community-feature" element={<CommunityHelpPage />} />
       </Routes>
     </div>
   );
