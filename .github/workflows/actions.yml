@@ -54,7 +54,15 @@ jobs:
         run: black --check .
 
       - name: Run tests for all services
-        run: PYTHONPATH=.:auth-service:search-service:analytics-service pytest
+        run: |
+          echo "--- Running tests for Auth Service ---"
+          (cd auth-service && PYTHONPATH=. pytest)
+
+          echo "--- Running tests for Search Service ---"
+          (cd search-service && PYTHONPATH=. pytest)
+
+          echo "--- Running tests for Analytics Service ---"
+          (cd analytics-service && PYTHONPATH=. pytest)
 
   # Frontend Pipeline
   frontend:
