@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: mavito-common-lib
+Version: 0.1.0
+Summary: Shared common library for the Mavito microservices project.
+Author-email: Velox <Veloxcapstone@gmail.com>
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: pydantic[email]
+Requires-Dist: pydantic-settings
+Requires-Dist: python-dotenv
+Requires-Dist: sqlalchemy[asyncio]
+Requires-Dist: asyncpg
+Requires-Dist: aiosqlite
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: black; extra == "dev"

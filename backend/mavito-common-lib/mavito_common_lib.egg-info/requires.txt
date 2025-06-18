@@ -1,0 +1,12 @@
+pydantic[email]
+pydantic-settings
+python-dotenv
+sqlalchemy[asyncio]
+asyncpg
+aiosqlite
+
+[dev]
+pytest
+ruff
+mypy
+black
