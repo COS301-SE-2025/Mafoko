@@ -74,6 +74,15 @@ $text-dark: #ffffff;
   color: var(--bg-secondary) !important;
 }
 
+.help-search-background{
+  background: linear-gradient(
+                  180deg,
+                  #00ceaf 49.52%,
+                  #7be1d2 74.76%,
+                  #f5f5f5 100%
+  );
+}
+
 .help-main-content {
   flex: 1;
   overflow-y: auto;

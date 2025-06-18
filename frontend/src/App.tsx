@@ -6,6 +6,7 @@ import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
 import SavedTermsPage from './pages/SavedTermsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import HelpPage from './pages/HelpPage';
 import './App.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/home" element={<DashboardPage />} />
         <Route path="/saved-terms" element={<SavedTermsPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
       </Routes>
     </div>
