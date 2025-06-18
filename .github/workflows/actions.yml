@@ -53,8 +53,8 @@ jobs:
       - name: Format check with Black
         run: black --check .
 
-      - name: Run tests
-        run: make test || true
+      - name: Run tests for all services
+        run: PYTHONPATH=.:auth-service:search-service:analytics-service pytest
 
   # Frontend Pipeline
   frontend:
