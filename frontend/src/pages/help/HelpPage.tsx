@@ -3,6 +3,7 @@ import HelpSearch from '../../components/ui/HelpSearch.tsx';
 import '../../styles/HelpPage.scss';
 import { useNavigate } from 'react-router-dom';
 import LeftPane from '../../components/dashboard/LeftPane.tsx';
+import { Link } from 'react-router-dom';
 
 interface Term {
   id: string;
@@ -154,19 +155,19 @@ const HelpPage: React.FC = () => {
               <h2 className="help-topics-heading">Common Topics</h2>
               <div className="help-topics-grid">
                 {[
-                  { title: 'Getting Started', desc: 'Learn how to quickly get the most out of the platform.', count: 12 },
-                  { title: 'Desktop App', desc: 'Get to know the basics of using the desktop app.', count: 22 },
-                  { title: 'Dashboard', desc: 'Manage users, folders, and your account settings.', count: 6 },
-                  { title: 'Releases', desc: "Learn what's new, improved or fixed.", count: 39 },
-                  { title: 'FAQs', desc: 'Answers to common questions about the platform.', count: 12 },
-                  { title: 'How To', desc: 'Find various tips on how to do things efficiently.', count: 20 },
+                  { title: 'Getting Started', desc: 'Learn how to quickly get the most out of the platform.', link: "/help/getting-started" },
+                  { title: 'Community Feature', desc: 'Get to know the basics of using the community feature.', link: "/help/getting-started" },
+                  { title: 'Terms', desc: 'Languages, AI, and your term settings.', link: "/help/getting-started" },
+                  { title: 'Releases', desc: "Learn what's new, improved or fixed.", link: "/help/getting-started" },
+                  { title: 'FAQs', desc: 'Answers to common questions about the platform.', link: "/help/getting-started" },
+                  { title: 'How To', desc: 'Find various tips on how to do things efficiently.', link: "/help/getting-started" },
                 ].map((topic, index) => (
                   <div key={index} className="help-topic-card">
                     <h3>{topic.title}</h3>
                     <p>{topic.desc}</p>
-                    <a href="#" className="article-link">
-                      See all {topic.count} articles →
-                    </a>
+                    <Link to={topic.link} className="article-link">
+                      Article →
+                    </Link>
                   </div>
                 ))}
               </div>

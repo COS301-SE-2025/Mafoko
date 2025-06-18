@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import SavedTermsPage from './pages/SavedTermsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import HelpPage from './pages/help/HelpPage.tsx';
+import GettingStarted from './pages/help/GettingStarted';
 import './App.css';
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
+        <Route path="/help/getting-started" element={<GettingStarted />} />
+
       </Routes>
     </div>
   );
