@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import '../../styles/SearchBar.scss';
 import { Autocomplete, TextField } from '@mui/material';
 
-
-
 interface HelpSearchProps extends InputHTMLAttributes<HTMLInputElement> {
   onSearch: (query: string) => Promise<void>;
   fetchSuggestions: (query: string) => Promise<string[]>;
@@ -14,12 +12,12 @@ interface HelpSearchProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const HelpSearch: FC<HelpSearchProps> = ({
-                                         onSearch,
-                                         fetchSuggestions,
-                                         minChars = 1,
-                                         placeholder = 'Search term',
-                                         debounceMs = 300,
-                                       }) => {
+  onSearch,
+  fetchSuggestions,
+  minChars = 1,
+  placeholder = 'Search term',
+  debounceMs = 300,
+}) => {
   const [value, setValue] = useState('');
   const [options, setOptions] = useState<string[]>([]);
 
@@ -61,7 +59,7 @@ const HelpSearch: FC<HelpSearchProps> = ({
           backgroundColor: 'var(--text-secondary)',
           border: 'none',
           focus: 'none',
-          focusHighlight: 'none'
+          focusHighlight: 'none',
         },
       }}
       freeSolo
@@ -77,7 +75,6 @@ const HelpSearch: FC<HelpSearchProps> = ({
       }}
       renderInput={(params) => (
         <TextField
-
           {...params}
           placeholder={placeholder}
           variant="outlined"

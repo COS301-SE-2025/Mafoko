@@ -104,8 +104,7 @@ const SearchPage: React.FC = () => {
       void navigate('/saved-terms');
     } else if (item === 'analytics') {
       void navigate('/analytics');
-    }
-    else if (item === 'help') {
+    } else if (item === 'help') {
       void navigate('/help');
     }
   };

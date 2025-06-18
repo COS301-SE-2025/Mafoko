@@ -27,7 +27,7 @@ $text-dark: #ffffff;
   box-sizing: border-box;
   background-color: transparent;
   font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* Theme Class Definitions */
@@ -84,8 +84,6 @@ $text-dark: #ffffff;
   max-width: none;
 }
 
-
-
 .theme-toggle-btn {
   margin-right: 1rem; // ✅ space between back and mode toggle
 }
@@ -101,9 +99,6 @@ $text-dark: #ffffff;
   line-height: 1.4;
 }
 
-
-
-
 .fixed-background {
   position: absolute;
   top: 0;
@@ -112,10 +107,8 @@ $text-dark: #ffffff;
   height: 100%;
   background-color: var(--bg-first);
   z-index: 0;
-
 }
-.video-container
-{
+.video-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -201,7 +194,9 @@ $text-dark: #ffffff;
   /*flex: 1;*/
   overflow-y: auto;
 
-  h1, h2, p {
+  h1,
+  h2,
+  p {
     color: var(--text-theme);
   }
 
@@ -276,7 +271,6 @@ html {
   box-sizing: border-box;
 }
 
-
 // Mobile responsiveness
 @media (max-width: 768px) {
   .article-inner {
@@ -315,10 +309,8 @@ html {
     padding: 1rem;
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     font-size: 1.25rem;
   }
 }
-
-
-

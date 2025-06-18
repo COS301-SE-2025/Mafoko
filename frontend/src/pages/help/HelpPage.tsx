@@ -4,6 +4,8 @@ import '../../styles/HelpPage.scss';
 import { useNavigate } from 'react-router-dom';
 import LeftPane from '../../components/dashboard/LeftPane.tsx';
 import { Link } from 'react-router-dom';
+import Navbar from '../../components/ui/Navbar.tsx';
+import LeftNav from '../../components/ui/LeftNav.tsx';
 
 interface Term {
   id: string;
@@ -16,7 +18,6 @@ interface Term {
 }
 
 const HelpPage: React.FC = () => {
-
   const [term, setTerm] = useState('');
   const [results, setResults] = useState<Term[]>([]);
   const pageSize = 10;
@@ -27,6 +28,18 @@ const HelpPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('help');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleMenuItemClick = (item: string) => {
     setActiveMenuItem(item);
@@ -54,28 +67,24 @@ const HelpPage: React.FC = () => {
     localStorage.setItem('darkMode', String(isDarkMode));
   }, [isDarkMode]);
 
-  const handleSearch = useCallback(
-    async (t: string) => {
-      await Promise.resolve(); // 👈 Silences the linter
+  const handleSearch = useCallback(async (t: string) => {
+    await Promise.resolve(); // 👈 Silences the linter
 
-      setTerm(t);
-      setCurrentPage(1);
-      setResults([
-        {
-          id: '1',
-          term: 'Placeholder',
-          language: 'English',
-          domain: 'Test',
-          definition: 'This is a dummy term for testing.',
-          upvotes: 0,
-          downvotes: 0,
-        },
-      ]);
-      setTotalPages(1);
-    },
-    [],
-  );
-
+    setTerm(t);
+    setCurrentPage(1);
+    setResults([
+      {
+        id: '1',
+        term: 'Placeholder',
+        language: 'English',
+        domain: 'Test',
+        definition: 'This is a dummy term for testing.',
+        upvotes: 0,
+        downvotes: 0,
+      },
+    ]);
+    setTotalPages(1);
+  }, []);
 
   const fetchSuggestions = async (term: string): Promise<string[]> => {
     return Promise.resolve([
@@ -85,7 +94,6 @@ const HelpPage: React.FC = () => {
     ]);
   };
 
-
   return (
     <div
       className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
@@ -93,50 +101,17 @@ const HelpPage: React.FC = () => {
       <div
         className={`help-page-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} `}
       >
-        {isMobileMenuOpen && (
-          <div
-            className="mobile-menu-overlay"
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') setIsMobileMenuOpen(false);
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label="Close menu"
+        {/* Top bar for mobile only */}
+        {isMobile ? (
+          <Navbar />
+        ) : (
+          <LeftNav
+            activeItem={activeMenuItem}
+            setActiveItem={setActiveMenuItem}
           />
         )}
 
-        <LeftPane
-          activeItem={activeMenuItem}
-          onItemClick={handleMenuItemClick}
-        />
-
         <div className="help-main-content">
-          <div className="top-bar">
-            <button
-              className="hamburger-icon"
-              onClick={() => {
-                setIsMobileMenuOpen(!isMobileMenuOpen);
-              }}
-              aria-label="Toggle menu"
-              aria-expanded={isMobileMenuOpen}
-              type="button"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsDarkMode((prev) => !prev);
-              }}
-              className="theme-toggle-btn"
-            >
-              {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-            </button>
-          </div>
-
           <div className="help-search-background">
             <div className="help-search-inner">
               <section>
@@ -150,17 +125,40 @@ const HelpPage: React.FC = () => {
           </div>
 
           <div className="min-h-screen search-page pt-16">
-
             <section className="help-topics-section w-full px-4">
               <h2 className="help-topics-heading">Common Topics</h2>
               <div className="help-topics-grid">
                 {[
-                  { title: 'Getting Started', desc: 'Learn how to quickly get the most out of the platform.', link: "/help/getting-started" },
-                  { title: 'Community Feature', desc: 'Get to know the basics of using the community feature.', link: "/help/getting-started" },
-                  { title: 'Terms', desc: 'Languages, AI, and your term settings.', link: "/help/getting-started" },
-                  { title: 'Releases', desc: "Learn what's new, improved or fixed.", link: "/help/getting-started" },
-                  { title: 'FAQs', desc: 'Answers to common questions about the platform.', link: "/help/getting-started" },
-                  { title: 'How To', desc: 'Find various tips on how to do things efficiently.', link: "/help/getting-started" },
+                  {
+                    title: 'Getting Started',
+                    desc: 'Learn how to quickly get the most out of the platform.',
+                    link: '/help/getting-started',
+                  },
+                  {
+                    title: 'Community Feature',
+                    desc: 'Get to know the basics of using the community feature.',
+                    link: '/help/getting-started',
+                  },
+                  {
+                    title: 'Terms',
+                    desc: 'Languages, AI, and your term settings.',
+                    link: '/help/getting-started',
+                  },
+                  {
+                    title: 'Releases',
+                    desc: "Learn what's new, improved or fixed.",
+                    link: '/help/getting-started',
+                  },
+                  {
+                    title: 'FAQs',
+                    desc: 'Answers to common questions about the platform.',
+                    link: '/help/getting-started',
+                  },
+                  {
+                    title: 'How To',
+                    desc: 'Find various tips on how to do things efficiently.',
+                    link: '/help/getting-started',
+                  },
                 ].map((topic, index) => (
                   <div key={index} className="help-topic-card">
                     <h3>{topic.title}</h3>
@@ -179,7 +177,6 @@ const HelpPage: React.FC = () => {
                 Submit a request →
               </a>
             </section>
-
 
             <div className="flex-1 overflow-y-auto p-6 scrollable-content">
               <div className="p-6 w-full">

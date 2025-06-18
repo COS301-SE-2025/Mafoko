@@ -25,7 +25,6 @@ function App() {
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
-
       </Routes>
     </div>
   );
