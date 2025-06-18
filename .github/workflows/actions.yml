@@ -27,10 +27,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install -e ./mavito-common-lib
           pip install -r ./auth-service/requirements.txt
           pip install -r ./search-service/requirements.txt
           pip install -r ./analytics-service/requirements.txt
-          pip install -e ./mavito-common-lib
           pip install types-passlib
           pip install spacy
           pip install pytest-asyncio
