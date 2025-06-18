@@ -3,8 +3,8 @@
 import os  # noqa F401
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
-from typing import Optional, List
-from pydantic import computed_field  # Import the new decorator
+from typing import Optional, List, Any, Dict
+from pydantic import model_validator
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,6 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
 
     # --- Base Database Connection Fields ---
-    # These are loaded directly from the environment by Pydantic
     DB_USER: Optional[str] = None
     DB_PASSWORD: Optional[str] = None
     DB_NAME: Optional[str] = None
@@ -30,43 +29,52 @@ class Settings(BaseSettings):
 
     # --- Base CORS Settings ---
     BACKEND_CORS_ORIGINS: str = ""
+    BACKEND_CORS_ORIGINS_LIST: List[str] = []
 
-    # --- Computed Fields ---
-    # These fields are derived from the base settings above.
+    # Give the field a placeholder default to satisfy mypy during static analysis.
+    # The validator below will ALWAYS overwrite this at runtime.
+    SQLALCHEMY_DATABASE_URL: str = "postgresql+asyncpg://user:pass@host/db"
 
-    @property
-    @computed_field
-    def SQLALCHEMY_DATABASE_URL(self) -> str:
+    @model_validator(mode="before")
+    def process_settings(cls, data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Constructs the database URL from other settings.
-        This property is computed on-demand.
+        Builds computed fields like the database URL and CORS origins list.
         """
-        if self.DB_USER and self.DB_PASSWORD and self.DB_NAME:
-            if self.INSTANCE_CONNECTION_NAME:
-                # Cloud SQL Connection
-                return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@/{self.DB_NAME}?host=/cloudsql/{self.INSTANCE_CONNECTION_NAME}"
-            elif self.DB_HOST and self.DB_PORT:
-                # Local Docker/TCP Connection
-                return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-
-        # If no valid URL could be built, raise an error to fail fast
-        raise ValueError(
-            "Database configuration is invalid. Could not determine SQLALCHEMY_DATABASE_URL."
+        # --- Build Database URL ---
+        db_url: Optional[str] = None
+        db_user, db_password, db_name = (
+            data.get("DB_USER"),
+            data.get("DB_PASSWORD"),
+            data.get("DB_NAME"),
         )
 
-    @property
-    @computed_field
-    def BACKEND_CORS_ORIGINS_LIST(self) -> List[str]:
-        """
-        Parses the comma-separated string of CORS origins into a list.
-        """
-        if self.BACKEND_CORS_ORIGINS:
-            return [
-                origin.strip()
-                for origin in self.BACKEND_CORS_ORIGINS.split(",")
-                if origin.strip()
+        if db_user and db_password and db_name:
+            instance_connection_name = data.get("INSTANCE_CONNECTION_NAME")
+            db_host = data.get("DB_HOST")
+            db_port = data.get("DB_PORT")
+
+            if instance_connection_name:
+                db_url = f"postgresql+asyncpg://{db_user}:{db_password}@/{db_name}?host=/cloudsql/{instance_connection_name}"
+            elif db_host and db_port:
+                db_url = f"postgresql+asyncpg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+        if not db_url:
+            raise ValueError(
+                "Database configuration is invalid. Could not determine SQLALCHEMY_DATABASE_URL."
+            )
+
+        data["SQLALCHEMY_DATABASE_URL"] = db_url
+
+        # --- Parse CORS origins ---
+        raw_origins = data.get("BACKEND_CORS_ORIGINS", "")
+        if raw_origins:
+            data["BACKEND_CORS_ORIGINS_LIST"] = [
+                origin.strip() for origin in raw_origins.split(",") if origin.strip()
             ]
-        return []
+        else:
+            data["BACKEND_CORS_ORIGINS_LIST"] = []
+
+        return data
 
     model_config = SettingsConfigDict(
         case_sensitive=True, env_file=".env", env_file_encoding="utf-8", extra="ignore"
