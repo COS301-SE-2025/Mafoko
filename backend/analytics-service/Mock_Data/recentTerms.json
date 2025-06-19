@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "term": "Agroforestry",
+    "language": "Zulu",
+    "definition": "Land use management system that combines trees with crops or livestock on the same land.",
+    "lastViewed": "2 hours ago",
+    "translation": "Izolimo zamahlathi"
+  },
+  {
+    "id": "2",
+    "term": "Aquaculture",
+    "language": "Xhosa",
+    "definition": "Cultivation of aquatic organisms under controlled conditions.",
+    "lastViewed": "5 hours ago",
+    "translation": "Ukukhulisa izilwanyana zasemanzini"
+  },
+  {
+    "id": "3",
+    "term": "Biodynamic farming",
+    "language": "Sesotho",
+    "definition": "Ecological farming approach that treats farms as unified organisms.",
+    "lastViewed": "1 day ago",
+    "translation": "Temo ea tlhaho"
+  },
+  {
+    "id": "4",
+    "term": "Cover crop",
+    "language": "Northern Sotho",
+    "definition": "Crop planted to manage soil erosion, fertility, quality, and biodiversity.",
+    "lastViewed": "2 days ago",
+    "translation": "Peo ya go sireletsa"
+  }
+]

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mavito-common-lib"
+version = "0.1.0"
+authors = [
+  { name="Velox", email="Veloxcapstone@gmail.com" },
+]
+description = "Shared common library for the Mavito microservices project."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pydantic[email]",
+    "pydantic-settings",
+    "python-dotenv",
+    "sqlalchemy[asyncio]",
+    "asyncpg",
+    "aiosqlite"
+]
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+    "black",
+]

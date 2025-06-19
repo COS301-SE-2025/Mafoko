@@ -27,7 +27,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install ruff black mypy
+          pip install -e ./mavito-common-lib
+          pip install -r ./auth-service/requirements.txt
+          pip install -r ./search-service/requirements.txt
+          pip install -r ./analytics-service/requirements.txt
           pip install types-passlib
           pip install spacy
           pip install pytest-asyncio
@@ -38,15 +42,38 @@ jobs:
 
       - name: Lint with Ruff
         run: ruff check .
-
+        
       - name: Type check with mypy
-        run: PYTHONPATH=. mypy app
+        run: |
+          echo "Running mypy on auth-service..."
+          PYTHONPATH=. mypy auth-service/app
+  
+          echo "Running mypy on search-service..."
+          PYTHONPATH=. mypy search-service/app
+  
+          echo "Running mypy on analytics-service..."
+          PYTHONPATH=. mypy analytics-service/app
 
       - name: Format check with Black
         run: black --check .
+  
+      - name: Run tests for all services
+        env:
+          SECRET_KEY: "a-secret-key-for-testing"
+          DB_USER: "testuser"
+          DB_PASSWORD: "testpassword"
+          DB_NAME: "testdb"
+          DB_HOST: "localhost"
+          DB_PORT: "5432"
+        run: |
+          echo "--- Running tests for Auth Service ---"
+          (cd auth-service && PYTHONPATH=. pytest)
 
-      - name: Run tests
-        run: make test || true
+          echo "--- Running tests for Search Service ---"
+          (cd search-service && PYTHONPATH=. pytest)
+
+          echo "--- Running tests for Analytics Service ---"
+          (cd analytics-service && PYTHONPATH=. pytest)
 
   # Frontend Pipeline
   frontend:

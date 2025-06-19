@@ -6,6 +6,7 @@ import LsImage from '/LS_image.png';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import DfsiLogo from '/DFSI_Logo.png';
+import { API_ENDPOINTS } from '../config';
 
 const GoogleLogo = () => (
   <svg
@@ -52,8 +53,7 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
     setErrorMessage(null); // Reset error message on new submission
 
-    const NGROK_BASE_URL = 'https://7ecc-197-185-168-28.ngrok-free.app';
-    const API_ENDPOINT = `${NGROK_BASE_URL}/api/v1/auth/login`;
+    const API_ENDPOINT = API_ENDPOINTS.login;
 
     try {
       const response = await fetch(API_ENDPOINT, {
