@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import HelpSearch from '../../components/ui/HelpSearch.tsx';
 import '../../styles/HelpPage.scss';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/ui/Navbar.tsx';
 import LeftNav from '../../components/ui/LeftNav.tsx';
@@ -25,9 +24,10 @@ const HelpPage: React.FC = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('help');
-
+  // State to determine wether to show Side nav or top nav
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+  // Determines if the side nav or top av should be used.
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -38,17 +38,19 @@ const HelpPage: React.FC = () => {
     };
   }, []);
 
+  // Changes the theme
   useEffect(() => {
     const stored = localStorage.getItem('darkMode');
     if (stored) setIsDarkMode(stored === 'false');
   }, []);
+
 
   useEffect(() => {
     localStorage.setItem('darkMode', String(isDarkMode));
   }, [isDarkMode]);
 
   const handleSearch = useCallback(async (t: string) => {
-    await Promise.resolve(); // 👈 Silences the linter
+    await Promise.resolve();
 
     setTerm(t);
     setCurrentPage(1);
@@ -76,7 +78,7 @@ const HelpPage: React.FC = () => {
 
   return (
     <div
-      className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`help-page-fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       <div className={`help-page-container`}>
         {/* Top bar for mobile only */}
@@ -89,9 +91,9 @@ const HelpPage: React.FC = () => {
           />
         )}
 
-        <div className="help-main-content">
-          <div className="help-search-background">
-            <div className="help-search-inner">
+        <div className="help-page-main-content">
+          <div className="help-page-search-background">
+            <div className="help-page-search-inner">
               <section>
                 <h1>How Can We Help?</h1>
                 <HelpSearch
@@ -102,10 +104,10 @@ const HelpPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="min-h-screen search-page pt-16">
-            <section className="help-topics-section w-full px-4">
-              <h2 className="help-topics-heading">Common Topics</h2>
-              <div className="help-topics-grid">
+          <div className="min-h-screen help-page pt-16">
+            <section className="help-page-topics-section w-full px-4">
+              <h2 className="help-page-topics-heading">Common Topics</h2>
+              <div className="help-page-topics-grid">
                 {[
                   {
                     title: 'Getting Started',
@@ -138,10 +140,10 @@ const HelpPage: React.FC = () => {
                     link: '/help/getting-started',
                   },
                 ].map((topic, index) => (
-                  <div key={index} className="help-topic-card">
+                  <div key={index} className="help-page-topic-card">
                     <h3>{topic.title}</h3>
                     <p>{topic.desc}</p>
-                    <Link to={topic.link} className="article-link">
+                    <Link to={topic.link} className="help-page-article-link">
                       Article →
                     </Link>
                   </div>
@@ -149,7 +151,7 @@ const HelpPage: React.FC = () => {
               </div>
             </section>
 
-            <section className="help-support-cta">
+            <section className="help-page-support-cta">
               <h3>Can’t find what you’re looking for?</h3>
               <a href="mailto:veloxcapstone@gmail.com" className="support-link">
                 Submit a request →
