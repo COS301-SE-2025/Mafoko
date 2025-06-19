@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LeftPane from '../components/dashboard/LeftPane.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/DashboardPage.css';
+import { API_ENDPOINTS } from '../config';
 
 interface RecentTerm {
   id: string;
@@ -23,19 +24,14 @@ interface CommunityActivity {
   timestamp: string;
 }
 
-// This should ideally be in a shared config file or environment variable
-const NGROK_BASE_URL = 'https://7ecc-197-185-168-28.ngrok-free.app';
-
 interface UserProfileApiResponse {
-  // Based on the example: /api/v1/me response
-  id: string; // This will be our UUID
+  id: string;
   first_name: string;
   last_name: string;
   email?: string;
   // Add other fields if needed, e.g., profile_pic_url, role
 }
 interface UserData {
-  // For component state and localStorage
   uuid: string;
   firstName: string;
   lastName: string;
@@ -93,12 +89,11 @@ const DashboardPage: React.FC = () => {
 
       // If not in localStorage or parsing failed, fetch from API
       try {
-        const response = await fetch(`${NGROK_BASE_URL}/api/v1/auth/me`, {
-          // Using /api/v1/me as per your example
+        const response = await fetch(API_ENDPOINTS.getMe, {
+          // <-- Use the new endpoint
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
-            'ngrok-skip-browser-warning': 'true',
           },
         });
 

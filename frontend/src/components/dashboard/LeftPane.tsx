@@ -15,7 +15,6 @@ const LeftPane: React.FC<LeftPaneProps> = ({ activeItem, onItemClick }) => {
     { id: 'search', label: t('leftPane.search') },
     { id: 'saved', label: t('leftPane.savedTerms') },
     { id: 'analytics', label: t('leftPane.analytics') },
-    { id: 'help', label: t('Help') },
   ];
 
   return (

@@ -8,6 +8,7 @@ import '../styles/SearchPage.scss';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
+import { API_ENDPOINTS } from '../config';
 
 interface Suggestion {
   id: string;
@@ -132,7 +133,9 @@ const SearchPage: React.FC = () => {
 
   const fetchSuggestions = async (term: string): Promise<Suggestion[]> => {
     const params = new URLSearchParams({ query: term });
-    const response = await fetch(`${BACKEND_URL}/suggest?${params.toString()}`);
+    const response = await fetch(
+      `${API_ENDPOINTS.suggest}?${params.toString()}`,
+    );
     if (!response.ok) throw new Error('Failed to fetch suggestions');
     return (await response.json()) as Suggestion[];
   };
@@ -155,7 +158,9 @@ const SearchPage: React.FC = () => {
       page: page.toString(),
       page_size: pageSize.toString(),
     });
-    const response = await fetch(`${BACKEND_URL}/search?${params.toString()}`);
+    const response = await fetch(
+      `${API_ENDPOINTS.search}?${params.toString()}`,
+    );
     if (!response.ok) throw new Error('Failed to fetch search results');
     return (await response.json()) as SearchResponse;
   };
