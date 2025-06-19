@@ -18,11 +18,11 @@ const CommunityHelpPage: React.FC = () => {
   return (
     <div>
       <div
-        className={`fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+        className={`article-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       >
-        <div className="top-bar">
+        <div className="article-top-bar">
           <button
-            className="theme-toggle-btn"
+            className="article-theme-toggle-btn"
             onClick={() => {
               void navigate('/help');
             }}
@@ -30,7 +30,7 @@ const CommunityHelpPage: React.FC = () => {
             Back
           </button>
           <button
-            className="theme-toggle-btn"
+            className="article-theme-toggle-btn"
             style={{ marginRight: '1rem' }}
             onClick={() => {
               setIsDarkMode((prev) => !prev);
@@ -44,9 +44,9 @@ const CommunityHelpPage: React.FC = () => {
           className={`article-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
         >
           <section className="article-section">
-            <div className="article-inner">
-              <aside className="article-sidebar">
-                <h2 className="help-h2">On this page</h2>
+            <div className="article-section-inner">
+              <aside className="article-section-sidebar">
+                <h2 className="article-h2">On this page</h2>
                 <ul>
                   <li>
                     <a href="#intro">Community Feature</a>
@@ -60,7 +60,7 @@ const CommunityHelpPage: React.FC = () => {
                 </ul>
               </aside>
 
-              <div className="article-content scrollable-content">
+              <div className="article-content article-scrollable-content">
                 <h1 id="intro">Using Marito's Community Features</h1>
                 <div className="text-center space-y-6 leading-relaxed text-base">
                   <p>
@@ -74,7 +74,7 @@ const CommunityHelpPage: React.FC = () => {
                   </p>
                 </div>
 
-                <h2 className="help-h2" id="video">
+                <h2 className="article-h2" id="video">
                   Community in Action
                 </h2>
                 <div className="video-container">
@@ -95,7 +95,7 @@ const CommunityHelpPage: React.FC = () => {
                   </video>
                 </div>
 
-                <h2 className="help-h2" id="workflow">
+                <h2 className="article-h2" id="workflow">
                   Community Features
                 </h2>
                 <div className="text-left space-y-6 leading-relaxed text-base">

@@ -18,11 +18,11 @@ const GettingStarted: React.FC = () => {
   return (
     <div>
       <div
-        className={`fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+        className={`article-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       >
-        <div className="top-bar">
+        <div className="article-top-bar">
           <button
-            className="theme-toggle-btn"
+            className="article-theme-toggle-btn"
             onClick={() => {
               void navigate('/help');
             }}
@@ -30,7 +30,7 @@ const GettingStarted: React.FC = () => {
             Back
           </button>
           <button
-            className="theme-toggle-btn"
+            className="article-theme-toggle-btn"
             style={{ marginRight: '1rem' }}
             onClick={() => {
               setIsDarkMode((prev) => !prev);
@@ -44,9 +44,9 @@ const GettingStarted: React.FC = () => {
           className={`article-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
         >
           <section className="article-section">
-            <div className="article-inner">
-              <aside className="article-sidebar">
-                <h2 className="help-h2">On this page</h2>
+            <div className="article-section-inner">
+              <aside className="article-section-sidebar">
+                <h2 className="article-h2">On this page</h2>
                 <ul>
                   <li>
                     <a href="#intro">Getting Started</a>
@@ -60,7 +60,7 @@ const GettingStarted: React.FC = () => {
                 </ul>
               </aside>
 
-              <div className="article-content scrollable-content">
+              <div className="article-content article-scrollable-content">
                 <h1 id="intro">Getting Started with Marito</h1>
                 <div className="text-center space-y-6 leading-relaxed text-base">
                   <p>
@@ -71,7 +71,7 @@ const GettingStarted: React.FC = () => {
                     Marito offers.
                   </p>
                 </div>
-                <h2 className="help-h2" id="video">
+                <h2 className="article-h2" id="video">
                   How It Works
                 </h2>
                 <div className="video-container">
@@ -88,7 +88,7 @@ const GettingStarted: React.FC = () => {
                     Your browser does not support the video tag.
                   </video>
                 </div>
-                <h2 className="help-h2" id="workflow">
+                <h2 className="article-h2" id="workflow">
                   Typical Workflow
                 </h2>
                 <div className="text-left space-y-6 leading-relaxed text-base">
