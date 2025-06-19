@@ -139,8 +139,7 @@ const SearchPage: React.FC = () => {
     if (!response.ok) throw new Error('Failed to fetch suggestions');
     return (await response.json()) as Suggestion[];
   };
-
-  const BACKEND_URL: string = 'http://localhost:8000/api/v1';
+  
 
   const fetchSearchResults = async (
     query: string,
