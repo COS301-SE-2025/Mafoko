@@ -95,7 +95,7 @@ const FrequentlyAskedPage: React.FC = () => {
                   </video>
                 </div>
 
-                <h2 id="faq">Frequently Asked Questions</h2>
+                <h2 className="text-2xl font-semibold text-theme mb-3" id="faq">Frequently Asked Questions</h2>
                 <div>
                   <h3>Can I download multiple dictionaries at once?</h3>
                   <p>Yes. You can select and download as many dictionaries as you'd like.</p>
