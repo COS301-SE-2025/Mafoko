@@ -41,9 +41,7 @@ const SearchPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
-
   const [activeMenuItem, setActiveMenuItem] = useState('search');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -173,12 +171,9 @@ const SearchPage: React.FC = () => {
 
   return (
     <div
-      className={`fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`search-page-fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
-      <div
-        className={`search-page-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} `}
-      >
-        {/* Top bar for mobile only */}
+      <div className={`search-page-container`}>
         {isMobile ? (
           <Navbar />
         ) : (
@@ -189,29 +184,6 @@ const SearchPage: React.FC = () => {
         )}
 
         <div className="search-main-content">
-          <div className="top-bar">
-            <button
-              className="hamburger-icon"
-              onClick={() => {
-                setIsMobileMenuOpen(!isMobileMenuOpen);
-              }}
-              aria-label="Toggle menu"
-              aria-expanded={isMobileMenuOpen}
-              type="button"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsDarkMode((prev) => !prev);
-              }}
-              className="theme-toggle-btn"
-            >
-              {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-            </button>
-          </div>
-
           <div className="min-h-screen search-page pt-16">
             <div className="search-conent">
               <section className="p-6 space-y-4 w-full max-w-4xl mx-auto">
@@ -252,7 +224,7 @@ const SearchPage: React.FC = () => {
               </section>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 scrollable-content">
+            <div className="flex-1 overflow-y-auto p-6 search-scrollable-content">
               <div className="p-6 w-full">
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
                   {results.map((res) => (
