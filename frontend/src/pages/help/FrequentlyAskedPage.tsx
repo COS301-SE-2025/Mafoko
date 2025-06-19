@@ -153,7 +153,6 @@ const FrequentlyAskedPage: React.FC = () => {
                       Users can leave <strong>comments</strong>, <strong>suggest improvements</strong>, and <strong>vote</strong> on definitions. Highly upvoted terms are considered more reliable, while flagged or controversial entries are reviewed by moderators.
                     </p>
                   </section>
-
                 </div>
               </div>
             </div>
