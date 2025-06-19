@@ -7,7 +7,7 @@ import { ThumbsUp, ThumbsDown, Share2 } from 'lucide-react';
 interface TermCardProps {
   id: string;
   term: string;
-  part_of_speech: 'noun' | 'verb' | 'adjective' | 'adverb';
+  language: string;
   domain: string;
   upvotes: number;
   downvotes: number;
@@ -15,16 +15,23 @@ interface TermCardProps {
   onView?: () => void;
 }
 
-const posColorMap: Record<string, string> = {
-  noun: 'blue',
-  verb: 'yellow',
-  adjective: 'pink',
-  adverb: 'green',
+const langColorMap: Record<string, string> = {
+  Afrikaans: 'blue',
+  English: 'yellow',
+  isiNdebele: 'pink',
+  isiXhosa: 'green',
+  isiZulu: 'green',
+  Sesotho: 'yellow',
+  Setswana: 'orange',
+  siSwati: 'teal',
+  Tshivenda: 'indigo',
+  Xitsonga: 'lime',
+  Sepedi: 'cyan',
 };
 
 const TermCard: React.FC<TermCardProps> = ({
   term,
-  part_of_speech,
+  language,
   domain,
   upvotes,
   downvotes,
@@ -42,8 +49,8 @@ const TermCard: React.FC<TermCardProps> = ({
             {term.length > 40 ? `${term.slice(0, 40)}...` : term}
           </h3>
           <div className="pills">
-            <span className={`pill ${posColorMap[part_of_speech] || 'gray'}`}>
-              {part_of_speech}
+            <span className={`pill ${langColorMap[language] || 'gray'}`}>
+              {language}
             </span>
             <span className="pill gray">
               {domain.length > 11 ? `${domain.slice(0, 11)}...` : domain}

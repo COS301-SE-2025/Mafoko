@@ -3,20 +3,15 @@ import { useState, useEffect } from 'react';
 import '../../styles/SearchBar.scss';
 import { Autocomplete, TextField } from '@mui/material';
 
-interface Suggestion {
-  id: string;
-  label: string;
-}
-
-interface SearchBarProps extends InputHTMLAttributes<HTMLInputElement> {
-  onSearch: (value: string) => Promise<void>;
-  fetchSuggestions: (term: string) => Promise<Suggestion[]>;
+interface HelpSearchProps extends InputHTMLAttributes<HTMLInputElement> {
+  onSearch: (query: string) => Promise<void>;
+  fetchSuggestions: (query: string) => Promise<string[]>;
   minChars?: number;
   placeholder?: string;
   debounceMs?: number;
 }
 
-const SearchBar: FC<SearchBarProps> = ({
+const HelpSearch: FC<HelpSearchProps> = ({
   onSearch,
   fetchSuggestions,
   minChars = 1,
@@ -36,7 +31,7 @@ const SearchBar: FC<SearchBarProps> = ({
       if (value.length >= minChars) {
         fetchSuggestions(value)
           .then((results) => {
-            setOptions(results.map((s) => s.label));
+            setOptions(results.map((s) => s));
           })
           .catch((err: unknown) => {
             if (err instanceof Error) {
@@ -58,6 +53,15 @@ const SearchBar: FC<SearchBarProps> = ({
 
   return (
     <Autocomplete
+      sx={{
+        input: {
+          color: 'var(--text-theme)',
+          backgroundColor: 'var(--text-secondary)',
+          border: 'none',
+          focus: 'none',
+          focusHighlight: 'none',
+        },
+      }}
       freeSolo
       options={options}
       inputValue={value}
@@ -76,8 +80,15 @@ const SearchBar: FC<SearchBarProps> = ({
           variant="outlined"
           fullWidth
           sx={{
-            input: {
-              color: 'var(--text-theme)',
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // or use var(--bg-tir)
+              borderRadius: '0.5rem',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none',
+            },
+            '& input': {
+              color: 'var(--bg-tri)',
             },
           }}
           onKeyDown={(e) => {
@@ -91,4 +102,4 @@ const SearchBar: FC<SearchBarProps> = ({
   );
 };
 
-export default SearchBar;
+export default HelpSearch;
