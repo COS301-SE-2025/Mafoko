@@ -22,32 +22,59 @@ const HelpPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('help');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  const articles: Article[] = useMemo(() => [
-    {
-      title: 'Getting Started',
-      desc: 'Learn how to quickly get the most out of the platform.',
-      link: '/help/getting-started',
-      keywords: ['introduction', 'first steps', 'account', 'navigation','login','register']
-    },
-    {
-      title: 'Community Feature',
-      desc: 'Get to know the basics of using the community feature.',
-      link: '/help/community-feature',
-      keywords: ['comment', 'upvote', 'downvote', 'community']
-    },
-    {
-      title: 'Terms',
-      desc: 'Languages, AI, and your term settings.',
-      link: '/help/terms',
-      keywords: ['ai', 'fuzzy', 'dictionary', 'language', 'search','offline','dictionary','term','language']
-    },
-    {
-      title: 'FAQs',
-      desc: 'Answers to common questions about the platform.',
-      link: '/help/faqs',
-      keywords: ['faq', 'downloads', 'contribute', 'search', 'dictionary','offline']
-    }
-  ], []);
+  const articles: Article[] = useMemo(
+    () => [
+      {
+        title: 'Getting Started',
+        desc: 'Learn how to quickly get the most out of the platform.',
+        link: '/help/getting-started',
+        keywords: [
+          'introduction',
+          'first steps',
+          'account',
+          'navigation',
+          'login',
+          'register',
+        ],
+      },
+      {
+        title: 'Community Feature',
+        desc: 'Get to know the basics of using the community feature.',
+        link: '/help/community-feature',
+        keywords: ['comment', 'upvote', 'downvote', 'community'],
+      },
+      {
+        title: 'Terms',
+        desc: 'Languages, AI, and your term settings.',
+        link: '/help/terms',
+        keywords: [
+          'ai',
+          'fuzzy',
+          'dictionary',
+          'language',
+          'search',
+          'offline',
+          'dictionary',
+          'term',
+          'language',
+        ],
+      },
+      {
+        title: 'FAQs',
+        desc: 'Answers to common questions about the platform.',
+        link: '/help/faqs',
+        keywords: [
+          'faq',
+          'downloads',
+          'contribute',
+          'search',
+          'dictionary',
+          'offline',
+        ],
+      },
+    ],
+    [],
+  );
 
   // Determines if the side nav or top av should be used.
   useEffect(() => {
@@ -66,31 +93,32 @@ const HelpPage: React.FC = () => {
     if (stored) setIsDarkMode(stored === 'false');
   }, []);
 
-
   useEffect(() => {
     localStorage.setItem('darkMode', String(isDarkMode));
   }, [isDarkMode]);
 
-  const handleSearch = useCallback(async (t: string): Promise<void> => {
-    await Promise.resolve();
-    setTerm(t);
-    setCurrentPage(1);
-    const query = t.toLowerCase().trim();
+  const handleSearch = useCallback(
+    async (t: string): Promise<void> => {
+      await Promise.resolve();
+      setTerm(t);
+      setCurrentPage(1);
+      const query = t.toLowerCase().trim();
 
-    if (!query) {
-      setResults([]);
-      setTerm('');
-      return;
-    }
+      if (!query) {
+        setResults([]);
+        setTerm('');
+        return;
+      }
 
-    const filtered = articles.filter(
-      (article) =>
-        article.title.toLowerCase().includes(query) ||
-        article.keywords.some((k) => k.includes(query))
-    );
-    setResults(filtered);
-  }, [articles]);
-
+      const filtered = articles.filter(
+        (article) =>
+          article.title.toLowerCase().includes(query) ||
+          article.keywords.some((k) => k.includes(query)),
+      );
+      setResults(filtered);
+    },
+    [articles],
+  );
 
   const fetchSuggestions = async (term: string): Promise<string[]> => {
     await Promise.resolve();
@@ -98,8 +126,8 @@ const HelpPage: React.FC = () => {
 
     const keywordSet = new Set<string>();
 
-    articles.forEach(article => {
-      article.keywords.forEach(keyword => {
+    articles.forEach((article) => {
+      article.keywords.forEach((keyword) => {
         if (keyword.includes(query) || query.includes(keyword)) {
           keywordSet.add(keyword);
         }
@@ -110,7 +138,10 @@ const HelpPage: React.FC = () => {
     return Array.from(keywordSet).slice(0, 5);
   };
 
-  const paginatedResults = results.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedResults = results.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
   const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
 
   return (
@@ -143,24 +174,22 @@ const HelpPage: React.FC = () => {
 
           <div className="min-h-screen help-page pt-16">
             {!term && (
-            <section className="help-page-topics-section w-full px-4">
-              <h2 className="help-page-topics-heading">Common Topics</h2>
-              <div className="help-page-topics-grid">
-                {articles.map((topic, index) => (
-                  // eslint-disable-next-line react-x/no-array-index-key
-                  <div key={index} className="help-page-topic-card">
-                    <h3>{topic.title}</h3>
-                    <p>{topic.desc}</p>
-                    <Link to={topic.link} className="help-page-article-link">
-                      Article →
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-
-              )}
+              <section className="help-page-topics-section w-full px-4">
+                <h2 className="help-page-topics-heading">Common Topics</h2>
+                <div className="help-page-topics-grid">
+                  {articles.map((topic, index) => (
+                    // eslint-disable-next-line react-x/no-array-index-key
+                    <div key={index} className="help-page-topic-card">
+                      <h3>{topic.title}</h3>
+                      <p>{topic.desc}</p>
+                      <Link to={topic.link} className="help-page-article-link">
+                        Article →
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
             {term && (
               <div className="p-6 w-full">
                 {paginatedResults.length > 0 ? (
@@ -188,7 +217,9 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === 1}
-                  onClick={() => {setCurrentPage(currentPage - 1)}}
+                  onClick={() => {
+                    setCurrentPage(currentPage - 1);
+                  }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   Previous
@@ -199,7 +230,9 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === totalPages}
-                  onClick={() => {setCurrentPage(currentPage + 1)}}
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1);
+                  }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   Next

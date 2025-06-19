@@ -13,7 +13,6 @@ import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import './App.css';
 
-
 function App() {
   return (
     <div className="MavitoApp">

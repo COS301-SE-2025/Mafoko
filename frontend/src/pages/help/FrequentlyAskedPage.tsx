@@ -22,6 +22,7 @@ const FrequentlyAskedPage: React.FC = () => {
       >
         <div className="article-top-bar">
           <button
+            type="button"
             className="article-theme-toggle-btn"
             onClick={() => {
               void navigate('/help');
@@ -30,6 +31,7 @@ const FrequentlyAskedPage: React.FC = () => {
             Back
           </button>
           <button
+            type="button"
             className="article-theme-toggle-btn"
             style={{ marginRight: '1rem' }}
             onClick={() => {
@@ -49,13 +51,19 @@ const FrequentlyAskedPage: React.FC = () => {
                 <h2 className="article-h2">FAQs</h2>
                 <ul>
                   <li>
-                    <a href="#multiple-download">Can I download multiple dictionaries at once?</a>
+                    <a href="#multiple-download">
+                      Can I download multiple dictionaries at once?
+                    </a>
                   </li>
                   <li>
-                    <a href="#fuzzy-offline">Will AI or fuzzy search still work offline?</a>
+                    <a href="#fuzzy-offline">
+                      Will AI or fuzzy search still work offline?
+                    </a>
                   </li>
                   <li>
-                    <a href="#unable-to-find-domain">What if the domain I need isn’t listed?</a>
+                    <a href="#unable-to-find-domain">
+                      What if the domain I need isn’t listed?
+                    </a>
                   </li>
                   <li>
                     <a href="#moderation">Are definitions moderated?</a>
@@ -71,20 +79,27 @@ const FrequentlyAskedPage: React.FC = () => {
                       Can I download multiple dictionaries at once?
                     </h3>
                     <p className="mb-2">
-                      Yes! You can select multiple dictionaries to download based on your needs. Each downloaded dictionary includes all associated terms, making them accessible during offline searches.
+                      Yes! You can select multiple dictionaries to download
+                      based on your needs. Each downloaded dictionary includes
+                      all associated terms, making them accessible during
+                      offline searches.
                     </p>
                     <p className="mb-2">
-                      If you're low on space, you can remove previously downloaded dictionaries at any time. This gives you full control over what data is stored locally on your device.
+                      If you're low on space, you can remove previously
+                      downloaded dictionaries at any time. This gives you full
+                      control over what data is stored locally on your device.
                     </p>
                     <p>
-                      To manage your downloads and see which dictionaries are available offline, visit the{' '}
+                      To manage your downloads and see which dictionaries are
+                      available offline, visit the{' '}
                       <Link
                         to="/dictionary"
                         className="help-page-article-link font-medium"
                         style={{ color: '#f00a50' }}
                       >
                         Dictionary Page
-                      </Link>.
+                      </Link>
+                      .
                     </p>
                     <p>
                       To get more information regarding offline use, visit the{' '}
@@ -94,30 +109,37 @@ const FrequentlyAskedPage: React.FC = () => {
                         style={{ color: '#f00a50' }}
                       >
                         Offline Help Section
-                      </Link>.
+                      </Link>
+                      .
                     </p>
                   </section>
-
 
                   <section id="fuzzy-offline" className="mb-10">
                     <h3 className="text-2xl font-semibold text-theme mb-3">
                       Will AI or fuzzy search still work offline?
                     </h3>
                     <p className="mb-2">
-                      Yes! As long as the relevant dictionary has been downloaded, both AI Semantic Search and Fuzzy Search are fully supported even when you’re offline.
+                      Yes! As long as the relevant dictionary has been
+                      downloaded, both AI Semantic Search and Fuzzy Search are
+                      fully supported even when you’re offline.
                     </p>
                     <p>
-                      These features operate locally using the data bundled with each downloaded dictionary, ensuring smooth and intelligent search experiences without requiring an internet connection.
+                      These features operate locally using the data bundled with
+                      each downloaded dictionary, ensuring smooth and
+                      intelligent search experiences without requiring an
+                      internet connection.
                     </p>
                     <p>
-                      To get more information regarding fuzzy and AI semantic search use, visit the{' '}
+                      To get more information regarding fuzzy and AI semantic
+                      search use, visit the{' '}
                       <Link
                         to="/help/terms"
                         className="help-page-article-link font-medium"
                         style={{ color: '#f00a50' }}
                       >
                         Search Help Section
-                      </Link>.
+                      </Link>
+                      .
                     </p>
                   </section>
 
@@ -126,20 +148,25 @@ const FrequentlyAskedPage: React.FC = () => {
                       What if the domain I need isn’t listed?
                     </h3>
                     <p className="mb-2">
-                      If the domain you're looking for doesn’t appear in the filters, it may not yet be part of our current dataset.
+                      If the domain you're looking for doesn’t appear in the
+                      filters, it may not yet be part of our current dataset.
                     </p>
                     <p>
-                      You can help improve the platform by suggesting a new domain or submitting relevant terms using the{' '}
+                      You can help improve the platform by suggesting a new
+                      domain or submitting relevant terms using the{' '}
                       <Link
                         to="/contribute"
                         className="help-page-article-link font-medium underline"
                         style={{ color: '#f00a50' }}
                       >
                         Contribution Form
-                      </Link>.
-
+                      </Link>
+                      .
                     </p>
-                    <p>Please note that all submissions go through a review process before being published.</p>
+                    <p>
+                      Please note that all submissions go through a review
+                      process before being published.
+                    </p>
                   </section>
 
                   <section id="moderation" className="mb-10">
@@ -147,10 +174,15 @@ const FrequentlyAskedPage: React.FC = () => {
                       Are definitions moderated?
                     </h3>
                     <p className="mb-2">
-                      Yes. Marito uses a community moderation system to ensure quality and accuracy.
+                      Yes. Marito uses a community moderation system to ensure
+                      quality and accuracy.
                     </p>
                     <p>
-                      Users can leave <strong>comments</strong>, <strong>suggest improvements</strong>, and <strong>vote</strong> on definitions. Highly upvoted terms are considered more reliable, while flagged or controversial entries are reviewed by moderators.
+                      Users can leave <strong>comments</strong>,{' '}
+                      <strong>suggest improvements</strong>, and{' '}
+                      <strong>vote</strong> on definitions. Highly upvoted terms
+                      are considered more reliable, while flagged or
+                      controversial entries are reviewed by moderators.
                     </p>
                   </section>
                 </div>

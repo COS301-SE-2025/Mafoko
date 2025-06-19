@@ -46,7 +46,7 @@ $text-dark: #ffffff;
     box-sizing: border-box;
     background-color: transparent;
     font-family:
-            -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 
     .help-page-main-content {
       flex: 1;
@@ -69,11 +69,11 @@ $text-dark: #ffffff;
       justify-content: center;
 
       background:
-              radial-gradient(circle at 10% 15%, #f2d001 0%, transparent 20%),
-              radial-gradient(circle at 20% 30%, #f00a50 0%, transparent 50%),
-              radial-gradient(circle at 80% 40%, #00ceaf 0%, transparent 55%),
-              radial-gradient(circle at 80% 20%, #363b4d 0%, transparent 55%),
-              radial-gradient(circle at top, #ffffff 0%, transparent 60%);
+        radial-gradient(circle at 10% 15%, #f2d001 0%, transparent 20%),
+        radial-gradient(circle at 20% 30%, #f00a50 0%, transparent 50%),
+        radial-gradient(circle at 80% 40%, #00ceaf 0%, transparent 55%),
+        radial-gradient(circle at 80% 20%, #363b4d 0%, transparent 55%),
+        radial-gradient(circle at top, #ffffff 0%, transparent 60%);
       background-blend-mode: screen; // optional for smooth blending
 
       background-size: cover;
@@ -158,7 +158,12 @@ $text-dark: #ffffff;
     .help-page-support-cta {
       width: 90%;
 
-      background-color: rgba(0, 0, 0, 0.05); // subtle light box (adjust if needed)
+      background-color: rgba(
+        0,
+        0,
+        0,
+        0.05
+      ); // subtle light box (adjust if needed)
       padding: 3rem 2rem;
       border-radius: 1rem;
       text-align: center;
