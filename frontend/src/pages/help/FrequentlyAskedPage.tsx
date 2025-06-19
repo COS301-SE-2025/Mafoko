@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 
 const FrequentlyAskedPage: React.FC = () => {
@@ -46,117 +46,114 @@ const FrequentlyAskedPage: React.FC = () => {
           <section className="article-section">
             <div className="article-section-inner">
               <aside className="article-section-sidebar">
-                <h2 className="article-h2">On this page</h2>
+                <h2 className="article-h2">FAQs</h2>
                 <ul>
                   <li>
-                    <a href="#intro">Community Feature</a>
+                    <a href="#multiple-download">Can I download multiple dictionaries at once?</a>
                   </li>
                   <li>
-                    <a href="#video">Community in Action</a>
+                    <a href="#fuzzy-offline">Will AI or fuzzy search still work offline?</a>
                   </li>
                   <li>
-                    <a href="#workflow">Community Features</a>
+                    <a href="#unable-to-find-domain">What if the domain I need isn’t listed?</a>
+                  </li>
+                  <li>
+                    <a href="#moderation">Are definitions moderated?</a>
                   </li>
                 </ul>
               </aside>
 
               <div className="article-content article-scrollable-content">
-                <h1 id="intro">Using Marito's Community Features</h1>
-                <div className="text-center space-y-6 leading-relaxed text-base">
-                  <p>
-                    Marito isn’t just a multilingual term bank, it’s a
-                    collaborative space designed for open, community-driven
-                    contributions. Built to support South Africa’s rich
-                    linguistic diversity, Marito allows users to not only search
-                    and save terms, but also actively participate in improving
-                    and curating the glossary through discussion, feedback, and
-                    peer review.
-                  </p>
-                </div>
-
-                <h2 className="article-h2" id="video">
-                  Community in Action
-                </h2>
-                <div className="video-container">
-                  <video
-                    controls
-                    width="100%"
-                    style={{
-                      maxWidth: '800px',
-                      marginTop: '2rem',
-                      borderRadius: '0.75rem',
-                    }}
-                  >
-                    <source
-                      src="/videos/community-features.mp4"
-                      type="video/mp4"
-                    />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-
-                <h2 className="text-2xl font-semibold text-theme mb-3" id="faq">Frequently Asked Questions</h2>
-                <div>
-                  <h3>Can I download multiple dictionaries at once?</h3>
-                  <p>Yes. You can select and download as many dictionaries as you'd like.</p>
-
-                  <h3>Will AI or fuzzy search still work offline?</h3>
-                  <p>Yes, as long as the relevant dictionary is downloaded, both modes are fully supported offline.</p>
-
-                  <h3>What if the domain I need isn’t listed?</h3>
-                  <p>
-                    We're actively expanding our coverage. If you're missing a domain, you can suggest new ones or add terms using the contribution form.
-                  </p>
-
-                  <h3>Are definitions moderated?</h3>
-                  <p>
-                    Marito uses a community review system. Terms can be <strong>commented on</strong>, <strong>suggested for improvement</strong>, and <strong>voted on</strong> to ensure accuracy and quality.
-                  </p>
-                </div>
+                <div className="p-6 max-w-4xl mx-auto space-y-12 text-base leading-relaxed text-left">
+                  <h1>Frequently Asked Questions</h1>
+                  <section id="multiple-download" className="mb-10">
+                    <h3 className="text-2xl font-semibold text-theme mb-3">
+                      Can I download multiple dictionaries at once?
+                    </h3>
+                    <p className="mb-2">
+                      Yes! You can select multiple dictionaries to download based on your needs. Each downloaded dictionary includes all associated terms, making them accessible during offline searches.
+                    </p>
+                    <p className="mb-2">
+                      If you're low on space, you can remove previously downloaded dictionaries at any time. This gives you full control over what data is stored locally on your device.
+                    </p>
+                    <p>
+                      To manage your downloads and see which dictionaries are available offline, visit the{' '}
+                      <Link
+                        to="/dictionary"
+                        className="help-page-article-link font-medium"
+                        style={{ color: '#f00a50' }}
+                      >
+                        Dictionary Page
+                      </Link>.
+                    </p>
+                    <p>
+                      To get more information regarding offline use, visit the{' '}
+                      <Link
+                        to="/help/terms#offline-use"
+                        className="help-page-article-link font-medium"
+                        style={{ color: '#f00a50' }}
+                      >
+                        Offline Help Section
+                      </Link>.
+                    </p>
+                  </section>
 
 
+                  <section id="fuzzy-offline" className="mb-10">
+                    <h3 className="text-2xl font-semibold text-theme mb-3">
+                      Will AI or fuzzy search still work offline?
+                    </h3>
+                    <p className="mb-2">
+                      Yes! As long as the relevant dictionary has been downloaded, both AI Semantic Search and Fuzzy Search are fully supported even when you’re offline.
+                    </p>
+                    <p>
+                      These features operate locally using the data bundled with each downloaded dictionary, ensuring smooth and intelligent search experiences without requiring an internet connection.
+                    </p>
+                    <p>
+                      To get more information regarding fuzzy and AI semantic search use, visit the{' '}
+                      <Link
+                        to="/help/terms"
+                        className="help-page-article-link font-medium"
+                        style={{ color: '#f00a50' }}
+                      >
+                        Search Help Section
+                      </Link>.
+                    </p>
+                  </section>
 
+                  <section id="unable-to-find-domain" className="mb-10">
+                    <h3 className="text-2xl font-semibold text-theme mb-3">
+                      What if the domain I need isn’t listed?
+                    </h3>
+                    <p className="mb-2">
+                      If the domain you're looking for doesn’t appear in the filters, it may not yet be part of our current dataset.
+                    </p>
+                    <p>
+                      You can help improve the platform by suggesting a new domain or submitting relevant terms using the{' '}
+                      <Link
+                        to="/contribute"
+                        className="help-page-article-link font-medium underline"
+                        style={{ color: '#f00a50' }}
+                      >
+                        Contribution Form
+                      </Link>.
 
-                <h2 className="article-h2" id="workflow">
-                  Community Features
-                </h2>
-                <div className="text-left space-y-6 leading-relaxed text-base">
-                  <p>
-                    Here’s how to get the most out of Marito’s collaborative
-                    features:
-                  </p>
-                  <ol className="list-decimal list-inside space-y-4">
-                    <li>
-                      <strong>Engage in Discussions:</strong> Every term has a
-                      comment section. Share suggestions, provide
-                      clarifications, or discuss alternative definitions with
-                      other users.
-                    </li>
+                    </p>
+                    <p>Please note that all submissions go through a review process before being published.</p>
+                  </section>
 
-                    <li>
-                      <strong>Suggest Edits:</strong> Approved users can propose
-                      changes to terms, whether it’s fixing typos, enhancing
-                      clarity, or adding better domain-specific context.
-                    </li>
+                  <section id="moderation" className="mb-10">
+                    <h3 className="text-2xl font-semibold text-theme mb-3">
+                      Are definitions moderated?
+                    </h3>
+                    <p className="mb-2">
+                      Yes. Marito uses a community moderation system to ensure quality and accuracy.
+                    </p>
+                    <p>
+                      Users can leave <strong>comments</strong>, <strong>suggest improvements</strong>, and <strong>vote</strong> on definitions. Highly upvoted terms are considered more reliable, while flagged or controversial entries are reviewed by moderators.
+                    </p>
+                  </section>
 
-                    <li>
-                      <strong>Upvote or Downvote:</strong> Rate the quality of
-                      terms or suggestions to signal accuracy and community
-                      consensus. This feedback helps build Marito's linguistic
-                      knowledge.
-                    </li>
-
-                    <li>
-                      <strong>Build Together:</strong> Collaborate with other
-                      language contributors, linguists, and researchers to
-                      improve South Africa’s linguistic data, one term at a
-                      time.
-                    </li>
-                  </ol>
-                  <p>
-                    <em>Watch the video above</em> for a real-time overview of
-                    these community tools in action.
-                  </p>
                 </div>
               </div>
             </div>

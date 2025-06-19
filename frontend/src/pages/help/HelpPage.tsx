@@ -122,23 +122,13 @@ const HelpPage: React.FC = () => {
                   {
                     title: 'Terms',
                     desc: 'Languages, AI, and your term settings.',
-                    link: '/help/getting-started',
-                  },
-                  {
-                    title: 'Releases',
-                    desc: "Learn what's new, improved or fixed.",
-                    link: '/help/getting-started',
+                    link: '/help/terms',
                   },
                   {
                     title: 'FAQs',
                     desc: 'Answers to common questions about the platform.',
-                    link: '/help/getting-started',
-                  },
-                  {
-                    title: 'How To',
-                    desc: 'Find various tips on how to do things efficiently.',
-                    link: '/help/getting-started',
-                  },
+                    link: '/help/faqs',
+                  }
                 ].map((topic, index) => (
                   <div key={index} className="help-page-topic-card">
                     <h3>{topic.title}</h3>
