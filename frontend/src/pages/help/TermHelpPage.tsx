@@ -123,17 +123,17 @@ const TermHelpPage: React.FC = () => {
                       <li><strong>Definition:</strong> Terms whose explanations contain your search keywords will also appear.</li>
                       <li><strong>Filters:</strong> If you use filters, only terms in the selected language or domain will be returned.</li>
                     </ul>
-                    <h3 className="text-lg font-medium mt-4">Live Suggestions</h3>
+                    <h3 className="text-lg font-medium mt-4 font-semibold">Live Suggestions</h3>
                     <p>As you type, Marito may suggest possible completions or closely related terms based on common queries. These suggestions speed up the process and help you discover terms even if you’re unsure of the exact wording.</p>
 
-                    <h3 className="text-lg font-medium mt-4">Search Sensitivity</h3>
+                    <h3 className="text-lg font-medium mt-4 font-semibold">Search Sensitivity</h3>
                     <p>By default, Marito performs <strong>exact or near-exact matching</strong>. However, you can expand the search behavior by enabling:</p>
                     <ul className="list-disc list-inside ml-4">
                       <li><strong>Fuzzy Search:</strong> Finds results even if there are typos or minor differences between your input and the actual term.</li>
-                      <li><strong>AI Semantic Search:</strong> Uses natural language processing to find results based on <em>meaning</em> rather than exact words — perfect when you're looking for related or conceptually similar terms.</li>
+                      <li><strong>AI Semantic Search:</strong> Uses natural language processing to find results based on <em>meaning</em> rather than exact words which is perfect when you're looking for related or conceptually similar terms.</li>
                     </ul>
 
-                    <h3 className="text-lg font-medium mt-4">Result Cards</h3>
+                    <h3 className="text-lg font-medium mt-4 font-semibold">Result Cards</h3>
                     <p>The terms are shown in cards that display the term name, language, domain, definition, and voting buttons. Each card also includes a “View” link where you can explore the term in more detail, comment on it, or suggest changes.</p>
 
                     <p>
@@ -167,31 +167,31 @@ const TermHelpPage: React.FC = () => {
                     <p>Marito provides several tools to help you find the right term quickly and efficiently:</p>
                     <div className="space-y-4">
                       <div>
-                        <h3 className="font-medium">Filter by Language</h3>
+                        <h3 className="font-medium font-semibold">Filter by Language</h3>
                         <p>Restrict your search to a specific language. This is useful when looking up terms in a single linguistic context (e.g., only isiZulu terms).</p>
                       </div>
                       <div>
-                        <h3 className="font-medium">Filter by Domain</h3>
+                        <h3 className="font-medium font-semibold">Filter by Domain</h3>
                         <p>Domains are thematic categories such as <em>Education</em>, <em>Health</em>, or <em>Technology</em>. This filter helps narrow results to a subject-specific context.</p>
                       </div>
                       <div>
-                        <h3 className="font-medium">Fuzzy Search</h3>
+                        <h3 className="font-medium font-semibold">Fuzzy Search</h3>
                         <p>If you're unsure how a term is spelled, Fuzzy Search helps by returning similar-looking matches even with typos. For example, typing "educashun" may return "education".</p>
                       </div>
                       <div>
-                        <h3 className="font-medium">AI Semantic Search</h3>
+                        <h3 className="font-medium font-semibold">AI Semantic Search</h3>
                         <p>This uses artificial intelligence to understand the <em>meaning</em> behind your query. For example, searching "learning place" may return "school" or "classroom", even if those exact words weren’t typed.</p>
                       </div>
                       <div>
-                        <h3 className="font-medium">Sort Options</h3>
+                        <h3 className="font-medium font-semibold">Sort Options</h3>
                         <ul className="list-disc list-inside ml-4">
                           <li><strong>By Popularity:</strong> Sort terms by their number of upvotes</li>
                           <li><strong>Alphabetical:</strong> Sort terms from A to Z or Z to A</li>
-
                         </ul>
                       </div>
                     </div>
-                    <p><em>📽 A video walkthrough showing how to search and download will be included here.</em></p>
+                    <br/>
+                    <p><em>A video tutorial is available below that demonstrates the full filter and sorting workflow.</em></p>
 
                     <div className="video-container">
                       <video
@@ -218,7 +218,7 @@ const TermHelpPage: React.FC = () => {
                     <p>
                       Marito is a Progressive Web App (PWA), meaning you can use its features even when you're offline. To do this, you'll need to download a dictionary first.
                     </p>
-                    <h3 className="font-medium">How to Download Dictionaries</h3>
+                    <h3 className="font-medium font-semibold">How to Download Dictionaries</h3>
                     <ol className="list-decimal list-inside ml-4 space-y-1">
                       <li>Go to the <strong>Dictionary</strong> page</li>
                       <li>Select one or more dictionaries to download (e.g. English–Health, isiZulu–Technology)</li>
@@ -227,7 +227,7 @@ const TermHelpPage: React.FC = () => {
                     <p>
                       Once downloaded, all the terms in that dictionary will be available offline, including support for fuzzy and AI search (limited to downloaded data).
                     </p>
-                    
+
                     <p><em>A video tutorial is available below that demonstrates the full offline download workflow.</em></p>
                     <div className="video-container">
                       <video
