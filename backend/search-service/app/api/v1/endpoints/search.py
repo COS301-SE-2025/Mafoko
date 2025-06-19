@@ -44,6 +44,7 @@ async def search_endpoint(
     Returns:
         Dict[str, Any]: A dictionary containing 'items' (list of terms) and 'total' (total result count).
     """
+
     results = await search_terms(query, language, domain, sort_by)
     total = len(results)
     start = (page - 1) * page_size

@@ -8,6 +8,7 @@ Validates:
 - Response structure and content integrity
 """
 
+
 from fastapi.testclient import TestClient
 from app.main import app
 

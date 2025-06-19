@@ -136,6 +136,7 @@ const SearchPage: React.FC = () => {
     const response = await fetch(
       `${API_ENDPOINTS.suggest}?${params.toString()}`,
     );
+
     if (!response.ok) throw new Error('Failed to fetch suggestions');
     return (await response.json()) as Suggestion[];
   };
@@ -157,6 +158,7 @@ const SearchPage: React.FC = () => {
       page: page.toString(),
       page_size: pageSize.toString(),
     });
+
     const response = await fetch(
       `${API_ENDPOINTS.search}?${params.toString()}`,
     );
