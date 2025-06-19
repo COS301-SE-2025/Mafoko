@@ -8,8 +8,10 @@ import SavedTermsPage from './pages/SavedTermsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import HelpPage from './pages/help/HelpPage.tsx';
 import GettingStarted from './pages/help/GettingStarted';
-import './App.css';
 import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
+import TermHelpPage from './pages/help/TermHelpPage.tsx';
+import './App.css';
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
+        <Route path="/help/terms" element={<TermHelpPage />} />
       </Routes>
     </div>
   );
