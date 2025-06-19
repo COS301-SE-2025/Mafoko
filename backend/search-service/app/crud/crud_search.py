@@ -64,7 +64,6 @@ async def load_terms() -> List[Term]:
             lang_key: uuid4() for lang_key in LANGUAGE_KEYS.keys() if item.get(lang_key)
         }
 
-
         # Build Term objects per language
         for lang_key, lang_name in LANGUAGE_KEYS.items():
             term_value = item.get(lang_key)

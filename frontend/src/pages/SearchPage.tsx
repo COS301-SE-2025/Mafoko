@@ -140,7 +140,6 @@ const SearchPage: React.FC = () => {
     if (!response.ok) throw new Error('Failed to fetch suggestions');
     return (await response.json()) as Suggestion[];
   };
-  
 
   const fetchSearchResults = async (
     query: string,
