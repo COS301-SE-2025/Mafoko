@@ -1,0 +1,131 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBLE ---
+\usepackage[margin=1in, landscape]{geometry}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+
+% Define colors and column types
+\definecolor{tablehead}{gray}{0.92}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% --- DOCUMENT START ---
+\begin{document}
+
+\begin{longtable}{L{0.14\textwidth} L{0.2\textwidth} L{0.2\textwidth} L{0.36\textwidth}}
+
+% --- TABLE CAPTION ---
+\caption{Mavito Project: Architecture Mapping from Requirements to Implementation} \\
+\toprule 
+
+% --- TABLE HEADER ---
+\rowcolor{tablehead}
+\textbf{Requirement} & \textbf{Architectural Strategies Used} & \textbf{Architectural Pattern Used} & \textbf{Our Specific Implementation (Mavito Project)} \\
+\midrule
+\endfirsthead
+
+% This header will repeat on all subsequent pages
+\caption{Mavito Project: Architecture Mapping (continued)} \\
+\toprule
+\rowcolor{tablehead}
+\textbf{Requirement} & \textbf{Architectural Strategies Used} & \textbf{Architectural Pattern Used} & \textbf{Our Specific Implementation (Mavito Project)} \\
+\midrule
+\endhead
+
+% --- TABLE CONTENT ---
+
+% Row 1: Scalability
+\textbf{Scalability} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Horizontal scale-out
+\end{itemize} &
+Micro-services &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Backend:} Services are packaged in \texttt{Docker} containers and deployed to \textbf{Google Cloud Run} for request-based auto-scaling.
+    \item \textbf{Frontend:} Hosted on \textbf{GitHub Pages}, which scales globally for static content delivery.
+\end{itemize} \\
+\midrule
+
+% Row 2: Performance
+\textbf{Performance} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Async APIs
+\end{itemize} &
+Micro-services with Asynchronous APIs &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Backend:} Built with \textbf{FastAPI} using an \texttt{async/await} model for non-blocking I/O, ensuring low-latency responses.
+    \item \textbf{Frontend:} A modern \textbf{React/Vite} build process creates optimized, static assets for fast initial load times.
+\end{itemize} \\
+\midrule
+
+% Row 3: Availability
+\textbf{Availability} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Replication
+\end{itemize} &
+Leader-Follower Replication &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Database:} \textbf{Google Cloud SQL} for PostgreSQL can be configured for High Availability (HA) to manage replication and failover automatically.
+    \item \textbf{Services:} \textbf{Google Cloud Run} is a managed service that ensures services are reliable and restarted on failure.
+\end{itemize} \\
+\midrule
+
+% Row 4: Usability & Latency
+\textbf{Usability} \& \textbf{Latency} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Real-time UI
+    \item Responsiveness
+    \item RAM-first
+\end{itemize} &
+Model-View-Controller (MVC) / Component-Based UI &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Frontend:} A \textbf{React} and \texttt{TypeScript} application follows a component-based pattern to separate UI concerns.
+    \item \textbf{Backend In-Memory Data:} The `search` and `analytics` services load data from JSON files into memory for fast lookups.
+\end{itemize} \\
+\midrule
+
+% Row 5: Security
+\textbf{Security} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item TLS \& tokens
+\end{itemize} &
+API Gateway &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Gateway Service:} \textbf{Google API Gateway} serves as the single entry point, handling TLS termination (enforcing HTTPS).
+    \item \textbf{Authentication:} \textbf{JWT tokens} are managed by the `auth-service` to secure protected API endpoints.
+    \item \textbf{Secret Management:} Secure values are managed as \textbf{GitHub Encrypted Secrets} and injected into the CI/CD pipeline.
+\end{itemize} \\
+\midrule
+
+% Row 6: Offline & Portability
+\textbf{Offline Accessibility} \& \textbf{Portability} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Service workers and caching
+\end{itemize} &
+Progressive Web App (PWA) &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Frontend:} The frontend is built as a PWA to support offline access to previously downloaded resources. 
+    \item \textbf{Backend:} The backend is containerized with \textbf{Docker}, ensuring it is portable and can run in any environment.
+\end{itemize} \\
+\midrule
+
+% Row 7: Maintainability & DevOps
+\textbf{Maintainability} \& \textbf{Deployment} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Modular design
+    \item CI/CD Automation
+\end{itemize} &
+Automated Testing \& Deployment Pipeline &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Code Quality:} \textbf{Husky pre-commit hooks} enforce \texttt{Ruff}, \texttt{Black}, and \texttt{Mypy} checks locally.
+    \item \textbf{CI/CD:} A \textbf{GitHub Actions} workflow automates testing, code quality checks, image building, and deployment for both frontend and backend.
+\end{itemize} \\
+\bottomrule
+
+\end{longtable}
+
+\end{document}
