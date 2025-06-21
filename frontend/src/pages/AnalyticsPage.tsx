@@ -288,7 +288,7 @@ const AnalyticsPage: React.FC = () => {
               <div className="chart-card pie-chart-card">
                 <div className="chart-header">
                   <h2 className="text-gray-800 text-xl font-semibold m-0">
-                    Language Distribution
+                    Unique Language Terms
                   </h2>
                 </div>
                 <div className="pie-chart-wrapper">
