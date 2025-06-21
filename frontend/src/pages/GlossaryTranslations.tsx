@@ -26,7 +26,7 @@ const GlossaryTranslations = () => {
               <th>Xhosa</th>
             </tr>
             <tr>
-              <th>Sesotho</th>
+              <th>Nothern Sotho</th>
             </tr>
             <tr>
               <th>Setswana</th>
