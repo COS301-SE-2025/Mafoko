@@ -11,13 +11,18 @@ import { API_ENDPOINTS } from '../config';
 type UserType = 'contributor' | 'linguist';
 type DocumentType = 'idDocument' | 'cv' | 'certifications' | 'researchPapers';
 
-// Define the shape of the API responses for type safety
+// --- Define interfaces for all expected API responses for type safety ---
 interface SignedUrlResponse {
   upload_url: string;
   gcs_key: string;
 }
 
-interface RegistrationErrorResponse {
+interface LoginSuccessResponse {
+  access_token: string;
+  token_type: string;
+}
+
+interface ApiErrorResponse {
   detail: string;
 }
 
@@ -73,7 +78,6 @@ const RegistrationPage: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>,
     docType: DocumentType,
   ) => {
-    // Use optional chaining for safer access
     const file = event.target.files?.[0];
     if (file) {
       setDocumentFiles((prev) => ({ ...prev, [docType]: file }));
@@ -85,39 +89,68 @@ const RegistrationPage: React.FC = () => {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError(
-        t(
-          'registrationPage.errors.passwordMismatch',
-          'Passwords do not match.',
-        ),
-      );
+      setError(t('registrationPage.errors.passwordMismatch'));
       return;
     }
     if (!agreedToTerms) {
-      setError(
-        t(
-          'registrationPage.errors.mustAgreeToTerms',
-          'You must agree to the terms and conditions.',
-        ),
-      );
+      setError(t('registrationPage.errors.mustAgreeToTerms'));
+      return;
+    }
+    if (
+      userType === 'linguist' &&
+      (!documentFiles.idDocument || !documentFiles.cv)
+    ) {
+      setError(t('registrationPage.errors.idAndCvRequired'));
       return;
     }
 
     setIsLoading(true);
-    const uploadedFileUrls: { [key in DocumentType]?: string } = {};
 
     try {
-      if (userType === 'linguist') {
-        if (!documentFiles.idDocument || !documentFiles.cv) {
-          throw new Error(
-            t(
-              'registrationPage.errors.idAndCvRequired',
-              'ID Document and CV are required for linguist applications.',
-            ),
-          );
-        }
+      const registerPayload = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+      };
 
-        // The filter already ensures that 'file' will be truthy inside the loop.
+      const registerResponse = await fetch(API_ENDPOINTS.register, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registerPayload),
+      });
+
+      if (!registerResponse.ok) {
+        // FIX: Use type assertion to eliminate 'any'
+        const errorData = (await registerResponse.json()) as ApiErrorResponse;
+        throw new Error(errorData.detail || 'Registration failed.');
+      }
+
+      const loginResponse = await fetch(API_ENDPOINTS.login, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          username: email,
+          password: password,
+        }),
+      });
+
+      if (!loginResponse.ok) {
+        const errorData = (await loginResponse.json()) as ApiErrorResponse;
+        throw new Error(
+          errorData.detail || 'Automatic login failed after registration.',
+        );
+      }
+
+      // FIX: Use type assertion to fix unsafe assignment and access
+      const loginData = (await loginResponse.json()) as LoginSuccessResponse;
+      const accessToken = loginData.access_token;
+      localStorage.setItem('accessToken', accessToken);
+
+      if (userType === 'linguist') {
+        const uploadedFileUrls: { [key: string]: string | undefined } = {};
         const filesToUpload = Object.entries(documentFiles).filter(
           (entry): entry is [DocumentType, File] => Boolean(entry[1]),
         );
@@ -125,14 +158,16 @@ const RegistrationPage: React.FC = () => {
         for (const [docType, file] of filesToUpload) {
           const signedUrlRes = await fetch(API_ENDPOINTS.generateSignedUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
             body: JSON.stringify({ content_type: file.type }),
           });
 
           if (!signedUrlRes.ok)
             throw new Error(`Could not get upload URL for ${file.name}.`);
 
-          // Add type assertion to resolve 'any' type
           const signedUrlData =
             (await signedUrlRes.json()) as SignedUrlResponse;
 
@@ -143,65 +178,42 @@ const RegistrationPage: React.FC = () => {
           });
 
           if (!uploadRes.ok) throw new Error(`Failed to upload ${file.name}.`);
-
           uploadedFileUrls[docType] = signedUrlData.gcs_key;
+        }
+
+        const applicationPayload = {
+          id_document_url: uploadedFileUrls.idDocument,
+          cv_document_url: uploadedFileUrls.cv,
+          certifications_document_url: uploadedFileUrls.certifications,
+          research_papers_document_url: uploadedFileUrls.researchPapers,
+        };
+
+        const appResponse = await fetch(API_ENDPOINTS.createApplication, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(applicationPayload),
+        });
+
+        if (!appResponse.ok) {
+          // FIX: Use type assertion here as well
+          const errorData = (await appResponse.json()) as ApiErrorResponse;
+          throw new Error(
+            errorData.detail || 'Failed to submit linguist application.',
+          );
         }
       }
 
-      const registrationPayload = {
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        password: password,
-        linguist_application:
-          userType === 'linguist'
-            ? {
-                id_document_url: uploadedFileUrls.idDocument,
-                cv_document_url: uploadedFileUrls.cv,
-                certifications_document_url: uploadedFileUrls.certifications,
-                research_papers_document_url: uploadedFileUrls.researchPapers,
-              }
-            : null,
-      };
-
-      const registerResponse = await fetch(API_ENDPOINTS.register, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registrationPayload),
-      });
-
-      if (!registerResponse.ok) {
-        // Add type assertion here as well
-        const errorData =
-          (await registerResponse.json()) as RegistrationErrorResponse;
-        throw new Error(
-          errorData.detail ||
-            t(
-              'registrationPage.errors.registrationFailed',
-              'Registration failed.',
-            ),
-        );
-      }
-
-      alert(
-        t(
-          'registrationPage.successMessage',
-          'Registration successful! If applying as a linguist, your application is now pending review.',
-        ),
-      );
-      // Use void operator to handle promises in event handlers
-      void navigate('/login');
+      alert(t('registrationPage.successMessage'));
+      // FIX: Use 'void' operator to handle floating promise
+      void navigate('/dashboard');
     } catch (err) {
-      // Use `unknown` and a type guard for safer error handling
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError(
-          t(
-            'registrationPage.errors.unexpectedError',
-            'An unexpected error occurred.',
-          ),
-        );
+        setError(t('registrationPage.errors.unexpectedError'));
       }
     } finally {
       setIsLoading(false);
@@ -212,7 +224,6 @@ const RegistrationPage: React.FC = () => {
     console.log('Attempting Google Sign Up');
   };
 
-  // Create a boolean constant to avoid redundant checks in JSX
   const isLinguist = userType === 'linguist';
 
   return (
@@ -254,6 +265,7 @@ const RegistrationPage: React.FC = () => {
             </p>
           )}
 
+          {/* FIX: Add void to onSubmit to handle promise */}
           <form
             onSubmit={(e) => void handleSubmit(e)}
             className="registration-form"

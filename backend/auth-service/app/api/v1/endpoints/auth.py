@@ -12,7 +12,6 @@ from mavito_common.db.session import get_db
 from app.api import deps
 from mavito_common.models.user import User as UserModel  # noqa: F401
 from app.crud.crud_user import crud_user
-from app.crud.crud_linguist_application import crud_linguist_application
 from mavito_common.models.user import UserRole
 
 
@@ -46,12 +45,6 @@ async def register_new_user(
 
     # Create the user record in the database
     new_user = await crud_user.create_user(db, obj_in=user_data_with_role)
-
-    # If the payload included a linguist application, create that record now
-    if user_in.linguist_application:
-        await crud_linguist_application.create_application(
-            db=db, user_id=new_user.id, obj_in=user_in.linguist_application
-        )
 
     # Return the created user object
     return new_user
