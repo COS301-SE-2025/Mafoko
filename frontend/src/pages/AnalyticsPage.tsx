@@ -19,6 +19,7 @@ import {
   Legend,
 } from 'chart.js';
 import '../styles/AnalyticsPage.css';
+
 ChartJS.register(
   LineElement,
   CategoryScale,
@@ -259,12 +260,10 @@ const AnalyticsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Main Charts Section */}
           <div className="main-charts-section">
-            {/* Left Column - Bar Charts */}
             <div className="charts-left-column">
               <div className="chart-card">
-                <div className="chart-content">
+                <div className="mt-4 px-2">
                   <HorizontalBarChart
                     data={mockData}
                     title="Term Frequency"
@@ -275,19 +274,22 @@ const AnalyticsPage: React.FC = () => {
 
               <div className="chart-card">
                 <div className="chart-header">
-                  <h2 className="chart-title">Category Distribution</h2>
+                  <h2 className="text-gray-800 text-xl font-semibold m-0">
+                    Category Distribution
+                  </h2>
                 </div>
-                <div className="chart-content">
+                <div className="mt-4 px-2">
                   <HorizontalBarChart data={categoryData} isDarkMode={false} />
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Pie Chart & Additional Info */}
             <div className="charts-right-column">
               <div className="chart-card pie-chart-card">
                 <div className="chart-header">
-                  <h2 className="chart-title">Language Distribution</h2>
+                  <h2 className="text-gray-800 text-xl font-semibold m-0">
+                    Language Distribution
+                  </h2>
                 </div>
                 <div className="pie-chart-wrapper">
                   <PieChart

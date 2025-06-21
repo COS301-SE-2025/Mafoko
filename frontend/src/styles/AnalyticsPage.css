@@ -40,7 +40,6 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-
 .main-charts-section {
   display: flex;
   flex-direction: column;
@@ -60,27 +59,19 @@
   margin-bottom: 16px;
 }
 
-/* Chart titles */
-.chart-header .chart-title {
-  color: #1f2937;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-}
-
 .charts-left-column,
 .charts-right-column {
   display: contents;
 }
 
-/* Specific chart ordering and sizing */
 .chart-card:has(.chart-title:contains("Category Distribution")) {
   order: 1;
 }
 
 .pie-chart-card {
   order: 2;
-  max-width: 600px;
+  max-width: 700px; 
+  min-width: 600px; 
   margin: 0 auto 16px auto;
 }
 
@@ -88,21 +79,70 @@
   order: 3;
 }
 
-/* Chart content spacing */
-.chart-content {
-  margin-top: 16px;
-  padding: 0 8px;
-}
-
 .pie-chart-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 16px;
+  width: 100%;
+  height: 400px;
+  overflow: visible;
 }
 
-.pie-chart-wrapper canvas {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+/* Desktop - larger charts */
+@media (min-width: 1024px) {
+  .pie-chart-wrapper {
+    min-width: 600px;
+    height: 450px;
+  }
+}
+
+/* Tablet - medium charts */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .pie-chart-wrapper {
+    height: 380px;
+    padding: 12px;
+  }
+}
+
+/* Mobile - responsive charts */
+@media (max-width: 768px) {
+  .pie-chart-card {
+    max-width: 100%;
+    min-width: auto; 
+  }
+  
+  .pie-chart-wrapper {
+    height: 320px;
+    min-height: 300px;
+    padding: 8px;
+    width: 100%;
+  }
+}
+
+/* Small mobile - compact charts */
+@media (max-width: 480px) {
+  .pie-chart-wrapper {
+    height: 280px;
+    min-height: 260px;
+    padding: 4px;
+  }
+}
+
+/* Desktop specific adjustments for pie chart */
+@media (min-width: 1024px) {
+  .pie-chart-card {
+    min-width: 650px;
+    max-width: 750px;
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .pie-chart-card {
+    min-width: 500px;
+    max-width: 600px;
+  }
 }
 
 /* Mobile Layout - Single Column */
@@ -132,6 +172,14 @@
   
   .pie-chart-card {
     max-width: 100%;
+    min-width: 100%;
+  }
+  
+  /* Mobile pie chart wrapper adjustments */
+  .pie-chart-wrapper {
+    height: 350px;
+    min-height: 300px;
+    padding: 8px;
   }
 }
 
@@ -148,12 +196,9 @@
   .page-header h1 {
     font-size: 1.25rem;
   }
-
-}
-
-@media (max-width: 768px) {
+  
   .pie-chart-wrapper {
-    height: 350px;
+    height: 300px;
     min-height: 250px;
   }
 }
