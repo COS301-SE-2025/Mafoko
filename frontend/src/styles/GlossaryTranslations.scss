@@ -24,10 +24,14 @@
   }
 }
 
+.download-icon-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
 .download-icon-btn {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1.5rem;
   background: transparent;
   border: none;
   outline: none;
@@ -35,16 +39,16 @@
   padding: 0;
   z-index: 2;
   transition: box-shadow 0.2s;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 
   svg {
     display: block;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    background: white;
+    background: transparent;
   }
 
   &:hover svg circle {
-    stroke: #00CEAF;
     filter: brightness(1.1);
   }
 }
