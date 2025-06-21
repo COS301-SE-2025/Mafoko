@@ -38,7 +38,6 @@
   cursor: pointer;
   padding: 0;
   z-index: 2;
-  transition: box-shadow 0.2s;
   border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 
@@ -46,6 +45,15 @@
     display: block;
     border-radius: 50%;
     background: transparent;
+  }
+
+  svg circle {
+    fill: #00CEAF;
+    stroke: none;
+  }
+
+  svg path {
+    stroke: #fff;
   }
 
   &:hover svg circle {
