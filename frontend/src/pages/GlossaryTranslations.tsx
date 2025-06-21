@@ -40,6 +40,9 @@ const GlossaryTranslations = () => {
             <tr>
               <th>Venda</th>
             </tr>
+            <tr>
+              <th>Ndebele</th>
+            </tr>
           </thead>
         </table>
       </div>
