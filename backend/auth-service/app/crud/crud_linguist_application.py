@@ -4,6 +4,7 @@ from uuid import UUID
 from mavito_common.models.linguist_application import LinguistApplication
 from mavito_common.schemas.linguist_application import LinguistApplicationCreate
 
+
 class CRUDLinguistApplication:
     async def create_application(
         self, db: AsyncSession, *, user_id: UUID, obj_in: LinguistApplicationCreate
@@ -21,5 +22,6 @@ class CRUDLinguistApplication:
         await db.commit()
         await db.refresh(db_obj)
         return db_obj
+
 
 crud_linguist_application = CRUDLinguistApplication()

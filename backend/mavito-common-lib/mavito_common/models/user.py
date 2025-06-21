@@ -24,9 +24,9 @@ from datetime import datetime  # For datetime type hint
 # Define an Enum for the user roles if you want to use it in Python code as well
 class UserRole(str, enum.Enum):
     linguist = "linguist"
-    #researcher = "researcher"
+    # researcher = "researcher"
     contributor = "contributor"
-    admin = "admin" 
+    admin = "admin"
 
 
 class User(Base):

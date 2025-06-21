@@ -56,6 +56,7 @@ async def register_new_user(
     # Return the created user object
     return new_user
 
+
 @router.post("/login", response_model=Token)
 async def login_for_access_token(
     db: AsyncSession = Depends(get_db),

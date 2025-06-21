@@ -5,15 +5,16 @@ Revises: 00b51e116863
 Create Date: 2025-06-21 08:08:48.462052
 
 """
+
 from typing import Sequence, Union
 
-from alembic import op #noqa F401
-import sqlalchemy as sa #noqa F401
+from alembic import op  # noqa F401
+import sqlalchemy as sa  # noqa F401
 
 
 # revision identifiers, used by Alembic.
-revision: str = '032ec21c08f2'
-down_revision: Union[str, Sequence[str], None] = '00b51e116863'
+revision: str = "032ec21c08f2"
+down_revision: Union[str, Sequence[str], None] = "00b51e116863"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

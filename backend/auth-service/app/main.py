@@ -18,6 +18,7 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["Uploads"])
 
+
 @app.get("/", tags=["Health Check"])
 async def read_root():
     return {"service": "Mavito Auth Service", "status": "ok"}
