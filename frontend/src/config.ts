@@ -20,4 +20,6 @@ export const API_ENDPOINTS = {
 
   // Analytics Service
   descriptiveAnalytics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive`,
+
+  generateSignedUrl: '/api/generate-signed-url',
 };

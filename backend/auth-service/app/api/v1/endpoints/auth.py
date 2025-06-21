@@ -12,6 +12,9 @@ from mavito_common.db.session import get_db
 from app.api import deps
 from mavito_common.models.user import User as UserModel  # noqa: F401
 from app.crud.crud_user import crud_user
+from app.crud.crud_linguist_application import crud_linguist_application
+from mavito_common.models.user import UserRole
+
 
 router = APIRouter()
 
@@ -39,12 +42,19 @@ async def register_new_user(
         )
 
     # Create the user using the CRUD operation
-    new_user_db_model = await crud_user.create_user(db, obj_in=user_in)
+    user_data_with_role = user_in.model_copy(update={"role": UserRole.contributor})
 
-    # The CRUD operation returns the UserModel.
-    # The response_model=UserSchema will automatically convert it using from_attributes=True.
-    return new_user_db_model
+    # Create the user record in the database
+    new_user = await crud_user.create_user(db, obj_in=user_data_with_role)
 
+    # If the payload included a linguist application, create that record now
+    if user_in.linguist_application:
+        await crud_linguist_application.create_application(
+            db=db, user_id=new_user.id, obj_in=user_in.linguist_application
+        )
+
+    # Return the created user object
+    return new_user
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(

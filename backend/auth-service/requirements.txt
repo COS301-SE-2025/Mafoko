@@ -7,4 +7,5 @@ pytest
 httpx
 python-multipart
 pytest-asyncio
+google-cloud-storage
 mavito-common-lib==0.1.0

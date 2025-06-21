@@ -8,7 +8,7 @@ import uuid  # Import for UUID type
 
 # Assuming UserRole is correctly defined in app/models/user.py
 from mavito_common.models.user import UserRole
-
+from .linguist_application import LinguistApplicationCreate
 
 # Shared properties
 class UserBase(BaseModel):
@@ -17,11 +17,13 @@ class UserBase(BaseModel):
     last_name: str
     role: Optional[UserRole] = None
     profile_pic_url: Optional[str] = None
+    
 
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     password: str  # Plain password received from client
+    linguist_application: Optional[LinguistApplicationCreate] = None
 
 
 # Properties to receive via API on update
