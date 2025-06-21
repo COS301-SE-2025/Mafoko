@@ -2,14 +2,15 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from uuid import UUID # noqa: F401
+from uuid import UUID  # noqa: F401
 
-from app.api import deps 
+from app.api import deps
 from mavito_common.models.user import User as UserModel
 from mavito_common.schemas.linguist_application import LinguistApplicationCreate
 from app.crud.crud_application import crud_linguist_application
 
 router = APIRouter()
+
 
 @router.post("/", status_code=201)
 async def create_linguist_application(
@@ -26,5 +27,5 @@ async def create_linguist_application(
     )
     if not application:
         raise HTTPException(status_code=400, detail="Could not create application.")
-        
+
     return application
