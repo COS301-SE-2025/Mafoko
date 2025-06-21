@@ -224,9 +224,6 @@ const AnalyticsPage: React.FC = () => {
           >
             {isMobileMenuOpen ? '✕' : '☰'}
           </button>
-          <div className="page-header">
-            <h1>Analytics Dashboard</h1>
-          </div>
         </div>
 
         <div className="analytics-content">
