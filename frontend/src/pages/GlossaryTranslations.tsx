@@ -46,6 +46,9 @@ const GlossaryTranslations = () => {
             <tr>
               <th>Ndebele</th>
             </tr>
+            <tr>
+              <th>Xitsonga</th>
+            </tr>
           </thead>
         </table>
       </div>
