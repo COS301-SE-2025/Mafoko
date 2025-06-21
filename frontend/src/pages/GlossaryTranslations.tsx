@@ -12,8 +12,55 @@ const GlossaryTranslations = () => {
         className="pt-20 px-4"
         style={{ marginLeft: '260px', maxWidth: 'calc(100vw - 280px)' }}
       >
-        <h1 className="text-2xl font-bold mb-4">Glossary Translations</h1>
-        <p>This is the Glossary Translations page.</p>
+        <div className="translation-bank-header">
+          <span className="translation-bank-title">Translation Bank</span>
+          <span className="translation-bank-icons">
+            <span className="favourite-icon">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="14" cy="14" r="14" fill="#FFBB4F" />
+                <path
+                  d="M14 19.5L8.5 22.5L9.5 16L5 11.5L11.25 10.75L14 5L16.75 10.75L23 11.5L18.5 16L19.5 22.5L14 19.5Z"
+                  stroke="#fff"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+              </svg>
+            </span>
+            <span className="share-icon">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="14" cy="14" r="14" fill="#F7074D" />
+                <path
+                  d="M18 12.5L14 9V19"
+                  stroke="#fff"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+                <path
+                  d="M9 19H19"
+                  stroke="#fff"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </svg>
+            </span>
+          </span>
+        </div>
+        <hr className="translation-bank-divider" />
         <div
           style={{
             overflowX: 'auto',

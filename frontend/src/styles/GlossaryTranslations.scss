@@ -60,3 +60,50 @@
     filter: brightness(1.1);
   }
 }
+
+.translation-bank-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.translation-bank-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #363B4D;
+}
+
+.translation-bank-icons {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.favourite-icon svg,
+.share-icon svg {
+  display: block;
+}
+
+.favourite-icon circle {
+  fill: #FFBB4F;
+}
+.favourite-icon path {
+  stroke: #fff;
+  fill: none;
+}
+
+.share-icon circle {
+  fill: #F7074D;
+}
+.share-icon path {
+  stroke: #fff;
+  fill: none;
+}
+
+.translation-bank-divider {
+  border: none;
+  border-top: 2px solid #D9D9D9;
+  margin-bottom: 2rem;
+}
