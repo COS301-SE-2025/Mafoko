@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LeftNav from '../components/ui/LeftNav';
+import '../styles/GlossaryTranslations.scss';
 
 const GlossaryTranslations = () => {
   const [activeItem, setActiveItem] = useState('');
@@ -8,9 +9,15 @@ const GlossaryTranslations = () => {
     <>
       <LeftNav activeItem={activeItem} setActiveItem={setActiveItem} />
       <div className="pt-20 px-4">
-        {/* Content for GlossaryTranslations page goes here */}
         <h1 className="text-2xl font-bold mb-4">Glossary Translations</h1>
         <p>This is the Glossary Translations page.</p>
+        <table className="glossary-table">
+          <thead>
+            <tr>
+              <th>English term</th>
+            </tr>
+          </thead>
+        </table>
       </div>
     </>
   );
