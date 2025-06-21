@@ -29,6 +29,9 @@ const GlossaryTranslations = () => {
               <th>Nothern Sotho</th>
             </tr>
             <tr>
+              <th>Southern Sotho</th>
+            </tr>
+            <tr>
               <th>Setswana</th>
             </tr>
             <tr>
