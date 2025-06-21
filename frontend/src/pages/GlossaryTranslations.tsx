@@ -112,18 +112,19 @@ const GlossaryTranslations = () => {
               >
                 <circle cx="16" cy="16" r="15" fill="#00CEAF" />
                 <path
-                  d="M16 10V22"
+                  d="M16 10V20"
                   stroke="#fff"
                   strokeWidth="2"
                   strokeLinecap="round"
                 />
                 <path
-                  d="M12 18L16 22L20 18"
+                  d="M12 16L16 20L20 16"
                   stroke="#fff"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
+                <rect x="12" y="22" width="8" height="2" rx="1" fill="#fff" />
               </svg>
             </button>
           </div>
