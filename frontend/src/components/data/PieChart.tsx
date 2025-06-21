@@ -1,6 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as Chart from 'chart.js';
-import type { ChartOptions, TooltipItem } from 'chart.js';
+import React, { useEffect, useRef } from 'react';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  type ChartOptions,
+  type TooltipItem,
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 interface PieChartData {
   label: string;
@@ -49,16 +67,24 @@ const PieChart: React.FC<PieChartProps> = ({
   data,
   title = 'Chart',
   showTitle = false,
-  isDarkMode = true,
+  isDarkMode = false,
   formatValue = defaultFormatValue,
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstance = useRef<Chart.Chart | null>(null);
-  const [showLegend, setShowLegend] = useState(window.innerWidth >= 768);
+  const chartInstance = useRef<ChartJS | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setShowLegend(window.innerWidth >= 768);
+      if (
+        chartInstance.current &&
+        chartInstance.current.options.plugins?.legend
+      ) {
+        const isMobile = window.innerWidth < 768;
+        chartInstance.current.options.plugins.legend.position = isMobile
+          ? 'bottom'
+          : 'right';
+        chartInstance.current.update();
+      }
     };
 
     window.addEventListener('resize', handleResize);
@@ -68,21 +94,15 @@ const PieChart: React.FC<PieChartProps> = ({
   }, []);
 
   useEffect(() => {
-    Chart.Chart.register(
-      Chart.ArcElement,
-      Chart.CategoryScale,
-      Chart.LinearScale,
-      Chart.Title,
-      Chart.Tooltip,
-      Chart.Legend,
-    );
-
     const ctx = chartRef.current?.getContext('2d');
     if (!ctx || !data.length) return;
 
+    // Destroy existing chart
     if (chartInstance.current) {
       chartInstance.current.destroy();
     }
+
+    const isMobile = window.innerWidth < 768;
 
     const chartData = {
       labels: data.map((item) => item.label),
@@ -99,10 +119,13 @@ const PieChart: React.FC<PieChartProps> = ({
               item.borderColor ||
               DEFAULT_BORDER_COLORS[index % DEFAULT_BORDER_COLORS.length],
           ),
-          borderWidth: 1,
+          borderWidth: 2,
         },
       ],
     };
+    const legendPosition = isMobile ? 'bottom' : ('right' as const);
+    const legendAlign = 'start' as const;
+    const fontWeight = 'bold' as const;
 
     const options: ChartOptions<'pie'> = {
       responsive: true,
@@ -112,26 +135,28 @@ const PieChart: React.FC<PieChartProps> = ({
           display: showTitle,
           text: title,
           font: {
-            size: 24,
-            weight: 700,
+            size: 18,
+            weight: fontWeight,
           },
-          color: isDarkMode ? '#ffffff' : '#333333',
+          color: isDarkMode ? '#ffffff' : '#1f2937',
           padding: {
             top: 10,
             bottom: 20,
           },
         },
         legend: {
-          display: showLegend,
-          position: 'right',
-          align: 'start',
+          display: true,
+          position: legendPosition,
+          align: legendAlign,
           labels: {
-            padding: 22,
-            boxWidth: 10,
+            padding: isMobile ? 10 : 15,
+            boxWidth: 12,
+            boxHeight: 12,
             font: {
-              size: 20,
+              size: isMobile ? 12 : 14,
             },
-            color: isDarkMode ? '#ffffff' : '#333333',
+            color: isDarkMode ? '#ffffff' : '#1f2937',
+            usePointStyle: true,
           },
         },
         tooltip: {
@@ -140,10 +165,12 @@ const PieChart: React.FC<PieChartProps> = ({
           bodyColor: isDarkMode ? '#ffffff' : '#374151',
           borderColor: isDarkMode ? '#6b7280' : '#e5e7eb',
           borderWidth: 1,
+          cornerRadius: 8,
+          displayColors: true,
           callbacks: {
             label: function (context: TooltipItem<'pie'>) {
-              const value = formatValue(context.parsed); // context.parsed is number for pie
-              return `${context.label || ''}: ${value}`;
+              const value = formatValue(context.parsed);
+              return `${context.label}: ${value}`;
             },
           },
         },
@@ -156,24 +183,153 @@ const PieChart: React.FC<PieChartProps> = ({
           bottom: 10,
         },
       },
+      elements: {
+        arc: {
+          borderWidth: 2,
+        },
+      },
     };
 
-    chartInstance.current = new Chart.Chart(ctx, {
+    chartInstance.current = new ChartJS(ctx, {
       type: 'pie',
       data: chartData,
       options: options,
     });
 
     return () => {
-      chartInstance.current?.destroy();
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
     };
-  }, [data, showLegend, isDarkMode, title, showTitle, formatValue]);
+  }, [data, isDarkMode, title, showTitle, formatValue]);
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <canvas ref={chartRef} className="max-w-full max-h-full" />
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        minHeight: '250px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <canvas
+        ref={chartRef}
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+        }}
+      />
     </div>
   );
 };
 
+// Demo component with sample data
+export const PieChartDemo = () => {
+  const mockPieData = [
+    {
+      label: 'Afrikaans',
+      value: 9.2,
+      backgroundColor: '#26D7B9',
+      borderColor: '#1BA997',
+    },
+    {
+      label: 'isiNdebele',
+      value: 9.1,
+      backgroundColor: '#FAE56B',
+      borderColor: '#E5CE00',
+    },
+    {
+      label: 'isiXhosa',
+      value: 8.8,
+      backgroundColor: '#F87171',
+      borderColor: '#E04343',
+    },
+    {
+      label: 'isiZulu',
+      value: 9.2,
+      backgroundColor: '#6C63FF',
+      borderColor: '#544DD4',
+    },
+    {
+      label: 'Sepedi',
+      value: 9.1,
+      backgroundColor: '#FFA69E',
+      borderColor: '#CC837A',
+    },
+    {
+      label: 'Sesotho',
+      value: 9.0,
+      backgroundColor: '#4DD599',
+      borderColor: '#3DAE7F',
+    },
+    {
+      label: 'Setswana',
+      value: 9.0,
+      backgroundColor: '#3AB0FF',
+      borderColor: '#2D90D0',
+    },
+    {
+      label: 'siSwati',
+      value: 8.9,
+      backgroundColor: '#FFB703',
+      borderColor: '#D58F00',
+    },
+    {
+      label: 'Tshivenda',
+      value: 9.0,
+      backgroundColor: '#B388EB',
+      borderColor: '#8B6AB3',
+    },
+    {
+      label: 'Xitsonga',
+      value: 9.1,
+      backgroundColor: '#FF9F68',
+      borderColor: '#D97F4A',
+    },
+  ];
+
+  const formatValue = (value: number): string => `${value.toString()}%`;
+
+  return (
+    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+      <h1
+        style={{ textAlign: 'center', marginBottom: '30px', color: '#1f2937' }}
+      >
+        Language Distribution Pie Chart
+      </h1>
+
+      <div
+        style={{
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
+          borderRadius: '12px',
+          padding: '24px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <h2
+          style={{
+            color: '#1f2937',
+            fontSize: '1.25rem',
+            fontWeight: '600',
+            margin: '0 0 16px 0',
+          }}
+        >
+          Language Distribution
+        </h2>
+
+        <PieChart
+          data={mockPieData}
+          formatValue={formatValue}
+          isDarkMode={false}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Export PieChart as the default export
 export default PieChart;
