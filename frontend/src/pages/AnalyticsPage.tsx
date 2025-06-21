@@ -4,7 +4,8 @@ import type { TermData } from '../components/data/HorizontalBarChart';
 import { FaCheckCircle, FaBookmark, FaComments, FaGlobe } from 'react-icons/fa';
 import StatCard from '../components/data/StatCard';
 import PieChart from '../components/data/PieChart';
-import Navbar from '../components/ui/Navbar';
+import LeftPane from '../components/dashboard/LeftPane';
+import { useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../config';
 
 import {
@@ -144,7 +145,10 @@ interface CategoryFrequencyData {
 }
 
 const AnalyticsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState<TermData[]>([]);
+  const [activeMenuItem, setActiveMenuItem] = useState('analytics');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch(API_ENDPOINTS.descriptiveAnalytics)
@@ -167,70 +171,131 @@ const AnalyticsPage: React.FC = () => {
       });
   }, []);
 
-  return (
-    <div className="analytics-root">
-      <Navbar />
-      <div className="p-2 md:p-4 analytics">
-        <div className="pt-16 md:pt-18 min-h-screen w-full p-2 md:p-4 flex flex-col">
-          {/* Top Section */}
-          <div className="h-auto md:h-1/2 w-full p-2 md:p-4 flex flex-col md:flex-row gap-4">
-            {/* Pie Chart Section */}
-            <div className="w-full md:w-3/8 h-64 md:h-full rounded-lg shadow-inner p-4 flex flex-col bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-white">
-              <h2 className="text-lg md:text-xl font-bold mb-4">
-                Unique Term Counts
-              </h2>
-              <div className="flex-1 overflow-hidden">
-                <PieChart
-                  data={mockPieData}
-                  formatValue={(value) => `${String(value)}%`}
-                />
-              </div>
-            </div>
+  const handleMenuItemClick = (item: string) => {
+    setActiveMenuItem(item);
+    if (window.innerWidth <= 768) {
+      setIsMobileMenuOpen(false);
+    }
+    if (item === 'dashboard') {
+      void navigate('/dashboard');
+    } else if (item === 'search') {
+      void navigate('/search');
+    } else if (item === 'saved') {
+      void navigate('/saved-terms');
+    } else if (item === 'analytics') {
+      void navigate('/analytics');
+    }
+  };
 
-            {/* Stat Cards Section */}
-            <div className="w-full md:w-5/8 h-auto grid grid-cols-1 sm:grid-cols-2 gap-4 min-h-[160px]">
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  return (
+    <div
+      className={`dashboard-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''}`}
+    >
+      {isMobileMenuOpen && (
+        <div
+          className="mobile-menu-overlay"
+          onClick={toggleMobileMenu}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              toggleMobileMenu();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Close menu"
+        />
+      )}
+      <LeftPane activeItem={activeMenuItem} onItemClick={handleMenuItemClick} />
+
+      <div className="main-content">
+        {/* Mobile hamburger menu for consistency */}
+        <div className="top-bar analytics-top-bar">
+          <button
+            className="hamburger-icon"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+            type="button"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <div className="page-header">
+            <h1>Analytics Dashboard</h1>
+          </div>
+        </div>
+
+        <div className="analytics-content">
+          {/* Stats Overview Section */}
+          <div className="stats-overview-section">
+            <div className="stat-cards-grid">
               <StatCard
                 title="Feedback Submissions Made"
                 value={12}
-                icon={<FaComments className="text-xl md:text-2xl" />}
+                icon={<FaComments className="stat-icon" />}
+                isDarkMode={false}
               />
               <StatCard
                 title="Approved Submissions"
                 value={12}
-                icon={<FaCheckCircle className="text-xl md:text-2xl" />}
+                icon={<FaCheckCircle className="stat-icon" />}
+                isDarkMode={false}
               />
               <StatCard
-                title="Your Total Saved Terms:"
+                title="Your Total Saved Terms"
                 value={12}
-                icon={<FaBookmark className="text-xl md:text-2xl" />}
+                icon={<FaBookmark className="stat-icon" />}
+                isDarkMode={false}
               />
               <StatCard
-                title="Your Top Language:"
+                title="Your Top Language"
                 value="English"
-                icon={<FaGlobe className="text-xl md:text-2xl" />}
+                icon={<FaGlobe className="stat-icon" />}
+                isDarkMode={false}
               />
             </div>
           </div>
 
-          {/* Bottom Section */}
-          <div className="h-auto md:h-1/2 w-full flex flex-col md:flex-row gap-4 mt-4 p-2 md:p-4">
-            <div className="w-full md:w-1/2 h-64 md:h-full p-4 rounded-lg shadow bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
-              <HorizontalBarChart
-                data={mockData}
-                title="Term Frequency"
-                isDarkMode={document.documentElement.classList.contains(
-                  'theme-dark',
-                )}
-              />
+          {/* Main Charts Section */}
+          <div className="main-charts-section">
+            {/* Left Column - Bar Charts */}
+            <div className="charts-left-column">
+              <div className="chart-card">
+                <div className="chart-content">
+                  <HorizontalBarChart
+                    data={mockData}
+                    title="Term Frequency"
+                    isDarkMode={false}
+                  />
+                </div>
+              </div>
+
+              <div className="chart-card">
+                <div className="chart-header">
+                  <h2 className="chart-title">Category Distribution</h2>
+                </div>
+                <div className="chart-content">
+                  <HorizontalBarChart data={categoryData} isDarkMode={false} />
+                </div>
+              </div>
             </div>
-            <div className="w-full md:w-1/2 h-64 md:h-full p-4 rounded-lg shadow bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
-              <HorizontalBarChart
-                data={categoryData}
-                title="Term Category Frequency"
-                isDarkMode={document.documentElement.classList.contains(
-                  'theme-dark',
-                )}
-              />
+
+            {/* Right Column - Pie Chart & Additional Info */}
+            <div className="charts-right-column">
+              <div className="chart-card pie-chart-card">
+                <div className="chart-header">
+                  <h2 className="chart-title">Language Distribution</h2>
+                </div>
+                <div className="pie-chart-wrapper">
+                  <PieChart
+                    data={mockPieData}
+                    formatValue={(value) => `${String(value)}%`}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
