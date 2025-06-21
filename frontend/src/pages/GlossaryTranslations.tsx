@@ -19,6 +19,9 @@ const GlossaryTranslations = () => {
             <tr>
               <th>Afrikaans</th>
             </tr>
+            <tr>
+              <th>Zulu</th>
+            </tr>
           </thead>
         </table>
       </div>
