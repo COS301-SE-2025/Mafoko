@@ -15,41 +15,49 @@ const GlossaryTranslations = () => {
           <thead>
             <tr>
               <th>English term</th>
-            </tr>
-            <tr>
               <th>Afrikaans</th>
-            </tr>
-            <tr>
               <th>Zulu</th>
-            </tr>
-            <tr>
               <th>Xhosa</th>
-            </tr>
-            <tr>
               <th>Nothern Sotho</th>
-            </tr>
-            <tr>
               <th>Southern Sotho</th>
-            </tr>
-            <tr>
               <th>Setswana</th>
-            </tr>
-            <tr>
               <th>Tsonga</th>
-            </tr>
-            <tr>
               <th>Swati</th>
-            </tr>
-            <tr>
               <th>Venda</th>
-            </tr>
-            <tr>
               <th>Ndebele</th>
-            </tr>
-            <tr>
               <th>Xitsonga</th>
             </tr>
           </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </>
