@@ -19,6 +19,7 @@ const GlossaryTranslations = () => {
             overflowX: 'auto',
             background: 'transparent',
             borderRadius: '0.5rem',
+            position: 'relative',
           }}
         >
           <table
@@ -100,6 +101,37 @@ const GlossaryTranslations = () => {
               </tr>
             </tbody>
           </table>
+          <button className="download-icon-btn" aria-label="Download">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16"
+                cy="16"
+                r="15"
+                stroke="#00CEAF"
+                strokeWidth="2"
+                fill="white"
+              />
+              <path
+                d="M16 10V22"
+                stroke="#00CEAF"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <path
+                d="M12 18L16 22L20 18"
+                stroke="#00CEAF"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </>
