@@ -28,6 +28,9 @@ const GlossaryTranslations = () => {
             <tr>
               <th>Sesotho</th>
             </tr>
+            <tr>
+              <th>Setswana</th>
+            </tr>
           </thead>
         </table>
       </div>
