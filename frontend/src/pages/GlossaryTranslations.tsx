@@ -15,7 +15,7 @@ const GlossaryTranslations = () => {
         <div className="translation-bank-header">
           <span className="translation-bank-title">Translation Bank</span>
           <span className="translation-bank-icons">
-            <span className="favourite-icon">
+            <span className="bookmark-icon">
               <svg
                 width="28"
                 height="28"
@@ -25,7 +25,7 @@ const GlossaryTranslations = () => {
               >
                 <circle cx="14" cy="14" r="14" fill="#FFBB4F" />
                 <path
-                  d="M14 19.5L8.5 22.5L9.5 16L5 11.5L11.25 10.75L14 5L16.75 10.75L23 11.5L18.5 16L19.5 22.5L14 19.5Z"
+                  d="M10 8C10 7.44772 10.4477 7 11 7H17C17.5523 7 18 7.44772 18 8V21L14 18.5L10 21V8Z"
                   stroke="#fff"
                   strokeWidth="1.5"
                   fill="none"
@@ -42,20 +42,15 @@ const GlossaryTranslations = () => {
               >
                 <circle cx="14" cy="14" r="14" fill="#F7074D" />
                 <path
-                  d="M18 12.5L14 9V19"
+                  d="M18.5 11.5L14 7M14 7L9.5 11.5M14 7V19"
                   stroke="#fff"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   fill="none"
                 />
-                <path
-                  d="M9 19H19"
-                  stroke="#fff"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  fill="none"
-                />
+                <circle cx="9.5" cy="18.5" r="1.5" fill="#fff" />
+                <circle cx="18.5" cy="18.5" r="1.5" fill="#fff" />
               </svg>
             </span>
           </span>

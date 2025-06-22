@@ -82,14 +82,17 @@
 }
 
 .favourite-icon svg,
-.share-icon svg {
+.share-icon svg,
+.bookmark-icon svg {
   display: block;
 }
 
-.favourite-icon circle {
+.favourite-icon circle,
+.bookmark-icon circle {
   fill: #FFBB4F;
 }
-.favourite-icon path {
+.favourite-icon path,
+.bookmark-icon path {
   stroke: #fff;
   fill: none;
 }
@@ -100,6 +103,9 @@
 .share-icon path {
   stroke: #fff;
   fill: none;
+}
+.share-icon circle[fill="#fff"] {
+  stroke: none;
 }
 
 .translation-bank-divider {
