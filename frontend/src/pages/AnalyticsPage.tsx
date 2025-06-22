@@ -5,6 +5,7 @@ import { FaCheckCircle, FaBookmark, FaComments, FaGlobe } from 'react-icons/fa';
 import StatCard from '../components/data/StatCard';
 import PieChart from '../components/data/PieChart';
 import LeftNav from '../components/ui/LeftNav';
+import Navbar from '../components/ui/Navbar.tsx';
 import { API_ENDPOINTS } from '../config';
 
 import {
@@ -149,6 +150,17 @@ const AnalyticsPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('analytics');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     fetch(API_ENDPOINTS.descriptiveAnalytics)
@@ -202,23 +214,32 @@ const AnalyticsPage: React.FC = () => {
           aria-label="Close menu"
         />
       )}
-      <LeftNav activeItem={activeMenuItem} setActiveItem={setActiveMenuItem} />
+
+      {isMobile ? (
+        <Navbar />
+      ) : (
+        <LeftNav
+          activeItem={activeMenuItem}
+          setActiveItem={setActiveMenuItem}
+        />
+      )}
 
       <div className="main-content">
-        {/* Mobile hamburger menu for consistency */}
-        <div className="top-bar analytics-top-bar">
-          <button
-            className="hamburger-icon"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-            type="button"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-        </div>
+        {!isMobile && (
+          <div className="top-bar analytics-top-bar">
+            <button
+              className="hamburger-icon"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+              type="button"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+          </div>
+        )}
 
-        <div className="analytics-content">
+        <div className={`analytics-content ${isMobile ? 'pt-16' : ''}`}>
           {/* Stats Overview Section */}
           <div className="stats-overview-section">
             <div className="stat-cards-grid">
