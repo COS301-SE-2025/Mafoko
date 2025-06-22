@@ -17,7 +17,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import '../styles/AnalyticsPage.css';
+import '../styles/AnalyticsPage.scss';
 
 ChartJS.register(
   LineElement,
