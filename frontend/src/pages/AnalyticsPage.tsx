@@ -4,8 +4,7 @@ import type { TermData } from '../components/data/HorizontalBarChart';
 import { FaCheckCircle, FaBookmark, FaComments, FaGlobe } from 'react-icons/fa';
 import StatCard from '../components/data/StatCard';
 import PieChart from '../components/data/PieChart';
-import LeftPane from '../components/dashboard/LeftPane';
-import { useNavigate } from 'react-router-dom';
+import LeftNav from '../components/ui/LeftNav';
 import { API_ENDPOINTS } from '../config';
 
 import {
@@ -146,10 +145,10 @@ interface CategoryFrequencyData {
 }
 
 const AnalyticsPage: React.FC = () => {
-  const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState<TermData[]>([]);
   const [activeMenuItem, setActiveMenuItem] = useState('analytics');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     fetch(API_ENDPOINTS.descriptiveAnalytics)
@@ -172,21 +171,14 @@ const AnalyticsPage: React.FC = () => {
       });
   }, []);
 
-  const handleMenuItemClick = (item: string) => {
-    setActiveMenuItem(item);
-    if (window.innerWidth <= 768) {
-      setIsMobileMenuOpen(false);
-    }
-    if (item === 'dashboard') {
-      void navigate('/dashboard');
-    } else if (item === 'search') {
-      void navigate('/search');
-    } else if (item === 'saved') {
-      void navigate('/saved-terms');
-    } else if (item === 'analytics') {
-      void navigate('/analytics');
-    }
-  };
+  useEffect(() => {
+    const stored = localStorage.getItem('darkMode');
+    if (stored !== null) setIsDarkMode(stored === 'true');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -194,7 +186,7 @@ const AnalyticsPage: React.FC = () => {
 
   return (
     <div
-      className={`dashboard-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''}`}
+      className={`dashboard-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobileMenuOpen && (
         <div
@@ -210,7 +202,7 @@ const AnalyticsPage: React.FC = () => {
           aria-label="Close menu"
         />
       )}
-      <LeftPane activeItem={activeMenuItem} onItemClick={handleMenuItemClick} />
+      <LeftNav activeItem={activeMenuItem} setActiveItem={setActiveMenuItem} />
 
       <div className="main-content">
         {/* Mobile hamburger menu for consistency */}
@@ -234,25 +226,25 @@ const AnalyticsPage: React.FC = () => {
                 title="Feedback Submissions Made"
                 value={12}
                 icon={<FaComments className="stat-icon" />}
-                isDarkMode={false}
+                isDarkMode={isDarkMode}
               />
               <StatCard
                 title="Approved Submissions"
                 value={12}
                 icon={<FaCheckCircle className="stat-icon" />}
-                isDarkMode={false}
+                isDarkMode={isDarkMode}
               />
               <StatCard
                 title="Your Total Saved Terms"
                 value={12}
                 icon={<FaBookmark className="stat-icon" />}
-                isDarkMode={false}
+                isDarkMode={isDarkMode}
               />
               <StatCard
                 title="Your Top Language"
                 value="English"
                 icon={<FaGlobe className="stat-icon" />}
-                isDarkMode={false}
+                isDarkMode={isDarkMode}
               />
             </div>
           </div>
@@ -264,7 +256,7 @@ const AnalyticsPage: React.FC = () => {
                   <HorizontalBarChart
                     data={mockData}
                     title="Term Frequency"
-                    isDarkMode={false}
+                    isDarkMode={isDarkMode}
                   />
                 </div>
               </div>
@@ -276,7 +268,10 @@ const AnalyticsPage: React.FC = () => {
                   </h2>
                 </div>
                 <div className="mt-4 px-2">
-                  <HorizontalBarChart data={categoryData} isDarkMode={false} />
+                  <HorizontalBarChart
+                    data={categoryData}
+                    isDarkMode={isDarkMode}
+                  />
                 </div>
               </div>
             </div>
@@ -294,6 +289,15 @@ const AnalyticsPage: React.FC = () => {
                     formatValue={(value) => `${String(value)}%`}
                   />
                 </div>
+                {/* Testing only */}
+                {/* <label>
+                    Dark Mode                                 
+                    <input
+                      type="checkbox"
+                      checked={isDarkMode}
+                      onChange={() => setIsDarkMode(prev => !prev)}
+                    />
+                  </label> */}
               </div>
             </div>
           </div>
