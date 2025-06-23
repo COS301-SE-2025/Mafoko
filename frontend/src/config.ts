@@ -14,6 +14,11 @@ const LINGUIST_APP_SERVICE_URL =
   (import.meta.env.VITE_LINGUIST_APP_SERVICE_URL as string) ||
   'http://localhost:8004';
 
+// Add the URL for your new service, pointing to the port defined in docker-compose.yml
+const GLOSSARY_SERVICE_URL =
+  (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
+  'http://localhost:8006';
+
 const VOTE_SERVICE_URL =
   (import.meta.env.VITE_VOTE_SERVICE_URL as string) || 'http://localhost:8005';
 
@@ -35,4 +40,7 @@ export const API_ENDPOINTS = {
   descriptiveAnalytics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive`,
 
   submitVote: `${VOTE_SERVICE_URL}/api/v1/votes/`,
+
+  // --- Glossary Service ---
+  glossary: `${GLOSSARY_SERVICE_URL}/api/v1/glossary`,
 };

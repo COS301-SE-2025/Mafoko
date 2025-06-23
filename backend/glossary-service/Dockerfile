@@ -3,4 +3,4 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY ./search-service/requirements.txt /app/requirements.txt
+COPY ./glossary-service/requirements.txt /app/requirements.txt
