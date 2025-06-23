@@ -308,54 +308,65 @@ async def advanced_search(
     }
 
 
-# @router.post("/glossary/translate")
-# async def translate_terms(
-#     terms: List[str],
-#     source_language: str = "English",
-#     target_languages: Optional[List[str]] = None,
-#     domain: Optional[str] = None,
-# ):
-#     """
-#     Translate a list of terms from source language to specified target languages.
-#     If target_languages is not provided, translates to all available languages.
-#     """
-#     df = await load_marito_data()
+@router.post("/glossary/translate")
+async def translate_terms(
+    terms: List[str],
+    source_language: str = "English",
+    target_languages: Optional[List[str]] = None,
+    domain: Optional[str] = None,
+):
+    """
+    Translate a list of terms from source language to specified target languages.
+    If target_languages is not provided, translates to all available languages.
+    """
+    df = await load_marito_data()
 
-#     # Find the source language column
-#     source_col = next((col for col, lang in LANGUAGE_MAP.items() if lang.lower() == source_language.lower()), 'eng_term')
+    # Find the source language column
+    source_col = next(
+        (
+            col
+            for col, lang in LANGUAGE_MAP.items()
+            if lang.lower() == source_language.lower()
+        ),
+        "eng_term",
+    )
 
-#     # Determine target language columns
-#     if target_languages:
-#         target_langs = [lang.lower() for lang in target_languages]
-#         target_cols = [col for col, lang in LANGUAGE_MAP.items() if lang.lower() in target_langs]
-#     else:
-#         # Use all languages except the source
-#         target_cols = [col for col, lang in LANGUAGE_MAP.items() if col != source_col]
+    # Determine target language columns
+    if target_languages:
+        target_langs = [lang.lower() for lang in target_languages]
+        target_cols = [
+            col for col, lang in LANGUAGE_MAP.items() if lang.lower() in target_langs
+        ]
+    else:
+        # Use all languages except the source
+        target_cols = [col for col, lang in LANGUAGE_MAP.items() if col != source_col]
 
-#     # Filter by domain if specified
-#     if domain:
-#         df = df[df['category'].str.lower() == domain.lower()]
+    # Filter by domain if specified
+    if domain:
+        df = df[df["category"].str.lower() == domain.lower()]
 
-#     # Find the requested terms
-#     result = []
-#     for term in terms:
-#         # Find rows where the source language term matches
-#         term_rows = df[df[source_col].str.lower() == term.lower()]
+    # Find the requested terms
+    result = []
+    for term in terms:
+        # Find rows where the source language term matches
+        term_rows = df[df[source_col].str.lower() == term.lower()]
 
-#         if not term_rows.empty:
-#             row = term_rows.iloc[0]
+        if not term_rows.empty:
+            row = term_rows.iloc[0]
 
-#             translations = {}
-#             for col in target_cols:
-#                 if col in row and not pd.isna(row[col]):
-#                     translations[LANGUAGE_MAP[col]] = row[col]
+            translations = {}
+            for col in target_cols:
+                if col in row and not pd.isna(row[col]):
+                    translations[LANGUAGE_MAP[col]] = row[col]
 
-#             result.append({
-#                 "id": str(row.name),
-#                 "term": row[source_col],
-#                 "definition": row.get('eng_definition', ''),
-#                 "source_language": LANGUAGE_MAP[source_col],
-#                 "translations": translations
-#             })
+            result.append(
+                {
+                    "id": str(row.name),
+                    "term": row[source_col],
+                    "definition": row.get("eng_definition", ""),
+                    "source_language": LANGUAGE_MAP[source_col],
+                    "translations": translations,
+                }
+            )
 
-#     return {"results": result}
+    return {"results": result}
