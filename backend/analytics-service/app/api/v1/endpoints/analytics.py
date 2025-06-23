@@ -4,7 +4,7 @@ import pandas as pd
 from collections import Counter  # noqa: F401
 import os
 from fastapi import HTTPException, Query
-from typing import Dict
+from typing import Dict, Optional
 
 router = APIRouter()
 
@@ -219,86 +219,94 @@ async def get_available_languages():
     return LANGUAGE_MAP
 
 
-# @router.post("/glossary/search")
-# async def advanced_search(
-#     query: Optional[str] = None,
-#     domain: Optional[str] = None,
-#     language: Optional[str] = None,
-#     page: int = 1,
-#     limit: int = 10,
-# ):
-#     """
-#     Advanced search endpoint with filtering by domain and language, and pagination.
+@router.post("/glossary/search")
+async def advanced_search(
+    query: Optional[str] = None,
+    domain: Optional[str] = None,
+    language: Optional[str] = None,
+    page: int = 1,
+    limit: int = 10,
+):
+    """
+    Advanced search endpoint with filtering by domain and language, and pagination.
 
-#     This endpoint can be used for the main glossary view with filtering capabilities.
-#     """
-#     df = await load_marito_data()
+    This endpoint can be used for the main glossary view with filtering capabilities.
+    """
+    df = await load_marito_data()
 
-#     # Start with all records
-#     filtered_df = df.copy()
+    # Start with all records
+    filtered_df = df.copy()
 
-#     # Apply filters
-#     if domain:
-#         filtered_df = filtered_df[filtered_df['category'].str.lower() == domain.lower()]
+    # Apply filters
+    if domain:
+        filtered_df = filtered_df[filtered_df["category"].str.lower() == domain.lower()]
 
-#     # Check if we need language filtering
-#     language_col = None
-#     if language and language.lower() != 'all':
-#         for col, lang_name in LANGUAGE_MAP.items():
-#             if lang_name.lower() == language.lower():
-#                 language_col = col
-#                 break
+    # Check if we need language filtering
+    language_col = None
+    if language and language.lower() != "all":
+        for col, lang_name in LANGUAGE_MAP.items():
+            if lang_name.lower() == language.lower():
+                language_col = col
+                break
 
-#         if language_col:
-#             # Keep only rows where the specified language column is not empty
-#             filtered_df = filtered_df[filtered_df[language_col].notna()]
+        if language_col:
+            # Keep only rows where the specified language column is not empty
+            filtered_df = filtered_df[filtered_df[language_col].notna()]
 
-#     # Apply text search if query is provided
-#     if query and query.strip():
-#         query = query.lower()
-#         term_columns = [col for col in filtered_df.columns if col.endswith('_term')]
-#         def_columns = [col for col in filtered_df.columns if col.endswith('_definition')]
+    # Apply text search if query is provided
+    if query and query.strip():
+        query = query.lower()
+        term_columns = [col for col in filtered_df.columns if col.endswith("_term")]
+        def_columns = [
+            col for col in filtered_df.columns if col.endswith("_definition")
+        ]
 
-#         # Create a mask for searching in all term and definition columns
-#         mask = pd.Series([False] * len(filtered_df))
+        # Create a mask for searching in all term and definition columns
+        mask = pd.Series([False] * len(filtered_df))
 
-#         for col in term_columns + def_columns:
-#             mask = mask | filtered_df[col].str.lower().str.contains(query, na=False)
+        for col in term_columns + def_columns:
+            mask = mask | filtered_df[col].str.lower().str.contains(query, na=False)
 
-#         filtered_df = filtered_df[mask]
+        filtered_df = filtered_df[mask]
 
-#     # Calculate total results for pagination
-#     total_results = len(filtered_df)
+    # Calculate total results for pagination
+    total_results = len(filtered_df)
 
-#     # Apply pagination
-#     start_idx = (page - 1) * limit
-#     end_idx = start_idx + limit
-#     paginated_df = filtered_df.iloc[start_idx:end_idx]
+    # Apply pagination
+    start_idx = (page - 1) * limit
+    end_idx = start_idx + limit
+    paginated_df = filtered_df.iloc[start_idx:end_idx]
 
-#     # Prepare results in the format expected by the frontend
-#     results = []
-#     for _, row in paginated_df.iterrows():
-#         term_data = {
-#             "id": str(row.name),  # Use row index as id
-#             "term": row.get('eng_term', ''),
-#             "definition": row.get('eng_definition', ''),
-#             "language": "English"  # Default language for the main view
-#         }
+    # Prepare results in the format expected by the frontend
+    results = []
+    for _, row in paginated_df.iterrows():
+        term_data = {
+            "id": str(row.name),  # Use row index as id
+            "term": row.get("eng_term", ""),
+            "definition": row.get("eng_definition", ""),
+            "language": "English",  # Default language for the main view
+        }
 
-#         # If a specific non-English language is requested, use that term instead
-#         if language_col and language_col != 'eng_term' and not pd.isna(row.get(language_col)):
-#             term_data["term"] = row.get(language_col)
-#             term_data["language"] = LANGUAGE_MAP.get(language_col, "Unknown")
+        # If a specific non-English language is requested, use that term instead
+        if (
+            language_col
+            and language_col != "eng_term"
+            and not pd.isna(row.get(language_col))
+        ):
+            term_data["term"] = row.get(language_col)
+            term_data["language"] = LANGUAGE_MAP.get(language_col, "Unknown")
 
-#         results.append(term_data)
+        results.append(term_data)
 
-#     return {
-#         "results": results,
-#         "total": total_results,
-#         "page": page,
-#         "limit": limit,
-#         "pages": (total_results + limit - 1) // limit  # Ceiling division for total pages
-#     }
+    return {
+        "results": results,
+        "total": total_results,
+        "page": page,
+        "limit": limit,
+        "pages": (total_results + limit - 1)
+        // limit,  # Ceiling division for total pages
+    }
+
 
 # @router.post("/glossary/translate")
 # async def translate_terms(
