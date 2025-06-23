@@ -190,54 +190,74 @@ const Glossary = () => {
   );
 
   return (
-    <div className="glossary-root">
-      {/* Top Bar with Profile Section */}
-      <div
-        className="glossary-top-bar"
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          padding: '1rem 2rem 0 2rem',
-        }}
-      >
-        {isLoadingUserData ? (
-          <div className="profile-section">Loading profile...</div>
-        ) : userData ? (
-          <div
-            className="profile-section"
-            style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-          >
-            <div
-              className="profile-info"
-              style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-            >
-              <div className="profile-avatar">{avatarInitials}</div>
-              <div className="profile-details">
-                <div
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-                >
-                  <LanguageSwitcher />
-                  <h3 style={{ margin: 0 }}>
-                    {userData.firstName} {userData.lastName}
-                  </h3>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
-                  User ID: {userData.uuid}
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : null}
-      </div>
+    <div
+      className="glossary-root"
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'row' }}
+    >
       {/* Left Navigation */}
-      <div className="glossary-leftnav">
+      <div className="glossary-leftnav" style={{ minWidth: 220 }}>
         <LeftNav activeItem={activeNav} setActiveItem={setActiveNav} />
       </div>
-      <div className="glossary-main">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="glossary-header">
+      {/* Main Content with Profile at Top Right */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          position: 'relative',
+        }}
+      >
+        {/* Profile Section absolutely positioned top right of main content */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            padding: '1.5rem 2.5rem 0 2.5rem',
+            zIndex: 2,
+          }}
+        >
+          {isLoadingUserData ? (
+            <div className="profile-section">Loading profile...</div>
+          ) : userData ? (
+            <div
+              className="profile-section"
+              style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+            >
+              <div
+                className="profile-info"
+                style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+              >
+                <div className="profile-avatar">{avatarInitials}</div>
+                <div className="profile-details">
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <LanguageSwitcher />
+                    <h3 style={{ margin: 0 }}>
+                      {userData.firstName} {userData.lastName}
+                    </h3>
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
+                    User ID: {userData.uuid}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+        {/* Main Centered Content */}
+        <div style={{ width: '100%', maxWidth: 900, marginTop: '5.5rem' }}>
+          {/* Multilingual Dictionary section restored */}
+          <div
+            className="glossary-header"
+            style={{ textAlign: 'center', marginBottom: '2rem' }}
+          >
             <h1 className="glossary-title">
               <Book className="text-blue-600" size={40} />
               Multilingual Dictionary
@@ -246,7 +266,6 @@ const Glossary = () => {
               Browse categories, explore terms, and discover translations
             </p>
           </div>
-
           <div className="glossary-grid">
             {/* Categories Panel */}
             <div className="glossary-panel">
