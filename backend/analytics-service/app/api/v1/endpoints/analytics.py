@@ -4,6 +4,7 @@ import pandas as pd
 from collections import Counter  # noqa: F401
 import os
 from fastapi import HTTPException, Query
+from typing import Dict
 
 router = APIRouter()
 
@@ -212,10 +213,11 @@ async def get_domains():
     return await get_all_categories()
 
 
-# @router.get("/glossary/languages", response_model=Dict[str, str])
-# async def get_available_languages():
-#     """Get all available languages in the glossary."""
-#     return LANGUAGE_MAP
+@router.get("/glossary/languages", response_model=Dict[str, str])
+async def get_available_languages():
+    """Get all available languages in the glossary."""
+    return LANGUAGE_MAP
+
 
 # @router.post("/glossary/search")
 # async def advanced_search(
