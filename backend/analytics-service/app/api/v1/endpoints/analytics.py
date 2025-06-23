@@ -106,11 +106,11 @@ async def get_definition_length_analysis():
     return def_lengths
 
 
-# @router.get("/descriptive/unique-terms")
-# async def get_unique_terms_count():
-#     """Get count of unique terms for each language."""
-#     df, language_columns, _, _ = await get_dataset_columns()
-#     unique_term_counts = {
-#         lang: df[lang].nunique(dropna=True) for lang in language_columns
-#     }
-#     return unique_term_counts
+@router.get("/descriptive/unique-terms")
+async def get_unique_terms_count():
+    """Get count of unique terms for each language."""
+    df, language_columns, _, _ = await get_dataset_columns()
+    unique_term_counts = {
+        lang: df[lang].nunique(dropna=True) for lang in language_columns
+    }
+    return unique_term_counts
