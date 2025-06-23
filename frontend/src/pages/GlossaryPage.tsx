@@ -12,6 +12,7 @@ const Pagination: React.FC<{
     <div className="pagination">
       <button
         className="arrow"
+        type="button"
         onClick={() => {
           onPageChange(currentPage - 1);
         }}
@@ -20,19 +21,23 @@ const Pagination: React.FC<{
       >
         &#8592;
       </button>
-      {pageNumbers.map((num) => (
-        <button
-          key={num}
-          className={`page-number${num === currentPage ? ' active' : ''}`}
-          onClick={() => {
-            onPageChange(num);
-          }}
-        >
-          {num}
-        </button>
-      ))}
+      <div className="numbers-group">
+        {pageNumbers.map((num) => (
+          <button
+            key={num}
+            type="button"
+            className={`page-number${num === currentPage ? ' active' : ''}`}
+            onClick={() => {
+              onPageChange(num);
+            }}
+          >
+            {num}
+          </button>
+        ))}
+      </div>
       <button
         className="arrow"
+        type="button"
         onClick={() => {
           onPageChange(currentPage + 1);
         }}
@@ -45,23 +50,72 @@ const Pagination: React.FC<{
   );
 };
 
+const DownloadBoxes: React.FC = () => (
+  <>
+    <div className="glossaries-header-row">
+      <span className="glossaries-title">Glossaries</span>
+    </div>
+    <hr className="glossaries-divider" />
+    <div className="download-boxes">
+      {[1, 2, 3, 4, 5, 6].map((item) => (
+        <div className="download-box" key={`glossary-box-${String(item)}`}>
+          <div className="download-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 3V14M10 14L5 9M10 14L15 9"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <div className="arrow-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 5L13 10L8 15"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      ))}
+    </div>
+  </>
+);
+
 const GlossaryPage: React.FC = () => {
-  // Set the default active item to 'glossary' for this page
   const [activeMenuItem, setActiveMenuItem] = useState('glossary');
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 5; // Replace with actual total pages if dynamic
+  const totalPages = 12;
 
   return (
     <div className="flex">
       <LeftNav activeItem={activeMenuItem} setActiveItem={setActiveMenuItem} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-bold mb-4">Glossary</h1>
-        {/* Add glossary content here */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+        <DownloadBoxes />
+        <div style={{ marginTop: '5rem' }}>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
     </div>
   );
