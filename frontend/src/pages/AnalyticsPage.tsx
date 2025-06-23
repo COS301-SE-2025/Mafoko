@@ -185,7 +185,7 @@ const AnalyticsPage: React.FC = () => {
 
   useEffect(() => {
     const stored = localStorage.getItem('darkMode');
-    if (stored !== null) setIsDarkMode(stored === 'true');
+    if (stored) setIsDarkMode(stored === 'false');
   }, []);
 
   useEffect(() => {
