@@ -28,91 +28,96 @@ async def load_marito_data():
         TERM_DATASET = df
     return TERM_DATASET
 
+
 # Language mappings
 LANGUAGE_MAP = {
-    'eng_term': 'English',
-    'afr_term': 'Afrikaans',
-    'nde_term': 'Ndebele',
-    'xho_term': 'Xhosa',
-    'zul_term': 'Zulu',
-    'nso_term': 'Northern Sotho',
-    'sot_term': 'Sotho',
-    'tsn_term': 'Tswana',
-    'ssw_term': 'Swazi',
-    'ven_term': 'Venda',
-    'tso_term': 'Tsonga'
+    "eng_term": "English",
+    "afr_term": "Afrikaans",
+    "nde_term": "Ndebele",
+    "xho_term": "Xhosa",
+    "zul_term": "Zulu",
+    "nso_term": "Northern Sotho",
+    "sot_term": "Sotho",
+    "tsn_term": "Tswana",
+    "ssw_term": "Swazi",
+    "ven_term": "Venda",
+    "tso_term": "Tsonga",
 }
+
 
 # Helper functions for glossary API
 async def get_all_categories():
     """Get all unique categories from the dataset."""
     df = await load_marito_data()
-    return sorted(df['category'].unique().tolist()) if 'category' in df.columns else []
+    return sorted(df["category"].unique().tolist()) if "category" in df.columns else []
+
 
 async def get_terms_by_category(category: str):
     """Get all terms for a specific category."""
     df = await load_marito_data()
-    
-    if 'category' not in df.columns:
+
+    if "category" not in df.columns:
         return []
-    
-    filtered_df = df[df['category'].str.lower() == category.lower()]
-    
+
+    filtered_df = df[df["category"].str.lower() == category.lower()]
+
     result = []
     for _, row in filtered_df.iterrows():
         term_data = {
-            "id": row.get('eng_term', ''),
-            "term": row.get('eng_term', ''),
-            "definition": row.get('eng_definition', ''),
-            "category": row.get('category', '')
+            "id": row.get("eng_term", ""),
+            "term": row.get("eng_term", ""),
+            "definition": row.get("eng_definition", ""),
+            "category": row.get("category", ""),
         }
         result.append(term_data)
-        
+
     return result
+
 
 async def get_term_translations(term_id: str):
     """Get all available translations for a specific term."""
     df = await load_marito_data()
-    
+
     # Find the term (case-insensitive)
-    term_row = df[df['eng_term'].str.lower() == term_id.lower()]
-    
+    term_row = df[df["eng_term"].str.lower() == term_id.lower()]
+
     if term_row.empty:
         return None
-    
+
     row = term_row.iloc[0]
-    
+
     translations = {}
     for lang_col, lang_name in LANGUAGE_MAP.items():
         if lang_col in row and not pd.isna(row[lang_col]):
             translations[lang_name] = row[lang_col]
-    
+
     return {
-        "term": row.get('eng_term', ''),
-        "definition": row.get('eng_definition', ''),
-        "translations": translations
+        "term": row.get("eng_term", ""),
+        "definition": row.get("eng_definition", ""),
+        "translations": translations,
     }
+
 
 async def search_terms(query: str):
     """Search for terms across all categories."""
     df = await load_marito_data()
-    
+
     # Search in both term and definition columns (case-insensitive)
-    mask = (
-        df['eng_term'].str.lower().str.contains(query.lower()) |
-        df['eng_definition'].str.lower().str.contains(query.lower())
-    )
+    mask = df["eng_term"].str.lower().str.contains(query.lower()) | df[
+        "eng_definition"
+    ].str.lower().str.contains(query.lower())
     results = df[mask]
-    
+
     return [
         {
-            "id": row.get('eng_term', ''),
-            "term": row.get('eng_term', ''),
-            "definition": row.get('eng_definition', ''),
-            "category": row.get('category', '')
+            "id": row.get("eng_term", ""),
+            "term": row.get("eng_term", ""),
+            "definition": row.get("eng_definition", ""),
+            "category": row.get("category", ""),
         }
         for _, row in results.iterrows()
     ]
+
 
 @router.get("/descriptive")
 async def get_descriptive_analytics():
@@ -160,7 +165,9 @@ async def get_descriptive_analytics():
         "unique_term_counts": unique_term_counts,
     }
 
+
 # ========== Glossary API Endpoints ==========
+
 
 @router.get("/glossary/categories", response_model=List[str])
 async def get_categories():
@@ -211,18 +218,18 @@ async def get_categories():
 # ):
 #     """
 #     Advanced search endpoint with filtering by domain and language, and pagination.
-    
+
 #     This endpoint can be used for the main glossary view with filtering capabilities.
 #     """
 #     df = await load_marito_data()
-    
+
 #     # Start with all records
 #     filtered_df = df.copy()
-    
+
 #     # Apply filters
 #     if domain:
 #         filtered_df = filtered_df[filtered_df['category'].str.lower() == domain.lower()]
-    
+
 #     # Check if we need language filtering
 #     language_col = None
 #     if language and language.lower() != 'all':
@@ -230,33 +237,33 @@ async def get_categories():
 #             if lang_name.lower() == language.lower():
 #                 language_col = col
 #                 break
-        
+
 #         if language_col:
 #             # Keep only rows where the specified language column is not empty
 #             filtered_df = filtered_df[filtered_df[language_col].notna()]
-    
+
 #     # Apply text search if query is provided
 #     if query and query.strip():
 #         query = query.lower()
 #         term_columns = [col for col in filtered_df.columns if col.endswith('_term')]
 #         def_columns = [col for col in filtered_df.columns if col.endswith('_definition')]
-        
+
 #         # Create a mask for searching in all term and definition columns
 #         mask = pd.Series([False] * len(filtered_df))
-        
+
 #         for col in term_columns + def_columns:
 #             mask = mask | filtered_df[col].str.lower().str.contains(query, na=False)
-            
+
 #         filtered_df = filtered_df[mask]
-    
+
 #     # Calculate total results for pagination
 #     total_results = len(filtered_df)
-    
+
 #     # Apply pagination
 #     start_idx = (page - 1) * limit
 #     end_idx = start_idx + limit
 #     paginated_df = filtered_df.iloc[start_idx:end_idx]
-    
+
 #     # Prepare results in the format expected by the frontend
 #     results = []
 #     for _, row in paginated_df.iterrows():
@@ -266,14 +273,14 @@ async def get_categories():
 #             "definition": row.get('eng_definition', ''),
 #             "language": "English"  # Default language for the main view
 #         }
-        
+
 #         # If a specific non-English language is requested, use that term instead
 #         if language_col and language_col != 'eng_term' and not pd.isna(row.get(language_col)):
 #             term_data["term"] = row.get(language_col)
 #             term_data["language"] = LANGUAGE_MAP.get(language_col, "Unknown")
-        
+
 #         results.append(term_data)
-    
+
 #     return {
 #         "results": results,
 #         "total": total_results,
@@ -294,10 +301,10 @@ async def get_categories():
 #     If target_languages is not provided, translates to all available languages.
 #     """
 #     df = await load_marito_data()
-    
+
 #     # Find the source language column
 #     source_col = next((col for col, lang in LANGUAGE_MAP.items() if lang.lower() == source_language.lower()), 'eng_term')
-    
+
 #     # Determine target language columns
 #     if target_languages:
 #         target_langs = [lang.lower() for lang in target_languages]
@@ -305,25 +312,25 @@ async def get_categories():
 #     else:
 #         # Use all languages except the source
 #         target_cols = [col for col, lang in LANGUAGE_MAP.items() if col != source_col]
-    
+
 #     # Filter by domain if specified
 #     if domain:
 #         df = df[df['category'].str.lower() == domain.lower()]
-    
+
 #     # Find the requested terms
 #     result = []
 #     for term in terms:
 #         # Find rows where the source language term matches
 #         term_rows = df[df[source_col].str.lower() == term.lower()]
-        
+
 #         if not term_rows.empty:
 #             row = term_rows.iloc[0]
-            
+
 #             translations = {}
 #             for col in target_cols:
 #                 if col in row and not pd.isna(row[col]):
 #                     translations[LANGUAGE_MAP[col]] = row[col]
-            
+
 #             result.append({
 #                 "id": str(row.name),
 #                 "term": row[source_col],
@@ -331,5 +338,5 @@ async def get_categories():
 #                 "source_language": LANGUAGE_MAP[source_col],
 #                 "translations": translations
 #             })
-    
+
 #     return {"results": result}
