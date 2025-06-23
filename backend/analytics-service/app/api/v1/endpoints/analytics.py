@@ -39,34 +39,34 @@ async def get_dataset_columns():
     return df, language_columns, definition_columns, category_column
 
 
-@router.get("/descriptive")
-async def get_descriptive_analytics():
-    """Get all descriptive analytics (legacy endpoint).
-    This endpoint combines all analytics for backward compatibility."""
+# @router.get("/descriptive")
+# async def get_descriptive_analytics():
+#     """Get all descriptive analytics (legacy endpoint).
+#     This endpoint combines all analytics for backward compatibility."""
 
-    # Get individual analytics
-    category_counts = await get_category_frequency()
-    language_coverage = await get_language_coverage()
-    term_lengths = await get_term_length_analysis()
-    def_lengths = await get_definition_length_analysis()
-    unique_term_counts = await get_unique_terms_count()
+#     # Get individual analytics
+#     category_counts = await get_category_frequency()
+#     language_coverage = await get_language_coverage()
+#     term_lengths = await get_term_length_analysis()
+#     def_lengths = await get_definition_length_analysis()
+#     unique_term_counts = await get_unique_terms_count()
 
-    # Combine all analytics
-    return {
-        "category_frequency": category_counts,
-        "language_coverage_percent": language_coverage,
-        "average_term_lengths": term_lengths,
-        "average_definition_lengths": def_lengths,
-        "unique_term_counts": unique_term_counts,
-    }
+#     # Combine all analytics
+#     return {
+#         "category_frequency": category_counts,
+#         "language_coverage_percent": language_coverage,
+#         "average_term_lengths": term_lengths,
+#         "average_definition_lengths": def_lengths,
+#         "unique_term_counts": unique_term_counts,
+#     }
 
 
-# @router.get("/descriptive/category-frequency")
-# async def get_category_frequency():
-#     """Get frequency distribution of terms across different categories."""
-#     df, _, _, category_column = await get_dataset_columns()
-#     category_counts = df[category_column].value_counts().to_dict()
-#     return category_counts
+@router.get("/descriptive/category-frequency")
+async def get_category_frequency():
+    """Get frequency distribution of terms across different categories."""
+    df, _, _, category_column = await get_dataset_columns()
+    category_counts = df[category_column].value_counts().to_dict()
+    return category_counts
 
 
 # @router.get("/descriptive/language-coverage")
