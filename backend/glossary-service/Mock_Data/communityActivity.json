@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "user": "LinguistMara",
+    "action": "added new term",
+    "term": "Indaba",
+    "language": "Zulu",
+    "timestamp": "30 minutes ago"
+  },
+  {
+    "id": "2",
+    "user": "SALanguageExpert",
+    "action": "updated definition for",
+    "term": "Braai",
+    "language": "Afrikaans",
+    "timestamp": "2 hours ago"
+  },
+  {
+    "id": "3",
+    "user": "TsongaScribe",
+    "action": "contributed translation for",
+    "term": "Vutomi",
+    "language": "Tsonga",
+    "timestamp": "5 hours ago"
+  },
+  {
+    "id": "4",
+    "user": "XhosaWords",
+    "action": "verified term",
+    "term": "Enkosi",
+    "language": "Xhosa",
+    "timestamp": "1 day ago"
+  }
+]
