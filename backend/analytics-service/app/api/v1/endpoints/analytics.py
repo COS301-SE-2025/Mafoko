@@ -39,26 +39,26 @@ async def get_dataset_columns():
     return df, language_columns, definition_columns, category_column
 
 
-# @router.get("/descriptive")
-# async def get_descriptive_analytics():
-#     """Get all descriptive analytics (legacy endpoint).
-#     This endpoint combines all analytics for backward compatibility."""
+@router.get("/descriptive")
+async def get_descriptive_analytics():
+    """Get all descriptive analytics (legacy endpoint).
+    This endpoint combines all analytics for backward compatibility."""
 
-#     # Get individual analytics
-#     category_counts = await get_category_frequency()
-#     language_coverage = await get_language_coverage()
-#     term_lengths = await get_term_length_analysis()
-#     def_lengths = await get_definition_length_analysis()
-#     unique_term_counts = await get_unique_terms_count()
+    # Get individual analytics
+    category_counts = await get_category_frequency()
+    language_coverage = await get_language_coverage()
+    term_lengths = await get_term_length_analysis()
+    def_lengths = await get_definition_length_analysis()
+    unique_term_counts = await get_unique_terms_count()
 
-#     # Combine all analytics
-#     return {
-#         "category_frequency": category_counts,
-#         "language_coverage_percent": language_coverage,
-#         "average_term_lengths": term_lengths,
-#         "average_definition_lengths": def_lengths,
-#         "unique_term_counts": unique_term_counts,
-#     }
+    # Combine all analytics
+    return {
+        "category_frequency": category_counts,
+        "language_coverage_percent": language_coverage,
+        "average_term_lengths": term_lengths,
+        "average_definition_lengths": def_lengths,
+        "unique_term_counts": unique_term_counts,
+    }
 
 
 @router.get("/descriptive/category-frequency")
