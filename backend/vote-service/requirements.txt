@@ -1,12 +1,13 @@
+# vote-service/requirements.txt
 fastapi
 uvicorn[standard]
+sqlalchemy
+asyncpg
+pydantic-settings
+python-jose[cryptography]
 passlib[bcrypt]
-PyJWT
-pytest
-httpx
 python-multipart
-pytest-asyncio
-google-cloud-storage
+PyJWT
 ruff      
 black     
 mypy    

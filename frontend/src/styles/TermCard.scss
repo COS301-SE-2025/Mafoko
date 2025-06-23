@@ -38,45 +38,16 @@
           border-radius: 9999px;
           color: white;
 
-          &.pink {
-            background-color: #f7074d;
-          }
-
-          &.yellow {
-            background-color: #ffbb4f;
-          }
-
-          &.blue {
-            background-color: #00ceaf;
-          }
-
-          &.gray {
-            background-color: #6c6c6c;
-          }
-
-          &.green {
-            background-color: #9bc973;
-          }
-
-          &.orange {
-            background-color: #fb923c;
-          }
-
-          &.teal {
-            background-color: #2dd4bf;
-          }
-
-          &.indigo {
-            background-color: #818cf8;
-          }
-
-          &.lime {
-            background-color: #a3e635;
-          }
-
-          &.cyan {
-            background-color: #22d3ee;
-          }
+          &.pink { background-color: #f7074d; }
+          &.yellow { background-color: #ffbb4f; }
+          &.blue { background-color: #00ceaf; }
+          &.gray { background-color: #6c6c6c; }
+          &.green { background-color: #9bc973; }
+          &.orange { background-color: #fb923c; }
+          &.teal { background-color: #2dd4bf; }
+          &.indigo { background-color: #818cf8; }
+          &.lime { background-color: #a3e635; }
+          &.cyan { background-color: #22d3ee; }
         }
       }
     }
@@ -86,13 +57,24 @@
       gap: 1rem;
       align-items: center;
 
-      .social {
+      // This replaces the old .social and .share styles
+      .social-button {
+        background: none;
+        border: none;
+        padding: 0.25rem;
+        margin: -0.25rem;
         display: flex;
         align-items: center;
         gap: 0.25rem;
+        cursor: pointer;
+        color: var(--text-theme);
+        
+        // --- CHANGE 1: Add smooth transitions for all animations ---
+        transition: all 0.15s ease-in-out;
 
         .count {
           font-size: 0.85rem;
+          transition: color 0.15s ease-in-out;
 
           &.up {
             color: #00ceaf;
@@ -106,14 +88,25 @@
         .icon {
           stroke: currentColor;
         }
-      }
-
-      .share {
-        cursor: pointer;
-        transition: opacity 0.2s;
-
+        
+        // --- CHANGE 2: Fix the hover effect so it doesn't disappear ---
         &:hover {
-          opacity: 0.8;
+          // Instead of changing color, we'll make it slightly brighter
+          filter: brightness(1.25);
+          transform: translateY(-2px); // Also lift it slightly on hover
+        }
+
+        // --- CHANGE 3: Add the "pop" animation when clicked ---
+        &:active {
+          transform: scale(1.2); // Makes the button larger while the mouse is pressed
+        }
+
+        // Style for when a vote is active
+        &.voted {
+          .icon, .count {
+            color: #f7074d; // Your accent pink color
+            font-weight: 600;
+          }
         }
       }
     }

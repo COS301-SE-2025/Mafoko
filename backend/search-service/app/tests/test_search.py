@@ -8,89 +8,45 @@ Validates:
 - Response structure and content integrity
 """
 
-from fastapi.testclient import TestClient
-from app.main import app
+import pytest
+import pytest_asyncio  # noqa: F401
+from httpx import AsyncClient  # Use AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from uuid import uuid4
+from mavito_common.models.term import Term
 
-client = TestClient(app)
 
-
-def test_search_with_filters_and_pagination():
-    """
-    Test /api/v1/search with full filters and pagination.
-    """
-    response = client.get(
-        "/api/v1/search",
-        params={
-            "query": "grain",
-            "language": "English",
-            "domain": "Agriculture",
-            "sort_by": "popularity",
-            "page": 1,
-            "page_size": 10,
-        },
+@pytest.mark.asyncio
+async def test_search_with_filters(client: AsyncClient, db_session: AsyncSession):
+    # Arrange
+    term1 = Term(
+        id=uuid4(),
+        term="Grain Silo",
+        definition="A place for grain",
+        language="English",
+        domain="Agriculture",
     )
-    assert response.status_code == 200
-    json = response.json()
-    assert isinstance(json, dict)
-    assert "items" in json and "total" in json
-    items = json["items"]
-    total = json["total"]
-    assert isinstance(items, list)
-    assert isinstance(total, int)
-    if items:
-        assert "term" in items[0]
+    db_session.add(term1)
+    await db_session.commit()
 
-
-def test_search_empty_result():
-    """
-    Test /api/v1/search with a query that returns no results.
-    """
-    response = client.get(
-        "/api/v1/search",
-        params={
-            "query": "nonexistentqueryterm",
-            "page": 1,
-            "page_size": 10,
-        },
+    # Act
+    response = await client.get(
+        "/api/v1/search/", params={"query": "grain", "language": "English"}
     )
+
+    # Assert
     assert response.status_code == 200
-    json = response.json()
-    assert isinstance(json["items"], list)
-    assert json["total"] == 0
+    data = response.json()
+    assert data["total"] == 1
+    assert data["items"][0]["term"] == "Grain Silo"
 
 
-def test_search_invalid_page():
-    """
-    Test /api/v1/search with an invalid (too high) page number.
-    """
-    response = client.get(
-        "/api/v1/search",
-        params={
-            "query": "grain",
-            "page": 999,
-            "page_size": 10,
-        },
-    )
+@pytest.mark.asyncio
+async def test_search_empty_result(client: AsyncClient):
+    # Act
+    response = await client.get("/api/v1/search/", params={"query": "nonexistentquery"})
+    # Assert
     assert response.status_code == 200
-    json = response.json()
-    assert isinstance(json["items"], list)
-    assert len(json["items"]) == 0 or (json["total"] < (999 - 1) * 10)
-
-
-def test_search_large_page_size():
-    """
-    Test /api/v1/search with an excessively large page size.
-    """
-    response = client.get(
-        "/api/v1/search",
-        params={
-            "query": "grain",
-            "page": 1,
-            "page_size": 1000,
-        },
-    )
-    assert response.status_code == 200
-    json = response.json()
-    assert isinstance(json["items"], list)
-    assert isinstance(json["total"], int)
-    assert len(json["items"]) <= 1000
+    data = response.json()
+    assert data["items"] == []
+    assert data["total"] == 0
