@@ -69,15 +69,15 @@ async def get_category_frequency():
     return category_counts
 
 
-# @router.get("/descriptive/language-coverage")
-# async def get_language_coverage():
-#     """Get coverage percentage for each language (% of non-empty terms)."""
-#     df, language_columns, _, _ = await get_dataset_columns()
-#     language_coverage = {
-#         lang: round(df[lang].notna().sum() / len(df) * 100, 2)
-#         for lang in language_columns
-#     }
-#     return language_coverage
+@router.get("/descriptive/language-coverage")
+async def get_language_coverage():
+    """Get coverage percentage for each language (% of non-empty terms)."""
+    df, language_columns, _, _ = await get_dataset_columns()
+    language_coverage = {
+        lang: round(df[lang].notna().sum() / len(df) * 100, 2)
+        for lang in language_columns
+    }
+    return language_coverage
 
 
 # @router.get("/descriptive/term-length")
