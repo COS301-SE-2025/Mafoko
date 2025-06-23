@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, master,develop]
+    branches: [main, master, develop]
   pull_request:
-    branches: [main, master,develop]
+    branches: [main, master, develop]
 
 jobs:
   # Backend Pipeline
@@ -14,6 +14,23 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+
+    # This services block starts a PostgreSQL container for the job
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        # Health check to ensure the database is ready before tests run
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout Repository
@@ -42,36 +59,32 @@ jobs:
 
       - name: Lint with Ruff
         run: ruff check .
-        
+
       - name: Type check with mypy
         run: |
           echo "Running mypy on auth-service..."
           PYTHONPATH=. mypy auth-service/app
-  
           echo "Running mypy on search-service..."
           PYTHONPATH=. mypy search-service/app
-  
           echo "Running mypy on analytics-service..."
           PYTHONPATH=. mypy analytics-service/app
 
       - name: Format check with Black
         run: black --check .
-  
+
       - name: Run tests for all services
         env:
           SECRET_KEY: "a-secret-key-for-testing"
           DB_USER: "testuser"
           DB_PASSWORD: "testpassword"
           DB_NAME: "testdb"
-          DB_HOST: "localhost"
-          DB_PORT: "5432"
+          DB_HOST: "localhost" # The service is mapped to localhost
+          DB_PORT: "5432"      # The service port is mapped to the host port
         run: |
           echo "--- Running tests for Auth Service ---"
           (cd auth-service && PYTHONPATH=. pytest)
-
           echo "--- Running tests for Search Service ---"
           (cd search-service && PYTHONPATH=. pytest)
-
           echo "--- Running tests for Analytics Service ---"
           (cd analytics-service && PYTHONPATH=. pytest)
 
@@ -82,7 +95,6 @@ jobs:
     defaults:
       run:
         working-directory: ./frontend
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
