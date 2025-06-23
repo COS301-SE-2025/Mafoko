@@ -299,15 +299,29 @@ const AdminPage: React.FC = () => {
 
                 <div className="admin-stats">
                   <div className="stat-card">
-                    <span className="stat-number">0</span>
+                    <span className="stat-number">
+                      {allApplications.length}
+                    </span>
                     <span className="stat-label">Total Applications</span>
                   </div>
                   <div className="stat-card">
-                    <span className="stat-number">0</span>
+                    <span className="stat-number">
+                      {
+                        allApplications.filter(
+                          (app) => app.status === 'pending',
+                        ).length
+                      }
+                    </span>
                     <span className="stat-label">Pending Review</span>
                   </div>
                   <div className="stat-card">
-                    <span className="stat-number">0</span>
+                    <span className="stat-number">
+                      {
+                        allApplications.filter(
+                          (app) => app.status === 'approved',
+                        ).length
+                      }
+                    </span>
                     <span className="stat-label">Approved</span>
                   </div>
                   {/* Testing only */}
