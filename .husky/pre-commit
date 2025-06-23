@@ -24,6 +24,7 @@ mypy glossary-service || exit 1
 
 echo "Running mypy on vote-service..."
 mypy vote-service || exit 1
+
 black --check . || exit 1
 black . || exit 1
 

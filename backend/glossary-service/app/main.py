@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
-from app.api.v1.endpoints import search, suggest
+from app.api.v1.endpoints import glossary
 
 app = FastAPI(title="Mavito Search Service")
 
@@ -14,8 +14,7 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
         allow_headers=["*"],
     )
 
-app.include_router(search.router, prefix="/api/v1/search", tags=["Search"])
-app.include_router(suggest.router, prefix="/api/v1/suggest", tags=["Suggest"])
+app.include_router(glossary.router, prefix="/api/v1/glossary", tags=["Glossary"])
 
 
 @app.get("/", tags=["Health Check"])
