@@ -1,0 +1,228 @@
+/* GlossaryStyles.scss - All styles for the Glossary page */
+
+.glossary-root {
+  min-height: 100vh;
+  background: none;
+  padding: 1rem;
+  display: flex;
+}
+
+.glossary-main {
+  flex: 1;
+  margin-top: 4rem;
+  background: #fff;
+  box-shadow: 0 2px 8px 0 #0001;
+  border-radius: 0.75rem;
+  padding: 1.2rem 0.5rem;
+  max-width: 900px;
+  margin-left: 18rem; /* Move main content further right to clear LeftNav */
+  margin-right: auto;
+}
+
+.glossary-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.glossary-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.glossary-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.glossary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+@media (min-width: 1024px) {
+  .glossary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.glossary-panel {
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px 0 #0001;
+  padding: 0.6rem;
+}
+
+.glossary-panel-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.glossary-categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.glossary-category-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #1e293b;
+  transition: all 0.2s;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+.glossary-category-btn.selected {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+.glossary-category-btn:hover:not(.selected) {
+  background: #f1f5f9;
+}
+
+.glossary-search {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.glossary-search-input {
+  width: 100%;
+  padding: 0.25rem 0.7rem 0.25rem 1.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  outline: none;
+  font-size: 0.85rem;
+  transition: border 0.2s;
+}
+.glossary-search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px #2563eb33;
+}
+.glossary-search-icon {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.glossary-terms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
+.glossary-term-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #1e293b;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+.glossary-term-btn.selected {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+}
+.glossary-term-btn:hover:not(.selected) {
+  background: #f1f5f9;
+}
+
+.glossary-term-title {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+}
+.glossary-term-def {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-clamp: 2;
+}
+
+.glossary-empty {
+  text-align: center;
+  color: #64748b;
+  padding: 0.7rem 0;
+  font-size: 0.85rem;
+}
+
+.glossary-details-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.2rem;
+}
+.glossary-details-def {
+  color: #64748b;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+}
+.glossary-translate-btn {
+  width: 100%;
+  background: #2563eb;
+  color: #fff;
+  padding: 0.25rem 0.7rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  transition: background 0.2s;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.glossary-translate-btn:hover {
+  background: #1d4ed8;
+}
+
+.glossary-translation-list {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.4rem;
+  margin-top: 0.4rem;
+  max-height: 6rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.glossary-translation-item {
+  background: #f9fafb;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+}
+.glossary-translation-lang {
+  font-weight: 500;
+  color: #2563eb;
+  font-size: 0.8rem;
+  margin-bottom: 0.1rem;
+}
+.glossary-translation-text {
+  color: #1e293b;
+  font-size: 0.85rem;
+}
