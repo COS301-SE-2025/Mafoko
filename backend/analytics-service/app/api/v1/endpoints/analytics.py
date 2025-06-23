@@ -3,7 +3,7 @@ from typing import List
 import pandas as pd
 from collections import Counter  # noqa: F401
 import os
-from fastapi import HTTPException ,Query
+from fastapi import HTTPException, Query
 
 router = APIRouter()
 
@@ -198,10 +198,13 @@ async def get_term_translations_api(term_id: str):
 
 
 @router.get("/glossary/search")
-async def search_terms_api(query: str = Query(..., description="Search query for terms or definitions")):
+async def search_terms_api(
+    query: str = Query(..., description="Search query for terms or definitions")
+):
     """Search for terms across all categories."""
     results = await search_terms(query)
     return results
+
 
 # @router.get("/glossary/domains", response_model=List[str])
 # async def get_domains():
