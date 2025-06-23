@@ -67,7 +67,7 @@ const PieChart: React.FC<PieChartProps> = ({
   data,
   title = 'Chart',
   showTitle = false,
-  isDarkMode = false,
+  isDarkMode,
   formatValue = defaultFormatValue,
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);

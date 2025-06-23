@@ -284,7 +284,10 @@ const AnalyticsPage: React.FC = () => {
 
               <div className="chart-card">
                 <div className="chart-header">
-                  <h2 className="text-gray-800 text-xl font-semibold m-0">
+                  <h2
+                    className="text-gray-800 text-xl font-semibold m-0 "
+                    style={{ color: 'var(--text-color)' }}
+                  >
                     Category Distribution
                   </h2>
                 </div>
@@ -300,7 +303,10 @@ const AnalyticsPage: React.FC = () => {
             <div className="charts-right-column">
               <div className="chart-card pie-chart-card">
                 <div className="chart-header">
-                  <h2 className="text-gray-800 text-xl font-semibold m-0">
+                  <h2
+                    className="text-xl font-semibold m-0"
+                    style={{ color: 'var(--text-color)' }}
+                  >
                     Unique Language Terms
                   </h2>
                 </div>
@@ -308,6 +314,7 @@ const AnalyticsPage: React.FC = () => {
                   <PieChart
                     data={mockPieData}
                     formatValue={(value) => `${String(value)}%`}
+                    isDarkMode={isDarkMode}
                   />
                 </div>
                 {/* Testing only */}
