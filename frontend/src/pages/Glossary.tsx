@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Book, Globe, Search } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav';
+import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryStyles.scss';
 
 // Mock API service - replace with actual API service later
@@ -80,6 +81,11 @@ interface Translations {
   id: number;
   translations: Record<string, string>;
 }
+interface UserData {
+  uuid: string;
+  firstName: string;
+  lastName: string;
+}
 
 const Glossary = () => {
   // State management
@@ -92,10 +98,39 @@ const Glossary = () => {
   const [translations, setTranslations] = useState<Translations | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeNav, setActiveNav] = useState('search');
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [avatarInitials, setAvatarInitials] = useState<string>('U');
+  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
 
   // Load categories on component mount
   useEffect(() => {
     void loadCategories();
+    // Profile logic
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+    const fetchAndSetUserData = () => {
+      setIsLoadingUserData(true);
+      const storedUserDataString = localStorage.getItem('userData');
+      if (storedUserDataString) {
+        try {
+          const parsedData = JSON.parse(storedUserDataString) as UserData;
+          setUserData(parsedData);
+          if (parsedData.firstName && parsedData.lastName) {
+            setAvatarInitials(
+              `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
+            );
+          } else if (parsedData.firstName) {
+            setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
+          }
+          setIsLoadingUserData(false);
+          return;
+        } catch {
+          localStorage.removeItem('userData');
+        }
+      }
+      setIsLoadingUserData(false);
+    };
+    fetchAndSetUserData();
   }, []);
 
   const loadCategories = async (): Promise<void> => {
@@ -156,6 +191,45 @@ const Glossary = () => {
 
   return (
     <div className="glossary-root">
+      {/* Top Bar with Profile Section */}
+      <div
+        className="glossary-top-bar"
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          padding: '1rem 2rem 0 2rem',
+        }}
+      >
+        {isLoadingUserData ? (
+          <div className="profile-section">Loading profile...</div>
+        ) : userData ? (
+          <div
+            className="profile-section"
+            style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+          >
+            <div
+              className="profile-info"
+              style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+            >
+              <div className="profile-avatar">{avatarInitials}</div>
+              <div className="profile-details">
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <LanguageSwitcher />
+                  <h3 style={{ margin: 0 }}>
+                    {userData.firstName} {userData.lastName}
+                  </h3>
+                </div>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
+                  User ID: {userData.uuid}
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
       {/* Left Navigation */}
       <div className="glossary-leftnav">
         <LeftNav activeItem={activeNav} setActiveItem={setActiveNav} />
@@ -195,7 +269,9 @@ const Glossary = () => {
                       onClick={() => {
                         void handleCategorySelect(category);
                       }}
-                      className={`glossary-category-btn${selectedCategory === category ? ' selected' : ''}`}
+                      className={`glossary-category-btn${
+                        selectedCategory === category ? ' selected' : ''
+                      }`}
                     >
                       <span>{category}</span>
                       {selectedCategory === category ? (
@@ -245,7 +321,9 @@ const Glossary = () => {
                       onClick={() => {
                         handleTermSelect(term);
                       }}
-                      className={`glossary-term-btn${selectedTerm?.id === term.id ? ' selected' : ''}`}
+                      className={`glossary-term-btn${
+                        selectedTerm?.id === term.id ? ' selected' : ''
+                      }`}
                     >
                       <div className="glossary-term-title">{term.term}</div>
                       <div className="glossary-term-def">{term.definition}</div>
