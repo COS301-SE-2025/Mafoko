@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Book, Globe, Search } from 'lucide-react';
-import LeftNav from '../components/ui/LeftNav';
+import LeftNav from '../components/ui/LeftNav.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
-import '../styles/GlossaryStyles.scss';
+import '../styles/GlossaryPage.scss';
 
 // Mock API service - replace with actual API service later
 const dictionaryAPI = {
@@ -87,7 +87,7 @@ interface UserData {
   lastName: string;
 }
 
-const Glossary = () => {
+const GlossaryPage = () => {
   // State management
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<Term | null>(null);
@@ -431,4 +431,6 @@ const Glossary = () => {
   );
 };
 
-export default Glossary;
+export default GlossaryPage;
+
+// RENAME: GlossaryPage.tsx (was Glossary.tsx)
