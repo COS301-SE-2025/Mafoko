@@ -3,6 +3,7 @@ from typing import List
 import pandas as pd
 from collections import Counter  # noqa: F401
 import os
+from fastapi import HTTPException
 
 router = APIRouter()
 
@@ -176,13 +177,16 @@ async def get_categories():
     return categories
 
 
-# @router.get("/glossary/categories/{category_name}/terms")
-# async def get_terms_by_category_api(category_name: str):
-#     """Get all terms for a specific category."""
-#     terms = await get_terms_by_category(category_name)
-#     if not terms:
-#         raise HTTPException(status_code=404, detail=f"No terms found for category: {category_name}")
-#     return terms
+@router.get("/glossary/categories/{category_name}/terms")
+async def get_terms_by_category_api(category_name: str):
+    """Get all terms for a specific category."""
+    terms = await get_terms_by_category(category_name)
+    if not terms:
+        raise HTTPException(
+            status_code=404, detail=f"No terms found for category: {category_name}"
+        )
+    return terms
+
 
 # @router.get("/glossary/terms/{term_id}/translations")
 # async def get_term_translations_api(term_id: str):
