@@ -52,27 +52,11 @@ const AdminPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [selectedApplication, setSelectedApplication] =
+    useState<LinguistApplication | null>(null);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
 
-  const pageSize = 6;
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
+  const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
 
   const applyFiltersAndPagination = useCallback(() => {
     // Filter applications based on search and status
@@ -107,58 +91,76 @@ const AdminPage: React.FC = () => {
     setDisplayedApplications(paginatedApplications);
   }, [allApplications, searchTerm, statusFilter, currentPage, pageSize]);
 
-  const fetchApplications = useCallback(() => {
-    setLoading(true);
-    try {
-      // Mock data for linguist applications
-      const mockApplications: LinguistApplication[] = [
-        {
-          id: '1',
-          applicantName: 'test',
-          applicantEmail: 'test@email.com',
-          appliedAt: '2025-06-20T14:30:00Z',
-          status: 'pending',
-          languages: ['English', 'Spanish'],
-          documents: [
-            {
-              id: 'd1',
-              name: 'CV.pdf',
-              type: 'cv',
-              size: 2.4,
-              uploadedAt: '2025-06-20T14:30:00Z',
-              url: '/documents/cv.pdf',
-            },
-            {
-              id: 'd2',
-              name: 'PhD_Certificate.pdf',
-              type: 'certificate',
-              size: 1.2,
-              uploadedAt: '2025-06-20T14:32:00Z',
-              url: '/id.pdf',
-            },
-            {
-              id: 'd3',
-              name: 'Research.pdf',
-              type: 'research',
-              size: 8.7,
-              uploadedAt: '2025-06-20T14:35:00Z',
-              url: '/documents/research_sarah.pdf',
-            },
-          ],
-        },
-      ];
-
-      setAllApplications(mockApplications);
-    } catch (error) {
-      console.error('Failed to fetch applications:', error);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   useEffect(() => {
+    const stored = localStorage.getItem('darkMode');
+    if (stored) setIsDarkMode(stored === 'true');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    const fetchApplications = () => {
+      setLoading(true);
+      try {
+        const mockApplications: LinguistApplication[] = [
+          {
+            id: '1',
+            applicantName: 'Test',
+            applicantEmail: 'test@email.com',
+            appliedAt: '2025-06-20T14:30:00Z',
+            status: 'pending',
+            languages: ['English', 'Afrikaans'],
+            documents: [
+              {
+                id: 'd1',
+                name: 'CV.pdf',
+                type: 'cv',
+                size: 2.4,
+                uploadedAt: '2025-06-20T14:30:00Z',
+                url: '/documents/cv.pdf',
+              },
+              {
+                id: 'd2',
+                name: 'Certificate.pdf',
+                type: 'certificate',
+                size: 1.2,
+                uploadedAt: '2025-06-20T14:32:00Z',
+                url: '/documents/phd.pdf',
+              },
+              {
+                id: 'd3',
+                name: 'Portfolio.pdf',
+                type: 'research',
+                size: 8.7,
+                uploadedAt: '2025-06-20T14:35:00Z',
+                url: '/documents/portfolio.pdf',
+              },
+            ],
+          },
+        ];
+
+        setAllApplications(mockApplications);
+      } catch (error) {
+        console.error('Failed to fetch applications:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchApplications();
-  }, [fetchApplications]);
+  }, []);
 
   useEffect(() => {
     applyFiltersAndPagination();
@@ -170,6 +172,8 @@ const AdminPage: React.FC = () => {
 
     switch (action) {
       case 'view':
+        setSelectedApplication(application);
+        setShowApplicationModal(true);
         break;
       case 'approve':
         // Update application status
@@ -208,10 +212,6 @@ const AdminPage: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-  };
-
-  const handleDocumentDownload = (document: ApplicationDocument) => {
-    console.log(`Downloading document: ${document.name}`);
   };
 
   const formatDate = (dateString: string) => {
@@ -453,9 +453,7 @@ const AdminPage: React.FC = () => {
                                   key={doc.id}
                                   type="button"
                                   className="document-item"
-                                  onClick={() => {
-                                    handleDocumentDownload(doc);
-                                  }}
+                                  // onClick={() => handleDocumentDownload(doc)}
                                   title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
                                 >
                                   {getDocumentTypeIcon()}
@@ -518,6 +516,16 @@ const AdminPage: React.FC = () => {
                       ))}
                     </tbody>
                   </table>
+
+                  {displayedApplications.length === 0 && (
+                    <div className="empty-state">
+                      <FileText size={48} className="empty-icon" />
+                      <p>No applications found</p>
+                      <p className="empty-subtitle">
+                        Try adjusting your search or filters
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -543,7 +551,7 @@ const AdminPage: React.FC = () => {
                   </span>
                   <button
                     type="button"
-                    disabled={currentPage >= totalPages}
+                    disabled={currentPage === totalPages || totalPages === 0}
                     onClick={() => {
                       handlePageChange(currentPage + 1);
                     }}
@@ -557,6 +565,102 @@ const AdminPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Application Detail Modal */}
+      {showApplicationModal && selectedApplication && (
+        <div
+          className="modal-overlay"
+          onClick={() => {
+            setShowApplicationModal(false);
+          }}
+        >
+          <div
+            className="application-modal"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <div className="modal-header">
+              <h2>Application Details</h2>
+              <button
+                type="button"
+                className="close-button"
+                onClick={() => {
+                  setShowApplicationModal(false);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-content">
+              <div className="applicant-section">
+                <h3>{selectedApplication.applicantName}</h3>
+                <p>{selectedApplication.applicantEmail}</p>
+                <span
+                  className={`status-badge ${getStatusColor(selectedApplication.status)}`}
+                >
+                  {getStatusIcon(selectedApplication.status)}
+                  {selectedApplication.status}
+                </span>
+              </div>
+
+              <div className="documents-section">
+                <h4>Documents</h4>
+                <div className="documents-grid">
+                  {selectedApplication.documents.map((doc) => (
+                    <div key={doc.id} className="document-card">
+                      <div className="document-info">
+                        {getDocumentTypeIcon()}
+                        <div>
+                          <div className="document-name">{doc.name}</div>
+                          <div className="document-meta">
+                            {formatFileSize(doc.size)} •{' '}
+                            {formatDate(doc.uploadedAt)}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="download-button"
+                        // onClick={() => handleDocumentDownload(doc)}
+                      >
+                        <Download size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {selectedApplication.status === 'pending' && (
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="approve-button"
+                  onClick={() => {
+                    handleApplicationAction(selectedApplication.id, 'approve');
+                    setShowApplicationModal(false);
+                  }}
+                >
+                  <CheckCircle size={16} />
+                  Approve Application
+                </button>
+                <button
+                  type="button"
+                  className="reject-button"
+                  onClick={() => {
+                    handleApplicationAction(selectedApplication.id, 'reject');
+                    setShowApplicationModal(false);
+                  }}
+                >
+                  <XCircle size={16} />
+                  Reject Application
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
