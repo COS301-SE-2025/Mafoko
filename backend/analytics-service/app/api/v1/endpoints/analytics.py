@@ -1,10 +1,10 @@
 from fastapi import APIRouter
-from typing import List
+from typing import List, Dict, Optional
 import pandas as pd
 from collections import Counter  # noqa: F401
 import os
 from fastapi import HTTPException, Query
-from typing import Dict, Optional
+
 
 router = APIRouter()
 
