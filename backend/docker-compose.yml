@@ -119,6 +119,7 @@ services:
       - ./mavito-common-lib:/mavito-common-lib-src
       # Mount the central migrations directory
       - ./migrations:/app/migrations
+      - ./alembic-service:/app
     depends_on:
       - db
     entrypoint: /app/entrypoint.sh
