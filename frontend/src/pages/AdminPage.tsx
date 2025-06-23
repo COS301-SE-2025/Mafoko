@@ -325,7 +325,7 @@ const AdminPage: React.FC = () => {
                     <span className="stat-label">Approved</span>
                   </div>
                   {/* Testing only */}
-                  <label>
+                  {/* <label>
                     Dark Mode
                     <input
                       type="checkbox"
@@ -334,7 +334,7 @@ const AdminPage: React.FC = () => {
                         setIsDarkMode((prev) => !prev);
                       }}
                     />
-                  </label>
+                  </label> */}
                 </div>
               </div>
             </div>
