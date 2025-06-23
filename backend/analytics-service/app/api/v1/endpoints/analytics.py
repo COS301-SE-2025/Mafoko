@@ -90,20 +90,20 @@ async def get_term_length_analysis():
     return term_lengths
 
 
-# @router.get("/descriptive/definition-length")
-# async def get_definition_length_analysis():
-#     """Get average length of definitions for each language."""
-#     df, _, definition_columns, _ = await get_dataset_columns()
-#     if definition_columns:
-#         def_lengths = {
-#             col: round(df[col].dropna().apply(len).mean(), 2)
-#             for col in definition_columns
-#         }
-#     else:
-#         def_lengths = {
-#             "eng_definition": round(df["eng_definition"].dropna().apply(len).mean(), 2)
-#         }
-#     return def_lengths
+@router.get("/descriptive/definition-length")
+async def get_definition_length_analysis():
+    """Get average length of definitions for each language."""
+    df, _, definition_columns, _ = await get_dataset_columns()
+    if definition_columns:
+        def_lengths = {
+            col: round(df[col].dropna().apply(len).mean(), 2)
+            for col in definition_columns
+        }
+    else:
+        def_lengths = {
+            "eng_definition": round(df["eng_definition"].dropna().apply(len).mean(), 2)
+        }
+    return def_lengths
 
 
 # @router.get("/descriptive/unique-terms")
