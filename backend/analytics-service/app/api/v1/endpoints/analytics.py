@@ -188,13 +188,14 @@ async def get_terms_by_category_api(category_name: str):
     return terms
 
 
-# @router.get("/glossary/terms/{term_id}/translations")
-# async def get_term_translations_api(term_id: str):
-#     """Get all available translations for a specific term."""
-#     translations = await get_term_translations(term_id)
-#     if not translations:
-#         raise HTTPException(status_code=404, detail=f"Term not found: {term_id}")
-#     return translations
+@router.get("/glossary/terms/{term_id}/translations")
+async def get_term_translations_api(term_id: str):
+    """Get all available translations for a specific term."""
+    translations = await get_term_translations(term_id)
+    if not translations:
+        raise HTTPException(status_code=404, detail=f"Term not found: {term_id}")
+    return translations
+
 
 # @router.get("/glossary/search")
 # async def search_terms_api(query: str = Query(..., description="Search query for terms or definitions")):
