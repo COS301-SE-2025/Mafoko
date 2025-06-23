@@ -80,14 +80,14 @@ async def get_language_coverage():
     return language_coverage
 
 
-# @router.get("/descriptive/term-length")
-# async def get_term_length_analysis():
-#     """Get average length of terms for each language."""
-#     df, language_columns, _, _ = await get_dataset_columns()
-#     term_lengths = {
-#         lang: round(df[lang].dropna().apply(len).mean(), 2) for lang in language_columns
-#     }
-#     return term_lengths
+@router.get("/descriptive/term-length")
+async def get_term_length_analysis():
+    """Get average length of terms for each language."""
+    df, language_columns, _, _ = await get_dataset_columns()
+    term_lengths = {
+        lang: round(df[lang].dropna().apply(len).mean(), 2) for lang in language_columns
+    }
+    return term_lengths
 
 
 # @router.get("/descriptive/definition-length")
