@@ -1,8 +1,15 @@
-import React from 'react';
-/*import { useNavigate } from 'react-router-dom';*/
-import '../../styles/TermCard.scss';
+import React, { useState } from 'react';
 import { ThumbsUp, ThumbsDown, Share2 } from 'lucide-react';
-//#import ReactTooltip from 'react-tooltip';
+import { API_ENDPOINTS } from '../../config';
+import '../../styles/TermCard.scss';
+
+// FIX 1: Define a type for the API response to avoid 'any'
+interface VoteApiResponse {
+  term_id: string;
+  upvotes: number;
+  downvotes: number;
+  user_vote: 'up' | 'down' | null;
+}
 
 interface TermCardProps {
   id: string;
@@ -30,14 +37,57 @@ const langColorMap: Record<string, string> = {
 };
 
 const TermCard: React.FC<TermCardProps> = ({
+  id,
   term,
   language,
   domain,
-  upvotes,
-  downvotes,
+  upvotes: initialUpvotes,
+  downvotes: initialDownvotes,
   definition,
   onView,
 }) => {
+  const [upvotes, setUpvotes] = useState(initialUpvotes);
+  const [downvotes, setDownvotes] = useState(initialDownvotes);
+  const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
+
+  const handleVote = async (voteType: 'upvote' | 'downvote') => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.log('Please log in to vote.');
+      return;
+    }
+
+    try {
+      const response = await fetch(API_ENDPOINTS.submitVote, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          term_id: id,
+          vote: voteType,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Vote submission failed');
+      }
+
+      // Use the type assertion here to fix all the 'any' errors
+      const result = (await response.json()) as VoteApiResponse;
+      setUpvotes(result.upvotes);
+      setDownvotes(result.downvotes);
+      setUserVote(result.user_vote);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error casting vote:', error.message);
+      } else {
+        console.error('An unknown error occurred while casting vote');
+      }
+    }
+  };
+
   return (
     <div className="term-card">
       <div className="term-header">
@@ -58,15 +108,28 @@ const TermCard: React.FC<TermCardProps> = ({
           </div>
         </div>
         <div className="term-socials">
-          <div className="social">
+          <button
+            type="button" // FIX 3: Add explicit button type
+            className={`social-button ${userVote === 'up' ? 'voted' : ''}`}
+            // FIX 2: Use 'void' to correctly handle the promise in onClick
+            onClick={() => void handleVote('upvote')}
+            aria-label="Upvote"
+          >
             <ThumbsUp size={20} className="icon" />
             <span className="count up">{upvotes}</span>
-          </div>
-          <div className="social">
+          </button>
+          <button
+            type="button" // FIX 3: Add explicit button type
+            className={`social-button ${userVote === 'down' ? 'voted' : ''}`}
+            onClick={() => void handleVote('downvote')}
+            aria-label="Downvote"
+          >
             <ThumbsDown size={20} className="icon" />
             <span className="count down">{downvotes}</span>
-          </div>
-          <Share2 size={20} className="icon share" />
+          </button>
+          <button type="button" className="social-button" aria-label="Share">
+            <Share2 size={20} className="icon share" />
+          </button>
         </div>
       </div>
 
