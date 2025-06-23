@@ -206,10 +206,11 @@ async def search_terms_api(
     return results
 
 
-# @router.get("/glossary/domains", response_model=List[str])
-# async def get_domains():
-#     """Get all available domains (same as categories)."""
-#     return await get_all_categories()
+@router.get("/glossary/domains", response_model=List[str])
+async def get_domains():
+    """Get all available domains (same as categories)."""
+    return await get_all_categories()
+
 
 # @router.get("/glossary/languages", response_model=Dict[str, str])
 # async def get_available_languages():
