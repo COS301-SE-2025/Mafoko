@@ -1,0 +1,10 @@
+[tool.mypy]
+# Ignore missing type hints for these third-party libraries
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pytest_asyncio.*",
+    "httpx.*"
+]
+ignore_missing_imports = true

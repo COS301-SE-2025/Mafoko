@@ -5,6 +5,7 @@ from datetime import timedelta
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
+from mavito_common.models.user import UserRole
 
 from app.api.v1.endpoints.auth import (
     register_new_user,
@@ -16,16 +17,12 @@ from mavito_common.models.user import User as UserModel
 
 
 class TestRegisterNewUser:
-    """Test cases for the register_new_user endpoint."""
-
     @pytest.fixture
     def mock_db(self):
-        """Mock database session."""
         return AsyncMock(spec=AsyncSession)
 
     @pytest.fixture
     def valid_user_create(self):
-        """Valid user creation data."""
         return UserCreate(
             first_name="John",
             last_name="Doe",
@@ -35,14 +32,9 @@ class TestRegisterNewUser:
 
     @pytest.fixture
     def mock_user_model(self):
-        """Mock user model returned from database."""
         user = MagicMock(spec=UserModel)
-        user.id = 1
         user.first_name = "John"
-        user.last_name = "Doe"
-        user.email = "john.doe@example.com"
-        user.is_active = True
-        user.role = "user"
+        # ... other mock attributes
         return user
 
     @pytest.mark.asyncio
@@ -51,22 +43,24 @@ class TestRegisterNewUser:
     ):
         """Test successful user registration."""
         with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
-            # Setup mocks - make them async
-            mock_crud.get_user_by_email = AsyncMock(
-                return_value=None
-            )  # User doesn't exist
+            mock_crud.get_user_by_email = AsyncMock(return_value=None)
             mock_crud.create_user = AsyncMock(return_value=mock_user_model)
 
-            # Call the endpoint
+            # Define the expected payload with the role set
+            expected_payload = valid_user_create.model_copy(
+                update={"role": UserRole.contributor}
+            )
+
             result = await register_new_user(db=mock_db, user_in=valid_user_create)
 
-            # Assertions
             assert result == mock_user_model
             mock_crud.get_user_by_email.assert_called_once_with(
                 mock_db, email=valid_user_create.email
             )
+
+            # Assert that create_user was called with the correct, modified payload
             mock_crud.create_user.assert_called_once_with(
-                mock_db, obj_in=valid_user_create
+                mock_db, obj_in=expected_payload
             )
 
     @pytest.mark.asyncio
