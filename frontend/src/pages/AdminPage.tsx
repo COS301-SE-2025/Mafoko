@@ -41,11 +41,16 @@ interface ApplicationDocument {
 
 interface SystemUser {
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  role: 'user' | 'admin';
-  joinedAt: string;
+  role: string;
+  profile_pic_url: string | null;
+  is_active: boolean;
+  is_verified: boolean;
+  account_locked: boolean;
+  created_at: string;
+  last_login: string | null;
 }
 
 const AdminPage: React.FC = () => {
@@ -110,8 +115,8 @@ const AdminPage: React.FC = () => {
       // Filter users based on search
       const filteredUsers = allUsers.filter((user) => {
         const matchesSearch =
-          user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           user.email.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesSearch;
       });
@@ -160,79 +165,42 @@ const AdminPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
-
-  useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async (): Promise<void> => {
       setLoading(true);
       try {
-        const mockApplications: LinguistApplication[] = [
-          {
-            id: '1',
-            applicantName: 'Test',
-            applicantEmail: 'test@email.com',
-            appliedAt: '2025-06-20T14:30:00Z',
-            status: 'pending',
-            languages: ['English', 'Afrikaans'],
-            documents: [
-              {
-                id: 'd1',
-                name: 'CV.pdf',
-                type: 'cv',
-                size: 2.4,
-                uploadedAt: '2025-06-20T14:30:00Z',
-                url: '/documents/cv.pdf',
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+          const response = await fetch(
+            'http://localhost:8001/api/v1/admin/users',
+            {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
               },
-              {
-                id: 'd2',
-                name: 'Certificate.pdf',
-                type: 'certificate',
-                size: 1.2,
-                uploadedAt: '2025-06-20T14:32:00Z',
-                url: '/documents/phd.pdf',
-              },
-              {
-                id: 'd3',
-                name: 'Portfolio.pdf',
-                type: 'research',
-                size: 8.7,
-                uploadedAt: '2025-06-20T14:35:00Z',
-                url: '/documents/portfolio.pdf',
-              },
-            ],
-          },
-        ];
+            },
+          );
 
-        const mockUsers: SystemUser[] = [
-          {
-            id: '1',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@example.com',
-            role: 'user',
-            joinedAt: '2025-01-15T08:00:00Z',
-          },
-          {
-            id: '2',
-            firstName: 'Jane',
-            lastName: 'Smith',
-            email: 'jane.smith@example.com',
-            role: 'user',
-            joinedAt: '2025-02-20T10:30:00Z',
-          },
-        ];
-
-        setAllApplications(mockApplications);
-        setAllUsers(mockUsers);
+          if (response.ok) {
+            const users = (await response.json()) as SystemUser[];
+            setAllUsers(users);
+          } else {
+            console.error('Failed to fetch users:', response.statusText);
+            setAllUsers([]);
+          }
+        } else {
+          console.error('No access token found');
+          window.location.href = '/login';
+        }
       } catch (error) {
         console.error('Failed to fetch data:', error);
+        setAllUsers([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    void fetchData();
   }, []);
 
   useEffect(() => {
@@ -288,13 +256,45 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleUserAction = (userId: string, action: string) => {
+  const handleUserAction = async (
+    userId: string,
+    action: string,
+  ): Promise<void> => {
     if (action === 'promote') {
-      setAllUsers((prev) =>
-        prev.map((user) =>
-          user.id === userId ? { ...user, role: 'admin' as const } : user,
-        ),
-      );
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.error('No access token found');
+          return;
+        }
+
+        const response = await fetch(
+          `http://localhost:8001/api/v1/admin/users/${userId}/role?new_role=admin`,
+          {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+
+        if (response.ok) {
+          const result = (await response.json()) as { message: string };
+          console.log('User promoted successfully:', result.message);
+
+          setAllUsers((prev) =>
+            prev.map((user) =>
+              user.id === userId ? { ...user, role: 'admin' } : user,
+            ),
+          );
+        } else {
+          const errorData = (await response.json()) as { message?: string };
+          console.error('Failed to promote user:', errorData);
+        }
+      } catch (error) {
+        console.error('Failed to promote user:', error);
+      }
     }
   };
 
@@ -359,8 +359,8 @@ const AdminPage: React.FC = () => {
     } else {
       return allUsers.filter((user) => {
         const matchesSearch =
-          user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           user.email.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesSearch;
       }).length;
@@ -695,7 +695,7 @@ const AdminPage: React.FC = () => {
                               </div>
                               <div className="applicant-details">
                                 <div className="applicant-name">
-                                  {user.firstName} {user.lastName}
+                                  {user.first_name} {user.last_name}
                                 </div>
                                 <div
                                   className="applicant-email"
@@ -731,16 +731,16 @@ const AdminPage: React.FC = () => {
                             </td>
                             <td className="date-cell">
                               <Calendar size={14} />
-                              {formatDate(user.joinedAt)}
+                              {formatDate(user.created_at)}
                             </td>
                             <td className="actions-cell">
                               <div className="action-buttons">
-                                {user.role === 'user' && (
+                                {user.role !== 'admin' && (
                                   <button
                                     type="button"
                                     className="action-button approve-button"
                                     onClick={() => {
-                                      handleUserAction(user.id, 'promote');
+                                      void handleUserAction(user.id, 'promote');
                                     }}
                                     title="Give Admin Privileges"
                                   >
