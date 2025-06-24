@@ -1,39 +1,27 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ChevronDown, ChevronRight, Book, Globe, Search } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  ChevronDown,
+  ChevronRight,
+  Book,
+  Globe,
+  Search,
+  Download,
+  FileType,
+} from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
 
 import { API_ENDPOINTS } from '../config';
+import {
+  Term,
+  TermTranslations,
+  SearchResponse,
+  UserData,
+} from '../types/glossaryTypes';
+import { downloadData } from '../utils/exportUtils';
 
-// Define types for terms and translations based on API response
-interface Term {
-  id: string;
-  term: string;
-  definition: string;
-  category: string;
-  language?: string;
-}
-
-interface TermTranslations {
-  term: string;
-  definition: string;
-  translations: Record<string, string>;
-}
-
-interface SearchResponse {
-  results: Term[];
-  total: number;
-  page: number;
-  limit: number;
-  pages: number;
-}
-
-interface UserData {
-  uuid: string;
-  firstName: string;
-  lastName: string;
-}
+// API client with strongly typed responses
 
 // API client with strongly typed responses
 const dictionaryAPI = {
@@ -55,11 +43,14 @@ const dictionaryAPI = {
         API_ENDPOINTS.glossaryTermsByCategory(category),
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch terms for category: ${category}`);
+        throw new Error('Failed to fetch terms for category: ' + category);
       }
       return (await response.json()) as Term[];
     } catch (error) {
-      console.error(`Error fetching terms for category ${category}:`, error);
+      console.error(
+        'Error fetching terms for category ' + category + ':',
+        error,
+      );
       return [];
     }
   },
@@ -70,11 +61,14 @@ const dictionaryAPI = {
         API_ENDPOINTS.glossaryTermTranslations(termId),
       );
       if (!response.ok) {
-        throw new Error(`Failed to fetch translations for term: ${termId}`);
+        throw new Error('Failed to fetch translations for term: ' + termId);
       }
       return (await response.json()) as TermTranslations;
     } catch (error) {
-      console.error(`Error fetching translations for term ${termId}:`, error);
+      console.error(
+        'Error fetching translations for term ' + termId + ':',
+        error,
+      );
       throw error;
     }
   },
@@ -163,6 +157,10 @@ const GlossaryPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState<string[]>([]);
   const [categoryTerms, setCategoryTerms] = useState<Term[]>([]);
+  // Cache to store translations for each term
+  const [termsTranslations, setTermsTranslations] = useState<
+    Record<string, TermTranslations | null>
+  >({});
   const [translations, setTranslations] = useState<TermTranslations | null>(
     null,
   );
@@ -175,12 +173,31 @@ const GlossaryPage = () => {
   const [availableLanguages, setAvailableLanguages] = useState<
     Record<string, string>
   >({});
+  const [showFormatDropdown, setShowFormatDropdown] = useState(false);
+  const formatDropdownRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
   useEffect(() => {
     void loadInitialData();
     loadUserData();
   }, []);
+
+  // Handle clicks outside the format dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        formatDropdownRef.current &&
+        !formatDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowFormatDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [formatDropdownRef]);
 
   const loadInitialData = async (): Promise<void> => {
     setLoading(true);
@@ -274,18 +291,33 @@ const GlossaryPage = () => {
     setError(null);
 
     try {
-      const termTranslations = await dictionaryAPI.getTranslations(
-        selectedTerm.id,
-      );
-      setTranslations(termTranslations);
+      // Check if we already have translations for this term in cache
+      if (termsTranslations[selectedTerm.id]) {
+        setTranslations(termsTranslations[selectedTerm.id]);
+      } else {
+        const termTranslations = await dictionaryAPI.getTranslations(
+          selectedTerm.id,
+        );
+        // Update both the current translations and the cache
+        setTranslations(termTranslations);
+        setTermsTranslations((prev) => ({
+          ...prev,
+          [selectedTerm.id]: termTranslations,
+        }));
+      }
     } catch (error) {
       console.error('Error loading translations:', error);
       setError('Failed to load translations. Please try again.');
       setTranslations(null);
+      // Also mark in cache that we failed to get translations for this term
+      setTermsTranslations((prev) => ({
+        ...prev,
+        [selectedTerm.id]: null,
+      }));
     } finally {
       setLoading(false);
     }
-  }, [selectedTerm]);
+  }, [selectedTerm, termsTranslations]);
 
   // Enhanced search functionality with useCallback
   const handleSearch = useCallback(
@@ -565,20 +597,9 @@ const GlossaryPage = () => {
                         selectedTerm?.id === term.id ? ' selected' : ''
                       }`}
                     >
+                      {' '}
                       <div className="glossary-term-title">{term.term}</div>
                       <div className="glossary-term-def">{term.definition}</div>
-                      {term.language && (
-                        <div
-                          style={{
-                            fontSize: '0.75rem',
-                            color: '#666',
-                            marginTop: '4px',
-                            fontStyle: 'italic',
-                          }}
-                        >
-                          Language: {term.language}
-                        </div>
-                      )}
                     </button>
                   ))}
                 </div>
@@ -602,22 +623,10 @@ const GlossaryPage = () => {
                   <div>
                     <h3 className="glossary-details-title">
                       {selectedTerm.term}
-                    </h3>
+                    </h3>{' '}
                     <p className="glossary-details-def">
                       {selectedTerm.definition}
                     </p>
-                    {selectedTerm.language && (
-                      <p
-                        style={{
-                          fontSize: '0.875rem',
-                          color: '#666',
-                          marginTop: '8px',
-                          fontStyle: 'italic',
-                        }}
-                      >
-                        Language: {selectedTerm.language}
-                      </p>
-                    )}
                     <button
                       type="button"
                       onClick={() => {
@@ -672,9 +681,224 @@ const GlossaryPage = () => {
                 <div className="glossary-empty">
                   Select a term to view details and translations
                 </div>
-              )}
+              )}{' '}
             </div>
           </div>
+
+          {/* Download Section */}
+          {categoryTerms.length > 0 && (
+            <div
+              className="glossary-download-section"
+              style={{
+                marginTop: '3rem',
+                padding: '1.5rem',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                backgroundColor: '#f9fafb',
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 600,
+                  marginBottom: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                }}
+              >
+                <Download size={20} />
+                Export Data
+              </h3>{' '}
+              <p
+                style={{
+                  marginBottom: '1rem',
+                  fontSize: '0.875rem',
+                  color: '#6b7280',
+                }}
+              >
+                Download the{' '}
+                {selectedCategory
+                  ? `terms in category "${selectedCategory}"`
+                  : 'current terms'}
+                {searchTerm ? ` matching "${searchTerm}"` : ''} (
+                {filteredTerms.length} items)
+              </p>
+              <div style={{ position: 'relative' }}>
+                <div
+                  ref={formatDropdownRef}
+                  style={{ display: 'inline-block' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowFormatDropdown(!showFormatDropdown);
+                    }}
+                    className="glossary-download-btn"
+                    style={{
+                      padding: '0.5rem 1rem',
+                      backgroundColor: '#1e40af',
+                      color: 'white',
+                      borderRadius: '4px',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Download size={16} />
+                    Download Data
+                    <ChevronDown size={16} />
+                  </button>
+
+                  {showFormatDropdown && (
+                    <div
+                      className="glossary-format-dropdown"
+                      style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '0',
+                        marginTop: '0.25rem',
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '4px',
+                        boxShadow:
+                          '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                        zIndex: 10,
+                        minWidth: '180px',
+                        padding: '0.5rem 0',
+                      }}
+                    >
+                      {' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          downloadData(
+                            filteredTerms,
+                            'csv',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                          setShowFormatDropdown(false);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          padding: '0.5rem 1rem',
+                          width: '100%',
+                          textAlign: 'left',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                        }}
+                      >
+                        <div style={{ width: '18px', color: '#1e40af' }}>
+                          <FileType size={18} />
+                        </div>
+                        CSV Format
+                      </button>{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          downloadData(
+                            filteredTerms,
+                            'json',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                          setShowFormatDropdown(false);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          padding: '0.5rem 1rem',
+                          width: '100%',
+                          textAlign: 'left',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                        }}
+                      >
+                        <div style={{ width: '18px', color: '#1f2937' }}>
+                          <FileType size={18} />
+                        </div>
+                        JSON Format
+                      </button>{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          downloadData(
+                            filteredTerms,
+                            'html',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                          setShowFormatDropdown(false);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          padding: '0.5rem 1rem',
+                          width: '100%',
+                          textAlign: 'left',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                        }}
+                      >
+                        <div style={{ width: '18px', color: '#047857' }}>
+                          <FileType size={18} />
+                        </div>
+                        HTML Table
+                      </button>{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          downloadData(
+                            filteredTerms,
+                            'pdf',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                          setShowFormatDropdown(false);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          padding: '0.5rem 1rem',
+                          width: '100%',
+                          textAlign: 'left',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          color: '#374151',
+                        }}
+                      >
+                        <div style={{ width: '18px', color: '#dc2626' }}>
+                          <FileType size={18} />
+                        </div>
+                        PDF Document{' '}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
