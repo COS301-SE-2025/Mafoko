@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+alembic
+passlib[bcrypt]
+PyJWT
+pytest
+httpx
+python-multipart
+pytest-asyncio
+google-cloud-storage
+mavito-common-lib==0.1.0

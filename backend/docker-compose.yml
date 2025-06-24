@@ -1,0 +1,148 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: mavito_local_postgres
+    environment:
+      POSTGRES_USER: "mavito_dev_user"
+      POSTGRES_PASSWORD: "mavito_dev_password"
+      POSTGRES_DB: "mavito_local_dev_db"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./auth-service/Dockerfile
+    container_name: mavito_auth_service
+    env_file:
+      - ./.env
+    ports:
+      - "8001:8080"
+    volumes:
+      - ./auth-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt && 
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+  search-service:
+    build:
+      context: .
+      dockerfile: ./search-service/Dockerfile
+    container_name: mavito_search_service
+    env_file:
+      - ./.env
+    ports:
+      - "8002:8080"
+    volumes:
+      - ./search-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt &&
+             python -m spacy download en_core_web_sm &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: ./analytics-service/Dockerfile
+    container_name: mavito_analytics_service
+    env_file:
+      - ./.env
+    ports:
+      - "8003:8080"
+    volumes:
+      - ./analytics-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+  linguist-application-service:
+    build:
+      context: .
+      dockerfile: ./linguist-application-service/Dockerfile
+    container_name: mavito_linguist_app_service
+    env_file:
+      - ./.env
+    ports:
+      - "8004:8080" # Assign a new port
+    volumes:
+      - ./linguist-application-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt && 
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+  vote-service:
+    build:
+      context: .
+      dockerfile: ./vote-service/Dockerfile
+    container_name: mavito_vote_service
+    env_file:
+      - ./.env
+    ports:
+      - "8005:8080" # Assign a new port
+    volumes:
+      - ./vote-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt && 
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+
+  glossary-service:
+    build:
+      context: .
+      dockerfile: ./glossary-service/Dockerfile
+    container_name: mavito_glossary_service
+    env_file:
+      - ./.env
+    ports:
+      - "8006:8080" # Assign a new port
+    volumes:
+      - ./glossary-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt && 
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"             
+
+  alembic-service:
+    build:
+      context: .
+      dockerfile: ./alembic-service/Dockerfile
+    container_name: mavito_alembic_service
+    env_file:
+      - ./.env
+    volumes:
+      # Mount the common library to see the models
+      - ./mavito-common-lib:/mavito-common-lib-src
+      # Mount the central migrations directory
+      - ./migrations:/app/migrations
+      - ./alembic-service:/app
+    depends_on:
+      - db
+    entrypoint: /app/entrypoint.sh
+
+volumes:
+  postgres_data:

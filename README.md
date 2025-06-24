@@ -55,6 +55,11 @@ This structure ensures clean separation between environments, supports parallel 
 | Eugen Vosloo      | Data Engineer               | 20445696        | I'm a BSc Computer Science student with a focus on Data Science and a passion for backend development. My project experience includes designing and implementing multiple RESTful APIs, as well as using image processing in Python for mining applications. I’m always eager to broaden my skillset and am especially driven to grow in areas like backend development and data science.   | [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/eugen-vosloo-aa2522353/) |
 
 ---
+## Demo Videos
+
+- 🎥 [Demo 1 Video](https://youtu.be/mwc1rmwkWEI)
+
+---
 
 ## Badges
 
@@ -78,4 +83,5 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>
   </a>
 </p>
+
 

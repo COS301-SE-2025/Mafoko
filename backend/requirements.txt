@@ -15,4 +15,7 @@ python-jose[cryptography] # For JWT tokens (can also use PyJWT)
 email-validator
 pydantic[email]
 PyJWT
+ruff      
+black     
+mypy    
 python-multipart

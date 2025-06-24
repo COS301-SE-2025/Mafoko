@@ -5,6 +5,26 @@ import '../styles/RegistrationPage.css';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import LsImage from '/LS_image.png';
 import DfsiLogo from '/DFSI_Logo.png';
+import { API_ENDPOINTS } from '../config';
+
+// --- TYPE DEFINITIONS ---
+type UserType = 'contributor' | 'linguist';
+type DocumentType = 'idDocument' | 'cv' | 'certifications' | 'researchPapers';
+
+// --- Define interfaces for all expected API responses for type safety ---
+interface SignedUrlResponse {
+  upload_url: string;
+  gcs_key: string;
+}
+
+interface LoginSuccessResponse {
+  access_token: string;
+  token_type: string;
+}
+
+interface ApiErrorResponse {
+  detail: string;
+}
 
 // SVG for Google Logo
 const GoogleLogo = () => (
@@ -35,91 +55,166 @@ const GoogleLogo = () => (
   </svg>
 );
 
-interface RegistrationResponse {
-  id: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  role: string | null;
-  profile_pic_url: string;
-  is_active: boolean;
-  is_verified: boolean;
-  account_locked: boolean;
-  created_at: string;
-  last_login: string | null;
-  detail: string;
-}
-
 const RegistrationPage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  const [userType, setUserType] = useState<UserType>('contributor');
+  const [documentFiles, setDocumentFiles] = useState<{
+    [key in DocumentType]?: File;
+  }>({});
+
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+
+  const handleFileSelect = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    docType: DocumentType,
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setDocumentFiles((prev) => ({ ...prev, [docType]: file }));
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('registrationPage.errors.passwordMismatch'));
       return;
     }
     if (!agreedToTerms) {
-      setError('You must agree to the terms and conditions.');
+      setError(t('registrationPage.errors.mustAgreeToTerms'));
+      return;
+    }
+    if (
+      userType === 'linguist' &&
+      (!documentFiles.idDocument || !documentFiles.cv)
+    ) {
+      setError(t('registrationPage.errors.idAndCvRequired'));
       return;
     }
 
     setIsLoading(true);
 
-    const NGROK_BASE_URL = 'https://7ecc-197-185-168-28.ngrok-free.app'; // <-- REPLACE WITH YOUR NGROK URL
-    const API_ENDPOINT = `${NGROK_BASE_URL}/api/v1/auth/register`;
-
-    // CORRECTED userData object creation:
-    const userData = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-    };
-
-    console.log('Registration attempt with:', userData);
-    console.log('Calling API endpoint:', API_ENDPOINT);
-
     try {
-      const response = await fetch(API_ENDPOINT, {
+      const registerPayload = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+      };
+
+      const registerResponse = await fetch(API_ENDPOINTS.register, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registerPayload),
       });
 
-      const data = (await response.json()) as RegistrationResponse;
-
-      if (response.status === 201) {
-        // 201 Created
-        console.log('Registration successful:', data);
-
-        alert('Registration successful!');
-        await navigate('/login');
-      } else {
-        console.error(
-          'Registration failed with status:',
-          response.status,
-          'Response data:',
-          data,
-        );
-        setError(`${data.detail} Please try again.`);
+      if (!registerResponse.ok) {
+        // FIX: Use type assertion to eliminate 'any'
+        const errorData = (await registerResponse.json()) as ApiErrorResponse;
+        throw new Error(errorData.detail || 'Registration failed.');
       }
+
+      const loginResponse = await fetch(API_ENDPOINTS.login, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          username: email,
+          password: password,
+        }),
+      });
+
+      if (!loginResponse.ok) {
+        const errorData = (await loginResponse.json()) as ApiErrorResponse;
+        throw new Error(
+          errorData.detail || 'Automatic login failed after registration.',
+        );
+      }
+
+      // FIX: Use type assertion to fix unsafe assignment and access
+      const loginData = (await loginResponse.json()) as LoginSuccessResponse;
+      const accessToken = loginData.access_token;
+      localStorage.setItem('accessToken', accessToken);
+
+      if (userType === 'linguist') {
+        const uploadedFileUrls: { [key: string]: string | undefined } = {};
+        const filesToUpload = Object.entries(documentFiles).filter(
+          (entry): entry is [DocumentType, File] => Boolean(entry[1]),
+        );
+
+        for (const [docType, file] of filesToUpload) {
+          const signedUrlRes = await fetch(API_ENDPOINTS.generateSignedUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ content_type: file.type }),
+          });
+
+          if (!signedUrlRes.ok)
+            throw new Error(`Could not get upload URL for ${file.name}.`);
+
+          const signedUrlData =
+            (await signedUrlRes.json()) as SignedUrlResponse;
+
+          const uploadRes = await fetch(signedUrlData.upload_url, {
+            method: 'PUT',
+            headers: { 'Content-Type': file.type },
+            body: file,
+          });
+
+          if (!uploadRes.ok) throw new Error(`Failed to upload ${file.name}.`);
+          uploadedFileUrls[docType] = signedUrlData.gcs_key;
+        }
+
+        const applicationPayload = {
+          id_document_url: uploadedFileUrls.idDocument,
+          cv_document_url: uploadedFileUrls.cv,
+          certifications_document_url: uploadedFileUrls.certifications,
+          research_papers_document_url: uploadedFileUrls.researchPapers,
+        };
+
+        const appResponse = await fetch(API_ENDPOINTS.createApplication, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(applicationPayload),
+        });
+
+        if (!appResponse.ok) {
+          // FIX: Use type assertion here as well
+          const errorData = (await appResponse.json()) as ApiErrorResponse;
+          throw new Error(
+            errorData.detail || 'Failed to submit linguist application.',
+          );
+        }
+      }
+
+      alert(t('registrationPage.successMessage'));
+      // FIX: Use 'void' operator to handle floating promise
+      void navigate('/dashboard');
     } catch (err) {
-      console.error('Network or other error during registration:', err);
-      setError('An error occurred. Please check your network and try again.');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError(t('registrationPage.errors.unexpectedError'));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -127,8 +222,9 @@ const RegistrationPage: React.FC = () => {
 
   const handleGoogleSignUp = () => {
     console.log('Attempting Google Sign Up');
-    // TODO: Implement Google Sign Up logic
   };
+
+  const isLinguist = userType === 'linguist';
 
   return (
     <div className="registration-page-full-container">
@@ -169,10 +265,9 @@ const RegistrationPage: React.FC = () => {
             </p>
           )}
 
+          {/* FIX: Add void to onSubmit to handle promise */}
           <form
-            onSubmit={(e) => {
-              void handleSubmit(e);
-            }}
+            onSubmit={(e) => void handleSubmit(e)}
             className="registration-form"
           >
             <div className="form-row">
@@ -264,11 +359,104 @@ const RegistrationPage: React.FC = () => {
               />
             </div>
 
+            <div className="form-group">
+              <label htmlFor="userType">
+                {t('registrationPage.registerAsLabel', 'Register As')}
+              </label>
+              <select
+                id="userType"
+                value={userType}
+                onChange={(e) => {
+                  setUserType(e.target.value as UserType);
+                }}
+                disabled={isLoading}
+                className="custom-select"
+              >
+                <option value="contributor">
+                  {t('registrationPage.normalUser', 'Normal User')}
+                </option>
+                <option value="linguist">
+                  {t(
+                    'registrationPage.linguistApplicant',
+                    'Applying as Linguist',
+                  )}
+                </option>
+              </select>
+            </div>
+
+            {isLinguist && (
+              <div className="linguist-application-section">
+                <div className="form-group">
+                  <label htmlFor="idDocument">
+                    {t('registrationPage.idDocumentLabel', 'ID Document (PDF)')}
+                  </label>
+                  <input
+                    type="file"
+                    id="idDocument"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'idDocument');
+                    }}
+                    required={isLinguist}
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="cv">
+                    {t('registrationPage.cvLabel', 'CV (PDF)')}
+                  </label>
+                  <input
+                    type="file"
+                    id="cv"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'cv');
+                    }}
+                    required={isLinguist}
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="certifications">
+                    {t(
+                      'registrationPage.certificationsLabel',
+                      'Certifications (PDF, Optional)',
+                    )}
+                  </label>
+                  <input
+                    type="file"
+                    id="certifications"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'certifications');
+                    }}
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="researchPapers">
+                    {t(
+                      'registrationPage.researchPapersLabel',
+                      'Research Papers (PDF, Optional)',
+                    )}
+                  </label>
+                  <input
+                    type="file"
+                    id="researchPapers"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'researchPapers');
+                    }}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="form-group terms-checkbox">
               <input
                 type="checkbox"
                 id="terms"
-                name="terms"
                 checked={agreedToTerms}
                 onChange={(e) => {
                   setAgreedToTerms(e.target.checked);
@@ -283,7 +471,6 @@ const RegistrationPage: React.FC = () => {
                 </Link>
               </label>
             </div>
-
             <button
               type="submit"
               className="register-button primary"
@@ -293,11 +480,9 @@ const RegistrationPage: React.FC = () => {
                 ? t('registrationPage.creatingAccountButton')
                 : t('registrationPage.createAccountButton')}
             </button>
-
             <div className="social-login-divider">
               <span>{t('registrationPage.orDivider')}</span>
             </div>
-
             <button
               type="button"
               onClick={handleGoogleSignUp}

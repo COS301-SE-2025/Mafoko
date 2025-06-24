@@ -1,0 +1,11 @@
+# requirements.txt for analytics-service
+fastapi
+uvicorn[standard]
+pandas
+pytest
+httpx
+pytest-asyncio
+ruff      
+black     
+mypy    
+mavito-common-lib==0.1.0

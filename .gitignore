@@ -1,2 +1,5 @@
 node_modules/
 venv/
+**/.idea/
+**/node_modules/
+
