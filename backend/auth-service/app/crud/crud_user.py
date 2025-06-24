@@ -2,6 +2,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import Optional, Union, Dict, Any
+from uuid import UUID
 
 from mavito_common.models.user import User as UserModel
 from mavito_common.schemas.user import UserCreate, UserUpdate
@@ -13,7 +14,17 @@ class CRUDUser:
         self, db: AsyncSession, *, user_id: int
     ) -> Optional[UserModel]:
         """
-        Retrieve a user by their ID.
+        Retrieve a user by their ID (integer).
+        """
+        result = await db.execute(select(UserModel).filter(UserModel.id == user_id))
+        return result.scalars().first()
+
+    async def get_user_by_uuid(
+        self, db: AsyncSession, *, user_id: UUID
+    ) -> Optional[UserModel]:
+        """
+        Retrieve a user by their UUID (if your User model has a uuid field).
+        If your User model uses UUID as the primary key, this should work.
         """
         result = await db.execute(select(UserModel).filter(UserModel.id == user_id))
         return result.scalars().first()

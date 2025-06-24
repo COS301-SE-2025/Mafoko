@@ -6,6 +6,7 @@ import jwt  # PyJWT (ensure it's in requirements.txt: python-jose[cryptography] 
 from pydantic import ValidationError  # For validating token payload
 from typing import Optional
 import logging
+from mavito_common.models.user import UserRole
 
 from mavito_common.core.config import settings
 from app.crud.crud_user import crud_user  # Your user CRUD operations
@@ -93,3 +94,14 @@ async def get_current_active_user(
     # UserSchema should have model_config = ConfigDict(from_attributes=True)
     return UserSchema.model_validate(current_user)  # Pydantic V2
     # For Pydantic V1, it would be: return UserSchema.from_orm(current_user)
+
+
+async def get_current_active_admin(
+    current_user: UserSchema = Depends(get_current_active_user),
+) -> UserSchema:
+    if current_user.role != UserRole.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Administrator privileges required.",
+        )
+    return current_user
