@@ -14,13 +14,13 @@ const LINGUIST_APP_SERVICE_URL =
   (import.meta.env.VITE_LINGUIST_APP_SERVICE_URL as string) ||
   'http://localhost:8004';
 
+const VOTE_SERVICE_URL =
+  (import.meta.env.VITE_VOTE_SERVICE_URL as string) || 'http://localhost:8005';
+
 // Add the URL for your new service, pointing to the port defined in docker-compose.yml
 const GLOSSARY_SERVICE_URL =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
-
-const VOTE_SERVICE_URL =
-  (import.meta.env.VITE_VOTE_SERVICE_URL as string) || 'http://localhost:8005';
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---
@@ -43,4 +43,12 @@ export const API_ENDPOINTS = {
 
   // --- Glossary Service ---
   glossary: `${GLOSSARY_SERVICE_URL}/api/v1/glossary`,
+  glossaryCategories: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/categories`,
+  glossaryTermsByCategory: (category: string) =>
+    `${GLOSSARY_SERVICE_URL}/api/v1/glossary/categories/${encodeURIComponent(category)}/terms`,
+  glossaryTermTranslations: (termId: string) =>
+    `${GLOSSARY_SERVICE_URL}/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
+  glossarySearch: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/search`,
+  glossaryLanguages: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/languages`,
+  glossaryRandom: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/random`,
 };
