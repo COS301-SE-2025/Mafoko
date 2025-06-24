@@ -15,6 +15,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const menuItems = [
     { id: 'dashboard', label: t('leftPane.dashboard'), path: '/dashboard' },
     { id: 'search', label: t('leftPane.search'), path: '/search' },
+    { id: 'glossary', label: 'Glossary', path: '/glossary' },
     { id: 'saved', label: t('leftPane.savedTerms'), path: '/saved-terms' },
     { id: 'analytics', label: t('leftPane.analytics'), path: '/analytics' },
     { id: 'help', label: t('Help'), path: '/help' },
