@@ -515,6 +515,7 @@ const AdminPage: React.FC = () => {
                   {currentView === 'applications' && (
                     <>
                       <div className="stat-card">
+                        <Clock size={20} />
                         <span className="stat-number">
                           {
                             allApplications.filter(
@@ -525,6 +526,7 @@ const AdminPage: React.FC = () => {
                         <span className="stat-label">Pending Review</span>
                       </div>
                       <div className="stat-card">
+                        <CheckCircle size={20} />
                         <span className="stat-number">
                           {
                             allApplications.filter(
@@ -539,6 +541,7 @@ const AdminPage: React.FC = () => {
 
                   {currentView === 'users' && (
                     <div className="stat-card">
+                      <UserCheck size={20} />
                       <span className="stat-number">
                         {
                           allUsers.filter((user) => user.role === 'admin')
@@ -550,7 +553,7 @@ const AdminPage: React.FC = () => {
                   )}
 
                   {/* Testing only */}
-                  <label>
+                  {/* <label>
                     Dark Mode
                     <input
                       type="checkbox"
@@ -559,7 +562,7 @@ const AdminPage: React.FC = () => {
                         setIsDarkMode((prev) => !prev);
                       }}
                     />
-                  </label>
+                  </label> */}
                 </div>
               </div>
             </div>
