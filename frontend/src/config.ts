@@ -23,7 +23,9 @@ export const API_ENDPOINTS = {
   register: `${AUTH_SERVICE_URL}/api/v1/auth/register`,
   getMe: `${AUTH_SERVICE_URL}/api/v1/auth/me`,
   generateSignedUrl: `${AUTH_SERVICE_URL}/api/v1/uploads/generate-signed-url`,
-
+  getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
+  updateUserRole: (userId: string) =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
   // --- Linguist Application Service --- (NEW SECTION)
   createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/applications/`,
 

@@ -19,6 +19,7 @@ import {
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import '../styles/AdminPage.scss';
+import { API_ENDPOINTS } from '../config';
 
 interface LinguistApplication {
   id: string;
@@ -170,16 +171,13 @@ const AdminPage: React.FC = () => {
       try {
         const token = localStorage.getItem('accessToken');
         if (token) {
-          const response = await fetch(
-            'http://localhost:8001/api/v1/admin/users',
-            {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
+          const response = await fetch(API_ENDPOINTS.getAll, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
             },
-          );
+          });
 
           if (response.ok) {
             const users = (await response.json()) as SystemUser[];
@@ -269,7 +267,7 @@ const AdminPage: React.FC = () => {
         }
 
         const response = await fetch(
-          `http://localhost:8001/api/v1/admin/users/${userId}/role?new_role=admin`,
+          `${API_ENDPOINTS.updateUserRole(userId)}?new_role=admin`,
           {
             method: 'PUT',
             headers: {
