@@ -1,91 +1,159 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Book, Globe, Search } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
 
-// Mock API service - replace with actual API service later
-const dictionaryAPI = {
-  getCategories: async () => {
-    // Simulating API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(['Medical', 'Legal', 'Technical', 'Financial', 'Scientific']);
-      }, 500);
-    });
-  },
-  getTermsByCategory: async (category: string) => {
-    // Simulating API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(
-          [
-            {
-              id: 1,
-              term: 'Abrasion',
-              definition: 'An area damaged by scraping or wearing away.',
-            },
-            {
-              id: 2,
-              term: 'Acetaminophen',
-              definition: 'A medication used to treat pain and fever.',
-            },
-            {
-              id: 3,
-              term: 'Acute',
-              definition:
-                'A condition that develops suddenly and is usually severe.',
-            },
-            {
-              id: 4,
-              term: 'Analgesic',
-              definition: 'A drug that relieves pain.',
-            },
-            {
-              id: 5,
-              term: 'Biopsy',
-              definition:
-                'The removal of a small piece of tissue for diagnostic examination.',
-            },
-          ].filter(() => category === 'Medical'),
-        );
-      }, 500);
-    });
-  },
-  getTranslations: async (termId: number) => {
-    // Simulating API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          id: termId,
-          translations: {
-            Spanish: 'Abrasión',
-            French: 'Abrasion',
-            German: 'Abschürfung',
-            Chinese: '擦伤',
-            Arabic: 'كشط',
-          },
-        });
-      }, 500);
-    });
-  },
-};
+import { API_ENDPOINTS } from '../config';
 
-// Define types for terms and translations
+// Define types for terms and translations based on API response
 interface Term {
-  id: number;
+  id: string;
   term: string;
   definition: string;
+  category: string;
+  language?: string;
 }
-interface Translations {
-  id: number;
+
+interface TermTranslations {
+  term: string;
+  definition: string;
   translations: Record<string, string>;
 }
+
+interface SearchResponse {
+  results: Term[];
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+}
+
 interface UserData {
   uuid: string;
   firstName: string;
   lastName: string;
 }
+
+// API client with strongly typed responses
+const dictionaryAPI = {
+  getCategories: async (): Promise<string[]> => {
+    try {
+      const response = await fetch(API_ENDPOINTS.glossaryCategories);
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      return (await response.json()) as string[];
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      return [];
+    }
+  },
+  getTermsByCategory: async (category: string): Promise<Term[]> => {
+    try {
+      const response = await fetch(
+        API_ENDPOINTS.glossaryTermsByCategory(category),
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch terms for category: ${category}`);
+      }
+      return (await response.json()) as Term[];
+    } catch (error) {
+      console.error(`Error fetching terms for category ${category}:`, error);
+      return [];
+    }
+  },
+
+  getTranslations: async (termId: string): Promise<TermTranslations> => {
+    try {
+      const response = await fetch(
+        API_ENDPOINTS.glossaryTermTranslations(termId),
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch translations for term: ${termId}`);
+      }
+      return (await response.json()) as TermTranslations;
+    } catch (error) {
+      console.error(`Error fetching translations for term ${termId}:`, error);
+      throw error;
+    }
+  },
+
+  searchTerms: async (query: string): Promise<Term[]> => {
+    try {
+      const response = await fetch(
+        `${API_ENDPOINTS.glossarySearch}?query=${encodeURIComponent(query)}`,
+      );
+      if (!response.ok) {
+        throw new Error('Failed to search terms');
+      }
+      return (await response.json()) as Term[];
+    } catch (error) {
+      console.error('Error searching terms:', error);
+      return [];
+    }
+  },
+
+  getLanguages: async (): Promise<Record<string, string>> => {
+    try {
+      const response = await fetch(API_ENDPOINTS.glossaryLanguages);
+      if (!response.ok) {
+        throw new Error('Failed to fetch languages');
+      }
+      return (await response.json()) as Record<string, string>;
+    } catch (error) {
+      console.error('Error fetching languages:', error);
+      return {};
+    }
+  },
+  advancedSearch: async (params: {
+    query?: string;
+    domain?: string;
+    language?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<SearchResponse> => {
+    try {
+      // For POST request with JSON body
+      const response = await fetch(API_ENDPOINTS.glossarySearch, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to perform advanced search');
+      }
+      return (await response.json()) as SearchResponse;
+    } catch (error) {
+      console.error('Error performing advanced search:', error);
+      return {
+        results: [],
+        total: 0,
+        page: params.page || 1,
+        limit: params.limit || 10,
+        pages: 0,
+      };
+    }
+  },
+
+  getRandomTerm: async (count: number = 1): Promise<Term[]> => {
+    try {
+      const response = await fetch(
+        `${API_ENDPOINTS.glossaryRandom}?count=${count.toString()}`,
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch random terms');
+      }
+      return (await response.json()) as Term[];
+    } catch (error) {
+      console.error('Error fetching random terms:', error);
+      return [];
+    }
+  },
+};
 
 const GlossaryPage = () => {
   // State management
@@ -95,98 +163,217 @@ const GlossaryPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState<string[]>([]);
   const [categoryTerms, setCategoryTerms] = useState<Term[]>([]);
-  const [translations, setTranslations] = useState<Translations | null>(null);
+  const [translations, setTranslations] = useState<TermTranslations | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [activeNav, setActiveNav] = useState('search');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [avatarInitials, setAvatarInitials] = useState<string>('U');
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
+  const [availableLanguages, setAvailableLanguages] = useState<
+    Record<string, string>
+  >({});
 
-  // Load categories on component mount
+  // Load initial data on component mount
   useEffect(() => {
-    void loadCategories();
-    // Profile logic
-    const token = localStorage.getItem('accessToken');
-    if (!token) return;
-    const fetchAndSetUserData = () => {
-      setIsLoadingUserData(true);
-      const storedUserDataString = localStorage.getItem('userData');
-      if (storedUserDataString) {
-        try {
-          const parsedData = JSON.parse(storedUserDataString) as UserData;
-          setUserData(parsedData);
-          if (parsedData.firstName && parsedData.lastName) {
-            setAvatarInitials(
-              `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
-            );
-          } else if (parsedData.firstName) {
-            setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
-          }
-          setIsLoadingUserData(false);
-          return;
-        } catch {
-          localStorage.removeItem('userData');
-        }
-      }
-      setIsLoadingUserData(false);
-    };
-    fetchAndSetUserData();
+    void loadInitialData();
+    loadUserData();
   }, []);
 
-  const loadCategories = async (): Promise<void> => {
+  const loadInitialData = async (): Promise<void> => {
     setLoading(true);
     try {
-      const cats = await dictionaryAPI.getCategories();
-      setCategories(cats as string[]);
+      // Load categories, languages, and some random terms concurrently
+      const [categoriesData, languagesData, randomTerms] = await Promise.all([
+        dictionaryAPI.getCategories(),
+        dictionaryAPI.getLanguages(),
+        dictionaryAPI.getRandomTerm(10), // Get 10 random terms for initial display
+      ]);
+
+      setCategories(categoriesData);
+      setAvailableLanguages(languagesData);
+
+      // Set initial terms if we got random terms back
+      if (randomTerms.length > 0) {
+        setCategoryTerms(randomTerms);
+      }
+
+      setError(null);
     } catch (error) {
-      console.error('Error loading categories:', error);
+      console.error('Error loading initial data:', error);
+      setError('Failed to load initial data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCategorySelect = async (category: string): Promise<void> => {
-    setSelectedCategory(category);
-    setSelectedTerm(null);
-    setShowTranslations(false);
-    setTranslations(null);
-    setLoading(true);
-    try {
-      const terms = await dictionaryAPI.getTermsByCategory(category);
-      setCategoryTerms(terms as Term[]);
-    } catch (error) {
-      console.error('Error loading terms:', error);
-    } finally {
-      setLoading(false);
+  const loadUserData = (): void => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setIsLoadingUserData(false);
+      return;
     }
+
+    setIsLoadingUserData(true);
+    const storedUserDataString = localStorage.getItem('userData');
+    if (storedUserDataString) {
+      try {
+        const parsedData = JSON.parse(storedUserDataString) as UserData;
+        setUserData(parsedData);
+        if (parsedData.firstName && parsedData.lastName) {
+          setAvatarInitials(
+            `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
+          );
+        } else if (parsedData.firstName) {
+          setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
+        }
+      } catch {
+        localStorage.removeItem('userData');
+      }
+    }
+    setIsLoadingUserData(false);
   };
 
-  const handleTermSelect = (term: Term): void => {
+  const handleCategorySelect = useCallback(
+    async (category: string): Promise<void> => {
+      setSelectedCategory(category);
+      setSelectedTerm(null);
+      setShowTranslations(false);
+      setTranslations(null);
+      setError(null);
+      setLoading(true);
+
+      try {
+        const terms = await dictionaryAPI.getTermsByCategory(category);
+        setCategoryTerms(terms);
+      } catch (error) {
+        console.error('Error loading terms:', error);
+        setError(`Failed to load terms for ${category}. Please try again.`);
+        setCategoryTerms([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
+
+  const handleTermSelect = useCallback((term: Term): void => {
     setSelectedTerm(term);
     setShowTranslations(false);
     setTranslations(null);
-  };
+    setError(null);
+  }, []);
 
-  const handleShowTranslations = async (): Promise<void> => {
+  const handleShowTranslations = useCallback(async (): Promise<void> => {
     if (!selectedTerm) return;
+
     setLoading(true);
     setShowTranslations(true);
+    setError(null);
+
     try {
       const termTranslations = await dictionaryAPI.getTranslations(
         selectedTerm.id,
       );
-      setTranslations(termTranslations as Translations);
+      setTranslations(termTranslations);
     } catch (error) {
       console.error('Error loading translations:', error);
+      setError('Failed to load translations. Please try again.');
+      setTranslations(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedTerm]);
 
+  // Enhanced search functionality with useCallback
+  const handleSearch = useCallback(
+    async (query: string): Promise<void> => {
+      if (!query.trim()) {
+        // If search is empty and we have a selected category, show category terms
+        if (selectedCategory) {
+          await handleCategorySelect(selectedCategory);
+        } else {
+          // If no category is selected and search is empty, load random terms
+          try {
+            setLoading(true);
+            const randomTerms = await dictionaryAPI.getRandomTerm(10);
+            setCategoryTerms(randomTerms);
+            setSelectedTerm(null);
+            setShowTranslations(false);
+            setTranslations(null);
+          } catch (err) {
+            console.error('Failed to load random terms:', err);
+          } finally {
+            setLoading(false);
+          }
+        }
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        let searchResults: Term[];
+
+        if (selectedCategory) {
+          // Search within selected category using advanced search
+          const response = await dictionaryAPI.advancedSearch({
+            query: query,
+            domain: selectedCategory,
+            limit: 50, // Adjust as needed
+          });
+          searchResults = response.results;
+        } else {
+          // Global search across all terms
+          searchResults = await dictionaryAPI.searchTerms(query);
+        }
+
+        setCategoryTerms(searchResults);
+
+        // If we have exactly one result, auto-select it for convenience
+        if (searchResults.length === 1) {
+          handleTermSelect(searchResults[0]);
+        } else {
+          // Clear term selection if we have multiple/no results
+          setSelectedTerm(null);
+          setShowTranslations(false);
+          setTranslations(null);
+        }
+      } catch (error) {
+        console.error('Error searching terms:', error);
+        setError('Failed to search terms. Please try again.');
+        setCategoryTerms([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [selectedCategory, handleCategorySelect, handleTermSelect],
+  );
+
+  // Debounced search effect with proper dependencies
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm !== '') {
+        void handleSearch(searchTerm);
+      } else if (selectedCategory) {
+        void handleCategorySelect(selectedCategory);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchTerm, selectedCategory, handleSearch, handleCategorySelect]);
+
+  // Filter terms locally for immediate feedback
   const filteredTerms = categoryTerms.filter(
     (term) =>
       term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      term.definition.toLowerCase().includes(searchTerm.toLowerCase()),
+      (term.definition &&
+        term.definition.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   return (
@@ -198,6 +385,7 @@ const GlossaryPage = () => {
       <div className="glossary-leftnav" style={{ minWidth: 220 }}>
         <LeftNav activeItem={activeNav} setActiveItem={setActiveNav} />
       </div>
+
       {/* Main Content with Profile at Top Right */}
       <div
         style={{
@@ -251,9 +439,27 @@ const GlossaryPage = () => {
             </div>
           ) : null}
         </div>
+
         {/* Main Centered Content */}
         <div style={{ width: '100%', maxWidth: 900, marginTop: '5.5rem' }}>
-          {/* Multilingual Dictionary section restored */}
+          {/* Error Display */}
+          {error && (
+            <div
+              style={{
+                background: '#fee2e2',
+                border: '1px solid #fecaca',
+                color: '#dc2626',
+                padding: '12px',
+                borderRadius: '6px',
+                marginBottom: '1rem',
+                textAlign: 'center',
+              }}
+            >
+              {error}
+            </div>
+          )}
+
+          {/* Multilingual Dictionary section */}
           <div
             className="glossary-header"
             style={{ textAlign: 'center', marginBottom: '2rem' }}
@@ -265,7 +471,19 @@ const GlossaryPage = () => {
             <p className="glossary-subtitle">
               Browse categories, explore terms, and discover translations
             </p>
+            {Object.keys(availableLanguages).length > 0 && (
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  color: '#666',
+                  marginTop: '0.5rem',
+                }}
+              >
+                Available in {Object.keys(availableLanguages).length} languages
+              </p>
+            )}
           </div>
+
           <div className="glossary-grid">
             {/* Categories Panel */}
             <div className="glossary-panel">
@@ -302,29 +520,32 @@ const GlossaryPage = () => {
                   ))}
                 </div>
               )}
-            </div>
-
+            </div>{' '}
             {/* Terms Panel */}
             <div className="glossary-panel">
               <h2 className="glossary-panel-title">
                 {selectedCategory
                   ? `Terms in ${selectedCategory}`
-                  : 'Select a Category'}
+                  : categoryTerms.length > 0
+                    ? 'Random Terms'
+                    : 'Select a Category'}
               </h2>
-              {selectedCategory && (
-                <div className="glossary-search">
-                  <Search className="glossary-search-icon" size={16} />
-                  <input
-                    type="text"
-                    placeholder="Search terms..."
-                    value={searchTerm}
-                    onChange={(e) => {
-                      setSearchTerm(e.target.value);
-                    }}
-                    className="glossary-search-input"
-                  />
-                </div>
-              )}
+              <div className="glossary-search">
+                <Search className="glossary-search-icon" size={16} />
+                <input
+                  type="text"
+                  placeholder={
+                    selectedCategory
+                      ? `Search terms in ${selectedCategory}...`
+                      : 'Search all terms...'
+                  }
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                  }}
+                  className="glossary-search-input"
+                />
+              </div>
               {loading && selectedCategory ? (
                 <div className="animate-pulse space-y-3">
                   <div className="h-20 bg-gray-200 rounded"></div>
@@ -346,17 +567,30 @@ const GlossaryPage = () => {
                     >
                       <div className="glossary-term-title">{term.term}</div>
                       <div className="glossary-term-def">{term.definition}</div>
+                      {term.language && (
+                        <div
+                          style={{
+                            fontSize: '0.75rem',
+                            color: '#666',
+                            marginTop: '4px',
+                            fontStyle: 'italic',
+                          }}
+                        >
+                          Language: {term.language}
+                        </div>
+                      )}
                     </button>
                   ))}
                 </div>
               )}
               {selectedCategory && filteredTerms.length === 0 && !loading && (
                 <div className="glossary-empty">
-                  No terms found matching your search.
+                  {searchTerm
+                    ? `No terms found matching "${searchTerm}" in ${selectedCategory}.`
+                    : `No terms available in ${selectedCategory}.`}
                 </div>
               )}
             </div>
-
             {/* Details Panel */}
             <div className="glossary-panel">
               <h2 className="glossary-panel-title">
@@ -372,15 +606,30 @@ const GlossaryPage = () => {
                     <p className="glossary-details-def">
                       {selectedTerm.definition}
                     </p>
+                    {selectedTerm.language && (
+                      <p
+                        style={{
+                          fontSize: '0.875rem',
+                          color: '#666',
+                          marginTop: '8px',
+                          fontStyle: 'italic',
+                        }}
+                      >
+                        Language: {selectedTerm.language}
+                      </p>
+                    )}
                     <button
                       type="button"
                       onClick={() => {
                         void handleShowTranslations();
                       }}
                       className="glossary-translate-btn"
+                      disabled={loading}
                     >
                       <Globe size={16} />
-                      Show Translations
+                      {loading && showTranslations
+                        ? 'Loading...'
+                        : 'Show Translations'}
                     </button>
                   </div>
                   {showTranslations && (
@@ -394,7 +643,8 @@ const GlossaryPage = () => {
                           <div className="h-4 bg-gray-200 rounded"></div>
                           <div className="h-4 bg-gray-200 rounded"></div>
                         </div>
-                      ) : translations ? (
+                      ) : translations &&
+                        Object.keys(translations.translations).length > 0 ? (
                         Object.entries(translations.translations).map(
                           ([language, translation]) => (
                             <div
@@ -412,7 +662,7 @@ const GlossaryPage = () => {
                         )
                       ) : (
                         <div className="glossary-empty">
-                          No translations available
+                          No translations available for this term
                         </div>
                       )}
                     </div>
@@ -432,5 +682,3 @@ const GlossaryPage = () => {
 };
 
 export default GlossaryPage;
-
-// RENAME: GlossaryPage.tsx (was Glossary.tsx)
