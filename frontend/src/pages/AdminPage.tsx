@@ -13,6 +13,8 @@ import {
   CheckCircle,
   XCircle,
   Clock,
+  Users,
+  UserCheck,
 } from 'lucide-react';
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
@@ -37,6 +39,15 @@ interface ApplicationDocument {
   url: string;
 }
 
+interface SystemUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'user' | 'admin';
+  joinedAt: string;
+}
+
 const AdminPage: React.FC = () => {
   const [allApplications, setAllApplications] = useState<LinguistApplication[]>(
     [],
@@ -44,6 +55,11 @@ const AdminPage: React.FC = () => {
   const [displayedApplications, setDisplayedApplications] = useState<
     LinguistApplication[]
   >([]);
+  const [allUsers, setAllUsers] = useState<SystemUser[]>([]);
+  const [displayedUsers, setDisplayedUsers] = useState<SystemUser[]>([]);
+  const [currentView, setCurrentView] = useState<'applications' | 'users'>(
+    'applications',
+  );
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,37 +75,74 @@ const AdminPage: React.FC = () => {
   const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
 
   const applyFiltersAndPagination = useCallback(() => {
-    // Filter applications based on search and status
-    const filteredApplications = allApplications.filter((app) => {
-      const matchesSearch =
-        app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.applicantEmail.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus =
-        statusFilter === 'all' || app.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    });
+    if (currentView === 'applications') {
+      // Filter applications based on search and status
+      const filteredApplications = allApplications.filter((app) => {
+        const matchesSearch =
+          app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.applicantEmail.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus =
+          statusFilter === 'all' || app.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      });
 
-    // Calculate total pages
-    const totalPages = Math.ceil(filteredApplications.length / pageSize);
-    setTotalPages(totalPages);
+      // Calculate total pages
+      const totalPages = Math.ceil(filteredApplications.length / pageSize);
+      setTotalPages(totalPages);
 
-    // Reset to page 1 if current page is out of bounds
-    const validCurrentPage = currentPage > totalPages ? 1 : currentPage;
-    if (validCurrentPage !== currentPage) {
-      setCurrentPage(validCurrentPage);
-      return;
+      // Reset to page 1 if current page is out of bounds
+      const validCurrentPage = currentPage > totalPages ? 1 : currentPage;
+      if (validCurrentPage !== currentPage) {
+        setCurrentPage(validCurrentPage);
+        return;
+      }
+
+      // Apply pagination
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      const paginatedApplications = filteredApplications.slice(
+        startIndex,
+        endIndex,
+      );
+
+      setDisplayedApplications(paginatedApplications);
+    } else {
+      // Filter users based on search
+      const filteredUsers = allUsers.filter((user) => {
+        const matchesSearch =
+          user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesSearch;
+      });
+
+      // Calculate total pages
+      const totalPages = Math.ceil(filteredUsers.length / pageSize);
+      setTotalPages(totalPages);
+
+      // Reset to page 1 if current page is out of bounds
+      const validCurrentPage = currentPage > totalPages ? 1 : currentPage;
+      if (validCurrentPage !== currentPage) {
+        setCurrentPage(validCurrentPage);
+        return;
+      }
+
+      // Apply pagination
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+      setDisplayedUsers(paginatedUsers);
     }
-
-    // Apply pagination
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const paginatedApplications = filteredApplications.slice(
-      startIndex,
-      endIndex,
-    );
-
-    setDisplayedApplications(paginatedApplications);
-  }, [allApplications, searchTerm, statusFilter, currentPage, pageSize]);
+  }, [
+    allApplications,
+    allUsers,
+    searchTerm,
+    statusFilter,
+    currentPage,
+    pageSize,
+    currentView,
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,7 +164,7 @@ const AdminPage: React.FC = () => {
   }, [isDarkMode]);
 
   useEffect(() => {
-    const fetchApplications = () => {
+    const fetchData = () => {
       setLoading(true);
       try {
         const mockApplications: LinguistApplication[] = [
@@ -151,20 +204,47 @@ const AdminPage: React.FC = () => {
           },
         ];
 
+        const mockUsers: SystemUser[] = [
+          {
+            id: '1',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            role: 'user',
+            joinedAt: '2025-01-15T08:00:00Z',
+          },
+          {
+            id: '2',
+            firstName: 'Jane',
+            lastName: 'Smith',
+            email: 'jane.smith@example.com',
+            role: 'user',
+            joinedAt: '2025-02-20T10:30:00Z',
+          },
+        ];
+
         setAllApplications(mockApplications);
+        setAllUsers(mockUsers);
       } catch (error) {
-        console.error('Failed to fetch applications:', error);
+        console.error('Failed to fetch data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchApplications();
+    fetchData();
   }, []);
 
   useEffect(() => {
     applyFiltersAndPagination();
   }, [applyFiltersAndPagination]);
+
+  // Reset pagination when switching views
+  useEffect(() => {
+    setCurrentPage(1);
+    setSearchTerm('');
+    setStatusFilter('all');
+  }, [currentView]);
 
   const handleApplicationAction = (applicationId: string, action: string) => {
     const application = allApplications.find((app) => app.id === applicationId);
@@ -176,7 +256,6 @@ const AdminPage: React.FC = () => {
         setShowApplicationModal(true);
         break;
       case 'approve':
-        // Update application status
         setAllApplications((prev) =>
           prev.map((app) =>
             app.id === applicationId
@@ -191,7 +270,6 @@ const AdminPage: React.FC = () => {
         );
         break;
       case 'reject':
-        // Update application status
         setAllApplications((prev) =>
           prev.map((app) =>
             app.id === applicationId
@@ -207,6 +285,16 @@ const AdminPage: React.FC = () => {
         break;
       default:
         console.log(`Action ${action} on application ${applicationId}`);
+    }
+  };
+
+  const handleUserAction = (userId: string, action: string) => {
+    if (action === 'promote') {
+      setAllUsers((prev) =>
+        prev.map((user) =>
+          user.id === userId ? { ...user, role: 'admin' as const } : user,
+        ),
+      );
     }
   };
 
@@ -259,14 +347,24 @@ const AdminPage: React.FC = () => {
   };
 
   const getTotalFilteredCount = () => {
-    return allApplications.filter((app) => {
-      const matchesSearch =
-        app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.applicantEmail.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus =
-        statusFilter === 'all' || app.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    }).length;
+    if (currentView === 'applications') {
+      return allApplications.filter((app) => {
+        const matchesSearch =
+          app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.applicantEmail.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus =
+          statusFilter === 'all' || app.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      }).length;
+    } else {
+      return allUsers.filter((user) => {
+        const matchesSearch =
+          user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesSearch;
+      }).length;
+    }
   };
 
   return (
@@ -290,42 +388,96 @@ const AdminPage: React.FC = () => {
                 <div className="admin-title-section">
                   <h1 className="admin-page-title">
                     <Shield className="admin-title-icon" />
-                    Linguist Applications
+                    {currentView === 'applications'
+                      ? 'Linguist Applications'
+                      : 'User Management'}
                   </h1>
                   <p className="admin-subtitle">
-                    Review and manage linguist role applications
+                    {currentView === 'applications'
+                      ? 'Review and manage linguist role applications'
+                      : 'Manage user accounts and admin privileges'}
                   </p>
                 </div>
 
                 <div className="admin-stats">
-                  <div className="stat-card">
+                  {/* View Toggle Buttons */}
+                  <button
+                    type="button"
+                    className={`stat-card ${currentView === 'applications' ? 'active' : ''}`}
+                    onClick={() => {
+                      setCurrentView('applications');
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      border:
+                        currentView === 'applications'
+                          ? '2px solid #007bff'
+                          : 'none',
+                    }}
+                  >
+                    <FileText size={20} />
                     <span className="stat-number">
                       {allApplications.length}
                     </span>
-                    <span className="stat-label">Total Applications</span>
-                  </div>
-                  <div className="stat-card">
-                    <span className="stat-number">
-                      {
-                        allApplications.filter(
-                          (app) => app.status === 'pending',
-                        ).length
-                      }
-                    </span>
-                    <span className="stat-label">Pending Review</span>
-                  </div>
-                  <div className="stat-card">
-                    <span className="stat-number">
-                      {
-                        allApplications.filter(
-                          (app) => app.status === 'approved',
-                        ).length
-                      }
-                    </span>
-                    <span className="stat-label">Approved</span>
-                  </div>
+                    <span className="stat-label">Applications</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`stat-card ${currentView === 'users' ? 'active' : ''}`}
+                    onClick={() => {
+                      setCurrentView('users');
+                    }}
+                    style={{
+                      cursor: 'pointer',
+                      border:
+                        currentView === 'users' ? '2px solid #007bff' : 'none',
+                    }}
+                  >
+                    <Users size={20} />
+                    <span className="stat-number">{allUsers.length}</span>
+                    <span className="stat-label">Users</span>
+                  </button>
+
+                  {currentView === 'applications' && (
+                    <>
+                      <div className="stat-card">
+                        <span className="stat-number">
+                          {
+                            allApplications.filter(
+                              (app) => app.status === 'pending',
+                            ).length
+                          }
+                        </span>
+                        <span className="stat-label">Pending Review</span>
+                      </div>
+                      <div className="stat-card">
+                        <span className="stat-number">
+                          {
+                            allApplications.filter(
+                              (app) => app.status === 'approved',
+                            ).length
+                          }
+                        </span>
+                        <span className="stat-label">Approved</span>
+                      </div>
+                    </>
+                  )}
+
+                  {currentView === 'users' && (
+                    <div className="stat-card">
+                      <span className="stat-number">
+                        {
+                          allUsers.filter((user) => user.role === 'admin')
+                            .length
+                        }
+                      </span>
+                      <span className="stat-label">Admins</span>
+                    </div>
+                  )}
+
                   {/* Testing only */}
-                  {/* <label>
+                  <label>
                     Dark Mode
                     <input
                       type="checkbox"
@@ -334,7 +486,7 @@ const AdminPage: React.FC = () => {
                         setIsDarkMode((prev) => !prev);
                       }}
                     />
-                  </label> */}
+                  </label>
                 </div>
               </div>
             </div>
@@ -345,7 +497,11 @@ const AdminPage: React.FC = () => {
                   <Search className="search-icon" size={20} />
                   <input
                     type="text"
-                    placeholder="Search applications by name or email..."
+                    placeholder={
+                      currentView === 'applications'
+                        ? 'Search applications by name or email...'
+                        : 'Search users by name or email...'
+                    }
                     value={searchTerm}
                     onChange={(e) => {
                       setSearchTerm(e.target.value);
@@ -354,175 +510,272 @@ const AdminPage: React.FC = () => {
                   />
                 </div>
 
-                <div className="filter-controls">
-                  <div className="filter-group">
-                    <Filter size={16} />
-                    <select
-                      value={statusFilter}
-                      onChange={(e) => {
-                        setStatusFilter(e.target.value);
-                      }}
-                      className="filter-select"
-                    >
-                      <option value="all">All Status</option>
-                      <option value="pending">Pending</option>
-                      <option value="approved">Approved</option>
-                      <option value="rejected">Rejected</option>
-                    </select>
+                {currentView === 'applications' && (
+                  <div className="filter-controls">
+                    <div className="filter-group">
+                      <Filter size={16} />
+                      <select
+                        value={statusFilter}
+                        onChange={(e) => {
+                          setStatusFilter(e.target.value);
+                        }}
+                        className="filter-select"
+                      >
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
             <div className="admin-content">
               {loading ? (
-                <div className="loading-state">Loading applications...</div>
+                <div className="loading-state">Loading data...</div>
               ) : (
                 <div
                   className="applications-table-container"
                   style={{ height: '400px', overflowY: 'auto' }}
                 >
-                  <table className="applications-table">
-                    <thead>
-                      <tr>
-                        <th>Applicant</th>
-                        <th>Status</th>
-                        <th>Applied</th>
-                        <th>Languages</th>
-                        <th>Documents</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {displayedApplications.map((application) => (
-                        <tr key={application.id} className="application-row">
-                          <td className="applicant-info">
-                            <div className="applicant-avatar">
-                              <User size={20} />
-                            </div>
-                            <div className="applicant-details">
-                              <div className="applicant-name">
-                                {application.applicantName}
+                  {currentView === 'applications' ? (
+                    <table className="applications-table">
+                      <thead>
+                        <tr>
+                          <th>Applicant</th>
+                          <th>Status</th>
+                          <th>Applied</th>
+                          <th>Languages</th>
+                          <th>Documents</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {displayedApplications.map((application) => (
+                          <tr key={application.id} className="application-row">
+                            <td className="applicant-info">
+                              <div className="applicant-avatar">
+                                <User size={20} />
                               </div>
-                              <div
-                                className="applicant-email"
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}
-                              >
-                                <Mail
-                                  size={14}
-                                  style={{ marginRight: '4px' }}
-                                />
-                                {application.applicantEmail}
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <span
-                              className={`status-badge ${getStatusColor(application.status)}`}
-                            >
-                              {getStatusIcon(application.status)}
-                              {application.status}
-                            </span>
-                          </td>
-                          <td className="date-cell">
-                            <Calendar size={14} />
-                            {formatDate(application.appliedAt)}
-                          </td>
-                          <td className="languages-cell">
-                            <div className="languages-list">
-                              {application.languages.slice(0, 3).map((lang) => (
-                                <span key={lang} className="language-tag">
-                                  {lang}
-                                </span>
-                              ))}
-                              {application.languages.length > 3 && (
-                                <span className="language-more">
-                                  +{application.languages.length - 3}
-                                </span>
-                              )}
-                            </div>
-                          </td>
-                          <td className="documents-cell">
-                            <div className="documents-list">
-                              {application.documents.map((doc) => (
-                                <button
-                                  key={doc.id}
-                                  type="button"
-                                  className="document-item"
-                                  // onClick={() => handleDocumentDownload(doc)}
-                                  title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
+                              <div className="applicant-details">
+                                <div className="applicant-name">
+                                  {application.applicantName}
+                                </div>
+                                <div
+                                  className="applicant-email"
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}
                                 >
-                                  {getDocumentTypeIcon()}
-                                  <span className="document-name">
-                                    {doc.name}
-                                  </span>
-                                  <Download size={12} />
-                                </button>
-                              ))}
-                            </div>
-                          </td>
-                          <td className="actions-cell">
-                            <div className="action-buttons">
-                              <button
-                                type="button"
-                                className="action-button view-button"
-                                onClick={() => {
-                                  handleApplicationAction(
-                                    application.id,
-                                    'view',
-                                  );
-                                }}
-                                title="View Details"
+                                  <Mail
+                                    size={14}
+                                    style={{ marginRight: '4px' }}
+                                  />
+                                  {application.applicantEmail}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span
+                                className={`status-badge ${getStatusColor(application.status)}`}
                               >
-                                <Eye size={16} />
-                              </button>
-                              {application.status === 'pending' && (
-                                <>
+                                {getStatusIcon(application.status)}
+                                {application.status}
+                              </span>
+                            </td>
+                            <td className="date-cell">
+                              <Calendar size={14} />
+                              {formatDate(application.appliedAt)}
+                            </td>
+                            <td className="languages-cell">
+                              <div className="languages-list">
+                                {application.languages
+                                  .slice(0, 3)
+                                  .map((lang) => (
+                                    <span key={lang} className="language-tag">
+                                      {lang}
+                                    </span>
+                                  ))}
+                                {application.languages.length > 3 && (
+                                  <span className="language-more">
+                                    +{application.languages.length - 3}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="documents-cell">
+                              <div className="documents-list">
+                                {application.documents.map((doc) => (
+                                  <button
+                                    key={doc.id}
+                                    type="button"
+                                    className="document-item"
+                                    title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
+                                  >
+                                    {getDocumentTypeIcon()}
+                                    <span className="document-name">
+                                      {doc.name}
+                                    </span>
+                                    <Download size={12} />
+                                  </button>
+                                ))}
+                              </div>
+                            </td>
+                            <td className="actions-cell">
+                              <div className="action-buttons">
+                                <button
+                                  type="button"
+                                  className="action-button view-button"
+                                  onClick={() => {
+                                    handleApplicationAction(
+                                      application.id,
+                                      'view',
+                                    );
+                                  }}
+                                  title="View Details"
+                                >
+                                  <Eye size={16} />
+                                </button>
+                                {application.status === 'pending' && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="action-button approve-button"
+                                      onClick={() => {
+                                        handleApplicationAction(
+                                          application.id,
+                                          'approve',
+                                        );
+                                      }}
+                                      title="Approve Application"
+                                    >
+                                      <CheckCircle size={16} />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="action-button reject-button"
+                                      onClick={() => {
+                                        handleApplicationAction(
+                                          application.id,
+                                          'reject',
+                                        );
+                                      }}
+                                      title="Reject Application"
+                                    >
+                                      <XCircle size={16} />
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <table className="applications-table">
+                      <thead>
+                        <tr>
+                          <th>User</th>
+                          <th>Role</th>
+                          <th>Joined</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {displayedUsers.map((user) => (
+                          <tr key={user.id} className="application-row">
+                            <td className="applicant-info">
+                              <div className="applicant-avatar">
+                                <User size={20} />
+                              </div>
+                              <div className="applicant-details">
+                                <div className="applicant-name">
+                                  {user.firstName} {user.lastName}
+                                </div>
+                                <div
+                                  className="applicant-email"
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  <Mail
+                                    size={14}
+                                    style={{ marginRight: '4px' }}
+                                  />
+                                  {user.email}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span
+                                className={`status-badge ${
+                                  user.role === 'admin'
+                                    ? 'status-approved'
+                                    : 'status-pending'
+                                }`}
+                              >
+                                {user.role === 'admin' ? (
+                                  <Shield size={14} />
+                                ) : (
+                                  <User size={14} />
+                                )}
+                                {user.role}
+                              </span>
+                            </td>
+                            <td className="date-cell">
+                              <Calendar size={14} />
+                              {formatDate(user.joinedAt)}
+                            </td>
+                            <td className="actions-cell">
+                              <div className="action-buttons">
+                                {user.role === 'user' && (
                                   <button
                                     type="button"
                                     className="action-button approve-button"
                                     onClick={() => {
-                                      handleApplicationAction(
-                                        application.id,
-                                        'approve',
-                                      );
+                                      handleUserAction(user.id, 'promote');
                                     }}
-                                    title="Approve Application"
+                                    title="Give Admin Privileges"
                                   >
-                                    <CheckCircle size={16} />
+                                    <UserCheck size={16} />
+                                    Make Admin
                                   </button>
-                                  <button
-                                    type="button"
-                                    className="action-button reject-button"
-                                    onClick={() => {
-                                      handleApplicationAction(
-                                        application.id,
-                                        'reject',
-                                      );
-                                    }}
-                                    title="Reject Application"
-                                  >
-                                    <XCircle size={16} />
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                                )}
+                                {user.role === 'admin' && (
+                                  <span className="admin-badge">
+                                    <Shield size={14} />
+                                    Admin
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
 
-                  {displayedApplications.length === 0 && (
+                  {(currentView === 'applications'
+                    ? displayedApplications
+                    : displayedUsers
+                  ).length === 0 && (
                     <div className="empty-state">
-                      <FileText size={48} className="empty-icon" />
-                      <p>No applications found</p>
+                      {currentView === 'applications' ? (
+                        <FileText size={48} className="empty-icon" />
+                      ) : (
+                        <Users size={48} className="empty-icon" />
+                      )}
+                      <p>No {currentView} found</p>
                       <p className="empty-subtitle">
-                        Try adjusting your search or filters
+                        Try adjusting your search
+                        {currentView === 'applications' ? ' or filters' : ''}
                       </p>
                     </div>
                   )}
@@ -619,11 +872,7 @@ const AdminPage: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        className="download-button"
-                        // onClick={() => handleDocumentDownload(doc)}
-                      >
+                      <button type="button" className="download-button">
                         <Download size={16} />
                       </button>
                     </div>
