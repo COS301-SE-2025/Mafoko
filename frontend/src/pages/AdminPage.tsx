@@ -54,6 +54,12 @@ interface SystemUser {
   last_login: string | null;
 }
 
+// Add interface for user response
+interface UserResponse {
+  role: string;
+  // Add other properties as needed
+}
+
 const AdminPage: React.FC = () => {
   const [allApplications, setAllApplications] = useState<LinguistApplication[]>(
     [],
@@ -77,7 +83,7 @@ const AdminPage: React.FC = () => {
   const [selectedApplication, setSelectedApplication] =
     useState<LinguistApplication | null>(null);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
-
+  const [authError, setAuthError] = useState<string | null>(null);
   const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
 
   const applyFiltersAndPagination = useCallback(() => {
@@ -162,8 +168,12 @@ const AdminPage: React.FC = () => {
 
   useEffect(() => {
     const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'true');
+    if (stored) setIsDarkMode(stored === 'false');
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -211,6 +221,39 @@ const AdminPage: React.FC = () => {
     setSearchTerm('');
     setStatusFilter('all');
   }, [currentView]);
+
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      try {
+        const response = await fetch(API_ENDPOINTS.getMe, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+          setAuthError(
+            `Error ${response.status.toString()}: ${response.statusText}`,
+          );
+          return;
+        }
+
+        const user = (await response.json()) as UserResponse;
+        if (user.role !== 'admin') {
+          setAuthError('Error 403: Forbidden - Admin access required');
+        }
+      } catch (err) {
+        console.error('Error checking admin role:', err);
+        setAuthError('Error 500: Unable to verify admin access');
+      }
+    };
+
+    void checkAdminRole();
+  }, []);
 
   const handleApplicationAction = (applicationId: string, action: string) => {
     const application = allApplications.find((app) => app.id === applicationId);
@@ -364,6 +407,38 @@ const AdminPage: React.FC = () => {
       }).length;
     }
   };
+
+  if (authError) {
+    return (
+      <div
+        className="error-container"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}
+      >
+        <h1 style={{ color: '#dc3545' }}>{authError}</h1>
+        <button
+          type="button"
+          onClick={() => (window.location.href = '/Mavito/dashboard')}
+          style={{
+            padding: '0.5rem 1rem',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Go to Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div
