@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
+
 # This assumes you will create an endpoint file for application logic
 from app.api.v1.endpoints import applications
 
@@ -19,10 +20,11 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
 # Include the router for handling linguist applications
 # All endpoints in linguist_applications.py will be prefixed with this path
 app.include_router(
-    applications.router, 
-    prefix="/api/v1/linguist-applications", 
-    tags=["Linguist Applications"]
+    applications.router,
+    prefix="/api/v1/linguist-applications",
+    tags=["Linguist Applications"],
 )
+
 
 @app.get("/", tags=["Health Check"])
 async def read_root():
