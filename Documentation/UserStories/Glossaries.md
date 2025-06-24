@@ -1,11 +1,11 @@
 
-# Mavito Glossaries User Stories
+# Marito Glossaries User Stories
 
 
 
 ## User Story #9: Term Detail View
 
-**ID:** US009 (Mavito Project)  
+**ID:** US009 (Marito Project)  
 **Title:** View Detailed Term Information  
 **As a:** terminology researcher,  
 **I want:** to view detailed information about a specific term,  
