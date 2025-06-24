@@ -1,7 +1,7 @@
 # app/crud/crud_user.py
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Optional, Union, Dict, Any
+from typing import List, Optional, Union, Dict, Any
 from uuid import UUID
 
 from mavito_common.models.user import User as UserModel
@@ -136,6 +136,12 @@ class CRUDUser:
         await db.commit()
         await db.refresh(user)
         return user
+
+    async def get_all_users(self, db: AsyncSession) -> List[UserModel]:
+        result = await db.execute(
+            select(UserModel).order_by(UserModel.created_at.desc())
+        )
+        return list(result.scalars().all())
 
 
 # Create a global instance of the CRUDUser class.

@@ -5,6 +5,8 @@ from app.api import deps
 from app.crud.crud_user import crud_user
 from mavito_common.models.user import User as UserModel, UserRole
 from mavito_common.db.session import get_db
+from mavito_common.schemas.user import User as UserSchema
+from typing import List
 
 router = APIRouter()
 
@@ -34,3 +36,15 @@ async def update_user_role(
     return {
         "message": f"Role updated to {updated_user.role} for user {updated_user.email}"
     }
+
+
+@router.get("/users", response_model=List[UserSchema])
+async def get_all_users(
+    db: AsyncSession = Depends(get_db),
+    current_user: UserModel = Depends(deps.get_current_active_admin),
+):
+    """
+    Admin-only endpoint to fetch all users.
+    """
+    users = await crud_user.get_all_users(db)
+    return [UserSchema.model_validate(user) for user in users]
