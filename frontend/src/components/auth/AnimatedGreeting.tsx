@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/AnimatedGreeting.css';
 
-// UPDATED: All messages now use the same consistent object shape.
 const conversations = [
   {
     lang: 'English',
@@ -36,33 +35,50 @@ const conversations = [
       },
     ],
   },
-];
+] as const;
 
-const languages = Object.keys(conversations);
+const languages = conversations.map((c) => c.lang);
 
 const AnimatedGreeting: React.FC = () => {
   const [langIndex, setLangIndex] = useState(0);
-  const [visibleMessages, setVisibleMessages] = useState(0);
+  // This state now tracks the COUNT of visible messages
+  const [visibleMessageCount, setVisibleMessageCount] = useState(0);
 
   useEffect(() => {
+    // This effect controls the entire animation sequence
+    const currentMessages = conversations[langIndex].messages;
+
+    // This timer reveals one bubble at a time by incrementing the count
     const messageTimer = setInterval(() => {
-      setVisibleMessages((currentCount) => {
-        const currentConversation = conversations[langIndex].messages;
-        if (currentCount < currentConversation.length) {
-          return currentCount + 1;
+      setVisibleMessageCount((prevCount) => {
+        if (prevCount < currentMessages.length) {
+          return prevCount + 1;
         }
-        return currentCount;
+        clearInterval(messageTimer);
+        return prevCount;
       });
     }, 1500);
 
-    const conversationTimer = setInterval(() => {
-      setVisibleMessages(0);
-      setLangIndex((prev) => (prev + 1) % languages.length);
+    // This timer handles resetting the conversation for the next language
+    const conversationCycle = setTimeout(() => {
+      // Start the fade out by setting the count to a high number
+      setVisibleMessageCount(currentMessages.length + 1);
+
+      // After the fade-out, switch the language and reset the count
+      const switchLangTimer = setTimeout(() => {
+        setLangIndex((prev) => (prev + 1) % languages.length);
+        setVisibleMessageCount(0);
+      }, 700);
+
+      // Add the inner timer to the cleanup array
+      timers.push(switchLangTimer);
     }, 8000);
 
+    const timers = [messageTimer, conversationCycle];
+
+    // Cleanup function to clear all timers
     return () => {
-      clearInterval(messageTimer);
-      clearInterval(conversationTimer);
+      timers.forEach(clearTimeout);
     };
   }, [langIndex]);
 
@@ -72,8 +88,9 @@ const AnimatedGreeting: React.FC = () => {
     <div className="conversation-container">
       {currentConversation.map((message, index) => (
         <div
-          key={index}
-          className={`message-bubble ${message.side} ${index < visibleMessages ? 'visible' : ''}`}
+          key={`${conversations[langIndex].lang}-${message.side}-${message.text}`}
+          // UPDATED: The 'visible' class is now applied conditionally
+          className={`message-bubble ${message.side} ${index < visibleMessageCount ? 'visible' : ''}`}
         >
           {message.text}
         </div>
