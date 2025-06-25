@@ -35,62 +35,153 @@ const conversations = [
       },
     ],
   },
+  {
+    lang: 'isiXhosa',
+    messages: [
+      { side: 'left', text: 'Iqonga labo bonke abasebenzisi...' },
+      { side: 'right', text: '...ukusuka kubafundi ukuya koonjingalwazi.' },
+      { side: 'left', text: 'Fikelela kwizixhobo zolwimi ezibalulekileyo...' },
+      { side: 'right', text: '...kwi-intanethi nangaphandle kwayo.' },
+    ],
+  },
+  {
+    lang: 'Sepedi',
+    messages: [
+      { side: 'left', text: 'Setšhaba sa basebedisi bohle...' },
+      {
+        side: 'right',
+        text: '...go tloga go baithuti go ya go ditsebi tša polelo.',
+      },
+      { side: 'left', text: 'Fumana didirišwa tša polelo tša bohlokwa...' },
+      { side: 'right', text: '...inthaneteng le ntle le yona.' },
+    ],
+  },
+  {
+    lang: 'Sesotho',
+    messages: [
+      { side: 'left', text: 'Sethala sa basebelisi bohle...' },
+      {
+        side: 'right',
+        text: '...ho tloha ho baithuti ho isa ho litsebi tsa puo.',
+      },
+      { side: 'left', text: 'Fumana lisebelisoa tsa puo tsa bohlokoa...' },
+      { side: 'right', text: '...inthaneteng le kantle ho eona.' },
+    ],
+  },
+  {
+    lang: 'Setswana',
+    messages: [
+      { side: 'left', text: 'Setsha sa basebelisi botlhe...' },
+      {
+        side: 'right',
+        text: '...go simolola ka baithuti go fitlha kwa ditsebing tsa puo.',
+      },
+      { side: 'left', text: 'Fumana didirisiwa tsa puo tsa botlhokwa...' },
+      { side: 'right', text: '...mo inthaneteng le kwa ntle ga yone.' },
+    ],
+  },
+  {
+    lang: 'siSwati',
+    messages: [
+      { side: 'left', text: 'Lizinga lebonkhe basebenti...' },
+      { side: 'right', text: '...kusuka kubafundzi kuya kutichwepheshe.' },
+      { side: 'left', text: 'Thola tisebenti telulwimi letibalulekile...' },
+      { side: 'right', text: '...ku-inthanethi nangaphandle kwayo.' },
+    ],
+  },
+  {
+    lang: 'Tshivenda',
+    messages: [
+      { side: 'left', text: 'Tshikolo tsha vhashumisani vhoṱhe...' },
+      {
+        side: 'right',
+        text: '...ubva kha vhafunzi u swika kha vhahulwane vha luambo.',
+      },
+      { side: 'left', text: 'Wana zwishumiswa zwa luambo zwa ndeme...' },
+      { side: 'right', text: '...kha inthanethe na nnḓa hayo.' },
+    ],
+  },
+  {
+    lang: 'Xitsonga',
+    messages: [
+      { side: 'left', text: 'Xipfuno xa hinkwavo va tirhisaka...' },
+      {
+        side: 'right',
+        text: '...ku suka eka vadyondzi ku ya eka vatsari va ririmi.',
+      },
+      { side: 'left', text: 'Kuma swinawana swa ririmi swa nkoka...' },
+      { side: 'right', text: '...eka inthanete na le handle ka yona.' },
+    ],
+  },
+  {
+    lang: 'isiNdebele',
+    messages: [
+      { side: 'left', text: 'Ipulatifomu yawo wonke abasebenzisi...' },
+      {
+        side: 'right',
+        text: '...kusukela kubafundi kuya kochwepheshe bolimi.',
+      },
+      { side: 'left', text: 'Thola izinsiza zolimi ezibalulekile...' },
+      { side: 'right', text: '...ku-inthanethi nangaphandle kwayo.' },
+    ],
+  },
 ] as const;
 
 const languages = conversations.map((c) => c.lang);
 
+type Message = {
+  side: 'left' | 'right';
+  text: string;
+};
+
 const AnimatedGreeting: React.FC = () => {
   const [langIndex, setLangIndex] = useState(0);
-  const [visibleMessageCount, setVisibleMessageCount] = useState(0);
-  // NEW: State to control the final fade-out animation
+  const [visibleBubbles, setVisibleBubbles] = useState<Message[]>([]);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
     const currentMessages = conversations[langIndex].messages;
     const timers: NodeJS.Timeout[] = [];
+    setVisibleBubbles([]); // Reset immediately for consistent sizing
 
-    // Timer to reveal messages one by one
-    const messageTimer = setInterval(() => {
-      setVisibleMessageCount((prevCount) => {
-        if (prevCount < currentMessages.length) {
-          return prevCount + 1;
-        }
-        clearInterval(messageTimer);
-        return prevCount;
-      });
-    }, 1800); // Slightly longer delay between messages
-    timers.push(messageTimer);
+    // Show each bubble only after the previous one is fully in place
+    currentMessages.forEach((message, index) => {
+      const timer = setTimeout(() => {
+        setVisibleBubbles((prev) => [...prev, message]);
+      }, index * 1800); // Slower: 1.8s per bubble, sequential
+      timers.push(timer);
+    });
 
-    // Timer to handle the end-of-conversation sequence
-    const conversationCycle = setTimeout(() => {
-      // 1. Trigger the fade-out animation in the CSS
+    // Pause at the end before fade out
+    const totalDuration = (currentMessages.length - 1) * 1800 + 2000;
+    const endConversationTimer = setTimeout(() => {
       setIsFadingOut(true);
-
-      // 2. After the fade-out is complete, reset everything for the next language
       const switchLangTimer = setTimeout(() => {
         setLangIndex((prev) => (prev + 1) % languages.length);
-        setVisibleMessageCount(0); // Reset message count
-        setIsFadingOut(false); // End the fade-out state
-      }, 800); // This delay must match the transition duration in the CSS
+        setVisibleBubbles([]);
+        setIsFadingOut(false);
+      }, 800);
       timers.push(switchLangTimer);
-    }, 9000); // Total duration of one conversation cycle
-    timers.push(conversationCycle);
+    }, totalDuration);
+    timers.push(endConversationTimer);
 
-    // Cleanup function to clear all scheduled timers
     return () => {
       timers.forEach(clearTimeout);
     };
   }, [langIndex]);
 
   return (
-    // The 'fading-out' class will be added at the end of the cycle
     <div
       className={`conversation-container ${isFadingOut ? 'fading-out' : ''}`}
     >
-      {conversations[langIndex].messages.map((message, index) => (
+      {visibleBubbles.map((message, index) => (
         <div
-          key={`${conversations[langIndex].lang}-${message.side}-${message.text}`}
-          className={`message-bubble ${message.side} ${index < visibleMessageCount ? 'visible' : ''}`}
+          key={index}
+          className={`message-bubble ${message.side} visible`}
+          style={{
+            animationPlayState: isFadingOut ? 'paused' : 'running',
+            willChange: 'transform, opacity',
+          }}
         >
           {message.text}
         </div>

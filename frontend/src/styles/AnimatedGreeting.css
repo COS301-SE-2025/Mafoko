@@ -5,15 +5,14 @@
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  max-width: 500px;
+  max-width: 640px;
   min-height: 280px;
   padding: 1rem;
   box-sizing: border-box;
-  /* UPDATED: Add a transition for the final fade-out effect */
   transition: opacity 0.7s ease-in-out;
+  align-items: flex-start;
 }
 
-/* NEW: This class is used to fade out the entire container smoothly */
 .conversation-container.fading-out {
   opacity: 0;
 }
@@ -21,21 +20,31 @@
 .message-bubble {
   padding: 0.75rem 1.25rem;
   border-radius: 20px;
-  max-width: 80%;
+  /* FINAL TWEAK: Increased max-width to make bubbles longer */
+  max-width: 85%; 
+  min-width: 220px; /* Ensures consistent width */
+  min-height: 48px; /* Consistent height for all bubbles */
   font-family: 'Poppins', sans-serif;
   font-size: 1.1rem;
   line-height: 1.5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  opacity: 0; /* Bubbles start invisible */
+  opacity: 0;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+  align-items: center;
+  word-break: break-word;
+  position: relative;
+  /* NEW: lock bubble size after render */
+  width: fit-content;
 }
 
-/* --- NEW: Directional Animations --- */
+/* --- Directional Animations --- */
 
-/* Animation for bubbles coming from the left */
 @keyframes slideInFromLeft {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    /* Smoother, slower, and further: -120px */
+    transform: translateX(-120px); 
   }
   to {
     opacity: 1;
@@ -43,11 +52,11 @@
   }
 }
 
-/* Animation for bubbles coming from the right */
 @keyframes slideInFromRight {
   from {
     opacity: 0;
-    transform: translateX(20px);
+    /* Smoother, slower, and further: 120px */
+    transform: translateX(120px); 
   }
   to {
     opacity: 1;
@@ -57,20 +66,24 @@
 
 /* Apply the correct animation based on the bubble's class */
 .message-bubble.left.visible {
-  animation: slideInFromLeft 0.5s ease-out forwards;
+  /* Smoother and slower: 1.6s duration, cubic-bezier for smoothness */
+  animation: slideInFromLeft 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 .message-bubble.right.visible {
-  animation: slideInFromRight 0.5s ease-out forwards;
+  /* Smoother and slower: 1.6s duration, cubic-bezier for smoothness */
+  animation: slideInFromRight 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 /* --- Bubble Styles --- */
 
 .message-bubble.left {
   align-self: flex-start;
-  background-color: #00e4c2;
-  color: #20222f;
+  /* Match login button color */
+  background-color: #00ceaf;
+  color: white;
   border-bottom-left-radius: 5px;
+  margin-right: 80px; /* Stop further from right bubble */
 }
 
 .message-bubble.right {
@@ -78,4 +91,17 @@
   background-color: #212431;
   color: white;
   border-bottom-right-radius: 5px;
+  margin-left: 80px; /* Stop further from left bubble */
+}
+
+@media (max-width: 600px) {
+  .conversation-container {
+    max-width: 98vw;
+    padding: 0.5rem;
+  }
+  .message-bubble {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 1rem;
+  }
 }
