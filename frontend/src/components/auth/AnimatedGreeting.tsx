@@ -41,14 +41,15 @@ const languages = conversations.map((c) => c.lang);
 
 const AnimatedGreeting: React.FC = () => {
   const [langIndex, setLangIndex] = useState(0);
-  // This state now tracks the COUNT of visible messages
   const [visibleMessageCount, setVisibleMessageCount] = useState(0);
+  // NEW: State to control the final fade-out animation
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    // This effect controls the entire animation sequence
     const currentMessages = conversations[langIndex].messages;
+    const timers: NodeJS.Timeout[] = [];
 
-    // This timer reveals one bubble at a time by incrementing the count
+    // Timer to reveal messages one by one
     const messageTimer = setInterval(() => {
       setVisibleMessageCount((prevCount) => {
         if (prevCount < currentMessages.length) {
@@ -57,39 +58,38 @@ const AnimatedGreeting: React.FC = () => {
         clearInterval(messageTimer);
         return prevCount;
       });
-    }, 1500);
+    }, 1800); // Slightly longer delay between messages
+    timers.push(messageTimer);
 
-    // This timer handles resetting the conversation for the next language
+    // Timer to handle the end-of-conversation sequence
     const conversationCycle = setTimeout(() => {
-      // Start the fade out by setting the count to a high number
-      setVisibleMessageCount(currentMessages.length + 1);
+      // 1. Trigger the fade-out animation in the CSS
+      setIsFadingOut(true);
 
-      // After the fade-out, switch the language and reset the count
+      // 2. After the fade-out is complete, reset everything for the next language
       const switchLangTimer = setTimeout(() => {
         setLangIndex((prev) => (prev + 1) % languages.length);
-        setVisibleMessageCount(0);
-      }, 700);
-
-      // Add the inner timer to the cleanup array
+        setVisibleMessageCount(0); // Reset message count
+        setIsFadingOut(false); // End the fade-out state
+      }, 800); // This delay must match the transition duration in the CSS
       timers.push(switchLangTimer);
-    }, 8000);
+    }, 9000); // Total duration of one conversation cycle
+    timers.push(conversationCycle);
 
-    const timers = [messageTimer, conversationCycle];
-
-    // Cleanup function to clear all timers
+    // Cleanup function to clear all scheduled timers
     return () => {
       timers.forEach(clearTimeout);
     };
   }, [langIndex]);
 
-  const currentConversation = conversations[langIndex].messages;
-
   return (
-    <div className="conversation-container">
-      {currentConversation.map((message, index) => (
+    // The 'fading-out' class will be added at the end of the cycle
+    <div
+      className={`conversation-container ${isFadingOut ? 'fading-out' : ''}`}
+    >
+      {conversations[langIndex].messages.map((message, index) => (
         <div
           key={`${conversations[langIndex].lang}-${message.side}-${message.text}`}
-          // UPDATED: The 'visible' class is now applied conditionally
           className={`message-bubble ${message.side} ${index < visibleMessageCount ? 'visible' : ''}`}
         >
           {message.text}
