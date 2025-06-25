@@ -80,10 +80,10 @@ class TestAnalyticsRouter:
         }
         return pd.DataFrame(data)
 
-    # @pytest.fixture
-    # def mock_json_data(self, sample_dataframe):
-    #     """Create mock JSON data that matches the DataFrame."""
-    #     return sample_dataframe.to_dict("records")
+    @pytest.fixture
+    def mock_json_data(self, sample_dataframe):
+        """Create mock JSON data that matches the DataFrame."""
+        return sample_dataframe.to_dict("records")
 
     # @pytest.fixture
     # def mock_file_system(self, mock_json_data):
