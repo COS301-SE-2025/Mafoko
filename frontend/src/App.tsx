@@ -32,7 +32,14 @@ function App() {
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
-        <Route path="/glossary" element={<GlossaryPage />} />
+        <Route
+          path="/glossary"
+          element={
+            <div style={{ margin: '-50px' }}>
+              <GlossaryPage />
+            </div>
+          }
+        />
       </Routes>
     </div>
   );
