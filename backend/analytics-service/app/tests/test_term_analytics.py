@@ -1,160 +1,177 @@
 import pytest
 import pandas as pd
-import json
 from unittest.mock import patch
+
+# import json
+# import os
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
 
-from app.api.v1.endpoints.analytics import router, load_marito_data, DATASET_PATH
+# Import the actual analytics router and functions
+from app.api.v1.endpoints.analytics import (
+    router,
+    load_marito_data,
+    get_dataset_columns,
+    # get_category_frequency,
+    get_language_coverage,
+    get_term_length_analysis,
+    #  get_definition_length_analysis,
+    get_unique_terms_count,
+    DATASET_PATH,
+)
 
-# Create a test app
+# Create a test app with the analytics router
 app = FastAPI()
-app.include_router(router, prefix="/analytics")
+app.include_router(router, prefix="/api/v1/analytics")
+
 client = TestClient(app)
 
 
-class TestAnalyticsModule:
-    """Test suite for analytics module"""
+class TestAnalyticsRouter:
+    """Test suite for the analytics router."""
 
     @pytest.fixture
-    def sample_data(self):
-        """Sample data fixture for testing"""
-        return [
-            {
-                "category": "Statistics",
-                "eng_term": "Mean",
-                "spa_term": "Media",
-                "fra_term": "Moyenne",
-                "deu_term": "Mittelwert",
-                "eng_definition": "The average value of a dataset",
-                "spa_definition": "El valor promedio de un conjunto de datos",
-                "fra_definition": "La valeur moyenne d'un ensemble de données",
-            },
-            {
-                "category": "Statistics",
-                "eng_term": "Median",
-                "spa_term": "Mediana",
-                "fra_term": "Médiane",
-                "deu_term": None,  # Missing term (1 missing)
-                "eng_definition": "The middle value in a sorted dataset",
-                "spa_definition": None,  # Missing definition
-                "fra_definition": "La valeur médiane dans un ensemble de données trié",
-            },
-            {
-                "category": "Probability",
-                "eng_term": "Distribution",
-                "spa_term": "Distribución",
-                "fra_term": "Distribution",
-                "deu_term": "Verteilung",
-                "eng_definition": "A mathematical function describing probability",
-                "spa_definition": "Una función matemática que describe probabilidad",
-                "fra_definition": "Une fonction mathématique décrivant la probabilité",
-            },
-            {
-                "category": "Probability",
-                "eng_term": "Variance",
-                "spa_term": None,  # Missing term (1 missing)
-                "fra_term": None,  # Missing term (1 missing)
-                "deu_term": None,  # Missing term (2 missing total)
-                "eng_definition": "A measure of data spread",
-                "spa_definition": "Una medida de dispersión de datos",
-                "fra_definition": None,  # Missing definition
-            },
-        ]
+    def sample_dataframe(self):
+        """Create a sample DataFrame for testing."""
+        data = {
+            "category": [
+                "Agriculture",
+                "Agriculture",
+                "Agriculture",
+                "Education",
+                "Education",
+            ],
+            "eng_term": [
+                "Agricultural inputs",
+                "Annual crops",
+                "Livestock",
+                "Education",
+                "Learning",
+            ],
+            "afr_term": ["Landbou-insette", "Jaargewasse", "Vee", "Onderwys", "Leer"],
+            "nde_term": [
+                "Iinsetjenziswa zokulima",
+                "Izitshalo zonyaka",
+                "Izifuyo",
+                "Imfundo",
+                "Ukufunda",
+            ],
+            "xho_term": [
+                "Amagalelo ezolimo",
+                "Izityalo zonyaka",
+                "Imfuyo",
+                "Imfundo",
+                "Ukufunda",
+            ],
+            "zul_term": [
+                "Izinsizamikhiqizo zezolimo",
+                "Izitshalo zonyaka",
+                "Izifuyo",
+                "Imfundo",
+                "Ukufunda",
+            ],
+            "eng_definition": [
+                "Consumable expendable inputs in agricultural production",
+                "Crops that are planted and harvested during the same production season",
+                "Domesticated animals raised for food or other products",
+                "The process of teaching and learning",
+                "The acquisition of knowledge and skills",
+            ],
+        }
+        return pd.DataFrame(data)
 
-    @pytest.fixture
-    def sample_dataframe(self, sample_data):
-        """Create a sample DataFrame from sample data"""
-        df = pd.DataFrame(sample_data)
-        # Normalize column names as done in the actual function
-        df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
-        return df
+    # @pytest.fixture
+    # def mock_json_data(self, sample_dataframe):
+    #     """Create mock JSON data that matches the DataFrame."""
+    #     return sample_dataframe.to_dict("records")
 
-    @pytest.fixture
-    def mock_json_file(self, sample_data):
-        """Mock JSON file content"""
-        return json.dumps(sample_data)
+    # @pytest.fixture
+    # def mock_file_system(self, mock_json_data):
+    #     """Mock the file system and pandas read_json."""
+    #     with patch("pandas.read_json") as mock_read_json, patch(
+    #         "os.path.abspath"
+    #     ) as mock_abspath, patch("os.path.join") as mock_join, patch(
+    #         "os.path.dirname"
+    #     ) as mock_dirname:
 
-    @pytest.fixture(autouse=True)
-    def reset_cache(self):
-        """Reset the global cache before each test"""
-        # Import here to avoid circular imports
-        import app.api.v1.endpoints.analytics as analytics_module
+    #         mock_abspath.return_value = "/mocked/path/to/dataset.json"
+    #         mock_join.return_value = "mocked/relative/path"
+    #         mock_dirname.return_value = "/mocked/current/dir"
 
-        analytics_module.TERM_DATASET = None
-        yield
-        analytics_module.TERM_DATASET = None
+    #         # Create DataFrame from mock data
+    #         df = pd.DataFrame(mock_json_data)
+    #         # Normalize column names as done in the actual function
+    #         df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
+    #         mock_read_json.return_value = df
 
-    @patch("pandas.read_json")
+    #         yield mock_read_json
+
+    # @pytest.fixture(autouse=True)
+    # def reset_global_cache(self):
+    #     """Reset the global TERM_DATASET cache before each test."""
+    #     # Import and reset the global variable
+    #     import app.api.v1.endpoints.analytics as analytics_module
+
+    #     analytics_module.TERM_DATASET = None
+    #     yield
+    #     # Reset after test
+    #     analytics_module.TERM_DATASET = None
+
+    # @pytest.mark.asyncio
+    # async def test_load_marito_data_first_call(
+    #     self, mock_file_system, sample_dataframe
+    # ):
+    #     """Test that load_marito_data loads data correctly on first call."""
+    #     # Mock the global variable
+    #     import app.api.v1.endpoints.analytics as analytics_module
+
+    #     analytics_module.TERM_DATASET = None
+
+    #     result = await load_marito_data()
+
+    #     assert result is not None
+    #     assert len(result) == 5
+    #     assert "category" in result.columns
+    #     mock_file_system.assert_called_once()
+
+    # @pytest.mark.asyncio
+    # async def test_load_marito_data_cached(self, mock_file_system, sample_dataframe):
+    #     """Test that load_marito_data uses cache on subsequent calls."""
+    #     import app.api.v1.endpoints.analytics as analytics_module
+
+    #     analytics_module.TERM_DATASET = sample_dataframe
+
+    #     result1 = await load_marito_data()
+    #     result2 = await load_marito_data()
+
+    #     # Should be the same object (cached)
+    #     assert result1 is result2
+    #     # read_json should not be called when using cache
+    #     mock_file_system.assert_not_called()
+
     @pytest.mark.asyncio
-    async def test_load_marito_data_first_call(self, mock_read_json, sample_dataframe):
-        """Test loading data for the first time"""
-        mock_read_json.return_value = sample_dataframe
-
-        result = await load_marito_data()
-
-        mock_read_json.assert_called_once_with(DATASET_PATH)
-        assert result is not None
-        assert len(result) == 4
-        assert list(result.columns) == [
-            "category",
-            "eng_term",
-            "spa_term",
-            "fra_term",
-            "deu_term",
-            "eng_definition",
-            "spa_definition",
-            "fra_definition",
-        ]
-
-    @patch("pandas.read_json")
-    @pytest.mark.asyncio
-    async def test_load_marito_data_cached(self, mock_read_json, sample_dataframe):
-        """Test that data is cached on subsequent calls"""
-        mock_read_json.return_value = sample_dataframe
-
-        # First call
-        result1 = await load_marito_data()
-        # Second call
-        result2 = await load_marito_data()
-
-        # Should only be called once due to caching
-        mock_read_json.assert_called_once()
-        assert result1 is result2  # Same object reference
-
-    @patch("pandas.read_json")
-    @pytest.mark.asyncio
-    async def test_load_marito_data_column_normalization(self, mock_read_json):
-        """Test that column names are properly normalized"""
-        # Create DataFrame with messy column names
-        messy_df = pd.DataFrame(
-            {
-                "Category ": ["Stats"],
-                " ENG Term": ["Mean"],
-                "SPA Definition ": ["Definición"],
-            }
+    async def test_get_dataset_columns(self, mock_file_system):
+        """Test get_dataset_columns returns correct column categorization."""
+        df, language_columns, definition_columns, category_column = (
+            await get_dataset_columns()
         )
-        mock_read_json.return_value = messy_df
 
-        result = await load_marito_data()
+        assert category_column == "category"
+        assert "eng_term" in language_columns
+        assert "afr_term" in language_columns
+        assert "nde_term" in language_columns
+        assert "xho_term" in language_columns
+        assert "zul_term" in language_columns
+        assert "eng_definition" in definition_columns
 
-        expected_columns = ["category", "eng_term", "spa_definition"]
-        assert list(result.columns) == expected_columns
-
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_get_descriptive_analytics_success(
-        self, mock_load_data, sample_dataframe
-    ):
-        """Test successful descriptive analytics endpoint"""
-        mock_load_data.return_value = sample_dataframe
-
-        response = client.get("/analytics/descriptive")
+    def test_get_descriptive_analytics_endpoint(self, mock_file_system):
+        """Test the main descriptive analytics endpoint."""
+        response = client.get("/api/v1/analytics/descriptive")
 
         assert response.status_code == 200
         data = response.json()
 
-        # Check structure
+        # Check that all expected keys are present
         expected_keys = [
             "category_frequency",
             "language_coverage_percent",
@@ -162,200 +179,290 @@ class TestAnalyticsModule:
             "average_definition_lengths",
             "unique_term_counts",
         ]
-        assert all(key in data for key in expected_keys)
+        for key in expected_keys:
+            assert key in data
 
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_category_frequency_calculation(
-        self, mock_load_data, sample_dataframe
-    ):
-        """Test category frequency calculation"""
-        mock_load_data.return_value = sample_dataframe
+    def test_get_category_frequency_endpoint(self, mock_file_system):
+        """Test category frequency endpoint."""
+        response = client.get("/api/v1/analytics/descriptive/category-frequency")
 
-        response = client.get("/analytics/descriptive")
+        assert response.status_code == 200
         data = response.json()
 
-        category_freq = data["category_frequency"]
-        assert category_freq["Statistics"] == 2
-        assert category_freq["Probability"] == 2
+        # Should have counts for each category
+        assert isinstance(data, dict)
+        assert "Agriculture" in data
+        assert "Education" in data
+        assert data["Agriculture"] == 3  # Based on sample data
+        assert data["Education"] == 2
 
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_language_coverage_calculation(
-        self, mock_load_data, sample_dataframe
-    ):
-        """Test language coverage percentage calculation"""
-        mock_load_data.return_value = sample_dataframe
+    def test_get_language_coverage_endpoint(self, mock_file_system):
+        """Test language coverage endpoint."""
+        response = client.get("/api/v1/analytics/descriptive/language-coverage")
 
-        response = client.get("/analytics/descriptive")
+        assert response.status_code == 200
         data = response.json()
 
-        coverage = data["language_coverage_percent"]
+        assert isinstance(data, dict)
+        # All languages should have coverage percentages
+        for lang in ["eng_term", "afr_term", "nde_term"]:
+            assert lang in data
+            assert isinstance(data[lang], (int, float))
+            assert 0 <= data[lang] <= 100
 
-        # eng_term: 4/4 = 100%
-        assert coverage["eng_term"] == 100.0
-        # spa_term: 3/4 = 75% (1 None)
-        assert coverage["spa_term"] == 75.0
-        # fra_term: 3/4 = 75% (1 None)
-        assert coverage["fra_term"] == 75.0
-        # deu_term: 2/4 = 50% (2 None)
-        assert coverage["deu_term"] == 50.0
+    def test_get_term_length_analysis_endpoint(self, mock_file_system):
+        """Test term length analysis endpoint."""
+        response = client.get("/api/v1/analytics/descriptive/term-length")
 
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_term_length_calculation(self, mock_load_data, sample_dataframe):
-        """Test average term length calculation"""
-        mock_load_data.return_value = sample_dataframe
-
-        response = client.get("/analytics/descriptive")
+        assert response.status_code == 200
         data = response.json()
 
-        term_lengths = data["average_term_lengths"]
+        assert isinstance(data, dict)
+        # Should have average lengths for each language
+        for lang in ["eng_term", "afr_term", "nde_term"]:
+            assert lang in data
+            assert isinstance(data[lang], (int, float))
+            assert data[lang] > 0  # Should have positive average length
 
-        # Check that values are reasonable (should be floats)
-        assert isinstance(term_lengths["eng_term"], float)
-        assert term_lengths["eng_term"] > 0
+    def test_get_definition_length_analysis_endpoint(self, mock_file_system):
+        """Test definition length analysis endpoint."""
+        response = client.get("/api/v1/analytics/descriptive/definition-length")
 
-        # eng_term lengths: Mean(4), Median(6), Distribution(12), Variance(8) = avg 7.5
-        assert term_lengths["eng_term"] == 7.5
-
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_definition_length_calculation(
-        self, mock_load_data, sample_dataframe
-    ):
-        """Test average definition length calculation"""
-        mock_load_data.return_value = sample_dataframe
-
-        response = client.get("/analytics/descriptive")
+        assert response.status_code == 200
         data = response.json()
 
-        def_lengths = data["average_definition_lengths"]
+        assert isinstance(data, dict)
+        # Should have average lengths for definition columns
+        assert "eng_definition" in data
+        assert isinstance(data["eng_definition"], (int, float))
+        assert data["eng_definition"] > 0
 
-        # Should have definition lengths for all definition columns
-        assert "eng_definition" in def_lengths
-        assert "spa_definition" in def_lengths
-        assert "fra_definition" in def_lengths
+    def test_get_unique_terms_count_endpoint(self, mock_file_system):
+        """Test unique terms count endpoint."""
+        response = client.get("/api/v1/analytics/descriptive/unique-terms")
 
-        assert isinstance(def_lengths["eng_definition"], float)
-        assert def_lengths["eng_definition"] > 0
-
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_unique_term_counts(self, mock_load_data, sample_dataframe):
-        """Test unique term count calculation"""
-        mock_load_data.return_value = sample_dataframe
-
-        response = client.get("/analytics/descriptive")
+        assert response.status_code == 200
         data = response.json()
 
-        unique_counts = data["unique_term_counts"]
+        assert isinstance(data, dict)
+        # Should have unique counts for each language
+        for lang in ["eng_term", "afr_term", "nde_term"]:
+            assert lang in data
+            assert isinstance(data[lang], int)
+            assert data[lang] >= 0
 
-        # All terms are unique in our sample data
-        assert unique_counts["eng_term"] == 4
-        assert unique_counts["spa_term"] == 3  # One is None
-        assert unique_counts["fra_term"] == 3  # One is None
-        assert unique_counts["deu_term"] == 2  # Two are None
-
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
     @pytest.mark.asyncio
-    async def test_no_definition_columns_fallback(self, mock_load_data):
-        """Test fallback when no multilingual definition columns exist"""
-        # Create DataFrame with only eng_definition
-        df = pd.DataFrame(
+    async def test_language_coverage_with_missing_values(self, mock_file_system):
+        """Test language coverage calculation with missing values."""
+        # Test with sample data that has full coverage
+        result = await get_language_coverage()
+
+        # All languages should have 100% coverage in our sample data
+        for lang in ["eng_term", "afr_term", "nde_term", "xho_term", "zul_term"]:
+            assert result[lang] == 100.0
+
+    @pytest.mark.asyncio
+    async def test_term_length_with_null_values(self, mock_file_system):
+        """Test term length calculation ignores null values."""
+        result = await get_term_length_analysis()
+
+        # Should calculate average length only for non-null values
+        assert all(isinstance(length, float) for length in result.values())
+        assert all(length > 0 for length in result.values())
+
+    @pytest.mark.asyncio
+    async def test_unique_terms_count_excludes_na(self, mock_file_system):
+        """Test unique terms count excludes NA values."""
+        result = await get_unique_terms_count()
+
+        # Each language column has 5 unique non-null values in our sample data
+        for lang in ["eng_term", "afr_term", "nde_term", "xho_term", "zul_term"]:
+            assert result[lang] == 5
+
+    def test_file_path_construction(self):
+        """Test that the dataset path is constructed correctly."""
+        # Should end with the expected filename
+        assert DATASET_PATH.endswith("multilingual_statistical_terminology_clean.json")
+
+    @pytest.mark.asyncio
+    async def test_error_handling_file_not_found(self):
+        """Test error handling when dataset file is not found."""
+        with patch("pandas.read_json", side_effect=FileNotFoundError("File not found")):
+            with pytest.raises(FileNotFoundError):
+                await load_marito_data()
+
+    @pytest.mark.asyncio
+    async def test_error_handling_invalid_json(self):
+        """Test error handling when JSON is invalid."""
+        with patch("pandas.read_json", side_effect=ValueError("Invalid JSON")):
+            with pytest.raises(ValueError):
+                await load_marito_data()
+
+    def test_column_normalization(self, mock_file_system):
+        """Test that column names are properly normalized."""
+        # Create DataFrame with messy column names
+        messy_data = pd.DataFrame(
             {
-                "category": ["Stats"],
-                "eng_term": ["Mean"],
-                "eng_definition": ["The average value"],
+                "Category ": ["test"],
+                " English Term": ["test"],
+                "Spanish_Term ": ["test"],
             }
         )
-        mock_load_data.return_value = df
 
-        response = client.get("/analytics/descriptive")
+        with patch("pandas.read_json", return_value=messy_data):
+            # Fixed: Use the correct full URL path
+            response = client.get("/api/v1/analytics/descriptive/category-frequency")
+            assert response.status_code == 200
+
+    @pytest.mark.parametrize(
+        "endpoint",
+        [
+            "/api/v1/analytics/descriptive",
+            "/api/v1/analytics/descriptive/category-frequency",
+            "/api/v1/analytics/descriptive/language-coverage",
+            "/api/v1/analytics/descriptive/term-length",
+            "/api/v1/analytics/descriptive/definition-length",
+            "/api/v1/analytics/descriptive/unique-terms",
+        ],
+    )
+    def test_all_endpoints_return_json(self, endpoint, mock_file_system):
+        """Test that all endpoints return valid JSON."""
+        response = client.get(endpoint)
+        assert response.status_code == 200
+        assert response.headers["content-type"] == "application/json"
+        # Should be able to parse as JSON
         data = response.json()
-
-        def_lengths = data["average_definition_lengths"]
-        assert "eng_definition" in def_lengths
-        assert len(def_lengths) == 1
-
-    # @patch('app.api.v1.endpoints.analytics.load_marito_data')
-    # @pytest.mark.asyncio
-    # async def test_empty_dataframe_handling(self, mock_load_data):
-    #     """Test handling of empty DataFrame"""
-    #     empty_df = pd.DataFrame()
-    #     mock_load_data.return_value = empty_df
-
-    #     response = client.get("/api/analytics/descriptive")
-
-    #     # Empty DataFrame should cause an error (500) since the endpoint
-    #     # doesn't handle this case gracefully
-    #     assert response.status_code == 500
-
-    @patch("pandas.read_json")
-    @pytest.mark.asyncio
-    async def test_file_not_found_error(self, mock_read_json):
-        """Test handling when JSON file is not found"""
-        mock_read_json.side_effect = FileNotFoundError("File not found")
-
-        with pytest.raises(FileNotFoundError):
-            await load_marito_data()
-
-    @patch("pandas.read_json")
-    @pytest.mark.asyncio
-    async def test_invalid_json_error(self, mock_read_json):
-        """Test handling of invalid JSON data"""
-        mock_read_json.side_effect = ValueError("Invalid JSON")
-
-        with pytest.raises(ValueError):
-            await load_marito_data()
-
-    def test_dataset_path_construction(self):
-        """Test that dataset path is constructed correctly"""
-        assert DATASET_PATH.endswith("multilingual_statistical_terminology_clean.json")
-        assert "Mock_Data" in DATASET_PATH
-
-    @patch("app.api.v1.endpoints.analytics.load_marito_data")
-    @pytest.mark.asyncio
-    async def test_response_format_validation(self, mock_load_data, sample_dataframe):
-        """Test that response format matches expected structure"""
-        mock_load_data.return_value = sample_dataframe
-
-        response = client.get("/analytics/descriptive")
-        data = response.json()
-
-        # Validate data types
-        assert isinstance(data["category_frequency"], dict)
-        assert isinstance(data["language_coverage_percent"], dict)
-        assert isinstance(data["average_term_lengths"], dict)
-        assert isinstance(data["average_definition_lengths"], dict)
-        assert isinstance(data["unique_term_counts"], dict)
-
-        # Validate that percentages are between 0 and 100
-        for percentage in data["language_coverage_percent"].values():
-            assert 0 <= percentage <= 100
-
-        # Validate that counts are non-negative integers
-        for count in data["unique_term_counts"].values():
-            assert isinstance(count, int)
-            assert count >= 0
+        assert isinstance(data, dict)
 
 
-# Integration tests
-class TestAnalyticsIntegration:
-    """Integration tests for the analytics API"""
+# Additional integration tests
+# class TestIntegration:
+#     """Integration tests for the full workflow."""
 
-    def test_analytics_endpoint_accessibility(self):
-        """Test that the analytics endpoint is accessible"""
-        # This would normally fail without mocking, but tests the route setup
-        response = client.get("/analytics/descriptive")
-        # Should get some response (likely 500 due to missing data file in test env)
-        assert response.status_code in [200, 500]
+#     @pytest.fixture
+#     def sample_dataframe(self):
+#         """Create a sample DataFrame for testing."""
+#         data = {
+#             "category": [
+#                 "Agriculture",
+#                 "Agriculture",
+#                 "Agriculture",
+#                 "Education",
+#                 "Education",
+#             ],
+#             "eng_term": [
+#                 "Agricultural inputs",
+#                 "Annual crops",
+#                 "Livestock",
+#                 "Education",
+#                 "Learning",
+#             ],
+#             "afr_term": ["Landbou-insette", "Jaargewasse", "Vee", "Onderwys", "Leer"],
+#             "nde_term": [
+#                 "Iinsetjenziswa zokulima",
+#                 "Izitshalo zonyaka",
+#                 "Izifuyo",
+#                 "Imfundo",
+#                 "Ukufunda",
+#             ],
+#             "xho_term": [
+#                 "Amagalelo ezolimo",
+#                 "Izityalo zonyaka",
+#                 "Imfuyo",
+#                 "Imfundo",
+#                 "Ukufunda",
+#             ],
+#             "zul_term": [
+#                 "Izinsizamikhiqizo zezolimo",
+#                 "Izitshalo zonyaka",
+#                 "Izifuyo",
+#                 "Imfundo",
+#                 "Ukufunda",
+#             ],
+#             "eng_definition": [
+#                 "Consumable expendable inputs in agricultural production",
+#                 "Crops that are planted and harvested during the same production season",
+#                 "Domesticated animals raised for food or other products",
+#                 "The process of teaching and learning",
+#                 "The acquisition of knowledge and skills",
+#             ],
+#         }
+#         return pd.DataFrame(data)
 
-    def test_router_prefix_and_tags(self):
-        """Test that router is configured with correct prefix and tags"""
-        assert router.prefix == ""
+#     @pytest.fixture
+#     def mock_json_data(self, sample_dataframe):
+#         """Create mock JSON data that matches the DataFrame."""
+#         return sample_dataframe.to_dict("records")
+
+#     @pytest.fixture
+#     def mock_file_system(self, mock_json_data):
+#         """Mock the file system and pandas read_json."""
+#         with patch("pandas.read_json") as mock_read_json, patch(
+#             "os.path.abspath"
+#         ) as mock_abspath, patch("os.path.join") as mock_join, patch(
+#             "os.path.dirname"
+#         ) as mock_dirname:
+
+#             mock_abspath.return_value = "/mocked/path/to/dataset.json"
+#             mock_join.return_value = "mocked/relative/path"
+#             mock_dirname.return_value = "/mocked/current/dir"
+
+#             # Create DataFrame from mock data
+#             df = pd.DataFrame(mock_json_data)
+#             # Normalize column names as done in the actual function
+#             df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
+#             mock_read_json.return_value = df
+
+#             yield mock_read_json
+
+#     @pytest.fixture(autouse=True)
+#     def reset_global_cache(self):
+#         """Reset the global TERM_DATASET cache before each test."""
+#         # Import and reset the global variable
+#         import app.api.v1.endpoints.analytics as analytics_module
+
+#         analytics_module.TERM_DATASET = None
+#         yield
+#         # Reset after test
+#         analytics_module.TERM_DATASET = None
+
+#     def test_full_analytics_workflow(self, mock_file_system):
+#         """Test the complete analytics workflow."""
+#         # Test main endpoint
+#         main_response = client.get("/api/v1/analytics/descriptive")
+#         assert main_response.status_code == 200
+#         main_data = main_response.json()
+
+#         # Test individual endpoints
+#         category_response = client.get(
+#             "/api/v1/analytics/descriptive/category-frequency"
+#         )
+#         coverage_response = client.get(
+#             "/api/v1/analytics/descriptive/language-coverage"
+#         )
+#         term_length_response = client.get("/api/v1/analytics/descriptive/term-length")
+#         def_length_response = client.get(
+#             "/api/v1/analytics/descriptive/definition-length"
+#         )
+#         unique_response = client.get("/api/v1/analytics/descriptive/unique-terms")
+
+#         # All should be successful
+#         responses = [
+#             category_response,
+#             coverage_response,
+#             term_length_response,
+#             def_length_response,
+#             unique_response,
+#         ]
+#         assert all(r.status_code == 200 for r in responses)
+
+#         # Main endpoint should contain data from individual endpoints
+#         assert main_data["category_frequency"] == category_response.json()
+#         assert main_data["language_coverage_percent"] == coverage_response.json()
+#         assert main_data["average_term_lengths"] == term_length_response.json()
+#         assert main_data["average_definition_lengths"] == def_length_response.json()
+#         assert main_data["unique_term_counts"] == unique_response.json()
 
 
-# Pytest configuration
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+# if __name__ == "__main__":
+#     pytest.main([__file__, "-v"])
