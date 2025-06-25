@@ -389,81 +389,80 @@ class TestIntegration:
         }
         return pd.DataFrame(data)
 
+    @pytest.fixture
+    def mock_json_data(self, sample_dataframe):
+        """Create mock JSON data that matches the DataFrame."""
+        return sample_dataframe.to_dict("records")
 
-#     @pytest.fixture
-#     def mock_json_data(self, sample_dataframe):
-#         """Create mock JSON data that matches the DataFrame."""
-#         return sample_dataframe.to_dict("records")
+    @pytest.fixture
+    def mock_file_system(self, mock_json_data):
+        """Mock the file system and pandas read_json."""
+        with patch("pandas.read_json") as mock_read_json, patch(
+            "os.path.abspath"
+        ) as mock_abspath, patch("os.path.join") as mock_join, patch(
+            "os.path.dirname"
+        ) as mock_dirname:
 
-#     @pytest.fixture
-#     def mock_file_system(self, mock_json_data):
-#         """Mock the file system and pandas read_json."""
-#         with patch("pandas.read_json") as mock_read_json, patch(
-#             "os.path.abspath"
-#         ) as mock_abspath, patch("os.path.join") as mock_join, patch(
-#             "os.path.dirname"
-#         ) as mock_dirname:
+            mock_abspath.return_value = "/mocked/path/to/dataset.json"
+            mock_join.return_value = "mocked/relative/path"
+            mock_dirname.return_value = "/mocked/current/dir"
 
-#             mock_abspath.return_value = "/mocked/path/to/dataset.json"
-#             mock_join.return_value = "mocked/relative/path"
-#             mock_dirname.return_value = "/mocked/current/dir"
+            # Create DataFrame from mock data
+            df = pd.DataFrame(mock_json_data)
+            # Normalize column names as done in the actual function
+            df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
+            mock_read_json.return_value = df
 
-#             # Create DataFrame from mock data
-#             df = pd.DataFrame(mock_json_data)
-#             # Normalize column names as done in the actual function
-#             df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
-#             mock_read_json.return_value = df
+            yield mock_read_json
 
-#             yield mock_read_json
+    @pytest.fixture(autouse=True)
+    def reset_global_cache(self):
+        """Reset the global TERM_DATASET cache before each test."""
+        # Import and reset the global variable
+        import app.api.v1.endpoints.analytics as analytics_module
 
-#     @pytest.fixture(autouse=True)
-#     def reset_global_cache(self):
-#         """Reset the global TERM_DATASET cache before each test."""
-#         # Import and reset the global variable
-#         import app.api.v1.endpoints.analytics as analytics_module
+        analytics_module.TERM_DATASET = None
+        yield
+        # Reset after test
+        analytics_module.TERM_DATASET = None
 
-#         analytics_module.TERM_DATASET = None
-#         yield
-#         # Reset after test
-#         analytics_module.TERM_DATASET = None
+    def test_full_analytics_workflow(self, mock_file_system):
+        """Test the complete analytics workflow."""
+        # Test main endpoint
+        main_response = client.get("/api/v1/analytics/descriptive")
+        assert main_response.status_code == 200
+        main_data = main_response.json()
 
-#     def test_full_analytics_workflow(self, mock_file_system):
-#         """Test the complete analytics workflow."""
-#         # Test main endpoint
-#         main_response = client.get("/api/v1/analytics/descriptive")
-#         assert main_response.status_code == 200
-#         main_data = main_response.json()
+        # Test individual endpoints
+        category_response = client.get(
+            "/api/v1/analytics/descriptive/category-frequency"
+        )
+        coverage_response = client.get(
+            "/api/v1/analytics/descriptive/language-coverage"
+        )
+        term_length_response = client.get("/api/v1/analytics/descriptive/term-length")
+        def_length_response = client.get(
+            "/api/v1/analytics/descriptive/definition-length"
+        )
+        unique_response = client.get("/api/v1/analytics/descriptive/unique-terms")
 
-#         # Test individual endpoints
-#         category_response = client.get(
-#             "/api/v1/analytics/descriptive/category-frequency"
-#         )
-#         coverage_response = client.get(
-#             "/api/v1/analytics/descriptive/language-coverage"
-#         )
-#         term_length_response = client.get("/api/v1/analytics/descriptive/term-length")
-#         def_length_response = client.get(
-#             "/api/v1/analytics/descriptive/definition-length"
-#         )
-#         unique_response = client.get("/api/v1/analytics/descriptive/unique-terms")
+        # All should be successful
+        responses = [
+            category_response,
+            coverage_response,
+            term_length_response,
+            def_length_response,
+            unique_response,
+        ]
+        assert all(r.status_code == 200 for r in responses)
 
-#         # All should be successful
-#         responses = [
-#             category_response,
-#             coverage_response,
-#             term_length_response,
-#             def_length_response,
-#             unique_response,
-#         ]
-#         assert all(r.status_code == 200 for r in responses)
-
-#         # Main endpoint should contain data from individual endpoints
-#         assert main_data["category_frequency"] == category_response.json()
-#         assert main_data["language_coverage_percent"] == coverage_response.json()
-#         assert main_data["average_term_lengths"] == term_length_response.json()
-#         assert main_data["average_definition_lengths"] == def_length_response.json()
-#         assert main_data["unique_term_counts"] == unique_response.json()
+        # Main endpoint should contain data from individual endpoints
+        assert main_data["category_frequency"] == category_response.json()
+        assert main_data["language_coverage_percent"] == coverage_response.json()
+        assert main_data["average_term_lengths"] == term_length_response.json()
+        assert main_data["average_definition_lengths"] == def_length_response.json()
+        assert main_data["unique_term_counts"] == unique_response.json()
 
 
-# if __name__ == "__main__":
-#     pytest.main([__file__, "-v"])
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
