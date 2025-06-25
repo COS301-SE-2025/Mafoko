@@ -12,6 +12,7 @@ import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
+import { useLocation } from 'react-router-dom';
 
 import { API_ENDPOINTS } from '../config';
 import {
@@ -151,6 +152,28 @@ const dictionaryAPI = {
 };
 
 const GlossaryPage = () => {
+  const location = useLocation();
+  // Set activeNav based on current path
+  const initialNav = location.pathname === '/glossary' ? 'glossary' : 'search';
+  const [activeNav, setActiveNav] = useState(initialNav);
+
+  // Force light mode for this page
+  useEffect(() => {
+    const html = document.documentElement;
+    const prevClass = html.className;
+    html.classList.remove('dark');
+    html.classList.add('light');
+
+    // Fix: Override body background to prevent landing page green shade
+    const prevBodyBg = document.body.style.background;
+    document.body.style.background = '#f8fafc';
+
+    return () => {
+      html.className = prevClass;
+      document.body.style.background = prevBodyBg;
+    };
+  }, []);
+
   // State management
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<Term | null>(null);
@@ -167,7 +190,6 @@ const GlossaryPage = () => {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeNav, setActiveNav] = useState('search');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [avatarInitials, setAvatarInitials] = useState<string>('U');
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);

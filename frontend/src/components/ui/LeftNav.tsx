@@ -13,7 +13,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Homepage', path: '/dashboard' },
+    { id: 'dashboard', label: 'Home', path: '/dashboard' },
     { id: 'search', label: 'Dictionary', path: '/search' },
     { id: 'glossary', label: 'Glossary', path: '/glossary' },
     { id: 'saved', label: t('leftPane.savedTerms'), path: '/saved-terms' },
