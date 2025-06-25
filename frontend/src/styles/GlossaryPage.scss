@@ -49,6 +49,21 @@
   .glossary-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .glossary-panel:nth-child(1) {
+    /* Categories column */
+    border-top: 5px solid #00CEAF;
+    box-shadow: 0 4px 16px 0 #00ceaf22;
+  }
+  .glossary-panel:nth-child(2) {
+    /* Terms column */
+    border-top: 5px solid #F00A50;
+    box-shadow: 0 4px 16px 0 #f00a5022;
+  }
+  .glossary-panel:nth-child(3) {
+    /* Term Details column */
+    border-top: 5px solid #F2D001;
+    box-shadow: 0 4px 16px 0 #f2d00122;
+  }
 }
 
 .glossary-panel {
@@ -66,6 +81,26 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  position: relative;
+}
+.glossary-panel-title::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+}
+.glossary-panel:nth-child(1) .glossary-panel-title::after {
+  background: linear-gradient(90deg, #00CEAF 60%, transparent 100%);
+}
+.glossary-panel:nth-child(2) .glossary-panel-title::after {
+  background: linear-gradient(90deg, #F00A50 60%, transparent 100%);
+}
+.glossary-panel:nth-child(3) .glossary-panel-title::after {
+  background: linear-gradient(90deg, #F2D001 60%, transparent 100%);
 }
 
 .glossary-categories-list {
