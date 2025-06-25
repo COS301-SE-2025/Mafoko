@@ -2,7 +2,8 @@ import pytest
 import pytest_asyncio
 import uuid
 from unittest.mock import AsyncMock
-#from unittest.mock import MagicMock
+
+# from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 from fastapi import FastAPI, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -288,51 +289,51 @@ class TestBasicEndpoints:
         assert isinstance(data, list)
 
 
-# class TestInputValidation:
-#     """Test input validation for various endpoints."""
+class TestInputValidation:
+    """Test input validation for various endpoints."""
 
-#     def test_search_with_special_characters(self, client):
-#         """Test search with special characters."""
-#         response = client.get("/search?query=test@#$%^&*()")
-#         assert response.status_code == 200
+    def test_search_with_special_characters(self, client):
+        """Test search with special characters."""
+        response = client.get("/search?query=test@#$%^&*()")
+        assert response.status_code == 200
 
-#     def test_search_with_unicode_characters(self, client):
-#         """Test search with Unicode characters."""
-#         unicode_queries = ["café", "naïve", "résumé"]
-#         for query in unicode_queries:
-#             response = client.get(f"/search?query={query}")
-#             assert response.status_code == 200
+    def test_search_with_unicode_characters(self, client):
+        """Test search with Unicode characters."""
+        unicode_queries = ["café", "naïve", "résumé"]
+        for query in unicode_queries:
+            response = client.get(f"/search?query={query}")
+            assert response.status_code == 200
 
-#     def test_category_with_spaces(self, client):
-#         """Test category endpoint with spaces in category name."""
-#         response = client.get("/categories/Data%20Science/terms")
-#         # Should either return results or 404, but not crash
-#         assert response.status_code in [200, 404]
+    def test_category_with_spaces(self, client):
+        """Test category endpoint with spaces in category name."""
+        response = client.get("/categories/Data%20Science/terms")
+        # Should either return results or 404, but not crash
+        assert response.status_code in [200, 404]
 
-#     def test_advanced_search_boundary_values(self, client):
-#         """Test advanced search with boundary values."""
-#         # Test with negative page numbers
-#         response = client.post("/search", json={"page": -1, "limit": 10})
-#         assert response.status_code in [200, 422]
+    def test_advanced_search_boundary_values(self, client):
+        """Test advanced search with boundary values."""
+        # Test with negative page numbers
+        response = client.post("/search", json={"page": -1, "limit": 10})
+        assert response.status_code in [200, 422]
 
-#         # Test with zero limit
-#         response = client.post("/search", json={"page": 1, "limit": 0})
-#         assert response.status_code in [200, 422]
+        # Test with zero limit
+        response = client.post("/search", json={"page": 1, "limit": 0})
+        assert response.status_code in [200, 422]
 
-#     def test_translation_edge_cases(self, client):
-#         """Test translation endpoint with edge cases."""
-#         # Empty terms list
-#         response = client.post(
-#             "/translate", json={"terms": [], "source_language": "English"}
-#         )
-#         assert response.status_code == 200
+    # def test_translation_edge_cases(self, client):
+    #     """Test translation endpoint with edge cases."""
+    #     # Empty terms list
+    #     response = client.post(
+    #         "/translate", json={"terms": [], "source_language": "English"}
+    #     )
+    #     assert response.status_code == 200
 
-#         # Invalid language codes
-#         response = client.post(
-#             "/translate",
-#             json={"terms": ["hello"], "source_language": "InvalidLanguage"},
-#         )
-#         assert response.status_code == 200  # Should handle gracefully
+    #     # Invalid language codes
+    #     response = client.post(
+    #         "/translate",
+    #         json={"terms": ["hello"], "source_language": "InvalidLanguage"},
+    #     )
+    #     assert response.status_code == 200  # Should handle gracefully
 
 
 # class TestErrorHandling:
