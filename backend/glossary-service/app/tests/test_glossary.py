@@ -320,20 +320,20 @@ class TestInputValidation:
         response = client.post("/search", json={"page": 1, "limit": 0})
         assert response.status_code in [200, 422]
 
-    # def test_translation_edge_cases(self, client):
-    #     """Test translation endpoint with edge cases."""
-    #     # Empty terms list
-    #     response = client.post(
-    #         "/translate", json={"terms": [], "source_language": "English"}
-    #     )
-    #     assert response.status_code == 200
+    def test_translation_edge_cases(self, client):
+        """Test translation endpoint with edge cases."""
+        # Empty terms list
+        response = client.post(
+            "/translate", json={"terms": [], "source_language": "English"}
+        )
+        assert response.status_code == 200
 
-    #     # Invalid language codes
-    #     response = client.post(
-    #         "/translate",
-    #         json={"terms": ["hello"], "source_language": "InvalidLanguage"},
-    #     )
-    #     assert response.status_code == 200  # Should handle gracefully
+        # Invalid language codes
+        response = client.post(
+            "/translate",
+            json={"terms": ["hello"], "source_language": "InvalidLanguage"},
+        )
+        assert response.status_code == 200  # Should handle gracefully
 
 
 # class TestErrorHandling:
