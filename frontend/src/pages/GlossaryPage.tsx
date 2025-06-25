@@ -411,10 +411,25 @@ const GlossaryPage = () => {
   return (
     <div
       className="glossary-root"
-      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'row' }}
+      style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100vw',
+        overflow: 'hidden',
+        backgroundColor: '#f8fafc',
+      }}
     >
       {/* Left Navigation */}
-      <div className="glossary-leftnav" style={{ minWidth: 220 }}>
+      <div
+        className="glossary-leftnav"
+        style={{
+          width: 220,
+          flexShrink: 0,
+          height: '100vh',
+          overflow: 'hidden',
+        }}
+      >
         <LeftNav activeItem={activeNav} setActiveItem={setActiveNav} />
       </div>
 
@@ -424,18 +439,25 @@ const GlossaryPage = () => {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          height: '100vh',
+          overflow: 'hidden',
           position: 'relative',
         }}
       >
-        {/* Profile Section absolutely positioned top right of main content */}
+        {/* Profile Section at top right */}
         <div
           style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            padding: '1.5rem 2.5rem 0 2.5rem',
-            zIndex: 2,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            width: '100%',
+            padding: '1rem 1rem 1rem 1.5rem',
+            flexShrink: 0,
+            backgroundColor: 'white',
+            zIndex: 10,
+            borderBottom: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+            marginRight: '0.75rem',
           }}
         >
           {isLoadingUserData ? (
@@ -472,8 +494,20 @@ const GlossaryPage = () => {
           ) : null}
         </div>
 
-        {/* Main Centered Content */}
-        <div style={{ width: '100%', maxWidth: 900, marginTop: '5.5rem' }}>
+        {/* Main Content Container */}
+        <div
+          style={{
+            flex: 1,
+            width: '100%',
+            padding: '0.75rem 0.75rem 0.75rem 0.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto',
+            minHeight: 0,
+            marginRight: '0.75rem',
+            marginLeft: '-0.5rem',
+          }}
+        >
           {/* Error Display */}
           {error && (
             <div
@@ -494,10 +528,14 @@ const GlossaryPage = () => {
           {/* Multilingual Dictionary section */}
           <div
             className="glossary-header"
-            style={{ textAlign: 'center', marginBottom: '2rem' }}
+            style={{
+              textAlign: 'center',
+              marginBottom: '1rem',
+              flexShrink: 0,
+            }}
           >
             <h1 className="glossary-title">
-              <Book className="text-blue-600" size={40} />
+              <Book style={{ color: '#363b4d' }} size={40} />
               Multilingual Dictionary
             </h1>
             <p className="glossary-subtitle">
@@ -511,12 +549,20 @@ const GlossaryPage = () => {
                   marginTop: '0.5rem',
                 }}
               >
-                Available in {Object.keys(availableLanguages).length} languages
+                {/* Available in {Object.keys(availableLanguages).length} languages */}
               </p>
             )}
           </div>
 
-          <div className="glossary-grid">
+          <div
+            className="glossary-grid"
+            style={{
+              flex: 1,
+              minHeight: 400,
+              overflow: 'visible',
+              marginBottom: '1rem',
+            }}
+          >
             {/* Categories Panel */}
             <div className="glossary-panel">
               <h2 className="glossary-panel-title">
@@ -681,49 +727,62 @@ const GlossaryPage = () => {
                 <div className="glossary-empty">
                   Select a term to view details and translations
                 </div>
-              )}{' '}
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Download Section */}
-          {categoryTerms.length > 0 && (
+        {/* Download Section - Fixed at bottom */}
+        {categoryTerms.length > 0 && (
+          <div
+            className="glossary-download-section"
+            style={{
+              padding: '0.75rem 0.75rem 0.75rem 1.5rem',
+              borderTop: '1px solid #e5e7eb',
+              backgroundColor: 'white',
+              flexShrink: 0,
+              boxShadow: '0 -1px 3px 0 rgba(0, 0, 0, 0.1)',
+              minHeight: '80px',
+              maxHeight: '120px',
+              marginRight: '0.75rem',
+            }}
+          >
             <div
-              className="glossary-download-section"
               style={{
-                marginTop: '3rem',
-                padding: '1.5rem',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                backgroundColor: '#f9fafb',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <h3
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 600,
-                  marginBottom: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                }}
-              >
-                <Download size={20} />
-                Export Data
-              </h3>{' '}
-              <p
-                style={{
-                  marginBottom: '1rem',
-                  fontSize: '0.875rem',
-                  color: '#6b7280',
-                }}
-              >
-                Download the{' '}
-                {selectedCategory
-                  ? `terms in category "${selectedCategory}"`
-                  : 'current terms'}
-                {searchTerm ? ` matching "${searchTerm}"` : ''} (
-                {filteredTerms.length} items)
-              </p>
+              <div>
+                <h3
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    margin: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <Download size={16} />
+                  Export Data
+                </h3>
+                <p
+                  style={{
+                    margin: '0.25rem 0 0 0',
+                    fontSize: '0.75rem',
+                    color: '#6b7280',
+                  }}
+                >
+                  Download the{' '}
+                  {selectedCategory
+                    ? `terms in category "${selectedCategory}"`
+                    : 'current terms'}
+                  {searchTerm ? ` matching "${searchTerm}"` : ''} (
+                  {filteredTerms.length} items)
+                </p>
+              </div>
               <div style={{ position: 'relative' }}>
                 <div
                   ref={formatDropdownRef}
@@ -737,7 +796,7 @@ const GlossaryPage = () => {
                     className="glossary-download-btn"
                     style={{
                       padding: '0.5rem 1rem',
-                      backgroundColor: '#1e40af',
+                      backgroundColor: '#363b4d',
                       color: 'white',
                       borderRadius: '4px',
                       fontSize: '0.875rem',
@@ -759,20 +818,19 @@ const GlossaryPage = () => {
                       className="glossary-format-dropdown"
                       style={{
                         position: 'absolute',
-                        top: '100%',
-                        left: '0',
-                        marginTop: '0.25rem',
+                        bottom: '100%',
+                        right: '0',
+                        marginBottom: '0.25rem',
                         backgroundColor: 'white',
                         border: '1px solid #e5e7eb',
                         borderRadius: '4px',
                         boxShadow:
                           '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        zIndex: 10,
+                        zIndex: 20,
                         minWidth: '180px',
                         padding: '0.5rem 0',
                       }}
                     >
-                      {' '}
                       <button
                         type="button"
                         onClick={() => {
@@ -802,7 +860,7 @@ const GlossaryPage = () => {
                           <FileType size={18} />
                         </div>
                         CSV Format
-                      </button>{' '}
+                      </button>
                       <button
                         type="button"
                         onClick={() => {
@@ -832,7 +890,7 @@ const GlossaryPage = () => {
                           <FileType size={18} />
                         </div>
                         JSON Format
-                      </button>{' '}
+                      </button>
                       <button
                         type="button"
                         onClick={() => {
@@ -862,7 +920,7 @@ const GlossaryPage = () => {
                           <FileType size={18} />
                         </div>
                         HTML Table
-                      </button>{' '}
+                      </button>
                       <button
                         type="button"
                         onClick={() => {
@@ -891,15 +949,15 @@ const GlossaryPage = () => {
                         <div style={{ width: '18px', color: '#dc2626' }}>
                           <FileType size={18} />
                         </div>
-                        PDF Document{' '}
+                        PDF Document
                       </button>
                     </div>
                   )}
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
