@@ -128,7 +128,10 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
     >
       {title && !showChartTitle && (
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-center dark:text-white text-gray-800">
+          <h3
+            className="text-lg font-semibold text-center"
+            style={{ color: 'var(--text-color)' }}
+          >
             {title}
           </h3>
         </div>

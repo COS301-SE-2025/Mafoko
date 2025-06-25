@@ -78,7 +78,7 @@ class User(Base):
         DateTime(timezone=True), nullable=True
     )
 
-    # Relationships (placeholders for future implementation)
+    # 'Relationships (placeholders for future implementation)
     # proficient_languages: Mapped[List["UserLanguage"]] = relationship(back_populates="user")
     # preferences: Mapped[Optional["UserPreference"]] = relationship(uselist=False, back_populates="user")
     # search_history: Mapped[List["UserSearchHistory"]] = relationship(back_populates="user")
