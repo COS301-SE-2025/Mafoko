@@ -85,26 +85,26 @@ class TestAnalyticsRouter:
         """Create mock JSON data that matches the DataFrame."""
         return sample_dataframe.to_dict("records")
 
-    # @pytest.fixture
-    # def mock_file_system(self, mock_json_data):
-    #     """Mock the file system and pandas read_json."""
-    #     with patch("pandas.read_json") as mock_read_json, patch(
-    #         "os.path.abspath"
-    #     ) as mock_abspath, patch("os.path.join") as mock_join, patch(
-    #         "os.path.dirname"
-    #     ) as mock_dirname:
+    @pytest.fixture
+    def mock_file_system(self, mock_json_data):
+        """Mock the file system and pandas read_json."""
+        with patch("pandas.read_json") as mock_read_json, patch(
+            "os.path.abspath"
+        ) as mock_abspath, patch("os.path.join") as mock_join, patch(
+            "os.path.dirname"
+        ) as mock_dirname:
 
-    #         mock_abspath.return_value = "/mocked/path/to/dataset.json"
-    #         mock_join.return_value = "mocked/relative/path"
-    #         mock_dirname.return_value = "/mocked/current/dir"
+            mock_abspath.return_value = "/mocked/path/to/dataset.json"
+            mock_join.return_value = "mocked/relative/path"
+            mock_dirname.return_value = "/mocked/current/dir"
 
-    #         # Create DataFrame from mock data
-    #         df = pd.DataFrame(mock_json_data)
-    #         # Normalize column names as done in the actual function
-    #         df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
-    #         mock_read_json.return_value = df
+            # Create DataFrame from mock data
+            df = pd.DataFrame(mock_json_data)
+            # Normalize column names as done in the actual function
+            df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
+            mock_read_json.return_value = df
 
-    #         yield mock_read_json
+            yield mock_read_json
 
     # @pytest.fixture(autouse=True)
     # def reset_global_cache(self):
