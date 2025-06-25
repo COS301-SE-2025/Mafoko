@@ -11,12 +11,17 @@ vi.mock('../src/components/ui/Navbar', () => ({
 
 vi.mock('../src/components/ui/LeftNav', () => ({
   __esModule: true,
-  default: ({ activeItem, setActiveItem }: any) => (
+  default: ({
+    activeItem,
+    setActiveItem,
+  }: {
+    activeItem: string;
+    setActiveItem: (item: string) => void;
+  }) => (
     <div
       data-testid="leftnav"
       onClick={() => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call
-        return setActiveItem('search');
+        setActiveItem('search');
       }}
     >
       LeftNav - {activeItem}
@@ -30,7 +35,9 @@ vi.mock('../src/components/ui/SearchBar', () => ({
     <div>
       <input
         placeholder="Search"
-        onChange={(e) => { onSearch((e.target as HTMLInputElement).value); }}
+        onChange={(e) => {
+          onSearch((e.target as HTMLInputElement).value);
+        }}
       />
     </div>
   ),
@@ -74,7 +81,7 @@ describe('SearchPage', () => {
     render(
       <Router>
         <SearchPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByText('Language')).toBeInTheDocument();
@@ -86,13 +93,13 @@ describe('SearchPage', () => {
   test('handles no results message after searching', async () => {
     (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: true,
-      json: async () => ({ items: [], total: 0 }),
+      json: () => ({ items: [], total: 0 }),
     });
 
     render(
       <Router>
         <SearchPage />
-      </Router>
+      </Router>,
     );
 
     fireEvent.change(screen.getByPlaceholderText('Search'), {
@@ -102,5 +109,18 @@ describe('SearchPage', () => {
     await waitFor(() => {
       expect(screen.getByText(/No results found for/)).toBeInTheDocument();
     });
+  });
+
+  test('renders SearchPage with key UI elements', () => {
+    render(
+      <Router>
+        <SearchPage />
+      </Router>,
+    );
+
+    expect(screen.getByText('Language')).toBeInTheDocument();
+    expect(screen.getByText('Domain')).toBeInTheDocument();
+    expect(screen.getByText('AI Search')).toBeInTheDocument();
+    expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 });

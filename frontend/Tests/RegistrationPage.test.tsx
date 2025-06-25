@@ -36,7 +36,7 @@ describe('RegistrationPage', () => {
     render(
       <BrowserRouter>
         <RegistrationPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     fireEvent.change(screen.getByLabelText('First Name'), {
@@ -61,12 +61,45 @@ describe('RegistrationPage', () => {
 
     fireEvent.click(screen.getByLabelText(/i agree to the terms/i));
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /create account/i })
-    );
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     expect(
-      await screen.findByText('Passwords do not match')
+      await screen.findByText('Passwords do not match'),
+    ).toBeInTheDocument();
+  });
+  test('displays error if passwords do not match', async () => {
+    render(
+      <BrowserRouter>
+        <RegistrationPage />
+      </BrowserRouter>,
+    );
+
+    fireEvent.change(screen.getByLabelText('First Name'), {
+      target: { value: 'Alice' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Last Name'), {
+      target: { value: 'Smith' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Email'), {
+      target: { value: 'alice@example.com' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'password123' },
+    });
+
+    fireEvent.change(screen.getByLabelText('Confirm Password'), {
+      target: { value: 'password456' },
+    });
+
+    fireEvent.click(screen.getByLabelText(/i agree to the terms/i));
+
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+
+    expect(
+      await screen.findByText('Passwords do not match'),
     ).toBeInTheDocument();
   });
 });

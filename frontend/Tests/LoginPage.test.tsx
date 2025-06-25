@@ -4,7 +4,10 @@ import { vi } from 'vitest';
 const mockNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -45,13 +48,19 @@ describe('LoginPage', () => {
     render(
       <Router>
         <LoginPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByLabelText('loginPage.emailLabel')).toBeInTheDocument();
-    expect(screen.getByLabelText('loginPage.passwordLabel')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'loginPage.loginButton' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'loginPage.loginWithGoogle' })).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('loginPage.passwordLabel'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'loginPage.loginButton' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'loginPage.loginWithGoogle' }),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
   });
 
@@ -63,13 +72,16 @@ describe('LoginPage', () => {
 
     (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: true,
-      json: async () => mockResponse,
+      json: async () => {
+        await Promise.resolve();
+        return mockResponse;
+      },
     } as Response);
 
     render(
       <Router>
         <LoginPage />
-      </Router>
+      </Router>,
     );
 
     fireEvent.change(screen.getByLabelText('loginPage.emailLabel'), {
@@ -80,7 +92,9 @@ describe('LoginPage', () => {
       target: { value: 'password123' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'loginPage.loginButton' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'loginPage.loginButton' }),
+    );
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalled();
@@ -92,15 +106,16 @@ describe('LoginPage', () => {
   test('shows error message on failed login', async () => {
     (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: false,
-      json: async () => ({
-        detail: 'Invalid credentials',
-      }),
+      json: async () => {
+        await Promise.resolve();
+        return { detail: 'Invalid credentials' };
+      },
     } as Response);
 
     render(
       <Router>
         <LoginPage />
-      </Router>
+      </Router>,
     );
 
     fireEvent.change(screen.getByLabelText('loginPage.emailLabel'), {
@@ -111,7 +126,9 @@ describe('LoginPage', () => {
       target: { value: 'badpassword' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'loginPage.loginButton' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'loginPage.loginButton' }),
+    );
 
     expect(await screen.findByText('Invalid credentials')).toBeInTheDocument();
   });

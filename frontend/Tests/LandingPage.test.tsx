@@ -30,7 +30,7 @@ describe('LandingPage', () => {
     render(
       <Router>
         <LandingPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe('LandingPage', () => {
     render(
       <Router>
         <LandingPage />
-      </Router>
+      </Router>,
     );
 
     const registerBtn = screen.getByRole('link', {
@@ -62,11 +62,13 @@ describe('LandingPage', () => {
     render(
       <Router>
         <LandingPage />
-      </Router>
+      </Router>,
     );
 
     const year = new Date().getFullYear().toString();
     expect(screen.getByText((text) => text.includes(year))).toBeInTheDocument();
-    expect(screen.getByText((text) => text.includes('Mavito Project'))).toBeInTheDocument();
+    expect(
+      screen.getByText((text) => text.includes('Mavito Project')),
+    ).toBeInTheDocument();
   });
 });
