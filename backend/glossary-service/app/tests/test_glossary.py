@@ -444,20 +444,21 @@ class TestUtilityFunctions:
         assert "German" in translation_languages
 
 
-# class TestPerformanceScenarios:
-#     """Test performance-related scenarios."""
+class TestPerformanceScenarios:
+    """Test performance-related scenarios."""
 
-#     def test_concurrent_request_simulation(self, client):
-#         """Simulate multiple concurrent requests."""
-#         # Simulate multiple requests
-#         responses = []
-#         for i in range(5):  # Reduced from 10 for faster testing
-#             response = client.get("/categories")
-#             responses.append(response)
+    def test_concurrent_request_simulation(self, client):
+        """Simulate multiple concurrent requests."""
+        # Simulate multiple requests
+        responses = []
+        for i in range(5):  # Reduced from 10 for faster testing
+            response = client.get("/categories")
+            responses.append(response)
 
-#         # All should succeed
-#         for response in responses:
-#             assert response.status_code == 200
+        # All should succeed
+        for response in responses:
+            assert response.status_code == 200
+
 
 #     def test_repeated_requests_consistency(self, client):
 #         """Test that repeated requests return consistent results."""
