@@ -474,23 +474,23 @@ class TestPerformanceScenarios:
 
 
 # Test markers for categorization
-class TestMarkers:
-    """Test pytest markers functionality."""
+# class TestMarkers:
+#     """Test pytest markers functionality."""
 
-    @pytest.mark.unit
-    def test_unit_marker(self):
-        """Test with unit marker."""
-        assert True
+#     @pytest.mark.unit
+#     def test_unit_marker(self):
+#         """Test with unit marker."""
+#         assert True
 
-    @pytest.mark.integration
-    def test_integration_marker(self):
-        """Test with integration marker."""
-        assert True
+#     @pytest.mark.integration
+#     def test_integration_marker(self):
+#         """Test with integration marker."""
+#         assert True
 
-    @pytest.mark.slow
-    def test_slow_marker(self):
-        """Test with slow marker."""
-        assert True
+#     @pytest.mark.slow
+#     def test_slow_marker(self):
+#         """Test with slow marker."""
+#         assert True
 
 
 # Basic functionality tests
