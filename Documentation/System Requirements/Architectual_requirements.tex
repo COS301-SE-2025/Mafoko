@@ -59,7 +59,7 @@ Microservices &
 Microservices with Asynchronous APIs &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Backend:} Built with \textbf{FastAPI} using an \texttt{async/await} model for non-blocking I/O, ensuring low-latency responses.
-    \item \textbf{Database:} The \texttt{search-service} now queries an indexed \textbf{PostgreSQL} database, allowing for highly efficient filtering and sorting of millions of records.
+    \item \textbf{Database:} The backend queries an indexed \textbf{PostgreSQL} database, allowing for highly efficient filtering and sorting of millions of records.
 \end{itemize} \\
 \midrule
 
@@ -71,7 +71,7 @@ Microservices with Asynchronous APIs &
 Leader-Follower Replication &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Database:} \textbf{Google Cloud SQL} for PostgreSQL can be configured for High Availability (HA) to manage replication and failover automatically.
-    \item \textbf{Services:} \textbf{Google Cloud Run} is a managed service that ensures services are reliable and restarted on failure.
+    \item \textbf{Services:} \textbf{Google Cloud Run} is a managed service that ensures backend services are reliable and restarted on failure.
 \end{itemize} \\
 \midrule
 
@@ -81,10 +81,10 @@ Leader-Follower Replication &
     \item Real-time UI
     \item Persistent State
 \end{itemize} &
-Component-Based UI & % <-- CORRECTED PATTERN
+Component-Based UI &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Frontend:} A \textbf{React} and \texttt{TypeScript} application follows a component-based pattern to separate UI concerns.
-    \item \textbf{Backend Database:} The `search-service` and `vote-service` now use \textbf{PostgreSQL} as the single source of truth for all terminology and vote data, ensuring data integrity.
+    \item \textbf{Backend:} The backend uses \textbf{PostgreSQL} as the single source of truth for all terminology and user interaction data, ensuring data integrity.
 \end{itemize} \\
 \midrule
 
@@ -97,7 +97,7 @@ Component-Based UI & % <-- CORRECTED PATTERN
 API Gateway &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Gateway Service:} \textbf{Google API Gateway} serves as the single entry point, handling TLS termination (enforcing HTTPS).
-    \item \textbf{Authentication:} \textbf{JWT tokens} are managed by the `auth-service` to secure protected API endpoints like the vote submission endpoint.
+    \item \textbf{Authentication:} The backend's authentication service manages \textbf{JWT tokens} to secure protected API endpoints.
     \item \textbf{File Uploads:} User-submitted documents are securely uploaded directly to a private \textbf{Google Cloud Storage} bucket using temporary signed URLs.
 \end{itemize} \\
 \midrule
@@ -110,8 +110,8 @@ API Gateway &
 \end{itemize} &
 Progressive Web App (PWA) &
 \begin{itemize}[nosep, leftmargin=*]
-    \item \textbf{Frontend:} Built as a PWA with a Service Worker to support offline access. API POST requests (like votes) are queued using \textbf{Workbox Background Sync} and sent automatically upon reconnection.
-    \item \textbf{Backend:} The backend is fully containerized with \textbf{Docker}, ensuring it is portable and can run consistently in any environment.
+    \item \textbf{Frontend:} Built as a PWA with a Service Worker to support offline access. API POST requests are queued using \textbf{Workbox Background Sync} and sent automatically upon reconnection.
+    \item \textbf{Backend:} The entire backend is containerized with \textbf{Docker}, ensuring it is portable and can run consistently in any environment.
 \end{itemize} \\
 \midrule
 
@@ -126,10 +126,11 @@ Automated Testing \& Deployment Pipeline &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Code Quality:} \textbf{Husky pre-commit hooks} enforce \texttt{Ruff}, \texttt{Black}, and \texttt{Mypy} checks locally inside Docker containers.
     \item \textbf{CI/CD:} A \textbf{GitHub Actions} workflow automates testing and quality checks for both frontend and backend.
-    \item \textbf{Database Schema:} A dedicated `alembic-service` is used to manage and apply database migrations, ensuring a consistent schema across all environments.
+    \item \textbf{Database Schema:} The backend uses a dedicated container to run \textbf{Alembic} database migrations, ensuring a consistent schema across all environments.
 \end{itemize} \\
 \bottomrule
 
 \end{longtable}
 
 \end{document}
+
