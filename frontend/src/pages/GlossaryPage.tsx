@@ -163,8 +163,14 @@ const GlossaryPage = () => {
     const prevClass = html.className;
     html.classList.remove('dark');
     html.classList.add('light');
+
+    // Fix: Override body background to prevent landing page green shade
+    const prevBodyBg = document.body.style.background;
+    document.body.style.background = '#f8fafc';
+
     return () => {
       html.className = prevClass;
+      document.body.style.background = prevBodyBg;
     };
   }, []);
 
