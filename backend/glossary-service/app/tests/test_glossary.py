@@ -459,19 +459,18 @@ class TestPerformanceScenarios:
         for response in responses:
             assert response.status_code == 200
 
+    def test_repeated_requests_consistency(self, client):
+        """Test that repeated requests return consistent results."""
+        # Make multiple identical requests
+        responses = []
+        for _ in range(3):  # Reduced for faster testing
+            response = client.get("/categories")
+            responses.append(response.json())
 
-#     def test_repeated_requests_consistency(self, client):
-#         """Test that repeated requests return consistent results."""
-#         # Make multiple identical requests
-#         responses = []
-#         for _ in range(3):  # Reduced for faster testing
-#             response = client.get("/categories")
-#             responses.append(response.json())
-
-#         # All responses should be identical
-#         first_response = responses[0]
-#         for response in responses[1:]:
-#             assert response == first_response
+        # All responses should be identical
+        first_response = responses[0]
+        for response in responses[1:]:
+            assert response == first_response
 
 
 # # Test markers for categorization
