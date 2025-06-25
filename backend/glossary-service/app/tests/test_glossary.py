@@ -390,13 +390,12 @@ class TestSecurityScenarios:
             # Should either return 404 or handle gracefully
             assert response.status_code in [200, 404, 422]
 
-
-#     def test_oversized_request_handling(self, client):
-#         """Test handling of oversized requests."""
-#         # Test with very long query string
-#         long_query = "a" * 1000  # Reduced size for testing
-#         response = client.get(f"/search?query={long_query}")
-#         assert response.status_code in [200, 413, 414, 422]
+    def test_oversized_request_handling(self, client):
+        """Test handling of oversized requests."""
+        # Test with very long query string
+        long_query = "a" * 1000  # Reduced size for testing
+        response = client.get(f"/search?query={long_query}")
+        assert response.status_code in [200, 413, 414, 422]
 
 
 # class TestUtilityFunctions:
