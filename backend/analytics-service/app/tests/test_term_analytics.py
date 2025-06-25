@@ -117,22 +117,22 @@ class TestAnalyticsRouter:
         # Reset after test
         analytics_module.TERM_DATASET = None
 
-    # @pytest.mark.asyncio
-    # async def test_load_marito_data_first_call(
-    #     self, mock_file_system, sample_dataframe
-    # ):
-    #     """Test that load_marito_data loads data correctly on first call."""
-    #     # Mock the global variable
-    #     import app.api.v1.endpoints.analytics as analytics_module
+    @pytest.mark.asyncio
+    async def test_load_marito_data_first_call(
+        self, mock_file_system, sample_dataframe
+    ):
+        """Test that load_marito_data loads data correctly on first call."""
+        # Mock the global variable
+        import app.api.v1.endpoints.analytics as analytics_module
 
-    #     analytics_module.TERM_DATASET = None
+        analytics_module.TERM_DATASET = None
 
-    #     result = await load_marito_data()
+        result = await load_marito_data()
 
-    #     assert result is not None
-    #     assert len(result) == 5
-    #     assert "category" in result.columns
-    #     mock_file_system.assert_called_once()
+        assert result is not None
+        assert len(result) == 5
+        assert "category" in result.columns
+        mock_file_system.assert_called_once()
 
     # @pytest.mark.asyncio
     # async def test_load_marito_data_cached(self, mock_file_system, sample_dataframe):
