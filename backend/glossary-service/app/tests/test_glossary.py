@@ -398,50 +398,50 @@ class TestSecurityScenarios:
         assert response.status_code in [200, 413, 414, 422]
 
 
-# class TestUtilityFunctions:
-#     """Test utility and helper functions."""
+class TestUtilityFunctions:
+    """Test utility and helper functions."""
 
-#     def test_mock_term_creation(self):
-#         """Test MockTerm creation and properties."""
-#         term = MockTerm(
-#             term="test",
-#             definition="test definition",
-#             domain="test domain",
-#             language="English",
-#         )
+    def test_mock_term_creation(self):
+        """Test MockTerm creation and properties."""
+        term = MockTerm(
+            term="test",
+            definition="test definition",
+            domain="test domain",
+            language="English",
+        )
 
-#         assert term.term == "test"
-#         assert term.definition == "test definition"
-#         assert term.domain == "test domain"
-#         assert term.language == "English"
-#         assert isinstance(term.id, uuid.UUID)
-#         assert isinstance(term.translations, list)
+        assert term.term == "test"
+        assert term.definition == "test definition"
+        assert term.domain == "test domain"
+        assert term.language == "English"
+        assert isinstance(term.id, uuid.UUID)
+        assert isinstance(term.translations, list)
 
-#     def test_mock_translation_creation(self):
-#         """Test MockTranslation creation and properties."""
-#         translation = MockTranslation("Spanish", "hola")
+    def test_mock_translation_creation(self):
+        """Test MockTranslation creation and properties."""
+        translation = MockTranslation("Spanish", "hola")
 
-#         assert translation.language == "Spanish"
-#         assert translation.term == "hola"
+        assert translation.language == "Spanish"
+        assert translation.term == "hola"
 
-#     def test_sample_data_fixtures(self, sample_terms, sample_term_with_translations):
-#         """Test that sample data fixtures work correctly."""
-#         # Test sample_terms fixture
-#         assert len(sample_terms) == 3
-#         assert sample_terms[0].term == "hello"
-#         assert sample_terms[1].term == "world"
-#         assert sample_terms[2].term == "hola"
+    def test_sample_data_fixtures(self, sample_terms, sample_term_with_translations):
+        """Test that sample data fixtures work correctly."""
+        # Test sample_terms fixture
+        assert len(sample_terms) == 3
+        assert sample_terms[0].term == "hello"
+        assert sample_terms[1].term == "world"
+        assert sample_terms[2].term == "hola"
 
-#         # Test sample_term_with_translations fixture
-#         assert sample_term_with_translations.term == "hello"
-#         assert len(sample_term_with_translations.translations) == 3
+        # Test sample_term_with_translations fixture
+        assert sample_term_with_translations.term == "hello"
+        assert len(sample_term_with_translations.translations) == 3
 
-#         translation_languages = [
-#             t.language for t in sample_term_with_translations.translations
-#         ]
-#         assert "Spanish" in translation_languages
-#         assert "French" in translation_languages
-#         assert "German" in translation_languages
+        translation_languages = [
+            t.language for t in sample_term_with_translations.translations
+        ]
+        assert "Spanish" in translation_languages
+        assert "French" in translation_languages
+        assert "German" in translation_languages
 
 
 # class TestPerformanceScenarios:
