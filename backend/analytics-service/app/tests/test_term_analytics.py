@@ -106,16 +106,16 @@ class TestAnalyticsRouter:
 
             yield mock_read_json
 
-    # @pytest.fixture(autouse=True)
-    # def reset_global_cache(self):
-    #     """Reset the global TERM_DATASET cache before each test."""
-    #     # Import and reset the global variable
-    #     import app.api.v1.endpoints.analytics as analytics_module
+    @pytest.fixture(autouse=True)
+    def reset_global_cache(self):
+        """Reset the global TERM_DATASET cache before each test."""
+        # Import and reset the global variable
+        import app.api.v1.endpoints.analytics as analytics_module
 
-    #     analytics_module.TERM_DATASET = None
-    #     yield
-    #     # Reset after test
-    #     analytics_module.TERM_DATASET = None
+        analytics_module.TERM_DATASET = None
+        yield
+        # Reset after test
+        analytics_module.TERM_DATASET = None
 
     # @pytest.mark.asyncio
     # async def test_load_marito_data_first_call(
