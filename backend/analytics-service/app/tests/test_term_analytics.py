@@ -134,20 +134,20 @@ class TestAnalyticsRouter:
         assert "category" in result.columns
         mock_file_system.assert_called_once()
 
-    # @pytest.mark.asyncio
-    # async def test_load_marito_data_cached(self, mock_file_system, sample_dataframe):
-    #     """Test that load_marito_data uses cache on subsequent calls."""
-    #     import app.api.v1.endpoints.analytics as analytics_module
+    @pytest.mark.asyncio
+    async def test_load_marito_data_cached(self, mock_file_system, sample_dataframe):
+        """Test that load_marito_data uses cache on subsequent calls."""
+        import app.api.v1.endpoints.analytics as analytics_module
 
-    #     analytics_module.TERM_DATASET = sample_dataframe
+        analytics_module.TERM_DATASET = sample_dataframe
 
-    #     result1 = await load_marito_data()
-    #     result2 = await load_marito_data()
+        result1 = await load_marito_data()
+        result2 = await load_marito_data()
 
-    #     # Should be the same object (cached)
-    #     assert result1 is result2
-    #     # read_json should not be called when using cache
-    #     mock_file_system.assert_not_called()
+        # Should be the same object (cached)
+        assert result1 is result2
+        # read_json should not be called when using cache
+        mock_file_system.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_get_dataset_columns(self, mock_file_system):
