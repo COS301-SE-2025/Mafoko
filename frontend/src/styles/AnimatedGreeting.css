@@ -1,26 +1,51 @@
-.info-text {
-  padding-right: 10px;
+/* src/styles/AnimatedGreeting.css */
+
+.conversation-container {
   display: flex;
-  width: fit-content;
-  height: 88px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  color: #f5f5f5;
-  font-family: 'Playball', cursive;
-  font-size: 70px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  opacity: 1;
-  transition: opacity 0.5s ease-in-out;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 500px;
+  min-height: 280px;
+  padding: 1rem;
+  box-sizing: border-box;
+  /* UPDATED: Add a transition for the fade-out effect */
+  transition: opacity 0.7s ease-in-out;
 }
 
-.info-text.fade-in {
-  opacity: 1;
-}
-
-.info-text.fade-out {
+/* NEW: This class will be added to fade out all bubbles at once */
+.conversation-container.fading-out {
   opacity: 0;
+}
+
+.message-bubble {
+  padding: 0.75rem 1.25rem;
+  border-radius: 20px;
+  max-width: 80%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.message-bubble.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.message-bubble.left {
+  align-self: flex-start;
+  background-color: #f1f0f0;
+  color: #212431;
+  border-bottom-left-radius: 5px;
+}
+
+.message-bubble.right {
+  align-self: flex-end;
+  background-color: #212431;
+  color: white;
+  border-bottom-right-radius: 5px;
 }
