@@ -336,59 +336,60 @@ class TestInputValidation:
         assert response.status_code == 200  # Should handle gracefully
 
 
-# class TestErrorHandling:
-#     """Test error handling scenarios."""
+class TestErrorHandling:
+    """Test error handling scenarios."""
 
-#     def test_invalid_uuid_format(self, client):
-#         """Test handling of invalid UUID format in term translations."""
-#         response = client.get("/terms/invalid-uuid-format/translations")
-#         # The actual response depends on implementation, but it shouldn't crash
-#         assert response.status_code in [200, 404, 422]
+    def test_invalid_uuid_format(self, client):
+        """Test handling of invalid UUID format in term translations."""
+        response = client.get("/terms/invalid-uuid-format/translations")
+        # The actual response depends on implementation, but it shouldn't crash
+        assert response.status_code in [200, 404, 422]
 
-#     # def test_malformed_json_request(self, client):
-#     #     """Test handling of malformed JSON in POST requests."""
-#     #     response = client.post("/search", data="invalid json")
-#     #     assert response.status_code == 422  # Validation error
+    # def test_malformed_json_request(self, client):
+    #     """Test handling of malformed JSON in POST requests."""
+    #     response = client.post("/search", data="invalid json")
+    #     assert response.status_code == 422  # Validation error
 
-#     def test_missing_required_parameters(self, client):
-#         """Test handling of missing required parameters."""
-#         # Missing query parameter for search
-#         response = client.get("/search")
-#         assert response.status_code == 422
+    def test_missing_required_parameters(self, client):
+        """Test handling of missing required parameters."""
+        # Missing query parameter for search
+        response = client.get("/search")
+        assert response.status_code == 422
 
-#         # Empty POST body for translate
-#         response = client.post("/translate", json={})
-#         assert response.status_code in [200, 422]  # Depends on validation
+        # Empty POST body for translate
+        response = client.post("/translate", json={})
+        assert response.status_code in [200, 422]  # Depends on validation
 
 
-# class TestSecurityScenarios:
-#     """Test security-related scenarios."""
+class TestSecurityScenarios:
+    """Test security-related scenarios."""
 
-#     def test_xss_prevention_in_search(self, client):
-#         """Test XSS prevention in search queries."""
-#         xss_payloads = [
-#             "<script>alert('xss')</script>",
-#             "javascript:alert('xss')",
-#             "<img src=x onerror=alert('xss')>",
-#         ]
+    def test_xss_prevention_in_search(self, client):
+        """Test XSS prevention in search queries."""
+        xss_payloads = [
+            "<script>alert('xss')</script>",
+            "javascript:alert('xss')",
+            "<img src=x onerror=alert('xss')>",
+        ]
 
-#         for payload in xss_payloads:
-#             response = client.get(f"/search?query={payload}")
-#             assert response.status_code == 200
-#             # Response should not contain unescaped script tags
-#             assert "<script>" not in str(response.content)
+        for payload in xss_payloads:
+            response = client.get(f"/search?query={payload}")
+            assert response.status_code == 200
+            # Response should not contain unescaped script tags
+            assert "<script>" not in str(response.content)
 
-#     def test_path_traversal_prevention(self, client):
-#         """Test path traversal prevention in category names."""
-#         path_traversal_payloads = [
-#             "../../../etc/passwd",
-#             "..\\..\\windows\\system32\\config\\sam",
-#         ]
+    def test_path_traversal_prevention(self, client):
+        """Test path traversal prevention in category names."""
+        path_traversal_payloads = [
+            "../../../etc/passwd",
+            "..\\..\\windows\\system32\\config\\sam",
+        ]
 
-#         for payload in path_traversal_payloads:
-#             response = client.get(f"/categories/{payload}/terms")
-#             # Should either return 404 or handle gracefully
-#             assert response.status_code in [200, 404, 422]
+        for payload in path_traversal_payloads:
+            response = client.get(f"/categories/{payload}/terms")
+            # Should either return 404 or handle gracefully
+            assert response.status_code in [200, 404, 422]
+
 
 #     def test_oversized_request_handling(self, client):
 #         """Test handling of oversized requests."""
