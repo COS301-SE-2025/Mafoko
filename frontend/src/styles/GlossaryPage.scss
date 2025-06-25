@@ -21,9 +21,15 @@
 
 .glossary-root {
   height: 100vh;
-  background: #f8fafc;
+  background: #f8fafc !important; // Ensure no gradient from body leaks in
   display: flex;
   overflow: hidden;
+}
+
+.glossary-root,
+.glossary-root body,
+.glossary-root ~ body {
+  background: #f8fafc !important;
 }
 
 .glossary-main {

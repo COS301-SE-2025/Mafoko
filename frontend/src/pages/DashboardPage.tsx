@@ -39,6 +39,17 @@ interface UserData {
 }
 
 const DashboardPage: React.FC = () => {
+  // Force light mode for this page
+  useEffect(() => {
+    const html = document.documentElement;
+    const prevClass = html.className;
+    html.classList.remove('dark');
+    html.classList.add('light');
+    return () => {
+      html.className = prevClass;
+    };
+  }, []);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeMenuItem, setActiveMenuItem] = useState('dashboard');
