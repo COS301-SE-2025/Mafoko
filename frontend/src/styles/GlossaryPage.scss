@@ -1,5 +1,24 @@
 /* GlossaryStyles.scss - All styles for the Glossary page */
 
+.glossary-container {
+  margin-left: 220px; /* Prevent overlap with LeftNav */
+  margin-right: 1rem; /* Add right margin for better spacing */
+  margin-top: 1rem; /* Add top margin for better spacing */
+  margin-bottom: 1rem; /* Add bottom margin for better spacing */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .glossary-container {
+    margin-left: 0; /* No margin on mobile since Navbar is used instead of LeftNav */
+    margin-right: 0.5rem; /* Reduced margin on mobile */
+    margin-top: 0.5rem; /* Reduced margin on mobile */
+    margin-bottom: 0.5rem; /* Reduced margin on mobile */
+  }
+}
+
 .glossary-root {
   height: 100vh;
   background: #f8fafc;
@@ -103,7 +122,8 @@
   grid-template-rows: auto auto auto;
   max-width: 1150px;
   width: 100%;
-  margin-left: -0.5rem;
+  margin: 0 1rem; /* Add horizontal margins for better spacing */
+  padding: 0 0.5rem; /* Add internal padding */
 }
 
 /* Mobile and tablet responsive breakpoints */
@@ -112,7 +132,8 @@
     grid-template-columns: 1fr;
     gap: 0.75rem;
     max-width: 100%;
-    margin-left: 0;
+    margin: 0 0.5rem; /* Reduced margins on mobile */
+    padding: 0 0.25rem; /* Reduced padding on mobile */
   }
   .glossary-panel {
     min-height: 300px;
@@ -190,6 +211,7 @@
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 1.5rem;
+  margin: 0.5rem; /* Add margin around panels */
   display: flex;
   flex-direction: column;
   height: 100%;

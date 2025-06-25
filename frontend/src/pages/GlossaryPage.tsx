@@ -9,6 +9,7 @@ import {
   FileType,
 } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav.tsx';
+import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
 
@@ -175,11 +176,23 @@ const GlossaryPage = () => {
   >({});
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const formatDropdownRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   // Load initial data on component mount
   useEffect(() => {
     void loadInitialData();
     loadUserData();
+  }, []);
+
+  // Determines if the side nav or top nav should be used.
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Handle clicks outside the format dropdown
@@ -410,7 +423,7 @@ const GlossaryPage = () => {
 
   return (
     <div
-      className="glossary-root"
+      className={`glossary-root`}
       style={{
         height: '100vh',
         display: 'flex',
@@ -420,544 +433,544 @@ const GlossaryPage = () => {
         backgroundColor: '#f8fafc',
       }}
     >
-      {/* Left Navigation */}
-      <div
-        className="glossary-leftnav"
-        style={{
-          width: 220,
-          flexShrink: 0,
-          height: '100vh',
-          overflow: 'hidden',
-        }}
-      >
+      {/* Navigation - using same pattern as HelpPage */}
+      {isMobile ? (
+        <Navbar />
+      ) : (
         <LeftNav activeItem={activeNav} setActiveItem={setActiveNav} />
-      </div>
+      )}
 
-      {/* Main Content with Profile at Top Right */}
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100vh',
-          overflow: 'hidden',
-          position: 'relative',
-        }}
-      >
-        {/* Profile Section at top right */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            width: '100%',
-            padding: '1rem 1rem 1rem 1.5rem',
-            flexShrink: 0,
-            backgroundColor: 'white',
-            zIndex: 10,
-            borderBottom: '1px solid #e5e7eb',
-            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-            marginRight: '0.75rem',
-          }}
-        >
-          {isLoadingUserData ? (
-            <div className="profile-section">Loading profile...</div>
-          ) : userData ? (
-            <div
-              className="profile-section"
-              style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-            >
-              <div
-                className="profile-info"
-                style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-              >
-                <div className="profile-avatar">{avatarInitials}</div>
-                <div className="profile-details">
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                    }}
-                  >
-                    <LanguageSwitcher />
-                    <h3 style={{ margin: 0 }}>
-                      {userData.firstName} {userData.lastName}
-                    </h3>
-                  </div>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
-                    User ID: {userData.uuid}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        {/* Main Content Container */}
+      <div className="glossary-container">
+        {/* Main Content with Profile at Top Right */}
         <div
           style={{
             flex: 1,
-            width: '100%',
-            padding: '0.75rem 0.75rem 0.75rem 0.5rem',
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'auto',
-            minHeight: 0,
-            marginRight: '0.75rem',
-            marginLeft: '-0.5rem',
+            height: '100vh',
+            overflow: 'hidden',
+            position: 'relative',
           }}
         >
-          {/* Error Display */}
-          {error && (
-            <div
-              style={{
-                background: '#fee2e2',
-                border: '1px solid #fecaca',
-                color: '#dc2626',
-                padding: '12px',
-                borderRadius: '6px',
-                marginBottom: '1rem',
-                textAlign: 'center',
-              }}
-            >
-              {error}
-            </div>
-          )}
-
-          {/* Multilingual Dictionary section */}
+          {/* Profile Section at top right */}
           <div
-            className="glossary-header"
             style={{
-              textAlign: 'center',
-              marginBottom: '1rem',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              width: '100%',
+              padding: '1rem 1rem 1rem 1.5rem',
               flexShrink: 0,
-            }}
-          >
-            <h1 className="glossary-title">
-              <Book style={{ color: '#363b4d' }} size={40} />
-              Multilingual Dictionary
-            </h1>
-            <p className="glossary-subtitle">
-              Browse categories, explore terms, and discover translations
-            </p>
-            {Object.keys(availableLanguages).length > 0 && (
-              <p
-                style={{
-                  fontSize: '0.875rem',
-                  color: '#666',
-                  marginTop: '0.5rem',
-                }}
-              >
-                {/* Available in {Object.keys(availableLanguages).length} languages */}
-              </p>
-            )}
-          </div>
-
-          <div
-            className="glossary-grid"
-            style={{
-              flex: 1,
-              minHeight: 400,
-              overflow: 'visible',
-              marginBottom: '1rem',
-            }}
-          >
-            {/* Categories Panel */}
-            <div className="glossary-panel">
-              <h2 className="glossary-panel-title">
-                <Book size={20} />
-                Categories
-              </h2>
-              {loading && !categories.length ? (
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                </div>
-              ) : (
-                <div className="glossary-categories-list">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      type="button"
-                      onClick={() => {
-                        void handleCategorySelect(category);
-                      }}
-                      className={`glossary-category-btn${
-                        selectedCategory === category ? ' selected' : ''
-                      }`}
-                    >
-                      <span>{category}</span>
-                      {selectedCategory === category ? (
-                        <ChevronDown size={16} />
-                      ) : (
-                        <ChevronRight size={16} />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>{' '}
-            {/* Terms Panel */}
-            <div className="glossary-panel">
-              <h2 className="glossary-panel-title">
-                {selectedCategory
-                  ? `Terms in ${selectedCategory}`
-                  : categoryTerms.length > 0
-                    ? 'Random Terms'
-                    : 'Select a Category'}
-              </h2>
-              <div className="glossary-search">
-                <Search className="glossary-search-icon" size={16} />
-                <input
-                  type="text"
-                  placeholder={
-                    selectedCategory
-                      ? `Search terms in ${selectedCategory}...`
-                      : 'Search all terms...'
-                  }
-                  value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                  }}
-                  className="glossary-search-input"
-                />
-              </div>
-              {loading && selectedCategory ? (
-                <div className="animate-pulse space-y-3">
-                  <div className="h-20 bg-gray-200 rounded"></div>
-                  <div className="h-20 bg-gray-200 rounded"></div>
-                  <div className="h-20 bg-gray-200 rounded"></div>
-                </div>
-              ) : (
-                <div className="glossary-terms-list">
-                  {filteredTerms.map((term) => (
-                    <button
-                      key={term.id}
-                      type="button"
-                      onClick={() => {
-                        handleTermSelect(term);
-                      }}
-                      className={`glossary-term-btn${
-                        selectedTerm?.id === term.id ? ' selected' : ''
-                      }`}
-                    >
-                      {' '}
-                      <div className="glossary-term-title">{term.term}</div>
-                      <div className="glossary-term-def">{term.definition}</div>
-                    </button>
-                  ))}
-                </div>
-              )}
-              {selectedCategory && filteredTerms.length === 0 && !loading && (
-                <div className="glossary-empty">
-                  {searchTerm
-                    ? `No terms found matching "${searchTerm}" in ${selectedCategory}.`
-                    : `No terms available in ${selectedCategory}.`}
-                </div>
-              )}
-            </div>
-            {/* Details Panel */}
-            <div className="glossary-panel">
-              <h2 className="glossary-panel-title">
-                <Globe size={20} />
-                Term Details
-              </h2>
-              {selectedTerm ? (
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="glossary-details-title">
-                      {selectedTerm.term}
-                    </h3>{' '}
-                    <p className="glossary-details-def">
-                      {selectedTerm.definition}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        void handleShowTranslations();
-                      }}
-                      className="glossary-translate-btn"
-                      disabled={loading}
-                    >
-                      <Globe size={16} />
-                      {loading && showTranslations
-                        ? 'Loading...'
-                        : 'Show Translations'}
-                    </button>
-                  </div>
-                  {showTranslations && (
-                    <div className="glossary-translation-list">
-                      <h4 className="font-semibold text-gray-800 mb-3">
-                        Translations
-                      </h4>
-                      {loading ? (
-                        <div className="animate-pulse space-y-2">
-                          <div className="h-4 bg-gray-200 rounded"></div>
-                          <div className="h-4 bg-gray-200 rounded"></div>
-                          <div className="h-4 bg-gray-200 rounded"></div>
-                        </div>
-                      ) : translations &&
-                        Object.keys(translations.translations).length > 0 ? (
-                        Object.entries(translations.translations).map(
-                          ([language, translation]) => (
-                            <div
-                              key={language}
-                              className="glossary-translation-item"
-                            >
-                              <div className="glossary-translation-lang">
-                                {language}
-                              </div>
-                              <div className="glossary-translation-text">
-                                {String(translation)}
-                              </div>
-                            </div>
-                          ),
-                        )
-                      ) : (
-                        <div className="glossary-empty">
-                          No translations available for this term
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="glossary-empty">
-                  Select a term to view details and translations
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Download Section - Fixed at bottom */}
-        {categoryTerms.length > 0 && (
-          <div
-            className="glossary-download-section"
-            style={{
-              padding: '0.75rem 0.75rem 0.75rem 1.5rem',
-              borderTop: '1px solid #e5e7eb',
               backgroundColor: 'white',
-              flexShrink: 0,
-              boxShadow: '0 -1px 3px 0 rgba(0, 0, 0, 0.1)',
-              minHeight: '80px',
-              maxHeight: '120px',
+              zIndex: 10,
+              borderBottom: '1px solid #e5e7eb',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
               marginRight: '0.75rem',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div>
-                <h3
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    margin: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                  }}
-                >
-                  <Download size={16} />
-                  Export Data
-                </h3>
-                <p
-                  style={{
-                    margin: '0.25rem 0 0 0',
-                    fontSize: '0.75rem',
-                    color: '#6b7280',
-                  }}
-                >
-                  Download the{' '}
-                  {selectedCategory
-                    ? `terms in category "${selectedCategory}"`
-                    : 'current terms'}
-                  {searchTerm ? ` matching "${searchTerm}"` : ''} (
-                  {filteredTerms.length} items)
-                </p>
-              </div>
-              <div style={{ position: 'relative' }}>
+            {isLoadingUserData ? (
+              <div className="profile-section">Loading profile...</div>
+            ) : userData ? (
+              <div
+                className="profile-section"
+                style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+              >
                 <div
-                  ref={formatDropdownRef}
-                  style={{ display: 'inline-block' }}
+                  className="profile-info"
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowFormatDropdown(!showFormatDropdown);
-                    }}
-                    className="glossary-download-btn"
-                    style={{
-                      padding: '0.5rem 1rem',
-                      backgroundColor: '#363b4d',
-                      color: 'white',
-                      borderRadius: '4px',
-                      fontSize: '0.875rem',
-                      fontWeight: 500,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      border: 'none',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <Download size={16} />
-                    Download Data
-                    <ChevronDown size={16} />
-                  </button>
-
-                  {showFormatDropdown && (
+                  <div className="profile-avatar">{avatarInitials}</div>
+                  <div className="profile-details">
                     <div
-                      className="glossary-format-dropdown"
                       style={{
-                        position: 'absolute',
-                        bottom: '100%',
-                        right: '0',
-                        marginBottom: '0.25rem',
-                        backgroundColor: 'white',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '4px',
-                        boxShadow:
-                          '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        zIndex: 20,
-                        minWidth: '180px',
-                        padding: '0.5rem 0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
                       }}
                     >
+                      <LanguageSwitcher />
+                      <h3 style={{ margin: 0 }}>
+                        {userData.firstName} {userData.lastName}
+                      </h3>
+                    </div>
+                    <p
+                      style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}
+                    >
+                      User ID: {userData.uuid}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Main Content Container */}
+          <div
+            style={{
+              flex: 1,
+              width: '100%',
+              padding: '0.75rem 0.75rem 0.75rem 0.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'auto',
+              minHeight: 0,
+              marginRight: '0.75rem',
+              marginLeft: '-0.5rem',
+            }}
+          >
+            {/* Error Display */}
+            {error && (
+              <div
+                style={{
+                  background: '#fee2e2',
+                  border: '1px solid #fecaca',
+                  color: '#dc2626',
+                  padding: '12px',
+                  borderRadius: '6px',
+                  marginBottom: '1rem',
+                  textAlign: 'center',
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Multilingual Dictionary section */}
+            <div
+              className="glossary-header"
+              style={{
+                textAlign: 'center',
+                marginBottom: '1rem',
+                flexShrink: 0,
+              }}
+            >
+              <h1 className="glossary-title">
+                <Book style={{ color: '#363b4d' }} size={40} />
+                Multilingual Glossary
+              </h1>
+              <p className="glossary-subtitle">
+                Browse categories, explore terms, and discover translations
+              </p>
+              {Object.keys(availableLanguages).length > 0 && (
+                <p
+                  style={{
+                    fontSize: '0.875rem',
+                    color: '#666',
+                    marginTop: '0.5rem',
+                  }}
+                >
+                  {/* Available in {Object.keys(availableLanguages).length} languages */}
+                </p>
+              )}
+            </div>
+
+            <div
+              className="glossary-grid"
+              style={{
+                flex: 1,
+                minHeight: 400,
+                overflow: 'visible',
+                marginBottom: '1rem',
+              }}
+            >
+              {/* Categories Panel */}
+              <div className="glossary-panel">
+                <h2 className="glossary-panel-title">
+                  <Book size={20} />
+                  Categories
+                </h2>
+                {loading && !categories.length ? (
+                  <div className="animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                  </div>
+                ) : (
+                  <div className="glossary-categories-list">
+                    {categories.map((category) => (
                       <button
+                        key={category}
                         type="button"
                         onClick={() => {
-                          downloadData(
-                            filteredTerms,
-                            'csv',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                          setShowFormatDropdown(false);
+                          void handleCategorySelect(category);
                         }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.75rem',
-                          padding: '0.5rem 1rem',
-                          width: '100%',
-                          textAlign: 'left',
-                          backgroundColor: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          color: '#374151',
-                        }}
+                        className={`glossary-category-btn${
+                          selectedCategory === category ? ' selected' : ''
+                        }`}
                       >
-                        <div style={{ width: '18px', color: '#1e40af' }}>
-                          <FileType size={18} />
-                        </div>
-                        CSV Format
+                        <span>{category}</span>
+                        {selectedCategory === category ? (
+                          <ChevronDown size={16} />
+                        ) : (
+                          <ChevronRight size={16} />
+                        )}
                       </button>
+                    ))}
+                  </div>
+                )}
+              </div>{' '}
+              {/* Terms Panel */}
+              <div className="glossary-panel">
+                <h2 className="glossary-panel-title">
+                  {selectedCategory
+                    ? `Terms in ${selectedCategory}`
+                    : categoryTerms.length > 0
+                      ? 'Random Terms'
+                      : 'Select a Category'}
+                </h2>
+                <div className="glossary-search">
+                  <Search className="glossary-search-icon" size={16} />
+                  <input
+                    type="text"
+                    placeholder={
+                      selectedCategory
+                        ? `Search terms in ${selectedCategory}...`
+                        : 'Search all terms...'
+                    }
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                    }}
+                    className="glossary-search-input"
+                  />
+                </div>
+                {loading && selectedCategory ? (
+                  <div className="animate-pulse space-y-3">
+                    <div className="h-20 bg-gray-200 rounded"></div>
+                    <div className="h-20 bg-gray-200 rounded"></div>
+                    <div className="h-20 bg-gray-200 rounded"></div>
+                  </div>
+                ) : (
+                  <div className="glossary-terms-list">
+                    {filteredTerms.map((term) => (
                       <button
+                        key={term.id}
                         type="button"
                         onClick={() => {
-                          downloadData(
-                            filteredTerms,
-                            'json',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                          setShowFormatDropdown(false);
+                          handleTermSelect(term);
                         }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.75rem',
-                          padding: '0.5rem 1rem',
-                          width: '100%',
-                          textAlign: 'left',
-                          backgroundColor: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          color: '#374151',
-                        }}
+                        className={`glossary-term-btn${
+                          selectedTerm?.id === term.id ? ' selected' : ''
+                        }`}
                       >
-                        <div style={{ width: '18px', color: '#1f2937' }}>
-                          <FileType size={18} />
+                        {' '}
+                        <div className="glossary-term-title">{term.term}</div>
+                        <div className="glossary-term-def">
+                          {term.definition}
                         </div>
-                        JSON Format
                       </button>
+                    ))}
+                  </div>
+                )}
+                {selectedCategory && filteredTerms.length === 0 && !loading && (
+                  <div className="glossary-empty">
+                    {searchTerm
+                      ? `No terms found matching "${searchTerm}" in ${selectedCategory}.`
+                      : `No terms available in ${selectedCategory}.`}
+                  </div>
+                )}
+              </div>
+              {/* Details Panel */}
+              <div className="glossary-panel">
+                <h2 className="glossary-panel-title">
+                  <Globe size={20} />
+                  Term Details
+                </h2>
+                {selectedTerm ? (
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="glossary-details-title">
+                        {selectedTerm.term}
+                      </h3>{' '}
+                      <p className="glossary-details-def">
+                        {selectedTerm.definition}
+                      </p>
                       <button
                         type="button"
                         onClick={() => {
-                          downloadData(
-                            filteredTerms,
-                            'html',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                          setShowFormatDropdown(false);
+                          void handleShowTranslations();
                         }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.75rem',
-                          padding: '0.5rem 1rem',
-                          width: '100%',
-                          textAlign: 'left',
-                          backgroundColor: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          color: '#374151',
-                        }}
+                        className="glossary-translate-btn"
+                        disabled={loading}
                       >
-                        <div style={{ width: '18px', color: '#047857' }}>
-                          <FileType size={18} />
-                        </div>
-                        HTML Table
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          downloadData(
-                            filteredTerms,
-                            'pdf',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                          setShowFormatDropdown(false);
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.75rem',
-                          padding: '0.5rem 1rem',
-                          width: '100%',
-                          textAlign: 'left',
-                          backgroundColor: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          color: '#374151',
-                        }}
-                      >
-                        <div style={{ width: '18px', color: '#dc2626' }}>
-                          <FileType size={18} />
-                        </div>
-                        PDF Document
+                        <Globe size={16} />
+                        {loading && showTranslations
+                          ? 'Loading...'
+                          : 'Show Translations'}
                       </button>
                     </div>
-                  )}
-                </div>
+                    {showTranslations && (
+                      <div className="glossary-translation-list">
+                        <h4 className="font-semibold text-gray-800 mb-3">
+                          Translations
+                        </h4>
+                        {loading ? (
+                          <div className="animate-pulse space-y-2">
+                            <div className="h-4 bg-gray-200 rounded"></div>
+                            <div className="h-4 bg-gray-200 rounded"></div>
+                            <div className="h-4 bg-gray-200 rounded"></div>
+                          </div>
+                        ) : translations &&
+                          Object.keys(translations.translations).length > 0 ? (
+                          Object.entries(translations.translations).map(
+                            ([language, translation]) => (
+                              <div
+                                key={language}
+                                className="glossary-translation-item"
+                              >
+                                <div className="glossary-translation-lang">
+                                  {language}
+                                </div>
+                                <div className="glossary-translation-text">
+                                  {String(translation)}
+                                </div>
+                              </div>
+                            ),
+                          )
+                        ) : (
+                          <div className="glossary-empty">
+                            No translations available for this term
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="glossary-empty">
+                    Select a term to view details and translations
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        )}
+
+          {/* Download Section - Fixed at bottom */}
+          {categoryTerms.length > 0 && (
+            <div
+              className="glossary-download-section"
+              style={{
+                padding: '0.75rem 0.75rem 0.75rem 1.5rem',
+                borderTop: '1px solid #e5e7eb',
+                backgroundColor: 'white',
+                flexShrink: 0,
+                boxShadow: '0 -1px 3px 0 rgba(0, 0, 0, 0.1)',
+                minHeight: '80px',
+                maxHeight: '120px',
+                marginRight: '0.75rem',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      margin: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    <Download size={16} />
+                    Export Data
+                  </h3>
+                  <p
+                    style={{
+                      margin: '0.25rem 0 0 0',
+                      fontSize: '0.75rem',
+                      color: '#6b7280',
+                    }}
+                  >
+                    Download the{' '}
+                    {selectedCategory
+                      ? `terms in category "${selectedCategory}"`
+                      : 'current terms'}
+                    {searchTerm ? ` matching "${searchTerm}"` : ''} (
+                    {filteredTerms.length} items)
+                  </p>
+                </div>
+                <div style={{ position: 'relative' }}>
+                  <div
+                    ref={formatDropdownRef}
+                    style={{ display: 'inline-block' }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowFormatDropdown(!showFormatDropdown);
+                      }}
+                      className="glossary-download-btn"
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#363b4d',
+                        color: 'white',
+                        borderRadius: '4px',
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        border: 'none',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <Download size={16} />
+                      Download Data
+                      <ChevronDown size={16} />
+                    </button>
+
+                    {showFormatDropdown && (
+                      <div
+                        className="glossary-format-dropdown"
+                        style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          right: '0',
+                          marginBottom: '0.25rem',
+                          backgroundColor: 'white',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '4px',
+                          boxShadow:
+                            '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                          zIndex: 20,
+                          minWidth: '180px',
+                          padding: '0.5rem 0',
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            downloadData(
+                              filteredTerms,
+                              'csv',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                            setShowFormatDropdown(false);
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            padding: '0.5rem 1rem',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            color: '#374151',
+                          }}
+                        >
+                          <div style={{ width: '18px', color: '#1e40af' }}>
+                            <FileType size={18} />
+                          </div>
+                          CSV Format
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            downloadData(
+                              filteredTerms,
+                              'json',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                            setShowFormatDropdown(false);
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            padding: '0.5rem 1rem',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            color: '#374151',
+                          }}
+                        >
+                          <div style={{ width: '18px', color: '#1f2937' }}>
+                            <FileType size={18} />
+                          </div>
+                          JSON Format
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            downloadData(
+                              filteredTerms,
+                              'html',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                            setShowFormatDropdown(false);
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            padding: '0.5rem 1rem',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            color: '#374151',
+                          }}
+                        >
+                          <div style={{ width: '18px', color: '#047857' }}>
+                            <FileType size={18} />
+                          </div>
+                          HTML Table
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            downloadData(
+                              filteredTerms,
+                              'pdf',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                            setShowFormatDropdown(false);
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            padding: '0.5rem 1rem',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            color: '#374151',
+                          }}
+                        >
+                          <div style={{ width: '18px', color: '#dc2626' }}>
+                            <FileType size={18} />
+                          </div>
+                          PDF Document
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
