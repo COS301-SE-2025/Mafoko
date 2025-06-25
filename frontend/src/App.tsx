@@ -11,7 +11,7 @@ import GettingStarted from './pages/help/GettingStarted';
 import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
 import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
-import GlossaryPage from './pages/GlossaryPage';
+import GlossaryPage from './pages/GlossaryPage.tsx';
 import './App.css';
 
 function App() {
