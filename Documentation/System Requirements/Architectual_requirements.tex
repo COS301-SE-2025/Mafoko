@@ -43,10 +43,10 @@
 \begin{itemize}[nosep, leftmargin=*]
     \item Horizontal scale-out
 \end{itemize} &
-Micro-services &
+Microservices &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Backend:} Services are packaged in \texttt{Docker} containers and deployed to \textbf{Google Cloud Run} for request-based auto-scaling.
-    \item \textbf{Frontend:} Hosted on \textbf{GitHub Pages}, which scales globally for static content delivery.
+    \item \textbf{Frontend:} Hosted as a static site (e.g., on GitHub Pages or Firebase Hosting), which scales globally for content delivery.
 \end{itemize} \\
 \midrule
 
@@ -54,11 +54,12 @@ Micro-services &
 \textbf{Performance} &
 \begin{itemize}[nosep, leftmargin=*]
     \item Async APIs
+    \item Database Indexing
 \end{itemize} &
-Micro-services with Asynchronous APIs &
+Microservices with Asynchronous APIs &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Backend:} Built with \textbf{FastAPI} using an \texttt{async/await} model for non-blocking I/O, ensuring low-latency responses.
-    \item \textbf{Frontend:} A modern \textbf{React/Vite} build process creates optimized, static assets for fast initial load times.
+    \item \textbf{Database:} The \texttt{search-service} now queries an indexed \textbf{PostgreSQL} database, allowing for highly efficient filtering and sorting of millions of records.
 \end{itemize} \\
 \midrule
 
@@ -74,17 +75,16 @@ Leader-Follower Replication &
 \end{itemize} \\
 \midrule
 
-% Row 4: Usability & Latency
-\textbf{Usability} \& \textbf{Latency} &
+% Row 4: Usability & Data Integrity
+\textbf{Usability} \& \textbf{Data Integrity} &
 \begin{itemize}[nosep, leftmargin=*]
     \item Real-time UI
-    \item Responsiveness
-    \item RAM-first
+    \item Persistent State
 \end{itemize} &
-Model-View-Controller (MVC) / Component-Based UI &
+Component-Based UI & % <-- CORRECTED PATTERN
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Frontend:} A \textbf{React} and \texttt{TypeScript} application follows a component-based pattern to separate UI concerns.
-    \item \textbf{Backend In-Memory Data:} The `search` and `analytics` services load data from JSON files into memory for fast lookups.
+    \item \textbf{Backend Database:} The `search-service` and `vote-service` now use \textbf{PostgreSQL} as the single source of truth for all terminology and vote data, ensuring data integrity.
 \end{itemize} \\
 \midrule
 
@@ -92,12 +92,13 @@ Model-View-Controller (MVC) / Component-Based UI &
 \textbf{Security} &
 \begin{itemize}[nosep, leftmargin=*]
     \item TLS \& tokens
+    \item Secure Cloud Storage
 \end{itemize} &
 API Gateway &
 \begin{itemize}[nosep, leftmargin=*]
     \item \textbf{Gateway Service:} \textbf{Google API Gateway} serves as the single entry point, handling TLS termination (enforcing HTTPS).
-    \item \textbf{Authentication:} \textbf{JWT tokens} are managed by the `auth-service` to secure protected API endpoints.
-    \item \textbf{Secret Management:} Secure values are managed as \textbf{GitHub Encrypted Secrets} and injected into the CI/CD pipeline.
+    \item \textbf{Authentication:} \textbf{JWT tokens} are managed by the `auth-service` to secure protected API endpoints like the vote submission endpoint.
+    \item \textbf{File Uploads:} User-submitted documents are securely uploaded directly to a private \textbf{Google Cloud Storage} bucket using temporary signed URLs.
 \end{itemize} \\
 \midrule
 
@@ -105,11 +106,12 @@ API Gateway &
 \textbf{Offline Accessibility} \& \textbf{Portability} &
 \begin{itemize}[nosep, leftmargin=*]
     \item Service workers and caching
+    \item Background Sync
 \end{itemize} &
 Progressive Web App (PWA) &
 \begin{itemize}[nosep, leftmargin=*]
-    \item \textbf{Frontend:} The frontend is built as a PWA to support offline access to previously downloaded resources. 
-    \item \textbf{Backend:} The backend is containerized with \textbf{Docker}, ensuring it is portable and can run in any environment.
+    \item \textbf{Frontend:} Built as a PWA with a Service Worker to support offline access. API POST requests (like votes) are queued using \textbf{Workbox Background Sync} and sent automatically upon reconnection.
+    \item \textbf{Backend:} The backend is fully containerized with \textbf{Docker}, ensuring it is portable and can run consistently in any environment.
 \end{itemize} \\
 \midrule
 
@@ -118,11 +120,13 @@ Progressive Web App (PWA) &
 \begin{itemize}[nosep, leftmargin=*]
     \item Modular design
     \item CI/CD Automation
+    \item Database Migrations
 \end{itemize} &
 Automated Testing \& Deployment Pipeline &
 \begin{itemize}[nosep, leftmargin=*]
-    \item \textbf{Code Quality:} \textbf{Husky pre-commit hooks} enforce \texttt{Ruff}, \texttt{Black}, and \texttt{Mypy} checks locally.
-    \item \textbf{CI/CD:} A \textbf{GitHub Actions} workflow automates testing, code quality checks, image building, and deployment for both frontend and backend.
+    \item \textbf{Code Quality:} \textbf{Husky pre-commit hooks} enforce \texttt{Ruff}, \texttt{Black}, and \texttt{Mypy} checks locally inside Docker containers.
+    \item \textbf{CI/CD:} A \textbf{GitHub Actions} workflow automates testing and quality checks for both frontend and backend.
+    \item \textbf{Database Schema:} A dedicated `alembic-service` is used to manage and apply database migrations, ensuring a consistent schema across all environments.
 \end{itemize} \\
 \bottomrule
 
