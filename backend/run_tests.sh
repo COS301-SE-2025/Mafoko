@@ -17,4 +17,8 @@ echo "--- Running tests for Analytics Service ---"
 docker-compose exec analytics-service sh -c "PYTHONPATH=. pytest"
 
 echo ""
+echo "--- Running tests for Voting Service ---"
+docker-compose exec vote-service sh -c "PYTHONPATH=. pytest"
+
+echo ""
 echo "✅ All tests passed successfully!"
