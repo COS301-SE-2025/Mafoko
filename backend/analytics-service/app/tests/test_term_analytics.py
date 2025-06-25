@@ -336,58 +336,59 @@ class TestAnalyticsRouter:
 
 
 # Additional integration tests
-# class TestIntegration:
-#     """Integration tests for the full workflow."""
+class TestIntegration:
+    """Integration tests for the full workflow."""
 
-#     @pytest.fixture
-#     def sample_dataframe(self):
-#         """Create a sample DataFrame for testing."""
-#         data = {
-#             "category": [
-#                 "Agriculture",
-#                 "Agriculture",
-#                 "Agriculture",
-#                 "Education",
-#                 "Education",
-#             ],
-#             "eng_term": [
-#                 "Agricultural inputs",
-#                 "Annual crops",
-#                 "Livestock",
-#                 "Education",
-#                 "Learning",
-#             ],
-#             "afr_term": ["Landbou-insette", "Jaargewasse", "Vee", "Onderwys", "Leer"],
-#             "nde_term": [
-#                 "Iinsetjenziswa zokulima",
-#                 "Izitshalo zonyaka",
-#                 "Izifuyo",
-#                 "Imfundo",
-#                 "Ukufunda",
-#             ],
-#             "xho_term": [
-#                 "Amagalelo ezolimo",
-#                 "Izityalo zonyaka",
-#                 "Imfuyo",
-#                 "Imfundo",
-#                 "Ukufunda",
-#             ],
-#             "zul_term": [
-#                 "Izinsizamikhiqizo zezolimo",
-#                 "Izitshalo zonyaka",
-#                 "Izifuyo",
-#                 "Imfundo",
-#                 "Ukufunda",
-#             ],
-#             "eng_definition": [
-#                 "Consumable expendable inputs in agricultural production",
-#                 "Crops that are planted and harvested during the same production season",
-#                 "Domesticated animals raised for food or other products",
-#                 "The process of teaching and learning",
-#                 "The acquisition of knowledge and skills",
-#             ],
-#         }
-#         return pd.DataFrame(data)
+    @pytest.fixture
+    def sample_dataframe(self):
+        """Create a sample DataFrame for testing."""
+        data = {
+            "category": [
+                "Agriculture",
+                "Agriculture",
+                "Agriculture",
+                "Education",
+                "Education",
+            ],
+            "eng_term": [
+                "Agricultural inputs",
+                "Annual crops",
+                "Livestock",
+                "Education",
+                "Learning",
+            ],
+            "afr_term": ["Landbou-insette", "Jaargewasse", "Vee", "Onderwys", "Leer"],
+            "nde_term": [
+                "Iinsetjenziswa zokulima",
+                "Izitshalo zonyaka",
+                "Izifuyo",
+                "Imfundo",
+                "Ukufunda",
+            ],
+            "xho_term": [
+                "Amagalelo ezolimo",
+                "Izityalo zonyaka",
+                "Imfuyo",
+                "Imfundo",
+                "Ukufunda",
+            ],
+            "zul_term": [
+                "Izinsizamikhiqizo zezolimo",
+                "Izitshalo zonyaka",
+                "Izifuyo",
+                "Imfundo",
+                "Ukufunda",
+            ],
+            "eng_definition": [
+                "Consumable expendable inputs in agricultural production",
+                "Crops that are planted and harvested during the same production season",
+                "Domesticated animals raised for food or other products",
+                "The process of teaching and learning",
+                "The acquisition of knowledge and skills",
+            ],
+        }
+        return pd.DataFrame(data)
+
 
 #     @pytest.fixture
 #     def mock_json_data(self, sample_dataframe):
