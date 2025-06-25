@@ -9,6 +9,21 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import { API_ENDPOINTS } from '../config';
+import { storeTerms, getAllTerms } from '../utils/indexedDB';
+
+const languages = [
+  'Afrikaans',
+  'English',
+  'isiNdebele',
+  'isiXhosa',
+  'isiZulu',
+  'Sesotho',
+  'Setswana',
+  'siSwati',
+  'Tshivenda',
+  'Xitsonga',
+  'Sepedi',
+];
 
 interface Suggestion {
   id: string;
@@ -20,7 +35,7 @@ interface SearchResponse {
   total: number;
 }
 
-interface Term {
+export interface Term {
   id: string;
   term: string;
   language: string;
@@ -44,8 +59,18 @@ const SearchPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('search');
   const navigate = useNavigate();
-
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    void preloadGlossary();
+    void fetchDomains().then(setDomainOptions);
+    const stored = localStorage.getItem('darkMode');
+    if (stored) setIsDarkMode(stored === 'false');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -80,6 +105,18 @@ const SearchPage: React.FC = () => {
     void runSearch();
   }, [term, language, domain, aiSearch, fuzzySearch, currentPage]);
 
+  const preloadGlossary = async (): Promise<void> => {
+    try {
+      const response = await fetch(`API_ENDPOINTS.search/api/v1/search/`);
+      if (!response.ok) throw new Error('Failed to preload glossary');
+      const terms = (await response.json()) as Term[];
+      await storeTerms(terms);
+      console.log(`Cached ${String(terms.length)} terms for offline use`);
+    } catch (err) {
+      console.warn('Could not preload glossary:', err);
+    }
+  };
+
   const handleSearch = useCallback(
     async (t: string) => {
       setTerm(t);
@@ -93,43 +130,22 @@ const SearchPage: React.FC = () => {
           fuzzySearch,
           1,
         );
+        // Store results locally for offline use
+        await storeTerms(items);
         setResults(items);
         setTotalPages(Math.ceil((total || 1) / pageSize));
       } catch (error: unknown) {
-        console.error('Search fetch failed:', error);
-        setResults([]);
-        setTotalPages(1);
+        console.error('Falling back to cached data', error);
+        const cachedTerms = await getAllTerms();
+        const filtered = cachedTerms.filter((term) =>
+          term.term.toLowerCase().includes(t.toLowerCase()),
+        );
+        setResults(filtered);
+        setTotalPages(Math.ceil(filtered.length / pageSize));
       }
     },
     [language, domain, aiSearch, fuzzySearch],
   );
-
-  useEffect(() => {
-    void fetchDomains().then(setDomainOptions);
-  }, []);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
-
-  const languages = [
-    'Afrikaans',
-    'English',
-    'isiNdebele',
-    'isiXhosa',
-    'isiZulu',
-    'Sesotho',
-    'Setswana',
-    'siSwati',
-    'Tshivenda',
-    'Xitsonga',
-    'Sepedi',
-  ];
 
   const fetchSuggestions = async (term: string): Promise<Suggestion[]> => {
     const params = new URLSearchParams({ query: term });
@@ -166,12 +182,17 @@ const SearchPage: React.FC = () => {
   };
 
   const fetchDomains = async (): Promise<string[]> => {
-    return Promise.resolve([
-      'Construction',
-      'Agriculture',
-      'Education',
-      'Business',
-    ]);
+    try {
+      const terms = await getAllTerms();
+      const domainSet = new Set<string>();
+      for (const term of terms) {
+        if (term.domain) domainSet.add(term.domain);
+      }
+      const dynamicDomains = Array.from(domainSet).sort();
+      return dynamicDomains.length ? dynamicDomains : ['General'];
+    } catch {
+      return ['General'];
+    }
   };
 
   return (
