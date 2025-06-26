@@ -9,7 +9,6 @@ import {
   Filter,
   Download,
   FileText,
-  Eye,
   CheckCircle,
   XCircle,
   Clock,
@@ -23,12 +22,14 @@ import { API_ENDPOINTS } from '../config';
 
 interface LinguistApplication {
   id: string;
+  applicantId: string; // Add this field
   applicantName: string;
   applicantEmail: string;
   appliedAt: string;
   status: 'pending' | 'approved' | 'rejected';
   documents: ApplicationDocument[];
   languages: string[];
+  role: string; // Add this to track current role
 }
 
 interface ApplicationDocument {
@@ -38,6 +39,12 @@ interface ApplicationDocument {
   size: number;
   uploadedAt: string;
   url: string;
+  gcsKey?: string;
+}
+
+interface UserUpload {
+  gcs_key: string;
+  filename: string;
 }
 
 interface SystemUser {
@@ -80,9 +87,6 @@ const AdminPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [selectedApplication, setSelectedApplication] =
-    useState<LinguistApplication | null>(null);
-  const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
 
@@ -175,13 +179,99 @@ const AdminPage: React.FC = () => {
     localStorage.setItem('darkMode', String(isDarkMode));
   }, [isDarkMode]);
 
+  const fetchUserDocuments = async (
+    userId: string,
+    token: string,
+  ): Promise<ApplicationDocument[]> => {
+    try {
+      const uploadsResponse = await fetch(
+        API_ENDPOINTS.getUserUploads(userId),
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      if (uploadsResponse.ok) {
+        const uploads = (await uploadsResponse.json()) as UserUpload[];
+
+        const documents: ApplicationDocument[] = await Promise.all(
+          uploads.map(async (upload, index) => {
+            // Get signed download URL
+            let downloadUrl = '';
+            try {
+              const downloadResponse = await fetch(
+                API_ENDPOINTS.getSignedDownloadUrl(upload.gcs_key),
+                {
+                  method: 'GET',
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
+              );
+
+              if (downloadResponse.ok) {
+                // Backend returns plain string, not JSON
+                downloadUrl = await downloadResponse.text();
+              }
+            } catch (error) {
+              console.error(
+                'Failed to get download URL for',
+                upload.gcs_key,
+                error,
+              );
+            }
+
+            // Determine document type based on filename
+            const getDocumentType = (
+              filename: string,
+            ): 'cv' | 'certificate' | 'id' | 'research' => {
+              const lower = filename.toLowerCase();
+              if (lower.includes('cv') || lower.includes('resume')) return 'cv';
+              if (lower.includes('cert') || lower.includes('certificate'))
+                return 'certificate';
+              if (lower.includes('id') || lower.includes('identity'))
+                return 'id';
+              return 'research'; // default
+            };
+
+            return {
+              id: `doc-${userId}-${index.toString()}`, // Fixed: Convert number to string
+              name: upload.filename,
+              type: getDocumentType(upload.filename),
+              size: 0,
+              uploadedAt: new Date().toISOString(),
+              url: downloadUrl,
+              gcsKey: upload.gcs_key,
+            };
+          }),
+        );
+
+        return documents;
+      } else {
+        console.error(
+          `Failed to fetch uploads for user ${userId}:`,
+          uploadsResponse.statusText,
+        );
+        return [];
+      }
+    } catch (error) {
+      console.error(`Error fetching documents for user ${userId}:`, error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       setLoading(true);
       try {
         const token = localStorage.getItem('accessToken');
         if (token) {
-          const response = await fetch(API_ENDPOINTS.getAll, {
+          // Fetch regular users
+          const usersResponse = await fetch(API_ENDPOINTS.getAll, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
@@ -189,12 +279,57 @@ const AdminPage: React.FC = () => {
             },
           });
 
-          if (response.ok) {
-            const users = (await response.json()) as SystemUser[];
+          if (usersResponse.ok) {
+            const users = (await usersResponse.json()) as SystemUser[];
             setAllUsers(users);
+          }
+
+          // Fetch users with uploads (potential linguist applications)
+          const applicationsResponse = await fetch(
+            API_ENDPOINTS.getUsersWithUploads(),
+            {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            },
+          );
+
+          if (applicationsResponse.ok) {
+            const usersWithUploads =
+              (await applicationsResponse.json()) as SystemUser[];
+
+            const applications: LinguistApplication[] = await Promise.all(
+              usersWithUploads.map(async (user) => {
+                const documents = await fetchUserDocuments(user.id, token);
+
+                return {
+                  id: `app-${user.id}`,
+                  applicantId: user.id,
+                  applicantName: `${user.first_name} ${user.last_name}`,
+                  applicantEmail: user.email,
+                  appliedAt: user.created_at,
+                  status:
+                    user.role === 'linguist'
+                      ? 'approved'
+                      : user.role === 'contributor'
+                        ? 'pending'
+                        : 'rejected',
+                  documents,
+                  languages: [],
+                  role: user.role,
+                };
+              }),
+            );
+
+            setAllApplications(applications);
           } else {
-            console.error('Failed to fetch users:', response.statusText);
-            setAllUsers([]);
+            console.error(
+              'Failed to fetch applications:',
+              applicationsResponse.statusText,
+            );
+            setAllApplications([]);
           }
         } else {
           console.error('No access token found');
@@ -203,6 +338,7 @@ const AdminPage: React.FC = () => {
       } catch (error) {
         console.error('Failed to fetch data:', error);
         setAllUsers([]);
+        setAllApplications([]);
       } finally {
         setLoading(false);
       }
@@ -215,7 +351,6 @@ const AdminPage: React.FC = () => {
     applyFiltersAndPagination();
   }, [applyFiltersAndPagination]);
 
-  // Reset pagination when switching views
   useEffect(() => {
     setCurrentPage(1);
     setSearchTerm('');
@@ -255,29 +390,104 @@ const AdminPage: React.FC = () => {
     void checkAdminRole();
   }, []);
 
-  const handleApplicationAction = (applicationId: string, action: string) => {
+  const handleDocumentOpen = async (gcsKey: string) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('No access token found');
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.getSignedDownloadUrl(gcsKey), {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const downloadUrl = await response.text();
+        if (downloadUrl) {
+          const cleanUrl = downloadUrl.replace(/^"+|"+$/g, '');
+          window.open(cleanUrl, '_blank');
+        } else {
+          console.error('Empty download URL received');
+        }
+      } else {
+        console.error(
+          'Failed to get download URL:',
+          response.status,
+          response.statusText,
+        );
+      }
+    } catch (error) {
+      console.error('Error opening document:', error);
+    }
+  };
+
+  const handleApplicationAction = async (
+    applicationId: string,
+    action: string,
+  ) => {
     const application = allApplications.find((app) => app.id === applicationId);
     if (!application) return;
 
     switch (action) {
-      case 'view':
-        setSelectedApplication(application);
-        setShowApplicationModal(true);
-        break;
       case 'approve':
-        setAllApplications((prev) =>
-          prev.map((app) =>
-            app.id === applicationId
-              ? {
-                  ...app,
-                  status: 'approved' as const,
-                  reviewedAt: new Date().toISOString(),
-                  reviewedBy: 'Current Admin',
-                }
-              : app,
-          ),
-        );
+        try {
+          const token = localStorage.getItem('accessToken');
+          if (!token) {
+            console.error('No access token found');
+            return;
+          }
+
+          const response = await fetch(
+            `${API_ENDPOINTS.updateUserRole(application.applicantId)}?new_role=linguist`,
+            {
+              method: 'PUT',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            },
+          );
+
+          if (response.ok) {
+            const result = (await response.json()) as { message: string };
+            console.log(
+              'User promoted to linguist successfully:',
+              result.message,
+            );
+
+            setAllApplications((prev) =>
+              prev.map((app) =>
+                app.id === applicationId
+                  ? {
+                      ...app,
+                      status: 'approved' as const,
+                      reviewedAt: new Date().toISOString(),
+                      reviewedBy: 'Current Admin',
+                    }
+                  : app,
+              ),
+            );
+
+            setAllUsers((prev) =>
+              prev.map((user) =>
+                user.email === application.applicantEmail
+                  ? { ...user, role: 'linguist' }
+                  : user,
+              ),
+            );
+          } else {
+            const errorData = (await response.json()) as { message?: string };
+            console.error('Failed to promote user to linguist:', errorData);
+          }
+        } catch (error) {
+          console.error('Failed to promote user to linguist:', error);
+        }
         break;
+
       case 'reject':
         setAllApplications((prev) =>
           prev.map((app) =>
@@ -292,6 +502,7 @@ const AdminPage: React.FC = () => {
           ),
         );
         break;
+
       default:
         console.log(`Action ${action} on application ${applicationId}`);
     }
@@ -551,18 +762,6 @@ const AdminPage: React.FC = () => {
                       <span className="stat-label">Admins</span>
                     </div>
                   )}
-
-                  {/* Testing only */}
-                  {/* <label>
-                    Dark Mode
-                    <input
-                      type="checkbox"
-                      checked={isDarkMode}
-                      onChange={() => {
-                        setIsDarkMode((prev) => !prev);
-                      }}
-                    />
-                  </label> */}
                 </div>
               </div>
             </div>
@@ -691,6 +890,11 @@ const AdminPage: React.FC = () => {
                                     type="button"
                                     className="document-item"
                                     title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
+                                    onClick={() => {
+                                      if (doc.gcsKey) {
+                                        void handleDocumentOpen(doc.gcsKey);
+                                      }
+                                    }}
                                   >
                                     {getDocumentTypeIcon()}
                                     <span className="document-name">
@@ -703,26 +907,26 @@ const AdminPage: React.FC = () => {
                             </td>
                             <td className="actions-cell">
                               <div className="action-buttons">
-                                <button
-                                  type="button"
-                                  className="action-button view-button"
-                                  onClick={() => {
-                                    handleApplicationAction(
-                                      application.id,
-                                      'view',
-                                    );
-                                  }}
-                                  title="View Details"
-                                >
-                                  <Eye size={16} />
-                                </button>
                                 {application.status === 'pending' && (
                                   <>
                                     <button
                                       type="button"
                                       className="action-button approve-button"
                                       onClick={() => {
-                                        handleApplicationAction(
+                                        void handleApplicationAction(
+                                          application.id,
+                                          'approve',
+                                        );
+                                      }}
+                                      title="Approve Application"
+                                    >
+                                      <CheckCircle size={16} />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="action-button approve-button"
+                                      onClick={() => {
+                                        void handleApplicationAction(
                                           application.id,
                                           'approve',
                                         );
@@ -735,7 +939,7 @@ const AdminPage: React.FC = () => {
                                       type="button"
                                       className="action-button reject-button"
                                       onClick={() => {
-                                        handleApplicationAction(
+                                        void handleApplicationAction(
                                           application.id,
                                           'reject',
                                         );
@@ -894,98 +1098,6 @@ const AdminPage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Application Detail Modal */}
-      {showApplicationModal && selectedApplication && (
-        <div
-          className="modal-overlay"
-          onClick={() => {
-            setShowApplicationModal(false);
-          }}
-        >
-          <div
-            className="application-modal"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <div className="modal-header">
-              <h2>Application Details</h2>
-              <button
-                type="button"
-                className="close-button"
-                onClick={() => {
-                  setShowApplicationModal(false);
-                }}
-              >
-                ×
-              </button>
-            </div>
-            <div className="modal-content">
-              <div className="applicant-section">
-                <h3>{selectedApplication.applicantName}</h3>
-                <p>{selectedApplication.applicantEmail}</p>
-                <span
-                  className={`status-badge ${getStatusColor(selectedApplication.status)}`}
-                >
-                  {getStatusIcon(selectedApplication.status)}
-                  {selectedApplication.status}
-                </span>
-              </div>
-
-              <div className="documents-section">
-                <h4>Documents</h4>
-                <div className="documents-grid">
-                  {selectedApplication.documents.map((doc) => (
-                    <div key={doc.id} className="document-card">
-                      <div className="document-info">
-                        {getDocumentTypeIcon()}
-                        <div>
-                          <div className="document-name">{doc.name}</div>
-                          <div className="document-meta">
-                            {formatFileSize(doc.size)} •{' '}
-                            {formatDate(doc.uploadedAt)}
-                          </div>
-                        </div>
-                      </div>
-                      <button type="button" className="download-button">
-                        <Download size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {selectedApplication.status === 'pending' && (
-              <div className="modal-actions">
-                <button
-                  type="button"
-                  className="approve-button"
-                  onClick={() => {
-                    handleApplicationAction(selectedApplication.id, 'approve');
-                    setShowApplicationModal(false);
-                  }}
-                >
-                  <CheckCircle size={16} />
-                  Approve Application
-                </button>
-                <button
-                  type="button"
-                  className="reject-button"
-                  onClick={() => {
-                    handleApplicationAction(selectedApplication.id, 'reject');
-                    setShowApplicationModal(false);
-                  }}
-                >
-                  <XCircle size={16} />
-                  Reject Application
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -33,6 +33,12 @@ export const API_ENDPOINTS = {
     `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
   // --- Linguist Application Service --- (NEW SECTION)
   createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
+  getUserUploads: (userId: string) =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/uploads`,
+  getSignedDownloadUrl: (gcsKey: string) =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/download-url?gcs_key=${encodeURIComponent(gcsKey)}`,
+  getUsersWithUploads: () =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/users-with-uploads`,
 
   // --- Search Service ---
   search: `${SEARCH_SERVICE_URL}/api/v1/search`,
