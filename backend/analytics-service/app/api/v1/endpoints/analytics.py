@@ -33,7 +33,9 @@ async def load_marito_data():
 async def get_dataset_columns():
     """Get column information from the dataset."""
     df = await load_marito_data()
+    # Get language columns (ends with _term)
     language_columns = [col for col in df.columns if col.endswith("_term")]
+    # Get definition columns (ends with _definition)
     definition_columns = [col for col in df.columns if col.endswith("_definition")]
     category_column = "category"
     return df, language_columns, definition_columns, category_column

@@ -396,68 +396,74 @@ This section outlines the high-level user goals and core system interactions tha
     \end{itemize}
 \end{enumerate}
 
-\subsection{User Story \#6: UpVote System}
+
+\geometry{a4paper, margin=1in}
+\begin{document}
+
+\subsection*{User Story #6: Term Validation System}
 
 \textbf{ID:} US006 (Mavito Project) \\
-\textbf{Title:} Crowdsourced Validation via UpVoting \\
-\textbf{As a:} Mavito application user (e.g., casual user, linguist, or academic) who wants to contribute to the accuracy and quality of lexicon entries, \\
-\textbf{I want:} to upvote (or downvote) suggested changes or comments on terms in the lexicon, \\
-\textbf{So that:} the community can collectively validate contributions, and moderators can prioritize high-quality updates for integration into the central repository.
+\textbf{Title:} Crowdsourced Term Validation via Voting \\
+\textbf{As a:} Mavito application user (e.g., linguist or contributor) \\
+\textbf{I want:} to upvote or downvote individual terms in the lexicon \\
+\textbf{So that:} I can signal the quality and accuracy of a term to the community and help surface the most reliable terminology.
 
 \vspace{1em}
 \textbf{Acceptance Criteria:}
-\begin{enumerate}
+\begin{enumerate}[label=\arabic*.]
     \item \textbf{Voting Interface:}
     \begin{itemize}
-        \item \textbf{Given} I am viewing a term entry with user-submitted comments or suggested changes,
-        \item \textbf{Then} I see an option to upvote or downvote each contribution.
-        \item \textbf{And} the current vote count is displayed next to each contribution.
+        \item \textbf{Given} I am viewing a term on a term card,
+        \item \textbf{Then} I see "thumbs-up" and "thumbs-down" buttons next to the term.
+        \item \textbf{And} the current total upvote and downvote counts are displayed with the buttons.
     \end{itemize}
 
-    \item \textbf{Vote Submission:}
+    \item \textbf{Casting a Vote:}
     \begin{itemize}
-        \item \textbf{Given} I am logged in and have not yet voted on a specific contribution,
-        \item \textbf{When} I click the upvote/downvote button,
-        \item \textbf{Then} my vote is recorded immediately (if online) or queued for sync (if offline).
-        \item \textbf{And} the UI reflects my vote and updates the vote count.
+        \item \textbf{Given} I am logged in and have not yet voted on a specific term,
+        \item \textbf{When} I click the "thumbs-up" button,
+        \item \textbf{Then} my vote is recorded by the system, the upvote count increases by 1, and the button becomes highlighted.
     \end{itemize}
 
-    \item \textbf{Prevent Duplicate Voting:}
+    \item \textbf{Changing a Vote:}
     \begin{itemize}
-        \item \textbf{Given} I have already voted on a contribution,
-        \item \textbf{Then} the UI prevents me from voting again (unless I undo my vote).
+        \item \textbf{Given} I have already downvoted a term,
+        \item \textbf{When} I click the "thumbs-up" button,
+        \item \textbf{Then} my vote is changed from a downvote to an upvote, the downvote count decreases by 1, the upvote count increases by 1, and the button highlights are updated accordingly.
     \end{itemize}
 
-    \item \textbf{Offline Handling:}
+    \item \textbf{Removing a Vote (Un-voting):}
     \begin{itemize}
-        \item \textbf{Given} I vote while offline,
-        \item \textbf{Then} the vote is stored locally and synced to the central repository when I reconnect.
+        \item \textbf{Given} I have already upvoted a term,
+        \item \textbf{When} I click the "thumbs-up" button again,
+        \item \textbf{Then} my vote is removed entirely, the upvote count decreases by 1, and the button is no longer highlighted.
     \end{itemize}
 
-    \item \textbf{Moderation Visibility (Optional Enhancement):}
+    \item \textbf{Offline Voting:}
     \begin{itemize}
-        \item \textbf{Given} I am a moderator,
-        \item \textbf{Then} I can filter contributions by vote count to prioritize high-quality submissions.
+        \item \textbf{Given} I vote on a term while my device is offline,
+        \item \textbf{Then} the UI should update optimistically to show my vote.
+        \item \textbf{And} the vote action should be queued locally.
+        \item \textbf{When} my internet connection is restored,
+        \item \textbf{Then} the queued vote should be automatically sent to the server to be synced.
     \end{itemize}
 
-    \item \textbf{Feedback Transparency:}
+    \item \textbf{Moderation Visibility (Future Enhancement):}
     \begin{itemize}
-        \item \textbf{Given} a contribution receives significant downvotes,
-        \item \textbf{Then} the system may flag it for review (future enhancement).
+        \item \textbf{Given} I am a moderator or administrator,
+        \item \textbf{Then} I can sort terms by "popularity" (upvotes - downvotes) to prioritize content review.
     \end{itemize}
 \end{enumerate}
 
 \vspace{1em}
 \textbf{Notes/Assumptions:}
 \begin{itemize}
-    \item Voting requires user authentication to prevent abuse.
-    \item Vote counts are public to encourage transparency.
-    \item Offline votes are treated as "pending" until synced.
-    \item Future enhancements could include:
-    \begin{itemize}
-        \item Weighted voting for trusted users (e.g., linguists).
-    \end{itemize}
+    \item Voting requires user authentication to prevent abuse and ensure each user can only vote once per term.
+    \item Vote counts are public to all users to encourage transparency.
+    \item The system is designed with a dedicated `vote-service` to handle all voting-related logic.
 \end{itemize}
+
+\end{document}
 
 
 \subsection{User Story \#7.1: Word Frequency Trends}

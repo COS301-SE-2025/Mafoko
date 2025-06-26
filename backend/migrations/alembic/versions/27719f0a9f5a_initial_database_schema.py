@@ -1,8 +1,8 @@
 """Initial database schema
 
-Revision ID: 495946073be3
+Revision ID: 27719f0a9f5a
 Revises:
-Create Date: 2025-06-23 16:28:34.632765
+Create Date: 2025-06-26 12:19:16.190105
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "495946073be3"
+revision: str = "27719f0a9f5a"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -81,6 +81,33 @@ def upgrade() -> None:
         unique=False,
     )
     op.create_table(
+        "linguistapplications",
+        sa.Column("id", sa.UUID(), nullable=False),
+        sa.Column("user_id", sa.UUID(), nullable=False),
+        sa.Column(
+            "status",
+            sa.Enum("pending", "approved", "rejected", name="application_status_enum"),
+            nullable=False,
+        ),
+        sa.Column("id_document_url", sa.String(), nullable=False),
+        sa.Column("cv_document_url", sa.String(), nullable=False),
+        sa.Column("certifications_document_url", sa.String(), nullable=True),
+        sa.Column("research_papers_document_url", sa.String(), nullable=True),
+        sa.Column(
+            "submitted_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+        sa.Column("reviewed_at", sa.DateTime(timezone=True), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("user_id"),
+    )
+    op.create_table(
         "term_translations",
         sa.Column("term_id", sa.UUID(), nullable=False),
         sa.Column("translation_id", sa.UUID(), nullable=False),
@@ -128,6 +155,7 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_termvotes_term_id"), table_name="termvotes")
     op.drop_table("termvotes")
     op.drop_table("term_translations")
+    op.drop_table("linguistapplications")
     op.drop_index(op.f("ix_users_verification_token"), table_name="users")
     op.drop_index(op.f("ix_users_password_reset_token"), table_name="users")
     op.drop_index(op.f("ix_users_id"), table_name="users")

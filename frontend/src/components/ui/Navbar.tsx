@@ -30,9 +30,32 @@ const Navbar = () => {
   const [active, setActive] = useState('');
 
   const navItems = useMemo(
-    () => ['Dashboard', 'Search', 'Saved Terms', 'Analytics', 'Help'],
+    () => [
+      'Homepage',
+      'Dictionary',
+      'Glossary',
+      'Saved Terms',
+      'Dashboard',
+      'Help',
+    ],
     [],
   );
+
+  // Custom route mapping for navigation items
+  const getRouteForItem = (item: string): string => {
+    switch (item) {
+      case 'Homepage':
+        return '/dashboard';
+      case 'Dictionary':
+        return '/search';
+      case 'Glossary':
+        return '/glossary';
+      case 'Dashboard':
+        return '/analytics';
+      default:
+        return `/${item.toLowerCase().replace(/\s/g, '-')}`;
+    }
+  };
 
   // const [userData, setUserData] = useState<UserData | null>(null);
   const [avatarInitials, setAvatarInitials] = useState<string>(''); // Default to empty or a placeholder
@@ -141,10 +164,10 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           <img
             src="public/DFSI_Logo.png"
-            alt="Mavito Logo"
+            alt="Marito Logo"
             className="w-10 h-10 rounded-full"
           />
-          <span className="text-xl font-semibold">Mavito</span>
+          <span className="text-xl font-semibold">Marito</span>
         </div>
 
         {/* Nav Links (desktop) */}
@@ -152,7 +175,7 @@ const Navbar = () => {
           {navItems.map((item) => (
             <NavLink
               key={item}
-              to={`/${item.toLowerCase().replace(/\s/g, '-')}`}
+              to={getRouteForItem(item)}
               className={`relative pb-1 ${
                 active === item
                   ? 'font-medium text-white'
@@ -215,7 +238,7 @@ const Navbar = () => {
         {navItems.map((item) => (
           <NavLink
             key={item}
-            to={`/${item.toLowerCase().replace(/\s/g, '-')}`}
+            to={getRouteForItem(item)}
             className={`block ${
               active === item ? 'text-theme font-semibold' : 'text-gray-300'
             }`}
