@@ -157,20 +157,24 @@ const GlossaryPage = () => {
   const initialNav = location.pathname === '/glossary' ? 'glossary' : 'search';
   const [activeNav, setActiveNav] = useState(initialNav);
 
-  // Force light mode for this page
+  // Hard-coded dark mode (always enabled)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Apply dark theme to document
   useEffect(() => {
     const html = document.documentElement;
-    const prevClass = html.className;
-    html.classList.remove('dark');
-    html.classList.add('light');
+    html.classList.add('theme-dark');
+    html.classList.remove('theme-light');
+  }, []);
 
-    // Fix: Override body background to prevent landing page green shade
-    const prevBodyBg = document.body.style.background;
-    document.body.style.background = '#f8fafc';
-
+  // Determines if the side nav or top nav should be used.
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
     return () => {
-      html.className = prevClass;
-      document.body.style.background = prevBodyBg;
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -197,8 +201,8 @@ const GlossaryPage = () => {
     Record<string, string>
   >({});
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const formatDropdownRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   // Load initial data on component mount
   useEffect(() => {
@@ -445,14 +449,13 @@ const GlossaryPage = () => {
 
   return (
     <div
-      className={`glossary-root`}
+      className={`glossary-root glossary-page-container theme-dark`}
       style={{
         height: '100vh',
         display: 'flex',
         flexDirection: 'row',
         width: '100vw',
         overflow: 'hidden',
-        backgroundColor: '#f8fafc',
       }}
     >
       {/* Navigation - using same pattern as HelpPage */}
@@ -483,9 +486,9 @@ const GlossaryPage = () => {
               width: '100%',
               padding: '1rem 1rem 1rem 1.5rem',
               flexShrink: 0,
-              backgroundColor: 'white',
+              backgroundColor: '#212431',
               zIndex: 10,
-              borderBottom: '1px solid #e5e7eb',
+              borderBottom: `1px solid #4a5568`,
               boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
               marginRight: '0.75rem',
             }}
@@ -503,6 +506,7 @@ const GlossaryPage = () => {
                 >
                   <div className="profile-avatar">{avatarInitials}</div>
                   <div className="profile-details">
+                    {' '}
                     <div
                       style={{
                         display: 'flex',
@@ -516,7 +520,11 @@ const GlossaryPage = () => {
                       </h3>
                     </div>
                     <p
-                      style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}
+                      style={{
+                        margin: 0,
+                        fontSize: '0.85rem',
+                        color: '#a0aec0',
+                      }}
                     >
                       User ID: {userData.uuid}
                     </p>
@@ -544,9 +552,9 @@ const GlossaryPage = () => {
             {error && (
               <div
                 style={{
-                  background: '#fee2e2',
-                  border: '1px solid #fecaca',
-                  color: '#dc2626',
+                  background: '#553c2c',
+                  border: `1px solid #d69e2e`,
+                  color: '#fbb6ce',
                   padding: '12px',
                   borderRadius: '6px',
                   marginBottom: '1rem',
@@ -567,7 +575,7 @@ const GlossaryPage = () => {
               }}
             >
               <h1 className="glossary-title">
-                <Book style={{ color: '#363b4d' }} size={40} />
+                <Book style={{ color: '#ffffff' }} size={40} />
                 Multilingual Glossary
               </h1>
               <p className="glossary-subtitle">
@@ -577,7 +585,7 @@ const GlossaryPage = () => {
                 <p
                   style={{
                     fontSize: '0.875rem',
-                    color: '#666',
+                    color: '#a0aec0',
                     marginTop: '0.5rem',
                   }}
                 >
@@ -603,9 +611,9 @@ const GlossaryPage = () => {
                 </h2>
                 {loading && !categories.length ? (
                   <div className="animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                    <div className="h-4 bg-gray-200 rounded"></div>
+                    <div className={`h-4 rounded mb-3 bg-gray-600`}></div>
+                    <div className={`h-4 rounded mb-3 bg-gray-600`}></div>
+                    <div className={`h-4 rounded bg-gray-600`}></div>
                   </div>
                 ) : (
                   <div className="glossary-categories-list">
@@ -658,9 +666,9 @@ const GlossaryPage = () => {
                 </div>
                 {loading && selectedCategory ? (
                   <div className="animate-pulse space-y-3">
-                    <div className="h-20 bg-gray-200 rounded"></div>
-                    <div className="h-20 bg-gray-200 rounded"></div>
-                    <div className="h-20 bg-gray-200 rounded"></div>
+                    <div className={`h-20 rounded bg-gray-600`}></div>
+                    <div className={`h-20 rounded bg-gray-600`}></div>
+                    <div className={`h-20 rounded bg-gray-600`}></div>
                   </div>
                 ) : (
                   <div className="glossary-terms-list">
@@ -723,14 +731,14 @@ const GlossaryPage = () => {
                     </div>
                     {showTranslations && (
                       <div className="glossary-translation-list">
-                        <h4 className="font-semibold text-gray-800 mb-3">
+                        <h4 className={`font-semibold mb-3 text-gray-200`}>
                           Translations
                         </h4>
                         {loading ? (
                           <div className="animate-pulse space-y-2">
-                            <div className="h-4 bg-gray-200 rounded"></div>
-                            <div className="h-4 bg-gray-200 rounded"></div>
-                            <div className="h-4 bg-gray-200 rounded"></div>
+                            <div className={`h-4 rounded bg-gray-600`}></div>
+                            <div className={`h-4 rounded bg-gray-600`}></div>
+                            <div className={`h-4 rounded bg-gray-600`}></div>
                           </div>
                         ) : translations &&
                           Object.keys(translations.translations).length > 0 ? (
@@ -771,13 +779,13 @@ const GlossaryPage = () => {
             <div
               className="glossary-download-section"
               style={{
-                padding: '0.75rem 0.75rem 0.75rem 1.5rem',
-                borderTop: '1px solid #e5e7eb',
-                backgroundColor: 'white',
+                padding: '0.5rem 0.5rem 0.5rem 1rem',
+                borderTop: `1px solid #4a5568`,
+                backgroundColor: '#212431',
                 flexShrink: 0,
                 boxShadow: '0 -1px 3px 0 rgba(0, 0, 0, 0.1)',
-                minHeight: '80px',
-                maxHeight: '120px',
+                minHeight: '60px',
+                maxHeight: '80px',
                 marginRight: '0.75rem',
               }}
             >
@@ -791,22 +799,23 @@ const GlossaryPage = () => {
                 <div>
                   <h3
                     style={{
-                      fontSize: '1rem',
+                      fontSize: '0.9rem',
                       fontWeight: 600,
                       margin: 0,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem',
+                      gap: '0.4rem',
+                      color: '#ffffff',
                     }}
                   >
-                    <Download size={16} />
+                    <Download size={14} />
                     Export Data
                   </h3>
                   <p
                     style={{
-                      margin: '0.25rem 0 0 0',
-                      fontSize: '0.75rem',
-                      color: '#6b7280',
+                      margin: '0.2rem 0 0 0',
+                      fontSize: '0.7rem',
+                      color: '#a0aec0',
                     }}
                   >
                     Download the{' '}
@@ -828,23 +837,24 @@ const GlossaryPage = () => {
                         setShowFormatDropdown(!showFormatDropdown);
                       }}
                       className="glossary-download-btn"
+                      disabled={isDownloading}
                       style={{
-                        padding: '0.5rem 1rem',
-                        backgroundColor: '#363b4d',
+                        padding: '0.25rem 0.5rem',
+                        backgroundColor: isDownloading ? '#9ca3af' : '#f00a50',
                         color: 'white',
                         borderRadius: '4px',
-                        fontSize: '0.875rem',
+                        fontSize: '0.75rem',
                         fontWeight: 500,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem',
+                        gap: '0.375rem',
                         border: 'none',
-                        cursor: 'pointer',
+                        cursor: isDownloading ? 'not-allowed' : 'pointer',
                       }}
                     >
-                      <Download size={16} />
-                      Download Data
-                      <ChevronDown size={16} />
+                      <Download size={12} />
+                      {isDownloading ? 'Generating...' : 'Download Data'}
+                      <ChevronDown size={12} />
                     </button>
 
                     {showFormatDropdown && (
@@ -855,135 +865,195 @@ const GlossaryPage = () => {
                           bottom: '100%',
                           right: '0',
                           marginBottom: '0.25rem',
-                          backgroundColor: 'white',
-                          border: '1px solid #e5e7eb',
+                          backgroundColor: '#212431',
+                          border: `1px solid #4a5568`,
                           borderRadius: '4px',
                           boxShadow:
                             '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                           zIndex: 20,
-                          minWidth: '180px',
-                          padding: '0.5rem 0',
+                          minWidth: '140px',
+                          padding: '0.375rem 0',
                         }}
                       >
                         <button
                           type="button"
                           onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'csv',
-                              termsTranslations,
-                              selectedCategory,
-                            );
                             setShowFormatDropdown(false);
+                            try {
+                              downloadData(
+                                filteredTerms,
+                                'csv',
+                                termsTranslations,
+                                selectedCategory,
+                              );
+                            } catch (error) {
+                              console.error('CSV download failed:', error);
+                              setError(
+                                'Failed to download CSV. Please try again.',
+                              );
+                              setTimeout(() => {
+                                setError(null);
+                              }, 5000);
+                            }
                           }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
+                            fontSize: '0.8rem',
+                            color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#1e40af' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#1e40af' }}>
+                            <FileType size={16} />
                           </div>
                           CSV Format
                         </button>
                         <button
                           type="button"
                           onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'json',
-                              termsTranslations,
-                              selectedCategory,
-                            );
+                            try {
+                              downloadData(
+                                filteredTerms,
+                                'json',
+                                termsTranslations,
+                                selectedCategory,
+                              );
+                            } catch (error) {
+                              console.error('JSON download failed:', error);
+                              setError(
+                                'Failed to download JSON. Please try again.',
+                              );
+                              setTimeout(() => {
+                                setError(null);
+                              }, 5000);
+                            }
                             setShowFormatDropdown(false);
+                            return;
                           }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
+                            fontSize: '0.8rem',
+                            color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#1f2937' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#10b981' }}>
+                            <FileType size={16} />
                           </div>
                           JSON Format
                         </button>
                         <button
                           type="button"
                           onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'html',
-                              termsTranslations,
-                              selectedCategory,
-                            );
+                            try {
+                              downloadData(
+                                filteredTerms,
+                                'html',
+                                termsTranslations,
+                                selectedCategory,
+                              );
+                            } catch (error) {
+                              console.error('HTML download failed:', error);
+                              setError(
+                                'Failed to download HTML. Please try again.',
+                              );
+                              setTimeout(() => {
+                                setError(null);
+                              }, 5000);
+                            }
                             setShowFormatDropdown(false);
+                            return;
                           }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
+                            fontSize: '0.8rem',
+                            color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#047857' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#047857' }}>
+                            <FileType size={16} />
                           </div>
                           HTML Table
                         </button>
                         <button
                           type="button"
                           onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'pdf',
-                              termsTranslations,
-                              selectedCategory,
-                            );
+                            try {
+                              setError(null);
+                              setIsDownloading(true);
+
+                              // Show loading state for PDF generation
+                              if (filteredTerms.length > 200) {
+                                setError(
+                                  'Generating PDF for large dataset. This may take a moment...',
+                                );
+                              }
+
+                              downloadData(
+                                filteredTerms,
+                                'pdf',
+                                termsTranslations,
+                                selectedCategory,
+                              );
+                              setError(null); // Clear any loading message
+                            } catch (error) {
+                              console.error('PDF download failed:', error);
+                              const errorMessage =
+                                error instanceof Error
+                                  ? error.message
+                                  : 'PDF generation failed. Please try HTML or CSV format instead.';
+                              setError(errorMessage);
+                              // Clear error after 10 seconds
+                              setTimeout(() => {
+                                setError(null);
+                              }, 10000);
+                            } finally {
+                              setIsDownloading(false);
+                            }
                             setShowFormatDropdown(false);
+                            return;
                           }}
+                          disabled={isDownloading}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
+                            fontSize: '0.8rem',
+                            color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#dc2626' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#dc2626' }}>
+                            <FileType size={16} />
                           </div>
-                          PDF Document
+                          {isDownloading ? 'Generating PDF...' : 'PDF Document'}
                         </button>
                       </div>
                     )}
