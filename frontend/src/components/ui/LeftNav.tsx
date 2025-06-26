@@ -13,10 +13,11 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { id: 'dashboard', label: t('leftPane.dashboard'), path: '/dashboard' },
-    { id: 'search', label: t('leftPane.search'), path: '/search' },
+    { id: 'dashboard', label: 'Home', path: '/dashboard' },
+    { id: 'search', label: 'Dictionary', path: '/search' },
+    { id: 'glossary', label: 'Glossary', path: '/glossary' },
     { id: 'saved', label: t('leftPane.savedTerms'), path: '/saved-terms' },
-    { id: 'analytics', label: t('leftPane.analytics'), path: '/analytics' },
+    { id: 'analytics', label: 'Dashboard', path: '/analytics' },
     { id: 'help', label: t('Help'), path: '/help' },
   ];
 
@@ -29,7 +30,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     <div className="left-nav">
       {/* Header */}
       <div className="left-nav-header">
-        <h2 className="left-nav-app-title">Mavito</h2>
+        <h2 className="left-nav-app-title">Marito</h2>
         <div className="logo-container">
           <img
             src="./icons/maskable_icon_x512.png"

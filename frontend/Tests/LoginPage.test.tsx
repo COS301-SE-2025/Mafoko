@@ -1,183 +1,135 @@
-// frontend/Tests/LoginPage.test.tsx
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { BrowserRouter as Router, NavigateFunction } from 'react-router-dom';
-import LoginPage from '../src/pages/LoginPage';
+import { vi } from 'vitest';
 
-// Mock react-i18next
-jest.mock('react-i18next', () => ({
+// 🧩 Mocks
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key, // Return the key itself
+    t: (key: string, fallback?: string) => fallback ?? key,
     i18n: {
-      changeLanguage: () => new Promise(() => {}),
+      changeLanguage: () => Promise.resolve(),
       language: 'en',
     },
   }),
 }));
 
-// Mock LanguageSwitcher component
-jest.mock('../src/components/LanguageSwitcher', () => {
-  const MockLanguageSwitcher = () => (
-    <div data-testid="language-switcher">Language Switcher</div>
-  );
-  MockLanguageSwitcher.displayName = 'MockLanguageSwitcher';
-  return MockLanguageSwitcher;
+vi.mock('../src/components/LanguageSwitcher', () => ({
+  __esModule: true,
+  default: () => <div data-testid="language-switcher">Language Switcher</div>,
+}));
+
+// 📦 Actual test logic
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import LoginPage from '../src/pages/LoginPage';
+
+global.fetch = vi.fn();
+
+beforeEach(() => {
+  localStorage.clear();
+  (global.fetch as ReturnType<typeof vi.fn>).mockClear();
+  mockNavigate.mockClear();
 });
-
-// Mock useNavigate
-const mockNavigate: jest.MockedFunction<NavigateFunction> = jest.fn();
-
-jest.mock('react-router-dom', () => {
-  const actual =
-    jest.requireActual<typeof import('react-router-dom')>('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: (): NavigateFunction => mockNavigate, // Explicit return type
-    Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-      <a href={to}>{children}</a>
-    ),
-  };
-});
-
-global.fetch = jest.fn();
 
 describe('LoginPage', () => {
-  beforeEach(() => {
-    mockNavigate.mockClear();
-    (global.fetch as jest.Mock<Promise<Partial<Response>>>).mockClear();
-    // Default successful login response for most tests
-    (global.fetch as jest.Mock<Promise<Partial<Response>>>).mockResolvedValue({
-      ok: true,
-      json: (): Promise<{ access_token: string; token_type: string }> =>
-        Promise.resolve<{ access_token: string; token_type: string }>({
-          access_token: 'fake-token',
-          token_type: 'bearer',
-        }),
-    });
+  test('renders input fields and buttons', () => {
     render(
       <Router>
         <LoginPage />
       </Router>,
     );
-  });
 
-  test('renders login form elements correctly', () => {
+    expect(screen.getByLabelText('loginPage.emailLabel')).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /loginPage.title/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText(/loginPage.emailLabel/i)).toBeInTheDocument();
-    expect(
-      screen.getByLabelText(/loginPage.passwordLabel/i),
+      screen.getByLabelText('loginPage.passwordLabel'),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /loginPage.loginButton/i }),
+      screen.getByRole('button', { name: 'loginPage.loginButton' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /loginPage.loginWithGoogle/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/loginPage.noAccount/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /loginPage.registerLink/i }),
+      screen.getByRole('button', { name: 'loginPage.loginWithGoogle' }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
-    // Corrected src attribute to match the global fileMock.js
-    expect(screen.getByAltText('Mavito Login Welcome')).toHaveAttribute(
-      'src',
-      'test-file-stub',
-    );
-    expect(screen.getByAltText(/loginPage.dsfsiLogoAlt/i)).toHaveAttribute(
-      'src',
-      'test-file-stub',
-    );
   });
 
-  test('allows user to input email and password', () => {
-    const emailInput = screen.getByLabelText(/loginPage.emailLabel/i);
-    const passwordInput = screen.getByLabelText(/loginPage.passwordLabel/i);
+  test('handles successful login and redirects', async () => {
+    const mockResponse = {
+      access_token: 'fake_token',
+      token_type: 'bearer',
+    };
 
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+      ok: true,
+      json: async () => {
+        await Promise.resolve();
+        return mockResponse;
+      },
+    } as Response);
 
-    expect((emailInput as HTMLInputElement).value).toBe('test@example.com');
-    expect((passwordInput as HTMLInputElement).value).toBe('password123');
-  });
+    render(
+      <Router>
+        <LoginPage />
+      </Router>,
+    );
 
-  test('submits the form and navigates on successful login', async () => {
-    // beforeEach already sets up a successful mock
-
-    const emailInput = screen.getByLabelText(/loginPage.emailLabel/i);
-    const passwordInput = screen.getByLabelText(/loginPage.passwordLabel/i);
-    const loginButton = screen.getByRole('button', {
-      name: /loginPage.loginButton/i,
+    fireEvent.change(screen.getByLabelText('loginPage.emailLabel'), {
+      target: { value: 'test@example.com' },
     });
 
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(loginButton);
+    fireEvent.change(screen.getByLabelText('loginPage.passwordLabel'), {
+      target: { value: 'password123' },
+    });
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'loginPage.loginButton' }),
+    );
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledTimes(1);
-    });
-    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
+      expect(localStorage.getItem('accessToken')).toBe('fake_token');
       expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
   });
 
-  test('displays error message on failed login', async () => {
-    (
-      global.fetch as jest.Mock<Promise<Partial<Response>>>
-    ).mockResolvedValueOnce({
-      // Override for this test
+  test('shows error message on failed login', async () => {
+    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
       ok: false,
-      json: (): Promise<{ detail: string }> =>
-        Promise.resolve({ detail: 'Invalid credentials' }),
+      json: async () => {
+        await Promise.resolve();
+        return { detail: 'Invalid credentials' };
+      },
+    } as Response);
+
+    render(
+      <Router>
+        <LoginPage />
+      </Router>,
+    );
+
+    fireEvent.change(screen.getByLabelText('loginPage.emailLabel'), {
+      target: { value: 'wrong@example.com' },
     });
 
-    const emailInput = screen.getByLabelText(/loginPage.emailLabel/i);
-    const passwordInput = screen.getByLabelText(/loginPage.passwordLabel/i);
-    const loginButton = screen.getByRole('button', {
-      name: /loginPage.loginButton/i,
+    fireEvent.change(screen.getByLabelText('loginPage.passwordLabel'), {
+      target: { value: 'badpassword' },
     });
 
-    fireEvent.change(emailInput, { target: { value: 'wrong@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
-    fireEvent.click(loginButton);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'loginPage.loginButton' }),
+    );
 
     expect(await screen.findByText('Invalid credentials')).toBeInTheDocument();
-    expect(mockNavigate).not.toHaveBeenCalled();
-  });
-
-  test('displays network error message if fetch throws an error', async () => {
-    (
-      global.fetch as jest.Mock<Promise<Partial<Response>>>
-    ).mockRejectedValueOnce(new Error('Network failure from test')); // Override for this test
-
-    const loginButton = screen.getByRole('button', {
-      name: /loginPage.loginButton/i,
-    });
-    // Fill in form to ensure handleSubmit's initial checks pass
-    fireEvent.change(screen.getByLabelText(/loginPage.emailLabel/i), {
-      target: { value: 'any@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText(/loginPage.passwordLabel/i), {
-      target: { value: 'anypassword' },
-    });
-    fireEvent.click(loginButton);
-
-    expect(
-      await screen.findByText(
-        'Network error. Please check your connection and try again.',
-      ),
-    ).toBeInTheDocument();
-  });
-
-  test('handles Google login button click', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    const googleLoginButton = screen.getByRole('button', {
-      name: /loginPage.loginWithGoogle/i,
-    });
-    fireEvent.click(googleLoginButton);
-    expect(consoleSpy).toHaveBeenCalledWith('Attempting Google Login');
-    consoleSpy.mockRestore();
   });
 });

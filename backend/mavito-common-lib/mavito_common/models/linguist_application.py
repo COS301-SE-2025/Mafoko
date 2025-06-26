@@ -7,20 +7,19 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
 from mavito_common.db.base_class import Base
-from mavito_common.models.user import User  # Import the User model
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mavito_common.models.user import User
 
 
 class ApplicationStatus(str, enum.Enum):
-    """Enum for the status of a linguist application."""
-
     pending = "pending"
     approved = "approved"
     rejected = "rejected"
 
 
 class LinguistApplication(Base):
-    """Database model for linguist applications."""
-
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
@@ -32,7 +31,6 @@ class LinguistApplication(Base):
         default=ApplicationStatus.pending,
         nullable=False,
     )
-
     id_document_url: Mapped[str] = mapped_column(String, nullable=False)
     cv_document_url: Mapped[str] = mapped_column(String, nullable=False)
     certifications_document_url: Mapped[str | None] = mapped_column(
@@ -41,7 +39,6 @@ class LinguistApplication(Base):
     research_papers_document_url: Mapped[str | None] = mapped_column(
         String, nullable=True
     )
-
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -49,5 +46,4 @@ class LinguistApplication(Base):
         DateTime(timezone=True), nullable=True
     )
 
-    # Define the many-to-one relationship back to the User
-    user: Mapped["User"] = relationship(back_populates="linguist_application")
+    user: Mapped["User"] = relationship("User", back_populates="linguist_application")

@@ -27,6 +27,9 @@ services:
     volumes:
       - ./auth-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
+      - ./dsfsi_sa_key.json:/app/sa-key.json:ro   
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json        
     depends_on:
       - db
     command: >
@@ -81,6 +84,9 @@ services:
     volumes:
       - ./linguist-application-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
+      - ./dsfsi_sa_key.json:/app/sa-key.json:ro   
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json        
     depends_on:
       - db
     command: >
