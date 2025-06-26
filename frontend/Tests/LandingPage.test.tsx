@@ -45,10 +45,10 @@ describe('LandingPage', () => {
     );
 
     const registerBtn = screen.getByRole('link', {
-      name: 'landingPage.registerButton',
+      name: /register/i,
     });
     const loginBtn = screen.getByRole('link', {
-      name: 'landingPage.loginButton',
+      name: /login/i,
     });
 
     expect(registerBtn).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('LandingPage', () => {
     const year = new Date().getFullYear().toString();
     expect(screen.getByText((text) => text.includes(year))).toBeInTheDocument();
     expect(
-      screen.getByText((text) => text.includes('Mavito Project')),
+      screen.getByText((text) => text.includes('Marito Project')),
     ).toBeInTheDocument();
   });
 });
