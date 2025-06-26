@@ -45,7 +45,7 @@ def generate_signed_url(
 
         blob = bucket.blob(unique_file_key)
 
-        url = blob.generate_signed_url_v4(
+        url = blob.generate_signed_url(
             version="v4",
             method="PUT",
             expiration=timedelta(minutes=15),
