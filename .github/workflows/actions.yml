@@ -111,3 +111,7 @@ jobs:
         run: |
           npx eslint . --ext .ts,.tsx
           npx prettier --check .
+
+      - name: Run Frontend Tests
+        run: |
+          npx vitest run
