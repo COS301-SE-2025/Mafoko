@@ -7,6 +7,7 @@ from mavito_common.models.user import User as UserModel, UserRole
 from mavito_common.db.session import get_db
 from mavito_common.schemas.user import User as UserSchema
 from typing import List
+from app.utils.gcs import list_user_uploads, generate_download_url
 
 router = APIRouter()
 
@@ -48,3 +49,17 @@ async def get_all_users(
     """
     users = await crud_user.get_all_users(db)
     return [UserSchema.model_validate(user) for user in users]
+
+@router.get("/users/{user_id}/uploads", response_model=List[str])
+def get_user_uploads(
+    user_id: UUID,
+    current_user: UserModel = Depends(deps.get_current_active_admin),
+):
+    return list_user_uploads(str(user_id))
+
+@router.get("/download-url", response_model=str)
+def get_signed_download_url(
+    gcs_key: str,
+    current_user: UserModel = Depends(deps.get_current_active_admin),
+):
+    return generate_download_url(gcs_key)
