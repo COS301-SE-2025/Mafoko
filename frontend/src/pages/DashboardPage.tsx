@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
-import '../styles/DashboardPage.css';
+import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 
 interface RecentTerm {
@@ -39,16 +39,17 @@ interface UserData {
 }
 
 const DashboardPage: React.FC = () => {
-  // Force light mode for this page
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Force dark mode for this page
   useEffect(() => {
-    const html = document.documentElement;
-    const prevClass = html.className;
-    html.classList.remove('dark');
-    html.classList.add('light');
-    return () => {
-      html.className = prevClass;
-    };
+    const stored = localStorage.getItem('darkMode');
+    if (stored) setIsDarkMode(stored === 'false');
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -290,7 +291,9 @@ const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div
+      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+    >
       {/* Navigation - using same pattern as GlossaryPage and HelpPage */}
       {isMobile ? (
         <Navbar />
@@ -325,7 +328,11 @@ const DashboardPage: React.FC = () => {
                     }}
                   >
                     <LanguageSwitcher />
-                    <h3>
+                    <h3
+                      style={{
+                        color: isDarkMode ? '#f0f0f0' : '#333333', // or your own theme colors
+                      }}
+                    >
                       {userData
                         ? `${userData.firstName} ${userData.lastName}`
                         : t('dashboard.userName')}
