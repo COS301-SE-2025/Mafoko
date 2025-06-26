@@ -50,6 +50,7 @@ async def get_all_users(
     users = await crud_user.get_all_users(db)
     return [UserSchema.model_validate(user) for user in users]
 
+
 @router.get("/users/{user_id}/uploads", response_model=List[str])
 def get_user_uploads(
     user_id: UUID,
@@ -57,9 +58,26 @@ def get_user_uploads(
 ):
     return list_user_uploads(str(user_id))
 
+
 @router.get("/download-url", response_model=str)
 def get_signed_download_url(
     gcs_key: str,
     current_user: UserModel = Depends(deps.get_current_active_admin),
 ):
     return generate_download_url(gcs_key)
+
+
+@router.get("/users-with-uploads", response_model=List[UserSchema])
+async def get_users_with_uploads(
+    db: AsyncSession = Depends(get_db),
+    current_user: UserModel = Depends(deps.get_current_active_admin),
+):
+    all_users = await crud_user.get_all_users(db)
+
+    users_with_uploads = []
+    for user in all_users:
+        uploads = list_user_uploads(str(user.id))
+        if uploads:  # If list is non-empty
+            users_with_uploads.append(UserSchema.model_validate(user))
+
+    return users_with_uploads
