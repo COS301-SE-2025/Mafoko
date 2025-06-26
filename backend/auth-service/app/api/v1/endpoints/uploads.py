@@ -13,6 +13,7 @@ router = APIRouter()
 
 class SignedUrlRequest(BaseModel):
     content_type: str
+    filename: str
 
 
 class SignedUrlResponse(BaseModel):
@@ -41,7 +42,7 @@ def generate_signed_url(
 
         # Create a unique key (path) for the file in the bucket,
         # associating it with the user's ID for organization and security.
-        unique_file_key = f"linguist-applications/{current_user.id}/{uuid.uuid4()}"
+        unique_file_key = f"linguist-applications/{current_user.id}/{uuid.uuid4()}-{request_body.filename}"
 
         blob = bucket.blob(unique_file_key)
 

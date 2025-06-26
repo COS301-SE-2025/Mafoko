@@ -51,12 +51,13 @@ async def get_all_users(
     return [UserSchema.model_validate(user) for user in users]
 
 
-@router.get("/users/{user_id}/uploads", response_model=List[str])
+@router.get("/users/{user_id}/uploads", response_model=List[dict])
 def get_user_uploads(
     user_id: UUID,
     current_user: UserModel = Depends(deps.get_current_active_admin),
 ):
-    return list_user_uploads(str(user_id))
+    uploads = list_user_uploads(str(user_id))
+    return [{"gcs_key": blob, "filename": blob.split("/")[-1]} for blob in uploads]
 
 
 @router.get("/download-url", response_model=str)

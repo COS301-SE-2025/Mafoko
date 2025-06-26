@@ -162,7 +162,10 @@ const RegistrationPage: React.FC = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${accessToken}`,
             },
-            body: JSON.stringify({ content_type: file.type }),
+            body: JSON.stringify({
+              content_type: file.type,
+              filename: file.name,
+            }),
           });
 
           if (!signedUrlRes.ok)
