@@ -78,7 +78,6 @@ body {
   background-color: #f8f9fa;
 }
 
-
 /* --- MOBILE LAYOUT (For screens 768px or less) --- */
 @media (max-width: 768px) {
   .landing-page-container {
@@ -113,7 +112,7 @@ body {
     min-height: auto;
     padding: 2rem 1rem;
   }
-  
+
   /* The footer now sits at the bottom of the content flow */
   .landing-footer {
     position: static;
