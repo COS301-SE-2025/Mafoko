@@ -4,6 +4,7 @@ spacy
 pytest
 httpx
 pytest-asyncio
+python-multipart
 psycopg2-binary
 ruff      
 black     
