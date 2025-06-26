@@ -11,11 +11,8 @@ import GettingStarted from './pages/help/GettingStarted';
 import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
 import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
-<<<<<<< frontend/admin-application
 import AdminPage from './pages/AdminPage.tsx';
-=======
 import GlossaryPage from './pages/GlossaryPage.tsx';
->>>>>>> develop
 import './App.css';
 
 function App() {
@@ -36,9 +33,7 @@ function App() {
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
-<<<<<<< frontend/admin-application
         <Route path="/admin" element={<AdminPage />} />
-=======
         <Route
           path="/glossary"
           element={
@@ -47,7 +42,6 @@ function App() {
             </div>
           }
         />
->>>>>>> develop
       </Routes>
     </div>
   );
