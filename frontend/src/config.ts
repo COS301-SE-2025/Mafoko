@@ -28,9 +28,17 @@ export const API_ENDPOINTS = {
   register: `${AUTH_SERVICE_URL}/api/v1/auth/register`,
   getMe: `${AUTH_SERVICE_URL}/api/v1/auth/me`,
   generateSignedUrl: `${AUTH_SERVICE_URL}/api/v1/uploads/generate-signed-url`,
-
+  getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
+  updateUserRole: (userId: string) =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
   // --- Linguist Application Service --- (NEW SECTION)
   createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
+  getUserUploads: (userId: string) =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/uploads`,
+  getSignedDownloadUrl: (gcsKey: string) =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/download-url?gcs_key=${encodeURIComponent(gcsKey)}`,
+  getUsersWithUploads: () =>
+    `${AUTH_SERVICE_URL}/api/v1/admin/users-with-uploads`,
 
   // --- Search Service ---
   search: `${SEARCH_SERVICE_URL}/api/v1/search`,
