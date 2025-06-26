@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
 from app.api.v1.endpoints import auth
 from app.api.v1.endpoints import uploads
+from app.api.v1.endpoints import admin
 
 app = FastAPI(title="Mavito Auth Service")
 
@@ -17,6 +18,7 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["Uploads"])
+app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 
 
 @app.get("/", tags=["Health Check"])
