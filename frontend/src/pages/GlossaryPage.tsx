@@ -779,13 +779,13 @@ const GlossaryPage = () => {
             <div
               className="glossary-download-section"
               style={{
-                padding: '0.75rem 0.75rem 0.75rem 1.5rem',
+                padding: '0.5rem 0.5rem 0.5rem 1rem',
                 borderTop: `1px solid #4a5568`,
                 backgroundColor: '#212431',
                 flexShrink: 0,
                 boxShadow: '0 -1px 3px 0 rgba(0, 0, 0, 0.1)',
-                minHeight: '80px',
-                maxHeight: '120px',
+                minHeight: '60px',
+                maxHeight: '80px',
                 marginRight: '0.75rem',
               }}
             >
@@ -799,22 +799,22 @@ const GlossaryPage = () => {
                 <div>
                   <h3
                     style={{
-                      fontSize: '1rem',
+                      fontSize: '0.9rem',
                       fontWeight: 600,
                       margin: 0,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem',
+                      gap: '0.4rem',
                       color: '#ffffff',
                     }}
                   >
-                    <Download size={16} />
+                    <Download size={14} />
                     Export Data
                   </h3>
                   <p
                     style={{
-                      margin: '0.25rem 0 0 0',
-                      fontSize: '0.75rem',
+                      margin: '0.2rem 0 0 0',
+                      fontSize: '0.7rem',
                       color: '#a0aec0',
                     }}
                   >
@@ -839,22 +839,22 @@ const GlossaryPage = () => {
                       className="glossary-download-btn"
                       disabled={isDownloading}
                       style={{
-                        padding: '0.5rem 1rem',
+                        padding: '0.25rem 0.5rem',
                         backgroundColor: isDownloading ? '#9ca3af' : '#f00a50',
                         color: 'white',
                         borderRadius: '4px',
-                        fontSize: '0.875rem',
+                        fontSize: '0.75rem',
                         fontWeight: 500,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem',
+                        gap: '0.375rem',
                         border: 'none',
                         cursor: isDownloading ? 'not-allowed' : 'pointer',
                       }}
                     >
-                      <Download size={16} />
+                      <Download size={12} />
                       {isDownloading ? 'Generating...' : 'Download Data'}
-                      <ChevronDown size={16} />
+                      <ChevronDown size={12} />
                     </button>
 
                     {showFormatDropdown && (
@@ -871,8 +871,8 @@ const GlossaryPage = () => {
                           boxShadow:
                             '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                           zIndex: 20,
-                          minWidth: '180px',
-                          padding: '0.5rem 0',
+                          minWidth: '140px',
+                          padding: '0.375rem 0',
                         }}
                       >
                         <button
@@ -899,19 +899,19 @@ const GlossaryPage = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
+                            fontSize: '0.8rem',
                             color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#1e40af' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#1e40af' }}>
+                            <FileType size={16} />
                           </div>
                           CSV Format
                         </button>
@@ -940,19 +940,19 @@ const GlossaryPage = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
+                            fontSize: '0.8rem',
                             color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#1f2937' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#10b981' }}>
+                            <FileType size={16} />
                           </div>
                           JSON Format
                         </button>
@@ -981,19 +981,19 @@ const GlossaryPage = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
+                            fontSize: '0.8rem',
                             color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#047857' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#047857' }}>
+                            <FileType size={16} />
                           </div>
                           HTML Table
                         </button>
@@ -1039,19 +1039,19 @@ const GlossaryPage = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.5rem',
+                            padding: '0.375rem 0.75rem',
                             width: '100%',
                             textAlign: 'left',
                             backgroundColor: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.875rem',
+                            fontSize: '0.8rem',
                             color: '#ffffff',
                           }}
                         >
-                          <div style={{ width: '18px', color: '#dc2626' }}>
-                            <FileType size={18} />
+                          <div style={{ width: '16px', color: '#dc2626' }}>
+                            <FileType size={16} />
                           </div>
                           {isDownloading ? 'Generating PDF...' : 'PDF Document'}
                         </button>
