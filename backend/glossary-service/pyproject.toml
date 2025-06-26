@@ -1,0 +1,16 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.mypy]
+# This tells mypy to ignore errors from any library that doesn't have type hints
+ignore_missing_imports = true
+# Enforce that all function definitions must have type annotations
+disallow_untyped_defs = true
+
+# This section is specifically for modules we know cause issues in tests
+[[tool.mypy.overrides]]
+module = [
+    "pytest_asyncio.*",
+    "httpx.*"
+]
+ignore_missing_imports = true

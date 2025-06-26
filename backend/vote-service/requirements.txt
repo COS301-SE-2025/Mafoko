@@ -10,5 +10,9 @@ python-multipart
 PyJWT
 ruff      
 black     
-mypy    
+mypy 
+pytest   
+httpx
+pytest-asyncio
+psycopg2-binary
 mavito-common-lib==0.1.0

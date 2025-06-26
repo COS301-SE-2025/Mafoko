@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+spacy
+pytest
+httpx
+pytest-asyncio
+psycopg2-binary
+ruff      
+black     
+mypy      
+mavito-common-lib==0.1.0

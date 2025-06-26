@@ -1,47 +1,47 @@
-# User Story #2: UpVote System
+# User Story #2: Crowdsourced Term Validation
 
-**ID:** US002 (Mavito Project)  
-**Title:** Crowdsourced Validation via UpVoting  
+**ID:** US002 (Mavito Project)
+**Title:** Crowdsourced Validation via Up/Down Voting
 
-**As a:** Mavito application user (e.g., language enthusiast, linguist, or researcher) who wants to contribute to the accuracy and quality of lexicon entries,  
-**I want:** to upvote (or downvote) suggested changes or comments on terms in the lexicon,  
-**So that:** the community can collectively validate contributions, and moderators can prioritize high-quality updates for integration into the central repository.  
-
----
-## Acceptance Criteria:
-
-1. **Voting Interface:**  
-   - [ ] **Given** I am viewing a term entry with user-submitted comments or suggested changes,  
-   - [ ] **Then** I see an option to upvote or downvote each contribution (e.g., thumbs-up/thumbs-down buttons).  
-   - [ ] **And** the current vote count is displayed next to each contribution.  
-
-2. **Vote Submission:**  
-   - [ ] **Given** I am logged in and have not yet voted on a specific contribution,  
-   - [ ] **When** I click the upvote/downvote button,  
-   - [ ] **Then** my vote is recorded immediately (if online) or queued for sync (if offline).  
-   - [ ] **And** the UI reflects my vote (e.g., highlighted button) and updates the vote count.  
-
-3. **Prevent Duplicate Voting:**  
-   - [ ] **Given** I have already voted on a contribution,  
-   - [ ] **Then** the UI prevents me from voting again (unless I undo my vote).  
-
-4. **Offline Handling:**  
-   - [ ] **Given** I vote while offline,  
-   - [ ] **Then** the vote is stored locally and synced to the central repository when I reconnect.  
-
-5. **Moderation Visibility (Optional Enhancement):**  
-   - [ ] **Given** I am a moderator,  
-   - [ ] **Then** I can filter contributions by vote count to prioritize high-quality submissions.  
-
-6. **Feedback Transparency:**  
-   - [ ] **Given** a contribution receives significant downvotes,  
-   - [ ] **Then** the system may flag it for review (future enhancement).  
+**As a:** Marito application user (e.g., linguist or contributor)
+**I want:** to upvote or downvote individual terms in the lexicon
+**So that:** the community can collectively validate the quality and accuracy of terms, helping moderators and other users identify high-quality entries.
 
 ---
-### Notes/Assumptions:
-- Voting requires user authentication to prevent abuse.  
-- Vote counts are public to encourage transparency.  
-- Offline votes are treated as "pending" until synced.  
-- Future enhancements could include:  
-  - Gamification (e.g., badges for active voters).  
-  - Weighted voting for trusted users (e.g., linguists).  
+
+## Acceptance Criteria
+
+1. **Voting Interface:**
+    * [x] **Given** I am viewing a term on a term card,
+    * [x] **Then** I see "thumbs-up" and "thumbs-down" buttons next to the term.
+    * [x] **And** the current total upvote and downvote counts are displayed with the buttons.
+
+2. **Casting a Vote:**
+    * [x] **Given** I am logged in and have not yet voted on a specific term,
+    * [x] **When** I click the "thumbs-up" button,
+    * [x] **Then** my vote is recorded, the upvote count increases by 1, and the button becomes highlighted.
+
+3. **Changing a Vote:**
+    * [x] **Given** I have already downvoted a term,
+    * [x] **When** I click the "thumbs-up" button,
+    * [x] **Then** my vote is changed from a downvote to an upvote, the downvote count decreases by 1, the upvote count increases by 1, and the button highlights are updated.
+
+4. **Removing a Vote (Un-voting):**
+    * [x] **Given** I have already upvoted a term,
+    * [x] **When** I click the "thumbs-up" button again,
+    * [x] **Then** my vote is removed, the upvote count decreases by 1, and the button is no longer highlighted.
+
+5. **Offline Voting (NEW):**
+    * [x] **Given** I am offline and I click a vote button,
+    * [x] **Then** the UI should update optimistically to show my vote.
+    * [x] **And** the vote action should be queued locally.
+    * [x] **When** my internet connection is restored,
+    * [x] **Then** the queued vote should be automatically sent to the server.
+
+---
+
+### Notes/Assumptions
+
+* Voting requires user authentication to prevent abuse.
+
+* The system prevents a user from casting the same vote multiple times.

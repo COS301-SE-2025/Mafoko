@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import LeftPane from '../components/dashboard/LeftPane.tsx';
+import LeftNav from '../components/ui/LeftNav.tsx';
+import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/DashboardPage.css';
 import { API_ENDPOINTS } from '../config';
@@ -38,6 +39,17 @@ interface UserData {
 }
 
 const DashboardPage: React.FC = () => {
+  // Force light mode for this page
+  useEffect(() => {
+    const html = document.documentElement;
+    const prevClass = html.className;
+    html.classList.remove('dark');
+    html.classList.add('light');
+    return () => {
+      html.className = prevClass;
+    };
+  }, []);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeMenuItem, setActiveMenuItem] = useState('dashboard');
@@ -47,7 +59,7 @@ const DashboardPage: React.FC = () => {
   >([]);
   const [showRecentTerms, setShowRecentTerms] = useState(false);
   const [showCommunityActivity, setShowCommunityActivity] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const [userData, setUserData] = useState<UserData | null>(null);
   const [avatarInitials, setAvatarInitials] = useState<string>('U');
@@ -262,67 +274,36 @@ const DashboardPage: React.FC = () => {
       .catch(console.error);
   }, [navigate]);
 
-  const handleMenuItemClick = (item: string) => {
-    setActiveMenuItem(item);
-    if (window.innerWidth <= 768) {
-      setIsMobileMenuOpen(false);
-    }
-    // Navigation logic for left pane using React Router
-    if (item === 'dashboard') {
-      void navigate('/dashboard');
-    } else if (item === 'search') {
-      void navigate('/search');
-    } else if (item === 'saved') {
-      void navigate('/saved-terms');
-    } else if (item === 'analytics') {
-      void navigate('/analytics');
-    }
-  };
+  // Responsive navigation effect
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleQuickAction = (action: string) => {
     console.log(`Quick action clicked: ${action}`);
   };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
   return (
-    <div
-      className={`dashboard-container ${
-        isMobileMenuOpen ? 'mobile-menu-is-open' : ''
-      }`}
-    >
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-menu-overlay"
-          onClick={toggleMobileMenu}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              toggleMobileMenu();
-              return;
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Close menu"
+    <div className="dashboard-container">
+      {/* Navigation - using same pattern as GlossaryPage and HelpPage */}
+      {isMobile ? (
+        <Navbar />
+      ) : (
+        <LeftNav
+          activeItem={activeMenuItem}
+          setActiveItem={setActiveMenuItem}
         />
       )}
-      <LeftPane activeItem={activeMenuItem} onItemClick={handleMenuItemClick} />
 
       <div className="main-content">
         <div className="top-bar">
-          <button
-            className="hamburger-icon"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-            type="button"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
           <div className="welcome-section">
-            {' '}
             <h1 className="welcome-title">{t('dashboard.welcome')}</h1>
           </div>
           {isLoadingUserData ? (

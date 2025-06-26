@@ -27,6 +27,9 @@ services:
     volumes:
       - ./auth-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
+      - ./dsfsi_sa_key.json:/app/sa-key.json:ro   
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json        
     depends_on:
       - db
     command: >
@@ -81,6 +84,9 @@ services:
     volumes:
       - ./linguist-application-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
+      - ./dsfsi_sa_key.json:/app/sa-key.json:ro   
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json        
     depends_on:
       - db
     command: >
@@ -106,6 +112,26 @@ services:
       sh -c "pip install -e /mavito-common-lib-src && 
              pip install --no-cache-dir -r /app/requirements.txt && 
              uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
+
+  glossary-service:
+    build:
+      context: .
+      dockerfile: ./glossary-service/Dockerfile
+    container_name: mavito_glossary_service
+    env_file:
+      - ./.env
+    ports:
+      - "8006:8080" # Assign a new port
+    volumes:
+      - ./glossary-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt && 
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"             
 
   alembic-service:
     build:
