@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import LeftNav from '../components/ui/LeftNav.tsx';
@@ -304,7 +304,11 @@ const DashboardPage: React.FC = () => {
       <div className="main-content">
         <div className="top-bar">
           <div className="welcome-section">
-            <h1 className="welcome-title">{t('dashboard.welcome')}</h1>
+            <h1 className="welcome-title">
+              {userData
+                ? `Welcome back, ${userData.firstName}${userData.lastName ? ' ' + userData.lastName : ''}`
+                : t('dashboard.welcome')}
+            </h1>
           </div>
           {isLoadingUserData ? (
             <div className="profile-section">Loading profile...</div>
