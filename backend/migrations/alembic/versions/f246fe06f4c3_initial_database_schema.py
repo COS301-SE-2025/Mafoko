@@ -5,15 +5,16 @@ Revises: 352d380e9b85
 Create Date: 2025-06-26 10:29:39.110290
 
 """
+
 from typing import Sequence, Union
 
-from alembic import op # noqa: F401
-import sqlalchemy as sa # noqa: F401
+from alembic import op  # noqa: F401
+import sqlalchemy as sa  # noqa: F401
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f246fe06f4c3'
-down_revision: Union[str, Sequence[str], None] = '352d380e9b85'
+revision: str = "f246fe06f4c3"
+down_revision: Union[str, Sequence[str], None] = "352d380e9b85"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

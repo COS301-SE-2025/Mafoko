@@ -33,8 +33,12 @@ class LinguistApplication(Base):
     )
     id_document_url: Mapped[str] = mapped_column(String, nullable=False)
     cv_document_url: Mapped[str] = mapped_column(String, nullable=False)
-    certifications_document_url: Mapped[str | None] = mapped_column(String, nullable=True)
-    research_papers_document_url: Mapped[str | None] = mapped_column(String, nullable=True)
+    certifications_document_url: Mapped[str | None] = mapped_column(
+        String, nullable=True
+    )
+    research_papers_document_url: Mapped[str | None] = mapped_column(
+        String, nullable=True
+    )
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

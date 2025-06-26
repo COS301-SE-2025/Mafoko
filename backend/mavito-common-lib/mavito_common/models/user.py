@@ -26,7 +26,9 @@ class User(Base):
     )
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
     last_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    email: Mapped[str] = mapped_column(String(100), unique=True, index=True, nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(100), unique=True, index=True, nullable=False
+    )
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[Optional[UserRole]] = mapped_column(
         SaEnum(UserRole, name="user_role_enum_type_sqla"), nullable=True
@@ -34,15 +36,23 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
-    last_login: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_login: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     profile_pic_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    password_reset_token: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
-    verification_token: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    password_reset_token: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, index=True
+    )
+    verification_token: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, index=True
+    )
     account_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0)
-    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     linguist_application: Mapped[Optional["LinguistApplication"]] = relationship(
         "LinguistApplication", back_populates="user", uselist=False

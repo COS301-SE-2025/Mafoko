@@ -5,15 +5,16 @@ Revises: 0fd138ff09d4
 Create Date: 2025-06-26 10:19:03.383869
 
 """
+
 from typing import Sequence, Union
 
-from alembic import op # noqa: F401
-import sqlalchemy as sa # noqa: F401
+from alembic import op  # noqa: F401
+import sqlalchemy as sa  # noqa: F401
 
 
 # revision identifiers, used by Alembic.
-revision: str = '352d380e9b85'
-down_revision: Union[str, Sequence[str], None] = '0fd138ff09d4'
+revision: str = "352d380e9b85"
+down_revision: Union[str, Sequence[str], None] = "0fd138ff09d4"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
