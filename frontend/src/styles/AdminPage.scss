@@ -25,7 +25,8 @@ $text-dark: #ffffff;
     display: flex;
     box-sizing: border-box;
     background-color: transparent;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     height: 100vh;
 
     .admin-main-content {
@@ -56,7 +57,7 @@ $text-dark: #ffffff;
           padding: 2rem;
 
           .admin-header-content {
-            max-width: none; 
+            max-width: none;
             margin: 0;
             display: flex;
             justify-content: space-between;
@@ -89,7 +90,7 @@ $text-dark: #ffffff;
             .admin-stats {
               display: flex;
               gap: 1.5rem;
-              flex-shrink: 0; 
+              flex-shrink: 0;
 
               .stat-card {
                 background: rgba(255, 255, 255, 0.05);
@@ -171,7 +172,7 @@ $text-dark: #ffffff;
               display: flex;
               gap: 1rem;
               align-items: center;
-              flex-shrink: 0; 
+              flex-shrink: 0;
 
               .filter-group {
                 display: flex;
@@ -207,7 +208,7 @@ $text-dark: #ffffff;
           flex: 1;
           padding: 2rem;
           width: 100%;
-          min-width: 0; 
+          min-width: 0;
 
           .loading-state {
             text-align: center;
@@ -228,9 +229,9 @@ $text-dark: #ffffff;
 
             .applications-table {
               width: 100%;
-              min-width: 1200px; 
+              min-width: 1200px;
               border-collapse: collapse;
-              table-layout: fixed; 
+              table-layout: fixed;
 
               thead {
                 background-color: rgba(0, 0, 0, 0.05);
@@ -245,14 +246,26 @@ $text-dark: #ffffff;
                   letter-spacing: 0.5px;
                   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
                   white-space: nowrap;
-                  
+
                   // Fixed: Define specific column widths
-                  &:nth-child(1) { width: 35%; } // Applicant
-                  &:nth-child(2) { width: 12%; } // Status
-                  &:nth-child(3) { width: 15%; } // Applied
-                  &:nth-child(4) { width: 15%; } // Languages
-                  &:nth-child(5) { width: 13%; } // Documents
-                  &:nth-child(6) { width: 10%; } // Actions
+                  &:nth-child(1) {
+                    width: 35%;
+                  } // Applicant
+                  &:nth-child(2) {
+                    width: 12%;
+                  } // Status
+                  &:nth-child(3) {
+                    width: 15%;
+                  } // Applied
+                  &:nth-child(4) {
+                    width: 15%;
+                  } // Languages
+                  &:nth-child(5) {
+                    width: 13%;
+                  } // Documents
+                  &:nth-child(6) {
+                    width: 10%;
+                  } // Actions
                 }
               }
 
@@ -920,7 +933,8 @@ $text-dark: #ffffff;
 }
 
 // Badge styles
-.role-badge, .status-badge {
+.role-badge,
+.status-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -992,33 +1006,33 @@ $text-dark: #ffffff;
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  
+
   .unauthorized-content {
     text-align: center;
     max-width: 400px;
-    
+
     .unauthorized-icon {
       color: var(--warning-color, #f59e0b);
       margin-bottom: 1.5rem;
     }
-    
+
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
       color: var(--text-primary);
     }
-    
+
     p {
       color: var(--text-secondary);
       margin-bottom: 1rem;
     }
-    
+
     .unauthorized-actions {
       display: flex;
       gap: 1rem;
       justify-content: center;
       margin-top: 2rem;
-      
+
       button {
         padding: 0.75rem 1.5rem;
         border-radius: 6px;
@@ -1026,21 +1040,21 @@ $text-dark: #ffffff;
         cursor: pointer;
         font-weight: 500;
         transition: all 0.2s;
-        
+
         &.back-button {
           background: var(--primary-color);
           color: white;
-          
+
           &:hover {
             opacity: 0.9;
           }
         }
-        
+
         &.login-button {
           background: transparent;
           color: var(--text-primary);
           border: 1px solid var(--border-color);
-          
+
           &:hover {
             background: var(--hover-bg);
           }
