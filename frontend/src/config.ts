@@ -30,7 +30,7 @@ export const API_ENDPOINTS = {
   generateSignedUrl: `${AUTH_SERVICE_URL}/api/v1/uploads/generate-signed-url`,
 
   // --- Linguist Application Service --- (NEW SECTION)
-  createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/applications/`,
+  createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
 
   // --- Search Service ---
   search: `${SEARCH_SERVICE_URL}/api/v1/search`,
