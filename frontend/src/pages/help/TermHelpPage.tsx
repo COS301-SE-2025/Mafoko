@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
-
 const TermHelpPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
@@ -255,7 +254,7 @@ const TermHelpPage: React.FC = () => {
                         }}
                       >
                         <source
-                          src="/videos/community-features.mp4"
+                          src="/Mavito/videos/search-page-tutorial.mp4"
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
@@ -333,30 +332,6 @@ const TermHelpPage: React.FC = () => {
                       </div>
                     </div>
                     <br />
-                    <p>
-                      <em>
-                        A video tutorial is available below that demonstrates
-                        the full filter and sorting workflow.
-                      </em>
-                    </p>
-
-                    <div className="video-container">
-                      <video
-                        controls
-                        width="100%"
-                        style={{
-                          maxWidth: '800px',
-                          marginTop: '2rem',
-                          borderRadius: '0.75rem',
-                        }}
-                      >
-                        <source
-                          src="/videos/community-features.mp4"
-                          type="video/mp4"
-                        />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
                   </section>
 
                   {/* OFFLINE USAGE */}
@@ -407,7 +382,7 @@ const TermHelpPage: React.FC = () => {
                         }}
                       >
                         <source
-                          src="/videos/community-features.mp4"
+                          src="/Mavito/videos/download-dictionary-turotial.mp4"
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
