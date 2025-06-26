@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock
 
 # from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -51,8 +51,14 @@ async def mock_get_terms_by_category(category_name: str):
         raise HTTPException(
             status_code=404, detail=f"No terms found for category: {category_name}"
         )
+    # Return terms that match the category
     return [
-        {"id": "123", "term": "hello", "definition": "A greeting", "category": "Common"}
+        {
+            "id": "123",
+            "term": "hello",
+            "definition": "A greeting",
+            "category": category_name,
+        }
     ]
 
 
@@ -60,12 +66,20 @@ async def mock_get_terms_by_category(category_name: str):
 async def mock_search_terms(query: str):
     if query == "nonexistent":
         return []
-    return [{"id": "123", "term": "hello", "definition": "A greeting"}]
+    return [
+        {"id": "123", "term": "hello", "definition": "A greeting", "category": "Common"}
+    ]
 
 
 @mock_router.post("/search")
-async def mock_advanced_search():
-    return {"results": [], "total": 0, "page": 1, "limit": 10, "pages": 0}
+async def mock_advanced_search(
+    query: str = Form(None),
+    domain: str = Form(None),
+    language: str = Form(None),
+    page: int = Form(1),
+    limit: int = Form(10),
+):
+    return {"results": [], "total": 0, "page": page, "limit": limit, "pages": 0}
 
 
 @mock_router.get("/languages")
@@ -95,7 +109,7 @@ async def mock_get_stats():
 
 @mock_router.get("/terms/{term_id}/translations")
 async def mock_get_term_translations(term_id: str):
-    if term_id == "nonexistent":
+    if term_id in ["nonexistent", "nonexistent-id"]:
         from fastapi import HTTPException
 
         raise HTTPException(status_code=404, detail="Term not found")
@@ -235,7 +249,7 @@ class TestBasicEndpoints:
 
     def test_advanced_search_basic(self, client):
         """Test basic advanced search."""
-        response = client.post("/search", json={"query": "hello"})
+        response = client.post("/search", data={"query": "hello"})
         assert response.status_code == 200
         data = response.json()
         assert "results" in data
@@ -313,11 +327,11 @@ class TestInputValidation:
     def test_advanced_search_boundary_values(self, client):
         """Test advanced search with boundary values."""
         # Test with negative page numbers
-        response = client.post("/search", json={"page": -1, "limit": 10})
+        response = client.post("/search", data={"page": -1, "limit": 10})
         assert response.status_code in [200, 422]
 
         # Test with zero limit
-        response = client.post("/search", json={"page": 1, "limit": 0})
+        response = client.post("/search", data={"page": 1, "limit": 0})
         assert response.status_code in [200, 422]
 
     def test_translation_edge_cases(self, client):
@@ -473,50 +487,480 @@ class TestPerformanceScenarios:
             assert response == first_response
 
 
-# Test markers for categorization
-# class TestMarkers:
-#     """Test pytest markers functionality."""
+@pytest.mark.integration
+class TestGlossaryIntegrationWorkflows:
+    """Integration tests that test complete workflows across multiple endpoints."""
 
-#     @pytest.mark.unit
-#     def test_unit_marker(self):
-#         """Test with unit marker."""
-#         assert True
+    def test_category_exploration_workflow(self, client):
+        """
+        Test the complete workflow of exploring categories and their terms.
 
-#     @pytest.mark.integration
-#     def test_integration_marker(self):
-#         """Test with integration marker."""
-#         assert True
+        Workflow:
+        1. Get all available categories
+        2. Select a category and get its terms
+        3. Verify all terms belong to the selected category
+        4. Get translations for one of the terms
+        """
+        # Step 1: Get all categories
+        response = client.get("/categories")
+        assert response.status_code == 200
+        categories = response.json()
 
-#     @pytest.mark.slow
-#     def test_slow_marker(self):
-#         """Test with slow marker."""
-#         assert True
+        assert isinstance(categories, list)
+        assert len(categories) > 0
+        assert "Common" in categories
+
+        # Step 2: Get terms for a specific category
+        response = client.get("/categories/Common/terms")
+        assert response.status_code == 200
+        terms = response.json()
+
+        # Step 3: Verify all terms belong to the category
+        assert isinstance(terms, list)
+        assert len(terms) > 0
+
+        for term in terms:
+            assert term["category"] == "Common"
+            assert "id" in term
+            assert "term" in term
+            assert "definition" in term
+
+        # Step 4: Get translations for the first term
+        if terms:
+            term_id = terms[0]["id"]
+            response = client.get(f"/terms/{term_id}/translations")
+            assert response.status_code == 200
+
+            translation_data = response.json()
+            assert "term" in translation_data
+            assert "translations" in translation_data
+
+    def test_search_and_translation_workflow(self, client):
+        """
+        Test searching for terms and then getting their translations.
+
+        Workflow:
+        1. Search for terms
+        2. Get translations for found terms
+        3. Verify translation data consistency
+        """
+        # Step 1: Search for terms
+        response = client.get("/search?query=hello")
+        assert response.status_code == 200
+        search_results = response.json()
+
+        assert isinstance(search_results, list)
+        assert len(search_results) > 0
+
+        # Step 2: Get translations for the first result
+        first_term = search_results[0]
+        term_id = first_term["id"]
+
+        response = client.get(f"/terms/{term_id}/translations")
+        assert response.status_code == 200
+
+        # Step 3: Verify translation data
+        translation_data = response.json()
+        assert translation_data["term"] == "hello"
+        assert "translations" in translation_data
+        assert isinstance(translation_data["translations"], dict)
+        assert "Spanish" in translation_data["translations"]
+        assert translation_data["translations"]["Spanish"] == "hola"
+
+    def test_advanced_search_workflow(self, client):
+        """
+        Test advanced search with various parameters and pagination.
+
+        Workflow:
+        1. Test basic advanced search
+        2. Test with filters
+        3. Test pagination
+        4. Verify response consistency
+        """
+        # Step 1: Basic advanced search
+        response = client.post(
+            "/search", data={"query": "hello", "page": 1, "limit": 5}
+        )
+        assert response.status_code == 200
+        data = response.json()
+
+        assert "results" in data
+        assert "total" in data
+        assert "page" in data
+        assert "limit" in data
+        assert "pages" in data
+        assert data["page"] == 1
+        assert data["limit"] == 5  # Should now work with form data
+
+        # Step 2: Search with filters (even if empty results)
+        response = client.post(
+            "/search",
+            data={
+                "query": "hello",
+                "domain": "Common",
+                "language": "English",
+                "page": 1,
+                "limit": 10,
+            },
+        )
+        assert response.status_code == 200
+        filtered_data = response.json()
+        assert "results" in filtered_data
+
+        # Step 3: Test pagination
+        response = client.post("/search", data={"page": 2, "limit": 2})
+        assert response.status_code == 200
+        page_data = response.json()
+        assert page_data["page"] == 2
+        assert page_data["limit"] == 2
+
+    def test_batch_translation_workflow(self, client):
+        """
+        Test batch translation of multiple terms.
+
+        Workflow:
+        1. Get available terms through search
+        2. Request batch translation
+        3. Verify translation results structure
+        """
+        # Step 1: Search for terms to translate
+        response = client.get("/search?query=hello")
+        assert response.status_code == 200
+
+        # Step 2: Request batch translation
+        terms_to_translate = ["hello"]
+        response = client.post(
+            "/translate",
+            json={
+                "terms": terms_to_translate,
+                "source_language": "English",
+                "target_languages": ["Spanish", "French"],
+            },
+        )
+        assert response.status_code == 200
+        translation_results = response.json()
+
+        # Step 3: Verify results structure
+        assert "results" in translation_results
+        assert isinstance(translation_results["results"], list)
+
+    def test_statistics_and_metadata_consistency(self, client):
+        """
+        Test consistency between statistics and other metadata endpoints.
+
+        Workflow:
+        1. Get glossary statistics
+        2. Get available languages
+        3. Get domains
+        4. Verify data consistency across endpoints
+        """
+        # Step 1: Get statistics
+        response = client.get("/stats")
+        assert response.status_code == 200
+        stats = response.json()
+
+        assert "total_terms" in stats
+        assert "languages_count" in stats
+        assert "categories_count" in stats
+        assert "languages" in stats
+        assert stats["total_terms"] == 100
+        assert stats["languages_count"] == 5
+        assert stats["categories_count"] == 10
+
+        # Step 2: Get languages
+        response = client.get("/languages")
+        assert response.status_code == 200
+        languages = response.json()
+
+        assert isinstance(languages, dict)
+        assert "English" in languages
+        assert "Afrikaans" in languages
+
+        # Step 3: Get domains
+        response = client.get("/domains")
+        assert response.status_code == 200
+        domains = response.json()
+
+        assert isinstance(domains, list)
+        assert "Common" in domains
+        assert "Geography" in domains
+        assert "Science" in domains
+
+        # Step 4: Verify consistency
+        # Stats should have at least the languages we see in the languages endpoint
+        stats_languages = stats["languages"]
+        assert "English" in stats_languages
+        assert "Afrikaans" in stats_languages
+
+    def test_random_terms_exploration_workflow(self, client):
+        """
+        Test getting random terms and exploring their details.
+
+        Workflow:
+        1. Get random terms
+        2. Get translations for a random term
+        3. Search for related terms
+        """
+        # Step 1: Get random terms
+        response = client.get("/random")
+        assert response.status_code == 200
+        random_terms = response.json()
+
+        assert isinstance(random_terms, list)
+        assert len(random_terms) > 0
+
+        # Step 2: Get translations for the first random term
+        term = random_terms[0]
+        assert "id" in term
+        assert "term" in term
+        assert "definition" in term
+
+        response = client.get(f"/terms/{term['id']}/translations")
+        assert response.status_code == 200
+
+        translation_data = response.json()
+        assert translation_data["term"] == term["term"]
+
+        # Step 3: Search for the same term to verify consistency
+        response = client.get(f"/search?query={term['term']}")
+        assert response.status_code == 200
+        search_results = response.json()
+
+        # Should find the term in search results
+        found_terms = [t for t in search_results if t["term"] == term["term"]]
+        assert len(found_terms) > 0
+
+    def test_cross_endpoint_data_consistency(self, client):
+        """
+        Test data consistency across different endpoints.
+
+        This ensures that the same term appears consistently across different endpoints.
+        """
+        # Get a term through search
+        response = client.get("/search?query=hello")
+        assert response.status_code == 200
+        search_results = response.json()
+        assert len(search_results) > 0
+
+        search_term = search_results[0]
+
+        # Get the same term through category endpoint
+        response = client.get(f"/categories/{search_term['category']}/terms")
+        assert response.status_code == 200
+        category_terms = response.json()
+
+        # Find the same term in category results
+        matching_terms = [t for t in category_terms if t["id"] == search_term["id"]]
+        assert len(matching_terms) == 1
+
+        category_term = matching_terms[0]
+
+        # Verify consistency
+        assert category_term["term"] == search_term["term"]
+        assert category_term["definition"] == search_term["definition"]
+        assert category_term["category"] == search_term["category"]
+
+    def test_error_handling_workflow(self, client):
+        """
+        Test error handling across different endpoints in a workflow.
+
+        Workflow:
+        1. Try to get terms for nonexistent category
+        2. Try to get translations for nonexistent term
+        3. Try invalid search parameters
+        4. Verify all errors are handled gracefully
+        """
+        # Step 1: Nonexistent category
+        response = client.get(
+            "/categories/NonExistent/terms"
+        )  # Use "NonExistent" which triggers 404
+        assert response.status_code == 404
+        error_data = response.json()
+        assert "detail" in error_data
+        assert "No terms found for category" in error_data["detail"]
+
+        # Step 2: Nonexistent term
+        response = client.get("/terms/nonexistent/translations")
+        assert response.status_code == 404
+        error_data = response.json()
+        assert "Term not found" in error_data["detail"]
+
+        # Step 3: Invalid search parameters
+        response = client.get("/search")  # Missing query
+        assert response.status_code == 422
+
+        # Step 4: Invalid advanced search
+        response = client.post("/search", data={"page": -1})
+        assert response.status_code in [200, 422]  # Should handle gracefully
+
+    def test_multilingual_workflow(self, client):
+        """
+        Test workflow involving multiple languages.
+
+        Workflow:
+        1. Get available languages
+        2. Search for terms in different languages
+        3. Get translations between languages
+        """
+        # Step 1: Get available languages
+        response = client.get("/languages")
+        assert response.status_code == 200
+        languages = response.json()
+
+        assert "English" in languages
+        assert "Afrikaans" in languages
+
+        # Step 2: Use advanced search to filter by language
+        response = client.post(
+            "/search",
+            json={
+                "language": "English",
+                "page": 1,
+                "limit": 10,
+            },
+        )
+        assert response.status_code == 200
+
+        # Step 3: Request translations for English terms to other languages
+        response = client.post(
+            "/translate",
+            json={
+                "terms": ["hello"],
+                "source_language": "English",
+                "target_languages": ["Spanish", "French"],
+            },
+        )
+        assert response.status_code == 200
+        translation_results = response.json()
+        assert "results" in translation_results
+
+    def test_domain_exploration_workflow(self, client):
+        """
+        Test exploring different domains and their content.
+
+        Workflow:
+        1. Get all domains
+        2. For each domain, get sample terms
+        3. Verify domain-specific content
+        """
+        # Step 1: Get all domains
+        response = client.get("/domains")
+        assert response.status_code == 200
+        domains = response.json()
+
+        assert isinstance(domains, list)
+        assert len(domains) > 0
+
+        # Step 2: Explore each domain
+        for domain in domains[:3]:  # Test first 3 domains
+            response = client.get(f"/categories/{domain}/terms")
+
+            if response.status_code == 200:
+                terms = response.json()
+
+                # Step 3: Verify all terms belong to this domain
+                for term in terms:
+                    assert term["category"] == domain
+            else:
+                # It's okay if some domains have no terms
+                assert response.status_code == 404
+
+    def test_pagination_workflow(self, client):
+        """
+        Test pagination workflow across multiple pages.
+
+        Workflow:
+        1. Get first page of results
+        2. Get subsequent pages
+        3. Verify pagination consistency
+        """
+        # Step 1: Get first page
+        response = client.post(
+            "/search",
+            data={
+                "page": 1,
+                "limit": 2,
+            },
+        )
+        assert response.status_code == 200
+        page1_data = response.json()
+
+        assert page1_data["page"] == 1
+        assert page1_data["limit"] == 2  # Should now work with form data
+        total_pages = page1_data["pages"]
+
+        # Step 2: If there are multiple pages, test page 2
+        if total_pages > 1:
+            response = client.post(
+                "/search",
+                data={
+                    "page": 2,
+                    "limit": 2,
+                },
+            )
+            assert response.status_code == 200
+            page2_data = response.json()
+
+            # Step 3: Verify pagination consistency
+            assert page2_data["page"] == 2
+            assert page2_data["limit"] == 2  # Should now work with form data
+            assert page2_data["total"] == page1_data["total"]
+            assert page2_data["pages"] == page1_data["pages"]
+
+            # Results should be different between pages
+            page1_terms = [t["id"] for t in page1_data["results"]]
+            page2_terms = [t["id"] for t in page2_data["results"]]
+
+            # No overlap between pages (unless there are fewer terms than page size)
+            if len(page1_terms) == 2 and len(page2_terms) > 0:
+                overlap = set(page1_terms).intersection(set(page2_terms))
+                assert len(overlap) == 0
 
 
-# Basic functionality tests
-# class TestBasicFunctionality:
-#     """Test basic Python functionality to ensure test environment works."""
+@pytest.mark.integration
+class TestGlossaryIntegrationErrorScenarios:
+    """Integration tests focusing on error scenarios and edge cases."""
 
-#     def test_basic_assertions(self):
-#         """Test basic assertions work."""
-#         assert 1 + 1 == 2
-#         assert "hello".upper() == "HELLO"
-#         assert [1, 2, 3] == [1, 2, 3]
+    def test_cascading_error_handling(self, client):
+        """Test how errors in one endpoint affect subsequent calls."""
+        # Start with a valid search
+        response = client.get("/search?query=hello")
+        assert response.status_code == 200
 
-#     def test_uuid_generation(self):
-#         """Test UUID generation works."""
-#         test_uuid = uuid.uuid4()
-#         assert isinstance(test_uuid, uuid.UUID)
-#         assert str(test_uuid) != str(uuid.uuid4())  # Should be different
+        # Try to get translations for a nonexistent term
+        response = client.get("/terms/nonexistent-id/translations")
+        assert response.status_code == 404
 
-#     def test_mock_objects(self):
-#         """Test that mock objects work correctly."""
-#         mock = MagicMock()
-#         mock.test_method.return_value = "test_result"
+        # Verify that the error doesn't affect subsequent valid calls
+        response = client.get("/categories")
+        assert response.status_code == 200
 
-#         result = mock.test_method()
-#         assert result == "test_result"
-#         mock.test_method.assert_called_once()
+    def test_malformed_request_recovery(self, client):
+        """Test recovery from malformed requests."""
+        # Try malformed advanced search
+        response = client.post("/search", data={"invalid_field": "value"})
+        assert response.status_code in [200, 422]
+
+        # Verify that valid requests still work after malformed ones
+        response = client.get("/categories")
+        assert response.status_code == 200
+
+    def test_boundary_conditions_workflow(self, client):
+        """Test boundary conditions across endpoints."""
+        # Test with very large page numbers
+        response = client.post(
+            "/search",
+            json={
+                "page": 9999,
+                "limit": 10,
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+
+        # Should handle gracefully - either empty results or reasonable page
+        assert "results" in data
+        assert isinstance(data["results"], list)
 
 
 if __name__ == "__main__":
