@@ -1,5 +1,47 @@
 /* GlossaryStyles.scss - All styles for the Glossary page */
 
+// Theme variables (matching SearchPage)
+$accent-pink: #f00a50;
+$accent-yellow: #f2d001;
+$accent-teal: #00ceaf;
+$accent-blue: #212431;
+$accent-white: #ffffff;
+$background-light: #f5f5f5;
+$background-dark: #363b4d;
+$secondary-light: #ffffff;
+$secondary-dark: #212431;
+$tertiary-light: #212431;
+$tertiary-dark: #ffffff;
+$text-light: #212431;
+$text-dark: #ffffff;
+
+/* Theme Class Definitions */
+.theme-light {
+  --bg-theme: #{$tertiary-light};
+  --text-theme: #{$text-dark};
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-dark};
+  --bg-first: #{$background-light};
+  --bg-tir: #{$secondary-light};
+  --glossary-border-color: #d1d5db; /* Light gray border for light mode */
+}
+
+.theme-dark {
+  --bg-theme: #{$tertiary-dark};
+  --text-theme: #{$text-light};
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-light};
+  --bg-first: #{$background-dark};
+  --bg-tir: #{$secondary-dark};
+  --glossary-border-color: #4a5568; /* Dark gray border for dark mode */
+}
+
+.glossary-page-container {
+  background-color: var(--bg-first);
+  color: var(--text-theme);
+  min-height: 100vh;
+}
+
 .glossary-container {
   margin-left: 220px; /* Prevent overlap with LeftNav */
   margin-right: 1rem; /* Add right margin for better spacing */
@@ -21,7 +63,7 @@
 
 .glossary-root {
   height: 100vh;
-  background: #f8fafc !important; // Ensure no gradient from body leaks in
+  background: var(--bg-first) !important;
   display: flex;
   overflow: hidden;
 }
@@ -29,12 +71,12 @@
 .glossary-root,
 .glossary-root body,
 .glossary-root ~ body {
-  background: #f8fafc !important;
+  background: var(--bg-first) !important;
 }
 
 .glossary-main {
   flex: 1;
-  background: #fff;
+  background: var(--bg-tir);
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
   border-radius: 0.75rem;
   padding: 1.2rem 0.5rem 1.2rem 0.2rem;
@@ -71,7 +113,7 @@
 .glossary-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-theme);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -102,7 +144,8 @@
 }
 
 .glossary-subtitle {
-  color: #64748b;
+  color: var(--text-theme);
+  opacity: 0.7;
   font-size: 1rem;
   margin-bottom: 0.5rem;
 }
@@ -213,7 +256,7 @@
 }
 
 .glossary-panel {
-  background: white;
+  background: var(--bg-tir);
   border-radius: 0.75rem;
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -226,7 +269,7 @@
   min-height: 400px;
   max-height: 100%;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--glossary-border-color);
   transition: all 0.2s ease-in-out;
 
   &:hover {
@@ -267,14 +310,14 @@
 .glossary-panel-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-theme);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   position: relative;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #f1f5f9;
+  border-bottom: 2px solid var(--glossary-border-color);
   flex-shrink: 0;
 }
 
@@ -314,9 +357,9 @@
   text-align: left;
   padding: 0.3rem 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  color: #1e293b;
+  border: 1px solid var(--glossary-border-color);
+  background: var(--bg-tir);
+  color: var(--text-theme);
   transition: all 0.2s ease-in-out;
   font-weight: 500;
   display: flex;
@@ -330,15 +373,16 @@
   }
 
   &.selected {
-    background: #dbeafe;
-    border-color: #93c5fd;
-    color: #2563eb;
+    background: var(--bg-first);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
     transform: translateX(4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 }
 .glossary-category-btn:hover:not(.selected) {
-  background: #f1f5f9;
+  background: var(--bg-first);
+  opacity: 0.8;
 }
 
 .glossary-search {
@@ -348,15 +392,23 @@
 .glossary-search-input {
   width: 100%;
   padding: 0.25rem 0.7rem 0.25rem 1.7rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--glossary-border-color);
   border-radius: 0.5rem;
   outline: none;
   font-size: 0.85rem;
   transition: all 0.2s ease-in-out;
+  background: var(--bg-tir);
+  color: var(--text-theme);
+
+  &::placeholder {
+    color: var(--text-theme);
+    opacity: 0.6;
+  }
 
   &:focus {
     transform: scale(1.02);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-color);
   }
 }
 .glossary-search-icon {
@@ -364,8 +416,11 @@
   left: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #94a3b8;
+  color: var(--text-theme);
+  opacity: 0.6;
 }
+
+// Remove the old theme-specific styles since we're using variables now
 
 .glossary-terms-list {
   display: flex;
@@ -383,9 +438,9 @@
   text-align: left;
   padding: 0.3rem 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  color: #1e293b;
+  border: 1px solid var(--glossary-border-color);
+  background: var(--bg-tir);
+  color: var(--text-theme);
   transition: all 0.2s ease-in-out;
   font-weight: 500;
   font-size: 0.85rem;
@@ -396,31 +451,36 @@
   }
 
   &.selected {
-    background: #d1fae5;
-    border-color: #6ee7b7;
+    background: var(--bg-first);
+    border-color: var(--accent-color);
     transform: translateX(4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 }
+
 .glossary-term-btn:hover:not(.selected) {
-  background: #f1f5f9;
+  background: var(--bg-first);
+  opacity: 0.8;
 }
 
 .glossary-term-title {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-theme);
   margin-bottom: 0.1rem;
   font-size: 0.9rem;
 }
+
 .glossary-term-def {
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--text-theme);
+  opacity: 0.7;
   line-clamp: 2;
 }
 
 .glossary-empty {
   text-align: center;
-  color: #64748b;
+  color: var(--text-theme);
+  opacity: 0.6;
   padding: 0.7rem 0;
   font-size: 0.85rem;
 }
@@ -428,17 +488,20 @@
 .glossary-details-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-theme);
   margin-bottom: 0.2rem;
 }
+
 .glossary-details-def {
-  color: #64748b;
+  color: var(--text-theme);
+  opacity: 0.7;
   margin-bottom: 0.4rem;
   font-size: 0.85rem;
 }
+
 .glossary-translate-btn {
   width: 100%;
-  background: #363b4d;
+  background: var(--accent-color);
   color: #fff;
   padding: 0.25rem 0.7rem;
   border-radius: 0.5rem;
@@ -451,13 +514,14 @@
   border: none;
   cursor: pointer;
   font-size: 0.85rem;
-}
-.glossary-translate-btn:hover {
-  background: #2a2f3a;
+  
+  &:hover {
+    background: #e91e63;
+  }
 }
 
 .glossary-translation-list {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--glossary-border-color);
   padding-top: 0.4rem;
   margin-top: 0.4rem;
   max-height: 200px;
@@ -469,19 +533,24 @@
   margin-right: -0.5rem;
   flex: 1;
 }
+
 .glossary-translation-item {
-  background: #f9fafb;
+  background: var(--bg-first);
   padding: 0.3rem;
   border-radius: 0.5rem;
+  border: 1px solid var(--glossary-border-color);
 }
+
 .glossary-translation-lang {
   font-weight: 500;
-  color: #363b4d;
+  color: var(--text-theme);
   font-size: 0.8rem;
   margin-bottom: 0.1rem;
 }
+
 .glossary-translation-text {
-  color: #1e293b;
+  color: var(--text-theme);
+  opacity: 0.8;
   font-size: 0.85rem;
 }
 
@@ -524,7 +593,7 @@
 
 /* Profile Section Styles */
 .profile-section {
-  background: #fff;
+  background: var(--bg-tir);
   border-radius: 0.5rem;
   padding: 0.8rem 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -533,28 +602,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-@media (max-width: 767px) {
-  .profile-section {
-    margin-left: 0;
-    padding: 0.5rem 0.75rem;
-    gap: 0.5rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .profile-section {
-    margin-left: -0.25rem;
-    padding: 0.6rem 0.875rem;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .profile-section {
-    margin-left: -0.75rem;
-    padding: 0.5rem 0.7rem;
-  }
 }
 
 .profile-info {
@@ -576,20 +623,6 @@
   font-size: 1rem;
 }
 
-@media (max-width: 767px) {
-  .profile-avatar {
-    width: 2rem;
-    height: 2rem;
-    font-size: 0.875rem;
-  }
-  .profile-details h3 {
-    font-size: 0.875rem !important;
-  }
-  .profile-details p {
-    font-size: 0.75rem !important;
-  }
-}
-
 .profile-details {
   display: flex;
   flex-direction: column;
@@ -599,13 +632,14 @@
 .profile-details h3 {
   font-size: 1rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-theme);
   margin: 0;
 }
 
 .profile-details p {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--text-theme);
+  opacity: 0.7;
   margin: 0;
 }
 
@@ -614,43 +648,14 @@
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  background: #fff;
+  background: var(--bg-tir);
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 1rem;
   z-index: 1000;
   min-width: 200px;
   margin-right: 0.5rem;
-}
-
-@media (max-width: 767px) {
-  .glossary-download-section {
-    bottom: 0.5rem;
-    right: 0.5rem;
-    margin-right: 0;
-    padding: 0.75rem;
-    min-width: 150px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .glossary-download-section {
-    bottom: 0.75rem;
-    right: 0.75rem;
-    margin-right: 0.25rem;
-    padding: 0.875rem;
-    min-width: 175px;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .glossary-download-section {
-    bottom: 1rem;
-    right: 1rem;
-    margin-right: 0.25rem;
-    padding: 0.9rem;
-    min-width: 185px;
-  }
+  border: 1px solid var(--glossary-border-color);
 }
 
 .glossary-download-btn {
@@ -669,7 +674,7 @@
   &:hover {
     transform: translateY(-1px);
     background: #2a2f3a;
-    box-shadow: 0 4px 12px rgba(54, 59, 77, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -678,7 +683,8 @@
   bottom: 100%;
   right: 0;
   margin-bottom: 0.5rem;
-  background: white;
+  background: var(--bg-tir);
+  border: 1px solid var(--glossary-border-color);
   border-radius: 0.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 0.5rem;
@@ -698,95 +704,24 @@
   cursor: pointer;
   font-size: 0.875rem;
   transition: background-color 0.2s ease;
+  color: var(--text-theme);
 
   &:hover {
-    background: #f1f5f9;
+    background: var(--bg-first);
   }
 }
 
-/* Very small desktop screens (small laptops) */
-@media (min-width: 1024px) and (max-width: 1366px) {
-  .glossary-panel-title {
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.4rem;
-  }
-
-  .glossary-category-btn,
-  .glossary-term-btn {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.35rem;
-  }
-
-  .glossary-search-input {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.5rem 0.15rem 1.3rem;
-  }
-
-  .glossary-details-title {
-    font-size: 0.8rem;
-  }
-
-  .glossary-details-def {
-    font-size: 0.75rem;
-  }
-
-  .glossary-translate-btn {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.5rem;
-  }
-
-  .glossary-translation-item {
-    padding: 0.2rem;
-  }
-
-  .glossary-translation-lang {
-    font-size: 0.7rem;
-  }
-
-  .glossary-translation-text {
-    font-size: 0.75rem;
-  }
-
-  .glossary-categories-list,
-  .glossary-terms-list {
-    min-height: 150px;
-  }
-
-  .glossary-translation-list {
-    max-height: 150px;
-  }
+/* Format dropdown specific styles */
+.glossary-format-dropdown {
+  background: var(--bg-tir) !important;
+  border: 1px solid var(--glossary-border-color) !important;
+  color: var(--text-theme) !important;
 }
 
-/* Extra small laptop screens (13" and smaller) */
-@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 768px) {
-  .glossary-grid {
-    max-width: 900px;
-    gap: 0.5rem;
-    margin-left: -1.5rem;
-  }
+.glossary-format-dropdown button {
+  color: var(--text-theme) !important;
 
-  .glossary-main {
-    margin-left: -1.5rem;
-    padding: 0.5rem 0.2rem 0.5rem 0.1rem;
-  }
-
-  .glossary-panel {
-    padding: 0.75rem;
-    min-height: 280px;
-  }
-
-  .glossary-header {
-    margin-bottom: 1rem;
-  }
-
-  .glossary-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .glossary-subtitle {
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
+  &:hover {
+    background: var(--bg-first) !important;
   }
 }
