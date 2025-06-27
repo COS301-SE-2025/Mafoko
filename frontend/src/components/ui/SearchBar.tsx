@@ -1,8 +1,7 @@
 import type { FC, InputHTMLAttributes } from 'react';
-import { useState, useEffect, useRef } from 'react';
-import type { KeyboardEvent } from 'react';
-import { Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import '../../styles/SearchBar.scss';
+import { Autocomplete, TextField } from '@mui/material';
 
 interface Suggestion {
   id: string;
@@ -20,104 +19,75 @@ interface SearchBarProps extends InputHTMLAttributes<HTMLInputElement> {
 const SearchBar: FC<SearchBarProps> = ({
   onSearch,
   fetchSuggestions,
-  minChars = 2,
+  minChars = 1,
   placeholder = 'Search term',
   debounceMs = 300,
 }) => {
   const [value, setValue] = useState('');
-  const [debounced, setDebounced] = useState(value);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  //const suggestionsRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [options, setOptions] = useState<string[]>([]);
 
-  // Debounced logic
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebounced(value);
-    }, debounceMs);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, debounceMs]);
+    void onSearch('');
+  }, [onSearch]);
 
   // Fetch suggestions
   useEffect(() => {
-    if (debounced.length >= minChars) {
-      void fetchSuggestions(debounced).then(setSuggestions);
-      setShowSuggestions(true);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  }, [debounced, fetchSuggestions, minChars]);
-
-  // Outside click detection
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
+    const handler = setTimeout(() => {
+      if (value.length >= minChars) {
+        fetchSuggestions(value)
+          .then((results) => {
+            setOptions(results.map((s) => s.label));
+          })
+          .catch((err: unknown) => {
+            if (err instanceof Error) {
+              console.error('Failed to fetch suggestions:', err.message);
+            } else {
+              console.error('Unknown error while fetching suggestions:', err);
+            }
+            setOptions([]);
+          });
+      } else {
+        setOptions([]);
       }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
+    }, debounceMs);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      clearTimeout(handler);
     };
-  }, []);
-
-  const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      setShowSuggestions(false);
-      setSuggestions([]);
-      await onSearch(value);
-    }
-  };
-
-  const handleSuggestionClick = async (label: string) => {
-    setValue(label);
-    setShowSuggestions(false);
-    await onSearch(label);
-  };
+  }, [value, fetchSuggestions, minChars, debounceMs]);
 
   return (
-    <div className="search-wrapper" ref={wrapperRef}>
-      <div className="search-bar" role="search">
-        <Search size={20} className="search-icon" />
-        <input
-          type="text"
+    <Autocomplete
+      freeSolo
+      options={options}
+      inputValue={value}
+      onInputChange={(_, newInputValue) => {
+        setValue(newInputValue);
+      }}
+      onChange={(_, selectedValue) => {
+        if (typeof selectedValue === 'string') {
+          void onSearch(selectedValue);
+        }
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
           placeholder={placeholder}
-          className="search-input"
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
+          variant="outlined"
+          fullWidth
+          sx={{
+            input: {
+              color: 'var(--text-theme)',
+            },
           }}
           onKeyDown={(e) => {
-            void handleKeyDown(e);
+            if (e.key === 'Enter') {
+              void onSearch(value);
+            }
           }}
-          aria-autocomplete="list"
-          aria-expanded={showSuggestions}
         />
-      </div>
-
-      {showSuggestions && suggestions.length > 0 && (
-        <div className="search-suggestions">
-          {suggestions.map((s) => (
-            <div
-              key={s.id}
-              className="suggestion-item"
-              onClick={() => {
-                void handleSuggestionClick(s.label);
-              }}
-            >
-              {s.label}
-            </div>
-          ))}
-        </div>
       )}
-    </div>
+    />
   );
 };
 

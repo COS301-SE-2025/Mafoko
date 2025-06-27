@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     DB_HOST: Optional[str] = None
     DB_PORT: Optional[str] = None
     INSTANCE_CONNECTION_NAME: Optional[str] = None
-
+    GCS_BUCKET_NAME: str = "marito_bucket"
     # --- Base CORS Settings ---
     BACKEND_CORS_ORIGINS: str = ""
     BACKEND_CORS_ORIGINS_LIST: List[str] = []

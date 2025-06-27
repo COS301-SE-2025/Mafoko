@@ -18,6 +18,13 @@ mypy search-service || exit 1
 
 echo "Running mypy on analytics-service..."
 mypy analytics-service || exit 1
+
+echo "Running mypy on glossary-service..."
+mypy glossary-service || exit 1
+
+echo "Running mypy on vote-service..."
+mypy vote-service || exit 1
+
 black --check . || exit 1
 black . || exit 1
 

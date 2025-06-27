@@ -58,6 +58,7 @@ This structure ensures clean separation between environments, supports parallel 
 ## Demo Videos
 
 - 🎥 [Demo 1 Video](https://youtu.be/mwc1rmwkWEI)
+- 🎥 [Demo 2 Video](https://youtu.be/92OJ90uNvXY)
 
 ---
 

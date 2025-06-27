@@ -1,0 +1,8 @@
+# alembic-service/requirements.txt
+alembic
+sqlalchemy
+psycopg2-binary
+pydantic-settings
+ruff      
+black     
+mypy    

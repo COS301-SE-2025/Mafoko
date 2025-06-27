@@ -4,12 +4,15 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{ragged2e}
 \usepackage{float}
 \titleformat{\section}[block]{\large\bfseries}{\thesection.}{0.5em}{}
 \titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
 
 
-\title{Software Requirements Specification\\\large\textbf{Mavito Multilingual Terminology PWA}}
+\title{Software Requirements Specification\\\large\textbf{Marito Multilingual Terminology PWA}}
 \author{Team Name: Velox}
 \date{\today}
 
@@ -21,10 +24,10 @@
 
 \section{Introduction}
 \subsection{Purpose}
-The purpose of this document is to define the software requirements of the Mavito system, a multilingual terminology web application developed as part of the COS 301 Capstone project at the University of Pretoria. This document is intended to guide the development team, ensure alignment with client expectations, and serve as a reference for future maintenance, testing, and extension of the platform.
+The purpose of this document is to define the software requirements of the Marito system, a multilingual terminology web application developed as part of the COS 301 Capstone project at the University of Pretoria. This document is intended to guide the development team, ensure alignment with client expectations, and serve as a reference for future maintenance, testing, and extension of the platform.
 
 \subsection{Scope}
-Mavito is a multilingual, progressive web application (PWA) designed to provide users with access to curated statistical terminology in all 11 official South African languages. The system enables users to search and browse glossary terms, submit suggestions, and engage through a gamified contribution model. Mavito supports offline functionality, glossary versioning, contributor uploads, and plugin-based feature extensions including AI-enhanced semantic search and analytics. The system is built using a microkernel-microservices architecture for flexibility, modularity, and future extensibility.
+Marito is a multilingual, progressive web application (PWA) designed to provide users with access to curated statistical terminology in all 11 official South African languages. The system enables users to search and browse glossary terms, submit suggestions, and engage through a gamified contribution model. Marito supports offline functionality, glossary versioning, contributor uploads, and plugin-based feature extensions including AI-enhanced semantic search and analytics. The system is built using a microkernel-microservices architecture for flexibility, modularity, and future extensibility.
 
 \subsection{Intended Audience}
 This document is primarily intended for:
@@ -666,10 +669,116 @@ This section outlines the high-level user goals and core system interactions tha
     \item Devices with screen widths less than or equal to 768 pixels are considered mobile, and touch interaction is expected on these devices.
 \end{itemize}
 
-\subsection{Repository Reference}
-All detailed use case specifications and diagrams are located at:  
-\newline
-\url{https://github.com/COS301-SE-2025/Mavito/tree/main/Documentation/UseCaseSpecification}
+
+
+\subsection{User Story \#9: Dictionary & Glossary}
+\textbf{ID:} US009 (Mavito Project) \\
+\textbf{Title:} Glossaries User Stories \\
+\textbf{As a:}  terminology researcher \\
+\textbf{I want:}  to view detailed information about a specific term, \\
+\textbf{So that:} I can understand its meaning and translations.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Definition Display:}
+    \begin{itemize}
+        \item \textbf{Given} I have selected a term from search results,
+        \item \textbf{And}  I should see its complete definition,
+        \item \textbf{Then} its assigned category with clickable link to the full glossary.
+    \end{itemize}
+
+    \item \textbf{Translation Panel}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing a term,
+        \item \textbf{And} all available translations should be displayed in a structured table,
+        \item \textbf{Then} clear language code labels (e.g., "afr", "zul").
+    \end{itemize}
+
+    \item \textbf{Missing Data Handling:}
+    \begin{itemize}
+        \item \textbf{Given} a term lacks translation for certain languages,
+        \item \textbf{Then} those fields should display "Translation not available",
+        \item \textbf{And} be visually distinct from complete entries.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Integrates with US003 search results.
+    \item Preserves all existing search filters when navigating from results to term view
+\end{itemize}
+
+\subsection{User Story \#10: Glossary Category Navigation}
+\textbf{ID:} US010 (Mavito Project) \\
+\textbf{Title:} Glossary Category Navigation \\
+\textbf{As a:} user interested in exploring specific domains (e.g., Agriculture, Legal), \\
+\textbf{I want:} to browse all terms within a particular category,\\
+\textbf{So that:} I can discover related terminology.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Category Selection:}
+    \begin{itemize}
+        \item \textbf{Given} I access the glossary browser,
+        \item \textbf{Then} I should see all available categories.
+    \end{itemize}
+
+    \item \textbf{Term Listing:}
+    \begin{itemize}
+        \item \textbf{Given} I select a category (e.g., "Agriculture"),
+        \item \textbf{Then} I should see paginated results of all terms,
+        \item \textbf{With} options to filter by language availability.
+    \end{itemize}
+
+    \item \textbf{Cross-Referencing:}
+    \begin{itemize}
+        \item \textbf{Given} I view a term in a glossary,
+        \item \textbf{Then} I should see related terms from the same category,
+        \item \textbf{And} options to navigate to similar categories.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Categories are predefined based on dataset taxonomy
+    \item Works both online and for downloaded glossaries
+\end{itemize}
+
+\subsection{User Story \#11: Term Bank Translations}
+\textbf{ID:} US011 (Mavito Project) \\
+\textbf{Title:} Access Multilingual Translations \\
+\textbf{As a:} multilingual user, \\
+\textbf{I want:} to toggle between translations for a term, \\
+\textbf{So that:} I can understand it in my preferred language.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Translation Toggle:}
+    \begin{itemize}
+        \item \textbf{Given} I view a term,
+        \item \textbf{When} I click a language tab (e.g., "Zulu"),
+        \item \textbf{Then}  I should see the translation ("Imbewu kawoyela").
+    \end{itemize}
+
+    \item \textbf{Missing Translations:}
+    \begin{itemize}
+        \item \textbf{Given} a term has no translation for a language,
+        \item \textbf{Then} display "Translation not available.
+    \end{itemize}
+
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Uses the translations field from the dataset.
+\end{itemize}
+
 
 \section{Use Case Diagrams}
 
@@ -681,6 +790,14 @@ This section presents the key use case diagrams developed for the Mavito applica
   \includegraphics[width=0.9\textwidth]{registration_login.png}
   \caption{Registration and Login Use Case Diagram}
   \label{fig:reg-log-use-case}
+\end{figure}
+
+\subsection{Interface Language Switching Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Interface Language Switching Subsystem.jpg}
+  \caption{Interface Language Switching Use Case Diagram for Mavito}
+  \label{fig:interface-lang-switch-use-case}
 \end{figure}
 
 \subsection{Search Term Use Case Diagram}
@@ -723,17 +840,44 @@ This section presents the key use case diagrams developed for the Mavito applica
   \label{fig:contributions-use-case}
 \end{figure}
 
+\subsection{Dictionary Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Dictionary,Glossaies and Term Banl.jpg}
+  \caption{Contributions Use Case Diagram}
+  \label{fig:contributions-use-case}
+\end{figure}
+
+\subsection{Admin Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Admin-User-Management.jpg}
+  \caption{Contributions Use Case Diagram}
+  \label{fig:contributions-use-case}
+\end{figure}
+
+\subsection{Export Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Export System.jpg}
+  \caption{Contributions Use Case Diagram}
+  \label{fig:contributions-use-case}
+\end{figure}
+
 \subsection{Overview}
 The main use cases covered include:
 \begin{itemize}
   \item Browsing and searching multilingual terms
+  \item Interface language switching
   \item Earning contribution points through gamified interactions
-  \item Registration and login ineractions
+  \item Registration and login interactions
   \item User Contributions
   \item User themes
   \item Data visualizations
+  \item Dictionary Use Case
+  \item Admin Use case
+  \item Export Use Case
 \end{itemize}
-
 
 \section{Functional Requirements}
 
@@ -981,7 +1125,7 @@ These constraints serve as the foundation for all architectural, design, and imp
 \section{Domain Model}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{domain_model.jpg}
+  \includegraphics[width=0.9\textwidth]{domain_model_V1.1.0.jpg}
   \caption{Domain Model}
   \label{fig:domain-model}
 \end{figure}
@@ -1087,9 +1231,132 @@ The Mavito system is built using modern, open-source technologies selected for t
   \item \textbf{Hosting:} GitHub Pages.
 \end{itemize}
 
+\section{Technology Choices}
+Our system is built using a modular microservices architecture, designed for scalability, isolation, and maintainability. We evaluated at least three technology options for each core component before selecting the final stack.
+
+\subsection*{Frontend Framework}
+
+\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
+\hline
+React (Chosen) & Declarative JavaScript library for UIs & Large ecosystem, reusable components, PWA support & Requires setup, JSX learning curve \\
+\hline
+Angular & Full-featured frontend framework & Strong typing, built-in tools, opinionated structure & Heavy, complex, steep learning curve \\
+\hline
+Vue.js & Progressive framework & Lightweight, easy to learn, good docs & Smaller ecosystem for enterprise-scale systems \\
+\hline
+\end{tabular}
+\newline
+\textbf{Justification:} React provides modularity and performance while supporting Progressive Web App (PWA) functionality which is ideal for our offline-first goal. Its community and integration with modern tooling enhance maintainability.
+
+\subsection*{Backend Framework (API Layer)}
+
+\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
+\hline
+FastAPI (Chosen) & Async Python framework for APIs & Very fast, OpenAPI docs, type hinting, async support & Newer, less mature than Django \\
+\hline
+Flask & Minimal WSGI Python web framework & Simple, flexible, lightweight & No async support, more boilerplate \\
+\hline
+Django & Full-stack Python web framework & ORM, admin panel, built-in features & Monolithic, less suitable for microservices \\
+\hline
+\end{tabular}
+\newline
+\textbf{Justification:} FastAPI is a performant async framework with native support for OpenAPI docs and type hinting. It aligns well with our modular design and Python-based data processing.
+
+\subsection*{Backend Language}
+
+\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
+\hline
+Python (Chosen) & General-purpose scripting language & Rich ML/NLP libraries, fast prototyping & Slower runtime compared to compiled languages \\
+\hline
+Go & Compiled systems language & High performance, excellent concurrency support & Verbose, smaller ecosystem for data science \\
+\hline
+Node.js & JS runtime for backend & Unified stack, async by default & Callback complexity, fragmented tooling \\
+\hline
+\end{tabular}
+\newline
+\textbf{Justification:} Python enables rapid development and integrates well with NLP tools like spaCy. Since our AI search requires natural language features, Python is the most suitable choice.
+
+\subsection*{Containerization}
+
+\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
+\hline
+Docker (Chosen) & OS-level virtualization platform & Portable, consistent dev/production environments & Requires setup and Docker knowledge \\
+\hline
+Vagrant & VM-based development tool & OS-level control & Heavyweight, slower than containers \\
+\hline
+Bare Metal & Manual installs & Full flexibility & Not reproducible, error-prone \\
+\hline
+\end{tabular}
+\newline
+\textbf{Justification:} Docker enables reproducible builds, isolates dependencies, and simplifies onboarding. It is essential for deploying and maintaining microservices efficiently.
+
+\subsection*{Summary}
+
+Our technology stack: React, FastAPI with Python, and Docker was chosen for its strong modularity, ease of maintenance, and developer productivity. React enables the creation of responsive, user-friendly interfaces that function seamlessly across all device types. FastAPI offers fast development with built-in validation and documentation, making it ideal for building clean and maintainable APIs. Docker ensures consistent environments across development and production, supporting a scalable microservices architecture. These choices align directly with our goals of building an offline-capable, user-centered platform that is simple to deploy, easy to extend, and reliable across a wide range of usage contexts.
+
+
+
 \section{Service Contracts}
+
+\subsection{API Information}
 \begin{itemize}
-Stub
+    \item \textbf{OpenAPI Version:} 3.1.0
+    \item \textbf{Title:} Marito API Default
+    \item \textbf{Version:} 0.1.0
 \end{itemize}
+
+\subsection{Endpoints Overview}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Endpoint} & \textbf{Description} \\
+\hline
+\endhead
+
+\url{/api/v1/auth/register} (POST) & Register new user. Expects first\_name, last\_name, email, password, and optionally role. Returns user object on success. \\
+\hline
+
+\url{/api/v1/auth/login} (POST) & OAuth2-compatible login. Frontend sends email (username) and password. Returns access token for future requests. \\
+\hline
+
+\url{/api/v1/auth/me} (GET) & Get details of the current logged-in user. Requires OAuth2 bearer token. \\
+\hline
+
+\url{/api/v1/analytics/descriptive} (GET) & Retrieve descriptive analytics summary. \\
+\hline
+
+\url{/api/v1/search/} (GET) & Search endpoint for multilingual terms with optional filters: language, domain, part of speech, sorting, pagination. Returns list of terms and total count. \\
+\hline
+
+\url{/api/v1/suggest/} (GET) & Autocomplete suggestions based on partial search term. Returns up to 10 suggestion objects. \\
+\hline
+
+\url{/} (GET) & Root endpoint. Returns a welcome message and API documentation link. \\
+\hline
+\end{longtable}
+
+\subsection{Schemas Summary}
+\begin{itemize}
+    \item \textbf{User} — Email, first name, last name, role, profile picture, status, timestamps.
+    \item \textbf{UserCreate} — Email, first name, last name, password, optional role.
+    \item \textbf{Token} — Access token and token type.
+    \item \textbf{Suggestion} — ID and label for autocomplete.
+    \item \textbf{ValidationError} — Location, message, and error type.
+    \item \textbf{UserRole Enum} — \texttt{linguist}, \texttt{researcher}, \texttt{contributor}.
+\end{itemize}
+
+\subsection{Security Schemes}
+\begin{itemize}
+    \item \textbf{OAuth2PasswordBearer} — Password flow using \texttt{/api/v1/auth/login}.
+\end{itemize}
+
 
 \end{document}

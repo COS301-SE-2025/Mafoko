@@ -14,7 +14,26 @@ docker-compose exec search-service sh -c "PYTHONPATH=. pytest"
 
 echo ""
 echo "--- Running tests for Analytics Service ---"
-docker-compose exec analytics-service sh -c "PYTHONPATH=. pytest"
+echo "  Running Unit Tests..."
+docker-compose exec analytics-service sh -c "PYTHONPATH=. pytest app/tests/test_term_analytics.py -v"
+
+echo "  Running Integration Tests..."
+docker-compose exec analytics-service sh -c "PYTHONPATH=. pytest app/tests/test_analytics_integration.py -v"
+
+echo "  Running Coverage Completion Tests..."
+docker-compose exec analytics-service sh -c "PYTHONPATH=. pytest app/tests/test_analytics_coverage.py -v"
+
+echo ""
+echo "--- Running tests for Glossary Service ---"
+echo "  Running Unit Tests (Direct Function Testing)..."
+docker-compose exec glossary-service sh -c "PYTHONPATH=. pytest app/tests/test_unit_functions.py -v"
+
+echo "  Running Integration Tests (API Workflow Testing)..."
+docker-compose exec glossary-service sh -c "PYTHONPATH=. pytest app/tests/test_glossary.py -v"
+
+echo ""
+echo "--- Running tests for Voting Service ---"
+docker-compose exec vote-service sh -c "PYTHONPATH=. pytest"
 
 echo ""
 echo "✅ All tests passed successfully!"

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import LeftPane from '../components/dashboard/LeftPane.tsx';
+import LeftNav from '../components/ui/LeftNav.tsx';
+import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
-import '../styles/DashboardPage.css';
+import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 
 interface RecentTerm {
@@ -38,6 +39,18 @@ interface UserData {
 }
 
 const DashboardPage: React.FC = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Force dark mode for this page
+  useEffect(() => {
+    const stored = localStorage.getItem('darkMode');
+    if (stored) setIsDarkMode(stored === 'false');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeMenuItem, setActiveMenuItem] = useState('dashboard');
@@ -47,7 +60,7 @@ const DashboardPage: React.FC = () => {
   >([]);
   const [showRecentTerms, setShowRecentTerms] = useState(false);
   const [showCommunityActivity, setShowCommunityActivity] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const [userData, setUserData] = useState<UserData | null>(null);
   const [avatarInitials, setAvatarInitials] = useState<string>('U');
@@ -262,68 +275,43 @@ const DashboardPage: React.FC = () => {
       .catch(console.error);
   }, [navigate]);
 
-  const handleMenuItemClick = (item: string) => {
-    setActiveMenuItem(item);
-    if (window.innerWidth <= 768) {
-      setIsMobileMenuOpen(false);
-    }
-    // Navigation logic for left pane using React Router
-    if (item === 'dashboard') {
-      void navigate('/dashboard');
-    } else if (item === 'search') {
-      void navigate('/search');
-    } else if (item === 'saved') {
-      void navigate('/saved-terms');
-    } else if (item === 'analytics') {
-      void navigate('/analytics');
-    }
-  };
+  // Responsive navigation effect
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleQuickAction = (action: string) => {
     console.log(`Quick action clicked: ${action}`);
   };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
   return (
     <div
-      className={`dashboard-container ${
-        isMobileMenuOpen ? 'mobile-menu-is-open' : ''
-      }`}
+      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-menu-overlay"
-          onClick={toggleMobileMenu}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              toggleMobileMenu();
-              return;
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Close menu"
+      {/* Navigation - using same pattern as GlossaryPage and HelpPage */}
+      {isMobile ? (
+        <Navbar />
+      ) : (
+        <LeftNav
+          activeItem={activeMenuItem}
+          setActiveItem={setActiveMenuItem}
         />
       )}
-      <LeftPane activeItem={activeMenuItem} onItemClick={handleMenuItemClick} />
 
       <div className="main-content">
         <div className="top-bar">
-          <button
-            className="hamburger-icon"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-            type="button"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
           <div className="welcome-section">
-            {' '}
-            <h1 className="welcome-title">{t('dashboard.welcome')}</h1>
+            <h1 className="welcome-title">
+              {userData
+                ? `Welcome back, ${userData.firstName}${userData.lastName ? ' ' + userData.lastName : ''}`
+                : t('dashboard.welcome')}
+            </h1>
           </div>
           {isLoadingUserData ? (
             <div className="profile-section">Loading profile...</div>
@@ -340,7 +328,11 @@ const DashboardPage: React.FC = () => {
                     }}
                   >
                     <LanguageSwitcher />
-                    <h3>
+                    <h3
+                      style={{
+                        color: isDarkMode ? '#f0f0f0' : '#333333', // or your own theme colors
+                      }}
+                    >
                       {userData
                         ? `${userData.firstName} ${userData.lastName}`
                         : t('dashboard.userName')}

@@ -1,0 +1,18 @@
+# vote-service/requirements.txt
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+PyJWT
+ruff      
+black     
+mypy 
+pytest   
+httpx
+pytest-asyncio
+psycopg2-binary
+mavito-common-lib==0.1.0

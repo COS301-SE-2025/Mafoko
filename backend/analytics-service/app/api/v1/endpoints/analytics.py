@@ -3,6 +3,7 @@ import pandas as pd
 from collections import Counter  # noqa: F401
 import os
 
+
 router = APIRouter()
 
 # caches dataset
@@ -28,29 +29,73 @@ async def load_marito_data():
     return TERM_DATASET
 
 
-@router.get("/descriptive")
-async def get_descriptive_analytics():
+# Analytics helper functions
+async def get_dataset_columns():
+    """Get column information from the dataset."""
     df = await load_marito_data()
-
+    # Get language columns (ends with _term)
     language_columns = [col for col in df.columns if col.endswith("_term")]
+    # Get definition columns (ends with _definition)
     definition_columns = [col for col in df.columns if col.endswith("_definition")]
     category_column = "category"
+    return df, language_columns, definition_columns, category_column
 
-    # Category Frequency
+
+@router.get("/descriptive")
+async def get_descriptive_analytics():
+    """Get all descriptive analytics (legacy endpoint).
+    This endpoint combines all analytics for backward compatibility."""
+
+    # Get individual analytics
+    category_counts = await get_category_frequency()
+    language_coverage = await get_language_coverage()
+    term_lengths = await get_term_length_analysis()
+    def_lengths = await get_definition_length_analysis()
+    unique_term_counts = await get_unique_terms_count()
+
+    # Combine all analytics
+    return {
+        "category_frequency": category_counts,
+        "language_coverage_percent": language_coverage,
+        "average_term_lengths": term_lengths,
+        "average_definition_lengths": def_lengths,
+        "unique_term_counts": unique_term_counts,
+    }
+
+
+@router.get("/descriptive/category-frequency")
+async def get_category_frequency():
+    """Get frequency distribution of terms across different categories."""
+    df, _, _, category_column = await get_dataset_columns()
     category_counts = df[category_column].value_counts().to_dict()
+    return category_counts
 
-    # Language Coverage (% non-empty terms)
+
+@router.get("/descriptive/language-coverage")
+async def get_language_coverage():
+    """Get coverage percentage for each language (% of non-empty terms)."""
+    df, language_columns, _, _ = await get_dataset_columns()
     language_coverage = {
         lang: round(df[lang].notna().sum() / len(df) * 100, 2)
         for lang in language_columns
     }
+    return language_coverage
 
-    # Term Length Analysis (average length of terms)
+
+@router.get("/descriptive/term-length")
+async def get_term_length_analysis():
+    """Get average length of terms for each language."""
+    df, language_columns, _, _ = await get_dataset_columns()
     term_lengths = {
         lang: round(df[lang].dropna().apply(len).mean(), 2) for lang in language_columns
     }
+    return term_lengths
 
-    # Definition Length Analysis (if definitions are multilingual; else use eng only)
+
+@router.get("/descriptive/definition-length")
+async def get_definition_length_analysis():
+    """Get average length of definitions for each language."""
+    df, _, definition_columns, _ = await get_dataset_columns()
     if definition_columns:
         def_lengths = {
             col: round(df[col].dropna().apply(len).mean(), 2)
@@ -60,16 +105,14 @@ async def get_descriptive_analytics():
         def_lengths = {
             "eng_definition": round(df["eng_definition"].dropna().apply(len).mean(), 2)
         }
+    return def_lengths
 
-    # Unique Terms per Language
+
+@router.get("/descriptive/unique-terms")
+async def get_unique_terms_count():
+    """Get count of unique terms for each language."""
+    df, language_columns, _, _ = await get_dataset_columns()
     unique_term_counts = {
         lang: df[lang].nunique(dropna=True) for lang in language_columns
     }
-
-    return {
-        "category_frequency": category_counts,
-        "language_coverage_percent": language_coverage,
-        "average_term_lengths": term_lengths,
-        "average_definition_lengths": def_lengths,
-        "unique_term_counts": unique_term_counts,
-    }
+    return unique_term_counts
