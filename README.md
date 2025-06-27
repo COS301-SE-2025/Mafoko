@@ -69,7 +69,7 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"/>
   </a>
   <a href="https://github.com/COS301-SE-2025/Mavito/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/COS301-SE-2025/Mavito/ci.yml?branch=main" alt="Build Status"/>
+    [![CI/CD Pipeline](https://github.com/COS301-SE-2025/Marito/actions/workflows/actions.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2025/Marito/actions/workflows/actions.yml)
   </a>
   <a href="https://codecov.io/gh/COS301-SE-2025/Mavito">
     <img src="https://img.shields.io/codecov/c/github/COS301-SE-2025/Mavito" alt="Code Coverage"/>
