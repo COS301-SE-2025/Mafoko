@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import SearchBar from '../components/ui/SearchBar';
 import DropdownFilter from '../components/ui/DropdownFilter';
 import ToggleSwitch from '../components/ui/ToggleSwtich';
@@ -60,6 +60,8 @@ const SearchPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('search');
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     void preloadGlossary();
@@ -86,19 +88,22 @@ const SearchPage: React.FC = () => {
     if (!term) return;
 
     const runSearch = async () => {
+      setIsLoading(true);
       try {
         const { items, total } = await fetchSearchResults(
-          term,
-          language,
-          domain,
-          aiSearch,
-          fuzzySearch,
-          currentPage,
+            term,
+            language,
+            domain,
+            aiSearch,
+            fuzzySearch,
+            currentPage,
         );
         setResults(items);
         setTotalPages(Math.ceil((total || 1) / pageSize));
       } catch (error: unknown) {
         console.error('Search fetch failed:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -118,39 +123,42 @@ const SearchPage: React.FC = () => {
   };
 
   const handleSearch = useCallback(
-    async (t: string) => {
-      setTerm(t);
-      setCurrentPage(1);
-      try {
-        const { items, total } = await fetchSearchResults(
-          t,
-          language,
-          domain,
-          aiSearch,
-          fuzzySearch,
-          1,
-        );
-        // Store results locally for offline use
-        await storeTerms(items);
-        setResults(items);
-        setTotalPages(Math.ceil((total || 1) / pageSize));
-      } catch (error: unknown) {
-        console.error('Falling back to cached data', error);
-        const cachedTerms = await getAllTerms();
-        const filtered = cachedTerms.filter((term) =>
-          term.term.toLowerCase().includes(t.toLowerCase()),
-        );
-        setResults(filtered);
-        setTotalPages(Math.ceil(filtered.length / pageSize));
-      }
-    },
-    [language, domain, aiSearch, fuzzySearch],
+      async (t: string) => {
+        setTerm(t);
+        setCurrentPage(1);
+        setIsLoading(true);
+        try {
+          const { items, total } = await fetchSearchResults(
+              t,
+              language,
+              domain,
+              aiSearch,
+              fuzzySearch,
+              1,
+          );
+          // Store results locally for offline use
+          await storeTerms(items);
+          setResults(items);
+          setTotalPages(Math.ceil((total || 1) / pageSize));
+        } catch (error: unknown) {
+          console.error('Falling back to cached data', error);
+          const cachedTerms = await getAllTerms();
+          const filtered = cachedTerms.filter((term) =>
+              term.term.toLowerCase().includes(t.toLowerCase()),
+          );
+          setResults(filtered);
+          setTotalPages(Math.ceil(filtered.length / pageSize));
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      [language, domain, aiSearch, fuzzySearch],
   );
 
   const fetchSuggestions = async (term: string): Promise<Suggestion[]> => {
     const params = new URLSearchParams({ query: term });
     const response = await fetch(
-      `${API_ENDPOINTS.suggest}?${params.toString()}`,
+        `${API_ENDPOINTS.suggest}?${params.toString()}`,
     );
 
     if (!response.ok) throw new Error('Failed to fetch suggestions');
@@ -158,12 +166,12 @@ const SearchPage: React.FC = () => {
   };
 
   const fetchSearchResults = async (
-    query: string,
-    language: string,
-    domain: string,
-    _ai: boolean,
-    _fuzzy: boolean,
-    page: number,
+      query: string,
+      language: string,
+      domain: string,
+      _ai: boolean,
+      _fuzzy: boolean,
+      page: number,
   ): Promise<SearchResponse> => {
     const params = new URLSearchParams({
       query,
@@ -175,7 +183,7 @@ const SearchPage: React.FC = () => {
     });
 
     const response = await fetch(
-      `${API_ENDPOINTS.search}?${params.toString()}`,
+        `${API_ENDPOINTS.search}?${params.toString()}`,
     );
     if (!response.ok) throw new Error('Failed to fetch search results');
     return (await response.json()) as SearchResponse;
@@ -195,117 +203,177 @@ const SearchPage: React.FC = () => {
     }
   };
 
+
+  const groupedTerms = results.reduce<Record<string, Term[]>>((acc, term) => {
+    const firstLetter = term.term[0].toUpperCase();
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!acc[firstLetter]) acc[firstLetter] = [];
+    acc[firstLetter].push(term);
+    return acc;
+  }, {});
+
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const availableLetters = new Set(Object.keys(groupedTerms));
+  const letterRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+
+
   return (
-    <div
-      className={`search-page-fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
-    >
-      <div className={`search-page-container`}>
-        {isMobile ? (
-          <Navbar />
-        ) : (
-          <LeftNav
-            activeItem={activeMenuItem}
-            setActiveItem={setActiveMenuItem}
-          />
-        )}
 
-        <div className="search-main-content">
-          <div className="min-h-screen search-page pt-16">
-            <div className="search-conent">
-              <section className="p-6 space-y-4 w-full max-w-4xl mx-auto">
-                <SearchBar
-                  onSearch={handleSearch}
-                  fetchSuggestions={fetchSuggestions}
-                />
-                <div className="flex flex-wrap gap-4 items-center">
-                  <div className="flex flex-wrap gap-4">
-                    <DropdownFilter
-                      label="Language"
-                      options={languages}
-                      selected={language}
-                      onSelect={setLanguage}
-                    />
-                    <DropdownFilter
-                      label="Domain"
-                      options={domainOptions}
-                      selected={domain}
-                      onSelect={setDomain}
-                    />
-                  </div>
-                  <div className="flex gap-4 flex-wrap">
-                    <ToggleSwitch
-                      label="AI Search"
-                      icon={<Brain size={16} />}
-                      checked={aiSearch}
-                      onChange={setAiSearch}
-                    />
-                    <ToggleSwitch
-                      label="Fuzzy Search"
-                      icon={<Wand2 size={16} />}
-                      checked={fuzzySearch}
-                      onChange={setFuzzySearch}
-                    />
-                  </div>
-                </div>
-              </section>
-            </div>
 
-            <div className="flex-1 overflow-y-auto p-6 search-scrollable-content">
-              <div className="p-6 w-full">
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
-                  {results.map((res) => (
-                    <TermCard
-                      key={res.id}
-                      id={res.id}
-                      term={res.term}
-                      language={res.language}
-                      domain={res.domain}
-                      upvotes={res.upvotes}
-                      downvotes={res.downvotes}
-                      definition={res.definition}
-                      onView={() => {
-                        void navigate(`/term/${res.id}`);
-                      }}
-                    />
-                  ))}
-                  {results.length === 0 && term && (
-                    <p className="text-theme opacity-60">
-                      No results found for "{term}".
-                    </p>
-                  )}
-                </div>
+      <div
+          className={`search-page-fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      >
+        <div className={`search-page-container`}>
+          {isMobile ? (
+              <Navbar />
+          ) : (
+              <LeftNav
+                  activeItem={activeMenuItem}
+                  setActiveItem={setActiveMenuItem}
+              />
+          )}
+
+          <div className="search-main-content">
+            <div className="min-h-screen search-page pt-16">
+              <div className="search-conent">
+                <section className="p-6 space-y-4 w-full max-w-4xl mx-auto">
+                  <SearchBar
+                      onSearch={handleSearch}
+                      fetchSuggestions={fetchSuggestions}
+                  />
+                  <div className="flex flex-wrap gap-4 items-center">
+                    <div className="flex flex-wrap gap-4">
+                      <DropdownFilter
+                          label="Language"
+                          options={languages}
+                          selected={language}
+                          onSelect={setLanguage}
+                      />
+                      <DropdownFilter
+                          label="Domain"
+                          options={domainOptions}
+                          selected={domain}
+                          onSelect={setDomain}
+                      />
+                    </div>
+                    <div className="flex gap-4 flex-wrap">
+                      <ToggleSwitch
+                          label="AI Search"
+                          icon={<Brain size={16} />}
+                          checked={aiSearch}
+                          onChange={setAiSearch}
+                      />
+                      <ToggleSwitch
+                          label="Fuzzy Search"
+                          icon={<Wand2 size={16} />}
+                          checked={fuzzySearch}
+                          onChange={setFuzzySearch}
+                      />
+                    </div>
+                  </div>
+                </section>
               </div>
 
-              <div className="pagination-controls flex justify-center space-x-4 p-4">
-                <button
-                  type="button"
-                  disabled={currentPage === 1}
-                  onClick={() => {
-                    setCurrentPage(currentPage - 1);
-                  }}
-                  className="px-4 py-2 bg-theme rounded disabled:opacity-50"
-                >
-                  Previous
-                </button>
-                <span>
+              <div className="flex-1 overflow-y-auto p-6 search-scrollable-content">
+                <div className="p-6 w-full">
+
+                  <nav className="alphabetical-index">
+                    {alphabet.map((letter) => {
+                      const isAvailable = availableLetters.has(letter);
+                      return (
+                        <button
+                          key={letter}
+                          disabled={!isAvailable}
+                          className={`index-letter ${isAvailable ? '' : 'disabled'}`}
+                          onClick={() => {
+                            const section = letterRefs.current[letter];
+                            if (section) {
+                              section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                          }}
+                          aria-label={`Jump to terms starting with ${letter}`}
+                          type="button"
+                        >
+                          {letter}
+                        </button>
+                      );
+                    })}
+                  </nav>
+
+                  <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
+                    {isLoading ? (
+                      <p className="text-theme opacity-80 text-center w-full">Loading...</p>
+                    ) : results.length > 0 ? (
+                      <div className="dictionary-view">
+                        {Object.keys(groupedTerms)
+                          .sort()
+                          .map((letter) => (
+                            <section key={letter} className="letter-group">
+                              <h2 className="letter-header">
+                                {letter}
+                                <span className="line" />
+                              </h2>
+                              <div className="terms-list">
+                                {groupedTerms[letter].map((term) => (
+                                  <TermCard
+                                    key={term.id}
+                                    id={term.id}
+                                    term={term.term}
+                                    language={term.language}
+                                    domain={term.domain}
+                                    upvotes={term.upvotes}
+                                    downvotes={term.downvotes}
+                                    definition={term.definition}
+                                    onView={() => {
+                                      void navigate(`/term/${term.id}`);
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                            </section>
+                          ))}
+                      </div>
+                    ) : (
+                      term && (
+                        <p className="text-theme opacity-60">
+                          No results found for "{term}".
+                        </p>
+                      )
+                    )}
+                </div>
+                </div>
+
+                <div className="pagination-controls flex justify-center space-x-4 p-4">
+                  <button
+                      type="button"
+                      disabled={currentPage === 1}
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                      }}
+                      className="px-4 py-2 bg-theme rounded disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
+                  <span>
                   Page {currentPage} of {totalPages}
                 </span>
-                <button
-                  type="button"
-                  disabled={currentPage === totalPages}
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                  }}
-                  className="px-4 py-2 bg-theme rounded disabled:opacity-50"
-                >
-                  Next
-                </button>
+                  <button
+                      type="button"
+                      disabled={currentPage === totalPages}
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                      }}
+                      className="px-4 py-2 bg-theme rounded disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
