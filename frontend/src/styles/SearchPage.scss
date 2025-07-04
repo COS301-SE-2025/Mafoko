@@ -116,9 +116,8 @@ $text-dark: #ffffff;
 
           .alphabetical-index {
             position: sticky;
-            top: 100px; /* Adjust based on your navbar height */
+            top: 100px;
             display: flex;
-            /*flex-direction: column;*/
             gap: 0.25rem;
             padding: 0.5rem;
             max-height: calc(100vh - 120px);
@@ -147,6 +146,13 @@ $text-dark: #ffffff;
             cursor: default;
             pointer-events: none;
           }
+
+          .terms-list {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          }
+
 
         }
       }

@@ -110,6 +110,31 @@ const SearchPage: React.FC = () => {
     void runSearch();
   }, [term, language, domain, aiSearch, fuzzySearch, currentPage]);
 
+  useEffect(() => {
+    const runSearch = async () => {
+      setIsLoading(true);
+      try {
+        const { items, total } = await fetchSearchResults(
+          term,
+          language,
+          domain,
+          aiSearch,
+          fuzzySearch,
+          currentPage,
+        );
+        setResults(items);
+        setTotalPages(Math.ceil((total || 1) / pageSize));
+      } catch (error: unknown) {
+        console.error('Search fetch failed:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void runSearch();
+  }, [term, language, domain, aiSearch, fuzzySearch, currentPage]);
+
+
   const preloadGlossary = async (): Promise<void> => {
     try {
       const response = await fetch(`API_ENDPOINTS.search/api/v1/search/`);
@@ -206,11 +231,13 @@ const SearchPage: React.FC = () => {
 
   const groupedTerms = results.reduce<Record<string, Term[]>>((acc, term) => {
     const firstLetter = term.term[0].toUpperCase();
+    if (!/^[A-Z]$/.test(firstLetter)) return acc;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!acc[firstLetter]) acc[firstLetter] = [];
     acc[firstLetter].push(term);
     return acc;
   }, {});
+
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const availableLetters = new Set(Object.keys(groupedTerms));
