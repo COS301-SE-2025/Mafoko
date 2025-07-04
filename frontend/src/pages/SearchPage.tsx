@@ -207,28 +207,9 @@ const SearchPage: React.FC = () => {
     }
   };
 
-
-/*  const groupedTerms = results.reduce<Record<string, Term[]>>((acc, term) => {
-    const firstLetter = term.term[0].toUpperCase();
-    if (!/^[A-Z]$/.test(firstLetter)) return acc;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!acc[firstLetter]) acc[firstLetter] = [];
-    acc[firstLetter].push(term);
-    return acc;
-  }, {});*/
-
-/*  const filteredResults = activeLetter
-    ? results.filter((term) => {
-      const first = term.term[0].toUpperCase();
-      return /^[A-Z]$/.test(first) && first === activeLetter;
-    })
-    : results.filter((term) => /^[A-Z]$/.test(term.term[0].toUpperCase()));*/
-
   const filteredResults = activeLetter
-    ? results // trust server search results
+    ? results.filter(term => /^[A-Z]$/.test(term.term[0].toUpperCase()) )
     : results.filter(term => /^[A-Z]$/.test(term.term[0].toUpperCase()));
-
-
 
   const groupedTerms = filteredResults.reduce<Record<string, Term[]>>((acc, term) => {
     const firstLetter = term.term[0].toUpperCase();
@@ -238,12 +219,7 @@ const SearchPage: React.FC = () => {
     return acc;
   }, {});
 
-
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  //const availableLetters = new Set(Object.keys(groupedTerms));
-  //const letterRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-
 
   return (
 
