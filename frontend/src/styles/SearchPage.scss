@@ -147,6 +147,12 @@ $text-dark: #ffffff;
             pointer-events: none;
           }
 
+          .index-letter.active {
+            background-color: var(--accent-color);
+            color: var(--bg-theme);
+          }
+
+
           .terms-list {
             display: grid;
             gap: 1rem;

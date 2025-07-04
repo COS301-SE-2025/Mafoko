@@ -61,6 +61,9 @@ const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isLoading, setIsLoading] = useState(false);
+  //const [allTerms, setAllTerms] = useState<Term[]>([]);
+  const [activeLetter, setActiveLetter] = useState<string | null>(null);
+
 
 
   useEffect(() => {
@@ -109,31 +112,6 @@ const SearchPage: React.FC = () => {
 
     void runSearch();
   }, [term, language, domain, aiSearch, fuzzySearch, currentPage]);
-
-  useEffect(() => {
-    const runSearch = async () => {
-      setIsLoading(true);
-      try {
-        const { items, total } = await fetchSearchResults(
-          term,
-          language,
-          domain,
-          aiSearch,
-          fuzzySearch,
-          currentPage,
-        );
-        setResults(items);
-        setTotalPages(Math.ceil((total || 1) / pageSize));
-      } catch (error: unknown) {
-        console.error('Search fetch failed:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    void runSearch();
-  }, [term, language, domain, aiSearch, fuzzySearch, currentPage]);
-
 
   const preloadGlossary = async (): Promise<void> => {
     try {
@@ -195,7 +173,7 @@ const SearchPage: React.FC = () => {
       language: string,
       domain: string,
       _ai: boolean,
-      _fuzzy: boolean,
+      fuzzy: boolean,
       page: number,
   ): Promise<SearchResponse> => {
     const params = new URLSearchParams({
@@ -205,6 +183,7 @@ const SearchPage: React.FC = () => {
       sort_by: 'name',
       page: page.toString(),
       page_size: pageSize.toString(),
+      fuzzy: fuzzy.toString(),
     });
 
     const response = await fetch(
@@ -229,9 +208,30 @@ const SearchPage: React.FC = () => {
   };
 
 
-  const groupedTerms = results.reduce<Record<string, Term[]>>((acc, term) => {
+/*  const groupedTerms = results.reduce<Record<string, Term[]>>((acc, term) => {
     const firstLetter = term.term[0].toUpperCase();
     if (!/^[A-Z]$/.test(firstLetter)) return acc;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!acc[firstLetter]) acc[firstLetter] = [];
+    acc[firstLetter].push(term);
+    return acc;
+  }, {});*/
+
+/*  const filteredResults = activeLetter
+    ? results.filter((term) => {
+      const first = term.term[0].toUpperCase();
+      return /^[A-Z]$/.test(first) && first === activeLetter;
+    })
+    : results.filter((term) => /^[A-Z]$/.test(term.term[0].toUpperCase()));*/
+
+  const filteredResults = activeLetter
+    ? results // trust server search results
+    : results.filter(term => /^[A-Z]$/.test(term.term[0].toUpperCase()));
+
+
+
+  const groupedTerms = filteredResults.reduce<Record<string, Term[]>>((acc, term) => {
+    const firstLetter = term.term[0].toUpperCase();
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!acc[firstLetter]) acc[firstLetter] = [];
     acc[firstLetter].push(term);
@@ -240,8 +240,8 @@ const SearchPage: React.FC = () => {
 
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  const availableLetters = new Set(Object.keys(groupedTerms));
-  const letterRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  //const availableLetters = new Set(Object.keys(groupedTerms));
+  //const letterRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
 
 
@@ -307,25 +307,34 @@ const SearchPage: React.FC = () => {
 
                   <nav className="alphabetical-index">
                     {alphabet.map((letter) => {
-                      const isAvailable = availableLetters.has(letter);
+                      //const isAvailable = availableLetters.has(letter);
                       return (
-                        <button
-                          key={letter}
-                          disabled={!isAvailable}
-                          className={`index-letter ${isAvailable ? '' : 'disabled'}`}
-                          onClick={() => {
-                            const section = letterRefs.current[letter];
-                            if (section) {
-                              section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
-                          }}
-                          aria-label={`Jump to terms starting with ${letter}`}
-                          type="button"
-                        >
-                          {letter}
-                        </button>
-                      );
+                      <button
+                        key={letter}
+                        /*disabled={!isAvailable}*/
+                        className={`index-letter ${activeLetter === letter ? 'active' : ''}`}
+                        onClick={() => {setCurrentPage(1); setActiveLetter(letter); void handleSearch(letter);}}
+                        aria-label={`Show terms starting with ${letter}`}
+                        type="button"
+                      >
+                        {letter}
+                      </button>
+
+                    );
                     })}
+                    {activeLetter && (
+                      <button
+                        onClick={() => {
+                          setActiveLetter(null);
+                          setCurrentPage(1);
+                          setTerm('');
+                          void handleSearch('');
+                        }}
+                        className="ml-2 px-2 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded"
+                      >
+                        Show All
+                      </button>
+                    )}
                   </nav>
 
                   <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
