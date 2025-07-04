@@ -13,11 +13,17 @@
 **Marito** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Mavito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
 
 
----
 
+---
 ## Project Resources
-* [Functional Requirements (SRS) Document](https://github.com/COS301-SE-2025/Mavito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
-* [GitHub Project Board](https://github.com/COS301-SE-2025/Mavito/projects)
+
+*  [Project Board](https://github.com/COS301-SE-2025/Mavito/projects)
+*  [SRS Document](https://github.com/COS301-SE-2025/Mavito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
+*  [Figma Designs](https://www.figma.com/design/XUPY5uCBmWQULGmh3L0bqC/Marito_Designs?node-id=0-1&p=f&t=0je6YkOSQeV0tjmJ-0) 
+*  [Architectural requirements](https://9000) 
+*  [User Manual ](https://9000) 
+*  [Technical Installation Manual](https://9000) 
+*  [Coding Standards Document](https://9000) 
 
 ---
 
