@@ -115,14 +115,34 @@ $text-dark: #ffffff;
           }
 
           .alphabetical-index {
+
+          }
+
+          .letter-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+          }
+
+          .alphabetical-index {
             position: sticky;
             top: 100px;
             display: flex;
-            gap: 0.25rem;
+            /*gap: 0.25rem;*/
             padding: 0.5rem;
             max-height: calc(100vh - 120px);
             overflow-y: auto;
             user-select: none;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
           }
 
           .index-letter {
@@ -148,8 +168,9 @@ $text-dark: #ffffff;
           }
 
           .index-letter.active {
-            background-color: var(--accent-color);
-            color: var(--bg-theme);
+            /*background-color: var(--accent-color);*/
+            color: var(--accent-color);
+            font-size: 1.5rem;
           }
 
 
