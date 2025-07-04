@@ -31,9 +31,12 @@ async def search_endpoint(
     sort_by: str = Query("name", description="Sort by 'name' or 'popularity'"),
     page: int = Query(1, description="Page number"),
     page_size: int = Query(20, description="Page size"),
+    fuzzy: bool = Query(False, description="Enable fuzzy search"),
 ):
     # This now returns a list of tuples: (Term, upvotes, downvotes)
-    results = await search_terms_in_db(db, query, language, domain, sort_by)
+    results = await search_terms_in_db(
+        db, query, language, domain, sort_by, fuzzy=fuzzy
+    )
 
     total = len(results)
     start = (page - 1) * page_size
