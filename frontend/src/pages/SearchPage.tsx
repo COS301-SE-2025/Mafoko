@@ -57,27 +57,17 @@
     const pageSize = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    //const [isDarkMode, setIsDarkMode] = useState(false);
     const [activeMenuItem, setActiveMenuItem] = useState('search');
     const navigate = useNavigate();
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [isLoading, setIsLoading] = useState(false);
-    //const [allTerms, setAllTerms] = useState<Term[]>([]);
     const [activeLetter, setActiveLetter] = useState<string | null>(null);
     const { isDarkMode } = useDarkMode();
-
-
 
     useEffect(() => {
       void preloadGlossary();
       void fetchDomains().then(setDomainOptions);
-      //const stored = localStorage.getItem('darkMode');
-      //if (stored) setIsDarkMode(stored === 'false');
     }, []);
-
-/*    useEffect(() => {
-      localStorage.setItem('darkMode', String(isDarkMode));
-    }, [isDarkMode]);*/
 
     useEffect(() => {
       const handleResize = () => {
@@ -285,11 +275,9 @@
 
                     <nav className="alphabetical-index">
                       {alphabet.map((letter) => {
-                        //const isAvailable = availableLetters.has(letter);
                         return (
                         <button
                           key={letter}
-                          /*disabled={!isAvailable}*/
                           className={`index-letter ${activeLetter === letter ? 'active' : ''}`}
                           onClick={() => {setCurrentPage(1); setActiveLetter(letter); void handleSearch(letter);}}
                           aria-label={`Show terms starting with ${letter}`}

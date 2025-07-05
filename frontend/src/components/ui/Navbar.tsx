@@ -29,17 +29,7 @@ const Navbar = () => {
   });*/
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState('');
-  //const [isDarkMode, setIsDarkMode] = useState(false);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-
-/*  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);*/
 
   const navItems = useMemo(
     () => [
@@ -74,17 +64,6 @@ const Navbar = () => {
   // const [isLoadingUserData, setIsLoadingUserData] = useState(true); // Optional: if you want a loading state for avatar
 
   useEffect(() => {
-    //const root = document.documentElement;
-    /*if (darkMode) {
-      root.classList.remove('theme-light');
-      root.classList.add('theme-dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      root.classList.remove('theme-dark');
-      root.classList.add('theme-light');
-      localStorage.setItem('theme', 'light');
-    }*/
-
     const currentPath = location.pathname.replace('/', '').replace(/-/g, ' ');
     const match = navItems.find(
       (item) => item.toLowerCase() === currentPath.toLowerCase(),

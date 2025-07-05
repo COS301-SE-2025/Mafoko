@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
+import { useDarkMode } from './DarkModeComponent.tsx';
+import { Moon, Sun } from 'lucide-react';
 
 interface LeftNavProps {
   activeItem: string;
@@ -11,6 +13,7 @@ interface LeftNavProps {
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const menuItems = [
     { id: 'dashboard', label: 'Home', path: '/dashboard' },
@@ -53,6 +56,16 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             <span className="left-nav-menu-label">{item.label}</span>
           </div>
         ))}
+        <div >
+          <button
+            onClick={toggleDarkMode}
+            className="text-theme bg-theme hover:text-accent-pink transition outline-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none"
+            type="button"
+            aria-label="Toggle dark mode"
+          >
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
       </nav>
     </div>
   );
