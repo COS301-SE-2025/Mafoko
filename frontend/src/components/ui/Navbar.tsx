@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import '../../styles/Navbar.scss';
+import { useDarkMode } from './DarkModeComponent.tsx';
 
 // This should ideally be in a shared config file or environment variable
 const NGROK_BASE_URL = 'https://7ecc-197-185-168-28.ngrok-free.app'; // Ensure this is your correct NGROK URL
@@ -23,11 +24,22 @@ interface UserData {
 
 const Navbar = () => {
   const location = useLocation();
-  const [darkMode, setDarkMode] = useState(() => {
+  /*const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark';
-  });
+  });*/
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState('');
+  //const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+/*  useEffect(() => {
+    const stored = localStorage.getItem('darkMode');
+    if (stored) setIsDarkMode(stored === 'false');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(isDarkMode));
+  }, [isDarkMode]);*/
 
   const navItems = useMemo(
     () => [
@@ -62,8 +74,8 @@ const Navbar = () => {
   // const [isLoadingUserData, setIsLoadingUserData] = useState(true); // Optional: if you want a loading state for avatar
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
+    //const root = document.documentElement;
+    /*if (darkMode) {
       root.classList.remove('theme-light');
       root.classList.add('theme-dark');
       localStorage.setItem('theme', 'dark');
@@ -71,7 +83,7 @@ const Navbar = () => {
       root.classList.remove('theme-dark');
       root.classList.add('theme-light');
       localStorage.setItem('theme', 'light');
-    }
+    }*/
 
     const currentPath = location.pathname.replace('/', '').replace(/-/g, ' ');
     const match = navItems.find(
@@ -155,10 +167,10 @@ const Navbar = () => {
     };
 
     void fetchAndSetUserData();
-  }, [darkMode, location.pathname, navItems]); // location.pathname ensures data might refetch if relevant
+  }, [/*darkMode, */location.pathname, navItems]); // location.pathname ensures data might refetch if relevant
 
   return (
-    <nav className="w-full fixed top-0 left-0 bg-theme text-theme px-6 py-3 shadow-md z-50">
+    <nav className={`w-full fixed top-0 left-0 bg-theme text-theme px-6 py-3 shadow-md z-50 ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
       <div className="max-w-screen-xl mx-auto flex items-center justify-between">
         {/* Logo and Title */}
         <div className="flex items-center space-x-3">
@@ -196,14 +208,12 @@ const Navbar = () => {
         {/* Avatar, Theme Toggle & Hamburger */}
         <div className="flex items-center gap-4">
           <button
-            onClick={() => {
-              setDarkMode(!darkMode);
-            }}
+            onClick={toggleDarkMode}
             className="text-theme bg-theme hover:text-accent-pink transition outline-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none"
             type="button"
             aria-label="Toggle dark mode"
           >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
           {/* Avatar Display */}

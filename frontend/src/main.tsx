@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { DarkModeProvider } from './components/ui/DarkModeComponent.tsx';
 import App from './App.tsx';
 import './i18n';
 import './index.css';
@@ -12,7 +13,9 @@ if (rootElement) {
     <React.StrictMode>
       <React.Suspense fallback={<div>Loading translations...</div>}>
         <BrowserRouter basename="/Mavito">
-          <App />
+          <DarkModeProvider>
+            <App />
+          </DarkModeProvider>
         </BrowserRouter>
       </React.Suspense>
     </React.StrictMode>,
