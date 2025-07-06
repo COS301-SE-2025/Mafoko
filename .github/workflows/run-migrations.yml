@@ -2,44 +2,54 @@ name: Run Database Migrations
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'backend/migrations/alembic/versions/**'
+    branches: [main]
+    paths: ['backend/migrations/**']
+
+env:
+  GCP_PROJECT_ID: dsfsi-232208
+  GCP_REGION: us-central1
+  GAR_LOCATION: us-central1-docker.pkg.dev
 
 jobs:
-  deploy-migration-job:
-    name: Deploy and Run Migration Job
+  deploy-migrations:
     runs-on: ubuntu-latest
-    environment: production
     permissions:
       contents: 'read'
       id-token: 'write'
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Authenticate with Google Cloud
+      - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.DSFSI_SA_KEY }}
-          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'my-backend-service@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com'
 
-      - name: Set up Cloud SDK
+      - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Deploy Cloud Run Job
-        run: |
-          # Replace with your actual Cloud Run job configuration
-          gcloud run jobs replace jobs/alembic-migrations.yaml \
-            --project=${{ secrets.GCP_PROJECT_ID }} \
-            --region=${{ secrets.GCP_REGION }}
+      - name: Build and push image
+        run: |-
+          docker build -t $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:$GITHUB_SHA -f backend/alembic-service/Dockerfile .
+          docker tag $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:$GITHUB_SHA $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
+          docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:$GITHUB_SHA
+          docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
 
-      - name: Execute Migration Job
-        run: |
+      - name: Deploy and run migrations
+        run: |-
+          # URL-encode password
+          ENCODED_PW=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")
+          
+          # Force update the image using latest tag
+          gcloud run jobs update alembic-migrations \
+            --project=$GCP_PROJECT_ID \
+            --region=$GCP_REGION \
+            --image=$GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
+            --update-env-vars="DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=$ENCODED_PW,DB_NAME=${{ secrets.DB_NAME }}" \
+            --args="alembic upgrade head"
+
           gcloud run jobs execute alembic-migrations \
-            --project=${{ secrets.GCP_PROJECT_ID }} \
-            --region=${{ secrets.GCP_REGION }} \
+            --project=$GCP_PROJECT_ID \
+            --region=$GCP_REGION \
             --wait
