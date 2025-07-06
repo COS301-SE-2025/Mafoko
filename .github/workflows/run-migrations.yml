@@ -1,10 +1,11 @@
 name: Run Database Migrations
 
 on:
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:  # Enable manual triggering
   push:
     branches: [main]
-    paths: ['backend/migrations/**']
+    paths:
+      - 'backend/migrations/**'  # Only trigger when migrations change
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -19,29 +20,53 @@ jobs:
       id-token: 'write'  # Required for Workload Identity
 
     steps:
-      - name: Checkout code
+      # --- STEP 1: Checkout code ---
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
+      # --- STEP 2: Authenticate to GCP ---
+
+      # OPTION A: Service Account Key (quickstart)
+      - name: Authenticate to Google Cloud (Service Account)
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.DSFSI_SA_KEY }}  # Use service account key
-          # OR use Workload Identity (choose one):
-          # workload_identity_provider: projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-          # service_account: my-backend-service@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+          credentials_json: ${{ secrets.DSFSI_SA_KEY }}
 
+      # OPTION B: Workload Identity (recommended for production)
+      # - name: Authenticate to Google Cloud (Workload Identity)
+      #   uses: google-github-actions/auth@v1
+      #   with:
+      #     workload_identity_provider: projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+      #     service_account: my-backend-service@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+
+      # --- STEP 3: Set up gcloud CLI ---
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
 
+      # --- STEP 4: Build and push Docker image ---
+      - name: Build and push image
+        run: |
+          docker build -t $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:$GITHUB_SHA -f backend/alembic-service/Dockerfile .
+          docker tag $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:$GITHUB_SHA $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
+          docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:$GITHUB_SHA
+          docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
+
+      # --- STEP 5: Deploy and run migrations ---
       - name: Deploy and run migrations
-        run: |-
+        run: |
+          # URL-encode password for special characters
+          ENCODED_PW=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")
+          
+          # Update Cloud Run Job configuration
           gcloud run jobs update alembic-migrations \
             --project=$GCP_PROJECT_ID \
             --region=$GCP_REGION \
-            --image=us-central1-docker.pkg.dev/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
-            --update-env-vars="DB_URL=postgresql+asyncpg://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@/${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.INSTANCE_CONNECTION_NAME }}" \
+            --image=$GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
+            --update-env-vars="DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=$ENCODED_PW,DB_NAME=${{ secrets.DB_NAME }}" \
+            --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --args="alembic upgrade head"
 
+          # Execute the job
           gcloud run jobs execute alembic-migrations \
             --project=$GCP_PROJECT_ID \
             --region=$GCP_REGION \
