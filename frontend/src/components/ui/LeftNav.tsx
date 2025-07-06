@@ -56,7 +56,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             <span className="left-nav-menu-label">{item.label}</span>
           </div>
         ))}
-        <div >
+        <div>
           <button
             onClick={toggleDarkMode}
             className="text-theme bg-theme hover:text-accent-pink transition outline-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none"

@@ -146,10 +146,12 @@ const Navbar = () => {
     };
 
     void fetchAndSetUserData();
-  }, [/*darkMode, */location.pathname, navItems]); // location.pathname ensures data might refetch if relevant
+  }, [/*darkMode, */ location.pathname, navItems]); // location.pathname ensures data might refetch if relevant
 
   return (
-    <nav className={`w-full fixed top-0 left-0 bg-theme text-theme px-6 py-3 shadow-md z-50 ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
+    <nav
+      className={`w-full fixed top-0 left-0 bg-theme text-theme px-6 py-3 shadow-md z-50 ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+    >
       <div className="max-w-screen-xl mx-auto flex items-center justify-between">
         {/* Logo and Title */}
         <div className="flex items-center space-x-3">

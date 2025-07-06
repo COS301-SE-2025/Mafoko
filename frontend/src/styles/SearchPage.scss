@@ -115,7 +115,6 @@ $text-dark: #ffffff;
           }
 
           .alphabetical-index {
-
           }
 
           .letter-header {
@@ -125,7 +124,6 @@ $text-dark: #ffffff;
             margin-bottom: 1rem;
             display: flex;
             gap: 0.5rem;
-
           }
 
           .alphabetical-index {
@@ -171,14 +169,11 @@ $text-dark: #ffffff;
             font-size: 1.5rem;
           }
 
-
           .terms-list {
             display: grid;
             gap: 1rem;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
           }
-
-
         }
       }
     }
