@@ -36,12 +36,11 @@ jobs:
 
       - name: Build and push image
         run: |
-          # Exact replica of your local command
           docker build \
             -t $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
-            -f ./alembic-service/Dockerfile \
-            .  # Build context is current directory (backend)
-
+            -f backend/alembic-service/Dockerfile \
+            backend
+      
           docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
 
       - name: Deploy and run migrations
