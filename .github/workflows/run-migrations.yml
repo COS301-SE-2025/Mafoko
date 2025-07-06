@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'backend/migrations/**'
+      - 'backend/alembic-service/**'
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -20,10 +21,10 @@ jobs:
       id-token: 'write'
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          path: 'backend'
+          path: 'backend'  # Matches your working directory
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -33,23 +34,25 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Build and push image (using latest tag)
+      - name: Build and push image
         run: |
-          cd backend/alembic-service
-          # Build with ONLY latest tag (matches your local command)
-          docker build -t $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest .
+          # Exact replica of your local command
+          docker build \
+            -t $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
+            -f ./alembic-service/Dockerfile \
+            .  # Build context is current directory (backend)
+
           docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
 
       - name: Deploy and run migrations
         run: |
-          # Use latest tag explicitly in deployment
           gcloud run jobs deploy alembic-migrations \
             --image=$GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
-            --set-env-vars="DB_URL=postgresql+asyncpg://${{ secrets.DB_USER }}:$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))"@/${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.INSTANCE_CONNECTION_NAME }}" \
+            --set-env-vars="DB_URL=postgresql+asyncpg://${{ secrets.DB_USER }}:$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")@/${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.INSTANCE_CONNECTION_NAME }}" \
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --region=$GCP_REGION \
             --project=$GCP_PROJECT_ID \
-            --command="/bin/sh,-c,alembic upgrade head" \
+            --command="alembic upgrade head" \
             --quiet
 
           gcloud run jobs execute alembic-migrations \
