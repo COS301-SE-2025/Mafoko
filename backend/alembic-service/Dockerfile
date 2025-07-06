@@ -1,19 +1,23 @@
-# alembic-service/Dockerfile
 FROM python:3.11-slim
 
+# Install system deps
+RUN apt-get update && apt-get install -y gcc && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y gettext-base && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y gcc git gettext-base && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install common lib
+COPY ./mavito-common-lib /mavito-common-lib
+RUN pip install -e /mavito-common-lib
+
+# Install requirements
+COPY ./alembic-service/requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy migrations 
+COPY ./migrations /app/migrations
+
 WORKDIR /app
-
-# Copy and install dependencies first
-COPY ./alembic-service/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the entrypoint script into the image
-COPY ./alembic-service/entrypoint.sh /app/entrypoint.sh
-# Make it executable inside the container
-RUN sed -i 's/\r$//' /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
-# Set the entrypoint for the container
-ENTRYPOINT ["/app/entrypoint.sh"]
-
-CMD ["sleep", "infinity"]
+ENTRYPOINT ["alembic"]
+CMD ["upgrade", "head"]
