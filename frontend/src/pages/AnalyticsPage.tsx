@@ -398,7 +398,9 @@ const AnalyticsPage: React.FC = () => {
                     </div>
                     <div className="mt-4 px-2">
                       <HorizontalBarChart
-                        data={categoryData.slice(0, 15)}
+                        data={categoryData
+                          .sort((a, b) => b.frequency - a.frequency)
+                          .slice(0, 15)}
                         isDarkMode={isDarkMode}
                       />
                     </div>
@@ -428,26 +430,29 @@ const AnalyticsPage: React.FC = () => {
                     </div>
                     <div className="pie-chart-wrapper">
                       <PieChart
-                        data={categoryData.slice(0, 8).map((item, index) => ({
-                          label:
-                            item.term.length > 20
-                              ? item.term.substring(0, 20) + '...'
-                              : item.term,
-                          value: Math.round(
-                            (item.frequency /
-                              (categoryData.reduce(
-                                (sum, cat) => sum + cat.frequency,
-                                0,
-                              ) || 1)) *
-                              100,
-                          ),
-                          backgroundColor:
-                            colorPalette[index % colorPalette.length]
-                              .backgroundColor,
-                          borderColor:
-                            colorPalette[index % colorPalette.length]
-                              .borderColor,
-                        }))}
+                        data={categoryData
+                          .sort((a, b) => b.frequency - a.frequency)
+                          .slice(0, 8)
+                          .map((item, index) => ({
+                            label:
+                              item.term.length > 20
+                                ? item.term.substring(0, 20) + '...'
+                                : item.term,
+                            value: Math.round(
+                              (item.frequency /
+                                (categoryData.reduce(
+                                  (sum, cat) => sum + cat.frequency,
+                                  0,
+                                ) || 1)) *
+                                100,
+                            ),
+                            backgroundColor:
+                              colorPalette[index % colorPalette.length]
+                                .backgroundColor,
+                            borderColor:
+                              colorPalette[index % colorPalette.length]
+                                .borderColor,
+                          }))}
                         formatValue={(value) => `${String(value)}%`}
                         isDarkMode={isDarkMode}
                       />
@@ -576,70 +581,74 @@ const AnalyticsPage: React.FC = () => {
                     </div>
                     <div style={{ padding: '1rem' }}>
                       <div className="focus-areas">
-                        {categoryData.slice(0, 5).map((category, index) => {
-                          const percentage =
-                            (category.frequency /
-                              (categoryData.reduce(
-                                (sum, cat) => sum + cat.frequency,
-                                0,
-                              ) || 1)) *
-                            100;
-                          return (
-                            <div
-                              key={`category-${category.term}`}
-                              style={{ marginBottom: '1rem' }}
-                            >
+                        {categoryData
+                          .sort((a, b) => b.frequency - a.frequency)
+                          .slice(0, 5)
+                          .map((category, index) => {
+                            const percentage =
+                              (category.frequency /
+                                (categoryData.reduce(
+                                  (sum, cat) => sum + cat.frequency,
+                                  0,
+                                ) || 1)) *
+                              100;
+                            return (
                               <div
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  marginBottom: '0.25rem',
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    color: 'var(--text-color)',
-                                    fontSize: '0.875rem',
-                                    fontWeight: '500',
-                                  }}
-                                >
-                                  {category.term.length > 25
-                                    ? category.term.substring(0, 25) + '...'
-                                    : category.term}
-                                </span>
-                                <span
-                                  style={{
-                                    color: 'var(--text-color-secondary)',
-                                    fontSize: '0.875rem',
-                                  }}
-                                >
-                                  {percentage.toFixed(1)}%
-                                </span>
-                              </div>
-                              <div
-                                style={{
-                                  width: '100%',
-                                  height: '6px',
-                                  backgroundColor:
-                                    'var(--background-secondary)',
-                                  borderRadius: '3px',
-                                  overflow: 'hidden',
-                                }}
+                                key={`category-${category.term}`}
+                                style={{ marginBottom: '1rem' }}
                               >
                                 <div
                                   style={{
-                                    width: `${percentage.toString()}%`,
-                                    height: '100%',
-                                    backgroundColor:
-                                      colorPalette[index % colorPalette.length]
-                                        .backgroundColor,
-                                    borderRadius: '3px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    marginBottom: '0.25rem',
                                   }}
-                                />
+                                >
+                                  <span
+                                    style={{
+                                      color: 'var(--text-color)',
+                                      fontSize: '0.875rem',
+                                      fontWeight: '500',
+                                    }}
+                                  >
+                                    {category.term.length > 25
+                                      ? category.term.substring(0, 25) + '...'
+                                      : category.term}
+                                  </span>
+                                  <span
+                                    style={{
+                                      color: 'var(--text-color-secondary)',
+                                      fontSize: '0.875rem',
+                                    }}
+                                  >
+                                    {percentage.toFixed(1)}%
+                                  </span>
+                                </div>
+                                <div
+                                  style={{
+                                    width: '100%',
+                                    height: '6px',
+                                    backgroundColor:
+                                      'var(--background-secondary)',
+                                    borderRadius: '3px',
+                                    overflow: 'hidden',
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      width: `${percentage.toString()}%`,
+                                      height: '100%',
+                                      backgroundColor:
+                                        colorPalette[
+                                          index % colorPalette.length
+                                        ].backgroundColor,
+                                      borderRadius: '3px',
+                                    }}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
                       </div>
                     </div>
                   </div>
