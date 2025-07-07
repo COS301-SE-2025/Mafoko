@@ -129,42 +129,42 @@ class TestAnalyticsIntegration:
                     # Re-raise unexpected errors
                     raise
 
+    def test_popular_terms_endpoint_with_parameters(self, client: TestClient) -> None:
+        """Test popular terms endpoint with query parameters."""
+        try:
+            # Test with limit parameter
+            response = client.get("/api/v1/analytics/descriptive/popular-terms?limit=5")
+            # Should not return 404 (endpoint exists)
+            assert response.status_code != 404
 
-#     def test_popular_terms_endpoint_with_parameters(self, client: TestClient) -> None:
-#         """Test popular terms endpoint with query parameters."""
-#         try:
-#             # Test with limit parameter
-#             response = client.get("/api/v1/analytics/descriptive/popular-terms?limit=5")
-#             # Should not return 404 (endpoint exists)
-#             assert response.status_code != 404
+            # Test with domain filter
+            response = client.get(
+                "/api/v1/analytics/descriptive/popular-terms?domain=Agriculture"
+            )
+            assert response.status_code != 404
 
-#             # Test with domain filter
-#             response = client.get(
-#                 "/api/v1/analytics/descriptive/popular-terms?domain=Agriculture"
-#             )
-#             assert response.status_code != 404
+            # Test with language filter
+            response = client.get(
+                "/api/v1/analytics/descriptive/popular-terms?language=english"
+            )
+            assert response.status_code != 404
 
-#             # Test with language filter
-#             response = client.get(
-#                 "/api/v1/analytics/descriptive/popular-terms?language=english"
-#             )
-#             assert response.status_code != 404
+            # Test with multiple parameters
+            response = client.get(
+                "/api/v1/analytics/descriptive/popular-terms?limit=3&domain=Education&language=afrikaans"
+            )
+            assert response.status_code != 404
 
-#             # Test with multiple parameters
-#             response = client.get(
-#                 "/api/v1/analytics/descriptive/popular-terms?limit=3&domain=Education&language=afrikaans"
-#             )
-#             assert response.status_code != 404
+            print("✓ Popular terms endpoint handles query parameters correctly")
+        except Exception as e:
+            if "getaddrinfo failed" in str(e) or "socket.gaierror" in str(e):
+                print(
+                    "✓ Popular terms endpoint exists but has database connection issues (expected)"
+                )
+                pass
+            else:
+                raise
 
-#             print("✓ Popular terms endpoint handles query parameters correctly")
-#         except Exception as e:
-#             if "getaddrinfo failed" in str(e) or "socket.gaierror" in str(e):
-#                 print(
-#                     "✓ Popular terms endpoint exists but has database connection issues (expected)"
-#                 )
-#                 pass
-#             else:
-#                 raise
 
 #     def test_popular_terms_parameter_validation(self, client: TestClient) -> None:
 #         """Test parameter validation for popular terms endpoint."""
