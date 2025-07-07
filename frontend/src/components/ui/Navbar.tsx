@@ -194,7 +194,8 @@ const Navbar = () => {
             type="button"
             aria-label="Toggle dark mode"
           >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
+            {isDarkMode ? "Light" : "Dark"}
           </button>
 
           {/* Avatar Display */}
