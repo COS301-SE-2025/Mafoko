@@ -196,227 +196,227 @@ async def test_get_domain_language_matrix_returns_expected():
     }
 
 
-# @pytest.mark.asyncio
-# async def test_get_popular_terms_returns_expected():
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [
-#         ("Farm", 5),
-#         ("School", 3),
-#     ]
-#     mock_db.execute.return_value = mock_result
-#     result = await analytics.get_popular_terms(db=mock_db)
-#     assert result == [
-#         {"term": "Farm", "frequency": 5},
-#         {"term": "School", "frequency": 3},
-#     ]
+@pytest.mark.asyncio
+async def test_get_popular_terms_returns_expected():
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.all.return_value = [
+        ("Farm", 5),
+        ("School", 3),
+    ]
+    mock_db.execute.return_value = mock_result
+    result = await analytics.get_popular_terms(db=mock_db)
+    assert result == [
+        {"term": "Farm", "frequency": 5},
+        {"term": "School", "frequency": 3},
+    ]
 
 
-# @pytest.mark.asyncio
-# async def test_get_terms_without_translations_returns_expected():
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [
-#         ("Farm", "english", "Agriculture"),
-#         ("Plaas", "afrikaans", "Agriculture"),
-#         ("School", "english", "Education"),
-#     ]
-#     mock_db.execute.return_value = mock_result
-#     result = await analytics.get_terms_without_translations(mock_db)
-#     assert result == {
-#         "Agriculture": {"english": ["Farm"], "afrikaans": ["Plaas"]},
-#         "Education": {"english": ["School"]},
-#     }
+@pytest.mark.asyncio
+async def test_get_terms_without_translations_returns_expected():
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.all.return_value = [
+        ("Farm", "english", "Agriculture"),
+        ("Plaas", "afrikaans", "Agriculture"),
+        ("School", "english", "Education"),
+    ]
+    mock_db.execute.return_value = mock_result
+    result = await analytics.get_terms_without_translations(mock_db)
+    assert result == {
+        "Agriculture": {"english": ["Farm"], "afrikaans": ["Plaas"]},
+        "Education": {"english": ["School"]},
+    }
 
 
-# @pytest.mark.asyncio
-# async def test_get_translation_completeness_returns_expected():
-#     mock_db = AsyncMock()
-#     # result for main query
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [
-#         ("Agriculture", "Farm", 2),
-#         ("Agriculture", "Plaas", 1),
-#         ("Education", "School", 2),
-#     ]
-#     # result for total_languages_query
-#     mock_total_languages_result = MagicMock()
-#     mock_total_languages_result.scalar.return_value = 2
-#     mock_db.execute.side_effect = [mock_result, mock_total_languages_result]
-#     result = await analytics.get_translation_completeness(mock_db)
-#     assert result["total_languages_available"] == 2
-#     assert "domain_statistics" in result
-#     assert result["domain_statistics"]["Agriculture"]["total_terms"] == 2
-#     assert result["domain_statistics"]["Education"]["fully_translated"] == 1
+@pytest.mark.asyncio
+async def test_get_translation_completeness_returns_expected():
+    mock_db = AsyncMock()
+    # result for main query
+    mock_result = MagicMock()
+    mock_result.all.return_value = [
+        ("Agriculture", "Farm", 2),
+        ("Agriculture", "Plaas", 1),
+        ("Education", "School", 2),
+    ]
+    # result for total_languages_query
+    mock_total_languages_result = MagicMock()
+    mock_total_languages_result.scalar.return_value = 2
+    mock_db.execute.side_effect = [mock_result, mock_total_languages_result]
+    result = await analytics.get_translation_completeness(mock_db)
+    assert result["total_languages_available"] == 2
+    assert "domain_statistics" in result
+    assert result["domain_statistics"]["Agriculture"]["total_terms"] == 2
+    assert result["domain_statistics"]["Education"]["fully_translated"] == 1
 
 
-# @pytest.mark.asyncio
-# async def test_get_domain_statistics_with_awaitable_result():
-#     """Test get_domain_statistics when result.all() returns an awaitable object."""
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
+@pytest.mark.asyncio
+async def test_get_domain_statistics_with_awaitable_result():
+    """Test get_domain_statistics when result.all() returns an awaitable object."""
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
 
-#     # Create a mock awaitable object
-#     async def mock_awaitable():
-#         return [("Agriculture", 5), ("Education", 3)]
+    # Create a mock awaitable object
+    async def mock_awaitable():
+        return [("Agriculture", 5), ("Education", 3)]
 
-#     # Make all() return an awaitable
-#     mock_result.all.return_value = mock_awaitable()
-#     mock_db.execute.return_value = mock_result
+    # Make all() return an awaitable
+    mock_result.all.return_value = mock_awaitable()
+    mock_db.execute.return_value = mock_result
 
-#     result = await analytics.get_domain_statistics(mock_db)
-#     assert result == {"Agriculture": 5, "Education": 3}
-
-
-# @pytest.mark.asyncio
-# async def test_get_descriptive_analytics_endpoint():
-#     """Test the main descriptive analytics endpoint that combines all analytics."""
-#     mock_db = AsyncMock()
-
-#     # Mock all the individual analytics functions
-#     orig_get_category_frequency = analytics.get_category_frequency
-#     orig_get_language_coverage = analytics.get_language_coverage
-#     orig_get_term_length_analysis = analytics.get_term_length_analysis
-#     orig_get_definition_length_analysis = analytics.get_definition_length_analysis
-#     orig_get_unique_terms_count = analytics.get_unique_terms_count
-
-#     async def mock_category_frequency(db):
-#         return {"Agriculture": 5}
-
-#     async def mock_language_coverage(db):
-#         return {"english": 80.0}
-
-#     async def mock_term_length(db):
-#         return {"english": 4.5}
-
-#     async def mock_def_length(db):
-#         return {"english": 12.0}
-
-#     async def mock_unique_count(db):
-#         return {"english": 10}
-
-#     analytics.get_category_frequency = mock_category_frequency
-#     analytics.get_language_coverage = mock_language_coverage
-#     analytics.get_term_length_analysis = mock_term_length
-#     analytics.get_definition_length_analysis = mock_def_length
-#     analytics.get_unique_terms_count = mock_unique_count
-
-#     result = await analytics.get_descriptive_analytics(mock_db)
-
-#     assert result == {
-#         "category_frequency": {"Agriculture": 5},
-#         "language_coverage_percent": {"english": 80.0},
-#         "average_term_lengths": {"english": 4.5},
-#         "average_definition_lengths": {"english": 12.0},
-#         "unique_term_counts": {"english": 10},
-#     }
-
-#     # Restore original functions
-#     analytics.get_category_frequency = orig_get_category_frequency
-#     analytics.get_language_coverage = orig_get_language_coverage
-#     analytics.get_term_length_analysis = orig_get_term_length_analysis
-#     analytics.get_definition_length_analysis = orig_get_definition_length_analysis
-#     analytics.get_unique_terms_count = orig_get_unique_terms_count
+    result = await analytics.get_domain_statistics(mock_db)
+    assert result == {"Agriculture": 5, "Education": 3}
 
 
-# @pytest.mark.asyncio
-# async def test_get_category_frequency_endpoint():
-#     """Test the category frequency endpoint wrapper."""
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [("Agriculture", 5), ("Education", 3)]
-#     mock_db.execute.return_value = mock_result
+@pytest.mark.asyncio
+async def test_get_descriptive_analytics_endpoint():
+    """Test the main descriptive analytics endpoint that combines all analytics."""
+    mock_db = AsyncMock()
 
-#     result = await analytics.get_category_frequency(mock_db)
-#     assert result == {"Agriculture": 5, "Education": 3}
+    # Mock all the individual analytics functions
+    orig_get_category_frequency = analytics.get_category_frequency
+    orig_get_language_coverage = analytics.get_language_coverage
+    orig_get_term_length_analysis = analytics.get_term_length_analysis
+    orig_get_definition_length_analysis = analytics.get_definition_length_analysis
+    orig_get_unique_terms_count = analytics.get_unique_terms_count
 
+    async def mock_category_frequency(db):
+        return {"Agriculture": 5}
 
-# @pytest.mark.asyncio
-# async def test_get_popular_terms_with_domain_filter():
-#     """Test popular terms endpoint with domain filter."""
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [("Farm", 5), ("Crop", 3)]
-#     mock_db.execute.return_value = mock_result
+    async def mock_language_coverage(db):
+        return {"english": 80.0}
 
-#     result = await analytics.get_popular_terms(db=mock_db, domain="Agriculture")
-#     assert result == [
-#         {"term": "Farm", "frequency": 5},
-#         {"term": "Crop", "frequency": 3},
-#     ]
+    async def mock_term_length(db):
+        return {"english": 4.5}
 
+    async def mock_def_length(db):
+        return {"english": 12.0}
 
-# @pytest.mark.asyncio
-# async def test_get_popular_terms_with_language_filter():
-#     """Test popular terms endpoint with language filter."""
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [("School", 4), ("Teacher", 2)]
-#     mock_db.execute.return_value = mock_result
+    async def mock_unique_count(db):
+        return {"english": 10}
 
-#     result = await analytics.get_popular_terms(db=mock_db, language="english")
-#     assert result == [
-#         {"term": "School", "frequency": 4},
-#         {"term": "Teacher", "frequency": 2},
-#     ]
+    analytics.get_category_frequency = mock_category_frequency
+    analytics.get_language_coverage = mock_language_coverage
+    analytics.get_term_length_analysis = mock_term_length
+    analytics.get_definition_length_analysis = mock_def_length
+    analytics.get_unique_terms_count = mock_unique_count
 
+    result = await analytics.get_descriptive_analytics(mock_db)
 
-# @pytest.mark.asyncio
-# async def test_get_popular_terms_with_both_filters():
-#     """Test popular terms endpoint with both domain and language filters."""
-#     mock_db = AsyncMock()
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [("University", 3)]
-#     mock_db.execute.return_value = mock_result
+    assert result == {
+        "category_frequency": {"Agriculture": 5},
+        "language_coverage_percent": {"english": 80.0},
+        "average_term_lengths": {"english": 4.5},
+        "average_definition_lengths": {"english": 12.0},
+        "unique_term_counts": {"english": 10},
+    }
 
-#     result = await analytics.get_popular_terms(
-#         db=mock_db, domain="Education", language="english"
-#     )
-#     assert result == [{"term": "University", "frequency": 3}]
+    # Restore original functions
+    analytics.get_category_frequency = orig_get_category_frequency
+    analytics.get_language_coverage = orig_get_language_coverage
+    analytics.get_term_length_analysis = orig_get_term_length_analysis
+    analytics.get_definition_length_analysis = orig_get_definition_length_analysis
+    analytics.get_unique_terms_count = orig_get_unique_terms_count
 
 
-# @pytest.mark.asyncio
-# async def test_get_translation_completeness_edge_cases():
-#     """Test translation completeness with edge cases for coverage."""
-#     mock_db = AsyncMock()
-#     # Mock data that covers different translation scenarios
-#     mock_result = MagicMock()
-#     mock_result.all.return_value = [
-#         ("Agriculture", "Farm", 3),  # fully translated (equals total_languages)
-#         ("Agriculture", "Soil", 2),  # partial translation
-#         ("Agriculture", "Seed", 1),  # single language only
-#         ("Education", "School", 3),  # fully translated
-#     ]
-#     mock_total_languages_result = MagicMock()
-#     mock_total_languages_result.scalar.return_value = 3
+@pytest.mark.asyncio
+async def test_get_category_frequency_endpoint():
+    """Test the category frequency endpoint wrapper."""
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.all.return_value = [("Agriculture", 5), ("Education", 3)]
+    mock_db.execute.return_value = mock_result
 
-#     mock_db.execute.side_effect = [mock_result, mock_total_languages_result]
-
-#     result = await analytics.get_translation_completeness(mock_db)
-
-#     assert result["total_languages_available"] == 3
-#     assert "domain_statistics" in result
-#     # Check that all translation categories are covered
-#     agri_stats = result["domain_statistics"]["Agriculture"]
-#     assert agri_stats["total_terms"] == 3
-#     assert agri_stats["fully_translated"] == 1  # Farm with 3 languages
-#     assert agri_stats["partial_translations"] == 1  # Soil with 2 languages
-#     assert agri_stats["single_language_only"] == 1  # Seed with 1 language
+    result = await analytics.get_category_frequency(mock_db)
+    assert result == {"Agriculture": 5, "Education": 3}
 
 
-# @pytest.mark.asyncio
-# async def test_health_check_endpoint():
-#     """Test the health check endpoint."""
-#     result = await analytics.health_check()
-#     assert result == {"status": "healthy", "service": "analytics"}
+@pytest.mark.asyncio
+async def test_get_popular_terms_with_domain_filter():
+    """Test popular terms endpoint with domain filter."""
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.all.return_value = [("Farm", 5), ("Crop", 3)]
+    mock_db.execute.return_value = mock_result
+
+    result = await analytics.get_popular_terms(db=mock_db, domain="Agriculture")
+    assert result == [
+        {"term": "Farm", "frequency": 5},
+        {"term": "Crop", "frequency": 3},
+    ]
 
 
-# @pytest.mark.asyncio
-# async def test_test_endpoint():
-#     """Test the test endpoint."""
-#     result = await analytics.test_endpoint()
-#     assert "message" in result
-#     assert "timestamp" in result
-#     assert "endpoints" in result
-#     assert result["message"] == "Analytics service is working!"
-#     assert isinstance(result["endpoints"], list)
+@pytest.mark.asyncio
+async def test_get_popular_terms_with_language_filter():
+    """Test popular terms endpoint with language filter."""
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.all.return_value = [("School", 4), ("Teacher", 2)]
+    mock_db.execute.return_value = mock_result
+
+    result = await analytics.get_popular_terms(db=mock_db, language="english")
+    assert result == [
+        {"term": "School", "frequency": 4},
+        {"term": "Teacher", "frequency": 2},
+    ]
+
+
+@pytest.mark.asyncio
+async def test_get_popular_terms_with_both_filters():
+    """Test popular terms endpoint with both domain and language filters."""
+    mock_db = AsyncMock()
+    mock_result = MagicMock()
+    mock_result.all.return_value = [("University", 3)]
+    mock_db.execute.return_value = mock_result
+
+    result = await analytics.get_popular_terms(
+        db=mock_db, domain="Education", language="english"
+    )
+    assert result == [{"term": "University", "frequency": 3}]
+
+
+@pytest.mark.asyncio
+async def test_get_translation_completeness_edge_cases():
+    """Test translation completeness with edge cases for coverage."""
+    mock_db = AsyncMock()
+    # Mock data that covers different translation scenarios
+    mock_result = MagicMock()
+    mock_result.all.return_value = [
+        ("Agriculture", "Farm", 3),  # fully translated (equals total_languages)
+        ("Agriculture", "Soil", 2),  # partial translation
+        ("Agriculture", "Seed", 1),  # single language only
+        ("Education", "School", 3),  # fully translated
+    ]
+    mock_total_languages_result = MagicMock()
+    mock_total_languages_result.scalar.return_value = 3
+
+    mock_db.execute.side_effect = [mock_result, mock_total_languages_result]
+
+    result = await analytics.get_translation_completeness(mock_db)
+
+    assert result["total_languages_available"] == 3
+    assert "domain_statistics" in result
+    # Check that all translation categories are covered
+    agri_stats = result["domain_statistics"]["Agriculture"]
+    assert agri_stats["total_terms"] == 3
+    assert agri_stats["fully_translated"] == 1  # Farm with 3 languages
+    assert agri_stats["partial_translations"] == 1  # Soil with 2 languages
+    assert agri_stats["single_language_only"] == 1  # Seed with 1 language
+
+
+@pytest.mark.asyncio
+async def test_health_check_endpoint():
+    """Test the health check endpoint."""
+    result = await analytics.health_check()
+    assert result == {"status": "healthy", "service": "analytics"}
+
+
+@pytest.mark.asyncio
+async def test_test_endpoint():
+    """Test the test endpoint."""
+    result = await analytics.test_endpoint()
+    assert "message" in result
+    assert "timestamp" in result
+    assert "endpoints" in result
+    assert result["message"] == "Analytics service is working!"
+    assert isinstance(result["endpoints"], list)
