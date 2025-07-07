@@ -254,12 +254,12 @@ const SearchPage: React.FC = () => {
                     />
                   </div>
                   <div className="flex gap-4 flex-wrap">
-                    <ToggleSwitch
+                    {/*<ToggleSwitch
                       label="AI Search"
                       icon={<Brain size={16} />}
                       checked={aiSearch}
                       onChange={setAiSearch}
-                    />
+                    />*/}
                     <ToggleSwitch
                       label="Fuzzy Search"
                       icon={<Wand2 size={16} />}
