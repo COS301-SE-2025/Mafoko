@@ -165,35 +165,35 @@ class TestAnalyticsIntegration:
             else:
                 raise
 
+    def test_popular_terms_parameter_validation(self, client: TestClient) -> None:
+        """Test parameter validation for popular terms endpoint."""
+        try:
+            # Test with invalid limit (too high)
+            response = client.get(
+                "/api/v1/analytics/descriptive/popular-terms?limit=150"
+            )
+            # FastAPI should validate and return 422 for invalid parameters
+            assert response.status_code in [422, 500], "Should validate limit parameter"
 
-#     def test_popular_terms_parameter_validation(self, client: TestClient) -> None:
-#         """Test parameter validation for popular terms endpoint."""
-#         try:
-#             # Test with invalid limit (too high)
-#             response = client.get(
-#                 "/api/v1/analytics/descriptive/popular-terms?limit=150"
-#             )
-#             # FastAPI should validate and return 422 for invalid parameters
-#             assert response.status_code in [422, 500], "Should validate limit parameter"
+            # Test with invalid limit (too low)
+            response = client.get("/api/v1/analytics/descriptive/popular-terms?limit=0")
+            assert response.status_code in [422, 500], "Should validate limit parameter"
 
-#             # Test with invalid limit (too low)
-#             response = client.get("/api/v1/analytics/descriptive/popular-terms?limit=0")
-#             assert response.status_code in [422, 500], "Should validate limit parameter"
+            print("✓ Parameter validation working for popular terms endpoint")
+        except Exception as e:
+            if "getaddrinfo failed" in str(e) or "socket.gaierror" in str(e):
+                print(
+                    "✓ Parameter validation exists but has database connection issues (expected)"
+                )
+                pass
+            else:
+                raise
 
-#             print("✓ Parameter validation working for popular terms endpoint")
-#         except Exception as e:
-#             if "getaddrinfo failed" in str(e) or "socket.gaierror" in str(e):
-#                 print(
-#                     "✓ Parameter validation exists but has database connection issues (expected)"
-#                 )
-#                 pass
-#             else:
-#                 raise
+    def test_endpoint_error_handling(self, client: TestClient) -> None:
+        """Test error handling for non-existent endpoints."""
+        response = client.get("/api/v1/analytics/descriptive/non-existent-endpoint")
+        assert response.status_code == 404
 
-#     def test_endpoint_error_handling(self, client: TestClient) -> None:
-#         """Test error handling for non-existent endpoints."""
-#         response = client.get("/api/v1/analytics/descriptive/non-existent-endpoint")
-#         assert response.status_code == 404
 
 #     def test_endpoint_response_structure(self, client: TestClient) -> None:
 #         """Test that endpoints return proper response structure when working."""
