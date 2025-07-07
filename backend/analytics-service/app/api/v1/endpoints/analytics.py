@@ -1,11 +1,11 @@
+from typing import Dict
 from fastapi import APIRouter, Depends
 
 # Query
 # from typing import Dict, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, distinct
+from sqlalchemy import func, distinct, select
 
-# select
 # from collections import Counter
 
 from mavito_common.models.term import Term
@@ -132,23 +132,23 @@ async def get_unique_terms_count(db: AsyncSession = Depends(get_db)):
     return unique_term_counts
 
 
-# @router.get("/descriptive/terms-by-domain-and-language")
-# async def get_terms_by_domain_and_language(db: AsyncSession = Depends(get_db)):
-#     """Get term distribution across domains and languages."""
-#     query = select(
-#         Term.domain, Term.language, func.count(Term.id).label("count")
-#     ).group_by(Term.domain, Term.language)
+@router.get("/descriptive/terms-by-domain-and-language")
+async def get_terms_by_domain_and_language(db: AsyncSession = Depends(get_db)):
+    """Get term distribution across domains and languages."""
+    query = select(
+        Term.domain, Term.language, func.count(Term.id).label("count")
+    ).group_by(Term.domain, Term.language)
 
-#     result = await db.execute(query)
+    result = await db.execute(query)
 
-#     # Organize data by domain, then by language
-#     data: Dict[str, Dict[str, int]] = {}
-#     for domain, language, count in result.all():
-#         if domain not in data:
-#             data[domain] = {}
-#         data[domain][language] = count
+    # Organize data by domain, then by language
+    data: Dict[str, Dict[str, int]] = {}
+    for domain, language, count in result.all():
+        if domain not in data:
+            data[domain] = {}
+        data[domain][language] = count
 
-#     return data
+    return data
 
 
 # @router.get("/descriptive/total-statistics")
