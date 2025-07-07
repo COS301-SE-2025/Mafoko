@@ -274,40 +274,40 @@ class TestAnalyticsIntegration:
 #         assert (end_time - start_time) < 5.0  # Should complete quickly
 
 
-# class TestAnalyticsServiceConfiguration:
-#     """Test analytics service configuration and setup."""
+class TestAnalyticsServiceConfiguration:
+    """Test analytics service configuration and setup."""
 
-#     def test_router_configuration(self) -> None:
-#         """Test that the analytics router is configured correctly."""
-#         from app.api.v1.endpoints.analytics import router
+    def test_router_configuration(self) -> None:
+        """Test that the analytics router is configured correctly."""
+        from app.api.v1.endpoints.analytics import router
 
-#         # Check that router exists and has routes
-#         assert router is not None
-#         assert len(router.routes) > 0
+        # Check that router exists and has routes
+        assert router is not None
+        assert len(router.routes) > 0
 
-#         # Check that expected endpoints are registered
-#         route_paths = [getattr(route, "path", "") for route in router.routes]
-#         expected_paths = [
-#             "/health",
-#             "/test",
-#             "/descriptive",
-#             "/descriptive/category-frequency",
-#             "/descriptive/language-coverage",
-#             "/descriptive/popular-terms",
-#         ]
+        # Check that expected endpoints are registered
+        route_paths = [getattr(route, "path", "") for route in router.routes]
+        expected_paths = [
+            "/health",
+            "/test",
+            "/descriptive",
+            "/descriptive/category-frequency",
+            "/descriptive/language-coverage",
+            "/descriptive/popular-terms",
+        ]
 
-#         for expected_path in expected_paths:
-#             assert any(
-#                 expected_path in path for path in route_paths
-#             ), f"Missing route: {expected_path}"
+        for expected_path in expected_paths:
+            assert any(
+                expected_path in path for path in route_paths
+            ), f"Missing route: {expected_path}"
 
-#     def test_endpoint_imports(self) -> None:
-#         """Test that all analytics endpoint functions can be imported."""
-#         try:
-#             # Test that we can import the analytics module
-#             import app.api.v1.endpoints.analytics  # noqa: F401
+    def test_endpoint_imports(self) -> None:
+        """Test that all analytics endpoint functions can be imported."""
+        try:
+            # Test that we can import the analytics module
+            import app.api.v1.endpoints.analytics  # noqa: F401
 
-#             # If we get here, imports work
-#             assert True
-#         except ImportError as e:
-#             pytest.fail(f"Failed to import analytics module: {e}")
+            # If we get here, imports work
+            assert True
+        except ImportError as e:
+            pytest.fail(f"Failed to import analytics module: {e}")
