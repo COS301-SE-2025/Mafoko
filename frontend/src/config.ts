@@ -46,6 +46,18 @@ export const API_ENDPOINTS = {
 
   // --- Analytics Service ---
   descriptiveAnalytics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive`,
+  categoryFrequency: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/category-frequency`,
+  languageCoverage: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/language-coverage`,
+  popularTerms: (limit?: number, domain?: string, language?: string) => {
+    const params = new URLSearchParams();
+    if (limit) params.append('limit', limit.toString());
+    if (domain) params.append('domain', domain);
+    if (language) params.append('language', language);
+    const queryString = params.toString();
+    return `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/popular-terms${queryString ? `?${queryString}` : ''}`;
+  },
+  totalStatistics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/total-statistics`,
+  uniqueTerms: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/unique-terms`,
 
   submitVote: `${VOTE_SERVICE_URL}/api/v1/votes/`,
 
