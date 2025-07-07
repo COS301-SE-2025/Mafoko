@@ -1,8 +1,9 @@
-from typing import Dict
+from typing import Dict, Optional, Union, Annotated
 from fastapi import APIRouter, Depends
 
 # Query
 # from typing import Dict, Optional, Union
+from fastapi.params import Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import Select, func, distinct, select
 
@@ -223,113 +224,113 @@ async def get_domain_language_matrix(db: AsyncSession = Depends(get_db)):
     return {"domains": domains, "languages": languages, "matrix": matrix}
 
 
-# @router.get("/descriptive/popular-terms")
-# async def get_popular_terms(
-#     limit: int = Query(10, ge=1, le=100),
-#     domain: Optional[str] = Query(None),
-#     language: Optional[str] = Query(None),
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     """Get the most common terms (by frequency of appearance across languages)."""
-#     # Base query to count term frequencies
-#     query = select(Term.term, func.count(Term.id).label("frequency"))
+@router.get("/descriptive/popular-terms")
+async def get_popular_terms(
+    limit: Annotated[int, Query(ge=1, le=100)] = 10,
+    domain: Annotated[Optional[str], Query()] = None,
+    language: Annotated[Optional[str], Query()] = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """Get the most common terms (by frequency of appearance across languages)."""
+    # Base query to count term frequencies
+    query = select(Term.term, func.count(Term.id).label("frequency"))
 
-#     # Apply filters if provided
-#     if domain:
-#         query = query.where(func.lower(Term.domain) == domain.lower())
-#     if language:
-#         query = query.where(func.lower(Term.language) == language.lower())
+    # Apply filters if provided
+    if domain:
+        query = query.where(func.lower(Term.domain) == domain.lower())
+    if language:
+        query = query.where(func.lower(Term.language) == language.lower())
 
-#     # Group by term and order by frequency
-#     query = query.group_by(Term.term).order_by(func.count(Term.id).desc()).limit(limit)
+    # Group by term and order by frequency
+    query = query.group_by(Term.term).order_by(func.count(Term.id).desc()).limit(limit)
 
-#     result = await db.execute(query)
+    result = await db.execute(query)
 
-#     return [{"term": term, "frequency": frequency} for term, frequency in result.all()]
-
-
-# @router.get("/descriptive/terms-without-translations")
-# async def get_terms_without_translations(db: AsyncSession = Depends(get_db)):
-#     """Get terms that don't have translations in other languages."""
-#     # This is a complex query - we need to find terms that appear in only one language
-#     subquery = (
-#         select(Term.term, func.count(distinct(Term.language)).label("language_count"))
-#         .group_by(Term.term)
-#         .subquery()
-#     )
-
-#     # Get terms that appear in only one language
-#     query = (
-#         select(Term.term, Term.language, Term.domain)
-#         .join(subquery, Term.term == subquery.c.term)
-#         .where(subquery.c.language_count == 1)
-#         .order_by(Term.domain, Term.language, Term.term)
-#     )
-
-#     result = await db.execute(query)
-
-#     # Group by domain and language
-#     missing_translations: Dict[str, Dict[str, list]] = {}
-#     for term, language, domain in result.all():
-#         if domain not in missing_translations:
-#             missing_translations[domain] = {}
-#         if language not in missing_translations[domain]:
-#             missing_translations[domain][language] = []
-#         missing_translations[domain][language].append(term)
-
-#     return missing_translations
+    return [{"term": term, "frequency": frequency} for term, frequency in result.all()]
 
 
-# @router.get("/descriptive/translation-completeness")
-# async def get_translation_completeness(db: AsyncSession = Depends(get_db)):
-#     """Get translation completeness statistics per domain."""
-#     # Get all unique terms and count how many languages each appears in
-#     query = select(
-#         Term.domain,
-#         Term.term,
-#         func.count(distinct(Term.language)).label("language_count"),
-#     ).group_by(Term.domain, Term.term)
+@router.get("/descriptive/terms-without-translations")
+async def get_terms_without_translations(db: AsyncSession = Depends(get_db)):
+    """Get terms that don't have translations in other languages."""
+    # This is a complex query - we need to find terms that appear in only one language
+    subquery = (
+        select(Term.term, func.count(distinct(Term.language)).label("language_count"))
+        .group_by(Term.term)
+        .subquery()
+    )
 
-#     result = await db.execute(query)
+    # Get terms that appear in only one language
+    query = (
+        select(Term.term, Term.language, Term.domain)
+        .join(subquery, Term.term == subquery.c.term)
+        .where(subquery.c.language_count == 1)
+        .order_by(Term.domain, Term.language, Term.term)
+    )
 
-#     # Get total number of languages available
-#     total_languages_query = select(func.count(distinct(Term.language)))
-#     total_languages_result = await db.execute(total_languages_query)
-#     total_languages = total_languages_result.scalar()
+    result = await db.execute(query)
 
-#     # Calculate completeness by domain
-#     domain_stats: Dict[str, Dict[str, Union[int, float]]] = {}
-#     for domain, term, lang_count in result.all():
-#         if domain not in domain_stats:
-#             domain_stats[domain] = {
-#                 "total_terms": 0,
-#                 "fully_translated": 0,
-#                 "partial_translations": 0,
-#                 "single_language_only": 0,
-#             }
+    # Group by domain and language
+    missing_translations: Dict[str, Dict[str, list]] = {}
+    for term, language, domain in result.all():
+        if domain not in missing_translations:
+            missing_translations[domain] = {}
+        if language not in missing_translations[domain]:
+            missing_translations[domain][language] = []
+        missing_translations[domain][language].append(term)
 
-#         domain_stats[domain]["total_terms"] += 1
+    return missing_translations
 
-#         if lang_count == total_languages:
-#             domain_stats[domain]["fully_translated"] += 1
-#         elif lang_count > 1:
-#             domain_stats[domain]["partial_translations"] += 1
-#         else:
-#             domain_stats[domain]["single_language_only"] += 1
 
-#     # Calculate percentages
-#     for domain in domain_stats:
-#         total = domain_stats[domain]["total_terms"]
-#         domain_stats[domain]["completeness_percentage"] = (
-#             round((domain_stats[domain]["fully_translated"] / total) * 100, 2)
-#             if total > 0
-#             else 0
-#         )
+@router.get("/descriptive/translation-completeness")
+async def get_translation_completeness(db: AsyncSession = Depends(get_db)):
+    """Get translation completeness statistics per domain."""
+    # Get all unique terms and count how many languages each appears in
+    query = select(
+        Term.domain,
+        Term.term,
+        func.count(distinct(Term.language)).label("language_count"),
+    ).group_by(Term.domain, Term.term)
 
-#     return {
-#         "total_languages_available": total_languages,
-#         "domain_statistics": domain_stats,
-#     }
+    result = await db.execute(query)
+
+    # Get total number of languages available
+    total_languages_query = select(func.count(distinct(Term.language)))
+    total_languages_result = await db.execute(total_languages_query)
+    total_languages = total_languages_result.scalar()
+
+    # Calculate completeness by domain
+    domain_stats: Dict[str, Dict[str, Union[int, float]]] = {}
+    for domain, term, lang_count in result.all():
+        if domain not in domain_stats:
+            domain_stats[domain] = {
+                "total_terms": 0,
+                "fully_translated": 0,
+                "partial_translations": 0,
+                "single_language_only": 0,
+            }
+
+        domain_stats[domain]["total_terms"] += 1
+
+        if lang_count == total_languages:
+            domain_stats[domain]["fully_translated"] += 1
+        elif lang_count > 1:
+            domain_stats[domain]["partial_translations"] += 1
+        else:
+            domain_stats[domain]["single_language_only"] += 1
+
+    # Calculate percentages
+    for domain in domain_stats:
+        total = domain_stats[domain]["total_terms"]
+        domain_stats[domain]["completeness_percentage"] = (
+            round((domain_stats[domain]["fully_translated"] / total) * 100, 2)
+            if total > 0
+            else 0
+        )
+
+    return {
+        "total_languages_available": total_languages,
+        "domain_statistics": domain_stats,
+    }
 
 
 @router.get("/health")
