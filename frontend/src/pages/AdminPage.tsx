@@ -924,19 +924,6 @@ const AdminPage: React.FC = () => {
                                     </button>
                                     <button
                                       type="button"
-                                      className="action-button approve-button"
-                                      onClick={() => {
-                                        void handleApplicationAction(
-                                          application.id,
-                                          'approve',
-                                        );
-                                      }}
-                                      title="Approve Application"
-                                    >
-                                      <CheckCircle size={16} />
-                                    </button>
-                                    <button
-                                      type="button"
                                       className="action-button reject-button"
                                       onClick={() => {
                                         void handleApplicationAction(
