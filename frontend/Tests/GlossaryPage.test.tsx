@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
 
 // 🧩 Mocks
 const mockNavigate = vi.fn<(path: string) => void>();
@@ -242,7 +243,9 @@ describe('GlossaryPage', () => {
     test('renders main components correctly', () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -262,7 +265,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -273,7 +278,9 @@ describe('GlossaryPage', () => {
     test('loads and displays categories on mount', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -287,7 +294,9 @@ describe('GlossaryPage', () => {
     test('loads and displays random terms initially', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -301,7 +310,9 @@ describe('GlossaryPage', () => {
     test('sets light mode and background on mount', () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -321,7 +332,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -337,7 +350,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -352,7 +367,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -366,7 +383,9 @@ describe('GlossaryPage', () => {
     test('selects category and loads its terms', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -387,7 +406,9 @@ describe('GlossaryPage', () => {
     test('shows selected category with different styling', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -433,7 +454,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -455,7 +478,9 @@ describe('GlossaryPage', () => {
     test('selects term and displays details', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -473,7 +498,9 @@ describe('GlossaryPage', () => {
     test('shows selected term with different styling', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -492,7 +519,9 @@ describe('GlossaryPage', () => {
     test('clears term selection when selecting new category', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -526,7 +555,9 @@ describe('GlossaryPage', () => {
     test('loads and displays translations for selected term', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -589,7 +620,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -637,7 +670,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -693,7 +728,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -716,7 +753,9 @@ describe('GlossaryPage', () => {
     test('searches terms globally when no category is selected', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -739,7 +778,9 @@ describe('GlossaryPage', () => {
     test('filters terms locally for immediate feedback', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -789,7 +830,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -806,7 +849,9 @@ describe('GlossaryPage', () => {
     test('clears search and shows category terms when search is empty', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -838,7 +883,9 @@ describe('GlossaryPage', () => {
     test('shows download section when terms are available', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -851,7 +898,9 @@ describe('GlossaryPage', () => {
     test('opens format dropdown when download button is clicked', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -870,7 +919,9 @@ describe('GlossaryPage', () => {
     test('downloads CSV format when selected', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -894,7 +945,9 @@ describe('GlossaryPage', () => {
     test('downloads JSON format when selected', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -916,7 +969,9 @@ describe('GlossaryPage', () => {
     test('closes dropdown after selecting format', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -969,7 +1024,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -990,7 +1047,9 @@ describe('GlossaryPage', () => {
     test('shows loading skeleton for terms', async () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1054,7 +1113,9 @@ describe('GlossaryPage', () => {
     test('handles window resize events', () => {
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1080,7 +1141,9 @@ describe('GlossaryPage', () => {
     test('removes event listeners on unmount', () => {
       const { unmount } = render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1098,7 +1161,9 @@ describe('GlossaryPage', () => {
 
       const { unmount } = render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1145,7 +1210,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1194,7 +1261,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1220,7 +1289,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
@@ -1246,7 +1317,9 @@ describe('GlossaryPage', () => {
 
       render(
         <Router>
-          <GlossaryPage />
+          <DarkModeProvider>
+            <GlossaryPage />
+          </DarkModeProvider>
         </Router>,
       );
 
