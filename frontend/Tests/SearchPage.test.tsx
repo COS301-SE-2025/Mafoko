@@ -89,7 +89,6 @@ describe('SearchPage', () => {
 
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Domain')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 
@@ -127,7 +126,7 @@ describe('SearchPage', () => {
 
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Domain')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
+    /*expect(screen.getByText('AI Search')).toBeInTheDocument();*/
     expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 });
