@@ -3,7 +3,7 @@ import SearchBar from '../components/ui/SearchBar';
 import DropdownFilter from '../components/ui/DropdownFilter';
 import ToggleSwitch from '../components/ui/ToggleSwtich';
 import TermCard from '../components/ui/TermCard';
-import { Brain, Wand2 } from 'lucide-react';
+import { Wand2 } from 'lucide-react';
 import '../styles/SearchPage.scss';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/ui/Navbar.tsx';
@@ -51,7 +51,6 @@ const SearchPage: React.FC = () => {
   const [language, setLanguage] = useState('English');
   const [domain, setDomain] = useState('');
   const [domainOptions, setDomainOptions] = useState<string[]>([]);
-  const [aiSearch, setAiSearch] = useState(false);
   const [fuzzySearch, setFuzzySearch] = useState(false);
   const [results, setResults] = useState<Term[]>([]);
   const pageSize = 10;
@@ -89,7 +88,7 @@ const SearchPage: React.FC = () => {
           term,
           language,
           domain,
-          aiSearch,
+          false,
           fuzzySearch,
           currentPage,
         );
@@ -103,7 +102,7 @@ const SearchPage: React.FC = () => {
     };
 
     void runSearch();
-  }, [term, language, domain, aiSearch, fuzzySearch, currentPage]);
+  }, [term, language, domain, false, fuzzySearch, currentPage]);
 
   const preloadGlossary = async (): Promise<void> => {
     try {
@@ -127,7 +126,7 @@ const SearchPage: React.FC = () => {
           t,
           language,
           domain,
-          aiSearch,
+          false,
           fuzzySearch,
           1,
         );
@@ -147,7 +146,7 @@ const SearchPage: React.FC = () => {
         setIsLoading(false);
       }
     },
-    [language, domain, aiSearch, fuzzySearch],
+    [language, domain, false, fuzzySearch],
   );
 
   const fetchSuggestions = async (term: string): Promise<Suggestion[]> => {

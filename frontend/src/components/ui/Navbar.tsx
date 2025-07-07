@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import '../../styles/Navbar.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 
