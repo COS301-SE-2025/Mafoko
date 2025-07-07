@@ -194,84 +194,83 @@ class TestAnalyticsIntegration:
         response = client.get("/api/v1/analytics/descriptive/non-existent-endpoint")
         assert response.status_code == 404
 
+    #     def test_endpoint_response_structure(self, client: TestClient) -> None:
+    #         """Test that endpoints return proper response structure when working."""
+    #         # Note: These tests will work only when database is connected
+    #         # For now, we just verify the endpoints exist and handle errors gracefully
 
-#     def test_endpoint_response_structure(self, client: TestClient) -> None:
-#         """Test that endpoints return proper response structure when working."""
-#         # Note: These tests will work only when database is connected
-#         # For now, we just verify the endpoints exist and handle errors gracefully
+    #         endpoints_with_expected_structure: dict = {
+    #             "/api/v1/analytics/health": {"status": str, "service": str},
+    #             "/api/v1/analytics/test": {
+    #                 "message": str,
+    #                 "timestamp": str,
+    #                 "endpoints": list,
+    #             },
+    #         }
 
-#         endpoints_with_expected_structure: dict = {
-#             "/api/v1/analytics/health": {"status": str, "service": str},
-#             "/api/v1/analytics/test": {
-#                 "message": str,
-#                 "timestamp": str,
-#                 "endpoints": list,
-#             },
-#         }
+    #         for endpoint, expected_structure in endpoints_with_expected_structure.items():
+    #             response = client.get(endpoint)
+    #             assert response.status_code == 200
+    #             data = response.json()
 
-#         for endpoint, expected_structure in endpoints_with_expected_structure.items():
-#             response = client.get(endpoint)
-#             assert response.status_code == 200
-#             data = response.json()
+    #             for key, expected_type in expected_structure.items():
+    #                 assert key in data, f"Missing key {key} in {endpoint} response"
+    #                 assert isinstance(
+    #                     data[key], expected_type
+    #                 ), f"Wrong type for {key} in {endpoint}"
 
-#             for key, expected_type in expected_structure.items():
-#                 assert key in data, f"Missing key {key} in {endpoint} response"
-#                 assert isinstance(
-#                     data[key], expected_type
-#                 ), f"Wrong type for {key} in {endpoint}"
+    #     @pytest.mark.integration
+    #     def test_analytics_service_startup(self, client: TestClient) -> None:
+    #         """Test that the analytics service starts up correctly."""
+    #         # Test that we can create a client and make basic requests
+    #         assert client is not None
 
-#     @pytest.mark.integration
-#     def test_analytics_service_startup(self, client: TestClient) -> None:
-#         """Test that the analytics service starts up correctly."""
-#         # Test that we can create a client and make basic requests
-#         assert client is not None
+    #         # Test that health endpoint works (doesn't require database)
+    #         response = client.get("/api/v1/analytics/health")
+    #         assert response.status_code == 200
 
-#         # Test that health endpoint works (doesn't require database)
-#         response = client.get("/api/v1/analytics/health")
-#         assert response.status_code == 200
+    #         # Test that router is properly mounted
+    #         response = client.get("/api/v1/analytics/test")
+    #         assert response.status_code == 200
 
-#         # Test that router is properly mounted
-#         response = client.get("/api/v1/analytics/test")
-#         assert response.status_code == 200
+    @pytest.mark.integration
+    def test_concurrent_requests_safety(self, client: TestClient) -> None:
+        """Test that the service handles concurrent requests safely."""
+        import threading
+        import time
 
-#     @pytest.mark.integration
-#     def test_concurrent_requests_safety(self, client: TestClient) -> None:
-#         """Test that the service handles concurrent requests safely."""
-#         import threading
-#         import time
+        results = []
+        errors = []
 
-#         results = []
-#         errors = []
+        def make_request() -> None:
+            try:
+                response = client.get("/api/v1/analytics/health")
+                results.append(response.status_code)
+            except Exception as e:
+                errors.append(e)
 
-#         def make_request() -> None:
-#             try:
-#                 response = client.get("/api/v1/analytics/health")
-#                 results.append(response.status_code)
-#             except Exception as e:
-#                 errors.append(e)
+        # Create multiple threads
+        threads = []
+        for _ in range(5):
+            thread = threading.Thread(target=make_request)
+            threads.append(thread)
 
-#         # Create multiple threads
-#         threads = []
-#         for _ in range(5):
-#             thread = threading.Thread(target=make_request)
-#             threads.append(thread)
+        # Start all threads
+        start_time = time.time()
+        for thread in threads:
+            thread.start()
 
-#         # Start all threads
-#         start_time = time.time()
-#         for thread in threads:
-#             thread.start()
+        # Wait for completion
+        for thread in threads:
+            thread.join()
 
-#         # Wait for completion
-#         for thread in threads:
-#             thread.join()
+        end_time = time.time()
 
-#         end_time = time.time()
-
-#         # Verify no errors and all requests succeeded
-#         assert len(errors) == 0, f"Errors occurred: {errors}"
-#         assert len(results) == 5
-#         assert all(status == 200 for status in results)
-#         assert (end_time - start_time) < 5.0  # Should complete quickly
+        # Verify no errors and all requests succeeded
+        assert len(errors) == 0, f"Errors occurred: {errors}"
+        assert len(results) == 5
+        assert all(status == 200 for status in results)
+        assert (end_time - start_time) < 5.0
 
 
 class TestAnalyticsServiceConfiguration:
