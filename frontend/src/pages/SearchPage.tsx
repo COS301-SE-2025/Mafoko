@@ -300,7 +300,7 @@ const SearchPage: React.FC = () => {
                         setTerm('');
                         void handleSearch('');
                       }}
-                      className="ml-2 px-2 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded"
+                      className="show-btn ml-2 px-2 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded"
                     >
                       Show All
                     </button>
