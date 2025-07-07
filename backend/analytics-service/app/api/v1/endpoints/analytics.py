@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Union, Annotated
+from typing import Dict, Optional, Union, Annotated, Any, List
 from fastapi import APIRouter, Depends
 
 # Query
@@ -16,14 +16,14 @@ router = APIRouter()
 
 
 # Analytics helper functions
-async def get_all_terms(db: AsyncSession):
+async def get_all_terms(db: AsyncSession) -> List[Any]:
     """Get all terms from the database."""
     query = select(Term)
     result = await db.execute(query)
-    return result.scalars().all()
+    return list(result.scalars().all())
 
 
-async def get_language_statistics(db: AsyncSession):
+async def get_language_statistics(db: AsyncSession) -> Dict[str, int]:
     """Get language-specific statistics from the database."""
     query = select(Term.language, func.count(Term.id).label("count")).group_by(
         Term.language
@@ -32,17 +32,22 @@ async def get_language_statistics(db: AsyncSession):
     return {lang: count for lang, count in result.all()}
 
 
-async def get_domain_statistics(db: AsyncSession):
+async def get_domain_statistics(db: AsyncSession) -> Dict[str, int]:
     """Get domain/category statistics from the database."""
     query = select(Term.domain, func.count(Term.id).label("count")).group_by(
         Term.domain
     )
     result = await db.execute(query)
-    return {domain: count for domain, count in result.all()}
+    all_rows = result.all()
+    if hasattr(all_rows, "__await__"):
+        all_rows = await all_rows
+    return {domain: count for domain, count in all_rows}
 
 
 @router.get("/descriptive")
-async def get_descriptive_analytics(db: AsyncSession = Depends(get_db)):
+async def get_descriptive_analytics(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Union[Dict[str, int], Dict[str, float]]]:
     """Get all descriptive analytics (legacy endpoint).
     This endpoint combines all analytics for backward compatibility."""
 
@@ -64,20 +69,20 @@ async def get_descriptive_analytics(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/category-frequency")
-async def get_category_frequency(db: AsyncSession = Depends(get_db)):
+async def get_category_frequency(db: AsyncSession = Depends(get_db)) -> Dict[str, int]:
     """Get frequency distribution of terms across different categories."""
     return await get_domain_statistics(db)
 
 
 @router.get("/descriptive/language-coverage")
-async def get_language_coverage(db: AsyncSession = Depends(get_db)):
+async def get_language_coverage(db: AsyncSession = Depends(get_db)) -> Dict[str, float]:
     """Get coverage percentage for each language (% of non-empty terms)."""
     # Get total terms count
     total_query = select(func.count(Term.id))
     total_result = await db.execute(total_query)
     total_terms = total_result.scalar()
 
-    if total_terms == 0:
+    if total_terms == 0 or total_terms is None:
         return {}
 
     # Get language statistics
@@ -92,7 +97,9 @@ async def get_language_coverage(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/term-length")
-async def get_term_length_analysis(db: AsyncSession = Depends(get_db)):
+async def get_term_length_analysis(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, float]:
     """Get average length of terms for each language."""
     query = select(
         Term.language, func.avg(func.length(Term.term)).label("avg_length")
@@ -107,7 +114,9 @@ async def get_term_length_analysis(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/definition-length")
-async def get_definition_length_analysis(db: AsyncSession = Depends(get_db)):
+async def get_definition_length_analysis(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, float]:
     """Get average length of definitions for each language."""
     query = select(
         Term.language, func.avg(func.length(Term.definition)).label("avg_length")
@@ -122,7 +131,7 @@ async def get_definition_length_analysis(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/unique-terms")
-async def get_unique_terms_count(db: AsyncSession = Depends(get_db)):
+async def get_unique_terms_count(db: AsyncSession = Depends(get_db)) -> Dict[str, int]:
     """Get count of unique terms for each language."""
     query = select(
         Term.language, func.count(distinct(Term.term)).label("unique_count")
@@ -134,7 +143,9 @@ async def get_unique_terms_count(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/terms-by-domain-and-language")
-async def get_terms_by_domain_and_language(db: AsyncSession = Depends(get_db)):
+async def get_terms_by_domain_and_language(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Dict[str, int]]:
     """Get term distribution across domains and languages."""
     query = select(
         Term.domain, Term.language, func.count(Term.id).label("count")
@@ -153,7 +164,9 @@ async def get_terms_by_domain_and_language(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/total-statistics")
-async def get_total_statistics(db: AsyncSession = Depends(get_db)):
+async def get_total_statistics(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Union[int, float, None]]:
     """Get overall statistics about the term database."""
     # Total terms
     total_terms_query = select(func.count(Term.id))
@@ -181,9 +194,9 @@ async def get_total_statistics(db: AsyncSession = Depends(get_db)):
     avg_def_length = avg_def_length_result.scalar()
 
     return {
-        "total_terms": total_terms,
-        "unique_languages": unique_languages,
-        "unique_domains": unique_domains,
+        "total_terms": total_terms or 0,
+        "unique_languages": unique_languages or 0,
+        "unique_domains": unique_domains or 0,
         "average_term_length": (
             round(float(avg_term_length), 2) if avg_term_length else 0
         ),
@@ -194,7 +207,9 @@ async def get_total_statistics(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/domain-language-matrix")
-async def get_domain_language_matrix(db: AsyncSession = Depends(get_db)):
+async def get_domain_language_matrix(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Union[List[str], Dict[str, Dict[str, int]]]]:
     """Get a matrix showing term availability across domains and languages."""
     # Get all domains and languages
     domains_query: Select = select(distinct(Term.domain)).order_by(Term.domain)
@@ -230,7 +245,7 @@ async def get_popular_terms(
     domain: Annotated[Optional[str], Query()] = None,
     language: Annotated[Optional[str], Query()] = None,
     db: AsyncSession = Depends(get_db),
-):
+) -> List[Dict[str, Union[str, int]]]:
     """Get the most common terms (by frequency of appearance across languages)."""
     # Base query to count term frequencies
     query = select(Term.term, func.count(Term.id).label("frequency"))
@@ -250,7 +265,9 @@ async def get_popular_terms(
 
 
 @router.get("/descriptive/terms-without-translations")
-async def get_terms_without_translations(db: AsyncSession = Depends(get_db)):
+async def get_terms_without_translations(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Dict[str, List[str]]]:
     """Get terms that don't have translations in other languages."""
     # This is a complex query - we need to find terms that appear in only one language
     subquery = (
@@ -282,7 +299,9 @@ async def get_terms_without_translations(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/descriptive/translation-completeness")
-async def get_translation_completeness(db: AsyncSession = Depends(get_db)):
+async def get_translation_completeness(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, Union[int, None, Dict[str, Dict[str, Union[int, float]]]]]:
     """Get translation completeness statistics per domain."""
     # Get all unique terms and count how many languages each appears in
     query = select(
@@ -328,19 +347,19 @@ async def get_translation_completeness(db: AsyncSession = Depends(get_db)):
         )
 
     return {
-        "total_languages_available": total_languages,
+        "total_languages_available": total_languages or 0,
         "domain_statistics": domain_stats,
     }
 
 
 @router.get("/health")
-async def health_check():
+async def health_check() -> Dict[str, str]:
     """Simple health check endpoint to verify the service is running."""
     return {"status": "healthy", "service": "analytics"}
 
 
 @router.get("/test")
-async def test_endpoint():
+async def test_endpoint() -> Dict[str, Union[str, List[str]]]:
     """Test endpoint that doesn't require database access."""
     return {
         "message": "Analytics service is working!",
