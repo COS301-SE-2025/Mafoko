@@ -332,26 +332,26 @@ async def get_domain_language_matrix(db: AsyncSession = Depends(get_db)):
 #     }
 
 
-# @router.get("/health")
-# async def health_check():
-#     """Simple health check endpoint to verify the service is running."""
-#     return {"status": "healthy", "service": "analytics"}
+@router.get("/health")
+async def health_check():
+    """Simple health check endpoint to verify the service is running."""
+    return {"status": "healthy", "service": "analytics"}
 
 
-# @router.get("/test")
-# async def test_endpoint():
-#     """Test endpoint that doesn't require database access."""
-#     return {
-#         "message": "Analytics service is working!",
-#         "timestamp": "2025-07-07",
-#         "endpoints": [
-#             "/api/v1/analytics/health",
-#             "/api/v1/analytics/test",
-#             "/api/v1/analytics/descriptive",
-#             "/api/v1/analytics/descriptive/category-frequency",
-#             "/api/v1/analytics/descriptive/language-coverage",
-#             "/api/v1/analytics/descriptive/term-length",
-#             "/api/v1/analytics/descriptive/definition-length",
-#             "/api/v1/analytics/descriptive/unique-terms",
-#         ],
-#     }
+@router.get("/test")
+async def test_endpoint():
+    """Test endpoint that doesn't require database access."""
+    return {
+        "message": "Analytics service is working!",
+        "timestamp": "2025-07-07",
+        "endpoints": [
+            "/api/v1/analytics/health",
+            "/api/v1/analytics/test",
+            "/api/v1/analytics/descriptive",
+            "/api/v1/analytics/descriptive/category-frequency",
+            "/api/v1/analytics/descriptive/language-coverage",
+            "/api/v1/analytics/descriptive/term-length",
+            "/api/v1/analytics/descriptive/definition-length",
+            "/api/v1/analytics/descriptive/unique-terms",
+        ],
+    }
