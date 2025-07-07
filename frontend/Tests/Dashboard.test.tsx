@@ -1,7 +1,6 @@
 import { vi } from 'vitest';
 import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
 
-
 const mockNavigate = vi.fn<(path: string) => void>();
 
 vi.mock('react-router-dom', async () => {

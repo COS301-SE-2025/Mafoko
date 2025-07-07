@@ -5,7 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
 
-
 vi.mock('../src/components/ui/Navbar', () => ({
   __esModule: true,
   default: () => <div data-testid="navbar">Navbar</div>,
