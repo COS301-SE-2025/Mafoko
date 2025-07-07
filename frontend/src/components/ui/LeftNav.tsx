@@ -64,7 +64,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             aria-label="Toggle dark mode"
           >
             {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
-            {isDarkMode ? "Light Mode" : "Dark Mode"}
+            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
           </button>
         </div>
       </nav>
