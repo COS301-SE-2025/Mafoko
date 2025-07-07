@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 # Query
 # from typing import Dict, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import func, distinct, select
+from sqlalchemy import Select, func, distinct, select
 
 # from collections import Counter
 
@@ -151,76 +151,76 @@ async def get_terms_by_domain_and_language(db: AsyncSession = Depends(get_db)):
     return data
 
 
-# @router.get("/descriptive/total-statistics")
-# async def get_total_statistics(db: AsyncSession = Depends(get_db)):
-#     """Get overall statistics about the term database."""
-#     # Total terms
-#     total_terms_query = select(func.count(Term.id))
-#     total_terms_result = await db.execute(total_terms_query)
-#     total_terms = total_terms_result.scalar()
+@router.get("/descriptive/total-statistics")
+async def get_total_statistics(db: AsyncSession = Depends(get_db)):
+    """Get overall statistics about the term database."""
+    # Total terms
+    total_terms_query = select(func.count(Term.id))
+    total_terms_result = await db.execute(total_terms_query)
+    total_terms = total_terms_result.scalar()
 
-#     # Total unique languages
-#     unique_languages_query = select(func.count(distinct(Term.language)))
-#     unique_languages_result = await db.execute(unique_languages_query)
-#     unique_languages = unique_languages_result.scalar()
+    # Total unique languages
+    unique_languages_query = select(func.count(distinct(Term.language)))
+    unique_languages_result = await db.execute(unique_languages_query)
+    unique_languages = unique_languages_result.scalar()
 
-#     # Total unique domains
-#     unique_domains_query = select(func.count(distinct(Term.domain)))
-#     unique_domains_result = await db.execute(unique_domains_query)
-#     unique_domains = unique_domains_result.scalar()
+    # Total unique domains
+    unique_domains_query = select(func.count(distinct(Term.domain)))
+    unique_domains_result = await db.execute(unique_domains_query)
+    unique_domains = unique_domains_result.scalar()
 
-#     # Average term length across all terms
-#     avg_term_length_query = select(func.avg(func.length(Term.term)))
-#     avg_term_length_result = await db.execute(avg_term_length_query)
-#     avg_term_length = avg_term_length_result.scalar()
+    # Average term length across all terms
+    avg_term_length_query = select(func.avg(func.length(Term.term)))
+    avg_term_length_result = await db.execute(avg_term_length_query)
+    avg_term_length = avg_term_length_result.scalar()
 
-#     # Average definition length across all terms
-#     avg_def_length_query = select(func.avg(func.length(Term.definition)))
-#     avg_def_length_result = await db.execute(avg_def_length_query)
-#     avg_def_length = avg_def_length_result.scalar()
+    # Average definition length across all terms
+    avg_def_length_query = select(func.avg(func.length(Term.definition)))
+    avg_def_length_result = await db.execute(avg_def_length_query)
+    avg_def_length = avg_def_length_result.scalar()
 
-#     return {
-#         "total_terms": total_terms,
-#         "unique_languages": unique_languages,
-#         "unique_domains": unique_domains,
-#         "average_term_length": (
-#             round(float(avg_term_length), 2) if avg_term_length else 0
-#         ),
-#         "average_definition_length": (
-#             round(float(avg_def_length), 2) if avg_def_length else 0
-#         ),
-#     }
+    return {
+        "total_terms": total_terms,
+        "unique_languages": unique_languages,
+        "unique_domains": unique_domains,
+        "average_term_length": (
+            round(float(avg_term_length), 2) if avg_term_length else 0
+        ),
+        "average_definition_length": (
+            round(float(avg_def_length), 2) if avg_def_length else 0
+        ),
+    }
 
 
-# @router.get("/descriptive/domain-language-matrix")
-# async def get_domain_language_matrix(db: AsyncSession = Depends(get_db)):
-#     """Get a matrix showing term availability across domains and languages."""
-#     # Get all domains and languages
-#     domains_query: Select = select(distinct(Term.domain)).order_by(Term.domain)
-#     languages_query: Select = select(distinct(Term.language)).order_by(Term.language)
+@router.get("/descriptive/domain-language-matrix")
+async def get_domain_language_matrix(db: AsyncSession = Depends(get_db)):
+    """Get a matrix showing term availability across domains and languages."""
+    # Get all domains and languages
+    domains_query: Select = select(distinct(Term.domain)).order_by(Term.domain)
+    languages_query: Select = select(distinct(Term.language)).order_by(Term.language)
 
-#     domains_result = await db.execute(domains_query)
-#     languages_result = await db.execute(languages_query)
+    domains_result = await db.execute(domains_query)
+    languages_result = await db.execute(languages_query)
 
-#     domains = [domain for (domain,) in domains_result.all()]
-#     languages = [lang for (lang,) in languages_result.all()]
+    domains = [domain for (domain,) in domains_result.all()]
+    languages = [lang for (lang,) in languages_result.all()]
 
-#     # Get term counts for each domain-language combination
-#     query = select(
-#         Term.domain, Term.language, func.count(Term.id).label("count")
-#     ).group_by(Term.domain, Term.language)
+    # Get term counts for each domain-language combination
+    query = select(
+        Term.domain, Term.language, func.count(Term.id).label("count")
+    ).group_by(Term.domain, Term.language)
 
-#     result = await db.execute(query)
+    result = await db.execute(query)
 
-#     # Create matrix
-#     matrix = {}
-#     for domain in domains:
-#         matrix[domain] = {lang: 0 for lang in languages}
+    # Create matrix
+    matrix = {}
+    for domain in domains:
+        matrix[domain] = {lang: 0 for lang in languages}
 
-#     for domain, language, count in result.all():
-#         matrix[domain][language] = count
+    for domain, language, count in result.all():
+        matrix[domain][language] = count
 
-#     return {"domains": domains, "languages": languages, "matrix": matrix}
+    return {"domains": domains, "languages": languages, "matrix": matrix}
 
 
 # @router.get("/descriptive/popular-terms")
