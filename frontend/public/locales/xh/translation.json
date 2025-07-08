@@ -1,12 +1,7 @@
 {
-  "appTitle": "Mavito",
-  "loading": "Iyalayisha...",
-
   "landingPage": {
-    "greeting": "Wamkelekile ku-Mavito PWA!",
     "registerButton": "Bhalisa",
-    "loginButton": "Ngena",
-    "footerText": "Iprojekthi ye-Mavito"
+    "loginButton": "Ngena"
   },
   "loginPage": {
     "title": "WAMKELEKILE KWAKHONA!",
