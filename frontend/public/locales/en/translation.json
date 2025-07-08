@@ -1,12 +1,7 @@
 {
-  "appTitle": "Mavito",
-  "loading": "Loading...",
-
   "landingPage": {
-    "greeting": "Welcome to Mavito PWA!",
     "registerButton": "Register",
-    "loginButton": "Login",
-    "footerText": "Mavito Project"
+    "loginButton": "Login"
   },
 
   "loginPage": {
