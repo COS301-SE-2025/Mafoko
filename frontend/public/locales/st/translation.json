@@ -56,7 +56,15 @@
     "errorUnexpectedFormat": "Phoso: {{detailJson}}",
     "errorWithStatus": "Ngodiso e hlolehile (boemo {{status}}). Ka kopo leka hape.",
     "errorNetwork": "Ho hlahile phoso: {{message}}.",
-    "errorUnknownNetwork": "Ho hlahile phoso e sa tsejweng ya neteweke. Ka kopo leka hape."
+    "errorUnknownNetwork": "Ho hlahile phoso e sa tsejweng ya neteweke. Ka kopo leka hape.",
+    "registerAsLabel": "Ngodisa Jwaloka",
+    "registerAsPlaceholder": "Kgetha karolo ya hao",
+    "registerAsOptions": {
+      "contributor": "Moneheli",
+      "linguist": "Setsebi sa Puo",
+      "researcher": "Mofuputsi",
+      "student": "Moithuti"
+    }
   },
   "languageSwitcher": {
     "selectLanguage": "Kgetha Puo"
