@@ -2,5 +2,28 @@
   "landingPage": {
     "registerButton": "Ngwadiša",
     "loginButton": "Tsena"
+  },
+  "loginPage": {
+    "title": "RE A GO AMOGELA GAPE!",
+    "subtitle": "Ka kopo tsenya dintlha tša gago go tsena.",
+    "emailLabel": "Imeili",
+    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
+    "passwordLabel": "Phasewete",
+    "passwordPlaceholder": "Tsenya phasewete ya gago",
+    "rememberMe": "Nkhopole",
+    "forgotPassword": "O lebetše Phasewete?",
+    "loginButton": "Tsena",
+    "orDivider": "GOBA",
+    "loginWithGoogle": "Tsena ka Google",
+    "noAccount": "Ga o na akhaonte?",
+    "registerLink": "Ngwadiša",
+    "welcomeImageAlt": "Kamogelo ya go Tsena go Mavito",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorTokenMissing": "O tsene ka katlego, fela ga go na tokene yeo e amogetšwego. Ka kopo ikopanye le thekgo.",
+    "errorDefault": "Go tsena go paletšwe. Ka kopo lekola dintlha tša gago.",
+    "errorUnexpectedFormat": "Phošo ya go tsena (maemo {{status}}). Sebopego sa phošo seo se sa lebelelwago.",
+    "errorWithStatus": "Go tsena go paletšwe (maemo {{status}}). Ka kopo leka gape.",
+    "errorNetwork": "Go bile le phošo: {{message}}.",
+    "errorUnknownNetwork": "Go bile le phošo ya neteweke yeo e sa tsebjego. Ka kopo leka gape."
   }
 }
