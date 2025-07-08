@@ -2,5 +2,28 @@
   "landingPage": {
     "registerButton": "Ṅwalisani",
     "loginButton": "Dzhenani"
+  },
+  "loginPage": {
+    "title": "RI A VHONA HAFHU!",
+    "subtitle": "Ri humbela uri vha ṋee zwidodombedzwa zwavho u dzhena.",
+    "emailLabel": "Imeiḽi",
+    "emailPlaceholder": "Ṅwalani diresi yavho ya imeiḽi",
+    "passwordLabel": "Phasiwede",
+    "passwordPlaceholder": "Ṅwalani phasiwede yavho",
+    "rememberMe": "Nkhumbuleni",
+    "forgotPassword": "Vho hangwa Phasiwede?",
+    "loginButton": "Dzhenani",
+    "orDivider": "KANA",
+    "loginWithGoogle": "Dzhenani nga Google",
+    "noAccount": "A vha na akhauthu?",
+    "registerLink": "Ṅwalisani",
+    "welcomeImageAlt": "Mavito Login Mwaḓamuni",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorTokenMissing": "Vho dzhena zwavhuḓi, fhedzi a hu na thokheni yo ṱanganedzwaho. Ri humbela vha kwamane na thikhedzo.",
+    "errorDefault": "U dzhena ho kundelwa. Ri humbela vha sedze zwidodombedzwa zwavho.",
+    "errorUnexpectedFormat": "Vhukhakhi ha u dzhena (tshiimo {{status}}). Tshivhumbeo tsha vhukhakhi tsho sa lavhelelwaho.",
+    "errorWithStatus": "U dzhena ho kundelwa (tshiimo {{status}}). Ri humbela vha lingedze hafhu.",
+    "errorNetwork": "Ho vha na vhukhakhi: {{message}}.",
+    "errorUnknownNetwork": "Ho vha na vhukhakhi ha nethiweke vhu sa ḓivhei. Ri humbela vha lingedze hafhu."
   }
 }
