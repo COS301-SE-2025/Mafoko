@@ -1,12 +1,7 @@
 {
-  "appTitle": "Mavito",
-  "loading": "Laai tans...",
-
   "landingPage": {
-    "greeting": "Welkom by Mavito PWA!",
     "registerButton": "Registreer",
-    "loginButton": "Teken in",
-    "footerText": "Mavito Projek"
+    "loginButton": "Teken in"
   },
   "loginPage": {
     "title": "WELKOM TERUG!",
