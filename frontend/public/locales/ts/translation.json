@@ -33,7 +33,15 @@
     "errorUnexpectedFormat": "Xihoxo: {{detailJson}}",
     "errorWithStatus": "Ku tsarisa ku tsandzekile (xiyimo {{status}}). Hi kombela u ringeta nakambe.",
     "errorNetwork": "Ku ve na xihoxo: {{message}}.",
-    "errorUnknownNetwork": "Ku ve na xihoxo xa netiweke lexi nga tivekiki. Hi kombela u ringeta nakambe."
+    "errorUnknownNetwork": "Ku ve na xihoxo xa netiweke lexi nga tivekiki. Hi kombela u ringeta nakambe.",
+    "registerAsLabel": "Tsarisa Tanihi",
+    "registerAsPlaceholder": "Hlawula ntirho wa wena",
+    "registerAsOptions": {
+      "contributor": "Muyimeri",
+      "linguist": "Mutivi wa Ririmi",
+      "researcher": "Mulavisisi",
+      "student": "Mudyondzi"
+    }
   },
   "loginPage": {
     "title": "MI AMUKELIWA NAKAMBE!",
