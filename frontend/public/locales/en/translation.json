@@ -58,7 +58,15 @@
     "errorUnexpectedFormat": "Error: {{detailJson}}",
     "errorWithStatus": "Registration failed (status {{status}}). Please try again.",
     "errorNetwork": "An error occurred: {{message}}.",
-    "errorUnknownNetwork": "An unknown network error occurred. Please try again."
+    "errorUnknownNetwork": "An unknown network error occurred. Please try again.",
+    "registerAsLabel": "Register As",
+    "registerAsPlaceholder": "Select your role",
+    "registerAsOptions": {
+      "contributor": "Contributor",
+      "linguist": "Linguist",
+      "researcher": "Researcher",
+      "student": "Student"
+    }
   },
 
   "languageSwitcher": {
