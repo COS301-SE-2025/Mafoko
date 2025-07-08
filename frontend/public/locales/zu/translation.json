@@ -58,7 +58,15 @@
     "errorUnexpectedFormat": "Iphutha: {{detailJson}}",
     "errorWithStatus": "Ukubhalisa kwehlulekile (isimo {{status}}). Sicela uzame futhi.",
     "errorNetwork": "Kwenzeke iphutha: {{message}}.",
-    "errorUnknownNetwork": "Kwenzeke iphutha lenethiwekhi elingaziwa. Sicela uzame futhi."
+    "errorUnknownNetwork": "Kwenzeke iphutha lenethiwekhi elingaziwa. Sicela uzame futhi.",
+    "registerAsLabel": "Bhalisa Njengo",
+    "registerAsPlaceholder": "Khetha iqhaza lakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Uchwepheshe Wolimi",
+      "researcher": "Umcwaningi",
+      "student": "Umfundi"
+    }
   },
   "languageSwitcher": {
     "selectLanguage": "Khetha Ulimi"
