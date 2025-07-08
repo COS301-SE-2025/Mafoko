@@ -33,7 +33,15 @@
     "errorUnexpectedFormat": "Vhukhakhi: {{detailJson}}",
     "errorWithStatus": "Ṅwalisiso yo kundelwa (tshiimo {{status}}). Ri humbela ni lingedze hafhu.",
     "errorNetwork": "Ho vha na vhukhakhi: {{message}}.",
-    "errorUnknownNetwork": "Ho vha na vhukhakhi ha nethiweke vhu sa ḓivhei. Ri humbela ni lingedze hafhu."
+    "errorUnknownNetwork": "Ho vha na vhukhakhi ha nethiweke vhu sa ḓivhei. Ri humbela ni lingedze hafhu.",
+    "registerAsLabel": "Ṅwalisani sa",
+    "registerAsPlaceholder": "Nangani mushumo wanu",
+    "registerAsOptions": {
+      "contributor": "Muṋetshedzi",
+      "linguist": "Muṱoḓisisi wa Luambo",
+      "researcher": "Muṱoḓisisi",
+      "student": "Mutshudeni"
+    }
   },
   "loginPage": {
     "title": "RI A VHONA HAFHU!",
