@@ -66,6 +66,10 @@
       "linguist": "Uchwepheshe Wolimi",
       "researcher": "Umcwaningi",
       "student": "Umfundi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Umsebenzisi Ojwayelekile",
+      "applyingLinguist": "Ukubhalisa njengoChwepheshe Wolimi"
     }
   },
   "languageSwitcher": {

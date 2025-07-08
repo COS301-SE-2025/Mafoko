@@ -41,6 +41,10 @@
       "linguist": "Mosekaseki wa Puo",
       "researcher": "Mmatlisisi",
       "student": "Moithuti"
+    },
+    "userTypeLabels": {
+      "normalUser": "Modirisi wa Tlwaelo",
+      "applyingLinguist": "Go Ikwadisa jaaka Mosekaseki wa Puo"
     }
   },
   "loginPage": {

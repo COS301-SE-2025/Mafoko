@@ -66,6 +66,10 @@
       "linguist": "Linguist",
       "researcher": "Researcher",
       "student": "Student"
+    },
+    "userTypeLabels": {
+      "normalUser": "Normal User",
+      "applyingLinguist": "Applying as a Linguist"
     }
   },
 

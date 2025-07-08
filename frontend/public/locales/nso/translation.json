@@ -41,6 +41,10 @@
       "linguist": "Setsebamolemo",
       "researcher": "Monyakišiši",
       "student": "Moithuti"
+    },
+    "userTypeLabels": {
+      "normalUser": "Modiriši wa Tlwaelo",
+      "applyingLinguist": "Ingwadiša bjalo ka Setsebamolemo"
     }
   },
   "loginPage": {

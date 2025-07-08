@@ -41,6 +41,10 @@
       "linguist": "Mutivi wa Ririmi",
       "researcher": "Mulavisisi",
       "student": "Mudyondzi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Mutirhisi wa Ntolovelo",
+      "applyingLinguist": "Ku tsarisa tanihi Mutivi wa Ririmi"
     }
   },
   "loginPage": {

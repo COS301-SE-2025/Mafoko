@@ -41,6 +41,10 @@
       "linguist": "Isazi seLimi",
       "researcher": "Umtjhejisisi",
       "student": "Umfundi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Umsebenzisi Wajayelekileko",
+      "applyingLinguist": "Ukubhalisela Ukuba Yisazi seLimi"
     }
   },
   "loginPage": {

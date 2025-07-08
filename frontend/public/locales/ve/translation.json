@@ -41,6 +41,10 @@
       "linguist": "Muṱoḓisisi wa Luambo",
       "researcher": "Muṱoḓisisi",
       "student": "Mutshudeni"
+    },
+    "userTypeLabels": {
+      "normalUser": "Mushumisi wa Zwashu",
+      "applyingLinguist": "U ṅwalisa sa Muṱoḓisisi wa Luambo"
     }
   },
   "loginPage": {

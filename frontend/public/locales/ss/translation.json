@@ -15,7 +15,7 @@
     "passwordLabel": "Iphasiwedi",
     "passwordPlaceholder": "Yakha iphasiwedi",
     "confirmPasswordLabel": "Cinisekisa Iphasiwedi",
-    "confirmPasswordPlaceholder": "Cinisekisa iphasiwedi yakho",
+    "confirmPasswordPlaceholder": "Cacisa iphasiwedi yakho",
     "agreeToTerms": "Ngiyavuma",
     "termsAndConditionsLink": "Imigomo Nemibandzela",
     "createAccountButton": "Yakha I-akhawunti",
@@ -41,6 +41,10 @@
       "linguist": "Sosayensi Welulwimi",
       "researcher": "Umcwaningi",
       "student": "Umfundzi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Umsebentisi Lovamile",
+      "applyingLinguist": "Kubhalisa njengeSosayensi Welulwimi"
     }
   },
   "loginPage": {

@@ -64,6 +64,10 @@
       "linguist": "Taalkundige",
       "researcher": "Navorser",
       "student": "Student"
+    },
+    "userTypeLabels": {
+      "normalUser": "Gewone Gebruiker",
+      "applyingLinguist": "Aansoek as Taalkundige"
     }
   },
 
