@@ -33,7 +33,15 @@
     "errorUnexpectedFormat": "Liphutsa: {{detailJson}}",
     "errorWithStatus": "Kubhalisa kuhlulekile (simo {{status}}). Ngicela utame futsi.",
     "errorNetwork": "Kwenteke liphutsa: {{message}}.",
-    "errorUnknownNetwork": "Kwenteke liphutsa lelingakatfolakali kwinethiwekhi. Ngicela utame futsi."
+    "errorUnknownNetwork": "Kwenteke liphutsa lelingakatfolakali kwinethiwekhi. Ngicela utame futsi.",
+    "registerAsLabel": "Bhalisa Njengo",
+    "registerAsPlaceholder": "Khetsa indzima yakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Sosayensi Welulwimi",
+      "researcher": "Umcwaningi",
+      "student": "Umfundzi"
+    }
   },
   "loginPage": {
     "title": "WEMUKELEKILE FUTSI!",
