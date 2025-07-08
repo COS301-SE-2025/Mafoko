@@ -2,5 +2,28 @@
   "landingPage": {
     "registerButton": "Bhalisa",
     "loginButton": "Ngena"
+  },
+  "loginPage": {
+    "title": "WEMUKELEKILE FUTSI!",
+    "subtitle": "Ngicela ufake imininingwane yakho kutsi ungene.",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "Faka likheli lakho le-imeyili",
+    "passwordLabel": "Iphasiwedi",
+    "passwordPlaceholder": "Faka iphasiwedi yakho",
+    "rememberMe": "Ngikhumbule",
+    "forgotPassword": "Ukhohlwe Yiphasiwedi?",
+    "loginButton": "Ngena",
+    "orDivider": "NOMA",
+    "loginWithGoogle": "Ngena nge-Google",
+    "noAccount": "Awunayo i-akhawunti?",
+    "registerLink": "Bhalisa",
+    "welcomeImageAlt": "Kwemukela Kungena ku-Mavito",
+    "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
+    "errorTokenMissing": "Ungene ngemphumelelo, kodvwa kute ithokheni letfolakele. Ngicela utsintse lusito.",
+    "errorDefault": "Kungena kuhlulekile. Ngicela uhlole imininingwane yakho.",
+    "errorUnexpectedFormat": "Liphutsa ekungeneni (simo {{status}}). Simo seliphutsa lesingakalindzeleki.",
+    "errorWithStatus": "Kungena kuhlulekile (simo {{status}}). Ngicela utame futsi.",
+    "errorNetwork": "Kwenteke liphutsa: {{message}}.",
+    "errorUnknownNetwork": "Kwenteke liphutsa lelingakatfolakali kwinethiwekhi. Ngicela utame futsi."
   }
 }
