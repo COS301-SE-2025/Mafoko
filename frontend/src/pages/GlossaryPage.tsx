@@ -13,6 +13,7 @@ import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
 import { useLocation } from 'react-router-dom';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 import { API_ENDPOINTS } from '../config';
 import {
@@ -153,24 +154,34 @@ const dictionaryAPI = {
 
 const GlossaryPage = () => {
   const location = useLocation();
+  const { isDarkMode } = useDarkMode();
+
   // Set activeNav based on current path
   const initialNav = location.pathname === '/glossary' ? 'glossary' : 'search';
   const [activeNav, setActiveNav] = useState(initialNav);
 
-  // Force light mode for this page
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Apply theme to document based on isDarkMode state
   useEffect(() => {
     const html = document.documentElement;
-    const prevClass = html.className;
-    html.classList.remove('dark');
-    html.classList.add('light');
+    if (isDarkMode) {
+      html.classList.add('theme-dark');
+      html.classList.remove('theme-light');
+    } else {
+      html.classList.add('theme-light');
+      html.classList.remove('theme-dark');
+    }
+  }, [isDarkMode]);
 
-    // Fix: Override body background to prevent landing page green shade
-    const prevBodyBg = document.body.style.background;
-    document.body.style.background = '#f8fafc';
-
+  // Determines if the side nav or top nav should be used.
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
     return () => {
-      html.className = prevClass;
-      document.body.style.background = prevBodyBg;
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -196,9 +207,9 @@ const GlossaryPage = () => {
   const [availableLanguages, setAvailableLanguages] = useState<
     Record<string, string>
   >({});
-  const [showFormatDropdown, setShowFormatDropdown] = useState(false);
-  const formatDropdownRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [showExportPopup, setShowExportPopup] = useState(false);
+  const exportPopupRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
   useEffect(() => {
@@ -217,14 +228,14 @@ const GlossaryPage = () => {
     };
   }, []);
 
-  // Handle clicks outside the format dropdown
+  // Handle clicks outside the export popup
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        formatDropdownRef.current &&
-        !formatDropdownRef.current.contains(event.target as Node)
+        exportPopupRef.current &&
+        !exportPopupRef.current.contains(event.target as Node)
       ) {
-        setShowFormatDropdown(false);
+        setShowExportPopup(false);
       }
     };
 
@@ -232,7 +243,7 @@ const GlossaryPage = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [formatDropdownRef]);
+  }, [exportPopupRef]);
 
   const loadInitialData = async (): Promise<void> => {
     setLoading(true);
@@ -445,14 +456,13 @@ const GlossaryPage = () => {
 
   return (
     <div
-      className={`glossary-root`}
+      className={`glossary-root glossary-page-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       style={{
         height: '100vh',
         display: 'flex',
         flexDirection: 'row',
         width: '100vw',
         overflow: 'hidden',
-        backgroundColor: '#f8fafc',
       }}
     >
       {/* Navigation - using same pattern as HelpPage */}
@@ -476,6 +486,7 @@ const GlossaryPage = () => {
         >
           {/* Profile Section at top right */}
           <div
+            className="glossary-profile-section"
             style={{
               display: 'flex',
               justifyContent: 'flex-end',
@@ -483,9 +494,7 @@ const GlossaryPage = () => {
               width: '100%',
               padding: '1rem 1rem 1rem 1.5rem',
               flexShrink: 0,
-              backgroundColor: 'white',
               zIndex: 10,
-              borderBottom: '1px solid #e5e7eb',
               boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
               marginRight: '0.75rem',
             }}
@@ -503,6 +512,7 @@ const GlossaryPage = () => {
                 >
                   <div className="profile-avatar">{avatarInitials}</div>
                   <div className="profile-details">
+                    {' '}
                     <div
                       style={{
                         display: 'flex',
@@ -516,7 +526,11 @@ const GlossaryPage = () => {
                       </h3>
                     </div>
                     <p
-                      style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}
+                      style={{
+                        margin: 0,
+                        fontSize: '0.85rem',
+                        color: '#a0aec0',
+                      }}
                     >
                       User ID: {userData.uuid}
                     </p>
@@ -544,9 +558,9 @@ const GlossaryPage = () => {
             {error && (
               <div
                 style={{
-                  background: '#fee2e2',
-                  border: '1px solid #fecaca',
-                  color: '#dc2626',
+                  background: '#553c2c',
+                  border: `1px solid #d69e2e`,
+                  color: '#fbb6ce',
                   padding: '12px',
                   borderRadius: '6px',
                   marginBottom: '1rem',
@@ -567,7 +581,7 @@ const GlossaryPage = () => {
               }}
             >
               <h1 className="glossary-title">
-                <Book style={{ color: '#363b4d' }} size={40} />
+                <Book size={40} />
                 Multilingual Glossary
               </h1>
               <p className="glossary-subtitle">
@@ -577,7 +591,7 @@ const GlossaryPage = () => {
                 <p
                   style={{
                     fontSize: '0.875rem',
-                    color: '#666',
+                    color: '#a0aec0',
                     marginTop: '0.5rem',
                   }}
                 >
@@ -593,6 +607,7 @@ const GlossaryPage = () => {
                 minHeight: 400,
                 overflow: 'visible',
                 marginBottom: '1rem',
+                position: 'relative',
               }}
             >
               {/* Categories Panel */}
@@ -603,9 +618,15 @@ const GlossaryPage = () => {
                 </h2>
                 {loading && !categories.length ? (
                   <div className="animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                    <div className="h-4 bg-gray-200 rounded mb-3"></div>
-                    <div className="h-4 bg-gray-200 rounded"></div>
+                    <div
+                      className="glossary-loading-skeleton"
+                      style={{ marginBottom: '12px' }}
+                    ></div>
+                    <div
+                      className="glossary-loading-skeleton"
+                      style={{ marginBottom: '12px' }}
+                    ></div>
+                    <div className="glossary-loading-skeleton"></div>
                   </div>
                 ) : (
                   <div className="glossary-categories-list">
@@ -658,9 +679,18 @@ const GlossaryPage = () => {
                 </div>
                 {loading && selectedCategory ? (
                   <div className="animate-pulse space-y-3">
-                    <div className="h-20 bg-gray-200 rounded"></div>
-                    <div className="h-20 bg-gray-200 rounded"></div>
-                    <div className="h-20 bg-gray-200 rounded"></div>
+                    <div
+                      className="glossary-loading-skeleton"
+                      style={{ height: '80px' }}
+                    ></div>
+                    <div
+                      className="glossary-loading-skeleton"
+                      style={{ height: '80px' }}
+                    ></div>
+                    <div
+                      className="glossary-loading-skeleton"
+                      style={{ height: '80px' }}
+                    ></div>
                   </div>
                 ) : (
                   <div className="glossary-terms-list">
@@ -723,14 +753,14 @@ const GlossaryPage = () => {
                     </div>
                     {showTranslations && (
                       <div className="glossary-translation-list">
-                        <h4 className="font-semibold text-gray-800 mb-3">
+                        <h4 className="glossary-translations-header">
                           Translations
                         </h4>
                         {loading ? (
                           <div className="animate-pulse space-y-2">
-                            <div className="h-4 bg-gray-200 rounded"></div>
-                            <div className="h-4 bg-gray-200 rounded"></div>
-                            <div className="h-4 bg-gray-200 rounded"></div>
+                            <div className="glossary-loading-skeleton"></div>
+                            <div className="glossary-loading-skeleton"></div>
+                            <div className="glossary-loading-skeleton"></div>
                           </div>
                         ) : translations &&
                           Object.keys(translations.translations).length > 0 ? (
@@ -764,50 +794,152 @@ const GlossaryPage = () => {
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Download Section - Fixed at bottom */}
-          {categoryTerms.length > 0 && (
-            <div
-              className="glossary-download-section"
-              style={{
-                padding: '0.75rem 0.75rem 0.75rem 1.5rem',
-                borderTop: '1px solid #e5e7eb',
-                backgroundColor: 'white',
-                flexShrink: 0,
-                boxShadow: '0 -1px 3px 0 rgba(0, 0, 0, 0.1)',
-                minHeight: '80px',
-                maxHeight: '120px',
-                marginRight: '0.75rem',
-              }}
-            >
+            {/* Export Data Button at Bottom */}
+            {categoryTerms.length > 0 && (
               <div
                 style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: '1rem',
+                  marginBottom: '1rem',
                 }}
               >
-                <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExportPopup(true);
+                  }}
+                  className="glossary-export-button"
+                  style={{
+                    backgroundColor: '#f00a50',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(240, 10, 80, 0.3)',
+                    transition: 'all 0.2s ease',
+                    minWidth: '150px',
+                    justifyContent: 'center',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow =
+                      '0 6px 16px rgba(240, 10, 80, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow =
+                      '0 4px 12px rgba(240, 10, 80, 0.3)';
+                  }}
+                >
+                  <Download size={16} />
+                  Export Data
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Export Data Popup Modal */}
+          {showExportPopup && (
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1000,
+                paddingLeft: '220px', // Account for sidebar
+              }}
+              onClick={() => {
+                setShowExportPopup(false);
+              }}
+            >
+              <div
+                ref={exportPopupRef}
+                className="glossary-export-popup"
+                style={{
+                  backgroundColor: 'var(--download-bg)',
+                  borderRadius: '12px',
+                  padding: '1.5rem',
+                  minWidth: '400px',
+                  maxWidth: '500px',
+                  position: 'relative',
+                  marginLeft: '2rem', // Move slightly to the right
+                  boxShadow:
+                    '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                {/* Close button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExportPopup(false);
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    fontSize: '1.5rem',
+                    cursor: 'pointer',
+                    color: 'var(--text-theme)',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '4px',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      'var(--glossary-border-color)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  ×
+                </button>
+
+                {/* Header */}
+                <div style={{ marginBottom: '1.5rem', paddingRight: '2rem' }}>
                   <h3
                     style={{
-                      fontSize: '1rem',
+                      fontSize: '1.25rem',
                       fontWeight: 600,
-                      margin: 0,
+                      margin: '0 0 0.5rem 0',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
                     }}
+                    className="glossary-export-title"
                   >
-                    <Download size={16} />
+                    <Download size={20} />
                     Export Data
                   </h3>
                   <p
                     style={{
-                      margin: '0.25rem 0 0 0',
-                      fontSize: '0.75rem',
-                      color: '#6b7280',
+                      margin: 0,
+                      fontSize: '0.9rem',
+                      lineHeight: '1.4',
                     }}
+                    className="glossary-export-subtitle"
                   >
                     Download the{' '}
                     {selectedCategory
@@ -817,177 +949,326 @@ const GlossaryPage = () => {
                     {filteredTerms.length} items)
                   </p>
                 </div>
-                <div style={{ position: 'relative' }}>
-                  <div
-                    ref={formatDropdownRef}
-                    style={{ display: 'inline-block' }}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setShowFormatDropdown(!showFormatDropdown);
-                      }}
-                      className="glossary-download-btn"
-                      style={{
-                        padding: '0.5rem 1rem',
-                        backgroundColor: '#363b4d',
-                        color: 'white',
-                        borderRadius: '4px',
-                        fontSize: '0.875rem',
-                        fontWeight: 500,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        border: 'none',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <Download size={16} />
-                      Download Data
-                      <ChevronDown size={16} />
-                    </button>
 
-                    {showFormatDropdown && (
-                      <div
-                        className="glossary-format-dropdown"
-                        style={{
-                          position: 'absolute',
-                          bottom: '100%',
-                          right: '0',
-                          marginBottom: '0.25rem',
-                          backgroundColor: 'white',
-                          border: '1px solid #e5e7eb',
-                          borderRadius: '4px',
-                          boxShadow:
-                            '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                          zIndex: 20,
-                          minWidth: '180px',
-                          padding: '0.5rem 0',
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'csv',
-                              termsTranslations,
-                              selectedCategory,
-                            );
-                            setShowFormatDropdown(false);
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
-                            width: '100%',
-                            textAlign: 'left',
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
-                          }}
-                        >
-                          <div style={{ width: '18px', color: '#1e40af' }}>
-                            <FileType size={18} />
-                          </div>
-                          CSV Format
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'json',
-                              termsTranslations,
-                              selectedCategory,
-                            );
-                            setShowFormatDropdown(false);
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
-                            width: '100%',
-                            textAlign: 'left',
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
-                          }}
-                        >
-                          <div style={{ width: '18px', color: '#1f2937' }}>
-                            <FileType size={18} />
-                          </div>
-                          JSON Format
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'html',
-                              termsTranslations,
-                              selectedCategory,
-                            );
-                            setShowFormatDropdown(false);
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
-                            width: '100%',
-                            textAlign: 'left',
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
-                          }}
-                        >
-                          <div style={{ width: '18px', color: '#047857' }}>
-                            <FileType size={18} />
-                          </div>
-                          HTML Table
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            downloadData(
-                              filteredTerms,
-                              'pdf',
-                              termsTranslations,
-                              selectedCategory,
-                            );
-                            setShowFormatDropdown(false);
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.5rem 1rem',
-                            width: '100%',
-                            textAlign: 'left',
-                            backgroundColor: 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: '#374151',
-                          }}
-                        >
-                          <div style={{ width: '18px', color: '#dc2626' }}>
-                            <FileType size={18} />
-                          </div>
-                          PDF Document
-                        </button>
+                {/* Format Options */}
+                <div style={{ display: 'grid', gap: '0.75rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportPopup(false);
+                      const handleDownload = async () => {
+                        try {
+                          await downloadData(
+                            filteredTerms,
+                            'csv',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                        } catch (error) {
+                          console.error('CSV download failed:', error);
+                          setError('Failed to download CSV. Please try again.');
+                          setTimeout(() => {
+                            setError(null);
+                          }, 5000);
+                        }
+                      };
+                      void handleDownload();
+                    }}
+                    className="glossary-format-menu-item"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '1rem',
+                      width: '100%',
+                      textAlign: 'left',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: 'transparent',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        'var(--glossary-border-color)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <div style={{ width: '20px', color: '#1e40af' }}>
+                      <FileType size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>CSV Format</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                        Spreadsheet-compatible format
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportPopup(false);
+                      const handleDownload = async () => {
+                        try {
+                          await downloadData(
+                            filteredTerms,
+                            'json',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                        } catch (error) {
+                          console.error('JSON download failed:', error);
+                          setError(
+                            'Failed to download JSON. Please try again.',
+                          );
+                          setTimeout(() => {
+                            setError(null);
+                          }, 5000);
+                        }
+                      };
+                      void handleDownload();
+                    }}
+                    className="glossary-format-menu-item"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '1rem',
+                      width: '100%',
+                      textAlign: 'left',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: 'transparent',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        'var(--glossary-border-color)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <div style={{ width: '20px', color: '#10b981' }}>
+                      <FileType size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>JSON Format</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                        Developer-friendly data format
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportPopup(false);
+                      const handleDownload = async () => {
+                        try {
+                          await downloadData(
+                            filteredTerms,
+                            'html',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                        } catch (error) {
+                          console.error('HTML download failed:', error);
+                          setError(
+                            'Failed to download HTML. Please try again.',
+                          );
+                          setTimeout(() => {
+                            setError(null);
+                          }, 5000);
+                        }
+                      };
+                      void handleDownload();
+                    }}
+                    className="glossary-format-menu-item"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '1rem',
+                      width: '100%',
+                      textAlign: 'left',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: 'transparent',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        'var(--glossary-border-color)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <div style={{ width: '20px', color: '#047857' }}>
+                      <FileType size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>HTML Table</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                        Web-friendly table format
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportPopup(false);
+                      const handlePdfDownload = async () => {
+                        try {
+                          setError(null);
+                          setIsDownloading(true);
+
+                          // First, show a message to the user
+                          setError(`Preparing terms for PDF export...`);
+
+                          // Always fetch ALL terms for the selected category to ensure complete exports
+                          let termsToExport = [...filteredTerms];
+
+                          // If we're in a category, always ensure we get all terms regardless of search
+                          if (selectedCategory) {
+                            setError(
+                              `Loading all terms in ${selectedCategory} for export...`,
+                            );
+                            try {
+                              // Get all terms for this category directly from the API
+                              const allCategoryTerms =
+                                await dictionaryAPI.getTermsByCategory(
+                                  selectedCategory,
+                                );
+                              if (allCategoryTerms.length > 0) {
+                                termsToExport = allCategoryTerms;
+
+                                // Show warning for very large exports
+                                if (allCategoryTerms.length > 200) {
+                                  setError(
+                                    `Preparing ${String(termsToExport.length)} terms from ${selectedCategory} for export. This may take a while...`,
+                                  );
+                                } else {
+                                  setError(
+                                    `Exporting ${String(termsToExport.length)} terms from ${selectedCategory}...`,
+                                  );
+                                }
+                              }
+                            } catch (err) {
+                              console.error(
+                                'Failed to load all category terms:',
+                                err,
+                              );
+                              // Continue with filtered terms as fallback
+                              setError(
+                                `Using ${String(filteredTerms.length)} filtered terms as fallback...`,
+                              );
+                            }
+                          } else {
+                            // If no category selected, use all filtered terms
+                            setError(
+                              `Exporting ${String(filteredTerms.length)} terms...`,
+                            );
+                          }
+
+                          // For very large datasets, we'll show an extra warning
+                          if (termsToExport.length > 300) {
+                            console.log(
+                              `Large export: ${String(termsToExport.length)} terms to PDF`,
+                            );
+                            // Add a slight delay to ensure the user sees the warning
+                            await new Promise((resolve) =>
+                              setTimeout(resolve, 800),
+                            );
+                          }
+
+                          console.log(
+                            `Exporting ${String(termsToExport.length)} terms to PDF`,
+                          );
+
+                          // Start the export process
+                          await downloadData(
+                            termsToExport,
+                            'pdf',
+                            termsTranslations,
+                            selectedCategory,
+                          );
+                          setError(null);
+                        } catch (error) {
+                          console.error('PDF download failed:', error);
+                          const errorMessage =
+                            error instanceof Error
+                              ? error.message
+                              : 'PDF generation failed. Please try HTML or CSV format instead.';
+                          setError(errorMessage);
+                          setTimeout(() => {
+                            setError(null);
+                          }, 10000);
+                        } finally {
+                          setIsDownloading(false);
+                        }
+                      };
+                      void handlePdfDownload();
+                    }}
+                    disabled={isDownloading}
+                    className="glossary-format-menu-item"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '1rem',
+                      width: '100%',
+                      textAlign: 'left',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '8px',
+                      cursor: isDownloading ? 'not-allowed' : 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: 'transparent',
+                      transition: 'all 0.2s ease',
+                      opacity: isDownloading ? 0.6 : 1,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isDownloading) {
+                        e.currentTarget.style.backgroundColor =
+                          'var(--glossary-border-color)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isDownloading) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }
+                    }}
+                  >
+                    <div style={{ width: '20px', color: '#dc2626' }}>
+                      <FileType size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>
+                        {isDownloading ? 'Generating PDF...' : 'PDF Document'}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                        Printable document format
+                      </div>
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>
