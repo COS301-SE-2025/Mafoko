@@ -56,7 +56,15 @@
     "errorUnexpectedFormat": "Imposiso: {{detailJson}}",
     "errorWithStatus": "Ubhaliso lusilele (isimo {{status}}). Nceda uzame kwakhona.",
     "errorNetwork": "Kwenzeke imposiso: {{message}}.",
-    "errorUnknownNetwork": "Kwenzeke imposiso engaziwayo kwinethiwekhi. Nceda uzame kwakhona."
+    "errorUnknownNetwork": "Kwenzeke imposiso engaziwayo kwinethiwekhi. Nceda uzame kwakhona.",
+    "registerAsLabel": "Bhalisa Njengo",
+    "registerAsPlaceholder": "Khetha indima yakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Ingcali Yeelwimi",
+      "researcher": "Umphandi",
+      "student": "Umfundi"
+    }
   },
 
   "languageSwitcher": {
