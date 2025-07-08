@@ -33,7 +33,15 @@
     "errorUnexpectedFormat": "Phošo: {{detailJson}}",
     "errorWithStatus": "Go ngwadiša go paletšwe (maemo {{status}}). Ka kopo leka gape.",
     "errorNetwork": "Go bile le phošo: {{message}}.",
-    "errorUnknownNetwork": "Go bile le phošo ya neteweke yeo e sa tsebjego. Ka kopo leka gape."
+    "errorUnknownNetwork": "Go bile le phošo ya neteweke yeo e sa tsebjego. Ka kopo leka gape.",
+    "registerAsLabel": "Ingwadiša bjalo ka",
+    "registerAsPlaceholder": "Kgetha tema ya gago",
+    "registerAsOptions": {
+      "contributor": "Motseakarolo",
+      "linguist": "Setsebamolemo",
+      "researcher": "Monyakišiši",
+      "student": "Moithuti"
+    }
   },
   "loginPage": {
     "title": "RE A GO AMOGELA GAPE!",
