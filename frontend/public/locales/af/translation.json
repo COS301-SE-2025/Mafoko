@@ -56,7 +56,15 @@
     "errorUnexpectedFormat": "Fout: {{detailJson}}",
     "errorWithStatus": "Registrasie het misluk (status {{status}}). Probeer asseblief weer.",
     "errorNetwork": "'n Fout het voorgekom: {{message}}.",
-    "errorUnknownNetwork": "'n Onbekende netwerkfout het voorgekom. Probeer asseblief weer."
+    "errorUnknownNetwork": "'n Onbekende netwerkfout het voorgekom. Probeer asseblief weer.",
+    "registerAsLabel": "Registreer As",
+    "registerAsPlaceholder": "Kies jou rol",
+    "registerAsOptions": {
+      "contributor": "Bydraer",
+      "linguist": "Taalkundige",
+      "researcher": "Navorser",
+      "student": "Student"
+    }
   },
 
   "languageSwitcher": {
