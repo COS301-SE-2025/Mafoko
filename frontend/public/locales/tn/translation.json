@@ -33,7 +33,15 @@
     "errorUnexpectedFormat": "Phoso: {{detailJson}}",
     "errorWithStatus": "Go ikwadisa go paletswe (maemo {{status}}). Tswee-tswee leka gape.",
     "errorNetwork": "Go diragetse phoso: {{message}}.",
-    "errorUnknownNetwork": "Go diragetse phoso e e sa itseweng ya neteweke. Tswee-tswee leka gape."
+    "errorUnknownNetwork": "Go diragetse phoso e e sa itseweng ya neteweke. Tswee-tswee leka gape.",
+    "registerAsLabel": "Ikwadise Jaaka",
+    "registerAsPlaceholder": "Tlhopha seabe sa gago",
+    "registerAsOptions": {
+      "contributor": "Motlhagisi",
+      "linguist": "Mosekaseki wa Puo",
+      "researcher": "Mmatlisisi",
+      "student": "Moithuti"
+    }
   },
   "loginPage": {
     "title": "O AMOGELESEGA GAPE!",
