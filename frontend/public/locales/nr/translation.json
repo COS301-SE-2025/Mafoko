@@ -33,7 +33,15 @@
     "errorUnexpectedFormat": "Iphoso: {{detailJson}}",
     "errorWithStatus": "Ukubhalisa kuhlulekile (isimo {{status}}). Sibawa uzame godu.",
     "errorNetwork": "Kwenzeke iphoso: {{message}}.",
-    "errorUnknownNetwork": "Kwenzeke iphoso yenethiwekhi engakaziwa. Sibawa uzame godu."
+    "errorUnknownNetwork": "Kwenzeke iphoso yenethiwekhi engakaziwa. Sibawa uzame godu.",
+    "registerAsLabel": "Bhalisela Njenge",
+    "registerAsPlaceholder": "Khetha indima yakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Isazi seLimi",
+      "researcher": "Umtjhejisisi",
+      "student": "Umfundi"
+    }
   },
   "loginPage": {
     "title": "SIYAKWAMUKELA GODU!",
