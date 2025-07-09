@@ -40,11 +40,12 @@ const getLogoAsBase64 = async (): Promise<string> => {
  */
 export const generateCSV = (data: Term[], includeHeader = true): string => {
   // Define CSV headers
-  const headers = ['Term', 'Definition', 'Language'];
+  const headers = ['ID', 'Term', 'Definition', 'Language'];
 
   // Map the data to CSV rows
   const dataRows = data.map((item) => {
     return [
+      `"${item.id.replace(/"/g, '""')}"`, // Include ID field and escape quotes
       `"${item.term.replace(/"/g, '""')}"`, // Escape quotes in CSV
       `"${item.definition.replace(/"/g, '""')}"`,
       `"${item.language ? item.language.replace(/"/g, '""') : ''}"`, // Include language field
