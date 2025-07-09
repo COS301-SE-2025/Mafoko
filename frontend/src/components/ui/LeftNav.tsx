@@ -29,7 +29,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   };
 
   return (
-    <div className="left-nav">
+    <div className={`left-nav ${isDarkMode ? 'dark-mode' : ''}`}>
       {/* Header */}
       <div className="left-nav-header">
         <h2 className="left-nav-app-title">Marito</h2>
@@ -63,7 +63,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             aria-label="Toggle dark mode"
           >
             {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            {t('navigation.darkMode')}
           </button>
         </div>
       </nav>

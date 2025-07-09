@@ -309,7 +309,7 @@ const DashboardPage: React.FC = () => {
           <div className="welcome-section">
             <h1 className="welcome-title">
               {userData
-                ? `Welcome back, ${userData.firstName}${userData.lastName ? ' ' + userData.lastName : ''}`
+                ? `${t('dashboard.welcomeBack')}, ${userData.firstName}${userData.lastName ? ' ' + userData.lastName : ''}`
                 : t('dashboard.welcome')}
             </h1>
           </div>
