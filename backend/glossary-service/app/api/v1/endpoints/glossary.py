@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import List, Dict, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, or_, distinct
+from sqlalchemy import select, func, or_, and_, distinct, text
 from sqlalchemy.orm import selectinload
+from typing import Any
 
 from mavito_common.models.term import Term
 from mavito_common.db.session import get_db
@@ -26,35 +27,226 @@ LANGUAGE_MAP = {
 
 
 # Helper functions for glossary API
-async def get_all_categories(db: AsyncSession):
+def transform_category_name(category: str, for_display: bool = True) -> str:
+    """
+    Transform category names between storage format and display format.
+
+    Args:
+        category: The category name to transform
+        for_display: If True, transforms from storage format (with slashes) to
+                    display format (with "or"). If False, does the reverse.
+
+    Returns:
+        The transformed category name
+    """
+    if for_display:
+        # Transform from storage format to display format (/ -> or)
+        return category.replace("/", " or ").strip()
+    else:
+        # Transform from display format to storage format (or -> /)
+        # Also handle the case where user might input actual slashes
+        result = category.replace(" or ", "/").replace(" OR ", "/")
+        # Also normalize any remaining slashes with spaces around them
+        import re
+
+        result = re.sub(r"\s*/\s*", "/", result)
+        return result.strip()
+
+
+async def get_all_categories(db: AsyncSession) -> List[str]:
     """Get all unique categories/domains from the database."""
-    query = select(distinct(Term.domain)).order_by(Term.domain)
+    query: Any = select(distinct(Term.domain)).order_by(Term.domain)
     result = await db.execute(query)
-    return [domain for domain, in result.all()]
+    # Transform categories for display
+    return [transform_category_name(domain) for domain, in result.all()]
 
 
-async def get_terms_by_category(db: AsyncSession, category: str):
+async def get_terms_by_category(
+    db: AsyncSession, category: str
+) -> List[Dict[str, Any]]:
     """Get all terms for a specific category/domain."""
-    query = (
+    # URL-decode the category name to handle special characters like forward slashes
+    from urllib.parse import unquote_plus
+
+    # Decode the category properly
+    decoded_category = unquote_plus(category)
+
+    # Transform from display format ("or") back to storage format ("/")
+    storage_category = transform_category_name(decoded_category, for_display=False)
+
+    # Use direct SQL for more reliable results
+    try:
+        # Approach 1: Try TRIM on the domain to remove trailing spaces
+        sql_query = text(
+            """
+            SELECT id, term, definition, domain, language 
+            FROM terms 
+            WHERE LOWER(TRIM(domain)) = LOWER(:category)
+            ORDER BY term
+        """
+        )
+        result = await db.execute(sql_query, {"category": storage_category})
+        rows = result.fetchall()
+
+        if rows:
+            sql_terms = [
+                {
+                    "id": str(row[0]),
+                    "term": row[1],
+                    "definition": row[2],
+                    "category": row[3],
+                    "language": row[4],
+                }
+                for row in rows
+            ]
+            return sql_terms
+
+        # Approach 2: Try with LIKE to catch trailing spaces
+        sql_query = text(
+            """
+            SELECT id, term, definition, domain, language 
+            FROM terms 
+            WHERE LOWER(domain) LIKE LOWER(:category) || ' '
+            ORDER BY term
+        """
+        )
+        result = await db.execute(sql_query, {"category": storage_category})
+        rows = result.fetchall()
+
+        if rows:
+            sql_terms = [
+                {
+                    "id": str(row[0]),
+                    "term": row[1],
+                    "definition": row[2],
+                    "category": row[3],
+                    "language": row[4],
+                }
+                for row in rows
+            ]
+            return sql_terms
+
+        # Approach 3: Try with exact match including trailing space
+        sql_query = text(
+            """
+            SELECT id, term, definition, domain, language 
+            FROM terms 
+            WHERE LOWER(domain) = LOWER(:category)
+            ORDER BY term
+        """
+        )
+        result = await db.execute(sql_query, {"category": storage_category})
+        rows = result.fetchall()
+
+        if rows:
+            sql_terms = [
+                {
+                    "id": str(row[0]),
+                    "term": row[1],
+                    "definition": row[2],
+                    "category": row[3],
+                    "language": row[4],
+                }
+                for row in rows
+            ]
+            return sql_terms
+
+        # Approach 4: Try adding a trailing space explicitly
+        sql_query = text(
+            """
+            SELECT id, term, definition, domain, language 
+            FROM terms 
+            WHERE LOWER(domain) = LOWER(:category)
+            ORDER BY term
+        """
+        )
+        result = await db.execute(sql_query, {"category": storage_category + " "})
+        rows = result.fetchall()
+
+        if rows:
+            sql_terms = [
+                {
+                    "id": str(row[0]),
+                    "term": row[1],
+                    "definition": row[2],
+                    "category": row[3],
+                    "language": row[4],
+                }
+                for row in rows
+            ]
+            return sql_terms
+
+        # Approach 5: Try direct search for all domains that look like our category
+        sql_query = text(
+            """
+            SELECT DISTINCT domain
+            FROM terms 
+            WHERE LOWER(domain) LIKE '%' || LOWER(:part) || '%'
+            LIMIT 10
+        """
+        )
+
+        # Get the first part of the category (before any slash)
+        first_part = decoded_category.split("/")[0].strip()
+        if len(first_part) > 2:
+            result = await db.execute(sql_query, {"part": first_part})
+            domains = [row[0] for row in result.fetchall()]
+
+            # Try each of these domains
+            for domain in domains:
+                domain_query = text(
+                    """
+                    SELECT id, term, definition, domain, language 
+                    FROM terms 
+                    WHERE domain = :domain
+                    ORDER BY term
+                """
+                )
+                result = await db.execute(domain_query, {"domain": domain})
+                rows = result.fetchall()
+
+                if rows:
+                    domain_terms = [
+                        {
+                            "id": str(row[0]),
+                            "term": row[1],
+                            "definition": row[2],
+                            "category": row[3],
+                            "language": row[4],
+                        }
+                        for row in rows
+                    ]
+                    return domain_terms
+
+    except Exception:
+        # If exception occurs, try regular ORM approach as last resort
+        pass
+
+    # If all attempts failed, try regular ORM approach as last resort
+    orm_query = (
         select(Term)
-        .where(func.lower(Term.domain) == category.lower())
+        .where(func.lower(Term.domain) == decoded_category.lower())
         .order_by(Term.term)
     )
-    result = await db.execute(query)
-    terms = result.scalars().all()
+    result = await db.execute(orm_query)
+    orm_terms = result.scalars().all()
 
+    # Format and return the results
     return [
         {
             "id": str(term.id),
             "term": term.term,
             "definition": term.definition,
             "category": term.domain,
+            "language": term.language,
         }
-        for term in terms
+        for term in orm_terms
     ]
 
 
-async def get_term_translations(db: AsyncSession, term_id: str):
+async def get_term_translations(
+    db: AsyncSession, term_id: str
+) -> Optional[Dict[str, Any]]:
     """Get all available translations for a specific term."""
     # First try to find by UUID if it's a valid UUID
     try:
@@ -93,7 +285,7 @@ async def get_term_translations(db: AsyncSession, term_id: str):
     }
 
 
-async def search_terms(db: AsyncSession, query: str):
+async def search_terms(db: AsyncSession, query: str) -> List[Dict[str, Any]]:
     """Search for terms across all categories."""
     # Search in both term and definition columns (case-insensitive)
     search_query = (
@@ -111,6 +303,7 @@ async def search_terms(db: AsyncSession, query: str):
             "term": term.term,
             "definition": term.definition,
             "category": term.domain,
+            "language": term.language,
         }
         for term in terms
     ]
@@ -120,7 +313,7 @@ async def search_terms(db: AsyncSession, query: str):
 
 
 @router.get("/categories", response_model=List[str])
-async def get_categories(db: AsyncSession = Depends(get_db)):
+async def get_categories(db: AsyncSession = Depends(get_db)) -> List[str]:
     """Get all available categories."""
     categories = await get_all_categories(db)
     return categories
@@ -129,7 +322,7 @@ async def get_categories(db: AsyncSession = Depends(get_db)):
 @router.get("/categories/{category_name}/terms")
 async def get_terms_by_category_api(
     category_name: str, db: AsyncSession = Depends(get_db)
-):
+) -> List[Dict[str, Any]]:
     """Get all terms for a specific category."""
     terms = await get_terms_by_category(db, category_name)
     if not terms:
@@ -140,7 +333,9 @@ async def get_terms_by_category_api(
 
 
 @router.get("/terms/{term_id}/translations")
-async def get_term_translations_api(term_id: str, db: AsyncSession = Depends(get_db)):
+async def get_term_translations_api(
+    term_id: str, db: AsyncSession = Depends(get_db)
+) -> Dict[str, Any]:
     """Get all available translations for a specific term."""
     translations = await get_term_translations(db, term_id)
     if not translations:
@@ -152,23 +347,23 @@ async def get_term_translations_api(term_id: str, db: AsyncSession = Depends(get
 async def search_terms_api(
     query: str = Query(..., description="Search query for terms or definitions"),
     db: AsyncSession = Depends(get_db),
-):
+) -> List[Dict[str, Any]]:
     """Search for terms across all categories."""
     results = await search_terms(db, query)
     return results
 
 
 @router.get("/domains", response_model=List[str])
-async def get_domains(db: AsyncSession = Depends(get_db)):
+async def get_domains(db: AsyncSession = Depends(get_db)) -> List[str]:
     """Get all available domains (same as categories)."""
     return await get_all_categories(db)
 
 
 @router.get("/languages", response_model=Dict[str, str])
-async def get_available_languages(db: AsyncSession = Depends(get_db)):
+async def get_available_languages(db: AsyncSession = Depends(get_db)) -> Dict[str, str]:
     """Get all available languages in the glossary."""
     # Query distinct languages from the database
-    query = select(distinct(Term.language))
+    query: Any = select(distinct(Term.language))
     result = await db.execute(query)
     languages = [lang for lang, in result.all()]
 
@@ -184,7 +379,7 @@ async def advanced_search(
     page: int = 1,
     limit: int = 10,
     db: AsyncSession = Depends(get_db),
-):
+) -> Dict[str, Any]:
     """
     Advanced search endpoint with filtering by domain and language, and pagination.
 
@@ -195,7 +390,83 @@ async def advanced_search(
 
     # Apply filters
     if domain:
-        base_query = base_query.where(func.lower(Term.domain) == domain.lower())
+        # URL-decode the domain name to handle special characters like forward slashes
+        from urllib.parse import unquote_plus
+        import re
+        from sqlalchemy import text
+
+        # Decode the domain properly
+        decoded_domain = unquote_plus(domain)
+
+        # Transform from display format ("or") back to storage format ("/")
+        storage_domain = transform_category_name(decoded_domain, for_display=False)
+
+        # Check if we can find the exact domain with trailing space
+        domain_query = text(
+            """
+            SELECT DISTINCT domain FROM terms WHERE LOWER(domain) = LOWER(:domain) OR LOWER(domain) = LOWER(:domain_with_space)
+        """
+        )
+        result = await db.execute(
+            domain_query,
+            {"domain": storage_domain, "domain_with_space": storage_domain + " "},
+        )
+        exact_domains = [row[0] for row in result.fetchall()]
+
+        if exact_domains:
+            domain_conditions = [Term.domain == d for d in exact_domains]
+            base_query = base_query.where(or_(*domain_conditions))
+        else:
+            # Try TRIM approach
+            trim_query = text(
+                """
+                SELECT DISTINCT domain FROM terms WHERE LOWER(TRIM(domain)) = LOWER(:domain)
+            """
+            )
+            result = await db.execute(trim_query, {"domain": storage_domain})
+            trim_domains = [row[0] for row in result.fetchall()]
+
+            if trim_domains:
+                domain_conditions = [Term.domain == d for d in trim_domains]
+                base_query = base_query.where(or_(*domain_conditions))
+            else:
+                # If still not found, look for similar domains
+                first_part = decoded_domain.split("/")[0].strip()
+                if len(first_part) > 2:
+                    similar_query = text(
+                        """
+                        SELECT DISTINCT domain FROM terms WHERE LOWER(domain) LIKE '%' || LOWER(:part) || '%'
+                    """
+                    )
+                    result = await db.execute(similar_query, {"part": first_part})
+                    similar_domains = [row[0] for row in result.fetchall()]
+
+                    if similar_domains:
+                        # Check how many terms each domain has
+                        matching_domains: List[tuple[str, int]] = []
+                        for d in similar_domains:
+                            count_query = text(
+                                "SELECT COUNT(*) FROM terms WHERE domain = :domain"
+                            )
+                            term_count = await db.scalar(count_query, {"domain": d})
+                            if term_count:
+                                matching_domains.append((d, term_count))
+
+                        if matching_domains:
+                            # Sort by term count (most terms first)
+                            matching_domains.sort(key=lambda x: x[1], reverse=True)
+                            best_domain = matching_domains[0][0]
+                            base_query = base_query.where(Term.domain == best_domain)
+                        else:
+                            # Fall back to direct match (which will probably return no results)
+                            base_query = base_query.where(
+                                func.lower(Term.domain) == storage_domain.lower()
+                            )
+                    else:
+                        # Fall back to direct match (which will probably return no results)
+                        base_query = base_query.where(
+                            func.lower(Term.domain) == storage_domain.lower()
+                        )
 
     if language and language.lower() != "all":
         base_query = base_query.where(Term.language == language)
@@ -207,10 +478,72 @@ async def advanced_search(
         )
 
     # First, get count for pagination
-    count_query = select(func.count()).select_from(base_query.subquery())
-    total_results = await db.scalar(count_query) or 0
+    count_sql_query = select(func.count()).select_from(base_query.subquery())
+    total_results = await db.scalar(count_sql_query) or 0
 
-    # Apply pagination and execute
+    # First, get count to check if we found any results
+    initial_sql_query = select(func.count()).select_from(base_query.subquery())
+    initial_count = await db.scalar(initial_sql_query) or 0
+
+    # If we have a domain filter and no results, try more flexible matching
+    if domain and initial_count == 0:
+        # Create a new base query without the domain filter
+        base_query = select(Term)
+
+        # Apply other filters that might still be present
+        if language and language.lower() != "all":
+            base_query = base_query.where(Term.language == language)
+
+        if query and query.strip():
+            base_query = base_query.where(
+                or_(Term.term.ilike(f"%{query}%"), Term.definition.ilike(f"%{query}%"))
+            )  # Try with normalized category (removing spaces around slashes)
+            normalized_domain = re.sub(r"\s*/\s*", "/", storage_domain)
+            base_query = base_query.where(
+                func.lower(Term.domain) == normalized_domain.lower()
+            )
+
+        # Check if we have results with this approach
+        normalized_sql_query = select(func.count()).select_from(base_query.subquery())
+        normalized_count = await db.scalar(normalized_sql_query) or 0
+
+        # If still no results, try with partial matching as last resort
+        if normalized_count == 0:
+            # Start with a fresh base query
+            base_query = select(Term)
+
+            # Re-apply other filters
+            if language and language.lower() != "all":
+                base_query = base_query.where(Term.language == language)
+
+            if query and query.strip():
+                base_query = base_query.where(
+                    or_(
+                        Term.term.ilike(f"%{query}%"),
+                        Term.definition.ilike(f"%{query}%"),
+                    )
+                )
+
+            # Split category by slash and create LIKE conditions
+            category_parts = re.split(r"/+", storage_domain)
+            if len(category_parts) > 1:
+                like_conditions = []
+                for part in category_parts:
+                    part = part.strip()
+                    if len(part) > 2:  # Skip very short parts
+                        like_conditions.append(
+                            func.lower(Term.domain).like(f"%{part.lower()}%")
+                        )
+
+                if like_conditions:
+                    # Combine with AND to ensure all parts are present
+                    base_query = base_query.where(and_(*like_conditions))
+
+    # Now get the final count for pagination
+    final_sql_query = select(func.count()).select_from(base_query.subquery())
+    total_results = await db.scalar(final_sql_query) or 0
+
+    # Apply pagination and execute the query
     final_query = base_query.order_by(Term.term).offset((page - 1) * limit).limit(limit)
     result = await db.execute(final_query)
     terms = result.scalars().all()
@@ -244,7 +577,7 @@ async def translate_terms(
     target_languages: Optional[List[str]] = None,
     domain: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-):
+) -> Dict[str, List[Dict[str, Any]]]:
     """
     Translate a list of terms from source language to specified target languages.
     If target_languages is not provided, translates to all available languages.
@@ -254,7 +587,17 @@ async def translate_terms(
 
     # Filter by domain if specified
     if domain:
-        base_query = base_query.where(func.lower(Term.domain) == domain.lower())
+        # URL-decode the domain name to handle special characters like forward slashes
+        from urllib.parse import unquote_plus
+
+        # Decode the domain properly
+        decoded_domain = unquote_plus(domain)
+
+        # Transform from display format ("or") back to storage format ("/")
+        storage_domain = transform_category_name(decoded_domain, for_display=False)
+
+        # For translation function, we'll use a simpler approach - just case insensitive matching
+        base_query = base_query.where(func.lower(Term.domain) == storage_domain.lower())
 
     # Filter by terms list
     term_filters = [func.lower(Term.term) == term.lower() for term in terms]
@@ -293,23 +636,23 @@ async def translate_terms(
 
 # Additional glossary functionality
 @router.get("/stats")
-async def get_glossary_stats(db: AsyncSession = Depends(get_db)):
+async def get_glossary_stats(db: AsyncSession = Depends(get_db)) -> Dict[str, Any]:
     """Get basic statistics about the glossary."""
     # Count total terms
-    total_query = select(func.count()).select_from(Term)
-    total_terms = await db.scalar(total_query)
+    total_sql = select(func.count()).select_from(Term)
+    total_terms = await db.scalar(total_sql)
 
     # Count unique languages
-    langs_query = select(func.count(distinct(Term.language)))
-    languages_count = await db.scalar(langs_query)
+    langs_sql = select(func.count(distinct(Term.language)))
+    languages_count = await db.scalar(langs_sql)
 
     # Count unique domains/categories
-    domains_query = select(func.count(distinct(Term.domain)))
-    categories_count = await db.scalar(domains_query)
+    domains_sql = select(func.count(distinct(Term.domain)))
+    categories_count = await db.scalar(domains_sql)
 
     # Get available languages
-    langs_list_query = select(distinct(Term.language))
-    result = await db.execute(langs_list_query)
+    langs_list_sql: Any = select(distinct(Term.language))
+    result = await db.execute(langs_list_sql)
     languages = {lang: lang for lang, in result.all()}
 
     return {
@@ -321,7 +664,9 @@ async def get_glossary_stats(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/random")
-async def get_random_term(count: int = 1, db: AsyncSession = Depends(get_db)):
+async def get_random_term(
+    count: int = 1, db: AsyncSession = Depends(get_db)
+) -> List[Dict[str, Any]]:
     """Get a random term or set of terms."""
     # Count total terms
     total_query = select(func.count()).select_from(Term)
@@ -344,6 +689,7 @@ async def get_random_term(count: int = 1, db: AsyncSession = Depends(get_db)):
             "term": term.term,
             "definition": term.definition,
             "category": term.domain,
+            "language": term.language,
         }
         results.append(term_data)
 
