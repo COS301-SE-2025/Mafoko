@@ -25,6 +25,7 @@ $text-dark: #ffffff;
   --glossary-border-color: #d1d5db; /* Light gray border for light mode */
   --profile-bg: #{$secondary-light}; /* White background for profile section in light mode */
   --download-bg: #{$secondary-light}; /* White background for download section in light mode */
+  --page-bg: #{$background-light};
 }
 
 .theme-dark {
@@ -37,16 +38,65 @@ $text-dark: #ffffff;
   --glossary-border-color: #4a5568; /* Dark gray border for dark mode */
   --profile-bg: #{$secondary-dark}; /* Dark background for profile section in dark mode */
   --download-bg: #{$secondary-dark}; /* Dark background for download section in dark mode */
+  --page-bg: #{$background-dark};
 }
 
-.glossary-page-container {
-  background-color: var(--bg-first);
+.dashboard-container {
+  position: fixed;
+  background-color: var(--page-bg);
   color: var(--text-theme);
   min-height: 100vh;
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  background-color: var(--page-bg);
+}
+
+.top-bar {
+  padding: 1rem;
+}
+
+.hamburger-icon {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-theme);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 15px;
+  line-height: 1;
+}
+
+/* Mobile menu overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.dashboard-container.mobile-menu-is-open .mobile-menu-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.glossary-content {
+  margin: 0;
+  padding: 0 16px;
 }
 
 .glossary-container {
-  margin-left: 220px; /* Prevent overlap with LeftNav */
+  width: 100%;
+  /* No margin needed as we're using the same layout as analytics page */
   margin-right: 1rem; /* Add right margin for better spacing */
   margin-top: 1rem; /* Add top margin for better spacing */
   margin-bottom: 1rem; /* Add bottom margin for better spacing */
@@ -56,6 +106,18 @@ $text-dark: #ffffff;
 }
 
 @media (max-width: 768px) {
+  .hamburger-icon {
+    display: block;
+  }
+  
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-secondary);
+  }
+  
   .glossary-container {
     margin-left: 0; /* No margin on mobile since Navbar is used instead of LeftNav */
     margin-right: 0.5rem; /* Reduced margin on mobile */

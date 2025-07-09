@@ -12,7 +12,7 @@ import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom'; // Not needed anymore
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 import { API_ENDPOINTS } from '../config';
@@ -153,14 +153,18 @@ const dictionaryAPI = {
 };
 
 const GlossaryPage = () => {
-  const location = useLocation();
   const { isDarkMode } = useDarkMode();
 
-  // Set activeNav based on current path
-  const initialNav = location.pathname === '/glossary' ? 'glossary' : 'search';
-  const [activeNav, setActiveNav] = useState(initialNav);
+  // Set activeMenuItem to 'glossary' for consistency with AnalyticsPage
+  const [activeMenuItem, setActiveMenuItem] = useState('glossary');
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Toggle mobile menu function
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -463,879 +467,912 @@ const GlossaryPage = () => {
 
   return (
     <div
-      className={`glossary-root glossary-page-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
-      style={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100vw',
-        overflow: 'hidden',
-      }}
+      className={`dashboard-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
-      {/* Navigation - using same pattern as HelpPage */}
+      {isMobileMenuOpen && (
+        <div
+          className="mobile-menu-overlay"
+          onClick={toggleMobileMenu}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              toggleMobileMenu();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Close menu"
+        />
+      )}
+
       {isMobile ? (
         <Navbar />
       ) : (
-        <LeftNav activeItem={activeNav} setActiveItem={setActiveNav} />
+        <LeftNav
+          activeItem={activeMenuItem}
+          setActiveItem={setActiveMenuItem}
+        />
       )}
 
-      <div className="glossary-container">
-        {/* Main Content with Profile at Top Right */}
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100vh',
-            overflow: 'hidden',
-            position: 'relative',
-          }}
-        >
-          {/* Profile Section at top right */}
-          <div
-            className="glossary-profile-section"
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              width: '100%',
-              padding: '1rem 1rem 1rem 1.5rem',
-              flexShrink: 0,
-              zIndex: 10,
-              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-              marginRight: '0.75rem',
-            }}
-          >
-            {isLoadingUserData ? (
-              <div className="profile-section">Loading profile...</div>
-            ) : userData ? (
-              <div
-                className="profile-section"
-                style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-              >
-                <div
-                  className="profile-info"
-                  style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-                >
-                  <div className="profile-avatar">{avatarInitials}</div>
-                  <div className="profile-details">
-                    {' '}
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                      }}
-                    >
-                      <LanguageSwitcher />
-                      <h3 style={{ margin: 0 }}>
-                        {userData.firstName} {userData.lastName}
-                      </h3>
-                    </div>
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: '0.85rem',
-                        color: '#a0aec0',
-                      }}
-                    >
-                      User ID: {userData.uuid}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : null}
+      <div className="main-content">
+        {!isMobile && (
+          <div className="top-bar glossary-top-bar">
+            <button
+              className="hamburger-icon"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+              type="button"
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
           </div>
+        )}
 
-          {/* Main Content Container */}
+        <div className={`glossary-content ${isMobile ? 'pt-16' : ''}`}>
+          {/* Main Content with Profile at Top Right */}
           <div
             style={{
               flex: 1,
-              width: '100%',
-              padding: '0.75rem 0.75rem 0.75rem 0.5rem',
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'auto',
-              minHeight: 0,
-              marginRight: '0.75rem',
-              marginLeft: '-0.5rem',
+              height: '100vh',
+              overflow: 'hidden',
+              position: 'relative',
             }}
           >
-            {/* Error Display */}
-            {error && (
-              <div
-                style={{
-                  background: '#553c2c',
-                  border: `1px solid #d69e2e`,
-                  color: '#fbb6ce',
-                  padding: '12px',
-                  borderRadius: '6px',
-                  marginBottom: '1rem',
-                  textAlign: 'center',
-                }}
-              >
-                {error}
-              </div>
-            )}
-
-            {/* Multilingual Dictionary section */}
+            {/* Profile Section at top right */}
             <div
-              className="glossary-header"
+              className="glossary-profile-section"
               style={{
-                textAlign: 'center',
-                marginBottom: '1rem',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                width: '100%',
+                padding: '1rem 1rem 1rem 1.5rem',
                 flexShrink: 0,
+                zIndex: 10,
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                marginRight: '0.75rem',
               }}
             >
-              <h1 className="glossary-title">
-                <Book size={40} />
-                Multilingual Glossary
-              </h1>
-              <p className="glossary-subtitle">
-                Browse categories, explore terms, and discover translations
-              </p>
-              {Object.keys(availableLanguages).length > 0 && (
-                <p
-                  style={{
-                    fontSize: '0.875rem',
-                    color: '#a0aec0',
-                    marginTop: '0.5rem',
-                  }}
+              {isLoadingUserData ? (
+                <div className="profile-section">Loading profile...</div>
+              ) : userData ? (
+                <div
+                  className="profile-section"
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
                 >
-                  {/* Available in {Object.keys(availableLanguages).length} languages */}
-                </p>
-              )}
+                  <div
+                    className="profile-info"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                    }}
+                  >
+                    <div className="profile-avatar">{avatarInitials}</div>
+                    <div className="profile-details">
+                      {' '}
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                        }}
+                      >
+                        <LanguageSwitcher />
+                        <h3 style={{ margin: 0 }}>
+                          {userData.firstName} {userData.lastName}
+                        </h3>
+                      </div>
+                      <p
+                        style={{
+                          margin: 0,
+                          fontSize: '0.85rem',
+                          color: '#a0aec0',
+                        }}
+                      >
+                        User ID: {userData.uuid}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
+            {/* Main Content Container */}
             <div
-              className="glossary-grid"
               style={{
                 flex: 1,
-                minHeight: 400,
-                overflow: 'visible',
-                marginBottom: '1rem',
-                position: 'relative',
-              }}
-            >
-              {/* Categories Panel */}
-              <div className="glossary-panel">
-                <h2 className="glossary-panel-title">
-                  <Book size={20} />
-                  Categories
-                </h2>
-                {loading && !categories.length ? (
-                  <div className="animate-pulse">
-                    <div
-                      className="glossary-loading-skeleton"
-                      style={{ marginBottom: '12px' }}
-                    ></div>
-                    <div
-                      className="glossary-loading-skeleton"
-                      style={{ marginBottom: '12px' }}
-                    ></div>
-                    <div className="glossary-loading-skeleton"></div>
-                  </div>
-                ) : (
-                  <div className="glossary-categories-list">
-                    {categories.map((category) => (
-                      <button
-                        key={category}
-                        type="button"
-                        onClick={() => {
-                          // If the category is already selected, deselect it and load random terms
-                          if (selectedCategory === category) {
-                            setSelectedCategory(null);
-                            setSelectedTerm(null);
-                            setShowTranslations(false);
-                            setTranslations(null);
-                            setSearchTerm('');
-                            setError(null);
-                            setLoading(true);
-
-                            // Load random terms
-                            void (async () => {
-                              try {
-                                const randomTerms =
-                                  await dictionaryAPI.getRandomTerm(10);
-                                setCategoryTerms(randomTerms);
-                              } catch (error) {
-                                console.error(
-                                  'Error loading random terms:',
-                                  error,
-                                );
-                                setError(
-                                  'Failed to load random terms. Please try again.',
-                                );
-                                setCategoryTerms([]);
-                              } finally {
-                                setLoading(false);
-                              }
-                            })();
-                          } else {
-                            // If selecting a new category, use the normal handler
-                            void handleCategorySelect(category);
-                          }
-                        }}
-                        className={`glossary-category-btn${
-                          selectedCategory === category ? ' selected' : ''
-                        }`}
-                      >
-                        <span>{category}</span>
-                        {selectedCategory === category ? (
-                          <ChevronDown size={16} />
-                        ) : (
-                          <ChevronRight size={16} />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>{' '}
-              {/* Terms Panel */}
-              <div className="glossary-panel">
-                <h2 className="glossary-panel-title">
-                  {selectedCategory
-                    ? `Terms in ${selectedCategory}`
-                    : categoryTerms.length > 0
-                      ? 'Random Terms'
-                      : 'Select a Category'}
-                </h2>
-                <div className="glossary-search">
-                  <Search className="glossary-search-icon" size={16} />
-                  <input
-                    type="text"
-                    placeholder={
-                      selectedCategory
-                        ? `Search terms in ${selectedCategory}...`
-                        : 'Search all terms...'
-                    }
-                    value={searchTerm}
-                    onChange={(e) => {
-                      setSearchTerm(e.target.value);
-                    }}
-                    className="glossary-search-input"
-                  />
-                </div>
-                {loading && selectedCategory ? (
-                  <div className="animate-pulse space-y-3">
-                    <div
-                      className="glossary-loading-skeleton"
-                      style={{ height: '80px' }}
-                    ></div>
-                    <div
-                      className="glossary-loading-skeleton"
-                      style={{ height: '80px' }}
-                    ></div>
-                    <div
-                      className="glossary-loading-skeleton"
-                      style={{ height: '80px' }}
-                    ></div>
-                  </div>
-                ) : (
-                  <div className="glossary-terms-list">
-                    {filteredTerms.map((term) => (
-                      <button
-                        key={term.id}
-                        type="button"
-                        onClick={() => {
-                          handleTermSelect(term);
-                        }}
-                        className={`glossary-term-btn${
-                          selectedTerm?.id === term.id ? ' selected' : ''
-                        }`}
-                      >
-                        {' '}
-                        <div className="glossary-term-title">{term.term}</div>
-                        <div className="glossary-term-def">
-                          {term.definition}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {filteredTerms.length === 0 && !loading && (
-                  <div className="glossary-empty">
-                    {searchTerm && selectedCategory
-                      ? `No terms found matching "${searchTerm}" in ${selectedCategory} category.`
-                      : searchTerm
-                        ? `No terms found matching "${searchTerm}" across all categories.`
-                        : selectedCategory
-                          ? `No terms available in ${selectedCategory} category.`
-                          : `No terms available.`}
-                  </div>
-                )}
-              </div>
-              {/* Details Panel */}
-              <div className="glossary-panel">
-                <h2 className="glossary-panel-title">
-                  <Globe size={20} />
-                  Term Details
-                </h2>
-                {selectedTerm ? (
-                  <div
-                    className="space-y-4 glossary-terms-list"
-                    style={{
-                      maxHeight: 'calc(100vh - 250px)',
-                      overflowY: 'auto',
-                      paddingRight: '8px',
-                      marginRight: '-8px',
-                    }}
-                  >
-                    <div>
-                      <h3 className="glossary-details-title">
-                        {selectedTerm.term}
-                      </h3>{' '}
-                      <p className="glossary-details-def">
-                        {selectedTerm.definition}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          void handleShowTranslations();
-                        }}
-                        className="glossary-translate-btn"
-                        disabled={loading}
-                      >
-                        <Globe size={16} />
-                        {loading && showTranslations
-                          ? 'Loading...'
-                          : 'Show Translations'}
-                      </button>
-                    </div>
-                    {showTranslations && (
-                      <div
-                        className="glossary-translation-list"
-                        style={{
-                          overflowY: 'visible',
-                          maxHeight: 'none',
-                        }}
-                      >
-                        <h4 className="glossary-translations-header">
-                          Translations
-                        </h4>
-                        {loading ? (
-                          <div className="animate-pulse space-y-2">
-                            <div className="glossary-loading-skeleton"></div>
-                            <div className="glossary-loading-skeleton"></div>
-                            <div className="glossary-loading-skeleton"></div>
-                          </div>
-                        ) : translations &&
-                          Object.keys(translations.translations).length > 0 ? (
-                          Object.entries(translations.translations).map(
-                            ([language, translation]) => (
-                              <div
-                                key={language}
-                                className="glossary-translation-item"
-                              >
-                                <div className="glossary-translation-lang">
-                                  {language}
-                                </div>
-                                <div className="glossary-translation-text">
-                                  {String(translation)}
-                                </div>
-                              </div>
-                            ),
-                          )
-                        ) : (
-                          <div className="glossary-empty">
-                            No translations available for this term
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    className="glossary-empty"
-                    style={{
-                      maxHeight: 'calc(100vh - 250px)',
-                      overflowY: 'auto',
-                    }}
-                  >
-                    Select a term to view details and translations
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Export Data Button at Bottom */}
-            {categoryTerms.length > 0 && (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginTop: '1rem',
-                  marginBottom: '1rem',
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowExportPopup(true);
-                  }}
-                  className="glossary-export-button"
-                  style={{
-                    backgroundColor: '#f00a50',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '0.75rem 1.5rem',
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(240, 10, 80, 0.3)',
-                    transition: 'all 0.2s ease',
-                    minWidth: '150px',
-                    justifyContent: 'center',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow =
-                      '0 6px 16px rgba(240, 10, 80, 0.4)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow =
-                      '0 4px 12px rgba(240, 10, 80, 0.3)';
-                  }}
-                >
-                  <Download size={16} />
-                  Export Data
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Export Data Popup Modal */}
-          {showExportPopup && (
-            <div
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 0.5rem',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1000,
-                paddingLeft: '220px', // Account for sidebar
-              }}
-              onClick={() => {
-                setShowExportPopup(false);
+                flexDirection: 'column',
+                overflow: 'auto',
+                minHeight: 0,
+                marginRight: '0.75rem',
+                marginLeft: '-0.5rem',
               }}
             >
-              <div
-                ref={exportPopupRef}
-                className="glossary-export-popup"
-                style={{
-                  backgroundColor: 'var(--download-bg)',
-                  borderRadius: '12px',
-                  padding: '1.5rem',
-                  minWidth: '400px',
-                  maxWidth: '500px',
-                  position: 'relative',
-                  marginLeft: '2rem', // Move slightly to the right
-                  boxShadow:
-                    '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                {/* Close button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowExportPopup(false);
-                  }}
+              {/* Error Display */}
+              {error && (
+                <div
                   style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    fontSize: '1.5rem',
-                    cursor: 'pointer',
-                    color: 'var(--text-theme)',
-                    width: '32px',
-                    height: '32px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '4px',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      'var(--glossary-border-color)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
+                    background: '#553c2c',
+                    border: `1px solid #d69e2e`,
+                    color: '#fbb6ce',
+                    padding: '12px',
+                    borderRadius: '6px',
+                    marginBottom: '1rem',
+                    textAlign: 'center',
                   }}
                 >
-                  ×
-                </button>
+                  {error}
+                </div>
+              )}
 
-                {/* Header */}
-                <div style={{ marginBottom: '1.5rem', paddingRight: '2rem' }}>
-                  <h3
+              {/* Multilingual Dictionary section */}
+              <div
+                className="glossary-header"
+                style={{
+                  textAlign: 'center',
+                  marginBottom: '1rem',
+                  flexShrink: 0,
+                }}
+              >
+                <h1 className="glossary-title">
+                  <Book size={40} />
+                  Multilingual Glossary
+                </h1>
+                <p className="glossary-subtitle">
+                  Browse categories, explore terms, and discover translations
+                </p>
+                {Object.keys(availableLanguages).length > 0 && (
+                  <p
                     style={{
-                      fontSize: '1.25rem',
+                      fontSize: '0.875rem',
+                      color: '#a0aec0',
+                      marginTop: '0.5rem',
+                    }}
+                  >
+                    {/* Available in {Object.keys(availableLanguages).length} languages */}
+                  </p>
+                )}
+              </div>
+
+              <div
+                className="glossary-grid"
+                style={{
+                  flex: 1,
+                  minHeight: 400,
+                  overflow: 'visible',
+                  marginBottom: '1rem',
+                  position: 'relative',
+                }}
+              >
+                {/* Categories Panel */}
+                <div className="glossary-panel">
+                  <h2 className="glossary-panel-title">
+                    <Book size={20} />
+                    Categories
+                  </h2>
+                  {loading && !categories.length ? (
+                    <div className="animate-pulse">
+                      <div
+                        className="glossary-loading-skeleton"
+                        style={{ marginBottom: '12px' }}
+                      ></div>
+                      <div
+                        className="glossary-loading-skeleton"
+                        style={{ marginBottom: '12px' }}
+                      ></div>
+                      <div className="glossary-loading-skeleton"></div>
+                    </div>
+                  ) : (
+                    <div className="glossary-categories-list">
+                      {categories.map((category) => (
+                        <button
+                          key={category}
+                          type="button"
+                          onClick={() => {
+                            // If the category is already selected, deselect it and load random terms
+                            if (selectedCategory === category) {
+                              setSelectedCategory(null);
+                              setSelectedTerm(null);
+                              setShowTranslations(false);
+                              setTranslations(null);
+                              setSearchTerm('');
+                              setError(null);
+                              setLoading(true);
+
+                              // Load random terms
+                              void (async () => {
+                                try {
+                                  const randomTerms =
+                                    await dictionaryAPI.getRandomTerm(10);
+                                  setCategoryTerms(randomTerms);
+                                } catch (error) {
+                                  console.error(
+                                    'Error loading random terms:',
+                                    error,
+                                  );
+                                  setError(
+                                    'Failed to load random terms. Please try again.',
+                                  );
+                                  setCategoryTerms([]);
+                                } finally {
+                                  setLoading(false);
+                                }
+                              })();
+                            } else {
+                              // If selecting a new category, use the normal handler
+                              void handleCategorySelect(category);
+                            }
+                          }}
+                          className={`glossary-category-btn${
+                            selectedCategory === category ? ' selected' : ''
+                          }`}
+                        >
+                          <span>{category}</span>
+                          {selectedCategory === category ? (
+                            <ChevronDown size={16} />
+                          ) : (
+                            <ChevronRight size={16} />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>{' '}
+                {/* Terms Panel */}
+                <div className="glossary-panel">
+                  <h2 className="glossary-panel-title">
+                    {selectedCategory
+                      ? `Terms in ${selectedCategory}`
+                      : categoryTerms.length > 0
+                        ? 'Random Terms'
+                        : 'Select a Category'}
+                  </h2>
+                  <div className="glossary-search">
+                    <Search className="glossary-search-icon" size={16} />
+                    <input
+                      type="text"
+                      placeholder={
+                        selectedCategory
+                          ? `Search terms in ${selectedCategory}...`
+                          : 'Search all terms...'
+                      }
+                      value={searchTerm}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                      }}
+                      className="glossary-search-input"
+                    />
+                  </div>
+                  {loading && selectedCategory ? (
+                    <div className="animate-pulse space-y-3">
+                      <div
+                        className="glossary-loading-skeleton"
+                        style={{ height: '80px' }}
+                      ></div>
+                      <div
+                        className="glossary-loading-skeleton"
+                        style={{ height: '80px' }}
+                      ></div>
+                      <div
+                        className="glossary-loading-skeleton"
+                        style={{ height: '80px' }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <div className="glossary-terms-list">
+                      {filteredTerms.map((term) => (
+                        <button
+                          key={term.id}
+                          type="button"
+                          onClick={() => {
+                            handleTermSelect(term);
+                          }}
+                          className={`glossary-term-btn${
+                            selectedTerm?.id === term.id ? ' selected' : ''
+                          }`}
+                        >
+                          {' '}
+                          <div className="glossary-term-title">{term.term}</div>
+                          <div className="glossary-term-def">
+                            {term.definition}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {filteredTerms.length === 0 && !loading && (
+                    <div className="glossary-empty">
+                      {searchTerm && selectedCategory
+                        ? `No terms found matching "${searchTerm}" in ${selectedCategory} category.`
+                        : searchTerm
+                          ? `No terms found matching "${searchTerm}" across all categories.`
+                          : selectedCategory
+                            ? `No terms available in ${selectedCategory} category.`
+                            : `No terms available.`}
+                    </div>
+                  )}
+                </div>
+                {/* Details Panel */}
+                <div className="glossary-panel">
+                  <h2 className="glossary-panel-title">
+                    <Globe size={20} />
+                    Term Details
+                  </h2>
+                  {selectedTerm ? (
+                    <div
+                      className="space-y-4 glossary-terms-list"
+                      style={{
+                        maxHeight: 'calc(100vh - 250px)',
+                        overflowY: 'auto',
+                        paddingRight: '8px',
+                        marginRight: '-8px',
+                      }}
+                    >
+                      <div>
+                        <h3 className="glossary-details-title">
+                          {selectedTerm.term}
+                        </h3>{' '}
+                        <p className="glossary-details-def">
+                          {selectedTerm.definition}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            void handleShowTranslations();
+                          }}
+                          className="glossary-translate-btn"
+                          disabled={loading}
+                        >
+                          <Globe size={16} />
+                          {loading && showTranslations
+                            ? 'Loading...'
+                            : 'Show Translations'}
+                        </button>
+                      </div>
+                      {showTranslations && (
+                        <div
+                          className="glossary-translation-list"
+                          style={{
+                            overflowY: 'visible',
+                            maxHeight: 'none',
+                          }}
+                        >
+                          <h4 className="glossary-translations-header">
+                            Translations
+                          </h4>
+                          {loading ? (
+                            <div className="animate-pulse space-y-2">
+                              <div className="glossary-loading-skeleton"></div>
+                              <div className="glossary-loading-skeleton"></div>
+                              <div className="glossary-loading-skeleton"></div>
+                            </div>
+                          ) : translations &&
+                            Object.keys(translations.translations).length >
+                              0 ? (
+                            Object.entries(translations.translations).map(
+                              ([language, translation]) => (
+                                <div
+                                  key={language}
+                                  className="glossary-translation-item"
+                                >
+                                  <div className="glossary-translation-lang">
+                                    {language}
+                                  </div>
+                                  <div className="glossary-translation-text">
+                                    {String(translation)}
+                                  </div>
+                                </div>
+                              ),
+                            )
+                          ) : (
+                            <div className="glossary-empty">
+                              No translations available for this term
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      className="glossary-empty"
+                      style={{
+                        maxHeight: 'calc(100vh - 250px)',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      Select a term to view details and translations
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Export Data Button at Bottom */}
+              {categoryTerms.length > 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: '1rem',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowExportPopup(true);
+                    }}
+                    className="glossary-export-button"
+                    style={{
+                      backgroundColor: '#f00a50',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '0.75rem 1.5rem',
+                      fontSize: '0.9rem',
                       fontWeight: 600,
-                      margin: '0 0 0.5rem 0',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(240, 10, 80, 0.3)',
+                      transition: 'all 0.2s ease',
+                      minWidth: '150px',
+                      justifyContent: 'center',
                     }}
-                    className="glossary-export-title"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow =
+                        '0 6px 16px rgba(240, 10, 80, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow =
+                        '0 4px 12px rgba(240, 10, 80, 0.3)';
+                    }}
                   >
-                    <Download size={20} />
+                    <Download size={16} />
                     Export Data
-                  </h3>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: '0.9rem',
-                      lineHeight: '1.4',
-                    }}
-                    className="glossary-export-subtitle"
-                  >
-                    Download the{' '}
-                    {selectedCategory
-                      ? `terms in category "${selectedCategory}"`
-                      : 'current terms'}
-                    {searchTerm ? ` matching "${searchTerm}"` : ''} (
-                    {filteredTerms.length} items)
-                  </p>
+                  </button>
                 </div>
+              )}
+            </div>
 
-                {/* Format Options */}
-                <div style={{ display: 'grid', gap: '0.75rem' }}>
+            {/* Export Data Popup Modal */}
+            {showExportPopup && (
+              <div
+                style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 1000,
+                  paddingLeft: '220px', // Account for sidebar
+                }}
+                onClick={() => {
+                  setShowExportPopup(false);
+                }}
+              >
+                <div
+                  ref={exportPopupRef}
+                  className="glossary-export-popup"
+                  style={{
+                    backgroundColor: 'var(--download-bg)',
+                    borderRadius: '12px',
+                    padding: '1.5rem',
+                    minWidth: '400px',
+                    maxWidth: '500px',
+                    position: 'relative',
+                    marginLeft: '2rem', // Move slightly to the right
+                    boxShadow:
+                      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {/* Close button */}
                   <button
                     type="button"
                     onClick={() => {
                       setShowExportPopup(false);
-                      const handleDownload = async () => {
-                        try {
-                          await downloadData(
-                            filteredTerms,
-                            'csv',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                        } catch (error) {
-                          console.error('CSV download failed:', error);
-                          setError('Failed to download CSV. Please try again.');
-                          setTimeout(() => {
-                            setError(null);
-                          }, 5000);
-                        }
-                      };
-                      void handleDownload();
                     }}
-                    className="glossary-format-menu-item"
                     style={{
+                      position: 'absolute',
+                      top: '1rem',
+                      right: '1rem',
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      fontSize: '1.5rem',
+                      cursor: 'pointer',
+                      color: 'var(--text-theme)',
+                      width: '32px',
+                      height: '32px',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '1rem',
-                      width: '100%',
-                      textAlign: 'left',
-                      border: '1px solid var(--glossary-border-color)',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem',
-                      backgroundColor: 'transparent',
-                      transition: 'all 0.2s ease',
+                      justifyContent: 'center',
+                      borderRadius: '4px',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor =
                         'var(--glossary-border-color)';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.transform = 'translateY(0)';
                     }}
                   >
-                    <div style={{ width: '20px', color: '#1e40af' }}>
-                      <FileType size={20} />
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>CSV Format</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Spreadsheet-compatible format
-                      </div>
-                    </div>
+                    ×
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowExportPopup(false);
-                      const handleDownload = async () => {
-                        try {
-                          await downloadData(
-                            filteredTerms,
-                            'json',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                        } catch (error) {
-                          console.error('JSON download failed:', error);
-                          setError(
-                            'Failed to download JSON. Please try again.',
-                          );
-                          setTimeout(() => {
-                            setError(null);
-                          }, 5000);
-                        }
-                      };
-                      void handleDownload();
-                    }}
-                    className="glossary-format-menu-item"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '1rem',
-                      width: '100%',
-                      textAlign: 'left',
-                      border: '1px solid var(--glossary-border-color)',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem',
-                      backgroundColor: 'transparent',
-                      transition: 'all 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        'var(--glossary-border-color)';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div style={{ width: '20px', color: '#10b981' }}>
-                      <FileType size={20} />
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>JSON Format</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Developer-friendly data format
-                      </div>
-                    </div>
-                  </button>
+                  {/* Header */}
+                  <div style={{ marginBottom: '1.5rem', paddingRight: '2rem' }}>
+                    <h3
+                      style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
+                        margin: '0 0 0.5rem 0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}
+                      className="glossary-export-title"
+                    >
+                      <Download size={20} />
+                      Export Data
+                    </h3>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: '0.9rem',
+                        lineHeight: '1.4',
+                      }}
+                      className="glossary-export-subtitle"
+                    >
+                      Download the{' '}
+                      {selectedCategory
+                        ? `terms in category "${selectedCategory}"`
+                        : 'current terms'}
+                      {searchTerm ? ` matching "${searchTerm}"` : ''} (
+                      {filteredTerms.length} items)
+                    </p>
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowExportPopup(false);
-                      const handleDownload = async () => {
-                        try {
-                          await downloadData(
-                            filteredTerms,
-                            'html',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                        } catch (error) {
-                          console.error('HTML download failed:', error);
-                          setError(
-                            'Failed to download HTML. Please try again.',
-                          );
-                          setTimeout(() => {
-                            setError(null);
-                          }, 5000);
-                        }
-                      };
-                      void handleDownload();
-                    }}
-                    className="glossary-format-menu-item"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '1rem',
-                      width: '100%',
-                      textAlign: 'left',
-                      border: '1px solid var(--glossary-border-color)',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem',
-                      backgroundColor: 'transparent',
-                      transition: 'all 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        'var(--glossary-border-color)';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div style={{ width: '20px', color: '#047857' }}>
-                      <FileType size={20} />
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>HTML Table</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Web-friendly table format
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowExportPopup(false);
-                      const handlePdfDownload = async () => {
-                        try {
-                          setError(null);
-                          setIsDownloading(true);
-
-                          // First, show a message to the user
-                          setError(`Preparing terms for PDF export...`);
-
-                          // Always fetch ALL terms for the selected category to ensure complete exports
-                          let termsToExport = [...filteredTerms];
-
-                          // If we're in a category, always ensure we get all terms regardless of search
-                          if (selectedCategory) {
+                  {/* Format Options */}
+                  <div style={{ display: 'grid', gap: '0.75rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowExportPopup(false);
+                        const handleDownload = async () => {
+                          try {
+                            await downloadData(
+                              filteredTerms,
+                              'csv',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                          } catch (error) {
+                            console.error('CSV download failed:', error);
                             setError(
-                              `Loading all terms in ${selectedCategory} for export...`,
+                              'Failed to download CSV. Please try again.',
                             );
-                            try {
-                              // Get all terms for this category directly from the API
-                              const allCategoryTerms =
-                                await dictionaryAPI.getTermsByCategory(
-                                  selectedCategory,
-                                );
-                              if (allCategoryTerms.length > 0) {
-                                termsToExport = allCategoryTerms;
-
-                                // Show warning for very large exports
-                                if (allCategoryTerms.length > 200) {
-                                  setError(
-                                    `Preparing ${String(termsToExport.length)} terms from ${selectedCategory} for export. This may take a while...`,
-                                  );
-                                } else {
-                                  setError(
-                                    `Exporting ${String(termsToExport.length)} terms from ${selectedCategory}...`,
-                                  );
-                                }
-                              }
-                            } catch (err) {
-                              console.error(
-                                'Failed to load all category terms:',
-                                err,
-                              );
-                              // Continue with filtered terms as fallback
-                              setError(
-                                `Using ${String(filteredTerms.length)} filtered terms as fallback...`,
-                              );
-                            }
-                          } else {
-                            // If no category selected, use all filtered terms
-                            setError(
-                              `Exporting ${String(filteredTerms.length)} terms...`,
-                            );
+                            setTimeout(() => {
+                              setError(null);
+                            }, 5000);
                           }
-
-                          // For very large datasets, we'll show an extra warning
-                          if (termsToExport.length > 300) {
-                            console.log(
-                              `Large export: ${String(termsToExport.length)} terms to PDF`,
-                            );
-                            // Add a slight delay to ensure the user sees the warning
-                            await new Promise((resolve) =>
-                              setTimeout(resolve, 800),
-                            );
-                          }
-
-                          console.log(
-                            `Exporting ${String(termsToExport.length)} terms to PDF`,
-                          );
-
-                          // Start the export process
-                          await downloadData(
-                            termsToExport,
-                            'pdf',
-                            termsTranslations,
-                            selectedCategory,
-                          );
-                          setError(null);
-                        } catch (error) {
-                          console.error('PDF download failed:', error);
-                          const errorMessage =
-                            error instanceof Error
-                              ? error.message
-                              : 'PDF generation failed. Please try HTML or CSV format instead.';
-                          setError(errorMessage);
-                          setTimeout(() => {
-                            setError(null);
-                          }, 10000);
-                        } finally {
-                          setIsDownloading(false);
-                        }
-                      };
-                      void handlePdfDownload();
-                    }}
-                    disabled={isDownloading}
-                    className="glossary-format-menu-item"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '1rem',
-                      width: '100%',
-                      textAlign: 'left',
-                      border: '1px solid var(--glossary-border-color)',
-                      borderRadius: '8px',
-                      cursor: isDownloading ? 'not-allowed' : 'pointer',
-                      fontSize: '0.9rem',
-                      backgroundColor: 'transparent',
-                      transition: 'all 0.2s ease',
-                      opacity: isDownloading ? 0.6 : 1,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isDownloading) {
+                        };
+                        void handleDownload();
+                      }}
+                      className="glossary-format-menu-item"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '1rem',
+                        width: '100%',
+                        textAlign: 'left',
+                        border: '1px solid var(--glossary-border-color)',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        backgroundColor: 'transparent',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor =
                           'var(--glossary-border-color)';
                         e.currentTarget.style.transform = 'translateY(-1px)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isDownloading) {
+                      }}
+                      onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = 'transparent';
                         e.currentTarget.style.transform = 'translateY(0)';
-                      }
-                    }}
-                  >
-                    <div style={{ width: '20px', color: '#dc2626' }}>
-                      <FileType size={20} />
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>
-                        {isDownloading ? 'Generating PDF...' : 'PDF Document'}
+                      }}
+                    >
+                      <div style={{ width: '20px', color: '#1e40af' }}>
+                        <FileType size={20} />
                       </div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Printable document format
+                      <div>
+                        <div style={{ fontWeight: 600 }}>CSV Format</div>
+                        <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                          Spreadsheet-compatible format
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowExportPopup(false);
+                        const handleDownload = async () => {
+                          try {
+                            await downloadData(
+                              filteredTerms,
+                              'json',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                          } catch (error) {
+                            console.error('JSON download failed:', error);
+                            setError(
+                              'Failed to download JSON. Please try again.',
+                            );
+                            setTimeout(() => {
+                              setError(null);
+                            }, 5000);
+                          }
+                        };
+                        void handleDownload();
+                      }}
+                      className="glossary-format-menu-item"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '1rem',
+                        width: '100%',
+                        textAlign: 'left',
+                        border: '1px solid var(--glossary-border-color)',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        backgroundColor: 'transparent',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          'var(--glossary-border-color)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
+                    >
+                      <div style={{ width: '20px', color: '#10b981' }}>
+                        <FileType size={20} />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>JSON Format</div>
+                        <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                          Developer-friendly data format
+                        </div>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowExportPopup(false);
+                        const handleDownload = async () => {
+                          try {
+                            await downloadData(
+                              filteredTerms,
+                              'html',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                          } catch (error) {
+                            console.error('HTML download failed:', error);
+                            setError(
+                              'Failed to download HTML. Please try again.',
+                            );
+                            setTimeout(() => {
+                              setError(null);
+                            }, 5000);
+                          }
+                        };
+                        void handleDownload();
+                      }}
+                      className="glossary-format-menu-item"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '1rem',
+                        width: '100%',
+                        textAlign: 'left',
+                        border: '1px solid var(--glossary-border-color)',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        backgroundColor: 'transparent',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          'var(--glossary-border-color)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
+                    >
+                      <div style={{ width: '20px', color: '#047857' }}>
+                        <FileType size={20} />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>HTML Table</div>
+                        <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                          Web-friendly table format
+                        </div>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowExportPopup(false);
+                        const handlePdfDownload = async () => {
+                          try {
+                            setError(null);
+                            setIsDownloading(true);
+
+                            // First, show a message to the user
+                            setError(`Preparing terms for PDF export...`);
+
+                            // Always fetch ALL terms for the selected category to ensure complete exports
+                            let termsToExport = [...filteredTerms];
+
+                            // If we're in a category, always ensure we get all terms regardless of search
+                            if (selectedCategory) {
+                              setError(
+                                `Loading all terms in ${selectedCategory} for export...`,
+                              );
+                              try {
+                                // Get all terms for this category directly from the API
+                                const allCategoryTerms =
+                                  await dictionaryAPI.getTermsByCategory(
+                                    selectedCategory,
+                                  );
+                                if (allCategoryTerms.length > 0) {
+                                  termsToExport = allCategoryTerms;
+
+                                  // Show warning for very large exports
+                                  if (allCategoryTerms.length > 200) {
+                                    setError(
+                                      `Preparing ${String(termsToExport.length)} terms from ${selectedCategory} for export. This may take a while...`,
+                                    );
+                                  } else {
+                                    setError(
+                                      `Exporting ${String(termsToExport.length)} terms from ${selectedCategory}...`,
+                                    );
+                                  }
+                                }
+                              } catch (err) {
+                                console.error(
+                                  'Failed to load all category terms:',
+                                  err,
+                                );
+                                // Continue with filtered terms as fallback
+                                setError(
+                                  `Using ${String(filteredTerms.length)} filtered terms as fallback...`,
+                                );
+                              }
+                            } else {
+                              // If no category selected, use all filtered terms
+                              setError(
+                                `Exporting ${String(filteredTerms.length)} terms...`,
+                              );
+                            }
+
+                            // For very large datasets, we'll show an extra warning
+                            if (termsToExport.length > 300) {
+                              console.log(
+                                `Large export: ${String(termsToExport.length)} terms to PDF`,
+                              );
+                              // Add a slight delay to ensure the user sees the warning
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 800),
+                              );
+                            }
+
+                            console.log(
+                              `Exporting ${String(termsToExport.length)} terms to PDF`,
+                            );
+
+                            // Start the export process
+                            await downloadData(
+                              termsToExport,
+                              'pdf',
+                              termsTranslations,
+                              selectedCategory,
+                            );
+                            setError(null);
+                          } catch (error) {
+                            console.error('PDF download failed:', error);
+                            const errorMessage =
+                              error instanceof Error
+                                ? error.message
+                                : 'PDF generation failed. Please try HTML or CSV format instead.';
+                            setError(errorMessage);
+                            setTimeout(() => {
+                              setError(null);
+                            }, 10000);
+                          } finally {
+                            setIsDownloading(false);
+                          }
+                        };
+                        void handlePdfDownload();
+                      }}
+                      disabled={isDownloading}
+                      className="glossary-format-menu-item"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '1rem',
+                        width: '100%',
+                        textAlign: 'left',
+                        border: '1px solid var(--glossary-border-color)',
+                        borderRadius: '8px',
+                        cursor: isDownloading ? 'not-allowed' : 'pointer',
+                        fontSize: '0.9rem',
+                        backgroundColor: 'transparent',
+                        transition: 'all 0.2s ease',
+                        opacity: isDownloading ? 0.6 : 1,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isDownloading) {
+                          e.currentTarget.style.backgroundColor =
+                            'var(--glossary-border-color)';
+                          e.currentTarget.style.transform = 'translateY(-1px)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isDownloading) {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }
+                      }}
+                    >
+                      <div style={{ width: '20px', color: '#dc2626' }}>
+                        <FileType size={20} />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>
+                          {isDownloading ? 'Generating PDF...' : 'PDF Document'}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                          Printable document format
+                        </div>
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
