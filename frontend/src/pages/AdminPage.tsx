@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import '../styles/AdminPage.scss';
 import { API_ENDPOINTS } from '../config';
 
@@ -68,6 +69,7 @@ interface UserResponse {
 }
 
 const AdminPage: React.FC = () => {
+  const { isDarkMode } = useDarkMode();
   const [allApplications, setAllApplications] = useState<LinguistApplication[]>(
     [],
   );
@@ -87,7 +89,6 @@ const AdminPage: React.FC = () => {
   const [documentsLoading, setDocumentsLoading] = useState<
     Record<string, boolean>
   >({});
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -172,15 +173,6 @@ const AdminPage: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
 
   const fetchUserDocuments = async (
     userId: string,
@@ -726,85 +718,90 @@ const AdminPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="admin-stats">
+                <div className="admin-right-section">
+                  <div className="admin-stats">
+                    {currentView === 'applications' && (
+                      <>
+                        <div className="stat-card">
+                          <FileText size={20} />
+                          <span className="stat-number">
+                            {allApplications.length}
+                          </span>
+                          <span className="stat-label">Applications</span>
+                        </div>
+
+                        <div className="stat-card">
+                          <Clock size={20} />
+                          <span className="stat-number">
+                            {
+                              allApplications.filter(
+                                (app) => app.status === 'pending',
+                              ).length
+                            }
+                          </span>
+                          <span className="stat-label">Pending Review</span>
+                        </div>
+
+                        <div className="stat-card">
+                          <CheckCircle size={20} />
+                          <span className="stat-number">
+                            {
+                              allApplications.filter(
+                                (app) => app.status === 'approved',
+                              ).length
+                            }
+                          </span>
+                          <span className="stat-label">Approved</span>
+                        </div>
+                      </>
+                    )}
+
+                    {currentView === 'users' && (
+                      <>
+                        <div className="stat-card">
+                          <Users size={20} />
+                          <span className="stat-number">{allUsers.length}</span>
+                          <span className="stat-label">Users</span>
+                        </div>
+
+                        <div className="stat-card">
+                          <UserCheck size={20} />
+                          <span className="stat-number">
+                            {
+                              allUsers.filter((user) => user.role === 'admin')
+                                .length
+                            }
+                          </span>
+                          <span className="stat-label">Admins</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
                   {/* View Toggle Buttons */}
-                  <button
-                    type="button"
-                    className={`stat-card ${currentView === 'applications' ? 'active' : ''}`}
-                    onClick={() => {
-                      setCurrentView('applications');
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      border:
-                        currentView === 'applications'
-                          ? '2px solid #007bff'
-                          : 'none',
-                    }}
-                  >
-                    <FileText size={20} />
-                    <span className="stat-number">
-                      {allApplications.length}
-                    </span>
-                    <span className="stat-label">Applications</span>
-                  </button>
+                  <div className="view-toggle-container">
+                    <button
+                      type="button"
+                      className={`view-toggle-btn ${currentView === 'applications' ? 'active' : ''}`}
+                      onClick={() => {
+                        setCurrentView('applications');
+                      }}
+                    >
+                      <FileText size={20} />
+                      <span className="toggle-label">Applications</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    className={`stat-card ${currentView === 'users' ? 'active' : ''}`}
-                    onClick={() => {
-                      setCurrentView('users');
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      border:
-                        currentView === 'users' ? '2px solid #007bff' : 'none',
-                    }}
-                  >
-                    <Users size={20} />
-                    <span className="stat-number">{allUsers.length}</span>
-                    <span className="stat-label">Users</span>
-                  </button>
-
-                  {currentView === 'applications' && (
-                    <>
-                      <div className="stat-card">
-                        <Clock size={20} />
-                        <span className="stat-number">
-                          {
-                            allApplications.filter(
-                              (app) => app.status === 'pending',
-                            ).length
-                          }
-                        </span>
-                        <span className="stat-label">Pending Review</span>
-                      </div>
-                      <div className="stat-card">
-                        <CheckCircle size={20} />
-                        <span className="stat-number">
-                          {
-                            allApplications.filter(
-                              (app) => app.status === 'approved',
-                            ).length
-                          }
-                        </span>
-                        <span className="stat-label">Approved</span>
-                      </div>
-                    </>
-                  )}
-
-                  {currentView === 'users' && (
-                    <div className="stat-card">
-                      <UserCheck size={20} />
-                      <span className="stat-number">
-                        {
-                          allUsers.filter((user) => user.role === 'admin')
-                            .length
-                        }
-                      </span>
-                      <span className="stat-label">Admins</span>
-                    </div>
-                  )}
+                    <button
+                      type="button"
+                      className={`view-toggle-btn ${currentView === 'users' ? 'active' : ''}`}
+                      onClick={() => {
+                        setCurrentView('users');
+                      }}
+                    >
+                      <Users size={20} />
+                      <span className="toggle-label">Users</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
