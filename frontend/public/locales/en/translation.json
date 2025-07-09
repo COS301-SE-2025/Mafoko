@@ -79,11 +79,13 @@
     "glossary": "Glossary",
     "savedTerms": "Saved Terms",
     "dashboard": "Dashboard",
-    "help": "Help"
+    "help": "Help",
+    "darkMode": "Dark Mode"
   },
 
   "dashboard": {
     "welcome": "Welcome to Mavito",
+    "welcomeBack": "Welcome back",
     "userName": "User Name",
     "userId": "User ID",
     "quickActions": "Quick Actions",

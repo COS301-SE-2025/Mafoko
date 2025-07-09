@@ -5,7 +5,8 @@
     "glossary": "Lenane la Mantswe",
     "savedTerms": "Mantswe a Bolokilweng",
     "dashboard": "Letlapa",
-    "help": "Thuso"
+    "help": "Thuso",
+    "darkMode": "Mokgwa o lefifi"
   },
   
   "landingPage": {
@@ -77,6 +78,7 @@
   },
   "dashboard": {
     "welcome": "O amohelehile ho Mavito",
+    "welcomeBack": "O kgutlile hape",
     "userName": "Lebitso la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
     "quickActions": "Diketso tse Potlakileng",

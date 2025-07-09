@@ -5,7 +5,8 @@
     "glossary": "Lenaneontšu",
     "savedTerms": "Mantšu ao a Bolokitšwego",
     "dashboard": "Letlapa",
-    "help": "Thušo"
+    "help": "Thušo",
+    "darkMode": "Mokgwa wo moso"
   },
   
   "landingPage": {
@@ -81,6 +82,7 @@
   },
   "dashboard": {
     "welcome": "O amogetswe go Mavito",
+    "welcomeBack": "O boile gape",
     "userName": "Leina la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
     "quickActions": "Ditiro tsa Potlako",

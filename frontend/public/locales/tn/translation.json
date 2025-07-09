@@ -5,7 +5,8 @@
     "glossary": "Lenanetlhalosi",
     "savedTerms": "Mafoko a a Bolokilweng",
     "dashboard": "Bolaodi",
-    "help": "Thuso"
+    "help": "Thuso",
+    "darkMode": "Mokgwa o montsho"
   },
   
   "landingPage": {
@@ -81,6 +82,7 @@
   },
   "dashboard": {
     "welcome": "O amogelwa mo Mavito",
+    "welcomeBack": "O amogetswe gape",
     "userName": "Leina la Modirisi",
     "userId": "Nomoro ya Modirisi",
     "quickActions": "Ditiro tsa Bonako",

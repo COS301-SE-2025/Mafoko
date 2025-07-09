@@ -5,7 +5,8 @@
     "glossary": "Woordelys",
     "savedTerms": "Gestoorde Terme",
     "dashboard": "Paneelbord",
-    "help": "Hulp"
+    "help": "Hulp",
+    "darkMode": "Donker modus"
   },
   
   "landingPage": {
@@ -81,6 +82,7 @@
   },
   "dashboard": {
     "welcome": "Welkom by Mavito",
+    "welcomeBack": "Welkom terug",
     "userName": "Gebruikersnaam",
     "userId": "Gebruiker ID",
     "quickActions": "Vinnige Aksies",

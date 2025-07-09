@@ -5,7 +5,8 @@
     "glossary": "Izihumusho",
     "savedTerms": "Amagama Agcinile",
     "dashboard": "Ibhodi",
-    "help": "Usizo"
+    "help": "Usizo",
+    "darkMode": "Indlela emnyama"
   },
   
   "landingPage": {
@@ -84,6 +85,7 @@
 
   "dashboard": {
     "welcome": "Siyakwamukela ku-Mavito",
+    "welcomeBack": "Wamukelekile futhi",
     "userName": "Igama Lomsebenzisi",
     "userId": "Inombolo Yomsebenzisi",
     "quickActions": "Izenzo Ezisheshayo",

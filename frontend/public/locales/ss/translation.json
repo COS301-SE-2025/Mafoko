@@ -5,7 +5,8 @@
     "glossary": "Luhla lwemagama",
     "savedTerms": "Emagama Lacondziwe",
     "dashboard": "Ibhodi",
-    "help": "Lusito"
+    "help": "Lusito",
+    "darkMode": "Indlela lemnyama"
   },
   
   "landingPage": {
@@ -81,6 +82,7 @@
   },
   "dashboard": {
     "welcome": "Wemukelekile ku-Mavito",
+    "welcomeBack": "Wemukelekile futsi",
     "userName": "Ligama Lemsebentisi",
     "userId": "Inombolo Yemsebentisi",
     "quickActions": "Tento Letisheshako",

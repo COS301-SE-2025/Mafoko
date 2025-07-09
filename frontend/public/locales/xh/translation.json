@@ -1,11 +1,12 @@
 {
   "navigation": {
     "home": "Ikhaya",
-    "dictionary": "Isichazi-magama",
+    "dictionary": "Isichazi-maga",
     "glossary": "Uluhlu lwamagama",
     "savedTerms": "Amagama Agciniweyo",
     "dashboard": "Ibhodi",
-    "help": "Uncedo"
+    "help": "Uncedo",
+    "darkMode": "Indlela emnyama"
   },
   
   "landingPage": {
@@ -77,6 +78,7 @@
   },
   "dashboard": {
     "welcome": "Wamkelekile ku-Mavito",
+    "welcomeBack": "Wamkelekile kwakhona",
     "userName": "Igama Lomsebenzisi",
     "userId": "Inombolo Yomsebenzisi",
     "quickActions": "Izenzo Ezikhawulezayo",
