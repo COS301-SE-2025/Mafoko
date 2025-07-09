@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
+import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
 
 const FrequentlyAskedPage: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
 
   return (
     <div>
@@ -29,16 +21,6 @@ const FrequentlyAskedPage: React.FC = () => {
             }}
           >
             Back
-          </button>
-          <button
-            type="button"
-            className="article-theme-toggle-btn"
-            style={{ marginRight: '1rem' }}
-            onClick={() => {
-              setIsDarkMode((prev) => !prev);
-            }}
-          >
-            {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
           </button>
         </div>
 

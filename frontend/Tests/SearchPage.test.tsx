@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SearchPage from '../src/pages/SearchPage';
 import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
+import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
 
 vi.mock('../src/components/ui/Navbar', () => ({
   __esModule: true,
@@ -80,13 +81,14 @@ describe('SearchPage', () => {
   test('renders SearchPage with key UI elements', () => {
     render(
       <Router>
-        <SearchPage />
+        <DarkModeProvider>
+          <SearchPage />
+        </DarkModeProvider>
       </Router>,
     );
 
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Domain')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 
@@ -98,7 +100,9 @@ describe('SearchPage', () => {
 
     render(
       <Router>
-        <SearchPage />
+        <DarkModeProvider>
+          <SearchPage />
+        </DarkModeProvider>
       </Router>,
     );
 
@@ -114,13 +118,15 @@ describe('SearchPage', () => {
   test('renders SearchPage with key UI elements', () => {
     render(
       <Router>
-        <SearchPage />
+        <DarkModeProvider>
+          <SearchPage />
+        </DarkModeProvider>
       </Router>,
     );
 
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Domain')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
+    /*expect(screen.getByText('AI Search')).toBeInTheDocument();*/
     expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 });

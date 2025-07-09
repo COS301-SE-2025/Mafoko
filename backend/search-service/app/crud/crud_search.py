@@ -13,6 +13,7 @@ async def search_terms_in_db(
     language: Optional[str] = None,
     domain: Optional[str] = None,
     sort_by: str = "name",
+    fuzzy: bool = False,
 ) -> List:  # The function will now return tuples of (Term, upvotes, downvotes)
 
     # --- NEW: Subquery to count upvotes and downvotes ---
@@ -39,7 +40,13 @@ async def search_terms_in_db(
     )
 
     if query:
-        stmt = stmt.where(Term.term.ilike(f"%{query}%"))
+        if fuzzy:
+            # substring matching for fuzzy search
+            stmt = stmt.where(Term.term.ilike(f"%{query}%"))
+        else:
+            # prefix matching for exact search by default
+            stmt = stmt.where(Term.term.ilike(f"{query}%"))
+
     if language:
         stmt = stmt.where(Term.language == language)
     if domain:

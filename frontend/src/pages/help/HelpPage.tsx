@@ -4,6 +4,7 @@ import '../../styles/HelpPage.scss';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/ui/Navbar.tsx';
 import LeftNav from '../../components/ui/LeftNav.tsx';
+import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
 
 interface Article {
   title: string;
@@ -17,10 +18,9 @@ const HelpPage: React.FC = () => {
   const [results, setResults] = useState<Article[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('help');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const { isDarkMode } = useDarkMode();
 
   const articles: Article[] = useMemo(
     () => [
@@ -86,16 +86,6 @@ const HelpPage: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  // Changes the theme
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
 
   const handleSearch = useCallback(
     async (t: string): Promise<void> => {
