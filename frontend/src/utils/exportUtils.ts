@@ -39,14 +39,15 @@ const getLogoAsBase64 = async (): Promise<string> => {
  * @returns CSV formatted string
  */
 export const generateCSV = (data: Term[], includeHeader = true): string => {
-  // Define CSV headers - removed Category and Language
-  const headers = ['Term', 'Definition'];
+  // Define CSV headers
+  const headers = ['Term', 'Definition', 'Language'];
 
-  // Map the data to CSV rows - removed Category and Language
+  // Map the data to CSV rows
   const dataRows = data.map((item) => {
     return [
       `"${item.term.replace(/"/g, '""')}"`, // Escape quotes in CSV
       `"${item.definition.replace(/"/g, '""')}"`,
+      `"${item.language ? item.language.replace(/"/g, '""') : ''}"`, // Include language field
     ].join(',');
   });
 
@@ -66,8 +67,8 @@ export const generateHTMLTable = async (
   data: Term[],
   categoryName?: string | null,
 ): Promise<string> => {
-  // Define headers - removed Category and Language
-  const headers = ['Term', 'Definition'];
+  // Define headers - now includes Language
+  const headers = ['Term', 'Definition', 'Language'];
 
   // Create HTML style for the table as concatenated string to avoid template literal issues
   const tableStyle =
@@ -170,7 +171,7 @@ export const generateHTMLTable = async (
     '  table { box-shadow: none; }' +
     '}' +
     '</style>';
-  // Create table rows - removed Category and Language columns
+  // Create table rows - now includes Language column
   let tableRowsStr = '';
   for (const item of data) {
     tableRowsStr +=
@@ -180,6 +181,11 @@ export const generateHTMLTable = async (
       '</td>' +
       '<td>' +
       item.definition.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+      '</td>' +
+      '<td>' +
+      (item.language
+        ? item.language.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        : '') +
       '</td>' +
       '</tr>';
   }
@@ -737,13 +743,12 @@ export const generatePDF = async (
 
         // Add header row with filled background
         pdf.setFillColor(45, 55, 72);
-        pdf.rect(margin, y - 6, pageWidth - margin * 2, 8, 'F');
-
-        // Add header text
+        pdf.rect(margin, y - 6, pageWidth - margin * 2, 8, 'F'); // Add header text
         pdf.setTextColor(255, 255, 255);
         pdf.setFont('helvetica', 'bold');
         pdf.text('Term', margin + 2, y);
-        pdf.text('Definition', pageWidth / 2, y);
+        pdf.text('Definition', margin + pageWidth * 0.3, y);
+        pdf.text('Language', margin + pageWidth * 0.7, y);
 
         // Reset text color for content
         pdf.setTextColor(0, 0, 0);
@@ -774,7 +779,8 @@ export const generatePDF = async (
             pdf.setTextColor(255, 255, 255);
             pdf.setFont('helvetica', 'bold');
             pdf.text('Term', margin + 2, y);
-            pdf.text('Definition', pageWidth / 2, y);
+            pdf.text('Definition', pageWidth / 3, y);
+            pdf.text('Language', (pageWidth * 2) / 3, y);
             pdf.setTextColor(0, 0, 0);
             pdf.setFont('helvetica', 'normal');
             y += 10;
@@ -785,11 +791,24 @@ export const generatePDF = async (
 
           // Add definition with wrapping
           const definition = term.definition;
-          const maxWidth = pageWidth - margin * 2 - (pageWidth / 2 - margin);
+          const maxWidth = pageWidth * 0.3;
           const splitText = pdf.splitTextToSize(
             definition,
             maxWidth,
           ) as string[];
+
+          // Add language
+          if (term.language) {
+            pdf.text(term.language, (pageWidth * 2) / 3, y);
+          }
+
+          // Position and add the definition text
+          pdf.text(splitText, margin + pageWidth * 0.3, y);
+
+          // Add language
+          if (term.language) {
+            pdf.text(term.language, margin + pageWidth * 0.7, y);
+          }
 
           // Position and add the definition text
           pdf.text(splitText, pageWidth / 2, y);
@@ -929,18 +948,19 @@ export const generatePDF = async (
             pdf.setTextColor(255, 255, 255); // White text for header
             pdf.setFont('helvetica', 'bold');
             pdf.text('Term', margin + 5, y);
-            pdf.text('Definition', pageWidth / 2, y);
+            pdf.text('Definition', margin + pageWidth * 0.3, y);
+            pdf.text('Language', margin + pageWidth * 0.7, y);
             pdf.setTextColor(0, 0, 0); // Reset text color for content
             y += 10;
             pdf.setFont('helvetica', 'normal');
           }
 
-          // Add term and definition
+          // Add term, definition and language
           pdf.text(term.term.substring(0, 30), margin, y);
 
           // Split definition into multiple lines if needed
           const definition = term.definition;
-          const maxWidth = pageWidth - margin * 2 - (pageWidth / 2 - margin);
+          const maxWidth = pageWidth * 0.35;
           const splitText = pdf.splitTextToSize(
             definition,
             maxWidth,
@@ -948,11 +968,19 @@ export const generatePDF = async (
           const lines = splitText.length;
 
           if (lines <= 1) {
-            pdf.text(definition, pageWidth / 2, y);
+            pdf.text(definition, margin + pageWidth * 0.3, y);
+            // Add language
+            if (term.language) {
+              pdf.text(term.language, margin + pageWidth * 0.7, y);
+            }
             y += 8;
           } else {
             // Handle multiline text
-            pdf.text(splitText, pageWidth / 2, y);
+            pdf.text(splitText, margin + pageWidth * 0.3, y);
+            // Add language
+            if (term.language) {
+              pdf.text(term.language, margin + pageWidth * 0.7, y);
+            }
             y += lines * 5 + 3;
           }
 
@@ -1232,17 +1260,31 @@ export const downloadData = async (
 
           // Set table styling
           const cellPadding = 5;
-          const termColWidth = contentWidth * 0.3;
-          const defColWidth = contentWidth * 0.7;
+          const termColWidth = contentWidth * 0.25; // Reduced to make room for language column
+          const defColWidth = contentWidth * 0.55; // Reduced to make room for language column
+          const langColWidth = contentWidth * 0.2; // New column for language
+
+          // Make sure these columns add up to contentWidth
+          const totalWidth = termColWidth + defColWidth + langColWidth;
+          console.assert(
+            Math.abs(totalWidth - contentWidth) < 0.01,
+            'Column widths should add up to content width',
+          );
 
           // Add header row with filled background
           pdf.setFillColor(45, 55, 72); // #2d3748 - matches th background color in HTML
           pdf.rect(margin, y, contentWidth, 10, 'F');
 
-          // Draw a vertical line between the term and definition columns
+          // Draw vertical lines between columns
           pdf.setDrawColor(255, 255, 255); // White line to separate columns
           pdf.setLineWidth(0.5);
           pdf.line(margin + termColWidth, y, margin + termColWidth, y + 10);
+          pdf.line(
+            margin + termColWidth + defColWidth,
+            y,
+            margin + termColWidth + defColWidth,
+            y + 10,
+          );
 
           // Add header text
           pdf.setTextColor(255, 255, 255); // White - matches th text color in HTML
@@ -1250,6 +1292,11 @@ export const downloadData = async (
           pdf.setFontSize(11);
           pdf.text('TERM', margin + cellPadding, y + 6.5);
           pdf.text('DEFINITION', margin + termColWidth + cellPadding, y + 6.5);
+          pdf.text(
+            'LANGUAGE',
+            margin + termColWidth + defColWidth + cellPadding,
+            y + 6.5,
+          );
 
           // Move to first data row
           y += 10;
@@ -1277,10 +1324,16 @@ export const downloadData = async (
               pdf.setFillColor(45, 55, 72);
               pdf.rect(margin, y, contentWidth, 10, 'F');
 
-              // Draw a vertical line between the term and definition columns
+              // Draw vertical lines between columns
               pdf.setDrawColor(255, 255, 255); // White line to separate columns
               pdf.setLineWidth(0.5);
               pdf.line(margin + termColWidth, y, margin + termColWidth, y + 10);
+              pdf.line(
+                margin + termColWidth + defColWidth,
+                y,
+                margin + termColWidth + defColWidth,
+                y + 10,
+              );
 
               pdf.setTextColor(255, 255, 255);
               pdf.setFont('helvetica', 'bold');
@@ -1288,6 +1341,11 @@ export const downloadData = async (
               pdf.text(
                 'DEFINITION',
                 margin + termColWidth + cellPadding,
+                y + 6.5,
+              );
+              pdf.text(
+                'LANGUAGE',
+                margin + termColWidth + defColWidth + cellPadding,
                 y + 6.5,
               );
               y += 10;
@@ -1327,13 +1385,19 @@ export const downloadData = async (
               pdf.rect(margin, y, contentWidth, rowHeight, 'F');
             }
 
-            // Draw a vertical line separating the columns
+            // Draw vertical lines separating the columns
             pdf.setDrawColor(226, 232, 240); // #e2e8f0 - matches border color in HTML
             pdf.setLineWidth(0.5);
             pdf.line(
               margin + termColWidth,
               y,
               margin + termColWidth,
+              y + rowHeight,
+            );
+            pdf.line(
+              margin + termColWidth + defColWidth,
+              y,
+              margin + termColWidth + defColWidth,
               y + rowHeight,
             );
 
@@ -1346,6 +1410,14 @@ export const downloadData = async (
 
             // Position and add the definition text
             pdf.text(splitDefText, margin + termColWidth + cellPadding, y + 7);
+
+            // Position and add the language text
+            const language = term.language || '';
+            pdf.text(
+              language,
+              margin + termColWidth + defColWidth + cellPadding,
+              y + 7,
+            );
 
             // Add border at bottom of each row
             pdf.line(
