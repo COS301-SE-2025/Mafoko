@@ -124,22 +124,33 @@ export const generateHTMLTable = async (
     '  color: #1a202c;' +
     '  margin-bottom: 8px;' +
     '  margin-top: 0;' +
+    '  overflow-wrap: break-word;' +
+    '  word-wrap: break-word;' +
+    '  word-break: break-word;' +
+    '  hyphens: auto;' +
     '}' +
     '.header-section {' +
     '  display: flex;' +
-    '  align-items: center;' +
+    '  align-items: flex-start;' +
     '  justify-content: space-between;' +
     '  margin-bottom: 24px;' +
     '  padding-bottom: 16px;' +
     '  border-bottom: 2px solid #e2e8f0;' +
+    '  flex-wrap: wrap;' +
     '}' +
     '.title-section {' +
     '  flex: 1;' +
+    '  min-width: 60%;' +
+    '  margin-right: 20px;' +
+    '  word-wrap: break-word;' +
+    '  overflow-wrap: break-word;' +
     '}' +
     '.logo-section {' +
     '  display: flex;' +
     '  align-items: center;' +
     '  gap: 12px;' +
+    '  min-width: 150px;' +
+    '  flex-shrink: 0;' +
     '}' +
     '.dsfsi-logo {' +
     '  width: 60px;' +
@@ -157,6 +168,10 @@ export const generateHTMLTable = async (
     '  font-size: 16px;' +
     '  margin-bottom: 24px;' +
     '  font-weight: 500;' +
+    '  overflow-wrap: break-word;' +
+    '  word-wrap: break-word;' +
+    '  word-break: break-word;' +
+    '  hyphens: auto;' +
     '}' +
     '.timestamp {' +
     '  color: #718096;' +
@@ -195,11 +210,14 @@ export const generateHTMLTable = async (
   const exportDate = new Date().toLocaleString();
 
   // Create a title based on category if provided
+  // Use full category name (no truncation)
+  const formattedCategoryName = categoryName || '';
+
   const title = categoryName
-    ? 'Marito Glossary: ' + categoryName
+    ? 'Marito Glossary: ' + formattedCategoryName
     : 'Marito Glossary';
   const subtitle = categoryName
-    ? 'Terms in ' + categoryName + ' category'
+    ? 'Terms in ' + formattedCategoryName + ' category'
     : 'Complete Glossary';
 
   // Create table header with explicit styling to ensure proper rendering
@@ -716,14 +734,20 @@ export const generatePDF = async (
         const pageHeight = 297; // A4 height in mm
         const margin = 20;
 
+        // Use full category name (no truncation)
+        const formattedCatName = categoryName || '';
+
         // Add title
         pdf.setFontSize(18);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(
-          categoryName ? `Marito Glossary: ${categoryName}` : 'Marito Glossary',
-          margin,
-          margin,
-        );
+        const title = categoryName
+          ? `Marito Glossary: ${formattedCatName}`
+          : 'Marito Glossary';
+
+        // Handle long titles
+        const maxWidth = pageWidth - margin * 2;
+        const splitTitle = pdf.splitTextToSize(title, maxWidth) as string[];
+        pdf.text(splitTitle, margin, margin);
 
         // Add timestamp
         pdf.setFontSize(10);
@@ -903,22 +927,29 @@ export const generatePDF = async (
         // Add title
         pdf.setFontSize(18);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(
-          categoryName ? `Marito Glossary: ${categoryName}` : 'Marito Glossary',
-          margin,
-          y,
-        );
+
+        // Use full category name (no truncation)
+        const formattedCatName = categoryName || '';
+        const title = categoryName
+          ? `Marito Glossary: ${formattedCatName}`
+          : 'Marito Glossary';
+
+        // Handle long titles
+        const maxWidth = pageWidth - margin * 2;
+        const splitTitle = pdf.splitTextToSize(title, maxWidth) as string[];
+        pdf.text(splitTitle, margin, y);
         y += 10;
 
-        // Add export date
+        // Add export date - adjust position based on title height
+        const titleOffset = splitTitle.length > 1 ? splitTitle.length * 8 : 10;
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'italic');
         pdf.text(
           `Export generated on: ${new Date().toLocaleString()}`,
           margin,
-          y,
+          y + titleOffset,
         );
-        y += 15;
+        y += titleOffset + 15;
 
         // Add column headers with background color simulation
         pdf.setFillColor(45, 55, 72); // #2d3748 - match the table header color
@@ -1029,14 +1060,20 @@ export const generatePDF = async (
       const margin = 10;
       let y = margin;
 
+      // Use full category name (no truncation)
+      const formattedCatName = categoryName || '';
+
       // Add a title
       pdf.setFontSize(16);
-      pdf.text(
-        categoryName ? `Marito Glossary: ${categoryName}` : 'Marito Glossary',
-        margin,
-        y,
-      );
-      y += 10;
+      const title = categoryName
+        ? `Marito Glossary: ${formattedCatName}`
+        : 'Marito Glossary';
+
+      // Handle long titles
+      const maxWidth = pageWidth - margin * 2;
+      const splitTitle = pdf.splitTextToSize(title, maxWidth) as string[];
+      pdf.text(splitTitle, margin, y);
+      y += splitTitle.length > 1 ? splitTitle.length * 7 : 10;
 
       // Add timestamp
       pdf.setFontSize(10);
@@ -1222,42 +1259,66 @@ export const downloadData = async (
           // Calculate title position
           const titleY = margin + 12;
 
+          // Use full category name (no truncation)
+          const formattedCategoryName = categoryName || '';
+
           // Add title with styling similar to HTML
           pdf.setFontSize(22);
           pdf.setFont('helvetica', 'bold');
           pdf.setTextColor(26, 32, 44); // #1a202c - matches h1 color in HTML
-          const title = categoryName
-            ? `Marito Glossary: ${categoryName}`
-            : 'Marito Glossary';
-          pdf.text(title, margin, titleY);
 
-          // Add subtitle
+          // Calculate max width for title to avoid overlapping with logo
+          const maxTitleWidth = pageWidth - margin - margin - 25; // Allow space for logo
+          const title = categoryName
+            ? `Marito Glossary: ${formattedCategoryName}`
+            : 'Marito Glossary';
+
+          // Handle long titles by splitting into multiple lines if needed
+          const titleLines = pdf.splitTextToSize(
+            title,
+            maxTitleWidth,
+          ) as string[];
+          pdf.text(titleLines, margin, titleY);
+
+          // Add subtitle - adjust position based on title height
+          const titleOffset = titleLines.length > 1 ? titleLines.length * 7 : 8;
           pdf.setFontSize(14);
           pdf.setFont('helvetica', 'normal');
           pdf.setTextColor(74, 85, 104); // #4a5568 - matches subtitle color in HTML
           const subtitle = categoryName
-            ? `Terms in ${categoryName} category`
+            ? `Terms in ${formattedCategoryName} category`
             : 'Complete Glossary';
-          pdf.text(subtitle, margin, titleY + 8);
 
-          // Add header section bottom border
+          // Handle long subtitles by splitting into multiple lines if needed
+          const subtitleLines = pdf.splitTextToSize(
+            subtitle,
+            maxTitleWidth,
+          ) as string[];
+          pdf.text(subtitleLines, margin, titleY + titleOffset);
+
+          // Add header section bottom border - adjust position based on subtitle height
+          const subtitleOffset =
+            subtitleLines.length > 1 ? subtitleLines.length * 7 : 7;
+          const borderY = titleY + titleOffset + subtitleOffset;
+
           pdf.setDrawColor(226, 232, 240); // #e2e8f0 - matches border color in HTML
           pdf.setLineWidth(0.5);
-          pdf.line(margin, titleY + 15, pageWidth - margin, titleY + 15);
+          pdf.line(margin, borderY, pageWidth - margin, borderY);
 
-          // Add timestamp in a styled box
+          // Add timestamp in a styled box - adjust position based on title and subtitle
+          const timestampY = borderY + 5;
           pdf.setFillColor(237, 242, 247); // #edf2f7 - matches timestamp background in HTML
-          pdf.roundedRect(margin, titleY + 20, 90, 8, 2, 2, 'F');
+          pdf.roundedRect(margin, timestampY, 90, 8, 2, 2, 'F');
           pdf.setFontSize(10);
           pdf.setTextColor(113, 128, 150); // #718096 - matches timestamp color in HTML
           pdf.text(
             `Export generated on: ${new Date().toLocaleString()}`,
             margin + 3,
-            titleY + 25,
+            timestampY + 5,
           );
 
-          // Start y position for the table content
-          let y = titleY + 35;
+          // Start y position for the table content - adjust based on timestamp position
+          let y = timestampY + 15;
 
           // Set table styling
           const cellPadding = 5;
