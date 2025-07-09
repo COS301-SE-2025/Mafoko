@@ -65,5 +65,23 @@
       "researcher": "Umphandi",
       "student": "Umfundi"
     }
+  },
+  "dashboard": {
+    "welcome": "Wamkelekile ku-Mavito",
+    "userName": "Igama Lomsebenzisi",
+    "userId": "Inombolo Yomsebenzisi",
+    "quickActions": "Izenzo Ezikhawulezayo",
+    "searchNow": "Khangela Ngoku",
+    "searchDescription": "Khangela amagama kwiilwimi ezininzi",
+    "downloadResources": "Khuphela Izixhobo",
+    "downloadDescription": "Fumana kwaye ukhuphele izixhobo zamagama",
+    "contributeTerm": "Faka Igama",
+    "contributeDescription": "Yongeza amagama amatsha kuvimba wethu",
+    "recentTerms": "Amagama Akutshanje",
+    "hideTerms": "Fihla Amagama",
+    "viewAll": "Jonga Konke",
+    "communityActivity": "Imisebenzi Yoluntu",
+    "hideActivity": "Fihla Imisebenzi",
+    "viewAllActivity": "Jonga Yonke Imisebenzi"
   }
 }

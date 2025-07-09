@@ -71,5 +71,24 @@
       "normalUser": "Normal User",
       "applyingLinguist": "Applying as a Linguist"
     }
+  },
+
+  "dashboard": {
+    "welcome": "Welcome to Mavito",
+    "userName": "User Name",
+    "userId": "User ID",
+    "quickActions": "Quick Actions",
+    "searchNow": "Search Now",
+    "searchDescription": "Search for terminology in multiple languages",
+    "downloadResources": "Download Resources",
+    "downloadDescription": "Access and download terminology resources",
+    "contributeTerm": "Contribute Term",
+    "contributeDescription": "Add new terms to our database",
+    "recentTerms": "Recent Terms",
+    "hideTerms": "Hide Terms",
+    "viewAll": "View All",
+    "communityActivity": "Community Activity",
+    "hideActivity": "Hide Activity",
+    "viewAllActivity": "View All Activity"
   }
 }

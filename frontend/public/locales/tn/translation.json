@@ -69,5 +69,23 @@
       "normalUser": "Modirisi wa Tlwaelo",
       "applyingLinguist": "Go Ikwadisa jaaka Mosekaseki wa Puo"
     }
+  },
+  "dashboard": {
+    "welcome": "O amogelwa mo Mavito",
+    "userName": "Leina la Modirisi",
+    "userId": "Nomoro ya Modirisi",
+    "quickActions": "Ditiro tsa Bonako",
+    "searchNow": "Batla Jaanong",
+    "searchDescription": "Batla mareo ka dipuo tse di farologaneng",
+    "downloadResources": "Gogela Didirisiwa",
+    "downloadDescription": "Bona le go gogela didirisiwa tsa mareo",
+    "contributeTerm": "Tsenya Lereo",
+    "contributeDescription": "Oketsa mareo a mantšhwa mo databeising ya rona",
+    "recentTerms": "Mareo a Gajaana",
+    "hideTerms": "Fitlha Mareo",
+    "viewAll": "Bona Tsotlhe",
+    "communityActivity": "Ditiro tsa Baagi",
+    "hideActivity": "Fitlha Ditiro",
+    "viewAllActivity": "Bona Ditiro Tsotlhe"
   }
 }

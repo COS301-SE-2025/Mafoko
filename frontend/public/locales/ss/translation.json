@@ -37,7 +37,7 @@
     "emailPlaceholder": "Faka likheli lakho le-imeyili",
     "passwordLabel": "Iphasiwedi",
     "passwordPlaceholder": "Yakha iphasiwedi",
-    "confirmPasswordLabel": "Cinisekisa Iphasiwedi",
+    "confirmPasswordLabel": "Cacisa Iphasiwedi",
     "confirmPasswordPlaceholder": "Cacisa iphasiwedi yakho",
     "agreeToTerms": "Ngiyavuma",
     "termsAndConditionsLink": "Imigomo Nemibandzela",
@@ -69,5 +69,23 @@
       "normalUser": "Umsebentisi Lovamile",
       "applyingLinguist": "Kubhalisa njengeSosayensi Welulwimi"
     }
+  },
+  "dashboard": {
+    "welcome": "Wemukelekile ku-Mavito",
+    "userName": "Ligama Lemsebentisi",
+    "userId": "Inombolo Yemsebentisi",
+    "quickActions": "Tento Letisheshako",
+    "searchNow": "Sesha Nyalo",
+    "searchDescription": "Sesha emagama ngetilimi letinyenti",
+    "downloadResources": "Dawuniloda Tisetjentiswa",
+    "downloadDescription": "Tfola futsi udawunilode tisetjentiswa temagama",
+    "contributeTerm": "Faka Ligama",
+    "contributeDescription": "Engeta emagama lamasha kudatabhesi yetfu",
+    "recentTerms": "Emagama Lakamanje",
+    "hideTerms": "Fihla Emagama",
+    "viewAll": "Buka Konkhe",
+    "communityActivity": "Imisebenti Yemmango",
+    "hideActivity": "Fihla Imisebenti",
+    "viewAllActivity": "Buka Yonkhe Imisebenti"
   }
 }

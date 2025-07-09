@@ -69,5 +69,23 @@
       "normalUser": "Modiriši wa Tlwaelo",
       "applyingLinguist": "Ingwadiša bjalo ka Setsebamolemo"
     }
+  },
+  "dashboard": {
+    "welcome": "O amogetswe go Mavito",
+    "userName": "Leina la Mosebedisi",
+    "userId": "Nomoro ya Mosebedisi",
+    "quickActions": "Ditiro tsa Potlako",
+    "searchNow": "Nyaka Bjale",
+    "searchDescription": "Nyaka mareo ka dipolelo tse mmalwa",
+    "downloadResources": "Laolla Didirišwa",
+    "downloadDescription": "Hwetša le go laolla didirišwa tša mareo",
+    "contributeTerm": "Tsenya Lereo",
+    "contributeDescription": "Oketša mareo a maswa go databeise ya rena",
+    "recentTerms": "Mareo a Bjale",
+    "hideTerms": "Fihla Mareo",
+    "viewAll": "Bona Kamoka",
+    "communityActivity": "Ditiro tša Setšhaba",
+    "hideActivity": "Fihla Ditiro",
+    "viewAllActivity": "Bona Ditiro Kamoka"
   }
 }

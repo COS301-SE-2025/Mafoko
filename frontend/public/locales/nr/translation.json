@@ -69,5 +69,23 @@
       "normalUser": "Umsebenzisi Wajayelekileko",
       "applyingLinguist": "Ukubhalisela Ukuba Yisazi seLimi"
     }
+  },
+  "dashboard": {
+    "welcome": "Siyakwamukela ku-Mavito",
+    "userName": "Ibizo Lomsebenzisi",
+    "userId": "Inomboro Yomsebenzisi",
+    "quickActions": "Izenzo Ezirhabako",
+    "searchNow": "Rhubhulula Khathesi",
+    "searchDescription": "Rhubhulula amagama ngeelimi ezinengi",
+    "downloadResources": "Thula Iinsetjenziswa",
+    "downloadDescription": "Thola begodu uthole iinsetjenziswa zamagama",
+    "contributeTerm": "Faka Igama",
+    "contributeDescription": "Nezela amagama amatjha ku-databekhu yethu",
+    "recentTerms": "Amagama Wamuva",
+    "hideTerms": "Fihla Amagama",
+    "viewAll": "Bona Koke",
+    "communityActivity": "Imisebenzi Yomphakathi",
+    "hideActivity": "Fihla Imisebenzi",
+    "viewAllActivity": "Bona Yoke Imisebenzi"
   }
 }

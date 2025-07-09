@@ -65,5 +65,23 @@
       "researcher": "Mofuputsi",
       "student": "Moithuti"
     }
+  },
+  "dashboard": {
+    "welcome": "O amohelehile ho Mavito",
+    "userName": "Lebitso la Mosebedisi",
+    "userId": "Nomoro ya Mosebedisi",
+    "quickActions": "Diketso tse Potlakileng",
+    "searchNow": "Batla Hona Jwale",
+    "searchDescription": "Batla mareo ka dipuo tse ngata",
+    "downloadResources": "Jarolla Disebediswa",
+    "downloadDescription": "Fumana le ho jarolla disebediswa tsa mareo",
+    "contributeTerm": "Kenya Lereo",
+    "contributeDescription": "Kenya mareo a matjha databeisung ya rona",
+    "recentTerms": "Mareo a Moraorao",
+    "hideTerms": "Pata Mareo",
+    "viewAll": "Bona Kaofela",
+    "communityActivity": "Mesebetsi ya Setjhaba",
+    "hideActivity": "Pata Mesebetsi",
+    "viewAllActivity": "Bona Mesebetsi Kaofela"
   }
 }

@@ -71,5 +71,24 @@
       "normalUser": "Umsebenzisi Ojwayelekile",
       "applyingLinguist": "Ukubhalisa njengoChwepheshe Wolimi"
     }
+  },
+
+  "dashboard": {
+    "welcome": "Siyakwamukela ku-Mavito",
+    "userName": "Igama Lomsebenzisi",
+    "userId": "Inombolo Yomsebenzisi",
+    "quickActions": "Izenzo Ezisheshayo",
+    "searchNow": "Sesha Manje",
+    "searchDescription": "Sesha amagama ezilimi eziningi",
+    "downloadResources": "Dawuniloda Izinsiza",
+    "downloadDescription": "Thola futhi udawunilode izinsiza zamagama",
+    "contributeTerm": "Faka Igama",
+    "contributeDescription": "Engeza amagama amasha kusizindalwazi sethu",
+    "recentTerms": "Amagama Amuva",
+    "hideTerms": "Fihla Amagama",
+    "viewAll": "Buka Konke",
+    "communityActivity": "Imisebenzi Yomphakathi",
+    "hideActivity": "Fihla Imisebenzi",
+    "viewAllActivity": "Buka Yonke Imisebenzi"
   }
 }

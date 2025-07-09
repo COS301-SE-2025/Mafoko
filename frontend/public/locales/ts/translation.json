@@ -69,5 +69,23 @@
       "normalUser": "Mutirhisi wa Ntolovelo",
       "applyingLinguist": "Ku tsarisa tanihi Mutivi wa Ririmi"
     }
+  },
+  "dashboard": {
+    "welcome": "Mi amukeriwa eka Mavito",
+    "userName": "Vito ra Mutirhisi",
+    "userId": "Nomboro ya Mutirhisi",
+    "quickActions": "Swiendlo swa Xihatla",
+    "searchNow": "Lavisisa Sweswi",
+    "searchDescription": "Lavisisa marito hi tindzimi to tala",
+    "downloadResources": "Koka Switirhisiwa",
+    "downloadDescription": "Kuma na ku koka switirhisiwa swa marito",
+    "contributeTerm": "Hoxa Rito",
+    "contributeDescription": "Engetela marito mantshwa eka databeyisi ya hina",
+    "recentTerms": "Marito ya Sweswi",
+    "hideTerms": "Tumbeta Marito",
+    "viewAll": "Vona Hinkwaswo",
+    "communityActivity": "Mitirho ya Vaaki",
+    "hideActivity": "Tumbeta Mitirho",
+    "viewAllActivity": "Vona Mitirho Hinkwayo"
   }
 }

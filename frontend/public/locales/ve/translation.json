@@ -69,5 +69,23 @@
       "normalUser": "Mushumisi wa Zwashu",
       "applyingLinguist": "U ṅwalisa sa Muṱoḓisisi wa Luambo"
     }
+  },
+  "dashboard": {
+    "welcome": "Vho ṱanganedzwa kha Mavito",
+    "userName": "Dzina ḽa Mushumisi",
+    "userId": "Nomboro ya Mushumisi",
+    "quickActions": "Nyito dza Tshihaḓu",
+    "searchNow": "Ṱoḓa Zwino",
+    "searchDescription": "Ṱoḓa maipfi nga nyambo nnzhi",
+    "downloadResources": "Daunulouda Zwishumiswa",
+    "downloadDescription": "Wana na u daunulouda zwishumiswa zwa maipfi",
+    "contributeTerm": "Dzhenisa Ipfi",
+    "contributeDescription": "Engedza maipfi maswa kha deithabeisi yashu",
+    "recentTerms": "Maipfi a Zwino",
+    "hideTerms": "Dzumba Maipfi",
+    "viewAll": "Vhona Zwoṱhe",
+    "communityActivity": "Mishumo ya Tshitshavha",
+    "hideActivity": "Dzumba Mishumo",
+    "viewAllActivity": "Vhona Mishumo Yoṱhe"
   }
 }
