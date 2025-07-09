@@ -772,7 +772,15 @@ const GlossaryPage = () => {
                   Term Details
                 </h2>
                 {selectedTerm ? (
-                  <div className="space-y-4">
+                  <div
+                    className="space-y-4 glossary-terms-list"
+                    style={{
+                      maxHeight: 'calc(100vh - 250px)',
+                      overflowY: 'auto',
+                      paddingRight: '8px',
+                      marginRight: '-8px',
+                    }}
+                  >
                     <div>
                       <h3 className="glossary-details-title">
                         {selectedTerm.term}
@@ -795,7 +803,13 @@ const GlossaryPage = () => {
                       </button>
                     </div>
                     {showTranslations && (
-                      <div className="glossary-translation-list">
+                      <div
+                        className="glossary-translation-list"
+                        style={{
+                          overflowY: 'visible',
+                          maxHeight: 'none',
+                        }}
+                      >
                         <h4 className="glossary-translations-header">
                           Translations
                         </h4>
@@ -831,7 +845,13 @@ const GlossaryPage = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="glossary-empty">
+                  <div
+                    className="glossary-empty"
+                    style={{
+                      maxHeight: 'calc(100vh - 250px)',
+                      overflowY: 'auto',
+                    }}
+                  >
                     Select a term to view details and translations
                   </div>
                 )}
