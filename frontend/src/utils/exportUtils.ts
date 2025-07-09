@@ -1124,17 +1124,12 @@ export const generatePDF = async (
     } catch (finalError) {
       console.error('Final PDF fallback failed:', finalError);
 
-      // Only as a last resort, provide an HTML download
+      // Show error message, but don't download HTML as fallback
       message.textContent =
-        'PDF generation failed. Downloading HTML version instead...';
+        'PDF generation failed. Please try again or use a different export format.';
 
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename.replace('.pdf', '.html');
-      link.click();
-      URL.revokeObjectURL(url);
+      // Give user time to see the error message
+      await new Promise((resolve) => setTimeout(resolve, 3000));
     }
   } catch (error: unknown) {
     console.error('PDF generation failed:', error);
@@ -1190,7 +1185,7 @@ export const downloadData = async (
       messageBox.style.maxWidth = '80%';
 
       const loadingMessage = document.createElement('div');
-      loadingMessage.textContent = 'Generating PDF and HTML files...';
+      loadingMessage.textContent = 'Generating PDF file...';
       loadingMessage.style.marginBottom = '15px';
       loadingMessage.style.fontSize = '18px';
       loadingMessage.style.fontWeight = 'bold';
@@ -1199,22 +1194,9 @@ export const downloadData = async (
       loadingOverlay.appendChild(messageBox);
       document.body.appendChild(loadingOverlay);
 
-      // Generate HTML file first for backup
-      const htmlContent = await generateHTMLTable(data, categoryName);
-      const htmlFilename = `marito-glossary-${categoryPrefix}${timestamp}.html`;
-      const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
-      const htmlUrl = URL.createObjectURL(htmlBlob);
-      const htmlLink = document.createElement('a');
-      htmlLink.href = htmlUrl;
-      htmlLink.download = htmlFilename;
-
-      // Download the HTML file
-      htmlLink.click();
-
       // Update the message
-      loadingMessage.textContent = 'HTML downloaded. Now generating PDF...';
+      loadingMessage.textContent = 'Generating PDF...';
 
-      // Use setTimeout to give the browser a chance to process the HTML download
       // Using an intermediate async function to avoid no-misused-promises error
       const generatePDFAfterDelay = async (): Promise<void> => {
         try {
@@ -1517,8 +1499,7 @@ export const downloadData = async (
           pdf.save(pdfFilename);
 
           // Display success message
-          loadingMessage.textContent =
-            'Both PDF and HTML files downloaded successfully!';
+          loadingMessage.textContent = 'PDF file downloaded successfully!';
           loadingMessage.style.color = '#00ceaf';
 
           // Remove the overlay after a delay
@@ -1528,7 +1509,7 @@ export const downloadData = async (
         } catch (pdfError) {
           console.error('Error generating PDF:', pdfError);
           loadingMessage.textContent =
-            'PDF generation failed. HTML backup has been downloaded.';
+            'PDF generation failed. Please try again or use a different export format.';
           loadingMessage.style.color = '#f00a50';
 
           // Remove the overlay after a delay
@@ -1536,8 +1517,7 @@ export const downloadData = async (
             document.body.removeChild(loadingOverlay);
           }, 3000);
         } finally {
-          // Clean up the URL object
-          URL.revokeObjectURL(htmlUrl);
+          // No URL objects to clean up since we're not creating any blob URLs
         }
       };
 
