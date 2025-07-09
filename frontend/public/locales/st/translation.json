@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Lehae",
+    "dictionary": "Bukantswe",
+    "glossary": "Lenane la Mantswe",
+    "savedTerms": "Mantswe a Bolokilweng",
+    "dashboard": "Letlapa",
+    "help": "Thuso"
+  },
+  
   "landingPage": {
     "registerButton": "Ngodisa",
     "loginButton": "Kena"

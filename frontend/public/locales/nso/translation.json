@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Gae",
+    "dictionary": "Pukuntšu",
+    "glossary": "Lenaneontšu",
+    "savedTerms": "Mantšu ao a Bolokitšwego",
+    "dashboard": "Letlapa",
+    "help": "Thušo"
+  },
+  
   "landingPage": {
     "registerButton": "Ngwadiša",
     "loginButton": "Tsena"

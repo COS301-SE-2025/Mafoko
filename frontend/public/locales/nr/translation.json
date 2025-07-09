@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Ikhaya",
+    "dictionary": "Isichazamazwi",
+    "glossary": "Irhelo lamagama",
+    "savedTerms": "Amagama Atlotjhiweko",
+    "dashboard": "Ibhodi",
+    "help": "Isizo"
+  },
+  
   "landingPage": {
     "registerButton": "Bhalisela",
     "loginButton": "Ngena"

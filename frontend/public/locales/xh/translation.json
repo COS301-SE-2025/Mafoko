@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Ikhaya",
+    "dictionary": "Isichazi-magama",
+    "glossary": "Uluhlu lwamagama",
+    "savedTerms": "Amagama Agciniweyo",
+    "dashboard": "Ibhodi",
+    "help": "Uncedo"
+  },
+  
   "landingPage": {
     "registerButton": "Bhalisa",
     "loginButton": "Ngena"

@@ -73,6 +73,15 @@
     }
   },
 
+  "navigation": {
+    "home": "Home",
+    "dictionary": "Dictionary",
+    "glossary": "Glossary",
+    "savedTerms": "Saved Terms",
+    "dashboard": "Dashboard",
+    "help": "Help"
+  },
+
   "dashboard": {
     "welcome": "Welcome to Mavito",
     "userName": "User Name",

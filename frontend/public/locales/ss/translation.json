@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Ekhaya",
+    "dictionary": "Sichazamagama",
+    "glossary": "Luhla lwemagama",
+    "savedTerms": "Emagama Lacondziwe",
+    "dashboard": "Ibhodi",
+    "help": "Lusito"
+  },
+  
   "landingPage": {
     "registerButton": "Bhalisa",
     "loginButton": "Ngena"

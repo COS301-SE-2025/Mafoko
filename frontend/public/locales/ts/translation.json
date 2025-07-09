@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Kaya",
+    "dictionary": "Dikixinari",
+    "glossary": "Nongoloko wa marito",
+    "savedTerms": "Marito lama Hlayisiweke",
+    "dashboard": "Bodo",
+    "help": "Mpfuno"
+  },
+  
   "landingPage": {
     "registerButton": "Tsarisa",
     "loginButton": "Nghena"

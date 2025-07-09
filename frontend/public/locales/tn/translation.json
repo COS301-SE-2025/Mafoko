@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Gae",
+    "dictionary": "Thanodi",
+    "glossary": "Lenanetlhalosi",
+    "savedTerms": "Mafoko a a Bolokilweng",
+    "dashboard": "Bolaodi",
+    "help": "Thuso"
+  },
+  
   "landingPage": {
     "registerButton": "Ikwadise",
     "loginButton": "Tsena"

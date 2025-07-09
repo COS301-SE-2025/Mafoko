@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Tuis",
+    "dictionary": "Woordeboek",
+    "glossary": "Woordelys",
+    "savedTerms": "Gestoorde Terme",
+    "dashboard": "Paneelbord",
+    "help": "Hulp"
+  },
+  
   "landingPage": {
     "registerButton": "Registreer",
     "loginButton": "Teken in"

@@ -1,4 +1,13 @@
 {
+  "navigation": {
+    "home": "Hayani",
+    "dictionary": "Ṱhalusamaipfi",
+    "glossary": "Mutevhemaipfi",
+    "savedTerms": "Maipfi o Vhulungwaho",
+    "dashboard": "Bodo",
+    "help": "Thuso"
+  },
+  
   "landingPage": {
     "registerButton": "Ṅwalisani",
     "loginButton": "Dzhenani"
