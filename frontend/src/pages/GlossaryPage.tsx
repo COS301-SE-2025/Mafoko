@@ -307,6 +307,8 @@ const GlossaryPage = () => {
       setTranslations(null);
       setError(null);
       setLoading(true);
+      // Clear search term when selecting a category
+      setSearchTerm('');
 
       try {
         const terms = await dictionaryAPI.getTermsByCategory(category);
@@ -319,7 +321,7 @@ const GlossaryPage = () => {
         setLoading(false);
       }
     },
-    [],
+    [setSearchTerm],
   );
 
   const handleTermSelect = useCallback((term: Term): void => {
@@ -397,13 +399,16 @@ const GlossaryPage = () => {
         let searchResults: Term[];
 
         if (selectedCategory) {
-          // Search within selected category using advanced search
-          const response = await dictionaryAPI.advancedSearch({
-            query: query,
-            domain: selectedCategory,
-            limit: 50, // Adjust as needed
-          });
-          searchResults = response.results;
+          // First fetch all terms for the category
+          const allTermsInCategory =
+            await dictionaryAPI.getTermsByCategory(selectedCategory);
+
+          // Then filter those terms based on the search query
+          searchResults = allTermsInCategory.filter(
+            (term) =>
+              term.term.toLowerCase().includes(query.toLowerCase()) ||
+              term.definition.toLowerCase().includes(query.toLowerCase()),
+          );
         } else {
           // Global search across all terms
           searchResults = await dictionaryAPI.searchTerms(query);
@@ -435,8 +440,10 @@ const GlossaryPage = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm !== '') {
+        // Always trigger search when there's a search term, regardless of category selection
         void handleSearch(searchTerm);
       } else if (selectedCategory) {
+        // Only load category terms when there's no search term
         void handleCategorySelect(selectedCategory);
       }
     }, 300);
@@ -635,7 +642,39 @@ const GlossaryPage = () => {
                         key={category}
                         type="button"
                         onClick={() => {
-                          void handleCategorySelect(category);
+                          // If the category is already selected, deselect it and load random terms
+                          if (selectedCategory === category) {
+                            setSelectedCategory(null);
+                            setSelectedTerm(null);
+                            setShowTranslations(false);
+                            setTranslations(null);
+                            setSearchTerm('');
+                            setError(null);
+                            setLoading(true);
+
+                            // Load random terms
+                            void (async () => {
+                              try {
+                                const randomTerms =
+                                  await dictionaryAPI.getRandomTerm(10);
+                                setCategoryTerms(randomTerms);
+                              } catch (error) {
+                                console.error(
+                                  'Error loading random terms:',
+                                  error,
+                                );
+                                setError(
+                                  'Failed to load random terms. Please try again.',
+                                );
+                                setCategoryTerms([]);
+                              } finally {
+                                setLoading(false);
+                              }
+                            })();
+                          } else {
+                            // If selecting a new category, use the normal handler
+                            void handleCategorySelect(category);
+                          }
                         }}
                         className={`glossary-category-btn${
                           selectedCategory === category ? ' selected' : ''
@@ -714,11 +753,15 @@ const GlossaryPage = () => {
                     ))}
                   </div>
                 )}
-                {selectedCategory && filteredTerms.length === 0 && !loading && (
+                {filteredTerms.length === 0 && !loading && (
                   <div className="glossary-empty">
-                    {searchTerm
-                      ? `No terms found matching "${searchTerm}" in ${selectedCategory}.`
-                      : `No terms available in ${selectedCategory}.`}
+                    {searchTerm && selectedCategory
+                      ? `No terms found matching "${searchTerm}" in ${selectedCategory} category.`
+                      : searchTerm
+                        ? `No terms found matching "${searchTerm}" across all categories.`
+                        : selectedCategory
+                          ? `No terms available in ${selectedCategory} category.`
+                          : `No terms available.`}
                   </div>
                 )}
               </div>
