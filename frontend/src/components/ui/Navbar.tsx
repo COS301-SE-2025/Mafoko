@@ -33,7 +33,7 @@ const Navbar = () => {
 
   const navItems = useMemo(
     () => [
-      'Homepage',
+      'Home',
       'Dictionary',
       'Glossary',
       'Saved Terms',
@@ -46,7 +46,7 @@ const Navbar = () => {
   // Custom route mapping for navigation items
   const getRouteForItem = (item: string): string => {
     switch (item) {
-      case 'Homepage':
+      case 'Home':
         return '/dashboard';
       case 'Dictionary':
         return '/search';
