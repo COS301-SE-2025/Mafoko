@@ -66,6 +66,7 @@ class TestGlossaryFunctions:
         assert len(result) == 1
         assert result[0]["term"] == "hello"
         assert result[0]["category"] == "Common"
+        assert result[0]["language"] == "English"
         mock_db.execute.assert_called_once()
 
     @pytest.mark.asyncio
@@ -157,6 +158,7 @@ class TestGlossaryFunctions:
         # Assertions
         assert len(result) == 1
         assert result[0]["term"] == "hello"
+        assert result[0]["language"] == "English"
         mock_db.execute.assert_called_once()
 
     def test_language_map_coverage(self):
@@ -211,7 +213,9 @@ class TestGlossaryAPIEndpoints:
         from app.api.v1.endpoints.glossary import get_terms_by_category_api
 
         # Setup mock
-        mock_get_terms.return_value = [{"term": "hello", "definition": "A greeting"}]
+        mock_get_terms.return_value = [
+            {"term": "hello", "definition": "A greeting", "language": "English"}
+        ]
 
         # Call the endpoint
         result = await get_terms_by_category_api("Common", mock_db)
@@ -228,7 +232,9 @@ class TestGlossaryAPIEndpoints:
         from app.api.v1.endpoints.glossary import search_terms_api
 
         # Setup mock - search_terms_api returns results directly, not wrapped
-        mock_search.return_value = [{"term": "hello", "definition": "A greeting"}]
+        mock_search.return_value = [
+            {"term": "hello", "definition": "A greeting", "language": "English"}
+        ]
 
         # Call the endpoint
         result = await search_terms_api("hello", mock_db)
@@ -416,7 +422,7 @@ class TestGlossaryAPIEndpoints:
         assert len(result) == 1
         assert result[0]["term"] == "hello"
         assert result[0]["category"] == "Common"
-        assert result[0]["term"] == "hello"
+        assert result[0]["language"] == "English"
 
     @pytest.mark.asyncio
     async def test_get_term_translations_function_no_translations(self, mock_db):
