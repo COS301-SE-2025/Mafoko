@@ -3,6 +3,29 @@
     "registerButton": "Tsarisa",
     "loginButton": "Nghena"
   },
+  "loginPage": {
+    "title": "MI AMUKELIWA NAKAMBE!",
+    "subtitle": "Hi kombela mi nghenisa vuxokoxoko bya n'wina ku nghena.",
+    "emailLabel": "Imeyili",
+    "emailPlaceholder": "Nghenisa adirese ya n'wina ya imeyili",
+    "passwordLabel": "Phasiwedi",
+    "passwordPlaceholder": "Nghenisa phasiwedi ya n'wina",
+    "rememberMe": "Ndzi tsundzuka",
+    "forgotPassword": "Mi Rivele Phasiwedi?",
+    "loginButton": "Nghena",
+    "orDivider": "KUMBE",
+    "loginWithGoogle": "Nghena hi Google",
+    "noAccount": "A mi na akhawunti?",
+    "registerLink": "Tsarisa",
+    "welcomeImageAlt": "Ku amukela ka Mavito",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorTokenMissing": "Mi nghenile hi ndzundzo, kambe ku hava thokeni leyi amukeriweke. Hi kombela mi tihlanganisa na mpfuno.",
+    "errorDefault": "Ku nghena ku tsandzekile. Hi kombela mi kambisisa vuxokoxoko bya n'wina.",
+    "errorUnexpectedFormat": "Xihoxo xa ku nghena (xiyimo {{status}}). Xivumbeko xa xihoxo lexi nga languteriwangiki.",
+    "errorWithStatus": "Ku nghena ku tsandzekile (xiyimo {{status}}). Hi kombela mi ringeta nakambe.",
+    "errorNetwork": "Ku ve na xihoxo: {{message}}.",
+    "errorUnknownNetwork": "Ku ve na xihoxo xa netiweke lexi nga tivekiki. Hi kombela mi ringeta nakambe."
+  },
   "registrationPage": {
     "title": "SUNGULA SWESWI",
     "subtitle": "Endla akhawunti ya wena ya Mavito.",
@@ -46,28 +69,5 @@
       "normalUser": "Mutirhisi wa Ntolovelo",
       "applyingLinguist": "Ku tsarisa tanihi Mutivi wa Ririmi"
     }
-  },
-  "loginPage": {
-    "title": "MI AMUKELIWA NAKAMBE!",
-    "subtitle": "Hi kombela mi nghenisa vuxokoxoko bya n'wina ku nghena.",
-    "emailLabel": "Imeyili",
-    "emailPlaceholder": "Nghenisa adirese ya n'wina ya imeyili",
-    "passwordLabel": "Phasiwedi",
-    "passwordPlaceholder": "Nghenisa phasiwedi ya n'wina",
-    "rememberMe": "Ndzi tsundzuka",
-    "forgotPassword": "Mi Rivele Phasiwedi?",
-    "loginButton": "Nghena",
-    "orDivider": "KUMBE",
-    "loginWithGoogle": "Nghena hi Google",
-    "noAccount": "A mi na akhawunti?",
-    "registerLink": "Tsarisa",
-    "welcomeImageAlt": "Ku amukela ka Mavito",
-    "dsfsiLogoAlt": "Logo ya DSFSI",
-    "errorTokenMissing": "Mi nghenile hi ndzundzo, kambe ku hava thokeni leyi amukeriweke. Hi kombela mi tihlanganisa na mpfuno.",
-    "errorDefault": "Ku nghena ku tsandzekile. Hi kombela mi kambisisa vuxokoxoko bya n'wina.",
-    "errorUnexpectedFormat": "Xihoxo xa ku nghena (xiyimo {{status}}). Xivumbeko xa xihoxo lexi nga languteriwangiki.",
-    "errorWithStatus": "Ku nghena ku tsandzekile (xiyimo {{status}}). Hi kombela mi ringeta nakambe.",
-    "errorNetwork": "Ku ve na xihoxo: {{message}}.",
-    "errorUnknownNetwork": "Ku ve na xihoxo xa netiweke lexi nga tivekiki. Hi kombela mi ringeta nakambe."
   }
 }

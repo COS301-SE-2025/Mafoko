@@ -69,34 +69,5 @@
       "normalUser": "Gewone Gebruiker",
       "applyingLinguist": "Aansoek as Taalkundige"
     }
-  },
-
-  "languageSwitcher": {
-    "selectLanguage": "Kies Taal"
-  },
-  "dashboard": {
-    "welcome": "Welkom terug, Bydraer!",
-    "quickActions": "Vinnige Aksies",
-    "searchNow": "Soek Nou",
-    "searchDescription": "Verken ons veeltalige databasis",
-    "downloadResources": "Laai Hulpbronne Af",
-    "downloadDescription": "Kry toegang tot inhoud vanlyn",
-    "contributeTerm": "Dra 'n Term By",
-    "contributeDescription": "Help om ons databasis te laat groei",
-    "recentTerms": "Onlangs Bekekene Terme",
-    "viewAll": "Bekyk Alle Onlangse Terme",
-    "hideTerms": "Versteek Terme",
-    "communityActivity": "Gemeenskapsaktiwiteit",
-    "viewAllActivity": "Bekyk Alle Aktiwiteit",
-    "hideActivity": "Versteek Aktiwiteit",
-    "userName": "Gebruikersnaam",
-    "userId": "Gebruiker ID"
-  },
-
-  "leftPane": {
-    "dashboard": "Dashboard",
-    "search": "Soek",
-    "savedTerms": "Gestoor Terme",
-    "analytics": "Analise"
   }
 }

@@ -71,34 +71,5 @@
       "normalUser": "Umsebenzisi Ojwayelekile",
       "applyingLinguist": "Ukubhalisa njengoChwepheshe Wolimi"
     }
-  },
-  "languageSwitcher": {
-    "selectLanguage": "Khetha Ulimi"
-  },
-
-  "dashboard": {
-    "welcome": "Wamukelekile futhi, Umnikeli!",
-    "quickActions": "Izenzo Ezisheshayo",
-    "searchNow": "Sesha Manje",
-    "searchDescription": "Hlola idatabase yethu yezilimi eziningi",
-    "downloadResources": "Landa Izinsiza",
-    "downloadDescription": "Thola okuqukethwe ngaphandle kwe-intanethi",
-    "contributeTerm": "Nikela Ngegama",
-    "contributeDescription": "Siza ukukhulisa idatabase yethu",
-    "recentTerms": "Amagama Abonwe Kamuva",
-    "viewAll": "Bona Wonke Amagama Amuva",
-    "hideTerms": "Fihla Amagama",
-    "communityActivity": "Umsebenzi Womphakathi",
-    "viewAllActivity": "Bona Yonke Imisebenzi",
-    "hideActivity": "Fihla Imisebenzi",
-    "userName": "Igama Lomsebenzisi",
-    "userId": "ID Yomsebenzisi"
-  },
-
-  "leftPane": {
-    "dashboard": "Ideshibhodi",
-    "search": "Sesha",
-    "savedTerms": "Amagama Agciniwe",
-    "analytics": "Ukuhlaziya"
   }
 }

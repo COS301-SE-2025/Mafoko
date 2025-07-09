@@ -65,34 +65,5 @@
       "researcher": "Mofuputsi",
       "student": "Moithuti"
     }
-  },
-  "languageSwitcher": {
-    "selectLanguage": "Kgetha Puo"
-  },
-
-  "dashboard": {
-    "welcome": "O amohelehile hape, Moneheli!",
-    "quickActions": "Diketso tse Potlakileng",
-    "searchNow": "Batla Hona Jwale",
-    "searchDescription": "Batlisisa databese ya rona ya dipuo tse ngata",
-    "downloadResources": "Jarolla Disebediswa",
-    "downloadDescription": "Fumana dikahare o sa kenyeletsa inthanete",
-    "contributeTerm": "Fana ka Lentswe",
-    "contributeDescription": "Thusa ho hodisa databese ya rona",
-    "recentTerms": "Mantswe a Bonweng Haufinyana",
-    "viewAll": "Sheba Mantswe Ohle a Haufinyana",
-    "hideTerms": "Pata Mantswe",
-    "communityActivity": "Diketsahalo tsa Setjhaba",
-    "viewAllActivity": "Sheba Diketsahalo Tsohle",
-    "hideActivity": "Pata Diketsahalo",
-    "userName": "Lebitso la Mosebedisi",
-    "userId": "ID ya Mosebedisi"
-  },
-
-  "leftPane": {
-    "dashboard": "Tafole ya Tshebetso",
-    "search": "Batla",
-    "savedTerms": "Mantswe a Bolokilweng",
-    "analytics": "Ditatistiki"
   }
 }

@@ -65,34 +65,5 @@
       "researcher": "Umphandi",
       "student": "Umfundi"
     }
-  },
-
-  "languageSwitcher": {
-    "selectLanguage": "Khetha Ulwimi"
-  },
-  "dashboard": {
-    "welcome": "Wamkelekile kwakhona, Mnikeli!",
-    "quickActions": "Izenzo Ezikhawulezayo",
-    "searchNow": "Khangela Ngoku",
-    "searchDescription": "Hlola idatabase yethu yeelwimi ezininzi",
-    "downloadResources": "Khuphela Izixhobo",
-    "downloadDescription": "Fikelela umxholo ngaphandle kwe-intanethi",
-    "contributeTerm": "Nikela ngeTem",
-    "contributeDescription": "Nceda ukukhula kwedatabase yethu",
-    "recentTerms": "Amagama Abonwe Kutshanje",
-    "viewAll": "Jonga Onke Amagama Akutshanje",
-    "hideTerms": "Fihla Amagama",
-    "communityActivity": "Umsebenzi woLuntu",
-    "viewAllActivity": "Jonga Yonke Imisebenzi",
-    "hideActivity": "Fihla Imisebenzi",
-    "userName": "Igama loMsebenzisi",
-    "userId": "ID yoMsebenzisi"
-  },
-
-  "leftPane": {
-    "dashboard": "Ideshibhodi",
-    "search": "Khangela",
-    "savedTerms": "Amagama Agciniweyo",
-    "analytics": "Uhlalutyo"
   }
 }

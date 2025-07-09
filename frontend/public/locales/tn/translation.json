@@ -3,6 +3,29 @@
     "registerButton": "Ikwadise",
     "loginButton": "Tsena"
   },
+  "loginPage": {
+    "title": "O AMOGELESEGA GAPE!",
+    "subtitle": "Tswee-tswee tsenya dintlha tsa gago go tsena.",
+    "emailLabel": "Imeili",
+    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
+    "passwordLabel": "Khunololamoraba",
+    "passwordPlaceholder": "Tsenya khunololamoraba ya gago",
+    "rememberMe": "Nkgopole",
+    "forgotPassword": "O lebetse Khunololamoraba?",
+    "loginButton": "Tsena",
+    "orDivider": "KGOTSA",
+    "loginWithGoogle": "Tsena ka Google",
+    "noAccount": "Ga o na akhaonto?",
+    "registerLink": "Ikwadise",
+    "welcomeImageAlt": "Kamogelo ya go Tsena mo Mavito",
+    "dsfsiLogoAlt": "Letshwao la DSFSI",
+    "errorTokenMissing": "O tsene sentle, mme ga go na tokene e e amogetsweng. Tswee-tswee ikgolaganye le thuso.",
+    "errorDefault": "Go tsena go paletswe. Tswee-tswee tlhola dintlha tsa gago.",
+    "errorUnexpectedFormat": "Phoso ya go tsena (maemo {{status}}). Sebopego sa phoso se se sa solofetswang.",
+    "errorWithStatus": "Go tsena go paletswe (maemo {{status}}). Tswee-tswee leka gape.",
+    "errorNetwork": "Go diragetse phoso: {{message}}.",
+    "errorUnknownNetwork": "Go diragetse phoso e e sa itseweng ya neteweke. Tswee-tswee leka gape."
+  },
   "registrationPage": {
     "title": "SIMOLOLA JAANONG",
     "subtitle": "Tlhola akhaonto ya gago ya Mavito.",
@@ -46,28 +69,5 @@
       "normalUser": "Modirisi wa Tlwaelo",
       "applyingLinguist": "Go Ikwadisa jaaka Mosekaseki wa Puo"
     }
-  },
-  "loginPage": {
-    "title": "O AMOGELESEGA GAPE!",
-    "subtitle": "Tswee-tswee tsenya dintlha tsa gago go tsena.",
-    "emailLabel": "Imeili",
-    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
-    "passwordLabel": "Khunololamoraba",
-    "passwordPlaceholder": "Tsenya khunololamoraba ya gago",
-    "rememberMe": "Nkgopole",
-    "forgotPassword": "O lebetse Khunololamoraba?",
-    "loginButton": "Tsena",
-    "orDivider": "KGOTSA",
-    "loginWithGoogle": "Tsena ka Google",
-    "noAccount": "Ga o na akhaonto?",
-    "registerLink": "Ikwadise",
-    "welcomeImageAlt": "Kamogelo ya go Tsena mo Mavito",
-    "dsfsiLogoAlt": "Letshwao la DSFSI",
-    "errorTokenMissing": "O tsene sentle, mme ga go na tokene e e amogetsweng. Tswee-tswee ikgolaganye le thuso.",
-    "errorDefault": "Go tsena go paletswe. Tswee-tswee tlhola dintlha tsa gago.",
-    "errorUnexpectedFormat": "Phoso ya go tsena (maemo {{status}}). Sebopego sa phoso se se sa solofetswang.",
-    "errorWithStatus": "Go tsena go paletswe (maemo {{status}}). Tswee-tswee leka gape.",
-    "errorNetwork": "Go diragetse phoso: {{message}}.",
-    "errorUnknownNetwork": "Go diragetse phoso e e sa itseweng ya neteweke. Tswee-tswee leka gape."
   }
 }

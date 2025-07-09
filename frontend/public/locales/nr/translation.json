@@ -3,6 +3,29 @@
     "registerButton": "Bhalisela",
     "loginButton": "Ngena"
   },
+    "loginPage": {
+    "title": "SIYAKWAMUKELA GODU!",
+    "subtitle": "Sibawa ufake imininingwana yakho yokungena.",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "Faka ikheli lakho le-imeyili",
+    "passwordLabel": "Iphasiwedi",
+    "passwordPlaceholder": "Faka iphasiwedi yakho",
+    "rememberMe": "Ngikhumbule",
+    "forgotPassword": "Ukhohlwe Yiphasiwedi?",
+    "loginButton": "Ngena",
+    "orDivider": "NAMKHA",
+    "loginWithGoogle": "Ngena nge-Google",
+    "noAccount": "Awunaso isikhwama?",
+    "registerLink": "Bhalisela",
+    "welcomeImageAlt": "Ukwamukela kokungena ku-Mavito",
+    "dsfsiLogoAlt": "Ilogo ye-DSFSI",
+    "errorTokenMissing": "Ungene ngepumelelo, kodwana awukho umtlolo-mqondiso otholakileko. Sibawa uthintane ngesizo.",
+    "errorDefault": "Ukungena kuhlulekile. Sibawa uhlole imininingwana yakho.",
+    "errorUnexpectedFormat": "Iphoso yokungena (isimo {{status}}). Isimo sephoso esingakalindelelwa.",
+    "errorWithStatus": "Ukungena kuhlulekile (isimo {{status}}). Sibawa uzame godu.",
+    "errorNetwork": "Kwenzeke iphoso: {{message}}.",
+    "errorUnknownNetwork": "Kwenzeke iphoso yenethiwekhi engakaziwa. Sibawa uzame godu."
+  },
   "registrationPage": {
     "title": "THOMA KHONA NJANI",
     "subtitle": "Dala i-akhawundi yakho ye-Mavito.",
@@ -46,28 +69,5 @@
       "normalUser": "Umsebenzisi Wajayelekileko",
       "applyingLinguist": "Ukubhalisela Ukuba Yisazi seLimi"
     }
-  },
-  "loginPage": {
-    "title": "SIYAKWAMUKELA GODU!",
-    "subtitle": "Sibawa ufake imininingwana yakho yokungena.",
-    "emailLabel": "I-imeyili",
-    "emailPlaceholder": "Faka ikheli lakho le-imeyili",
-    "passwordLabel": "Iphasiwedi",
-    "passwordPlaceholder": "Faka iphasiwedi yakho",
-    "rememberMe": "Ngikhumbule",
-    "forgotPassword": "Ukhohlwe Yiphasiwedi?",
-    "loginButton": "Ngena",
-    "orDivider": "NAMKHA",
-    "loginWithGoogle": "Ngena nge-Google",
-    "noAccount": "Awunaso isikhwama?",
-    "registerLink": "Bhalisela",
-    "welcomeImageAlt": "Ukwamukela kokungena ku-Mavito",
-    "dsfsiLogoAlt": "Ilogo ye-DSFSI",
-    "errorTokenMissing": "Ungene ngepumelelo, kodwana awukho umtlolo-mqondiso otholakileko. Sibawa uthintane ngesizo.",
-    "errorDefault": "Ukungena kuhlulekile. Sibawa uhlole imininingwana yakho.",
-    "errorUnexpectedFormat": "Iphoso yokungena (isimo {{status}}). Isimo sephoso esingakalindelelwa.",
-    "errorWithStatus": "Ukungena kuhlulekile (isimo {{status}}). Sibawa uzame godu.",
-    "errorNetwork": "Kwenzeke iphoso: {{message}}.",
-    "errorUnknownNetwork": "Kwenzeke iphoso yenethiwekhi engakaziwa. Sibawa uzame godu."
   }
 }

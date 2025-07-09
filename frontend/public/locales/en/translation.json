@@ -71,34 +71,5 @@
       "normalUser": "Normal User",
       "applyingLinguist": "Applying as a Linguist"
     }
-  },
-
-  "languageSwitcher": {
-    "selectLanguage": "Select Language"
-  },
-  "dashboard": {
-    "welcome": "Welcome back, Contributor!",
-    "quickActions": "Quick Actions",
-    "searchNow": "Search Now",
-    "searchDescription": "Explore our multilingual database",
-    "downloadResources": "Download Resources",
-    "downloadDescription": "Access content offline",
-    "contributeTerm": "Contribute a Term",
-    "contributeDescription": "Help grow our database",
-    "recentTerms": "Recently Viewed Terms",
-    "viewAll": "View All Recent Terms",
-    "hideTerms": "Hide Terms",
-    "communityActivity": "Community Activity",
-    "viewAllActivity": "View All Activity",
-    "hideActivity": "Hide Activity",
-    "userName": "User Name",
-    "userId": "User ID"
-  },
-
-  "leftPane": {
-    "dashboard": "Dashboard",
-    "search": "Search",
-    "savedTerms": "Saved Terms",
-    "analytics": "Analytics"
   }
 }
