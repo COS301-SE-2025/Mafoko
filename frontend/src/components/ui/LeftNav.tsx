@@ -15,12 +15,12 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Home', path: '/dashboard' },
-    { id: 'search', label: 'Dictionary', path: '/search' },
-    { id: 'glossary', label: 'Glossary', path: '/glossary' },
-    { id: 'saved', label: 'Saved Terms', path: '/saved-terms' },
-    { id: 'analytics', label: 'Dashboard', path: '/analytics' },
-    { id: 'help', label: t('Help'), path: '/help' },
+    { id: 'dashboard', label: t('navigation.home'), path: '/dashboard' },
+    { id: 'search', label: t('navigation.dictionary'), path: '/search' },
+    { id: 'glossary', label: t('navigation.glossary'), path: '/glossary' },
+    { id: 'saved', label: t('navigation.savedTerms'), path: '/saved-terms' },
+    { id: 'analytics', label: t('navigation.dashboard'), path: '/analytics' },
+    { id: 'help', label: t('navigation.help'), path: '/help' },
   ];
 
   const handleItemClick = (itemId: string, path: string) => {

@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import '../../styles/Navbar.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 
@@ -31,16 +32,18 @@ const Navbar = () => {
   const [active, setActive] = useState('');
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
+  const { t } = useTranslation();
+
   const navItems = useMemo(
     () => [
-      'Home',
-      'Dictionary',
-      'Glossary',
-      'Saved Terms',
-      'Dashboard',
-      'Help',
+      t('navigation.home'),
+      t('navigation.dictionary'),
+      t('navigation.glossary'),
+      t('navigation.savedTerms'),
+      t('navigation.dashboard'),
+      t('navigation.help'),
     ],
-    [],
+    [t],
   );
 
   // Custom route mapping for navigation items
