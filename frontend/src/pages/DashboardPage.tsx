@@ -341,7 +341,10 @@ const DashboardPage: React.FC = () => {
                   }}
                 >
                   <div className="action-icon">🔍</div>
-                  <h3>{t('dashboard.searchNow')}</h3>
+                  <h3>
+                    {t('dashboard.searchNow')}
+                    <br />
+                  </h3>
                   <p>{t('dashboard.searchDescription')}</p>
                 </div>
                 <div
@@ -351,7 +354,10 @@ const DashboardPage: React.FC = () => {
                   }}
                 >
                   <div className="action-icon">📥</div>
-                  <h3>{t('dashboard.downloadResources')}</h3>
+                  <h3>
+                    {t('dashboard.downloadResources')}
+                    <br />
+                  </h3>
                   <p>{t('dashboard.downloadDescription')}</p>
                 </div>
                 <div
@@ -361,7 +367,10 @@ const DashboardPage: React.FC = () => {
                   }}
                 >
                   <div className="action-icon">✍️</div>
-                  <h3>{t('dashboard.contributeTerm')}</h3>
+                  <h3>
+                    {t('dashboard.contributeTerm')}
+                    <br />
+                  </h3>
                   <p>{t('dashboard.contributeDescription')}</p>
                 </div>
               </div>
