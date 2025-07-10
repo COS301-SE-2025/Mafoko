@@ -112,5 +112,66 @@
     "searchAllTerms": "Khangela onke amagama...",
     "noTermsFound": "Akukho magama afumanekayo afana no-\"{{query}}\" ku-{{category}}.",
     "noTermsInCategory": "Akukho magama afumanekayo ku-{{category}}."
+  },
+  "analytics": {
+    "loading": "Iyalayisha idatha yohlalutyo...",
+    "stats": {
+      "totalTerms": "Amagama Ewonke",
+      "uniqueLanguages": "Iilwimi Ezahlukileyo",
+      "uniqueDomains": "Iindawo Ezahlukileyo",
+      "topLanguage": "Ulwimi Oluphambili"
+    },
+    "popularTerms": {
+      "title": "Amagama Athandwayo",
+      "subtitle": "Amagama asetyenziswa kakhulu kuzo zonke iindawo"
+    },
+    "categoryDistribution": {
+      "title": "Ukusasazwa Kweendidi",
+      "subtitle": "Amagama ahlelwe ngokweendawo zestatistiki"
+    },
+    "topDomains": {
+      "title": "Iindawo Eziphambili",
+      "subtitle": "Iindawo zestatistiki ezisebenza kakhulu"
+    },
+    "trendsAndInsights": {
+      "title": "Iinkqubo Nolwazi",
+      "subtitle": "Uhlalutyo olususelwa kwidatha neziphumo",
+      "languageDiversity": {
+        "title": "Isalathisi Sokwahluka Kweelwimi",
+        "coverage": "yeelwimi zoMzantsi Afrika zisetyenzisiwe",
+        "terms": "amagama"
+      },
+      "domainFocus": {
+        "title": "Iindawo Ekujoliswe Kuzo"
+      },
+      "dataQuality": {
+        "title": "Iindlela Zokulinganisa Umgangatho Wedatha",
+        "completenessScore": "Amanqaku Okuphelela",
+        "translationCoverage": "Ukuguqulela Ngokwaneleyo",
+        "definitionQuality": "Umgangatho Wengcaciso"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Isishwankathelo Sohlalutyo",
+      "subtitle": "Imbonakalo yomgangatho wedatha neendlela zokulinganisa ukusebenza",
+      "dataQualityScore": {
+        "title": "Amanqaku Omgangatho Wedatha",
+        "subtitle": "Ukuguqulela Okupheleleyo"
+      },
+      "coverageEfficiency": {
+        "title": "Ukusebenza Kokuguqulela",
+        "subtitle": "Umgangatho Wokusasazwa",
+        "excellent": "Iphumelele Kakhulu",
+        "good": "Ilungile"
+      },
+      "popularCategory": {
+        "title": "Udidi Oluthandwa Kakhulu",
+        "subtitle": "Indawo Ephambili"
+      },
+      "termGrowth": {
+        "title": "Izinga Lokukhula Kwamagama",
+        "subtitle": "Kule Nyanga"
+      }
+    }
   }
 }

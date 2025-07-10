@@ -116,5 +116,66 @@
     "searchAllTerms": "Lavisisa marito hinkwawo...",
     "noTermsFound": "Ku hava marito lama kumekaka lama fanaka na \"{{query}}\" eka {{category}}.",
     "noTermsInCategory": "Ku hava marito lama kumekaka eka {{category}}."
+  },
+  "analytics": {
+    "loading": "Ya layicha data ya analytics...",
+    "stats": {
+      "totalTerms": "Marito Hinkwawo",
+      "uniqueLanguages": "Tindzimi to Hambana",
+      "uniqueDomains": "Swiyenge swo Hambana",
+      "topLanguage": "Ririmi ro Rhanga"
+    },
+    "popularTerms": {
+      "title": "Marito yo Tsakeriwa",
+      "subtitle": "Marito lama tirhisiwaka ngopfu eka swiyenge hinkwaswo"
+    },
+    "categoryDistribution": {
+      "title": "Ku Hangalasiwa ka Swiyenge",
+      "subtitle": "Marito lama hlengeletiweke hi swiyenge swa switatistiki"
+    },
+    "topDomains": {
+      "title": "Swiyenge swa le Henhla",
+      "subtitle": "Swiyenge swa switatistiki swo tirha ngopfu"
+    },
+    "trendsAndInsights": {
+      "title": "Mintolovelo na Vutivi",
+      "subtitle": "Nxopaxopo lowu hlanganisiweke na data na mbuyelo",
+      "languageDiversity": {
+        "title": "Mpimo wa ku Hambana ka Tindzimi",
+        "coverage": "wa tindzimi ta Afrika-Dzonga leti tirhisiweke",
+        "terms": "marito"
+      },
+      "domainFocus": {
+        "title": "Tindhawu to Kongomisa"
+      },
+      "dataQuality": {
+        "title": "Mimpimo ya Nkoka wa Data",
+        "completenessScore": "Mpimo wa ku Hetiseka",
+        "translationCoverage": "Nkunguhato wa Mahundzuluxo",
+        "definitionQuality": "Nkoka wa Tinhlamuselo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Nkomiso wa Analytics",
+      "subtitle": "Nkambisiso wa nkoka wa data na mimpimo ya matirhelo",
+      "dataQualityScore": {
+        "title": "Mpimo wa Nkoka wa Data",
+        "subtitle": "Nkunguhato wo Hetiseka"
+      },
+      "coverageEfficiency": {
+        "title": "Vuswikoti bya Nkunguhato",
+        "subtitle": "Nkoka wa Ku Hangalasiwa",
+        "excellent": "Kahle Swinene",
+        "good": "Kahle"
+      },
+      "popularCategory": {
+        "title": "Xiyenge xo Tsakeriwa Ngopfu",
+        "subtitle": "Xiyenge xo Rhanga"
+      },
+      "termGrowth": {
+        "title": "Mpimo wa Ku Kula ka Marito",
+        "subtitle": "N'hweti Leyi"
+      }
+    }
   }
 }

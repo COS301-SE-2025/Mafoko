@@ -112,5 +112,66 @@
     "searchAllTerms": "Batla mantswe ohle...",
     "noTermsFound": "Ha ho mantswe a fumanehileng a tshwanang le \"{{query}}\" ho {{category}}.",
     "noTermsInCategory": "Ha ho mantswe a fumanehang ho {{category}}."
+  },
+  "analytics": {
+    "loading": "E laeta data ya analytics...",
+    "stats": {
+      "totalTerms": "Mantswe Kaofela",
+      "uniqueLanguages": "Dipuo tse Fapaneng",
+      "uniqueDomains": "Dikarolo tse Fapaneng",
+      "topLanguage": "Puo e Phahameng"
+    },
+    "popularTerms": {
+      "title": "Mantswe a Tummeng",
+      "subtitle": "Mantswe a sebediswang haholo dikarolong tsohle"
+    },
+    "categoryDistribution": {
+      "title": "Kabo ya Dikarolo",
+      "subtitle": "Mantswe a hlophisitsweng ka dikarolo tsa dipalopalo"
+    },
+    "topDomains": {
+      "title": "Dikarolo tse Phahameng",
+      "subtitle": "Dikarolo tsa dipalopalo tse sebetsang haholo"
+    },
+    "trendsAndInsights": {
+      "title": "Ditlwaelo le Tsebo",
+      "subtitle": "Tlhahlobo e thehilweng ho data le diphetho",
+      "languageDiversity": {
+        "title": "Sekala sa ho Fapana ha Dipuo",
+        "coverage": "ya dipuo tsa Afrika Borwa tse sebedisitsweng",
+        "terms": "mantswe"
+      },
+      "domainFocus": {
+        "title": "Dikarolo tsa Tsepamiso"
+      },
+      "dataQuality": {
+        "title": "Ditekanyetso tsa Boleng ba Data",
+        "completenessScore": "Matshwao a ho Phethahala",
+        "translationCoverage": "Kgahllamelo ya Phetolelo",
+        "definitionQuality": "Boleng ba Ditlhaloso"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Kakaretso ya Analytics",
+      "subtitle": "Tjhebo ya boleng ba data le ditekanyetso tsa tshebetso",
+      "dataQualityScore": {
+        "title": "Matshwao a Boleng ba Data",
+        "subtitle": "Kgahllamelo e Phethahetseng"
+      },
+      "coverageEfficiency": {
+        "title": "Bokgoni ba Kgahllamelo",
+        "subtitle": "Boleng ba Kabo",
+        "excellent": "Ho Kgabane",
+        "good": "Ho Hotle"
+      },
+      "popularCategory": {
+        "title": "Karolo e Tummeng ka ho Fetisisa",
+        "subtitle": "Karolo e Etelletseng Pele"
+      },
+      "termGrowth": {
+        "title": "Sekgahla sa Kgolo ya Mantswe",
+        "subtitle": "Kgweding Ena"
+      }
+    }
   }
 }

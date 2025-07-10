@@ -120,5 +120,67 @@
     "searchAllTerms": "Sesha wonke amagama...",
     "noTermsFound": "Awekho amagama atholakele afana no-\"{{query}}\" ku-{{category}}.",
     "noTermsInCategory": "Awekho amagama atholakalayo ku-{{category}}."
+  },
+
+  "analytics": {
+    "loading": "Ilayisha idatha yokuhlaziya...",
+    "stats": {
+      "totalTerms": "Amagama Ewonke",
+      "uniqueLanguages": "Izilimi Ezihlukile",
+      "uniqueDomains": "Izindawo Ezihlukile",
+      "topLanguage": "Ulimi Oluphambili"
+    },
+    "popularTerms": {
+      "title": "Amagama Adumile",
+      "subtitle": "Amagama asetshenziswa kakhulu kuzo zonke izindawo"
+    },
+    "categoryDistribution": {
+      "title": "Ukuhleleka Kwezigaba",
+      "subtitle": "Amagama ahlelwe ngezindawo zestatistiki"
+    },
+    "topDomains": {
+      "title": "Izindawo Eziphambili",
+      "subtitle": "Izindawo zestatistiki ezisebenza kakhulu"
+    },
+    "trendsAndInsights": {
+      "title": "Izinqubo Nokubona",
+      "subtitle": "Ukuhlaziya okususelwa kudatha nemiphumela",
+      "languageDiversity": {
+        "title": "Isikali Sokwahluka Kwezilimi",
+        "coverage": "yezilimi zaseNingizimu Afrika zisetshenzisiwe",
+        "terms": "amagama"
+      },
+      "domainFocus": {
+        "title": "Izindawo Ezigxilwe Kuzo"
+      },
+      "dataQuality": {
+        "title": "Izikali Zekhwalithi Yedatha",
+        "completenessScore": "Amamaki Okuphelela",
+        "translationCoverage": "Ukumboza Kokuhumusha",
+        "definitionQuality": "Ikhwalithi Yencazelo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Isifinyezo Sokuhlaziya",
+      "subtitle": "Ukubuka ikhwalithi yedatha nezikali zokusebenza",
+      "dataQualityScore": {
+        "title": "Amamaki Ekhwalithi Yedatha",
+        "subtitle": "Ukumboza Okuphelele"
+      },
+      "coverageEfficiency": {
+        "title": "Ukusebenza Kokumboza",
+        "subtitle": "Ikhwalithi Yokusabalalisa",
+        "excellent": "Kuhle Kakhulu",
+        "good": "Kuhle"
+      },
+      "popularCategory": {
+        "title": "Isigaba Esidume Kakhulu",
+        "subtitle": "Indawo Ephambili"
+      },
+      "termGrowth": {
+        "title": "Izinga Lokukhula Kwamagama",
+        "subtitle": "Kule Nyanga"
+      }
+    }
   }
 }

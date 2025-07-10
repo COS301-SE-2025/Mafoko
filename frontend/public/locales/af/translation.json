@@ -116,5 +116,66 @@
     "searchAllTerms": "Soek alle terme...",
     "noTermsFound": "Geen terme gevind wat ooreenstem met \"{{query}}\" in {{category}} nie.",
     "noTermsInCategory": "Geen terme beskikbaar in {{category}} nie."
+  },
+  "analytics": {
+    "loading": "Laai tans analitiese data...",
+    "stats": {
+      "totalTerms": "Totale Terme",
+      "uniqueLanguages": "Unieke Tale",
+      "uniqueDomains": "Unieke Domeine",
+      "topLanguage": "Top Taal"
+    },
+    "popularTerms": {
+      "title": "Populêre Terme",
+      "subtitle": "Mees gebruikte terme oor alle domeine"
+    },
+    "categoryDistribution": {
+      "title": "Kategorie Verspreiding",
+      "subtitle": "Terme gegroepeer volgens statistiese domeine"
+    },
+    "topDomains": {
+      "title": "Top Domeine",
+      "subtitle": "Mees aktiewe statistiese domeine"
+    },
+    "trendsAndInsights": {
+      "title": "Tendense & Insigte",
+      "subtitle": "Data-gedrewe insigte en tendensanalise",
+      "languageDiversity": {
+        "title": "Taaldiversiteitsindeks",
+        "coverage": "van Suid-Afrikaanse tale gedek",
+        "terms": "terme"
+      },
+      "domainFocus": {
+        "title": "Domein Fokusareas"
+      },
+      "dataQuality": {
+        "title": "Datakwaliteit Metrieke",
+        "completenessScore": "Volledigheid Telling",
+        "translationCoverage": "Vertaling Dekking",
+        "definitionQuality": "Definisie Kwaliteit"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Analitiese Opsomming",
+      "subtitle": "Oorsig van datakwaliteit en prestasie metrieke",
+      "dataQualityScore": {
+        "title": "Datakwaliteit Telling",
+        "subtitle": "Volledige Dekking"
+      },
+      "coverageEfficiency": {
+        "title": "Dekkingsdoeltreffendheid",
+        "subtitle": "Verspreidingskwaliteit",
+        "excellent": "Uitstekend",
+        "good": "Goed"
+      },
+      "popularCategory": {
+        "title": "Mees Populêre Kategorie",
+        "subtitle": "Leidende Domein"
+      },
+      "termGrowth": {
+        "title": "Term Groeikoers",
+        "subtitle": "Hierdie Maand"
+      }
+    }
   }
 }

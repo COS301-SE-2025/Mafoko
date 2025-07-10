@@ -116,5 +116,66 @@
     "searchAllTerms": "Sesha onkhe emagama...",
     "noTermsFound": "Kute emagama latfolakele lafana ne-\"{{query}}\" ku-{{category}}.",
     "noTermsInCategory": "Kute emagama latfolakala ku-{{category}}."
+  },
+  "analytics": {
+    "loading": "Kuyalayisha idatha ye-analytics...",
+    "stats": {
+      "totalTerms": "Emagama Onkhe",
+      "uniqueLanguages": "Tilimi Letehlukene",
+      "uniqueDomains": "Tigaba Letehlukene",
+      "topLanguage": "Lulimi Lolusetulu"
+    },
+    "popularTerms": {
+      "title": "Emagama Ladumile",
+      "subtitle": "Emagama lasetjentiswa kakhulu kuyo yonkhe imisebenti"
+    },
+    "categoryDistribution": {
+      "title": "Kuhleleka Kwetigaba",
+      "subtitle": "Emagama ahlelwe ngetigaba tetibalo"
+    },
+    "topDomains": {
+      "title": "Tigaba Letiphakeme",
+      "subtitle": "Tigaba tetibalo letisebenta kakhulu"
+    },
+    "trendsAndInsights": {
+      "title": "Imikhuba Nekucondzisisa",
+      "subtitle": "Kuhlatiyelwa lokususelwa kwidatha nemiphumela",
+      "languageDiversity": {
+        "title": "Silinganiso Sekwehluka Kwetilimi",
+        "coverage": "wetilimi taseNingizimu Afrika letisetjentisiwe",
+        "terms": "emagama"
+      },
+      "domainFocus": {
+        "title": "Tigaba Letibukiwe"
+      },
+      "dataQuality": {
+        "title": "Tilinganiso Telizinga Ledatha",
+        "completenessScore": "Emamaki Ekuphelela",
+        "translationCoverage": "Kufaka Tihumusho",
+        "definitionQuality": "Lizinga Lencazelo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Sifinyeto se-Analytics",
+      "subtitle": "Kubuka lizinga ledatha netilinganiso tekusebenta",
+      "dataQualityScore": {
+        "title": "Emamaki Elizinga Ledatha",
+        "subtitle": "Kufaka Lokuphelele"
+      },
+      "coverageEfficiency": {
+        "title": "Kusebenta Kwekufaka",
+        "subtitle": "Lizinga Lekuhleleka",
+        "excellent": "Kuhle Kakhulu",
+        "good": "Kuhle"
+      },
+      "popularCategory": {
+        "title": "Sigaba Lesidumile Kakhulu",
+        "subtitle": "Sigaba Lesiholako"
+      },
+      "termGrowth": {
+        "title": "Lizinga Lekukhula Kwemagama",
+        "subtitle": "Kulelinyanga"
+      }
+    }
   }
 }

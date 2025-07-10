@@ -114,5 +114,66 @@
     "searchAllTerms": "Ṱoḓa maipfi oṱhe...",
     "noTermsFound": "A hu na maipfi o wanalaho a fanaho na \"{{query}}\" kha {{category}}.",
     "noTermsInCategory": "A hu na maipfi a wanalaho kha {{category}}."
+  },
+  "analytics": {
+    "loading": "I khou laisa data ya analytics...",
+    "stats": {
+      "totalTerms": "Maipfi Oṱhe",
+      "uniqueLanguages": "Nyambo dzo Fhambanaho",
+      "uniqueDomains": "Masia o Fhambanaho",
+      "topLanguage": "Luambo lwa Nṱha"
+    },
+    "popularTerms": {
+      "title": "Maipfi o Ṱanganedzwaho",
+      "subtitle": "Maipfi o shumiswaho nga maanḓa kha masia oṱhe"
+    },
+    "categoryDistribution": {
+      "title": "Khethekanyo ya Masia",
+      "subtitle": "Maipfi o khethekanywa nga masia a statistiki"
+    },
+    "topDomains": {
+      "title": "Masia a Nṱha",
+      "subtitle": "Masia a statistiki o shumaho nga maanḓa"
+    },
+    "trendsAndInsights": {
+      "title": "Zwikalo na Nḓivho",
+      "subtitle": "Tsenguluso yo ḓisendekaho kha data na mvelelo",
+      "languageDiversity": {
+        "title": "Tshisumbavhubvo tsha Nyambo",
+        "coverage": "ya nyambo dza Afrika Tshipembe dzo shumiswaho",
+        "terms": "maipfi"
+      },
+      "domainFocus": {
+        "title": "Masia a Tshumelo"
+      },
+      "dataQuality": {
+        "title": "Zwikalo zwa Ndeme wa Data",
+        "completenessScore": "Maraga ya u Fhelela",
+        "translationCoverage": "Tshumelo ya Ṱhalutshedzo",
+        "definitionQuality": "Ndeme wa Ṱhalutshedzo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Manweledzo a Analytics",
+      "subtitle": "Mbonelaphanda ya ndeme wa data na zwikalo zwa kushumele",
+      "dataQualityScore": {
+        "title": "Maraga ya Ndeme wa Data",
+        "subtitle": "Tshumelo yo Fhelelaho"
+      },
+      "coverageEfficiency": {
+        "title": "Vhukoni ha Tshumelo",
+        "subtitle": "Ndeme wa Khethekanyo",
+        "excellent": "Zwavhuḓi nga Maanḓa",
+        "good": "Zwavhuḓi"
+      },
+      "popularCategory": {
+        "title": "Khethekanyo yo Ṱanganedzwaho",
+        "subtitle": "Sia ḽa Nṱha"
+      },
+      "termGrowth": {
+        "title": "Nyaluwo ya Maipfi",
+        "subtitle": "Ṅwedzi Wonoyu"
+      }
+    }
   }
 }

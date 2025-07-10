@@ -116,5 +116,66 @@
     "searchAllTerms": "Nyaka mantšu ka moka...",
     "noTermsFound": "Ga go mantšu ao a hwetšwago ao a swanago le \"{{query}}\" go {{category}}.",
     "noTermsInCategory": "Ga go mantšu ao a hwetšagalago go {{category}}."
+  },
+  "analytics": {
+    "loading": "E laetša data ya analytics...",
+    "stats": {
+      "totalTerms": "Mantšu Ka Moka",
+      "uniqueLanguages": "Maleme a go Fapana",
+      "uniqueDomains": "Magoro a go Fapana",
+      "topLanguage": "Leleme la Godimo"
+    },
+    "popularTerms": {
+      "title": "Mantšu a go Tuma",
+      "subtitle": "Mantšu ao a šomišwago kudu magorong ka moka"
+    },
+    "categoryDistribution": {
+      "title": "Phatlalatšo ya Magoro",
+      "subtitle": "Mantšu a hlopša ka magoro a dipalopalo"
+    },
+    "topDomains": {
+      "title": "Magoro a Godimo",
+      "subtitle": "Magoro a dipalopalo ao a šomago kudu"
+    },
+    "trendsAndInsights": {
+      "title": "Ditlwaelo le Kwešišo",
+      "subtitle": "Tshekatsheko ye e theilwego go data le dipoelo",
+      "languageDiversity": {
+        "title": "Tekanyetšo ya go Fapana ga Maleme",
+        "coverage": "ya maleme a Afrika Borwa ao a šomišitšwego",
+        "terms": "mantšu"
+      },
+      "domainFocus": {
+        "title": "Magoro a Nepišo"
+      },
+      "dataQuality": {
+        "title": "Ditekanyetšo tša Boleng bja Data",
+        "completenessScore": "Meputso ya Botlalo",
+        "translationCoverage": "Tšhireletšo ya Phetolelo",
+        "definitionQuality": "Boleng bja Tlhalošo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Kakaretšo ya Analytics",
+      "subtitle": "Tebelelo ya boleng bja data le ditekanyetšo tša tiragatšo",
+      "dataQualityScore": {
+        "title": "Meputso ya Boleng bja Data",
+        "subtitle": "Tšhireletšo ye e Feletšego"
+      },
+      "coverageEfficiency": {
+        "title": "Bokgoni bja Tšhireletšo",
+        "subtitle": "Boleng bja Phatlalatšo",
+        "excellent": "Go Kgahliša Kudu",
+        "good": "Go Lokile"
+      },
+      "popularCategory": {
+        "title": "Sehlopha se se Tumilego Kudu",
+        "subtitle": "Sehlopha se se Etilego Pele"
+      },
+      "termGrowth": {
+        "title": "Kelo ya Kgolo ya Mantšu",
+        "subtitle": "Kgweding ye"
+      }
+    }
   }
 }

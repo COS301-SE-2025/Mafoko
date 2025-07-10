@@ -120,5 +120,67 @@
     "searchAllTerms": "Search all terms...",
     "noTermsFound": "No terms found matching \"{{query}}\" in {{category}}.",
     "noTermsInCategory": "No terms available in {{category}}."
+  },
+
+  "analytics": {
+    "loading": "Loading analytics data...",
+    "stats": {
+      "totalTerms": "Total Terms",
+      "uniqueLanguages": "Unique Languages",
+      "uniqueDomains": "Unique Domains",
+      "topLanguage": "Top Language"
+    },
+    "popularTerms": {
+      "title": "Popular Terms",
+      "subtitle": "Most frequently used terms across all domains"
+    },
+    "categoryDistribution": {
+      "title": "Category Distribution",
+      "subtitle": "Terms grouped by statistical domains"
+    },
+    "topDomains": {
+      "title": "Top Domains",
+      "subtitle": "Most active statistical domains"
+    },
+    "trendsAndInsights": {
+      "title": "Trends & Insights",
+      "subtitle": "Data-driven insights and trends analysis",
+      "languageDiversity": {
+        "title": "Language Diversity Index",
+        "coverage": "of South African languages covered",
+        "terms": "terms"
+      },
+      "domainFocus": {
+        "title": "Domain Focus Areas"
+      },
+      "dataQuality": {
+        "title": "Data Quality Metrics",
+        "completenessScore": "Completeness Score",
+        "translationCoverage": "Translation Coverage",
+        "definitionQuality": "Definition Quality"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Analytics Summary",
+      "subtitle": "Overview of data quality and performance metrics",
+      "dataQualityScore": {
+        "title": "Data Quality Score",
+        "subtitle": "Complete Coverage"
+      },
+      "coverageEfficiency": {
+        "title": "Coverage Efficiency",
+        "subtitle": "Distribution Quality",
+        "excellent": "Excellent",
+        "good": "Good"
+      },
+      "popularCategory": {
+        "title": "Most Popular Category",
+        "subtitle": "Leading Domain"
+      },
+      "termGrowth": {
+        "title": "Term Growth Rate",
+        "subtitle": "This Month"
+      }
+    }
   }
 }

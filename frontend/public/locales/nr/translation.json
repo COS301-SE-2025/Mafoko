@@ -116,5 +116,66 @@
     "searchAllTerms": "Rhubhulula woke amagama...",
     "noTermsFound": "Akukho magama atholakala afana no-\"{{query}}\" ku-{{category}}.",
     "noTermsInCategory": "Akukho magama atholakala ku-{{category}}."
+  },
+  "analytics": {
+    "loading": "Ilayitjha idatha ye-analytics...",
+    "stats": {
+      "totalTerms": "Amagama Woke",
+      "uniqueLanguages": "Iilimi Ezihlukako",
+      "uniqueDomains": "Iingaba Ezihlukako",
+      "topLanguage": "Ilimi Eliphezulu"
+    },
+    "popularTerms": {
+      "title": "Amagama Athandwako",
+      "subtitle": "Amagama asetjenziswa khulu eengabeni zoke"
+    },
+    "categoryDistribution": {
+      "title": "Ukusatshalaliswa Kweengaba",
+      "subtitle": "Amagama ahlelwe ngeengaba zeenomboro"
+    },
+    "topDomains": {
+      "title": "Iingaba Eziphezulu",
+      "subtitle": "Iingaba zeenomboro ezisebenza khulu"
+    },
+    "trendsAndInsights": {
+      "title": "Iindlela Nekuzwisisa",
+      "subtitle": "Ukuhlola okususelwa kwidatha nemiphumela",
+      "languageDiversity": {
+        "title": "Isilinganiso Sokwahluka Kweelimi",
+        "coverage": "yeelimi zeSewula Afrika ezisebenzisiweko",
+        "terms": "amagama"
+      },
+      "domainFocus": {
+        "title": "Iingaba Ekutjhejwe Kuzo"
+      },
+      "dataQuality": {
+        "title": "Iinlinganiso Zekhwalithi Yedatha",
+        "completenessScore": "Amanqaku Wokuphelela",
+        "translationCoverage": "Ukuvikela Kokutjhugulula",
+        "definitionQuality": "Ikhwalithi Yencazelo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Ukurhunyeza Kwe-Analytics",
+      "subtitle": "Ukubuka ikhwalithi yedatha neenlinganiso zokusebenza",
+      "dataQualityScore": {
+        "title": "Amanqaku Wekhwalithi Yedatha",
+        "subtitle": "Ukuvikela Okupheleleko"
+      },
+      "coverageEfficiency": {
+        "title": "Ukusebenza Kokuvikela",
+        "subtitle": "Ikhwalithi Yokusatshalaliswa",
+        "excellent": "Kuhle Khulu",
+        "good": "Kuhle"
+      },
+      "popularCategory": {
+        "title": "Isigaba Esithandwa Khulu",
+        "subtitle": "Isigaba Esirhelegako"
+      },
+      "termGrowth": {
+        "title": "Izinga Lokukhula Kwamagama",
+        "subtitle": "Ngenyanga Le"
+      }
+    }
   }
 }
