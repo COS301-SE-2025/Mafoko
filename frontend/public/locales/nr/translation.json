@@ -98,5 +98,23 @@
     "communityActivity": "Imisebenzi Yomphakathi",
     "hideActivity": "Fihla Imisebenzi",
     "viewAllActivity": "Bona Yoke Imisebenzi"
+  },
+  "glossaryPage": {
+    "title": "Irhelo lamagama Ngezilimi Ezinengi",
+    "subtitle": "Funda iingaba, hlola amagama, thola iintjhugululo",
+    "showTranslations": "Tjengisa Iintjhugululo",
+    "translationsHeader": "Iintjhugululo",
+    "noTranslations": "Akukho iintjhugululo ezitholakala kweligama",
+    "selectTerm": "Khetha igama ukubona imininingwana neentjhugululo",
+    "loading": "Iyalayitjha...",
+    "categories": "Iingaba",
+    "selectCategory": "Khetha Isigaba",
+    "termDetails": "Imininingwana Yegama",
+    "termsInCategory": "Amagama ku-{{category}}",
+    "randomTerms": "Amagama Angahlelwanga",
+    "searchTermsInCategory": "Rhubhulula amagama ku-{{category}}...",
+    "searchAllTerms": "Rhubhulula woke amagama...",
+    "noTermsFound": "Akukho magama atholakala afana no-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Akukho magama atholakala ku-{{category}}."
   }
 }

@@ -98,5 +98,23 @@
     "communityActivity": "Mitirho ya Vaaki",
     "hideActivity": "Tumbeta Mitirho",
     "viewAllActivity": "Vona Mitirho Hinkwayo"
+  },
+  "glossaryPage": {
+    "title": "Nongoloko wa Marito hi Tindzimi to Tala",
+    "subtitle": "Languta swiyenge, lavisisa marito, kuma mahundzuluxo",
+    "showTranslations": "Komba Mahundzuluxo",
+    "translationsHeader": "Mahundzuluxo",
+    "noTranslations": "Ku hava mahundzuluxo lama nga kona ya rito leri",
+    "selectTerm": "Hlawula rito ku vona vuxokoxoko na mahundzuluxo",
+    "loading": "Ya layicha...",
+    "categories": "Swiyenge",
+    "selectCategory": "Hlawula Xiyenge",
+    "termDetails": "Vuxokoxoko bya Rito",
+    "termsInCategory": "Marito eka {{category}}",
+    "randomTerms": "Marito yo Hlawuleka",
+    "searchTermsInCategory": "Lavisisa marito eka {{category}}...",
+    "searchAllTerms": "Lavisisa marito hinkwawo...",
+    "noTermsFound": "Ku hava marito lama kumekaka lama fanaka na \"{{query}}\" eka {{category}}.",
+    "noTermsInCategory": "Ku hava marito lama kumekaka eka {{category}}."
   }
 }

@@ -101,5 +101,24 @@
     "communityActivity": "Community Activity",
     "hideActivity": "Hide Activity",
     "viewAllActivity": "View All Activity"
+  },
+
+  "glossaryPage": {
+    "title": "Multilingual Glossary",
+    "subtitle": "Browse categories, explore terms, and discover translations",
+    "showTranslations": "Show Translations",
+    "translationsHeader": "Translations",
+    "noTranslations": "No translations available for this term",
+    "selectTerm": "Select a term to view details and translations",
+    "loading": "Loading...",
+    "categories": "Categories",
+    "selectCategory": "Select a Category",
+    "termDetails": "Term Details",
+    "termsInCategory": "Terms in {{category}}",
+    "randomTerms": "Random Terms",
+    "searchTermsInCategory": "Search terms in {{category}}...",
+    "searchAllTerms": "Search all terms...",
+    "noTermsFound": "No terms found matching \"{{query}}\" in {{category}}.",
+    "noTermsInCategory": "No terms available in {{category}}."
   }
 }

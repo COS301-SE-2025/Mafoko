@@ -96,5 +96,23 @@
     "communityActivity": "Mishumo ya Tshitshavha",
     "hideActivity": "Dzumba Mishumo",
     "viewAllActivity": "Vhona Mishumo Yoṱhe"
+  },
+  "glossaryPage": {
+    "title": "Mutevhemaipfi wa Nyambo Nnzhi",
+    "subtitle": "Sedzulusa khethekanyo, ṱoḓisisa maipfi, wane ṱhalutshedzo",
+    "showTranslations": "Sumbedza Ṱhalutshedzo",
+    "translationsHeader": "Ṱhalutshedzo",
+    "noTranslations": "A hu na ṱhalutshedzo dzi wanalaho dza ipfi iḽi",
+    "selectTerm": "Nanga ipfi u vhone zwidodombedzwa na ṱhalutshedzo",
+    "loading": "I khou laisa...",
+    "categories": "Khethekanyo",
+    "selectCategory": "Nanga Khethekanyo",
+    "termDetails": "Zwidodombedzwa zwa Ipfi",
+    "termsInCategory": "Maipfi kha {{category}}",
+    "randomTerms": "Maipfi o Ṱanganaho",
+    "searchTermsInCategory": "Ṱoḓa maipfi kha {{category}}...",
+    "searchAllTerms": "Ṱoḓa maipfi oṱhe...",
+    "noTermsFound": "A hu na maipfi o wanalaho a fanaho na \"{{query}}\" kha {{category}}.",
+    "noTermsInCategory": "A hu na maipfi a wanalaho kha {{category}}."
   }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ChevronDown,
   ChevronRight,
@@ -153,6 +154,7 @@ const dictionaryAPI = {
 
 const GlossaryPage = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   // Set activeNav based on current path
   const initialNav = location.pathname === '/glossary' ? 'glossary' : 'search';
   const [activeNav, setActiveNav] = useState(initialNav);
@@ -568,10 +570,13 @@ const GlossaryPage = () => {
             >
               <h1 className="glossary-title">
                 <Book style={{ color: '#363b4d' }} size={40} />
-                Multilingual Glossary
+                {t('glossaryPage.title', 'Multilingual Glossary')}
               </h1>
               <p className="glossary-subtitle">
-                Browse categories, explore terms, and discover translations
+                {t(
+                  'glossaryPage.subtitle',
+                  'Browse categories, explore terms, and discover translations',
+                )}
               </p>
               {Object.keys(availableLanguages).length > 0 && (
                 <p
@@ -599,7 +604,7 @@ const GlossaryPage = () => {
               <div className="glossary-panel">
                 <h2 className="glossary-panel-title">
                   <Book size={20} />
-                  Categories
+                  {t('glossaryPage.categories', 'Categories')}
                 </h2>
                 {loading && !categories.length ? (
                   <div className="animate-pulse">
@@ -635,10 +640,14 @@ const GlossaryPage = () => {
               <div className="glossary-panel">
                 <h2 className="glossary-panel-title">
                   {selectedCategory
-                    ? `Terms in ${selectedCategory}`
+                    ? t(
+                        'glossaryPage.termsInCategory',
+                        'Terms in {{category}}',
+                        { category: selectedCategory },
+                      )
                     : categoryTerms.length > 0
-                      ? 'Random Terms'
-                      : 'Select a Category'}
+                      ? t('glossaryPage.randomTerms', 'Random Terms')
+                      : t('glossaryPage.selectCategory', 'Select a Category')}
                 </h2>
                 <div className="glossary-search">
                   <Search className="glossary-search-icon" size={16} />
@@ -646,8 +655,15 @@ const GlossaryPage = () => {
                     type="text"
                     placeholder={
                       selectedCategory
-                        ? `Search terms in ${selectedCategory}...`
-                        : 'Search all terms...'
+                        ? t(
+                            'glossaryPage.searchTermsInCategory',
+                            'Search terms in {{category}}...',
+                            { category: selectedCategory },
+                          )
+                        : t(
+                            'glossaryPage.searchAllTerms',
+                            'Search all terms...',
+                          )
                     }
                     value={searchTerm}
                     onChange={(e) => {
@@ -687,8 +703,16 @@ const GlossaryPage = () => {
                 {selectedCategory && filteredTerms.length === 0 && !loading && (
                   <div className="glossary-empty">
                     {searchTerm
-                      ? `No terms found matching "${searchTerm}" in ${selectedCategory}.`
-                      : `No terms available in ${selectedCategory}.`}
+                      ? t(
+                          'glossaryPage.noTermsFound',
+                          'No terms found matching "{{query}}" in {{category}}.',
+                          { query: searchTerm, category: selectedCategory },
+                        )
+                      : t(
+                          'glossaryPage.noTermsInCategory',
+                          'No terms available in {{category}}.',
+                          { category: selectedCategory },
+                        )}
                   </div>
                 )}
               </div>
@@ -696,7 +720,7 @@ const GlossaryPage = () => {
               <div className="glossary-panel">
                 <h2 className="glossary-panel-title">
                   <Globe size={20} />
-                  Term Details
+                  {t('glossaryPage.termDetails', 'Term Details')}
                 </h2>
                 {selectedTerm ? (
                   <div className="space-y-4">
@@ -717,14 +741,17 @@ const GlossaryPage = () => {
                       >
                         <Globe size={16} />
                         {loading && showTranslations
-                          ? 'Loading...'
-                          : 'Show Translations'}
+                          ? t('glossaryPage.loading', 'Loading...')
+                          : t(
+                              'glossaryPage.showTranslations',
+                              'Show Translations',
+                            )}
                       </button>
                     </div>
                     {showTranslations && (
                       <div className="glossary-translation-list">
                         <h4 className="font-semibold text-gray-800 mb-3">
-                          Translations
+                          {t('glossaryPage.translationsHeader', 'Translations')}
                         </h4>
                         {loading ? (
                           <div className="animate-pulse space-y-2">
@@ -751,7 +778,10 @@ const GlossaryPage = () => {
                           )
                         ) : (
                           <div className="glossary-empty">
-                            No translations available for this term
+                            {t(
+                              'glossaryPage.noTranslations',
+                              'No translations available for this term',
+                            )}
                           </div>
                         )}
                       </div>
@@ -759,7 +789,10 @@ const GlossaryPage = () => {
                   </div>
                 ) : (
                   <div className="glossary-empty">
-                    Select a term to view details and translations
+                    {t(
+                      'glossaryPage.selectTerm',
+                      'Select a term to view details and translations',
+                    )}
                   </div>
                 )}
               </div>

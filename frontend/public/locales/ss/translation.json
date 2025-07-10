@@ -98,5 +98,23 @@
     "communityActivity": "Imisebenti Yemmango",
     "hideActivity": "Fihla Imisebenti",
     "viewAllActivity": "Buka Yonkhe Imisebenti"
+  },
+  "glossaryPage": {
+    "title": "Luhla Lwemagama Ngetilimi Letinyenti",
+    "subtitle": "Buka tigaba, hlola emagama, utfole tihumusho",
+    "showTranslations": "Khombisa Tihumusho",
+    "translationsHeader": "Tihumusho",
+    "noTranslations": "Kute tihumusho letikhona taleligama",
+    "selectTerm": "Khetsa ligama kute ubone imininingwane netihumusho",
+    "loading": "Kuyalayisha...",
+    "categories": "Tigaba",
+    "selectCategory": "Khetsa Sigaba",
+    "termDetails": "Imininingwane Yeligama",
+    "termsInCategory": "Emagama ku-{{category}}",
+    "randomTerms": "Emagama Langakahleleki",
+    "searchTermsInCategory": "Sesha emagama ku-{{category}}...",
+    "searchAllTerms": "Sesha onkhe emagama...",
+    "noTermsFound": "Kute emagama latfolakele lafana ne-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Kute emagama latfolakala ku-{{category}}."
   }
 }

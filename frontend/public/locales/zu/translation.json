@@ -101,5 +101,24 @@
     "communityActivity": "Imisebenzi Yomphakathi",
     "hideActivity": "Fihla Imisebenzi",
     "viewAllActivity": "Buka Yonke Imisebenzi"
+  },
+
+  "glossaryPage": {
+    "title": "Izihumusho Zezilimi Eziningi",
+    "subtitle": "Bheka izigaba, hlola amatemu, uthole izihumusho",
+    "showTranslations": "Bonisa Izihumusho",
+    "translationsHeader": "Izihumusho",
+    "noTranslations": "Azikho izihumusho ezitholakalayo zaleli gama",
+    "selectTerm": "Khetha igama ukuze ubone imininingwane nezihumusho",
+    "loading": "Iyalayisha...",
+    "categories": "Izigaba",
+    "selectCategory": "Khetha Isigaba",
+    "termDetails": "Imininingwane Yegama",
+    "termsInCategory": "Amagama ku-{{category}}",
+    "randomTerms": "Amagama Angahleliwe",
+    "searchTermsInCategory": "Sesha amagama ku-{{category}}...",
+    "searchAllTerms": "Sesha wonke amagama...",
+    "noTermsFound": "Awekho amagama atholakele afana no-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Awekho amagama atholakalayo ku-{{category}}."
   }
 }

@@ -94,5 +94,23 @@
     "communityActivity": "Imisebenzi Yoluntu",
     "hideActivity": "Fihla Imisebenzi",
     "viewAllActivity": "Jonga Yonke Imisebenzi"
+  },
+  "glossaryPage": {
+    "title": "Uluhlu Lwamagama Ngeelwimi Ezininzi",
+    "subtitle": "Khangela iindidi, jonga amagama, ufumane iinguqulelo",
+    "showTranslations": "Bonisa Iinguqulelo",
+    "translationsHeader": "Iinguqulelo",
+    "noTranslations": "Akukho nguqulelo zifumanekayo zeli gama",
+    "selectTerm": "Khetha igama ukuze ubone iinkcukacha neenguqulelo",
+    "loading": "Iyalayisha...",
+    "categories": "Iindidi",
+    "selectCategory": "Khetha Udidi",
+    "termDetails": "Iinkcukacha Zegama",
+    "termsInCategory": "Amagama ku-{{category}}",
+    "randomTerms": "Amagama Angacwangciswanga",
+    "searchTermsInCategory": "Khangela amagama ku-{{category}}...",
+    "searchAllTerms": "Khangela onke amagama...",
+    "noTermsFound": "Akukho magama afumanekayo afana no-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Akukho magama afumanekayo ku-{{category}}."
   }
 }

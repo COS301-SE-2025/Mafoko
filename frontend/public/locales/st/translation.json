@@ -94,5 +94,23 @@
     "communityActivity": "Mesebetsi ya Setjhaba",
     "hideActivity": "Pata Mesebetsi",
     "viewAllActivity": "Bona Mesebetsi Kaofela"
+  },
+  "glossaryPage": {
+    "title": "Lenane la Mantswe a Dipuo tse Ngata",
+    "subtitle": "Sheba dikarolo, fuputsa mantswe, fumana diphetolelo",
+    "showTranslations": "Bontsha Diphetolelo",
+    "translationsHeader": "Diphetolelo",
+    "noTranslations": "Ha ho diphetolelo tse fumanehang bakeng sa lentswe lena",
+    "selectTerm": "Kgetha lentswe ho bona dintlha le diphetolelo",
+    "loading": "E a laeta...",
+    "categories": "Dikarolo",
+    "selectCategory": "Kgetha Karolo",
+    "termDetails": "Dintlha tsa Lentswe",
+    "termsInCategory": "Mantswe ho {{category}}",
+    "randomTerms": "Mantswe a sa Hlophiswang",
+    "searchTermsInCategory": "Batla mantswe ho {{category}}...",
+    "searchAllTerms": "Batla mantswe ohle...",
+    "noTermsFound": "Ha ho mantswe a fumanehileng a tshwanang le \"{{query}}\" ho {{category}}.",
+    "noTermsInCategory": "Ha ho mantswe a fumanehang ho {{category}}."
   }
 }

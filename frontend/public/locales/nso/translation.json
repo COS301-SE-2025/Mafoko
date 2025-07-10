@@ -98,5 +98,23 @@
     "communityActivity": "Ditiro tša Setšhaba",
     "hideActivity": "Fihla Ditiro",
     "viewAllActivity": "Bona Ditiro Kamoka"
+  },
+  "glossaryPage": {
+    "title": "Lenaneontšu la Maleme a Mantši",
+    "subtitle": "Lebelela magoro, nyakišiša mantšu, hwetša diphetolelo",
+    "showTranslations": "Bontšha Diphetolelo",
+    "translationsHeader": "Diphetolelo",
+    "noTranslations": "Ga go na diphetolelo tše di hwetšagalago tša lentšu le",
+    "selectTerm": "Kgetha lentšu go bona dintlha le diphetolelo",
+    "loading": "E a laetša...",
+    "categories": "Magoro",
+    "selectCategory": "Kgetha Sehlopha",
+    "termDetails": "Dintlha tša Lentšu",
+    "termsInCategory": "Mantšu go {{category}}",
+    "randomTerms": "Mantšu a go se Beakanywe",
+    "searchTermsInCategory": "Nyaka mantšu go {{category}}...",
+    "searchAllTerms": "Nyaka mantšu ka moka...",
+    "noTermsFound": "Ga go mantšu ao a hwetšwago ao a swanago le \"{{query}}\" go {{category}}.",
+    "noTermsInCategory": "Ga go mantšu ao a hwetšagalago go {{category}}."
   }
 }

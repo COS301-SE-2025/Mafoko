@@ -98,5 +98,23 @@
     "communityActivity": "Gemeenskap Aktiwiteit",
     "hideActivity": "Versteek Aktiwiteit",
     "viewAllActivity": "Sien Alle Aktiwiteit"
+  },
+  "glossaryPage": {
+    "title": "Veeltalige Woordelys",
+    "subtitle": "Verken kategorieë, ontdek terme en vind vertalings",
+    "showTranslations": "Wys Vertalings",
+    "translationsHeader": "Vertalings",
+    "noTranslations": "Geen vertalings beskikbaar vir hierdie term nie",
+    "selectTerm": "Kies 'n term om besonderhede en vertalings te sien",
+    "loading": "Laai tans...",
+    "categories": "Kategorieë",
+    "selectCategory": "Kies 'n Kategorie",
+    "termDetails": "Termbesonderhede",
+    "termsInCategory": "Terme in {{category}}",
+    "randomTerms": "Ewekansige Terme",
+    "searchTermsInCategory": "Soek terme in {{category}}...",
+    "searchAllTerms": "Soek alle terme...",
+    "noTermsFound": "Geen terme gevind wat ooreenstem met \"{{query}}\" in {{category}} nie.",
+    "noTermsInCategory": "Geen terme beskikbaar in {{category}} nie."
   }
 }

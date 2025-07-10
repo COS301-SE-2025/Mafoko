@@ -98,5 +98,23 @@
     "communityActivity": "Ditiro tsa Baagi",
     "hideActivity": "Fitlha Ditiro",
     "viewAllActivity": "Bona Ditiro Tsotlhe"
+  },
+  "glossaryPage": {
+    "title": "Lenanetlhalosi la Dipuo tse Dintsi",
+    "subtitle": "Lebelela dikarolo, batlisisa mafoko, bona diphetolelo",
+    "showTranslations": "Bontsha Diphetolelo",
+    "translationsHeader": "Diphetolelo",
+    "noTranslations": "Ga go na diphetolelo tse di leng teng tsa lefoko le",
+    "selectTerm": "Tlhopha lefoko go bona dintlha le diphetolelo",
+    "loading": "E a laisa...",
+    "categories": "Dikarolo",
+    "selectCategory": "Tlhopha Karolo",
+    "termDetails": "Dintlha tsa Lefoko",
+    "termsInCategory": "Mafoko mo {{category}}",
+    "randomTerms": "Mafoko a a sa Rulaganngwang",
+    "searchTermsInCategory": "Batla mafoko mo {{category}}...",
+    "searchAllTerms": "Batla mafoko otlhe...",
+    "noTermsFound": "Ga go mafoko a a fitlhelwang a a tshwanang le \"{{query}}\" mo {{category}}.",
+    "noTermsInCategory": "Ga go mafoko a a fitlhelwang mo {{category}}."
   }
 }
