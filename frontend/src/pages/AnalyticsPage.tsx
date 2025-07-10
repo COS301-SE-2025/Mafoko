@@ -8,6 +8,7 @@ import Histogram from '../components/data/Histogram';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar.tsx';
 import { API_ENDPOINTS } from '../config';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 import {
   Chart as ChartJS,
@@ -127,9 +128,9 @@ const AnalyticsPage: React.FC = () => {
   // UI state
   const [activeMenuItem, setActiveMenuItem] = useState('analytics');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isLoading, setIsLoading] = useState(true);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const handleResize = () => {
@@ -241,15 +242,6 @@ const AnalyticsPage: React.FC = () => {
     );
     return topLanguage[0].charAt(0).toUpperCase() + topLanguage[0].slice(1);
   };
-
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
