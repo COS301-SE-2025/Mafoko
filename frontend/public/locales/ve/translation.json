@@ -187,8 +187,18 @@
     "pagination": {
       "previous": "Murahu",
       "next": "Phanḓa",
-      "pageInfo": "Siaṱari {{current}} kha {{total}}"
+      "pageInfo": "Siaṭari {{current}} kha {{total}}"
     },
     "searchPlaceholder": "Ipfi ḽa u ṱoḓa"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Ri Nga Ni Thusa Hani?",
+    "commonTopics": "Mafhungo a Ḓoweleaho",
+    "articleLink": "Athikili →",
+    "cantFind": "A ni wani zwine na khou ṱoḓa?",
+    "submitRequest": "Rumelani khumbelo →",
+    "previous": "Yo fhiraho",
+    "next": "I tevhelaho",
+    "pageInfo": "Siaṱari {{current}} kha {{total}}"
   }
 }

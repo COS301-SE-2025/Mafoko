@@ -192,5 +192,15 @@
       "next": "Volgende",
       "pageInfo": "Bladsy {{current}} van {{total}}"
     }
+  },
+  "helpPage": {
+    "howCanWeHelp": "Hoe Kan Ons Help?",
+    "commonTopics": "Algemene Onderwerpe",
+    "articleLink": "Artikel →",
+    "cantFind": "Kan jy nie kry wat jy soek nie?", 
+    "submitRequest": "Dien 'n versoek in →",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "pageInfo": "Bladsy {{current}} van {{total}}"
   }
 }

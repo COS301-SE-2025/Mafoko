@@ -192,5 +192,15 @@
       "pageInfo": "Likhasi {{current}} kuma-{{total}}"
     },
     "searchPlaceholder": "Ligama lekufuna"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Singakusita Kanjani?",
+    "commonTopics": "Tindzaba Letivamile",
+    "articleLink": "Indaba →",
+    "cantFind": "Awutfoli loko lokufunako?",
+    "submitRequest": "Tfumela sicelo →",
+    "previous": "Longendvulela",
+    "next": "Lolandzelako",
+    "pageInfo": "Likhasi {{current}} kwa-{{total}}"
   }
 }

@@ -198,5 +198,16 @@
       "next": "Okulandelayo",
       "pageInfo": "Ikhasi {{current}} kwa-{{total}}"
     }
+  },
+
+  "helpPage": {
+    "howCanWeHelp": "Singakusiza Kanjani?",
+    "commonTopics": "Izihloko Ezijwayelekile",
+    "articleLink": "Indaba →",
+    "cantFind": "Akutholi okudingayo?",
+    "submitRequest": "Thumela isicelo →",
+    "previous": "Okudlule",
+    "next": "Okulandelayo",
+    "pageInfo": "Ikhasi {{current}} kwi-{{total}}"
   }
 }

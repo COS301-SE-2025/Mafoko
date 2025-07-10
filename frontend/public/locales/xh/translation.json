@@ -188,5 +188,15 @@
       "pageInfo": "Iphepha {{current}} kwi-{{total}}"
     },
     "searchPlaceholder": "Igama lokukhangela"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Singakunceda Njani?",
+    "commonTopics": "Izihloko Eziqhelekileyo",
+    "articleLink": "Inqaku →",
+    "cantFind": "Akufumani oko ukufunayo?",
+    "submitRequest": "Thumela isicelo →",
+    "previous": "Engaphambili",
+    "next": "Elandelayo",
+    "pageInfo": "Iphepha {{current}} kwi-{{total}}"
   }
 }

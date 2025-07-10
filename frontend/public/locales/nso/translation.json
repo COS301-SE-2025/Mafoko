@@ -192,5 +192,15 @@
       "pageInfo": "Letlakala la {{current}} go tša {{total}}"
     },
     "searchPlaceholder": "Lentšu la go nyaka"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Re Ka Go Thuša Bjang?",
+    "commonTopics": "Ditaba tša Tlwaelo",
+    "articleLink": "Sengwalwa →",
+    "cantFind": "O ka se hwetše seo o se nyakago?",
+    "submitRequest": "Romela kgopelo →",
+    "previous": "Ya go feta",
+    "next": "Ye e latelago",
+    "pageInfo": "Letlakala {{current}} la {{total}}"
   }
 }

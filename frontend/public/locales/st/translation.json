@@ -188,5 +188,15 @@
       "next": "Pele",
       "pageInfo": "Leqephe la {{current}} ho tsa {{total}}"
     }
+  },
+  "helpPage": {
+    "howCanWeHelp": "Re Ka O Thusa Jwang?",
+    "commonTopics": "Ditaba Tse Tlwaelehileng",
+    "articleLink": "Atikele →",
+    "cantFind": "Ha o fumane seo o se batlang?",
+    "submitRequest": "Romela kopo →",
+    "previous": "E fetileng",
+    "next": "E latelang",
+    "pageInfo": "Leqephe {{current}} ho {{total}}"
   }
 }

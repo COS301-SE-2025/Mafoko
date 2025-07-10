@@ -192,5 +192,15 @@
       "pageInfo": "Pheji ya {{current}} eka {{total}}"
     },
     "searchPlaceholder": "Rito ro lava"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Hi Nga Mi Pfuna Njhani?",
+    "commonTopics": "Timhaka Leti Tolovelekeke",
+    "articleLink": "Xitsalwana →",
+    "cantFind": "U nga kumi leswi u swi lavaka?",
+    "submitRequest": "Rhumela xikombelo →",
+    "previous": "Leyi hundzeke",
+    "next": "Leyi landzelaka",
+    "pageInfo": "Pheji {{current}} ya {{total}}"
   }
 }

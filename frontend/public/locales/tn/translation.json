@@ -192,5 +192,15 @@
       "pageInfo": "Tsebe {{current}} ya {{total}}"
     },
     "searchPlaceholder": "Lefoko la go batla"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Re Ka Go Thusa Jang?",
+    "commonTopics": "Dikgang Tse Di Tlwaelegileng",
+    "articleLink": "Athikele →",
+    "cantFind": "Ga o bone se o se batlang?",
+    "submitRequest": "Romela kopo →",
+    "previous": "E fetileng",
+    "next": "E latelang",
+    "pageInfo": "Tsebe {{current}} ya {{total}}"
   }
 }

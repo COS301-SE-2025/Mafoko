@@ -192,5 +192,15 @@
       "pageInfo": "Ikhasi {{current}} kwama-{{total}}"
     },
     "searchPlaceholder": "Igama lokufuna"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Singakusiza Bunjani?",
+    "commonTopics": "Iindaba Ezijayelekileko",
+    "articleLink": "Indatjana →",
+    "cantFind": "Awukghoni ukuthola lokho okufunako?",
+    "submitRequest": "Thumela isibawo →",
+    "previous": "Yangaphambili",
+    "next": "Elandelako",
+    "pageInfo": "Ikhasi {{current}} kwa-{{total}}"
   }
 }

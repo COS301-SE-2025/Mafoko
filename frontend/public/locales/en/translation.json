@@ -198,5 +198,16 @@
       "next": "Next",
       "pageInfo": "Page {{current}} of {{total}}"
     }
+  },
+
+  "helpPage": {
+    "howCanWeHelp": "How Can We Help?",
+    "commonTopics": "Common Topics",
+    "articleLink": "Article →",
+    "cantFind": "Can't find what you're looking for?",
+    "submitRequest": "Submit a request →",
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {{current}} of {{total}}"
   }
 }
