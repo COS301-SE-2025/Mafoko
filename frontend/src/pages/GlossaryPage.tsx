@@ -214,11 +214,21 @@ const GlossaryPage = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [showExportPopup, setShowExportPopup] = useState(false);
   const exportPopupRef = useRef<HTMLDivElement>(null);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const exportContainerRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
   useEffect(() => {
     void loadInitialData();
     loadUserData();
+  }, []);
+
+  // Add glossary-page class to body for specific mobile styles
+  useEffect(() => {
+    document.body.classList.add('glossary-page');
+    return () => {
+      document.body.classList.remove('glossary-page');
+    };
   }, []);
 
   // Determines if the side nav or top nav should be used.
@@ -248,6 +258,33 @@ const GlossaryPage = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [exportPopupRef]);
+
+  // Handle scroll events to detect when we're near the bottom of the page
+  const handleScroll = useCallback(() => {
+    // Only apply bottom detection for mobile
+    if (window.innerWidth <= 768) {
+      const scrollPosition = window.scrollY + window.innerHeight;
+      const bottomThreshold = document.body.scrollHeight - 100; // 100px from the bottom
+
+      if (scrollPosition >= bottomThreshold && !isAtBottom) {
+        setIsAtBottom(true);
+      } else if (scrollPosition < bottomThreshold && isAtBottom) {
+        setIsAtBottom(false);
+      }
+    }
+  }, [isAtBottom]);
+
+  // Add scroll event listener
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    // Initial check
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   const loadInitialData = async (): Promise<void> => {
     setLoading(true);
@@ -525,14 +562,21 @@ const GlossaryPage = () => {
               className="glossary-profile-section"
               style={{
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: window.innerWidth > 767 ? 'flex-end' : 'center',
                 alignItems: 'center',
                 width: '100%',
-                padding: '1rem 1rem 1rem 1.5rem',
+                padding:
+                  window.innerWidth > 767 ? '1rem 1rem 1rem 1.5rem' : '0.75rem',
                 flexShrink: 0,
-                zIndex: 10,
+                zIndex: window.innerWidth > 767 ? 10 : 15,
                 boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                marginRight: '0.75rem',
+                marginRight: window.innerWidth > 767 ? '0.75rem' : '0',
+                marginTop: window.innerWidth > 767 ? '0' : '15px',
+                position: window.innerWidth > 767 ? 'relative' : 'fixed',
+                top: window.innerWidth > 767 ? 'auto' : '0',
+                left: window.innerWidth > 767 ? 'auto' : '0',
+                backgroundColor:
+                  window.innerWidth > 767 ? 'transparent' : 'var(--profile-bg)',
               }}
             >
               {isLoadingUserData ? (
@@ -646,7 +690,7 @@ const GlossaryPage = () => {
                   flex: 1,
                   minHeight: 400,
                   overflow: 'visible',
-                  marginBottom: '1rem',
+                  marginBottom: window.innerWidth <= 768 ? '2rem' : '1rem',
                   position: 'relative',
                 }}
               >
@@ -895,12 +939,8 @@ const GlossaryPage = () => {
               {/* Export Data Button at Bottom */}
               {categoryTerms.length > 0 && (
                 <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '1rem',
-                    marginBottom: '1rem',
-                  }}
+                  className={`glossary-export-container ${isAtBottom ? 'at-bottom' : ''}`}
+                  ref={exportContainerRef}
                 >
                   <button
                     type="button"
@@ -957,7 +997,7 @@ const GlossaryPage = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   zIndex: 1000,
-                  paddingLeft: '220px', // Account for sidebar
+                  paddingLeft: window.innerWidth > 767 ? '220px' : '0', // Account for sidebar on desktop only
                 }}
                 onClick={() => {
                   setShowExportPopup(false);
@@ -970,10 +1010,10 @@ const GlossaryPage = () => {
                     backgroundColor: 'var(--download-bg)',
                     borderRadius: '12px',
                     padding: '1.5rem',
-                    minWidth: '400px',
-                    maxWidth: '500px',
+                    minWidth: window.innerWidth > 767 ? '400px' : '300px',
+                    maxWidth: window.innerWidth > 767 ? '500px' : '95vw',
                     position: 'relative',
-                    marginLeft: '2rem', // Move slightly to the right
+                    marginLeft: window.innerWidth > 767 ? '2rem' : '0', // Move slightly to the right on desktop only
                     boxShadow:
                       '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                   }}
@@ -993,15 +1033,16 @@ const GlossaryPage = () => {
                       right: '1rem',
                       backgroundColor: 'transparent',
                       border: 'none',
-                      fontSize: '1.5rem',
+                      fontSize: window.innerWidth > 767 ? '1.5rem' : '1.75rem',
                       cursor: 'pointer',
                       color: 'var(--text-theme)',
-                      width: '32px',
-                      height: '32px',
+                      width: window.innerWidth > 767 ? '32px' : '44px',
+                      height: window.innerWidth > 767 ? '32px' : '44px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderRadius: '4px',
+                      padding: 0,
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor =
@@ -1048,7 +1089,10 @@ const GlossaryPage = () => {
                   </div>
 
                   {/* Format Options */}
-                  <div style={{ display: 'grid', gap: '0.75rem' }}>
+                  <div
+                    className="glossary-format-options"
+                    style={{ display: 'grid', gap: '0.75rem' }}
+                  >
                     <button
                       type="button"
                       onClick={() => {

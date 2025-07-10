@@ -26,6 +26,7 @@ $text-dark: #ffffff;
   --profile-bg: #{$secondary-light}; /* White background for profile section in light mode */
   --download-bg: #{$secondary-light}; /* White background for download section in light mode */
   --page-bg: #{$background-light};
+  --page-bg-semitrans: rgba(245, 245, 245, 0.98); /* More opaque background for overlays in light mode */
 }
 
 .theme-dark {
@@ -39,6 +40,7 @@ $text-dark: #ffffff;
   --profile-bg: #{$secondary-dark}; /* Dark background for profile section in dark mode */
   --download-bg: #{$secondary-dark}; /* Dark background for download section in dark mode */
   --page-bg: #{$background-dark};
+  --page-bg-semitrans: rgba(54, 59, 77, 0.98); /* More opaque background for overlays in dark mode */
 }
 
 .dashboard-container {
@@ -52,10 +54,29 @@ $text-dark: #ffffff;
 .main-content {
   flex: 1;
   background-color: var(--page-bg);
+  padding-top: 1px; /* Add some padding at top */
+  
+  @media (max-width: 767px) {
+    padding-bottom: 120px; /* Further increased padding at bottom for mobile to ensure export button visibility */
+    padding-top: 0; /* Remove top padding on mobile */
+    overflow-y: auto; /* Allow scrolling on mobile */
+    display: flex;
+    flex-direction: column;
+    margin-top: -5px; /* Small negative margin to reduce space above */
+  }
 }
 
 .top-bar {
   padding: 1rem;
+  
+  @media (max-width: 767px) {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 15;
+  }
 }
 
 .hamburger-icon {
@@ -92,13 +113,20 @@ $text-dark: #ffffff;
 .glossary-content {
   margin: 0;
   padding: 0 16px;
+  margin-top: -50px; /* Shift content up to make room for export button */
+  
+  /* Adjust for mobile view */
+  @media (max-width: 767px) {
+    padding-bottom: 100px; /* Increased padding to the bottom for export button */
+    margin-top: 0; /* No negative margin on mobile to accommodate profile section */
+    padding-top: 55px; /* Further reduced padding to minimize navbar-profile spacing */
+  }
 }
 
 .glossary-container {
   width: 100%;
-  /* No margin needed as we're using the same layout as analytics page */
   margin-right: 1rem; /* Add right margin for better spacing */
-  margin-top: 1rem; /* Add top margin for better spacing */
+  margin-top: 0px; /* Reduced top margin to shift content up */
   margin-bottom: 1rem; /* Add bottom margin for better spacing */
   flex: 1;
   display: flex;
@@ -172,7 +200,7 @@ $text-dark: #ffffff;
 
 .glossary-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem; /* Reduced bottom margin to save vertical space */
 }
 
 .glossary-title {
@@ -233,8 +261,8 @@ $text-dark: #ffffff;
 
 .glossary-grid {
   display: grid;
-  gap: 1rem;
-  height: 100%;
+  gap: 0.75rem; /* Reduced gap to fit more content vertically */
+  height: calc(100% - 50px); /* Reduce height to make room for export button */
   overflow: hidden;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto;
@@ -252,10 +280,13 @@ $text-dark: #ffffff;
     max-width: 100%;
     margin: 0 0.5rem; /* Reduced margins on mobile */
     padding: 0 0.25rem; /* Reduced padding on mobile */
+    height: auto; /* Allow height to adjust based on content */
+    overflow: visible; /* Allow content to flow */
+    padding-bottom: 100px; /* Increased space for export button to prevent overlap */
   }
   .glossary-panel {
-    min-height: 300px;
-    max-height: 400px;
+    min-height: 200px; /* Reduced from 300px */
+    max-height: 330px; /* Further reduced max height to avoid overlap with export button */
   }
 }
 
@@ -308,8 +339,8 @@ $text-dark: #ffffff;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 400px;
-  max-height: 100%;
+  min-height: 350px; /* Reduced min-height to fit more content */
+  max-height: calc(100vh - 200px); /* Adjusted to make sure export button is visible */
   overflow: hidden;
   border: 1px solid var(--glossary-border-color);
   transition: all 0.2s ease-in-out;
@@ -672,12 +703,27 @@ $text-dark: #ffffff;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  
+  @media (max-width: 767px) {
+    padding: 0.4rem 0.75rem;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 0.375rem;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0;
+    margin-bottom: 0.3rem;
+  }
 }
 
 .profile-info {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  
+  @media (max-width: 767px) {
+    gap: 0.5rem;
+  }
 }
 
 .profile-avatar {
@@ -691,12 +737,22 @@ $text-dark: #ffffff;
   color: white;
   font-weight: 600;
   font-size: 1rem;
+  
+  @media (max-width: 767px) {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.8rem;
+  }
 }
 
 .profile-details {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  
+  @media (max-width: 767px) {
+    gap: 0.125rem;
+  }
 }
 
 .profile-details h3 {
@@ -704,6 +760,10 @@ $text-dark: #ffffff;
   font-weight: 600;
   color: var(--text-theme);
   margin: 0;
+  
+  @media (max-width: 767px) {
+    font-size: 0.875rem;
+  }
 }
 
 .profile-details p {
@@ -711,6 +771,32 @@ $text-dark: #ffffff;
   color: var(--text-theme);
   opacity: 0.7;
   margin: 0;
+  
+  @media (max-width: 767px) {
+    font-size: 0.75rem;
+  }
+}
+
+/* Fix for very small mobile devices */
+@media (max-width: 375px) {
+  .profile-section {
+    padding: 0.5rem;
+  }
+  
+  .profile-info {
+    max-width: 100%;
+  }
+  
+  .profile-details {
+    max-width: 150px;
+    overflow: hidden;
+  }
+  
+  .profile-details h3, .profile-details p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 /* Download Section Styles */
@@ -800,6 +886,17 @@ $text-dark: #ffffff;
 .glossary-profile-section {
   background-color: var(--profile-bg) !important;
   border-bottom: 1px solid var(--glossary-border-color) !important;
+  
+  @media (max-width: 767px) {
+    padding: 0.75rem 0.5rem !important;
+    margin-right: 0 !important;
+    justify-content: center !important;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 0.5rem !important;
+    position: relative !important;
+    margin-top: 5px !important; /* Further reduced space between navbar and profile section */
+    z-index: 5 !important; /* Lower than navbar but above content */
+  }
 }
 
 /* Inline download section styles */
@@ -850,22 +947,33 @@ $text-dark: #ffffff;
   color: white !important; /* Keep white text on colored button */
 }
 
-/* Format dropdown menu item styles */
+/* Format menu item styles for export popup */
 .glossary-format-menu-item {
-  color: var(--text-theme) !important;
-  background-color: transparent !important;
-  
-  &:hover {
-    background-color: var(--bg-first) !important;
+  @media (max-width: 767px) {
+    padding: 0.75rem !important;
+    border: 1px solid var(--glossary-border-color) !important;
+    margin-bottom: 0.5rem !important;
+    border-radius: 6px !important;
+    
+    /* Increase touch target size */
+    min-height: 60px !important;
+    
+    /* Make the format icon larger on mobile */
+    svg {
+      width: 20px !important;
+      height: 20px !important;
+    }
   }
 }
 
-/* Translations header styles */
-.glossary-translations-header {
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--text-theme) !important;
-  font-size: 0.875rem;
+/* Style for the format options section */
+.glossary-format-options {
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
 }
 
 /* Loading skeleton styles */
@@ -916,23 +1024,111 @@ $text-dark: #ffffff;
   }
   
   @media (max-width: 767px) {
-    top: 0.5rem !important;
-    right: 0.5rem !important;
-    padding: 0.4rem 0.6rem !important;
-    font-size: 0.75rem !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+    position: relative !important;
+    z-index: 1001 !important; /* Ensure button appears above other content */
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 90% !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(240, 10, 80, 0.35) !important;
+    margin-bottom: 5px !important; /* Add some bottom margin */
   }
 }
 
 .glossary-export-popup {
   @media (max-width: 767px) {
-    min-width: 300px !important;
-    max-width: 90vw !important;
-    margin-left: 0 !important;
-    padding: 1rem !important;
+    width: 100% !important;
+    max-width: 95vw !important;
+    margin: 0 auto !important;
+    padding: 1.25rem 1rem !important;
+    border-radius: 12px !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+    
+    /* Improve mobile touch targets */
+    button {
+      min-height: 44px !important;
+      margin-bottom: 0.75rem !important;
+    }
+    
+    /* Add spacing between options */
+    label {
+      padding: 0.5rem 0 !important;
+      display: block !important;
+    }
+    
+    /* Make checkboxes more touch-friendly */
+    input[type="checkbox"] {
+      width: 20px !important;
+      height: 20px !important;
+      margin-right: 10px !important;
+    }
   }
   
   @media (min-width: 768px) and (max-width: 1023px) {
     min-width: 350px !important;
     margin-left: 1rem !important;
+  }
+}
+
+/* Export button container styling */
+.glossary-export-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 50;
+  
+  @media (max-width: 767px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0.75rem 0.75rem 1rem 0.75rem; /* Added bottom padding */
+    background-color: var(--page-bg-semitrans);
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+}
+
+/* Special style for export container when at bottom of page */
+.glossary-export-container.at-bottom {
+  @media (max-width: 767px) {
+    background-color: var(--bg-tir);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+    padding-top: 0.9rem;
+    padding-bottom: 1.2rem;
+  }
+}
+
+/* Mobile layout improvements */
+@media (max-width: 767px) {
+  /* Fix position of elements in the mobile layout */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Ensure proper spacing after navbar */
+  .glossary-profile-section {
+    top: 2px !important; /* Position much closer to navbar */
+  }
+  
+  /* Fix for hiding scrollbar on mobile while still enabling scrolling */
+  body.glossary-page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Ensure content has space below the profile section */
+  .glossary-header {
+    margin-top: 5px;
   }
 }
