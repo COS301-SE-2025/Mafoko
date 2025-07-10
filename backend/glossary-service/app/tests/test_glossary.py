@@ -58,6 +58,7 @@ async def mock_get_terms_by_category(category_name: str):
             "term": "hello",
             "definition": "A greeting",
             "category": category_name,
+            "language": "English",
         }
     ]
 
@@ -67,7 +68,13 @@ async def mock_search_terms(query: str):
     if query == "nonexistent":
         return []
     return [
-        {"id": "123", "term": "hello", "definition": "A greeting", "category": "Common"}
+        {
+            "id": "123",
+            "term": "hello",
+            "definition": "A greeting",
+            "category": "Common",
+            "language": "English",
+        }
     ]
 
 

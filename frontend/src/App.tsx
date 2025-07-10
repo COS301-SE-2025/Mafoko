@@ -34,14 +34,7 @@ function App() {
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route
-          path="/glossary"
-          element={
-            <div style={{ margin: '-50px' }}>
-              <GlossaryPage />
-            </div>
-          }
-        />
+        <Route path="/glossary" element={<GlossaryPage />} />
       </Routes>
     </div>
   );

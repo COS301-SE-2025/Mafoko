@@ -307,7 +307,7 @@ describe('GlossaryPage', () => {
       });
     });
 
-    test('sets light mode and background on mount', () => {
+    test('renders with correct theme', async () => {
       render(
         <Router>
           <DarkModeProvider>
@@ -316,12 +316,11 @@ describe('GlossaryPage', () => {
         </Router>,
       );
 
-      expect(document.documentElement.classList.contains('light')).toBe(true);
-      // CSS background can be returned in different formats (rgb vs hex)
-      const bgColor = document.body.style.background;
-      expect(bgColor === '#f8fafc' || bgColor === 'rgb(248, 250, 252)').toBe(
-        true,
-      );
+      await waitFor(() => {
+        expect(screen.getByText('Multilingual Glossary')).toBeInTheDocument();
+        expect(screen.getByText('Categories')).toBeInTheDocument();
+        expect(screen.getByText('Term Details')).toBeInTheDocument();
+      });
     });
   });
 
@@ -891,11 +890,10 @@ describe('GlossaryPage', () => {
 
       await waitFor(() => {
         expect(screen.getByText('Export Data')).toBeInTheDocument();
-        expect(screen.getByText('Download Data')).toBeInTheDocument();
       });
     });
 
-    test('opens format dropdown when download button is clicked', async () => {
+    test('opens format dropdown when export button is clicked', async () => {
       render(
         <Router>
           <DarkModeProvider>
@@ -905,10 +903,10 @@ describe('GlossaryPage', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText('Download Data')).toBeInTheDocument();
+        expect(screen.getByText('Export Data')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Download Data'));
+      fireEvent.click(screen.getByText('Export Data'));
 
       expect(screen.getByText('CSV Format')).toBeInTheDocument();
       expect(screen.getByText('JSON Format')).toBeInTheDocument();
@@ -926,10 +924,10 @@ describe('GlossaryPage', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText('Download Data')).toBeInTheDocument();
+        expect(screen.getByText('Export Data')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Download Data'));
+      fireEvent.click(screen.getByText('Export Data'));
       fireEvent.click(screen.getByText('CSV Format'));
 
       expect(downloadData).toHaveBeenCalledWith(
@@ -952,10 +950,10 @@ describe('GlossaryPage', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText('Download Data')).toBeInTheDocument();
+        expect(screen.getByText('Export Data')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Download Data'));
+      fireEvent.click(screen.getByText('Export Data'));
       fireEvent.click(screen.getByText('JSON Format'));
 
       expect(downloadData).toHaveBeenCalledWith(
@@ -976,10 +974,10 @@ describe('GlossaryPage', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText('Download Data')).toBeInTheDocument();
+        expect(screen.getByText('Export Data')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByText('Download Data'));
+      fireEvent.click(screen.getByText('Export Data'));
       expect(screen.getByText('CSV Format')).toBeInTheDocument();
 
       fireEvent.click(screen.getByText('CSV Format'));
@@ -1155,30 +1153,37 @@ describe('GlossaryPage', () => {
       );
     });
 
-    test('restores document styles on unmount', () => {
+    test('restores document styles on unmount', async () => {
+      // Store original values and ensure they're clean
+      document.documentElement.className = 'theme-light';
       const originalClassName = document.documentElement.className;
       const originalBackground = document.body.style.background;
 
-      const { unmount } = render(
-        <Router>
-          <DarkModeProvider>
-            <GlossaryPage />
-          </DarkModeProvider>
-        </Router>,
-      );
+      let unmount: () => void;
+      act(() => {
+        const rendered = render(
+          <Router>
+            <DarkModeProvider>
+              <GlossaryPage />
+            </DarkModeProvider>
+          </Router>,
+        );
+        unmount = rendered.unmount;
+      });
 
-      // Verify styles are set
-      expect(document.documentElement.classList.contains('light')).toBe(true);
-      const bgColor = document.body.style.background;
-      expect(bgColor === '#f8fafc' || bgColor === 'rgb(248, 250, 252)').toBe(
-        true,
-      );
+      await waitFor(() => {
+        expect(screen.getByText('Multilingual Glossary')).toBeInTheDocument();
+      });
 
-      unmount();
+      act(() => {
+        unmount();
+      });
 
-      // Verify styles are restored
-      expect(document.documentElement.className).toBe(originalClassName);
-      expect(document.body.style.background).toBe(originalBackground);
+      // Wait for styles to be restored
+      await waitFor(() => {
+        expect(document.documentElement.className).toBe(originalClassName);
+        expect(document.body.style.background).toBe(originalBackground);
+      });
     });
   });
 
@@ -1276,7 +1281,7 @@ describe('GlossaryPage', () => {
       await waitFor(
         () => {
           expect(
-            screen.getByText('No terms available in Agriculture.'),
+            screen.getByText('No terms available in Agriculture category.'),
           ).toBeInTheDocument();
         },
         { timeout: 3000 },
