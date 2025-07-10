@@ -1,4 +1,4 @@
-# search-service/app/tests/conftest.py
+# glossary-service/app/tests/conftest.py
 import asyncio
 import pytest_asyncio
 from typing import AsyncGenerator
