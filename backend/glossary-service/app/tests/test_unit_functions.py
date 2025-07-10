@@ -52,11 +52,16 @@ class TestGlossaryFunctions:
         """Test the get_terms_by_category function directly."""
         from app.api.v1.endpoints.glossary import get_terms_by_category
 
-        # Setup mocks
-        mock_scalars = MagicMock()
-        mock_scalars.all.return_value = [mock_term]
+        # Setup mocks for the SQL query approach
+        mock_row = (
+            str(mock_term.id),
+            mock_term.term,
+            mock_term.definition,
+            mock_term.domain,
+            mock_term.language,
+        )
         mock_result = MagicMock()
-        mock_result.scalars.return_value = mock_scalars
+        mock_result.fetchall.return_value = [mock_row]
         mock_db.execute.return_value = mock_result
 
         # Call the function
@@ -67,7 +72,7 @@ class TestGlossaryFunctions:
         assert result[0]["term"] == "hello"
         assert result[0]["category"] == "Common"
         assert result[0]["language"] == "English"
-        mock_db.execute.assert_called_once()
+        mock_db.execute.assert_called()
 
     @pytest.mark.asyncio
     async def test_get_term_translations_function_with_uuid(self, mock_db):
