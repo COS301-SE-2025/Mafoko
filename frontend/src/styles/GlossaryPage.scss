@@ -5,7 +5,8 @@ $accent-pink: #f00a50;
 $accent-yellow: #f2d001;
 $accent-teal: #00ceaf;
 $accent-blue: #212431;
-$accent-white: #ffffff;$background-light: #f5f5f5;
+$accent-white: #ffffff;
+$background-light: #f5f5f5;
 $background-dark: #363b4d;
 $secondary-light: #ffffff;
 $secondary-dark: #212431;
@@ -26,7 +27,12 @@ $text-dark: #ffffff;
   --profile-bg: #{$secondary-light}; /* White background for profile section in light mode */
   --download-bg: #{$secondary-light}; /* White background for download section in light mode */
   --page-bg: #{$background-light};
-  --page-bg-semitrans: rgba(245, 245, 245, 0.98); /* More opaque background for overlays in light mode */
+  --page-bg-semitrans: rgba(
+    245,
+    245,
+    245,
+    0.98
+  ); /* More opaque background for overlays in light mode */
 }
 
 .theme-dark {
@@ -40,7 +46,12 @@ $text-dark: #ffffff;
   --profile-bg: #{$secondary-dark}; /* Dark background for profile section in dark mode */
   --download-bg: #{$secondary-dark}; /* Dark background for download section in dark mode */
   --page-bg: #{$background-dark};
-  --page-bg-semitrans: rgba(54, 59, 77, 0.98); /* More opaque background for overlays in dark mode */
+  --page-bg-semitrans: rgba(
+    54,
+    59,
+    77,
+    0.98
+  ); /* More opaque background for overlays in dark mode */
 }
 
 .dashboard-container {
@@ -55,7 +66,7 @@ $text-dark: #ffffff;
   flex: 1;
   background-color: var(--page-bg);
   padding-top: 1px; /* Add some padding at top */
-  
+
   @media (max-width: 767px) {
     padding-bottom: 120px; /* Further increased padding at bottom for mobile to ensure export button visibility */
     padding-top: 0; /* Remove top padding on mobile */
@@ -68,7 +79,7 @@ $text-dark: #ffffff;
 
 .top-bar {
   padding: 1rem;
-  
+
   @media (max-width: 767px) {
     padding: 0.75rem;
     display: flex;
@@ -114,7 +125,7 @@ $text-dark: #ffffff;
   margin: 0;
   padding: 0 16px;
   margin-top: -50px; /* Shift content up to make room for export button */
-  
+
   /* Adjust for mobile view */
   @media (max-width: 767px) {
     padding-bottom: 100px; /* Increased padding to the bottom for export button */
@@ -137,7 +148,7 @@ $text-dark: #ffffff;
   .hamburger-icon {
     display: block;
   }
-  
+
   .top-bar {
     display: flex;
     justify-content: space-between;
@@ -145,7 +156,7 @@ $text-dark: #ffffff;
     padding: 0.75rem 1rem;
     background-color: var(--bg-secondary);
   }
-  
+
   .glossary-container {
     margin-left: 0; /* No margin on mobile since Navbar is used instead of LeftNav */
     margin-right: 0.5rem; /* Reduced margin on mobile */
@@ -340,7 +351,9 @@ $text-dark: #ffffff;
   flex-direction: column;
   height: 100%;
   min-height: 350px; /* Reduced min-height to fit more content */
-  max-height: calc(100vh - 200px); /* Adjusted to make sure export button is visible */
+  max-height: calc(
+    100vh - 200px
+  ); /* Adjusted to make sure export button is visible */
   overflow: hidden;
   border: 1px solid var(--glossary-border-color);
   transition: all 0.2s ease-in-out;
@@ -703,7 +716,7 @@ $text-dark: #ffffff;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   @media (max-width: 767px) {
     padding: 0.4rem 0.75rem;
     margin-left: 0;
@@ -720,7 +733,7 @@ $text-dark: #ffffff;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  
+
   @media (max-width: 767px) {
     gap: 0.5rem;
   }
@@ -737,7 +750,7 @@ $text-dark: #ffffff;
   color: white;
   font-weight: 600;
   font-size: 1rem;
-  
+
   @media (max-width: 767px) {
     width: 1.8rem;
     height: 1.8rem;
@@ -749,7 +762,7 @@ $text-dark: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  
+
   @media (max-width: 767px) {
     gap: 0.125rem;
   }
@@ -760,7 +773,7 @@ $text-dark: #ffffff;
   font-weight: 600;
   color: var(--text-theme);
   margin: 0;
-  
+
   @media (max-width: 767px) {
     font-size: 0.875rem;
   }
@@ -771,7 +784,7 @@ $text-dark: #ffffff;
   color: var(--text-theme);
   opacity: 0.7;
   margin: 0;
-  
+
   @media (max-width: 767px) {
     font-size: 0.75rem;
   }
@@ -782,17 +795,18 @@ $text-dark: #ffffff;
   .profile-section {
     padding: 0.5rem;
   }
-  
+
   .profile-info {
     max-width: 100%;
   }
-  
+
   .profile-details {
     max-width: 150px;
     overflow: hidden;
   }
-  
-  .profile-details h3, .profile-details p {
+
+  .profile-details h3,
+  .profile-details p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -886,7 +900,7 @@ $text-dark: #ffffff;
 .glossary-profile-section {
   background-color: var(--profile-bg) !important;
   border-bottom: 1px solid var(--glossary-border-color) !important;
-  
+
   @media (max-width: 767px) {
     padding: 0.75rem 0.5rem !important;
     margin-right: 0 !important;
@@ -954,10 +968,10 @@ $text-dark: #ffffff;
     border: 1px solid var(--glossary-border-color) !important;
     margin-bottom: 0.5rem !important;
     border-radius: 6px !important;
-    
+
     /* Increase touch target size */
     min-height: 60px !important;
-    
+
     /* Make the format icon larger on mobile */
     svg {
       width: 20px !important;
@@ -987,7 +1001,7 @@ $text-dark: #ffffff;
 /* Export Data section styles */
 .glossary-inline-download-section {
   background-color: var(--download-bg);
-  
+
   /* Mobile: Full width */
   @media (max-width: 767px) {
     width: calc(100% - 1rem) !important;
@@ -996,7 +1010,7 @@ $text-dark: #ffffff;
     min-height: 40px !important;
     max-height: 60px !important;
   }
-  
+
   /* Tablet: Half width */
   @media (min-width: 768px) and (max-width: 1023px) {
     width: calc(50% - 1rem) !important;
@@ -1005,7 +1019,7 @@ $text-dark: #ffffff;
     min-height: 45px !important;
     max-height: 65px !important;
   }
-  
+
   /* Desktop: Match Term Details panel (1/3 width) */
   @media (min-width: 1024px) {
     width: calc(33.33% - 1rem) !important;
@@ -1022,7 +1036,7 @@ $text-dark: #ffffff;
     transform: translateY(-1px) !important;
     box-shadow: 0 4px 12px rgba(240, 10, 80, 0.4) !important;
   }
-  
+
   @media (max-width: 767px) {
     padding: 0.75rem 1rem !important;
     font-size: 0.9rem !important;
@@ -1046,27 +1060,27 @@ $text-dark: #ffffff;
     border-radius: 12px !important;
     max-height: 85vh !important;
     overflow-y: auto !important;
-    
+
     /* Improve mobile touch targets */
     button {
       min-height: 44px !important;
       margin-bottom: 0.75rem !important;
     }
-    
+
     /* Add spacing between options */
     label {
       padding: 0.5rem 0 !important;
       display: block !important;
     }
-    
+
     /* Make checkboxes more touch-friendly */
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       width: 20px !important;
       height: 20px !important;
       margin-right: 10px !important;
     }
   }
-  
+
   @media (min-width: 768px) and (max-width: 1023px) {
     min-width: 350px !important;
     margin-left: 1rem !important;
@@ -1082,7 +1096,7 @@ $text-dark: #ffffff;
   margin-bottom: 1rem;
   position: relative;
   z-index: 50;
-  
+
   @media (max-width: 767px) {
     position: fixed;
     bottom: 0;
@@ -1094,7 +1108,9 @@ $text-dark: #ffffff;
     box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     backdrop-filter: blur(8px);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease;
   }
 }
 
@@ -1115,18 +1131,18 @@ $text-dark: #ffffff;
     display: flex;
     flex-direction: column;
   }
-  
+
   /* Ensure proper spacing after navbar */
   .glossary-profile-section {
     top: 2px !important; /* Position much closer to navbar */
   }
-  
+
   /* Fix for hiding scrollbar on mobile while still enabling scrolling */
   body.glossary-page {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   /* Ensure content has space below the profile section */
   .glossary-header {
     margin-top: 5px;
