@@ -186,6 +186,7 @@
       "previous": "Ngaphambili",
       "next": "Okulandelayo",
       "pageInfo": "Iphepha {{current}} kwi-{{total}}"
-    }
+    },
+    "searchPlaceholder": "Igama lokukhangela"
   }
 }

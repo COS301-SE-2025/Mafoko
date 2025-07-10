@@ -185,6 +185,7 @@
   },
 
   "searchPage": {
+    "searchPlaceholder": "Search term",
     "language": "Language",
     "domain": "Domain",
     "fuzzySearch": "Fuzzy Search",

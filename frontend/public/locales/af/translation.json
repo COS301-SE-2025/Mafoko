@@ -179,6 +179,7 @@
     }
   },
   "searchPage": {
+    "searchPlaceholder": "Soekterm",
     "language": "Taal",
     "domain": "Domein",
     "fuzzySearch": "Wasige Soektog",

@@ -190,6 +190,7 @@
       "previous": "Endzhaku",
       "next": "Mahlweni",
       "pageInfo": "Pheji ya {{current}} eka {{total}}"
-    }
+    },
+    "searchPlaceholder": "Rito ro lava"
   }
 }

@@ -190,6 +190,7 @@
       "previous": "Morago",
       "next": "Pele",
       "pageInfo": "Letlakala la {{current}} go tša {{total}}"
-    }
+    },
+    "searchPlaceholder": "Lentšu la go nyaka"
   }
 }

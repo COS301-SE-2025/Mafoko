@@ -175,6 +175,7 @@
     }
   },
   "searchPage": {
+    "searchPlaceholder": "Lentswe la ho batla",
     "language": "Puo",
     "domain": "Sebaka",
     "fuzzySearch": "Patlo e sa Tobileng",

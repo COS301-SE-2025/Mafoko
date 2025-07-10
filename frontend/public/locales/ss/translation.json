@@ -190,6 +190,7 @@
       "previous": "Emuva",
       "next": "Embili",
       "pageInfo": "Likhasi {{current}} kuma-{{total}}"
-    }
+    },
+    "searchPlaceholder": "Ligama lekufuna"
   }
 }

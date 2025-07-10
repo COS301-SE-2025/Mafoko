@@ -185,6 +185,7 @@
   },
 
   "searchPage": {
+    "searchPlaceholder": "Faka igama lokusesha",
     "language": "Ulimi",
     "domain": "Isizinda",
     "fuzzySearch": "Ukucinga Okungacacile",

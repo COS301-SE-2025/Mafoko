@@ -190,6 +190,7 @@
       "previous": "Morago",
       "next": "Pele",
       "pageInfo": "Tsebe {{current}} ya {{total}}"
-    }
+    },
+    "searchPlaceholder": "Lefoko la go batla"
   }
 }

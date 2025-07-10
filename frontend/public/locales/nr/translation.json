@@ -190,6 +190,7 @@
       "previous": "Emuva",
       "next": "Phambili",
       "pageInfo": "Ikhasi {{current}} kwama-{{total}}"
-    }
+    },
+    "searchPlaceholder": "Igama lokufuna"
   }
 }
