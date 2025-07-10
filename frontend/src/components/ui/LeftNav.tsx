@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface LeftNavProps {
   activeItem: string;
@@ -32,7 +33,10 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     <div className={`left-nav ${isDarkMode ? 'dark-mode' : ''}`}>
       {/* Header */}
       <div className="left-nav-header">
-        <h2 className="left-nav-app-title">Marito</h2>
+        <div className="left-nav-title-section">
+          <h2 className="left-nav-app-title">Marito</h2>
+          <LanguageSwitcher />
+        </div>
         <div className="logo-container">
           <img
             src="./icons/maskable_icon_x512.png"

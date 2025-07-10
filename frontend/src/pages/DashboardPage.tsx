@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
-import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 
@@ -320,24 +319,15 @@ const DashboardPage: React.FC = () => {
               <div className="profile-info">
                 <div className="profile-avatar">{avatarInitials}</div>
                 <div className="profile-details">
-                  <div
+                  <h3
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
+                      color: isDarkMode ? '#f0f0f0' : '#333333', // or your own theme colors
                     }}
                   >
-                    <LanguageSwitcher />
-                    <h3
-                      style={{
-                        color: isDarkMode ? '#f0f0f0' : '#333333', // or your own theme colors
-                      }}
-                    >
-                      {userData
-                        ? `${userData.firstName} ${userData.lastName}`
-                        : t('dashboard.userName')}
-                    </h3>
-                  </div>
+                    {userData
+                      ? `${userData.firstName} ${userData.lastName}`
+                      : t('dashboard.userName')}
+                  </h3>
                   <p>
                     {t('dashboard.userId')}: {userData ? userData.uuid : 'N/A'}
                   </p>
