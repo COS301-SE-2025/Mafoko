@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import '../../styles/Navbar.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 
@@ -31,22 +32,24 @@ const Navbar = () => {
   const [active, setActive] = useState('');
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
+  const { t } = useTranslation();
+
   const navItems = useMemo(
     () => [
-      'Homepage',
-      'Dictionary',
-      'Glossary',
-      'Saved Terms',
-      'Dashboard',
-      'Help',
+      t('navigation.home'),
+      t('navigation.dictionary'),
+      t('navigation.glossary'),
+      t('navigation.savedTerms'),
+      t('navigation.dashboard'),
+      t('navigation.help'),
     ],
-    [],
+    [t],
   );
 
   // Custom route mapping for navigation items
   const getRouteForItem = (item: string): string => {
     switch (item) {
-      case 'Homepage':
+      case 'Home':
         return '/dashboard';
       case 'Dictionary':
         return '/search';
@@ -195,7 +198,7 @@ const Navbar = () => {
             aria-label="Toggle dark mode"
           >
             {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
-            {isDarkMode ? 'Light' : 'Dark'}
+            {t('navigation.darkMode')}
           </button>
 
           {/* Avatar Display */}

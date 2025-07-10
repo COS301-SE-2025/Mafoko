@@ -9,9 +9,15 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px;
-  color: #1f2937;
+  font-size: 18px;
+  color: var(--bg-secondary);
   padding: 4px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.language-switcher-button:hover {
+  opacity: 1;
 }
 
 .language-dropdown-menu {
