@@ -1,12 +1,7 @@
 {
-  "appTitle": "Mavito",
-  "loading": "Loading...",
-
   "landingPage": {
-    "greeting": "Welcome to Mavito PWA!",
     "registerButton": "Register",
-    "loginButton": "Login",
-    "footerText": "Mavito Project"
+    "loginButton": "Login"
   },
 
   "loginPage": {
@@ -63,35 +58,156 @@
     "errorUnexpectedFormat": "Error: {{detailJson}}",
     "errorWithStatus": "Registration failed (status {{status}}). Please try again.",
     "errorNetwork": "An error occurred: {{message}}.",
-    "errorUnknownNetwork": "An unknown network error occurred. Please try again."
+    "errorUnknownNetwork": "An unknown network error occurred. Please try again.",
+    "registerAsLabel": "Register As",
+    "registerAsPlaceholder": "Select your role",
+    "registerAsOptions": {
+      "contributor": "Contributor",
+      "linguist": "Linguist",
+      "researcher": "Researcher",
+      "student": "Student"
+    },
+    "userTypeLabels": {
+      "normalUser": "Normal User",
+      "applyingLinguist": "Applying as a Linguist"
+    }
   },
 
-  "languageSwitcher": {
-    "selectLanguage": "Select Language"
+  "navigation": {
+    "home": "Home",
+    "dictionary": "Dictionary",
+    "glossary": "Glossary",
+    "savedTerms": "Saved Terms",
+    "dashboard": "Dashboard",
+    "help": "Help",
+    "darkMode": "Dark Mode"
   },
+
   "dashboard": {
-    "welcome": "Welcome back, Contributor!",
+    "welcome": "Welcome to Mavito",
+    "welcomeBack": "Welcome back",
+    "userName": "User Name",
+    "userId": "User ID",
     "quickActions": "Quick Actions",
     "searchNow": "Search Now",
-    "searchDescription": "Explore our multilingual database",
+    "searchDescription": "Search for terminology in multiple languages",
     "downloadResources": "Download Resources",
-    "downloadDescription": "Access content offline",
-    "contributeTerm": "Contribute a Term",
-    "contributeDescription": "Help grow our database",
-    "recentTerms": "Recently Viewed Terms",
-    "viewAll": "View All Recent Terms",
+    "downloadDescription": "Access and download terminology resources",
+    "contributeTerm": "Contribute Term",
+    "contributeDescription": "Add new terms to our database",
+    "recentTerms": "Recent Terms",
     "hideTerms": "Hide Terms",
+    "viewAll": "View All",
     "communityActivity": "Community Activity",
-    "viewAllActivity": "View All Activity",
     "hideActivity": "Hide Activity",
-    "userName": "User Name",
-    "userId": "User ID"
+    "viewAllActivity": "View All Activity"
   },
 
-  "leftPane": {
-    "dashboard": "Dashboard",
-    "search": "Search",
-    "savedTerms": "Saved Terms",
-    "analytics": "Analytics"
+  "glossaryPage": {
+    "title": "Multilingual Glossary",
+    "subtitle": "Browse categories, explore terms, and discover translations",
+    "showTranslations": "Show Translations",
+    "translationsHeader": "Translations",
+    "noTranslations": "No translations available for this term",
+    "selectTerm": "Select a term to view details and translations",
+    "loading": "Loading...",
+    "categories": "Categories",
+    "selectCategory": "Select a Category",
+    "termDetails": "Term Details",
+    "termsInCategory": "Terms in {{category}}",
+    "randomTerms": "Random Terms",
+    "searchTermsInCategory": "Search terms in {{category}}...",
+    "searchAllTerms": "Search all terms...",
+    "noTermsFound": "No terms found matching \"{{query}}\" in {{category}}.",
+    "noTermsInCategory": "No terms available in {{category}}."
+  },
+
+  "analytics": {
+    "loading": "Loading analytics data...",
+    "stats": {
+      "totalTerms": "Total Terms",
+      "uniqueLanguages": "Unique Languages",
+      "uniqueDomains": "Unique Domains",
+      "topLanguage": "Top Language"
+    },
+    "popularTerms": {
+      "title": "Popular Terms",
+      "subtitle": "Most frequently used terms across all domains"
+    },
+    "categoryDistribution": {
+      "title": "Category Distribution",
+      "subtitle": "Terms grouped by statistical domains"
+    },
+    "topDomains": {
+      "title": "Top Domains",
+      "subtitle": "Most active statistical domains"
+    },
+    "trendsAndInsights": {
+      "title": "Trends & Insights",
+      "subtitle": "Data-driven insights and trends analysis",
+      "languageDiversity": {
+        "title": "Language Diversity Index",
+        "coverage": "of South African languages covered",
+        "terms": "terms"
+      },
+      "domainFocus": {
+        "title": "Domain Focus Areas"
+      },
+      "dataQuality": {
+        "title": "Data Quality Metrics",
+        "completenessScore": "Completeness Score",
+        "translationCoverage": "Translation Coverage",
+        "definitionQuality": "Definition Quality"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Analytics Summary",
+      "subtitle": "Overview of data quality and performance metrics",
+      "dataQualityScore": {
+        "title": "Data Quality Score",
+        "subtitle": "Complete Coverage"
+      },
+      "coverageEfficiency": {
+        "title": "Coverage Efficiency",
+        "subtitle": "Distribution Quality",
+        "excellent": "Excellent",
+        "good": "Good"
+      },
+      "popularCategory": {
+        "title": "Most Popular Category",
+        "subtitle": "Leading Domain"
+      },
+      "termGrowth": {
+        "title": "Term Growth Rate",
+        "subtitle": "This Month"
+      }
+    }
+  },
+
+  "searchPage": {
+    "searchPlaceholder": "Search term",
+    "language": "Language",
+    "domain": "Domain",
+    "fuzzySearch": "Fuzzy Search",
+    "loading": "Loading...",
+    "noResults": "No results found for \"{{term}}\".",
+    "showAll": "Show All",
+    "showTermsWithLetter": "Show terms starting with {{letter}}",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {{current}} of {{total}}"
+    }
+  },
+
+  "helpPage": {
+    "howCanWeHelp": "How Can We Help?",
+    "commonTopics": "Common Topics",
+    "articleLink": "Article →",
+    "cantFind": "Can't find what you're looking for?",
+    "submitRequest": "Submit a request →",
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {{current}} of {{total}}"
   }
 }

@@ -1,0 +1,206 @@
+{
+  "navigation": {
+    "home": "Kaya",
+    "dictionary": "Dikixinari",
+    "glossary": "Nongoloko wa marito",
+    "savedTerms": "Marito lama Hlayisiweke",
+    "dashboard": "Bodo",
+    "help": "Mpfuno",
+    "darkMode": "Muxaka wa ntima"
+  },
+  
+  "landingPage": {
+    "registerButton": "Tsarisa",
+    "loginButton": "Nghena"
+  },
+  "loginPage": {
+    "title": "MI AMUKELIWA NAKAMBE!",
+    "subtitle": "Hi kombela mi nghenisa vuxokoxoko bya n'wina ku nghena.",
+    "emailLabel": "Imeyili",
+    "emailPlaceholder": "Nghenisa adirese ya n'wina ya imeyili",
+    "passwordLabel": "Phasiwedi",
+    "passwordPlaceholder": "Nghenisa phasiwedi ya n'wina",
+    "rememberMe": "Ndzi tsundzuka",
+    "forgotPassword": "Mi Rivele Phasiwedi?",
+    "loginButton": "Nghena",
+    "orDivider": "KUMBE",
+    "loginWithGoogle": "Nghena hi Google",
+    "noAccount": "A mi na akhawunti?",
+    "registerLink": "Tsarisa",
+    "welcomeImageAlt": "Ku amukela ka Mavito",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorTokenMissing": "Mi nghenile hi ndzundzo, kambe ku hava thokeni leyi amukeriweke. Hi kombela mi tihlanganisa na mpfuno.",
+    "errorDefault": "Ku nghena ku tsandzekile. Hi kombela mi kambisisa vuxokoxoko bya n'wina.",
+    "errorUnexpectedFormat": "Xihoxo xa ku nghena (xiyimo {{status}}). Xivumbeko xa xihoxo lexi nga languteriwangiki.",
+    "errorWithStatus": "Ku nghena ku tsandzekile (xiyimo {{status}}). Hi kombela mi ringeta nakambe.",
+    "errorNetwork": "Ku ve na xihoxo: {{message}}.",
+    "errorUnknownNetwork": "Ku ve na xihoxo xa netiweke lexi nga tivekiki. Hi kombela mi ringeta nakambe."
+  },
+  "registrationPage": {
+    "title": "SUNGULA SWESWI",
+    "subtitle": "Endla akhawunti ya wena ya Mavito.",
+    "firstNameLabel": "Vito ro Sungula",
+    "firstNamePlaceholder": "Nghenisa vito ra wena ro sungula",
+    "lastNameLabel": "Xivongo",
+    "lastNamePlaceholder": "Nghenisa xivongo xa wena",
+    "emailLabel": "Imeyili",
+    "emailPlaceholder": "Nghenisa adirese ya wena ya imeyili",
+    "passwordLabel": "Phasiwedi",
+    "passwordPlaceholder": "Endla phasiwedi",
+    "confirmPasswordLabel": "Tiyisisa Phasiwedi",
+    "confirmPasswordPlaceholder": "Tiyisisa phasiwedi ya wena",
+    "agreeToTerms": "Ndza pfumela eka",
+    "termsAndConditionsLink": "Milawu na Swipimelo",
+    "createAccountButton": "Endla Akhawunti",
+    "creatingAccountButton": "Ya Endliwa...",
+    "orDivider": "KUMBE",
+    "createWithGoogle": "Endla Akhawunti hi Google",
+    "haveAccount": "Se u na akhawunti?",
+    "loginLink": "Nghena",
+    "welcomeImageAlt": "Ku amukela eka Mavito",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorPasswordsDoNotMatch": "Tiphasiwedi a ti fanani.",
+    "errorAgreeToTerms": "U fanele ku pfumela eka milawu na swipimelo.",
+    "alertSuccess": "U tsarisile hi ndzundzo! Hi kombela u ya emahlweni u nghena.",
+    "errorDefault": "Ku tsarisa ku tsandzekile. Hi kombela u ringeta nakambe.",
+    "errorUnexpectedFormat": "Xihoxo: {{detailJson}}",
+    "errorWithStatus": "Ku tsarisa ku tsandzekile (xiyimo {{status}}). Hi kombela u ringeta nakambe.",
+    "errorNetwork": "Ku ve na xihoxo: {{message}}.",
+    "errorUnknownNetwork": "Ku ve na xihoxo xa netiweke lexi nga tivekiki. Hi kombela u ringeta nakambe.",
+    "registerAsLabel": "Tsarisa Tanihi",
+    "registerAsPlaceholder": "Hlawula ntirho wa wena",
+    "registerAsOptions": {
+      "contributor": "Muyimeri",
+      "linguist": "Mutivi wa Ririmi",
+      "researcher": "Mulavisisi",
+      "student": "Mudyondzi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Mutirhisi wa Ntolovelo",
+      "applyingLinguist": "Ku tsarisa tanihi Mutivi wa Ririmi"
+    }
+  },
+  "dashboard": {
+    "welcome": "Mi amukeriwa eka Mavito",
+    "welcomeBack": "Mi tlhela mi amukeriwa",
+    "userName": "Vito ra Mutirhisi",
+    "userId": "Nomboro ya Mutirhisi",
+    "quickActions": "Swiendlo swa Xihatla",
+    "searchNow": "Lavisisa Sweswi",
+    "searchDescription": "Lavisisa marito hi tindzimi to tala",
+    "downloadResources": "Koka Switirhisiwa",
+    "downloadDescription": "Kuma na ku koka switirhisiwa swa marito",
+    "contributeTerm": "Hoxa Rito",
+    "contributeDescription": "Engetela marito mantshwa eka databeyisi ya hina",
+    "recentTerms": "Marito ya Sweswi",
+    "hideTerms": "Tumbeta Marito",
+    "viewAll": "Vona Hinkwaswo",
+    "communityActivity": "Mitirho ya Vaaki",
+    "hideActivity": "Tumbeta Mitirho",
+    "viewAllActivity": "Vona Mitirho Hinkwayo"
+  },
+  "glossaryPage": {
+    "title": "Nongoloko wa Marito hi Tindzimi to Tala",
+    "subtitle": "Languta swiyenge, lavisisa marito, kuma mahundzuluxo",
+    "showTranslations": "Komba Mahundzuluxo",
+    "translationsHeader": "Mahundzuluxo",
+    "noTranslations": "Ku hava mahundzuluxo lama nga kona ya rito leri",
+    "selectTerm": "Hlawula rito ku vona vuxokoxoko na mahundzuluxo",
+    "loading": "Ya layicha...",
+    "categories": "Swiyenge",
+    "selectCategory": "Hlawula Xiyenge",
+    "termDetails": "Vuxokoxoko bya Rito",
+    "termsInCategory": "Marito eka {{category}}",
+    "randomTerms": "Marito yo Hlawuleka",
+    "searchTermsInCategory": "Lavisisa marito eka {{category}}...",
+    "searchAllTerms": "Lavisisa marito hinkwawo...",
+    "noTermsFound": "Ku hava marito lama kumekaka lama fanaka na \"{{query}}\" eka {{category}}.",
+    "noTermsInCategory": "Ku hava marito lama kumekaka eka {{category}}."
+  },
+  "analytics": {
+    "loading": "Ya layicha data ya analytics...",
+    "stats": {
+      "totalTerms": "Marito Hinkwawo",
+      "uniqueLanguages": "Tindzimi to Hambana",
+      "uniqueDomains": "Swiyenge swo Hambana",
+      "topLanguage": "Ririmi ro Rhanga"
+    },
+    "popularTerms": {
+      "title": "Marito yo Tsakeriwa",
+      "subtitle": "Marito lama tirhisiwaka ngopfu eka swiyenge hinkwaswo"
+    },
+    "categoryDistribution": {
+      "title": "Ku Hangalasiwa ka Swiyenge",
+      "subtitle": "Marito lama hlengeletiweke hi swiyenge swa switatistiki"
+    },
+    "topDomains": {
+      "title": "Swiyenge swa le Henhla",
+      "subtitle": "Swiyenge swa switatistiki swo tirha ngopfu"
+    },
+    "trendsAndInsights": {
+      "title": "Mintolovelo na Vutivi",
+      "subtitle": "Nxopaxopo lowu hlanganisiweke na data na mbuyelo",
+      "languageDiversity": {
+        "title": "Mpimo wa ku Hambana ka Tindzimi",
+        "coverage": "wa tindzimi ta Afrika-Dzonga leti tirhisiweke",
+        "terms": "marito"
+      },
+      "domainFocus": {
+        "title": "Tindhawu to Kongomisa"
+      },
+      "dataQuality": {
+        "title": "Mimpimo ya Nkoka wa Data",
+        "completenessScore": "Mpimo wa ku Hetiseka",
+        "translationCoverage": "Nkunguhato wa Mahundzuluxo",
+        "definitionQuality": "Nkoka wa Tinhlamuselo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Nkomiso wa Analytics",
+      "subtitle": "Nkambisiso wa nkoka wa data na mimpimo ya matirhelo",
+      "dataQualityScore": {
+        "title": "Mpimo wa Nkoka wa Data",
+        "subtitle": "Nkunguhato wo Hetiseka"
+      },
+      "coverageEfficiency": {
+        "title": "Vuswikoti bya Nkunguhato",
+        "subtitle": "Nkoka wa Ku Hangalasiwa",
+        "excellent": "Kahle Swinene",
+        "good": "Kahle"
+      },
+      "popularCategory": {
+        "title": "Xiyenge xo Tsakeriwa Ngopfu",
+        "subtitle": "Xiyenge xo Rhanga"
+      },
+      "termGrowth": {
+        "title": "Mpimo wa Ku Kula ka Marito",
+        "subtitle": "N'hweti Leyi"
+      }
+    }
+  },
+  "searchPage": {
+    "language": "Ririmi",
+    "domain": "Ndhawu",
+    "fuzzySearch": "Ku Lavalava",
+    "loading": "Ku Layicha...",
+    "noResults": "Ku hava mbuyelo wa \"{{term}}\".",
+    "showAll": "Komba Hinkwaswo",
+    "showTermsWithLetter": "Komba marito lama sungulaka hi {{letter}}",
+    "pagination": {
+      "previous": "Endzhaku",
+      "next": "Mahlweni",
+      "pageInfo": "Pheji ya {{current}} eka {{total}}"
+    },
+    "searchPlaceholder": "Rito ro lava"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Hi Nga Mi Pfuna Njhani?",
+    "commonTopics": "Timhaka Leti Tolovelekeke",
+    "articleLink": "Xitsalwana →",
+    "cantFind": "U nga kumi leswi u swi lavaka?",
+    "submitRequest": "Rhumela xikombelo →",
+    "previous": "Leyi hundzeke",
+    "next": "Leyi landzelaka",
+    "pageInfo": "Pheji {{current}} ya {{total}}"
+  }
+}

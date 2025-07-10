@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import HorizontalBarChart from '../components/data/HorizontalBarChart';
 import type { TermData } from '../components/data/HorizontalBarChart';
 import { FaGlobe, FaChartLine, FaDatabase, FaLanguage } from 'react-icons/fa';
@@ -116,6 +117,8 @@ const colorPalette = [
 ];
 
 const AnalyticsPage: React.FC = () => {
+  const { t } = useTranslation();
+
   // State for various data sources
   const [categoryData, setCategoryData] = useState<TermData[]>([]);
   const [popularTermsData, setPopularTermsData] = useState<TermData[]>([]);
@@ -302,7 +305,7 @@ const AnalyticsPage: React.FC = () => {
                 color: 'var(--text-color)',
               }}
             >
-              <div>Loading analytics data...</div>
+              <div>{t('analytics.loading')}</div>
             </div>
           ) : (
             <>
@@ -310,25 +313,25 @@ const AnalyticsPage: React.FC = () => {
               <div className="stats-overview-section">
                 <div className="stat-cards-grid">
                   <StatCard
-                    title="Total Terms"
+                    title={t('analytics.stats.totalTerms')}
                     value={totalStatistics?.total_terms || 0}
                     icon={<FaDatabase className="stat-icon" />}
                     isDarkMode={isDarkMode}
                   />
                   <StatCard
-                    title="Unique Languages"
+                    title={t('analytics.stats.uniqueLanguages')}
                     value={totalStatistics?.unique_languages || 0}
                     icon={<FaLanguage className="stat-icon" />}
                     isDarkMode={isDarkMode}
                   />
                   <StatCard
-                    title="Unique Domains"
+                    title={t('analytics.stats.uniqueDomains')}
                     value={totalStatistics?.unique_domains || 0}
                     icon={<FaGlobe className="stat-icon" />}
                     isDarkMode={isDarkMode}
                   />
                   <StatCard
-                    title="Top Language"
+                    title={t('analytics.stats.topLanguage')}
                     value={getTopLanguage()}
                     icon={<FaChartLine className="stat-icon" />}
                     isDarkMode={isDarkMode}
@@ -344,7 +347,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-gray-800 text-xl font-semibold m-0 "
                         style={{ color: 'var(--text-color)' }}
                       >
-                        Popular Terms
+                        {t('analytics.popularTerms.title')}
                       </h2>
                       <p
                         className="chart-subtitle"
@@ -354,7 +357,7 @@ const AnalyticsPage: React.FC = () => {
                           margin: '0.25rem 0 0 0',
                         }}
                       >
-                        Most frequently used terms across all domains
+                        {t('analytics.popularTerms.subtitle')}
                       </p>
                     </div>
                     <div className="mt-4 px-2">
@@ -375,7 +378,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-gray-800 text-xl font-semibold m-0 "
                         style={{ color: 'var(--text-color)' }}
                       >
-                        Category Distribution
+                        {t('analytics.categoryDistribution.title')}
                       </h2>
                       <p
                         className="chart-subtitle"
@@ -385,7 +388,7 @@ const AnalyticsPage: React.FC = () => {
                           margin: '0.25rem 0 0 0',
                         }}
                       >
-                        Terms grouped by statistical domains
+                        {t('analytics.categoryDistribution.subtitle')}
                       </p>
                     </div>
                     <div className="mt-4 px-2">
@@ -407,7 +410,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-xl font-semibold m-0"
                         style={{ color: 'var(--text-color)' }}
                       >
-                        Top Domains
+                        {t('analytics.topDomains.title')}
                       </h2>
                       <p
                         className="chart-subtitle"
@@ -417,7 +420,7 @@ const AnalyticsPage: React.FC = () => {
                           margin: '0.25rem 0 0 0',
                         }}
                       >
-                        Most active statistical domains
+                        {t('analytics.topDomains.subtitle')}
                       </p>
                     </div>
                     <div className="pie-chart-wrapper">
@@ -463,7 +466,7 @@ const AnalyticsPage: React.FC = () => {
                     className="text-2xl font-bold"
                     style={{ color: 'var(--text-color)', margin: 0 }}
                   >
-                    Trends & Insights
+                    {t('analytics.trendsAndInsights.title')}
                   </h2>
                   <p
                     style={{
@@ -472,7 +475,7 @@ const AnalyticsPage: React.FC = () => {
                       margin: '0.5rem 0 0 0',
                     }}
                   >
-                    Data-driven insights and trends analysis
+                    {t('analytics.trendsAndInsights.subtitle')}
                   </p>
                 </div>
 
@@ -491,7 +494,9 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Language Diversity Index
+                        {t(
+                          'analytics.trendsAndInsights.languageDiversity.title',
+                        )}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem' }}>
@@ -518,7 +523,9 @@ const AnalyticsPage: React.FC = () => {
                           fontSize: '0.875rem',
                         }}
                       >
-                        of South African languages covered
+                        {t(
+                          'analytics.trendsAndInsights.languageDiversity.coverage',
+                        )}
                       </div>
                       <div
                         className="language-breakdown"
@@ -553,7 +560,10 @@ const AnalyticsPage: React.FC = () => {
                                   fontSize: '0.875rem',
                                 }}
                               >
-                                {count} terms
+                                {count}{' '}
+                                {t(
+                                  'analytics.trendsAndInsights.languageDiversity.terms',
+                                )}
                               </span>
                             </div>
                           ))}
@@ -568,7 +578,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Domain Focus Areas
+                        {t('analytics.trendsAndInsights.domainFocus.title')}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem' }}>
@@ -652,7 +662,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Data Quality Metrics
+                        {t('analytics.trendsAndInsights.dataQuality.title')}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem' }}>
@@ -668,7 +678,9 @@ const AnalyticsPage: React.FC = () => {
                               marginBottom: '0.25rem',
                             }}
                           >
-                            Completeness Score
+                            {t(
+                              'analytics.trendsAndInsights.dataQuality.completenessScore',
+                            )}
                           </div>
                           <div
                             style={{
@@ -717,7 +729,9 @@ const AnalyticsPage: React.FC = () => {
                               marginBottom: '0.25rem',
                             }}
                           >
-                            Translation Coverage
+                            {t(
+                              'analytics.trendsAndInsights.dataQuality.translationCoverage',
+                            )}
                           </div>
                           <div
                             style={{
@@ -763,7 +777,9 @@ const AnalyticsPage: React.FC = () => {
                               marginBottom: '0.25rem',
                             }}
                           >
-                            Definition Quality
+                            {t(
+                              'analytics.trendsAndInsights.dataQuality.definitionQuality',
+                            )}
                           </div>
                           <div
                             style={{
@@ -819,7 +835,7 @@ const AnalyticsPage: React.FC = () => {
                     className="text-2xl font-bold"
                     style={{ color: 'var(--text-color)', margin: 0 }}
                   >
-                    Analytics Summary
+                    {t('analytics.analyticsSummary.title')}
                   </h2>
                   <p
                     style={{
@@ -828,7 +844,7 @@ const AnalyticsPage: React.FC = () => {
                       margin: '0.5rem 0 0 0',
                     }}
                   >
-                    Overview of data quality and performance metrics
+                    {t('analytics.analyticsSummary.subtitle')}
                   </p>
                 </div>
 
@@ -847,7 +863,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Data Quality Score
+                        {t('analytics.analyticsSummary.dataQualityScore.title')}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem', textAlign: 'center' }}>
@@ -872,7 +888,9 @@ const AnalyticsPage: React.FC = () => {
                           fontSize: '0.875rem',
                         }}
                       >
-                        Complete Coverage
+                        {t(
+                          'analytics.analyticsSummary.dataQualityScore.subtitle',
+                        )}
                       </div>
                     </div>
                   </div>
@@ -884,7 +902,9 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Coverage Efficiency
+                        {t(
+                          'analytics.analyticsSummary.coverageEfficiency.title',
+                        )}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem', textAlign: 'center' }}>
@@ -896,7 +916,13 @@ const AnalyticsPage: React.FC = () => {
                           marginBottom: '0.5rem',
                         }}
                       >
-                        {categoryData.length > 10 ? 'Excellent' : 'Good'}
+                        {categoryData.length > 10
+                          ? t(
+                              'analytics.analyticsSummary.coverageEfficiency.excellent',
+                            )
+                          : t(
+                              'analytics.analyticsSummary.coverageEfficiency.good',
+                            )}
                       </div>
                       <div
                         style={{
@@ -904,7 +930,9 @@ const AnalyticsPage: React.FC = () => {
                           fontSize: '0.875rem',
                         }}
                       >
-                        Distribution Quality
+                        {t(
+                          'analytics.analyticsSummary.coverageEfficiency.subtitle',
+                        )}
                       </div>
                     </div>
                   </div>
@@ -916,7 +944,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Most Popular Category
+                        {t('analytics.analyticsSummary.popularCategory.title')}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem', textAlign: 'center' }}>
@@ -940,7 +968,9 @@ const AnalyticsPage: React.FC = () => {
                           fontSize: '0.875rem',
                         }}
                       >
-                        Leading Domain
+                        {t(
+                          'analytics.analyticsSummary.popularCategory.subtitle',
+                        )}
                       </div>
                     </div>
                   </div>
@@ -952,7 +982,7 @@ const AnalyticsPage: React.FC = () => {
                         className="text-lg font-semibold"
                         style={{ color: 'var(--text-color)', margin: 0 }}
                       >
-                        Term Growth Rate
+                        {t('analytics.analyticsSummary.termGrowth.title')}
                       </h3>
                     </div>
                     <div style={{ padding: '1rem', textAlign: 'center' }}>
@@ -972,7 +1002,7 @@ const AnalyticsPage: React.FC = () => {
                           fontSize: '0.875rem',
                         }}
                       >
-                        This Month
+                        {t('analytics.analyticsSummary.termGrowth.subtitle')}
                       </div>
                     </div>
                   </div>

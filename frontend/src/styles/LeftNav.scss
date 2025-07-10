@@ -35,6 +35,16 @@
   justify-content: space-between;
 }
 
+.left-nav-title-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  .language-switcher-wrapper {
+    margin-left: 4px;
+  }
+}
+
 .left-nav-app-title {
   font-size: 28px;
   font-weight: 700;

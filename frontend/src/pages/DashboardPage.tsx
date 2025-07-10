@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
-import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 interface RecentTerm {
   id: string;
@@ -39,17 +39,7 @@ interface UserData {
 }
 
 const DashboardPage: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Force dark mode for this page
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
+  const { isDarkMode } = useDarkMode();
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -309,7 +299,7 @@ const DashboardPage: React.FC = () => {
           <div className="welcome-section">
             <h1 className="welcome-title">
               {userData
-                ? `Welcome back, ${userData.firstName}${userData.lastName ? ' ' + userData.lastName : ''}`
+                ? `${t('dashboard.welcomeBack')}, ${userData.firstName}${userData.lastName ? ' ' + userData.lastName : ''}`
                 : t('dashboard.welcome')}
             </h1>
           </div>
@@ -320,24 +310,15 @@ const DashboardPage: React.FC = () => {
               <div className="profile-info">
                 <div className="profile-avatar">{avatarInitials}</div>
                 <div className="profile-details">
-                  <div
+                  <h3
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
+                      color: isDarkMode ? '#f0f0f0' : '#333333', // or your own theme colors
                     }}
                   >
-                    <LanguageSwitcher />
-                    <h3
-                      style={{
-                        color: isDarkMode ? '#f0f0f0' : '#333333', // or your own theme colors
-                      }}
-                    >
-                      {userData
-                        ? `${userData.firstName} ${userData.lastName}`
-                        : t('dashboard.userName')}
-                    </h3>
-                  </div>
+                    {userData
+                      ? `${userData.firstName} ${userData.lastName}`
+                      : t('dashboard.userName')}
+                  </h3>
                   <p>
                     {t('dashboard.userId')}: {userData ? userData.uuid : 'N/A'}
                   </p>
@@ -360,7 +341,10 @@ const DashboardPage: React.FC = () => {
                   }}
                 >
                   <div className="action-icon">🔍</div>
-                  <h3>{t('dashboard.searchNow')}</h3>
+                  <h3>
+                    {t('dashboard.searchNow')}
+                    <br />
+                  </h3>
                   <p>{t('dashboard.searchDescription')}</p>
                 </div>
                 <div
@@ -370,7 +354,10 @@ const DashboardPage: React.FC = () => {
                   }}
                 >
                   <div className="action-icon">📥</div>
-                  <h3>{t('dashboard.downloadResources')}</h3>
+                  <h3>
+                    {t('dashboard.downloadResources')}
+                    <br />
+                  </h3>
                   <p>{t('dashboard.downloadDescription')}</p>
                 </div>
                 <div
@@ -380,7 +367,10 @@ const DashboardPage: React.FC = () => {
                   }}
                 >
                   <div className="action-icon">✍️</div>
-                  <h3>{t('dashboard.contributeTerm')}</h3>
+                  <h3>
+                    {t('dashboard.contributeTerm')}
+                    <br />
+                  </h3>
                   <p>{t('dashboard.contributeDescription')}</p>
                 </div>
               </div>

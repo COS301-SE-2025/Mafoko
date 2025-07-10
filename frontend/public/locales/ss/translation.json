@@ -1,0 +1,206 @@
+{
+  "navigation": {
+    "home": "Ekhaya",
+    "dictionary": "Sichazamagama",
+    "glossary": "Luhla lwemagama",
+    "savedTerms": "Emagama Lacondziwe",
+    "dashboard": "Ibhodi",
+    "help": "Lusito",
+    "darkMode": "Indlela lemnyama"
+  },
+  
+  "landingPage": {
+    "registerButton": "Bhalisa",
+    "loginButton": "Ngena"
+  },
+  "loginPage": {
+    "title": "WEMUKELEKILE FUTSI!",
+    "subtitle": "Ngicela ufake imininingwane yakho kutsi ungene.",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "Faka likheli lakho le-imeyili",
+    "passwordLabel": "Iphasiwedi",
+    "passwordPlaceholder": "Faka iphasiwedi yakho",
+    "rememberMe": "Ngikhumbule",
+    "forgotPassword": "Ukhohlwe Yiphasiwedi?",
+    "loginButton": "Ngena",
+    "orDivider": "NOMA",
+    "loginWithGoogle": "Ngena nge-Google",
+    "noAccount": "Awunayo i-akhawunti?",
+    "registerLink": "Bhalisa",
+    "welcomeImageAlt": "Kwemukela Kungena ku-Mavito",
+    "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
+    "errorTokenMissing": "Ungene ngemphumelelo, kodvwa kute ithokheni letfolakele. Ngicela utsintse lusito.",
+    "errorDefault": "Kungena kuhlulekile. Ngicela uhlole imininingwane yakho.",
+    "errorUnexpectedFormat": "Liphutsa ekungeneni (simo {{status}}). Simo seliphutsa lesingakalindzeleki.",
+    "errorWithStatus": "Kungena kuhlulekile (simo {{status}}). Ngicela utame futsi.",
+    "errorNetwork": "Kwenteke liphutsa: {{message}}.",
+    "errorUnknownNetwork": "Kwenteke liphutsa lelingakatfolakali kwinethiwekhi. Ngicela utame futsi."
+  },
+  "registrationPage": {
+    "title": "CALA MANJE",
+    "subtitle": "Yakha i-akhawunti yakho ye-Mavito.",
+    "firstNameLabel": "Ligama Lekucala",
+    "firstNamePlaceholder": "Faka ligama lakho lekucala",
+    "lastNameLabel": "Sibongo",
+    "lastNamePlaceholder": "Faka sibongo sakho",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "Faka likheli lakho le-imeyili",
+    "passwordLabel": "Iphasiwedi",
+    "passwordPlaceholder": "Yakha iphasiwedi",
+    "confirmPasswordLabel": "Cacisa Iphasiwedi",
+    "confirmPasswordPlaceholder": "Cacisa iphasiwedi yakho",
+    "agreeToTerms": "Ngiyavuma",
+    "termsAndConditionsLink": "Imigomo Nemibandzela",
+    "createAccountButton": "Yakha I-akhawunti",
+    "creatingAccountButton": "Iyakhiwa...",
+    "orDivider": "NOMA",
+    "createWithGoogle": "Yakha I-akhawunti nge-Google",
+    "haveAccount": "Sewuvele unayo i-akhawunti?",
+    "loginLink": "Ngena",
+    "welcomeImageAlt": "Kwemukela ku-Mavito",
+    "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
+    "errorPasswordsDoNotMatch": "Emaphasiwedi awahambelani.",
+    "errorAgreeToTerms": "Kufanele uvume imigomo nemibandzela.",
+    "alertSuccess": "Kubhalisa kuphumelele! Ngicela uchubeke ungene.",
+    "errorDefault": "Kubhalisa kuhlulekile. Ngicela utame futsi.",
+    "errorUnexpectedFormat": "Liphutsa: {{detailJson}}",
+    "errorWithStatus": "Kubhalisa kuhlulekile (simo {{status}}). Ngicela utame futsi.",
+    "errorNetwork": "Kwenteke liphutsa: {{message}}.",
+    "errorUnknownNetwork": "Kwenteke liphutsa lelingakatfolakali kwinethiwekhi. Ngicela utame futsi.",
+    "registerAsLabel": "Bhalisa Njengo",
+    "registerAsPlaceholder": "Khetsa indzima yakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Sosayensi Welulwimi",
+      "researcher": "Umcwaningi",
+      "student": "Umfundzi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Umsebentisi Lovamile",
+      "applyingLinguist": "Kubhalisa njengeSosayensi Welulwimi"
+    }
+  },
+  "dashboard": {
+    "welcome": "Wemukelekile ku-Mavito",
+    "welcomeBack": "Wemukelekile futsi",
+    "userName": "Ligama Lemsebentisi",
+    "userId": "Inombolo Yemsebentisi",
+    "quickActions": "Tento Letisheshako",
+    "searchNow": "Sesha Nyalo",
+    "searchDescription": "Sesha emagama ngetilimi letinyenti",
+    "downloadResources": "Dawuniloda Tisetjentiswa",
+    "downloadDescription": "Tfola futsi udawunilode tisetjentiswa temagama",
+    "contributeTerm": "Faka Ligama",
+    "contributeDescription": "Engeta emagama lamasha kudatabhesi yetfu",
+    "recentTerms": "Emagama Lakamanje",
+    "hideTerms": "Fihla Emagama",
+    "viewAll": "Buka Konkhe",
+    "communityActivity": "Imisebenti Yemmango",
+    "hideActivity": "Fihla Imisebenti",
+    "viewAllActivity": "Buka Yonkhe Imisebenti"
+  },
+  "glossaryPage": {
+    "title": "Luhla Lwemagama Ngetilimi Letinyenti",
+    "subtitle": "Buka tigaba, hlola emagama, utfole tihumusho",
+    "showTranslations": "Khombisa Tihumusho",
+    "translationsHeader": "Tihumusho",
+    "noTranslations": "Kute tihumusho letikhona taleligama",
+    "selectTerm": "Khetsa ligama kute ubone imininingwane netihumusho",
+    "loading": "Kuyalayisha...",
+    "categories": "Tigaba",
+    "selectCategory": "Khetsa Sigaba",
+    "termDetails": "Imininingwane Yeligama",
+    "termsInCategory": "Emagama ku-{{category}}",
+    "randomTerms": "Emagama Langakahleleki",
+    "searchTermsInCategory": "Sesha emagama ku-{{category}}...",
+    "searchAllTerms": "Sesha onkhe emagama...",
+    "noTermsFound": "Kute emagama latfolakele lafana ne-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Kute emagama latfolakala ku-{{category}}."
+  },
+  "analytics": {
+    "loading": "Kuyalayisha idatha ye-analytics...",
+    "stats": {
+      "totalTerms": "Emagama Onkhe",
+      "uniqueLanguages": "Tilimi Letehlukene",
+      "uniqueDomains": "Tigaba Letehlukene",
+      "topLanguage": "Lulimi Lolusetulu"
+    },
+    "popularTerms": {
+      "title": "Emagama Ladumile",
+      "subtitle": "Emagama lasetjentiswa kakhulu kuyo yonkhe imisebenti"
+    },
+    "categoryDistribution": {
+      "title": "Kuhleleka Kwetigaba",
+      "subtitle": "Emagama ahlelwe ngetigaba tetibalo"
+    },
+    "topDomains": {
+      "title": "Tigaba Letiphakeme",
+      "subtitle": "Tigaba tetibalo letisebenta kakhulu"
+    },
+    "trendsAndInsights": {
+      "title": "Imikhuba Nekucondzisisa",
+      "subtitle": "Kuhlatiyelwa lokususelwa kwidatha nemiphumela",
+      "languageDiversity": {
+        "title": "Silinganiso Sekwehluka Kwetilimi",
+        "coverage": "wetilimi taseNingizimu Afrika letisetjentisiwe",
+        "terms": "emagama"
+      },
+      "domainFocus": {
+        "title": "Tigaba Letibukiwe"
+      },
+      "dataQuality": {
+        "title": "Tilinganiso Telizinga Ledatha",
+        "completenessScore": "Emamaki Ekuphelela",
+        "translationCoverage": "Kufaka Tihumusho",
+        "definitionQuality": "Lizinga Lencazelo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Sifinyeto se-Analytics",
+      "subtitle": "Kubuka lizinga ledatha netilinganiso tekusebenta",
+      "dataQualityScore": {
+        "title": "Emamaki Elizinga Ledatha",
+        "subtitle": "Kufaka Lokuphelele"
+      },
+      "coverageEfficiency": {
+        "title": "Kusebenta Kwekufaka",
+        "subtitle": "Lizinga Lekuhleleka",
+        "excellent": "Kuhle Kakhulu",
+        "good": "Kuhle"
+      },
+      "popularCategory": {
+        "title": "Sigaba Lesidumile Kakhulu",
+        "subtitle": "Sigaba Lesiholako"
+      },
+      "termGrowth": {
+        "title": "Lizinga Lekukhula Kwemagama",
+        "subtitle": "Kulelinyanga"
+      }
+    }
+  },
+  "searchPage": {
+    "language": "Lulwimi",
+    "domain": "Indzawo",
+    "fuzzySearch": "Kufuna Lokungakapheleli",
+    "loading": "Kuyalayisha...",
+    "noResults": "Kute imiphumela ya-\"{{term}}\".",
+    "showAll": "Khombisa Konkhe",
+    "showTermsWithLetter": "Khombisa emagama lacala nga-{{letter}}",
+    "pagination": {
+      "previous": "Emuva",
+      "next": "Embili",
+      "pageInfo": "Likhasi {{current}} kuma-{{total}}"
+    },
+    "searchPlaceholder": "Ligama lekufuna"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Singakusita Kanjani?",
+    "commonTopics": "Tindzaba Letivamile",
+    "articleLink": "Indaba →",
+    "cantFind": "Awutfoli loko lokufunako?",
+    "submitRequest": "Tfumela sicelo →",
+    "previous": "Longendvulela",
+    "next": "Lolandzelako",
+    "pageInfo": "Likhasi {{current}} kwa-{{total}}"
+  }
+}

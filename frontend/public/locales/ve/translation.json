@@ -1,0 +1,204 @@
+{
+  "navigation": {
+    "home": "Hayani",
+    "dictionary": "Ṱhalusamaipfi",
+    "glossary": "Mutevhemaipfi",
+    "savedTerms": "Maipfi o Vhulungwaho",
+    "dashboard": "Bodo",
+    "help": "Thuso",
+    "darkMode": "Mutoli wo swifhalaho"
+  },
+  "landingPage": {
+    "registerButton": "Ṅwalisani",
+    "loginButton": "Dzhenani"
+  },
+  "loginPage": {
+    "title": "RI A VHONA HAFHU!",
+    "subtitle": "Ri humbela uri vha ṋee zwidodombedzwa zwavho u dzhena.",
+    "emailLabel": "Imeiḽi",
+    "emailPlaceholder": "Ṅwalani diresi yavho ya imeiḽi",
+    "passwordLabel": "Phasiwede",
+    "passwordPlaceholder": "Ṅwalani phasiwede yavho",
+    "rememberMe": "Nkhumbuleni",
+    "forgotPassword": "Vho hangwa Phasiwede?",
+    "loginButton": "Dzhenani",
+    "orDivider": "KANA",
+    "loginWithGoogle": "Dzhenani nga Google",
+    "noAccount": "A vha na akhauthu?",
+    "registerLink": "Ṅwalisani",
+    "welcomeImageAlt": "Mavito Login Mwaḓamuni",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorTokenMissing": "Vho dzhena zwavhuḓi, fhedzi a hu na thokheni yo ṱanganedzwaho. Ri humbela vha kwamane na thikhedzo.",
+    "errorDefault": "U dzhena ho kundelwa. Ri humbela vha sedze zwidodombedzwa zwavho.",
+    "errorUnexpectedFormat": "Vhukhakhi ha u dzhena (tshiimo {{status}}). Tshivhumbeo tsha vhukhakhi tsho sa lavhelelwaho.",
+    "errorWithStatus": "U dzhena ho kundelwa (tshiimo {{status}}). Ri humbela vha lingedze hafhu.",
+    "errorNetwork": "Ho vha na vhukhakhi: {{message}}.",
+    "errorUnknownNetwork": "Ho vha na vhukhakhi ha nethiweke vhu sa ḓivhei. Ri humbela vha lingedze hafhu."
+  },
+  "registrationPage": {
+    "title": "THOMANI ZWINO",
+    "subtitle": "Sikani akhauthu yanu ya Mavito.",
+    "firstNameLabel": "Dzina Ḽa U Thoma",
+    "firstNamePlaceholder": "Ṅwalani dzina ḽanu ḽa u thoma",
+    "lastNameLabel": "Tshifani",
+    "lastNamePlaceholder": "Ṅwalani tshifani tshanu",
+    "emailLabel": "Imeiḽi",
+    "emailPlaceholder": "Ṅwalani diresi yanu ya imeiḽi",
+    "passwordLabel": "Phasiwede",
+    "passwordPlaceholder": "Sikani phasiwede",
+    "confirmPasswordLabel": "Khwaṱhisedza Phasiwede",
+    "confirmPasswordPlaceholder": "Khwaṱhisedzani phasiwede yanu",
+    "agreeToTerms": "Ndi a tenda kha",
+    "termsAndConditionsLink": "Milayo na Nyimele",
+    "createAccountButton": "Sikani Akhauthu",
+    "creatingAccountButton": "I khou Sikwa...",
+    "orDivider": "KANA",
+    "createWithGoogle": "Sikani Akhauthu nga Google",
+    "haveAccount": "Ni na akhauthu?",
+    "loginLink": "Dzhenani",
+    "welcomeImageAlt": "Mavito Ṱanganedzo",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorPasswordsDoNotMatch": "Phasiwede a dzi tendelani.",
+    "errorAgreeToTerms": "Ni fanela u tenda kha milayo na nyimele.",
+    "alertSuccess": "Ṅwalisiso yo bvelela! Ri humbela ni ye kha u dzhena.",
+    "errorDefault": "Ṅwalisiso yo kundelwa. Ri humbela ni lingedze hafhu.",
+    "errorUnexpectedFormat": "Vhukhakhi: {{detailJson}}",
+    "errorWithStatus": "Ṅwalisiso yo kundelwa (tshiimo {{status}}). Ri humbela ni lingedze hafhu.",
+    "errorNetwork": "Ho vha na vhukhakhi: {{message}}.",
+    "errorUnknownNetwork": "Ho vha na vhukhakhi ha nethiweke vhu sa ḓivhei. Ri humbela ni lingedze hafhu.",
+    "registerAsLabel": "Ṅwalisani sa",
+    "registerAsPlaceholder": "Nangani mushumo wanu",
+    "registerAsOptions": {
+      "contributor": "Muṋetshedzi",
+      "linguist": "Muṱoḓisisi wa Luambo",
+      "researcher": "Muṱoḓisisi",
+      "student": "Mutshudeni"
+    },
+    "userTypeLabels": {
+      "normalUser": "Mushumisi wa Zwashu",
+      "applyingLinguist": "U ṅwalisa sa Muṱoḓisisi wa Luambo"
+    }
+  },
+  "dashboard": {
+    "welcome": "Vho ṱanganedzwa kha Mavito",
+    "userName": "Dzina ḽa Mushumisi",
+    "userId": "Nomboro ya Mushumisi",
+    "quickActions": "Nyito dza Tshihaḓu",
+    "searchNow": "Ṱoḓa Zwino",
+    "searchDescription": "Ṱoḓa maipfi nga nyambo nnzhi",
+    "downloadResources": "Daunulouda Zwishumiswa",
+    "downloadDescription": "Wana na u daunulouda zwishumiswa zwa maipfi",
+    "contributeTerm": "Dzhenisa Ipfi",
+    "contributeDescription": "Engedza maipfi maswa kha deithabeisi yashu",
+    "recentTerms": "Maipfi a Zwino",
+    "hideTerms": "Dzumba Maipfi",
+    "viewAll": "Vhona Zwoṱhe",
+    "communityActivity": "Mishumo ya Tshitshavha",
+    "hideActivity": "Dzumba Mishumo",
+    "viewAllActivity": "Vhona Mishumo Yoṱhe"
+  },
+  "glossaryPage": {
+    "title": "Mutevhemaipfi wa Nyambo Nnzhi",
+    "subtitle": "Sedzulusa khethekanyo, ṱoḓisisa maipfi, wane ṱhalutshedzo",
+    "showTranslations": "Sumbedza Ṱhalutshedzo",
+    "translationsHeader": "Ṱhalutshedzo",
+    "noTranslations": "A hu na ṱhalutshedzo dzi wanalaho dza ipfi iḽi",
+    "selectTerm": "Nanga ipfi u vhone zwidodombedzwa na ṱhalutshedzo",
+    "loading": "I khou laisa...",
+    "categories": "Khethekanyo",
+    "selectCategory": "Nanga Khethekanyo",
+    "termDetails": "Zwidodombedzwa zwa Ipfi",
+    "termsInCategory": "Maipfi kha {{category}}",
+    "randomTerms": "Maipfi o Ṱanganaho",
+    "searchTermsInCategory": "Ṱoḓa maipfi kha {{category}}...",
+    "searchAllTerms": "Ṱoḓa maipfi oṱhe...",
+    "noTermsFound": "A hu na maipfi o wanalaho a fanaho na \"{{query}}\" kha {{category}}.",
+    "noTermsInCategory": "A hu na maipfi a wanalaho kha {{category}}."
+  },
+  "analytics": {
+    "loading": "I khou laisa data ya analytics...",
+    "stats": {
+      "totalTerms": "Maipfi Oṱhe",
+      "uniqueLanguages": "Nyambo dzo Fhambanaho",
+      "uniqueDomains": "Masia o Fhambanaho",
+      "topLanguage": "Luambo lwa Nṱha"
+    },
+    "popularTerms": {
+      "title": "Maipfi o Ṱanganedzwaho",
+      "subtitle": "Maipfi o shumiswaho nga maanḓa kha masia oṱhe"
+    },
+    "categoryDistribution": {
+      "title": "Khethekanyo ya Masia",
+      "subtitle": "Maipfi o khethekanywa nga masia a statistiki"
+    },
+    "topDomains": {
+      "title": "Masia a Nṱha",
+      "subtitle": "Masia a statistiki o shumaho nga maanḓa"
+    },
+    "trendsAndInsights": {
+      "title": "Zwikalo na Nḓivho",
+      "subtitle": "Tsenguluso yo ḓisendekaho kha data na mvelelo",
+      "languageDiversity": {
+        "title": "Tshisumbavhubvo tsha Nyambo",
+        "coverage": "ya nyambo dza Afrika Tshipembe dzo shumiswaho",
+        "terms": "maipfi"
+      },
+      "domainFocus": {
+        "title": "Masia a Tshumelo"
+      },
+      "dataQuality": {
+        "title": "Zwikalo zwa Ndeme wa Data",
+        "completenessScore": "Maraga ya u Fhelela",
+        "translationCoverage": "Tshumelo ya Ṱhalutshedzo",
+        "definitionQuality": "Ndeme wa Ṱhalutshedzo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Manweledzo a Analytics",
+      "subtitle": "Mbonelaphanda ya ndeme wa data na zwikalo zwa kushumele",
+      "dataQualityScore": {
+        "title": "Maraga ya Ndeme wa Data",
+        "subtitle": "Tshumelo yo Fhelelaho"
+      },
+      "coverageEfficiency": {
+        "title": "Vhukoni ha Tshumelo",
+        "subtitle": "Ndeme wa Khethekanyo",
+        "excellent": "Zwavhuḓi nga Maanḓa",
+        "good": "Zwavhuḓi"
+      },
+      "popularCategory": {
+        "title": "Khethekanyo yo Ṱanganedzwaho",
+        "subtitle": "Sia ḽa Nṱha"
+      },
+      "termGrowth": {
+        "title": "Nyaluwo ya Maipfi",
+        "subtitle": "Ṅwedzi Wonoyu"
+      }
+    }
+  },
+  "searchPage": {
+    "language": "Luambo",
+    "domain": "Sia",
+    "fuzzySearch": "U Ṱoḓa ho Sedzwa",
+    "loading": "Kha vha lindele...",
+    "noResults": "A hu na mvelelo dza \"{{term}}\".",
+    "showAll": "Sumbedza Zwoṱhe",
+    "showTermsWithLetter": "Sumbedza maipfi a thomaho nga {{letter}}",
+    "pagination": {
+      "previous": "Murahu",
+      "next": "Phanḓa",
+      "pageInfo": "Siaṭari {{current}} kha {{total}}"
+    },
+    "searchPlaceholder": "Ipfi ḽa u ṱoḓa"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Ri Nga Ni Thusa Hani?",
+    "commonTopics": "Mafhungo a Ḓoweleaho",
+    "articleLink": "Athikili →",
+    "cantFind": "A ni wani zwine na khou ṱoḓa?",
+    "submitRequest": "Rumelani khumbelo →",
+    "previous": "Yo fhiraho",
+    "next": "I tevhelaho",
+    "pageInfo": "Siaṱari {{current}} kha {{total}}"
+  }
+}

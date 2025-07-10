@@ -1,0 +1,206 @@
+{
+  "navigation": {
+    "home": "Gae",
+    "dictionary": "Pukuntšu",
+    "glossary": "Lenaneontšu",
+    "savedTerms": "Mantšu ao a Bolokitšwego",
+    "dashboard": "Letlapa",
+    "help": "Thušo",
+    "darkMode": "Mokgwa wo moso"
+  },
+  
+  "landingPage": {
+    "registerButton": "Ngwadiša",
+    "loginButton": "Tsena"
+  },
+  "loginPage": {
+    "title": "RE A GO AMOGELA GAPE!",
+    "subtitle": "Ka kopo tsenya dintlha tša gago go tsena.",
+    "emailLabel": "Imeili",
+    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
+    "passwordLabel": "Phasewete",
+    "passwordPlaceholder": "Tsenya phasewete ya gago",
+    "rememberMe": "Nkhopole",
+    "forgotPassword": "O lebetše Phasewete?",
+    "loginButton": "Tsena",
+    "orDivider": "GOBA",
+    "loginWithGoogle": "Tsena ka Google",
+    "noAccount": "Ga o na akhaonte?",
+    "registerLink": "Ngwadiša",
+    "welcomeImageAlt": "Kamogelo ya go Tsena go Mavito",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorTokenMissing": "O tsene ka katlego, fela ga go na tokene yeo e amogetšwego. Ka kopo ikopanye le thekgo.",
+    "errorDefault": "Go tsena go paletšwe. Ka kopo lekola dintlha tša gago.",
+    "errorUnexpectedFormat": "Phošo ya go tsena (maemo {{status}}). Sebopego sa phošo seo se sa lebelelwago.",
+    "errorWithStatus": "Go tsena go paletšwe (maemo {{status}}). Ka kopo leka gape.",
+    "errorNetwork": "Go bile le phošo: {{message}}.",
+    "errorUnknownNetwork": "Go bile le phošo ya neteweke yeo e sa tsebjego. Ka kopo leka gape."
+  },
+  "registrationPage": {
+    "title": "THOMA BJALE",
+    "subtitle": "Hlola akhaonte ya gago ya Mavito.",
+    "firstNameLabel": "Leina la Mathomo",
+    "firstNamePlaceholder": "Tsenya leina la gago la mathomo",
+    "lastNameLabel": "Sefane",
+    "lastNamePlaceholder": "Tsenya sefane sa gago",
+    "emailLabel": "Imeili",
+    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
+    "passwordLabel": "Phasewete",
+    "passwordPlaceholder": "Hlama phasewete",
+    "confirmPasswordLabel": "Tiišetša Phasewete",
+    "confirmPasswordPlaceholder": "Tiišetša phasewete ya gago",
+    "agreeToTerms": "Ke dumela go",
+    "termsAndConditionsLink": "Melao le Dipeelano",
+    "createAccountButton": "Hlola Akhaonte",
+    "creatingAccountButton": "E a Hlolwa...",
+    "orDivider": "GOBA",
+    "createWithGoogle": "Hlola Akhaonte ka Google",
+    "haveAccount": "O šetše o na le akhaonte?",
+    "loginLink": "Tsena",
+    "welcomeImageAlt": "Kamogelo ya Mavito",
+    "dsfsiLogoAlt": "Logo ya DSFSI",
+    "errorPasswordsDoNotMatch": "Diphasewete ga di swane.",
+    "errorAgreeToTerms": "O swanetše go dumela melao le dipeelano.",
+    "alertSuccess": "O ngwadišitše ka katlego! Ka kopo tšwela pele go tsena.",
+    "errorDefault": "Go ngwadiša go paletšwe. Ka kopo leka gape.",
+    "errorUnexpectedFormat": "Phošo: {{detailJson}}",
+    "errorWithStatus": "Go ngwadiša go paletšwe (maemo {{status}}). Ka kopo leka gape.",
+    "errorNetwork": "Go bile le phošo: {{message}}.",
+    "errorUnknownNetwork": "Go bile le phošo ya neteweke yeo e sa tsebjego. Ka kopo leka gape.",
+    "registerAsLabel": "Ingwadiša bjalo ka",
+    "registerAsPlaceholder": "Kgetha tema ya gago",
+    "registerAsOptions": {
+      "contributor": "Motseakarolo",
+      "linguist": "Setsebamolemo",
+      "researcher": "Monyakišiši",
+      "student": "Moithuti"
+    },
+    "userTypeLabels": {
+      "normalUser": "Modiriši wa Tlwaelo",
+      "applyingLinguist": "Ingwadiša bjalo ka Setsebamolemo"
+    }
+  },
+  "dashboard": {
+    "welcome": "O amogetswe go Mavito",
+    "welcomeBack": "O boile gape",
+    "userName": "Leina la Mosebedisi",
+    "userId": "Nomoro ya Mosebedisi",
+    "quickActions": "Ditiro tsa Potlako",
+    "searchNow": "Nyaka Bjale",
+    "searchDescription": "Nyaka mareo ka dipolelo tse mmalwa",
+    "downloadResources": "Laolla Didirišwa",
+    "downloadDescription": "Hwetša le go laolla didirišwa tša mareo",
+    "contributeTerm": "Tsenya Lereo",
+    "contributeDescription": "Oketša mareo a maswa go databeise ya rena",
+    "recentTerms": "Mareo a Bjale",
+    "hideTerms": "Fihla Mareo",
+    "viewAll": "Bona Kamoka",
+    "communityActivity": "Ditiro tša Setšhaba",
+    "hideActivity": "Fihla Ditiro",
+    "viewAllActivity": "Bona Ditiro Kamoka"
+  },
+  "glossaryPage": {
+    "title": "Lenaneontšu la Maleme a Mantši",
+    "subtitle": "Lebelela magoro, nyakišiša mantšu, hwetša diphetolelo",
+    "showTranslations": "Bontšha Diphetolelo",
+    "translationsHeader": "Diphetolelo",
+    "noTranslations": "Ga go na diphetolelo tše di hwetšagalago tša lentšu le",
+    "selectTerm": "Kgetha lentšu go bona dintlha le diphetolelo",
+    "loading": "E a laetša...",
+    "categories": "Magoro",
+    "selectCategory": "Kgetha Sehlopha",
+    "termDetails": "Dintlha tša Lentšu",
+    "termsInCategory": "Mantšu go {{category}}",
+    "randomTerms": "Mantšu a go se Beakanywe",
+    "searchTermsInCategory": "Nyaka mantšu go {{category}}...",
+    "searchAllTerms": "Nyaka mantšu ka moka...",
+    "noTermsFound": "Ga go mantšu ao a hwetšwago ao a swanago le \"{{query}}\" go {{category}}.",
+    "noTermsInCategory": "Ga go mantšu ao a hwetšagalago go {{category}}."
+  },
+  "analytics": {
+    "loading": "E laetša data ya analytics...",
+    "stats": {
+      "totalTerms": "Mantšu Ka Moka",
+      "uniqueLanguages": "Maleme a go Fapana",
+      "uniqueDomains": "Magoro a go Fapana",
+      "topLanguage": "Leleme la Godimo"
+    },
+    "popularTerms": {
+      "title": "Mantšu a go Tuma",
+      "subtitle": "Mantšu ao a šomišwago kudu magorong ka moka"
+    },
+    "categoryDistribution": {
+      "title": "Phatlalatšo ya Magoro",
+      "subtitle": "Mantšu a hlopša ka magoro a dipalopalo"
+    },
+    "topDomains": {
+      "title": "Magoro a Godimo",
+      "subtitle": "Magoro a dipalopalo ao a šomago kudu"
+    },
+    "trendsAndInsights": {
+      "title": "Ditlwaelo le Kwešišo",
+      "subtitle": "Tshekatsheko ye e theilwego go data le dipoelo",
+      "languageDiversity": {
+        "title": "Tekanyetšo ya go Fapana ga Maleme",
+        "coverage": "ya maleme a Afrika Borwa ao a šomišitšwego",
+        "terms": "mantšu"
+      },
+      "domainFocus": {
+        "title": "Magoro a Nepišo"
+      },
+      "dataQuality": {
+        "title": "Ditekanyetšo tša Boleng bja Data",
+        "completenessScore": "Meputso ya Botlalo",
+        "translationCoverage": "Tšhireletšo ya Phetolelo",
+        "definitionQuality": "Boleng bja Tlhalošo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Kakaretšo ya Analytics",
+      "subtitle": "Tebelelo ya boleng bja data le ditekanyetšo tša tiragatšo",
+      "dataQualityScore": {
+        "title": "Meputso ya Boleng bja Data",
+        "subtitle": "Tšhireletšo ye e Feletšego"
+      },
+      "coverageEfficiency": {
+        "title": "Bokgoni bja Tšhireletšo",
+        "subtitle": "Boleng bja Phatlalatšo",
+        "excellent": "Go Kgahliša Kudu",
+        "good": "Go Lokile"
+      },
+      "popularCategory": {
+        "title": "Sehlopha se se Tumilego Kudu",
+        "subtitle": "Sehlopha se se Etilego Pele"
+      },
+      "termGrowth": {
+        "title": "Kelo ya Kgolo ya Mantšu",
+        "subtitle": "Kgweding ye"
+      }
+    }
+  },
+  "searchPage": {
+    "language": "Polelo",
+    "domain": "Lefelo",
+    "fuzzySearch": "Go Nyaka ka go se Nepe",
+    "loading": "E a laisha...",
+    "noResults": "Ga go na dipoelo tša \"{{term}}\".",
+    "showAll": "Bontšha Tšohle",
+    "showTermsWithLetter": "Bontšha mantšu ao a thomago ka {{letter}}",
+    "pagination": {
+      "previous": "Morago",
+      "next": "Pele",
+      "pageInfo": "Letlakala la {{current}} go tša {{total}}"
+    },
+    "searchPlaceholder": "Lentšu la go nyaka"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Re Ka Go Thuša Bjang?",
+    "commonTopics": "Ditaba tša Tlwaelo",
+    "articleLink": "Sengwalwa →",
+    "cantFind": "O ka se hwetše seo o se nyakago?",
+    "submitRequest": "Romela kgopelo →",
+    "previous": "Ya go feta",
+    "next": "Ye e latelago",
+    "pageInfo": "Letlakala {{current}} la {{total}}"
+  }
+}
