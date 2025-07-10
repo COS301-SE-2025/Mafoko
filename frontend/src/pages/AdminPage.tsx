@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import '../styles/AdminPage.scss';
 import { API_ENDPOINTS } from '../config';
 
@@ -68,6 +69,7 @@ interface UserResponse {
 }
 
 const AdminPage: React.FC = () => {
+  const { isDarkMode } = useDarkMode();
   const [allApplications, setAllApplications] = useState<LinguistApplication[]>(
     [],
   );
@@ -84,7 +86,9 @@ const AdminPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [documentsLoading, setDocumentsLoading] = useState<
+    Record<string, boolean>
+  >({});
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -170,15 +174,6 @@ const AdminPage: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
-
   const fetchUserDocuments = async (
     userId: string,
     token: string,
@@ -239,7 +234,7 @@ const AdminPage: React.FC = () => {
             };
 
             return {
-              id: `doc-${userId}-${index.toString()}`, // Fixed: Convert number to string
+              id: `doc-${userId}-${index.toString()}`,
               name: upload.filename,
               type: getDocumentType(upload.filename),
               size: 0,
@@ -264,79 +259,99 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  const fetchDocumentsForUser = useCallback(async (userId: string) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return [];
+
+    setDocumentsLoading((prev) => ({ ...prev, [userId]: true }));
+    try {
+      const documents = await fetchUserDocuments(userId, token);
+
+      setAllApplications((prev) =>
+        prev.map((app) =>
+          app.applicantId === userId ? { ...app, documents } : app,
+        ),
+      );
+
+      return documents;
+    } catch (error) {
+      console.error(`Failed to fetch documents for user ${userId}:`, error);
+      return [];
+    } finally {
+      setDocumentsLoading((prev) => ({ ...prev, [userId]: false }));
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
+    const fetchInitialData = async (): Promise<void> => {
       setLoading(true);
       try {
         const token = localStorage.getItem('accessToken');
-        if (token) {
-          // Fetch regular users
-          const usersResponse = await fetch(API_ENDPOINTS.getAll, {
+        if (!token) {
+          console.error('No access token found');
+          window.location.href = '/login';
+          return;
+        }
+
+        // Fetch both endpoints in parallel for basic data
+        const [usersResponse, applicationsResponse] = await Promise.all([
+          fetch(API_ENDPOINTS.getAll, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
-          });
-
-          if (usersResponse.ok) {
-            const users = (await usersResponse.json()) as SystemUser[];
-            setAllUsers(users);
-          }
-
-          // Fetch users with uploads (potential linguist applications)
-          const applicationsResponse = await fetch(
-            API_ENDPOINTS.getUsersWithUploads(),
-            {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
+          }),
+          fetch(API_ENDPOINTS.getUsersWithUploads(), {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
             },
+          }),
+        ]);
+
+        if (usersResponse.ok) {
+          const users = (await usersResponse.json()) as SystemUser[];
+          setAllUsers(users);
+        } else {
+          console.error('Failed to fetch users:', usersResponse.statusText);
+          setAllUsers([]);
+        }
+
+        if (applicationsResponse.ok) {
+          const usersWithUploads =
+            (await applicationsResponse.json()) as SystemUser[];
+
+          const applications: LinguistApplication[] = usersWithUploads.map(
+            (user) => ({
+              id: `app-${user.id}`,
+              applicantId: user.id,
+              applicantName: `${user.first_name} ${user.last_name}`,
+              applicantEmail: user.email,
+              appliedAt: user.created_at,
+              status:
+                user.role === 'linguist'
+                  ? 'approved'
+                  : user.role === 'contributor'
+                    ? 'pending'
+                    : 'rejected',
+              documents: [],
+              languages: [],
+              role: user.role,
+            }),
           );
 
-          if (applicationsResponse.ok) {
-            const usersWithUploads =
-              (await applicationsResponse.json()) as SystemUser[];
-
-            const applications: LinguistApplication[] = await Promise.all(
-              usersWithUploads.map(async (user) => {
-                const documents = await fetchUserDocuments(user.id, token);
-
-                return {
-                  id: `app-${user.id}`,
-                  applicantId: user.id,
-                  applicantName: `${user.first_name} ${user.last_name}`,
-                  applicantEmail: user.email,
-                  appliedAt: user.created_at,
-                  status:
-                    user.role === 'linguist'
-                      ? 'approved'
-                      : user.role === 'contributor'
-                        ? 'pending'
-                        : 'rejected',
-                  documents,
-                  languages: [],
-                  role: user.role,
-                };
-              }),
-            );
-
-            setAllApplications(applications);
-          } else {
-            console.error(
-              'Failed to fetch applications:',
-              applicationsResponse.statusText,
-            );
-            setAllApplications([]);
-          }
+          setAllApplications(applications);
         } else {
-          console.error('No access token found');
-          window.location.href = '/login';
+          console.error(
+            'Failed to fetch applications:',
+            applicationsResponse.statusText,
+          );
+          setAllApplications([]);
         }
       } catch (error) {
-        console.error('Failed to fetch data:', error);
+        console.error('Failed to fetch initial data:', error);
         setAllUsers([]);
         setAllApplications([]);
       } finally {
@@ -344,8 +359,28 @@ const AdminPage: React.FC = () => {
       }
     };
 
-    void fetchData();
+    void fetchInitialData();
   }, []);
+
+  useEffect(() => {
+    if (
+      currentView === 'applications' &&
+      displayedApplications.length > 0 &&
+      !loading
+    ) {
+      displayedApplications.forEach((app) => {
+        if (app.documents.length === 0 && !documentsLoading[app.applicantId]) {
+          void fetchDocumentsForUser(app.applicantId);
+        }
+      });
+    }
+  }, [
+    displayedApplications,
+    currentView,
+    fetchDocumentsForUser,
+    documentsLoading,
+    loading,
+  ]);
 
   useEffect(() => {
     applyFiltersAndPagination();
@@ -683,85 +718,90 @@ const AdminPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="admin-stats">
+                <div className="admin-right-section">
+                  <div className="admin-stats">
+                    {currentView === 'applications' && (
+                      <>
+                        <div className="stat-card">
+                          <FileText size={20} />
+                          <span className="stat-number">
+                            {allApplications.length}
+                          </span>
+                          <span className="stat-label">Applications</span>
+                        </div>
+
+                        <div className="stat-card">
+                          <Clock size={20} />
+                          <span className="stat-number">
+                            {
+                              allApplications.filter(
+                                (app) => app.status === 'pending',
+                              ).length
+                            }
+                          </span>
+                          <span className="stat-label">Pending Review</span>
+                        </div>
+
+                        <div className="stat-card">
+                          <CheckCircle size={20} />
+                          <span className="stat-number">
+                            {
+                              allApplications.filter(
+                                (app) => app.status === 'approved',
+                              ).length
+                            }
+                          </span>
+                          <span className="stat-label">Approved</span>
+                        </div>
+                      </>
+                    )}
+
+                    {currentView === 'users' && (
+                      <>
+                        <div className="stat-card">
+                          <Users size={20} />
+                          <span className="stat-number">{allUsers.length}</span>
+                          <span className="stat-label">Users</span>
+                        </div>
+
+                        <div className="stat-card">
+                          <UserCheck size={20} />
+                          <span className="stat-number">
+                            {
+                              allUsers.filter((user) => user.role === 'admin')
+                                .length
+                            }
+                          </span>
+                          <span className="stat-label">Admins</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
                   {/* View Toggle Buttons */}
-                  <button
-                    type="button"
-                    className={`stat-card ${currentView === 'applications' ? 'active' : ''}`}
-                    onClick={() => {
-                      setCurrentView('applications');
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      border:
-                        currentView === 'applications'
-                          ? '2px solid #007bff'
-                          : 'none',
-                    }}
-                  >
-                    <FileText size={20} />
-                    <span className="stat-number">
-                      {allApplications.length}
-                    </span>
-                    <span className="stat-label">Applications</span>
-                  </button>
+                  <div className="view-toggle-container">
+                    <button
+                      type="button"
+                      className={`view-toggle-btn ${currentView === 'applications' ? 'active' : ''}`}
+                      onClick={() => {
+                        setCurrentView('applications');
+                      }}
+                    >
+                      <FileText size={20} />
+                      <span className="toggle-label">Applications</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    className={`stat-card ${currentView === 'users' ? 'active' : ''}`}
-                    onClick={() => {
-                      setCurrentView('users');
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      border:
-                        currentView === 'users' ? '2px solid #007bff' : 'none',
-                    }}
-                  >
-                    <Users size={20} />
-                    <span className="stat-number">{allUsers.length}</span>
-                    <span className="stat-label">Users</span>
-                  </button>
-
-                  {currentView === 'applications' && (
-                    <>
-                      <div className="stat-card">
-                        <Clock size={20} />
-                        <span className="stat-number">
-                          {
-                            allApplications.filter(
-                              (app) => app.status === 'pending',
-                            ).length
-                          }
-                        </span>
-                        <span className="stat-label">Pending Review</span>
-                      </div>
-                      <div className="stat-card">
-                        <CheckCircle size={20} />
-                        <span className="stat-number">
-                          {
-                            allApplications.filter(
-                              (app) => app.status === 'approved',
-                            ).length
-                          }
-                        </span>
-                        <span className="stat-label">Approved</span>
-                      </div>
-                    </>
-                  )}
-
-                  {currentView === 'users' && (
-                    <div className="stat-card">
-                      <UserCheck size={20} />
-                      <span className="stat-number">
-                        {
-                          allUsers.filter((user) => user.role === 'admin')
-                            .length
-                        }
-                      </span>
-                      <span className="stat-label">Admins</span>
-                    </div>
-                  )}
+                    <button
+                      type="button"
+                      className={`view-toggle-btn ${currentView === 'users' ? 'active' : ''}`}
+                      onClick={() => {
+                        setCurrentView('users');
+                      }}
+                    >
+                      <Users size={20} />
+                      <span className="toggle-label">Users</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -809,7 +849,9 @@ const AdminPage: React.FC = () => {
 
             <div className="admin-content">
               {loading ? (
-                <div className="loading-state">Loading data...</div>
+                <div className="loading-state">
+                  Loading users and applications...
+                </div>
               ) : (
                 <div
                   className="applications-table-container"
@@ -884,44 +926,41 @@ const AdminPage: React.FC = () => {
                             </td>
                             <td className="documents-cell">
                               <div className="documents-list">
-                                {application.documents.map((doc) => (
-                                  <button
-                                    key={doc.id}
-                                    type="button"
-                                    className="document-item"
-                                    title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
-                                    onClick={() => {
-                                      if (doc.gcsKey) {
-                                        void handleDocumentOpen(doc.gcsKey);
-                                      }
-                                    }}
-                                  >
-                                    {getDocumentTypeIcon()}
-                                    <span className="document-name">
-                                      {doc.name}
-                                    </span>
-                                    <Download size={12} />
-                                  </button>
-                                ))}
+                                {documentsLoading[application.applicantId] ? (
+                                  <div className="loading-documents">
+                                    Loading...
+                                  </div>
+                                ) : application.documents.length > 0 ? (
+                                  application.documents.map((doc) => (
+                                    <button
+                                      key={doc.id}
+                                      type="button"
+                                      className="document-item"
+                                      title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
+                                      onClick={() => {
+                                        if (doc.gcsKey) {
+                                          void handleDocumentOpen(doc.gcsKey);
+                                        }
+                                      }}
+                                    >
+                                      {getDocumentTypeIcon()}
+                                      <span className="document-name">
+                                        {doc.name}
+                                      </span>
+                                      <Download size={12} />
+                                    </button>
+                                  ))
+                                ) : (
+                                  <span className="no-documents">
+                                    No documents
+                                  </span>
+                                )}
                               </div>
                             </td>
                             <td className="actions-cell">
                               <div className="action-buttons">
                                 {application.status === 'pending' && (
                                   <>
-                                    <button
-                                      type="button"
-                                      className="action-button approve-button"
-                                      onClick={() => {
-                                        void handleApplicationAction(
-                                          application.id,
-                                          'approve',
-                                        );
-                                      }}
-                                      title="Approve Application"
-                                    >
-                                      <CheckCircle size={16} />
-                                    </button>
                                     <button
                                       type="button"
                                       className="action-button approve-button"

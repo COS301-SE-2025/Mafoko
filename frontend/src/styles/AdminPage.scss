@@ -87,31 +87,88 @@ $text-dark: #ffffff;
               }
             }
 
-            .admin-stats {
+            .admin-right-section {
               display: flex;
-              gap: 1.5rem;
+              align-items: flex-start;
+              gap: 2rem;
               flex-shrink: 0;
 
-              .stat-card {
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 12px;
-                padding: 1rem 1.5rem;
-                text-align: center;
-                min-width: 100px;
+              .admin-stats {
+                display: flex;
+                gap: 1.5rem;
+                flex-shrink: 0;
 
-                .stat-number {
-                  display: block;
-                  font-size: 1.5rem;
-                  font-weight: 700;
-                  color: $accent-pink;
-                  margin-bottom: 0.25rem;
+                .stat-card {
+                  background: rgba(255, 255, 255, 0.05);
+                  border: 1px solid rgba(255, 255, 255, 0.1);
+                  border-radius: 12px;
+                  padding: 1rem 1.5rem;
+                  text-align: center;
+                  min-width: 100px;
+
+                  .stat-number {
+                    display: block;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: $accent-pink;
+                    margin-bottom: 0.25rem;
+                  }
+
+                  .stat-label {
+                    font-size: 0.875rem;
+                    color: var(--bg-secondary);
+                    opacity: 0.7;
+                  }
                 }
+              }
 
-                .stat-label {
-                  font-size: 0.875rem;
+              .view-toggle-container {
+                display: flex;
+                gap: 0.5rem;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+                padding: 0.5rem;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                flex-shrink: 0;
+
+                .view-toggle-btn {
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                  padding: 0.75rem 1.25rem;
+                  border: none;
+                  border-radius: 12px;
+                  background: transparent;
                   color: var(--bg-secondary);
-                  opacity: 0.7;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  position: relative;
+                  min-width: 120px;
+                  text-align: center;
+                  justify-content: center;
+
+                  &:hover {
+                    background: rgba(255, 255, 255, 0.08);
+                    transform: translateY(-2px);
+                  }
+
+                  &.active {
+                    background: $accent-pink;
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(240, 10, 80, 0.3);
+                    transform: translateY(-1px);
+
+                    &:hover {
+                      background: lighten($accent-pink, 5%);
+                      transform: translateY(-3px);
+                    }
+                  }
+
+                  .toggle-label {
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    opacity: 0.9;
+                  }
                 }
               }
             }
@@ -226,12 +283,14 @@ $text-dark: #ffffff;
             margin-bottom: 2rem;
             overflow-x: auto;
             width: 100%;
+            min-height: 400px;
 
             .applications-table {
               width: 100%;
               min-width: 1200px;
               border-collapse: collapse;
               table-layout: fixed;
+              height: 100%;
 
               thead {
                 background-color: rgba(0, 0, 0, 0.05);
@@ -253,18 +312,23 @@ $text-dark: #ffffff;
                   } // Applicant
                   &:nth-child(2) {
                     width: 12%;
+                    text-align: center;
                   } // Status
                   &:nth-child(3) {
                     width: 15%;
+                    text-align: center;
                   } // Applied
                   &:nth-child(4) {
                     width: 15%;
+                    text-align: center;
                   } // Languages
                   &:nth-child(5) {
                     width: 13%;
+                    text-align: center;
                   } // Documents
                   &:nth-child(6) {
                     width: 10%;
+                    text-align: center;
                   } // Actions
                 }
               }
@@ -273,6 +337,7 @@ $text-dark: #ffffff;
                 .application-row {
                   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
                   transition: background-color 0.2s ease;
+                  height: 80px;
 
                   &:hover {
                     background-color: rgba(0, 0, 0, 0.02);
@@ -280,10 +345,20 @@ $text-dark: #ffffff;
 
                   td {
                     padding: 1rem;
-                    vertical-align: top;
+                    vertical-align: middle;
                     color: var(--text-theme);
                     word-wrap: break-word;
                     overflow: hidden;
+
+                    // Center-align specific columns to match headers
+                    &:nth-child(2), // Status
+                    &:nth-child(3), // Applied
+                    &:nth-child(4), // Languages
+                    &:nth-child(5), // Documents
+                    &:nth-child(6) {
+                      // Actions
+                      text-align: center;
+                    }
 
                     &.applicant-info {
                       display: flex;
@@ -340,6 +415,9 @@ $text-dark: #ffffff;
 
                     &.date-cell {
                       font-size: 0.875rem;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
 
                       svg {
                         opacity: 0.5;
@@ -351,6 +429,7 @@ $text-dark: #ffffff;
                       display: flex;
                       flex-wrap: wrap;
                       gap: 0.25rem;
+                      justify-content: center;
 
                       .language-tag {
                         background-color: rgba(240, 10, 80, 0.1);
@@ -374,6 +453,7 @@ $text-dark: #ffffff;
                       display: flex;
                       flex-direction: column;
                       gap: 0.25rem;
+                      align-items: center;
 
                       .document-item {
                         display: flex;
@@ -456,10 +536,15 @@ $text-dark: #ffffff;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-bottom: 2rem;
+            overflow-x: auto;
+            width: 100%;
+            min-height: 400px;
 
             .users-table {
               width: 100%;
               border-collapse: collapse;
+              table-layout: fixed;
+              height: 100%;
 
               thead {
                 background-color: rgba(0, 0, 0, 0.05);
@@ -473,6 +558,24 @@ $text-dark: #ffffff;
                   text-transform: uppercase;
                   letter-spacing: 0.5px;
                   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                  white-space: nowrap;
+
+                  // Define specific column widths for users table
+                  &:nth-child(1) {
+                    width: 40%;
+                  } // User
+                  &:nth-child(2) {
+                    width: 15%;
+                    text-align: center;
+                  } // Role
+                  &:nth-child(3) {
+                    width: 20%;
+                    text-align: center;
+                  } // Joined
+                  &:nth-child(4) {
+                    width: 25%;
+                    text-align: center;
+                  } // Actions
                 }
               }
 
@@ -480,6 +583,7 @@ $text-dark: #ffffff;
                 .user-row {
                   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
                   transition: background-color 0.2s ease;
+                  height: 80px;
 
                   &:hover {
                     background-color: rgba(0, 0, 0, 0.02);
@@ -489,6 +593,14 @@ $text-dark: #ffffff;
                     padding: 1rem;
                     vertical-align: middle;
                     color: var(--text-theme);
+
+                    // Center-align specific columns to match headers
+                    &:nth-child(2), // Role
+                    &:nth-child(3), // Joined
+                    &:nth-child(4) {
+                      // Actions
+                      text-align: center;
+                    }
 
                     &.user-info {
                       display: flex;
@@ -529,6 +641,7 @@ $text-dark: #ffffff;
                     &.date-cell {
                       display: flex;
                       align-items: center;
+                      justify-content: center;
                       gap: 0.5rem;
                       font-size: 0.875rem;
 
@@ -564,19 +677,44 @@ $text-dark: #ffffff;
                     &.actions-cell {
                       text-align: center;
 
-                      .action-button {
-                        background: none;
-                        border: none;
-                        padding: 0.5rem;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        color: var(--text-theme);
-                        opacity: 0.6;
-                        transition: all 0.2s ease;
+                      .action-buttons {
+                        display: flex;
+                        gap: 0.5rem;
+                        justify-content: center;
+                        align-items: center;
 
-                        &:hover {
-                          opacity: 1;
-                          background-color: rgba(0, 0, 0, 0.05);
+                        .action-button {
+                          background: none;
+                          border: 1px solid rgba(0, 0, 0, 0.1);
+                          padding: 0.5rem 1rem;
+                          border-radius: 4px;
+                          cursor: pointer;
+                          color: var(--text-theme);
+                          transition: all 0.2s ease;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          gap: 0.5rem;
+                          font-size: 0.875rem;
+
+                          &.approve-button:hover {
+                            background-color: rgba(0, 206, 175, 0.1);
+                            border-color: rgba(0, 206, 175, 0.3);
+                            color: $accent-teal;
+                          }
+                        }
+
+                        .admin-badge {
+                          display: flex;
+                          align-items: center;
+                          gap: 0.5rem;
+                          padding: 0.5rem 1rem;
+                          background: rgba(240, 10, 80, 0.1);
+                          border: 1px solid rgba(240, 10, 80, 0.2);
+                          border-radius: 4px;
+                          color: $accent-pink;
+                          font-size: 0.875rem;
+                          font-weight: 500;
                         }
                       }
                     }
@@ -655,13 +793,36 @@ $text-dark: #ffffff;
             align-items: flex-start;
             gap: 1.5rem;
 
-            .admin-stats {
+            .admin-title-section {
               width: 100%;
-              justify-content: space-between;
+              text-align: center;
+            }
 
-              .stat-card {
-                flex: 1;
-                min-width: auto;
+            .admin-right-section {
+              width: 100%;
+              flex-direction: column;
+              gap: 1.5rem;
+
+              .admin-stats {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 1rem;
+
+                .stat-card {
+                  flex: 1;
+                  min-width: 120px;
+                }
+              }
+
+              .view-toggle-container {
+                width: 100%;
+                justify-content: center;
+
+                .view-toggle-btn {
+                  flex: 1;
+                  min-width: 0;
+                }
               }
             }
           }

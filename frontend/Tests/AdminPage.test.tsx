@@ -2,6 +2,7 @@ import { vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminPage from '../src/pages/AdminPage';
+import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
 
 interface User {
   id: string;
@@ -167,7 +168,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
 
     expect(
       await screen.findByText('Linguist Applications'),
@@ -187,7 +192,11 @@ describe('AdminPage', () => {
       } as Response),
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
 
     await waitFor(() => {
       expect(window.location.href).toBe('/login');
@@ -210,7 +219,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
 
     expect(await screen.findByText(/Error 403: Forbidden/)).toBeInTheDocument();
     expect(screen.getByText('Go to Dashboard')).toBeInTheDocument();
@@ -247,7 +260,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
     await screen.findByText('Linguist Applications');
 
     fireEvent.click(screen.getByRole('button', { name: /Users/ }));
@@ -285,7 +302,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
     await screen.findByText('John Doe');
 
     const searchInput = screen.getByPlaceholderText(/Search applications/);
@@ -325,7 +346,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
     await screen.findByText('John Doe');
 
     const statusFilter = screen.getByDisplayValue('All Status');
@@ -359,7 +384,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
     expect(
       await screen.findByText('No applications found'),
     ).toBeInTheDocument();
@@ -375,7 +404,11 @@ describe('AdminPage', () => {
       json: () => Promise.resolve({ role: 'admin' }),
     } as Response);
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
     fireEvent(window, new Event('resize'));
     expect(await screen.findByTestId('navbar')).toBeInTheDocument();
   });
@@ -393,7 +426,11 @@ describe('AdminPage', () => {
       },
     );
 
-    render(<AdminPage />);
+    render(
+      <DarkModeProvider>
+        <AdminPage />
+      </DarkModeProvider>,
+    );
     expect(
       await screen.findByText('Linguist Applications'),
     ).toBeInTheDocument();
