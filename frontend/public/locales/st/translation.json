@@ -173,5 +173,19 @@
         "subtitle": "Kgweding Ena"
       }
     }
+  },
+  "searchPage": {
+    "language": "Puo",
+    "domain": "Sebaka",
+    "fuzzySearch": "Patlo e sa Tobileng",
+    "loading": "E a laisa...",
+    "noResults": "Ha ho diphetho tsa \"{{term}}\".",
+    "showAll": "Bontsha Tsohle",
+    "showTermsWithLetter": "Bontsha mantswe a qalang ka {{letter}}",
+    "pagination": {
+      "previous": "Morao",
+      "next": "Pele",
+      "pageInfo": "Leqephe la {{current}} ho tsa {{total}}"
+    }
   }
 }

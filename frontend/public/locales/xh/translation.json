@@ -173,5 +173,19 @@
         "subtitle": "Kule Nyanga"
       }
     }
+  },
+  "searchPage": {
+    "language": "Ulwimi",
+    "domain": "Indawo",
+    "fuzzySearch": "Ukhangelo Olungachananga",
+    "loading": "Kuyalayisha...",
+    "noResults": "Akukho ziphumo zifunyenwe ku-\"{{term}}\".",
+    "showAll": "Bonisa Konke",
+    "showTermsWithLetter": "Bonisa amagama aqala ngo-{{letter}}",
+    "pagination": {
+      "previous": "Ngaphambili",
+      "next": "Okulandelayo",
+      "pageInfo": "Iphepha {{current}} kwi-{{total}}"
+    }
   }
 }

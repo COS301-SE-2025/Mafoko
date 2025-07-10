@@ -177,5 +177,19 @@
         "subtitle": "Kgweding ye"
       }
     }
+  },
+  "searchPage": {
+    "language": "Polelo",
+    "domain": "Lefelo",
+    "fuzzySearch": "Go Nyaka ka go se Nepe",
+    "loading": "E a laisha...",
+    "noResults": "Ga go na dipoelo tša \"{{term}}\".",
+    "showAll": "Bontšha Tšohle",
+    "showTermsWithLetter": "Bontšha mantšu ao a thomago ka {{letter}}",
+    "pagination": {
+      "previous": "Morago",
+      "next": "Pele",
+      "pageInfo": "Letlakala la {{current}} go tša {{total}}"
+    }
   }
 }

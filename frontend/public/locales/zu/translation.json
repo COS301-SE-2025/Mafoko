@@ -182,5 +182,20 @@
         "subtitle": "Kule Nyanga"
       }
     }
+  },
+
+  "searchPage": {
+    "language": "Ulimi",
+    "domain": "Isizinda",
+    "fuzzySearch": "Ukucinga Okungacacile",
+    "loading": "Iyalayisha...",
+    "noResults": "Azitholakali imiphumela yalokhu \"{{term}}\".",
+    "showAll": "Bonisa Konke",
+    "showTermsWithLetter": "Bonisa amagama aqala ngo-{{letter}}",
+    "pagination": {
+      "previous": "Elidlule",
+      "next": "Okulandelayo",
+      "pageInfo": "Ikhasi {{current}} kwa-{{total}}"
+    }
   }
 }

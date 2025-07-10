@@ -177,5 +177,19 @@
         "subtitle": "Hierdie Maand"
       }
     }
+  },
+  "searchPage": {
+    "language": "Taal",
+    "domain": "Domein",
+    "fuzzySearch": "Wasige Soektog",
+    "loading": "Laai tans...",
+    "noResults": "Geen resultate gevind vir \"{{term}}\" nie.",
+    "showAll": "Wys Alles",
+    "showTermsWithLetter": "Wys terme wat begin met {{letter}}",
+    "pagination": {
+      "previous": "Vorige",
+      "next": "Volgende",
+      "pageInfo": "Bladsy {{current}} van {{total}}"
+    }
   }
 }

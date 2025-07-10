@@ -175,5 +175,19 @@
         "subtitle": "Ṅwedzi Wonoyu"
       }
     }
+  },
+  "searchPage": {
+    "language": "Luambo",
+    "domain": "Sia",
+    "fuzzySearch": "U Ṱoḓa ho Sedzwa",
+    "loading": "Kha vha lindele...",
+    "noResults": "A hu na mvelelo dza \"{{term}}\".",
+    "showAll": "Sumbedza Zwoṱhe",
+    "showTermsWithLetter": "Sumbedza maipfi a thomaho nga {{letter}}",
+    "pagination": {
+      "previous": "Murahu",
+      "next": "Phanḓa",
+      "pageInfo": "Siaṱari {{current}} kha {{total}}"
+    }
   }
 }

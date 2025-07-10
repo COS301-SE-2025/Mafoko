@@ -127,7 +127,7 @@
     },
     "popularTerms": {
       "title": "Amagama Athandwako",
-      "subtitle": "Amagama asetjenziswa khulu eengabeni zoke"
+      "subtitle": "Amagama asetjwenza khulu eengabeni zoke"
     },
     "categoryDistribution": {
       "title": "Ukusatshalaliswa Kweengaba",
@@ -176,6 +176,20 @@
         "title": "Izinga Lokukhula Kwamagama",
         "subtitle": "Ngenyanga Le"
       }
+    }
+  },
+  "searchPage": {
+    "language": "Ilimi",
+    "domain": "Indawo",
+    "fuzzySearch": "Ukufuna Okungazeleleki",
+    "loading": "Iyalayisha...",
+    "noResults": "Akukho miphumela etholakele ye-\"{{term}}\".",
+    "showAll": "Khombisa Koke",
+    "showTermsWithLetter": "Khombisa amagama athoma ngo-{{letter}}",
+    "pagination": {
+      "previous": "Emuva",
+      "next": "Phambili",
+      "pageInfo": "Ikhasi {{current}} kwama-{{total}}"
     }
   }
 }

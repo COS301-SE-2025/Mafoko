@@ -177,5 +177,19 @@
         "subtitle": "Kulelinyanga"
       }
     }
+  },
+  "searchPage": {
+    "language": "Lulwimi",
+    "domain": "Indzawo",
+    "fuzzySearch": "Kufuna Lokungakapheleli",
+    "loading": "Kuyalayisha...",
+    "noResults": "Kute imiphumela ya-\"{{term}}\".",
+    "showAll": "Khombisa Konkhe",
+    "showTermsWithLetter": "Khombisa emagama lacala nga-{{letter}}",
+    "pagination": {
+      "previous": "Emuva",
+      "next": "Embili",
+      "pageInfo": "Likhasi {{current}} kuma-{{total}}"
+    }
   }
 }

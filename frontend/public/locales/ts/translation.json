@@ -177,5 +177,19 @@
         "subtitle": "N'hweti Leyi"
       }
     }
+  },
+  "searchPage": {
+    "language": "Ririmi",
+    "domain": "Ndhawu",
+    "fuzzySearch": "Ku Lavalava",
+    "loading": "Ku Layicha...",
+    "noResults": "Ku hava mbuyelo wa \"{{term}}\".",
+    "showAll": "Komba Hinkwaswo",
+    "showTermsWithLetter": "Komba marito lama sungulaka hi {{letter}}",
+    "pagination": {
+      "previous": "Endzhaku",
+      "next": "Mahlweni",
+      "pageInfo": "Pheji ya {{current}} eka {{total}}"
+    }
   }
 }

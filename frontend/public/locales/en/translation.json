@@ -182,5 +182,20 @@
         "subtitle": "This Month"
       }
     }
+  },
+
+  "searchPage": {
+    "language": "Language",
+    "domain": "Domain",
+    "fuzzySearch": "Fuzzy Search",
+    "loading": "Loading...",
+    "noResults": "No results found for \"{{term}}\".",
+    "showAll": "Show All",
+    "showTermsWithLetter": "Show terms starting with {{letter}}",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {{current}} of {{total}}"
+    }
   }
 }

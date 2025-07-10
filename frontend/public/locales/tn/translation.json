@@ -177,5 +177,19 @@
         "subtitle": "Kgwedi Eno"
       }
     }
+  },
+  "searchPage": {
+    "language": "Puo",
+    "domain": "Lefelo",
+    "fuzzySearch": "Patlo e e sa Tlhamalalang",
+    "loading": "E a laisa...",
+    "noResults": "Ga go na dipholo tsa \"{{term}}\".",
+    "showAll": "Bontsha Tsotlhe",
+    "showTermsWithLetter": "Bontsha mafoko a a simololang ka {{letter}}",
+    "pagination": {
+      "previous": "Morago",
+      "next": "Pele",
+      "pageInfo": "Tsebe {{current}} ya {{total}}"
+    }
   }
 }
