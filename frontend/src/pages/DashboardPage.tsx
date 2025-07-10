@@ -5,6 +5,7 @@ import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
 import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 interface RecentTerm {
   id: string;
@@ -38,17 +39,7 @@ interface UserData {
 }
 
 const DashboardPage: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Force dark mode for this page
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
+  const { isDarkMode } = useDarkMode();
 
   const { t } = useTranslation();
   const navigate = useNavigate();

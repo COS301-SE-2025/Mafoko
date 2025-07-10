@@ -35,19 +35,19 @@ $card-dark: #3a4050;
   --border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ===== DEFAULT DARK THEME ===== */
+/* ===== DEFAULT THEME (Light) ===== */
 :root {
-  --bg-card: #{$card-dark};
-  --text-color: #{$text-dark};
-  --page-bg: #{$background-dark};
-  --icon-color: #{$text-dark};
-  --sidebar-bg: #2a2f3a;
-  --sidebar-border: #3a4050;
-  --menu-hover: #3a4050;
+  --bg-card: #{$card-light};
+  --text-color: #{$text-light};
+  --page-bg: #{$background-light};
+  --icon-color: #{$text-light};
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --menu-hover: #f3f4f6;
   --menu-active: #4338ca;
   --accent-color: #6366f1;
-  --secondary-bg: rgba(33, 36, 49, 0.95);
-  --border-color: rgba(255, 255, 255, 0.1);
+  --secondary-bg: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ===== DASHBOARD CONTAINER ===== */
