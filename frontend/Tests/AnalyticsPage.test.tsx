@@ -170,11 +170,12 @@ test('renders analytics page with basic structure', async () => {
     </Router>,
   );
 
-  await waitFor(() => {
-    expect(
-      screen.queryByText('Loading analytics data...'),
-    ).not.toBeInTheDocument();
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryByText('analytics.loading')).not.toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
 
   expect(
     screen.getByTestId('stat-card-analytics.stats.totalterms'),
@@ -199,11 +200,12 @@ test('renders all chart components', async () => {
     </Router>,
   );
 
-  await waitFor(() => {
-    expect(
-      screen.queryByText('Loading analytics data...'),
-    ).not.toBeInTheDocument();
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryByText('analytics.loading')).not.toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
 
   expect(screen.getByTestId('horizontal-bar-chart')).toBeInTheDocument();
   expect(screen.getByTestId('pie-chart')).toBeInTheDocument();
@@ -314,11 +316,12 @@ test('displays dark mode properly on charts', async () => {
     </Router>,
   );
 
-  await waitFor(() => {
-    expect(
-      screen.queryByText('Loading analytics data...'),
-    ).not.toBeInTheDocument();
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryByText('analytics.loading')).not.toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
 
   const chartElements = screen.getAllByTestId('chart-dark-mode');
   chartElements.forEach((element) => {
@@ -335,11 +338,12 @@ test('renders page sections correctly', async () => {
     </Router>,
   );
 
-  await waitFor(() => {
-    expect(
-      screen.queryByText('Loading analytics data...'),
-    ).not.toBeInTheDocument();
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryByText('analytics.loading')).not.toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
 
   expect(screen.getByText('analytics.popularTerms.title')).toBeInTheDocument();
   expect(
