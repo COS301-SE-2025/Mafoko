@@ -15,8 +15,8 @@ $card-dark: #3a4050;
   --sidebar-bg: #ffffff;
   --sidebar-border: #e5e7eb;
   --menu-hover: #f3f4f6;
-  --menu-active: #00CEAF;
-  --accent-color: #00CEAF;
+  --menu-active: #00ceaf;
+  --accent-color: #00ceaf;
   --secondary-bg: rgba(255, 255, 255, 0.95);
   --border-color: rgba(0, 0, 0, 0.1);
 }
@@ -29,8 +29,8 @@ $card-dark: #3a4050;
   --sidebar-bg: #2a2f3a;
   --sidebar-border: #3a4050;
   --menu-hover: #3a4050;
-  --menu-active: #00CEAF;
-  --accent-color: #00CEAF;
+  --menu-active: #00ceaf;
+  --accent-color: #00ceaf;
   --secondary-bg: rgba(33, 36, 49, 0.95);
   --border-color: rgba(255, 255, 255, 0.1);
 }
@@ -44,8 +44,8 @@ $card-dark: #3a4050;
   --sidebar-bg: #ffffff;
   --sidebar-border: #e5e7eb;
   --menu-hover: #f3f4f6;
-  --menu-active: #00CEAF;
-  --accent-color: #00CEAF;
+  --menu-active: #00ceaf;
+  --accent-color: #00ceaf;
   --secondary-bg: rgba(255, 255, 255, 0.95);
   --border-color: rgba(0, 0, 0, 0.1);
 }
@@ -183,7 +183,7 @@ $card-dark: #3a4050;
 
 .welcome-section {
   padding: 20px;
-  background: #00CEAF;
+  background: #00ceaf;
   border-radius: 16px;
   color: white;
   box-shadow: 0 10px 25px rgba(0, 206, 175, 0.3);
@@ -215,7 +215,7 @@ $card-dark: #3a4050;
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #F00A50 !important;
+  background: #f00a50 !important;
   color: white;
   display: flex;
   align-items: center;
@@ -317,35 +317,35 @@ $card-dark: #3a4050;
 }
 
 .action-card.primary {
-  border-color: #00CEAF;
+  border-color: #00ceaf;
   border-style: dashed;
 }
 
 .action-card.primary:hover {
   border-style: solid;
-  background: #00CEAF;
+  background: #00ceaf;
   color: white;
 }
 
 .action-card.secondary {
-  border-color: #F2D001;
+  border-color: #f2d001;
   border-style: dashed;
 }
 
 .action-card.secondary:hover {
   border-style: solid;
-  background: #F2D001;
+  background: #f2d001;
   color: white;
 }
 
 .action-card.tertiary {
-  border-color: #F00A50;
+  border-color: #f00a50;
   border-style: dashed;
 }
 
 .action-card.tertiary:hover {
   border-style: solid;
-  background: #F00A50;
+  background: #f00a50;
   color: white;
 }
 
@@ -441,7 +441,7 @@ $card-dark: #3a4050;
 }
 
 .view-all-btn {
-  background: #00CEAF;
+  background: #00ceaf;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -453,7 +453,7 @@ $card-dark: #3a4050;
 }
 
 .view-all-btn:hover {
-  background: #00CEAF;
+  background: #00ceaf;
   transform: translateY(-2px);
 }
 
@@ -484,7 +484,7 @@ $card-dark: #3a4050;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #F00A50;
+  background: #f00a50;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -524,7 +524,7 @@ $card-dark: #3a4050;
 }
 
 .view-all-activity-btn {
-  background: #00CEAF;
+  background: #00ceaf;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -536,7 +536,7 @@ $card-dark: #3a4050;
 }
 
 .view-all-activity-btn:hover {
-  background: #00CEAF;
+  background: #00ceaf;
   transform: translateY(-2px);
 }
 

@@ -2,21 +2,21 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 
-const translations: Record<string, string> = {
-  'searchPage.language': 'Language',
-  'searchPage.domain': 'Domain',
-  'searchPage.fuzzySearch': 'Fuzzy Search',
-  'searchPage.noResults': 'No results found for {{term}}',
-  'searchPage.loading': 'Loading...',
-  'searchPage.showAll': 'Show All',
-  'searchPage.showTermsWithLetter': 'Show terms starting with {{letter}}',
-  'searchPage.pagination.previous': 'Previous',
-  'searchPage.pagination.next': 'Next',
-  'searchPage.pagination.pageInfo': 'Page {{current}} of {{total}}',
-};
-
 // Mock useTranslation hook
-const useTranslation = () => {
+export const useTranslation = () => {
+  const translations: Record<string, string> = {
+    'searchPage.language': 'Language',
+    'searchPage.domain': 'Domain',
+    'searchPage.fuzzySearch': 'Fuzzy Search',
+    'searchPage.noResults': 'No results found for {{term}}',
+    'searchPage.loading': 'Loading...',
+    'searchPage.showAll': 'Show All',
+    'searchPage.showTermsWithLetter': 'Show terms starting with {{letter}}',
+    'searchPage.pagination.previous': 'Previous',
+    'searchPage.pagination.next': 'Next',
+    'searchPage.pagination.pageInfo': 'Page {{current}} of {{total}}',
+  };
+
   return {
     t: (key: string) => {
       // Handle interpolation for simple cases
@@ -34,7 +34,7 @@ const useTranslation = () => {
 };
 
 // Mock Trans component
-const Trans = ({
+export const Trans = ({
   i18nKey,
   children,
 }: {
@@ -43,5 +43,3 @@ const Trans = ({
 }) => {
   return <>{children || i18nKey}</>;
 };
-
-export { useTranslation, Trans };

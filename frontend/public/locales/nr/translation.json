@@ -8,12 +8,12 @@
     "help": "Isizo",
     "darkMode": "Indlela emnyama"
   },
-  
+
   "landingPage": {
     "registerButton": "Bhalisela",
     "loginButton": "Ngena"
   },
-    "loginPage": {
+  "loginPage": {
     "title": "SIYAKWAMUKELA GODU!",
     "subtitle": "Sibawa ufake imininingwana yakho yokungena.",
     "emailLabel": "I-imeyili",

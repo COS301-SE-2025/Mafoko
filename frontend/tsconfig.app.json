@@ -25,5 +25,12 @@
 
     "esModuleInterop": true
   },
-  "include": ["src", "setupTests.ts", "Tests/**/*.ts", "Tests/**/*.tsx", "__mocks__/**/*.ts", "__mocks__/**/*.tsx"]
+  "include": [
+    "src",
+    "setupTests.ts",
+    "Tests/**/*.ts",
+    "Tests/**/*.tsx",
+    "__mocks__/**/*.ts",
+    "__mocks__/**/*.tsx"
+  ]
 }
