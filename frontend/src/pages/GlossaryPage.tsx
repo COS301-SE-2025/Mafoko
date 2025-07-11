@@ -8,11 +8,11 @@ import {
   Download,
   FileType,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
 import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
 import '../styles/GlossaryPage.scss';
-// import { useLocation } from 'react-router-dom'; // Not needed anymore
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 import { API_ENDPOINTS } from '../config';
@@ -153,6 +153,7 @@ const dictionaryAPI = {
 };
 
 const GlossaryPage = () => {
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
 
   // Set activeMenuItem to 'glossary' for consistency with AnalyticsPage
@@ -580,7 +581,9 @@ const GlossaryPage = () => {
               }}
             >
               {isLoadingUserData ? (
-                <div className="profile-section">Loading profile...</div>
+                <div className="profile-section">
+                  {t('glossaryPage.loading')}
+                </div>
               ) : userData ? (
                 <div
                   className="profile-section"
@@ -661,15 +664,14 @@ const GlossaryPage = () => {
                 style={{
                   textAlign: 'center',
                   marginBottom: '1rem',
-                  flexShrink: 0,
                 }}
               >
                 <h1 className="glossary-title">
                   <Book size={40} />
-                  Multilingual Glossary
+                  {t('glossaryPage.title')}
                 </h1>
                 <p className="glossary-subtitle">
-                  Browse categories, explore terms, and discover translations
+                  {t('glossaryPage.subtitle')}
                 </p>
                 {Object.keys(availableLanguages).length > 0 && (
                   <p
@@ -684,21 +686,12 @@ const GlossaryPage = () => {
                 )}
               </div>
 
-              <div
-                className="glossary-grid"
-                style={{
-                  flex: 1,
-                  minHeight: 400,
-                  overflow: 'visible',
-                  marginBottom: window.innerWidth <= 768 ? '2rem' : '1rem',
-                  position: 'relative',
-                }}
-              >
+              <div className="glossary-grid">
                 {/* Categories Panel */}
                 <div className="glossary-panel">
                   <h2 className="glossary-panel-title">
                     <Book size={20} />
-                    Categories
+                    {t('glossaryPage.categories')}
                   </h2>
                   {loading && !categories.length ? (
                     <div className="animate-pulse">
@@ -772,10 +765,12 @@ const GlossaryPage = () => {
                 <div className="glossary-panel">
                   <h2 className="glossary-panel-title">
                     {selectedCategory
-                      ? `Terms in ${selectedCategory}`
+                      ? t('glossaryPage.termsInCategory', {
+                          category: selectedCategory,
+                        })
                       : categoryTerms.length > 0
-                        ? 'Random Terms'
-                        : 'Select a Category'}
+                        ? t('glossaryPage.randomTerms')
+                        : t('glossaryPage.selectCategory')}
                   </h2>
                   <div className="glossary-search">
                     <Search className="glossary-search-icon" size={16} />
@@ -783,8 +778,10 @@ const GlossaryPage = () => {
                       type="text"
                       placeholder={
                         selectedCategory
-                          ? `Search terms in ${selectedCategory}...`
-                          : 'Search all terms...'
+                          ? t('glossaryPage.searchTermsInCategory', {
+                              category: selectedCategory,
+                            })
+                          : t('glossaryPage.searchAllTerms')
                       }
                       value={searchTerm}
                       onChange={(e) => {
@@ -845,94 +842,88 @@ const GlossaryPage = () => {
                 {/* Details Panel */}
                 <div className="glossary-panel">
                   <h2 className="glossary-panel-title">
-                    <Globe size={20} />
-                    Term Details
+                    <Book size={20} />
+                    {t('glossaryPage.termDetails')}
                   </h2>
-                  {selectedTerm ? (
-                    <div
-                      className="space-y-4 glossary-terms-list"
-                      style={{
-                        maxHeight: 'calc(100vh - 250px)',
-                        overflowY: 'auto',
-                        paddingRight: '8px',
-                        marginRight: '-8px',
-                      }}
-                    >
+                  <div className="glossary-details">
+                    {selectedTerm ? (
                       <div>
                         <h3 className="glossary-details-title">
                           {selectedTerm.term}
-                        </h3>{' '}
+                        </h3>
                         <p className="glossary-details-def">
                           {selectedTerm.definition}
                         </p>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            void handleShowTranslations();
-                          }}
-                          className="glossary-translate-btn"
-                          disabled={loading}
-                        >
-                          <Globe size={16} />
-                          {loading && showTranslations
-                            ? 'Loading...'
-                            : 'Show Translations'}
-                        </button>
-                      </div>
-                      {showTranslations && (
-                        <div
-                          className="glossary-translation-list"
-                          style={{
-                            overflowY: 'visible',
-                            maxHeight: 'none',
-                          }}
-                        >
-                          <h4 className="glossary-translations-header">
-                            Translations
-                          </h4>
-                          {loading ? (
-                            <div className="animate-pulse space-y-2">
-                              <div className="glossary-loading-skeleton"></div>
-                              <div className="glossary-loading-skeleton"></div>
-                              <div className="glossary-loading-skeleton"></div>
-                            </div>
-                          ) : translations &&
-                            Object.keys(translations.translations).length >
-                              0 ? (
-                            Object.entries(translations.translations).map(
-                              ([language, translation]) => (
-                                <div
-                                  key={language}
-                                  className="glossary-translation-item"
-                                >
-                                  <div className="glossary-translation-lang">
-                                    {language}
-                                  </div>
-                                  <div className="glossary-translation-text">
-                                    {String(translation)}
-                                  </div>
-                                </div>
-                              ),
-                            )
-                          ) : (
-                            <div className="glossary-empty">
-                              No translations available for this term
-                            </div>
-                          )}
+                        <div style={{ marginTop: '1rem' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              void handleShowTranslations();
+                            }}
+                            className="glossary-translate-btn"
+                            disabled={loading}
+                          >
+                            <Globe size={16} />
+                            {loading && showTranslations
+                              ? t('glossaryPage.loading')
+                              : t('glossaryPage.showTranslations')}
+                          </button>
                         </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div
-                      className="glossary-empty"
-                      style={{
-                        maxHeight: 'calc(100vh - 250px)',
-                        overflowY: 'auto',
-                      }}
-                    >
-                      Select a term to view details and translations
-                    </div>
-                  )}
+                        {showTranslations && (
+                          <div
+                            className="glossary-translation-list"
+                            style={{
+                              overflowY: 'visible',
+                              maxHeight: 'none',
+                            }}
+                          >
+                            <h4 className="glossary-translations-header">
+                              {t('glossaryPage.translationsHeader')}
+                            </h4>
+                            {loading ? (
+                              <div className="animate-pulse space-y-2">
+                                <div className="glossary-loading-skeleton"></div>
+                                <div className="glossary-loading-skeleton"></div>
+                                <div className="glossary-loading-skeleton"></div>
+                              </div>
+                            ) : translations &&
+                              Object.keys(translations.translations).length >
+                                0 ? (
+                              Object.entries(translations.translations).map(
+                                ([language, translation]) => (
+                                  <div
+                                    key={language}
+                                    className="glossary-translation-item"
+                                  >
+                                    <div className="glossary-translation-lang">
+                                      {language}
+                                    </div>
+                                    <div className="glossary-translation-text">
+                                      {String(translation)}
+                                    </div>
+                                  </div>
+                                ),
+                              )
+                            ) : (
+                              <div className="glossary-empty">
+                                {t('glossaryPage.noTranslations')}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        className="glossary-empty"
+                        style={{
+                          maxHeight: 'calc(100vh - 250px)',
+                          overflowY: 'auto',
+                        }}
+                      >
+                        {t('glossaryPage.selectTerm')}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -977,7 +968,7 @@ const GlossaryPage = () => {
                     }}
                   >
                     <Download size={16} />
-                    Export Data
+                    {t('glossaryPage.exportData')}
                   </button>
                 </div>
               )}
@@ -1069,7 +1060,7 @@ const GlossaryPage = () => {
                       className="glossary-export-title"
                     >
                       <Download size={20} />
-                      Export Data
+                      {t('glossaryPage.exportData')}
                     </h3>
                     <p
                       style={{
@@ -1079,12 +1070,11 @@ const GlossaryPage = () => {
                       }}
                       className="glossary-export-subtitle"
                     >
-                      Download the{' '}
-                      {selectedCategory
-                        ? `terms in category "${selectedCategory}"`
-                        : 'current terms'}
-                      {searchTerm ? ` matching "${searchTerm}"` : ''} (
-                      {filteredTerms.length} items)
+                      {t('glossaryPage.downloadTerms', {
+                        category: selectedCategory,
+                        searchTerm,
+                        count: filteredTerms.length,
+                      })}
                     </p>
                   </div>
 
@@ -1146,9 +1136,11 @@ const GlossaryPage = () => {
                         <FileType size={20} />
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600 }}>CSV Format</div>
+                        <div style={{ fontWeight: 600 }}>
+                          {t('glossaryPage.csvFormat')}
+                        </div>
                         <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                          Spreadsheet-compatible format
+                          {t('glossaryPage.spreadsheetCompatible')}
                         </div>
                       </div>
                     </button>
@@ -1206,9 +1198,11 @@ const GlossaryPage = () => {
                         <FileType size={20} />
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600 }}>JSON Format</div>
+                        <div style={{ fontWeight: 600 }}>
+                          {t('glossaryPage.jsonFormat')}
+                        </div>
                         <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                          Developer-friendly data format
+                          {t('glossaryPage.developerFriendly')}
                         </div>
                       </div>
                     </button>
@@ -1266,9 +1260,11 @@ const GlossaryPage = () => {
                         <FileType size={20} />
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600 }}>HTML Table</div>
+                        <div style={{ fontWeight: 600 }}>
+                          {t('glossaryPage.htmlTable')}
+                        </div>
                         <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                          Web-friendly table format
+                          {t('glossaryPage.webFriendly')}
                         </div>
                       </div>
                     </button>
@@ -1408,7 +1404,7 @@ const GlossaryPage = () => {
                           {isDownloading ? 'Generating PDF...' : 'PDF Document'}
                         </div>
                         <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                          Printable document format
+                          {t('glossaryPage.printableDocument')}
                         </div>
                       </div>
                     </button>

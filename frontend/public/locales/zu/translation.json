@@ -1,12 +1,17 @@
 {
-  "appTitle": "i-Mavito",
-  "loading": "Iyalayisha...",
+  "navigation": {
+    "home": "Ikhaya",
+    "dictionary": "Isichazamazwi",
+    "glossary": "Izihumusho",
+    "savedTerms": "Amagama Agcinile",
+    "dashboard": "Ibhodi",
+    "help": "Usizo",
+    "darkMode": "Indlela emnyama"
+  },
 
   "landingPage": {
-    "greeting": "Siyakwamukela ku-Mavito PWA!",
     "registerButton": "Bhalisa",
-    "loginButton": "Ngena ngemvume",
-    "footerText": "Iphrojekthi ye-Mavito"
+    "loginButton": "Ngena"
   },
 
   "loginPage": {
@@ -63,35 +68,146 @@
     "errorUnexpectedFormat": "Iphutha: {{detailJson}}",
     "errorWithStatus": "Ukubhalisa kwehlulekile (isimo {{status}}). Sicela uzame futhi.",
     "errorNetwork": "Kwenzeke iphutha: {{message}}.",
-    "errorUnknownNetwork": "Kwenzeke iphutha lenethiwekhi elingaziwa. Sicela uzame futhi."
-  },
-  "languageSwitcher": {
-    "selectLanguage": "Khetha Ulimi"
+    "errorUnknownNetwork": "Kwenzeke iphutha lenethiwekhi elingaziwa. Sicela uzame futhi.",
+    "registerAsLabel": "Bhalisa Njengo",
+    "registerAsPlaceholder": "Khetha iqhaza lakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Uchwepheshe Wolimi",
+      "researcher": "Umcwaningi",
+      "student": "Umfundi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Umsebenzisi Ojwayelekile",
+      "applyingLinguist": "Ukubhalisa njengoChwepheshe Wolimi"
+    }
   },
 
   "dashboard": {
-    "welcome": "Wamukelekile futhi, Umnikeli!",
+    "welcome": "Siyakwamukela ku-Mavito",
+    "welcomeBack": "Wamukelekile futhi",
+    "userName": "Igama Lomsebenzisi",
+    "userId": "Inombolo Yomsebenzisi",
     "quickActions": "Izenzo Ezisheshayo",
     "searchNow": "Sesha Manje",
-    "searchDescription": "Hlola idatabase yethu yezilimi eziningi",
-    "downloadResources": "Landa Izinsiza",
-    "downloadDescription": "Thola okuqukethwe ngaphandle kwe-intanethi",
-    "contributeTerm": "Nikela Ngegama",
-    "contributeDescription": "Siza ukukhulisa idatabase yethu",
-    "recentTerms": "Amagama Abonwe Kamuva",
-    "viewAll": "Bona Wonke Amagama Amuva",
+    "searchDescription": "Sesha amagama ezilimi eziningi",
+    "downloadResources": "Dawuniloda Izinsiza",
+    "downloadDescription": "Thola futhi udawunilode izinsiza zamagama",
+    "contributeTerm": "Faka Igama",
+    "contributeDescription": "Engeza amagama amasha kusizindalwazi sethu",
+    "recentTerms": "Amagama Amuva",
     "hideTerms": "Fihla Amagama",
-    "communityActivity": "Umsebenzi Womphakathi",
-    "viewAllActivity": "Bona Yonke Imisebenzi",
+    "viewAll": "Buka Konke",
+    "communityActivity": "Imisebenzi Yomphakathi",
     "hideActivity": "Fihla Imisebenzi",
-    "userName": "Igama Lomsebenzisi",
-    "userId": "ID Yomsebenzisi"
+    "viewAllActivity": "Buka Yonke Imisebenzi"
   },
 
-  "leftPane": {
-    "dashboard": "Ideshibhodi",
-    "search": "Sesha",
-    "savedTerms": "Amagama Agciniwe",
-    "analytics": "Ukuhlaziya"
+  "glossaryPage": {
+    "title": "Izihumusho Zezilimi Eziningi",
+    "subtitle": "Bheka izigaba, hlola amatemu, uthole izihumusho",
+    "showTranslations": "Bonisa Izihumusho",
+    "translationsHeader": "Izihumusho",
+    "noTranslations": "Azikho izihumusho ezitholakalayo zaleli gama",
+    "selectTerm": "Khetha igama ukuze ubone imininingwane nezihumusho",
+    "loading": "Iyalayisha...",
+    "categories": "Izigaba",
+    "selectCategory": "Khetha Isigaba",
+    "termDetails": "Imininingwane Yegama",
+    "termsInCategory": "Amagama ku-{{category}}",
+    "randomTerms": "Amagama Angahleliwe",
+    "searchTermsInCategory": "Sesha amagama ku-{{category}}...",
+    "searchAllTerms": "Sesha wonke amagama...",
+    "noTermsFound": "Awekho amagama atholakele afana no-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Awekho amagama atholakalayo ku-{{category}}."
+  },
+
+  "analytics": {
+    "loading": "Ilayisha idatha yokuhlaziya...",
+    "stats": {
+      "totalTerms": "Amagama Ewonke",
+      "uniqueLanguages": "Izilimi Ezihlukile",
+      "uniqueDomains": "Izindawo Ezihlukile",
+      "topLanguage": "Ulimi Oluphambili"
+    },
+    "popularTerms": {
+      "title": "Amagama Adumile",
+      "subtitle": "Amagama asetshenziswa kakhulu kuzo zonke izindawo"
+    },
+    "categoryDistribution": {
+      "title": "Ukuhleleka Kwezigaba",
+      "subtitle": "Amagama ahlelwe ngezindawo zestatistiki"
+    },
+    "topDomains": {
+      "title": "Izindawo Eziphambili",
+      "subtitle": "Izindawo zestatistiki ezisebenza kakhulu"
+    },
+    "trendsAndInsights": {
+      "title": "Izinqubo Nokubona",
+      "subtitle": "Ukuhlaziya okususelwa kudatha nemiphumela",
+      "languageDiversity": {
+        "title": "Isikali Sokwahluka Kwezilimi",
+        "coverage": "yezilimi zaseNingizimu Afrika zisetshenzisiwe",
+        "terms": "amagama"
+      },
+      "domainFocus": {
+        "title": "Izindawo Ezigxilwe Kuzo"
+      },
+      "dataQuality": {
+        "title": "Izikali Zekhwalithi Yedatha",
+        "completenessScore": "Amamaki Okuphelela",
+        "translationCoverage": "Ukumboza Kokuhumusha",
+        "definitionQuality": "Ikhwalithi Yencazelo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Isifinyezo Sokuhlaziya",
+      "subtitle": "Ukubuka ikhwalithi yedatha nezikali zokusebenza",
+      "dataQualityScore": {
+        "title": "Amamaki Ekhwalithi Yedatha",
+        "subtitle": "Ukumboza Okuphelele"
+      },
+      "coverageEfficiency": {
+        "title": "Ukusebenza Kokumboza",
+        "subtitle": "Ikhwalithi Yokusabalalisa",
+        "excellent": "Kuhle Kakhulu",
+        "good": "Kuhle"
+      },
+      "popularCategory": {
+        "title": "Isigaba Esidume Kakhulu",
+        "subtitle": "Indawo Ephambili"
+      },
+      "termGrowth": {
+        "title": "Izinga Lokukhula Kwamagama",
+        "subtitle": "Kule Nyanga"
+      }
+    }
+  },
+
+  "searchPage": {
+    "searchPlaceholder": "Faka igama lokusesha",
+    "language": "Ulimi",
+    "domain": "Isizinda",
+    "fuzzySearch": "Ukucinga Okungacacile",
+    "loading": "Iyalayisha...",
+    "noResults": "Azitholakali imiphumela yalokhu \"{{term}}\".",
+    "showAll": "Bonisa Konke",
+    "showTermsWithLetter": "Bonisa amagama aqala ngo-{{letter}}",
+    "pagination": {
+      "previous": "Elidlule",
+      "next": "Okulandelayo",
+      "pageInfo": "Ikhasi {{current}} kwa-{{total}}"
+    }
+  },
+
+  "helpPage": {
+    "howCanWeHelp": "Singakusiza Kanjani?",
+    "commonTopics": "Izihloko Ezijwayelekile",
+    "articleLink": "Indaba →",
+    "cantFind": "Akutholi okudingayo?",
+    "submitRequest": "Thumela isicelo →",
+    "previous": "Okudlule",
+    "next": "Okulandelayo",
+    "pageInfo": "Ikhasi {{current}} kwi-{{total}}"
   }
 }

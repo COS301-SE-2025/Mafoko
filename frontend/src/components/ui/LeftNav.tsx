@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface LeftNavProps {
   activeItem: string;
@@ -15,12 +16,12 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Home', path: '/dashboard' },
-    { id: 'search', label: 'Dictionary', path: '/search' },
-    { id: 'glossary', label: 'Glossary', path: '/glossary' },
-    { id: 'saved', label: t('leftPane.savedTerms'), path: '/saved-terms' },
-    { id: 'analytics', label: 'Dashboard', path: '/analytics' },
-    { id: 'help', label: t('Help'), path: '/help' },
+    { id: 'dashboard', label: t('navigation.home'), path: '/dashboard' },
+    { id: 'search', label: t('navigation.dictionary'), path: '/search' },
+    { id: 'glossary', label: t('navigation.glossary'), path: '/glossary' },
+    { id: 'saved', label: t('navigation.savedTerms'), path: '/saved-terms' },
+    { id: 'analytics', label: t('navigation.dashboard'), path: '/analytics' },
+    { id: 'help', label: t('navigation.help'), path: '/help' },
   ];
 
   const handleItemClick = (itemId: string, path: string) => {
@@ -29,10 +30,13 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   };
 
   return (
-    <div className="left-nav">
+    <div className={`left-nav ${isDarkMode ? 'dark-mode' : ''}`}>
       {/* Header */}
       <div className="left-nav-header">
-        <h2 className="left-nav-app-title">Marito</h2>
+        <div className="left-nav-title-section">
+          <h2 className="left-nav-app-title">Marito</h2>
+          <LanguageSwitcher />
+        </div>
         <div className="logo-container">
           <img
             src="./icons/maskable_icon_x512.png"
@@ -63,7 +67,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             aria-label="Toggle dark mode"
           >
             {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            {t('navigation.darkMode')}
           </button>
         </div>
       </nav>

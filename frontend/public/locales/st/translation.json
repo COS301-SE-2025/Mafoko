@@ -1,12 +1,17 @@
 {
-  "appTitle": "Mavito",
-  "loading": "E ntse e jarwa...",
+  "navigation": {
+    "home": "Lehae",
+    "dictionary": "Bukantswe",
+    "glossary": "Lenane la Mantswe",
+    "savedTerms": "Mantswe a Bolokilweng",
+    "dashboard": "Letlapa",
+    "help": "Thuso",
+    "darkMode": "Mokgwa o lefifi"
+  },
 
   "landingPage": {
-    "greeting": "O amohetswe ho Mavito PWA!",
     "registerButton": "Ngodisa",
-    "loginButton": "Kena",
-    "footerText": "Projeke ya Mavito"
+    "loginButton": "Kena"
   },
   "loginPage": {
     "title": "RE A O AMOHELA HAPE!",
@@ -61,41 +66,137 @@
     "errorUnexpectedFormat": "Phoso: {{detailJson}}",
     "errorWithStatus": "Ngodiso e hlolehile (boemo {{status}}). Ka kopo leka hape.",
     "errorNetwork": "Ho hlahile phoso: {{message}}.",
-    "errorUnknownNetwork": "Ho hlahile phoso e sa tsejweng ya neteweke. Ka kopo leka hape."
+    "errorUnknownNetwork": "Ho hlahile phoso e sa tsejweng ya neteweke. Ka kopo leka hape.",
+    "registerAsLabel": "Ngodisa Jwaloka",
+    "registerAsPlaceholder": "Kgetha karolo ya hao",
+    "registerAsOptions": {
+      "contributor": "Moneheli",
+      "linguist": "Setsebi sa Puo",
+      "researcher": "Mofuputsi",
+      "student": "Moithuti"
+    }
   },
-  "languageSwitcher": {
-    "selectLanguage": "Kgetha Puo"
-  },
-
   "dashboard": {
-    "welcome": "O amohelehile hape, Moneheli!",
+    "welcome": "O amohelehile ho Mavito",
+    "welcomeBack": "O kgutlile hape",
+    "userName": "Lebitso la Mosebedisi",
+    "userId": "Nomoro ya Mosebedisi",
     "quickActions": "Diketso tse Potlakileng",
     "searchNow": "Batla Hona Jwale",
-    "searchDescription": "Batlisisa databese ya rona ya dipuo tse ngata",
+    "searchDescription": "Batla mareo ka dipuo tse ngata",
     "downloadResources": "Jarolla Disebediswa",
-    "downloadDescription": "Fumana dikahare o sa kenyeletsa inthanete",
-    "contributeTerm": "Fana ka Lentswe",
-    "contributeDescription": "Thusa ho hodisa databese ya rona",
-    "recentTerms": "Mantswe a Bonweng Haufinyana",
-    "viewAll": "Sheba Mantswe Ohle a Haufinyana",
-    "hideTerms": "Pata Mantswe",
-    "communityActivity": "Diketsahalo tsa Setjhaba",
-    "viewAllActivity": "Sheba Diketsahalo Tsohle",
-    "hideActivity": "Pata Diketsahalo",
-    "userName": "Lebitso la Mosebedisi",
-    "userId": "ID ya Mosebedisi"
+    "downloadDescription": "Fumana le ho jarolla disebediswa tsa mareo",
+    "contributeTerm": "Kenya Lereo",
+    "contributeDescription": "Kenya mareo a matjha databeisung ya rona",
+    "recentTerms": "Mareo a Moraorao",
+    "hideTerms": "Pata Mareo",
+    "viewAll": "Bona Kaofela",
+    "communityActivity": "Mesebetsi ya Setjhaba",
+    "hideActivity": "Pata Mesebetsi",
+    "viewAllActivity": "Bona Mesebetsi Kaofela"
   },
-
-  "leftPane": {
-    "dashboard": "Tafole ya Tshebetso",
-    "search": "Batla",
-    "savedTerms": "Mantswe a Bolokilweng",
-    "analytics": "Ditatistiki"
+  "glossaryPage": {
+    "title": "Lenane la Mantswe a Dipuo tse Ngata",
+    "subtitle": "Sheba dikarolo, fuputsa mantswe, fumana diphetolelo",
+    "showTranslations": "Bontsha Diphetolelo",
+    "translationsHeader": "Diphetolelo",
+    "noTranslations": "Ha ho diphetolelo tse fumanehang bakeng sa lentswe lena",
+    "selectTerm": "Kgetha lentswe ho bona dintlha le diphetolelo",
+    "loading": "E a laeta...",
+    "categories": "Dikarolo",
+    "selectCategory": "Kgetha Karolo",
+    "termDetails": "Dintlha tsa Lentswe",
+    "termsInCategory": "Mantswe ho {{category}}",
+    "randomTerms": "Mantswe a sa Hlophiswang",
+    "searchTermsInCategory": "Batla mantswe ho {{category}}...",
+    "searchAllTerms": "Batla mantswe ohle...",
+    "noTermsFound": "Ha ho mantswe a fumanehileng a tshwanang le \"{{query}}\" ho {{category}}.",
+    "noTermsInCategory": "Ha ho mantswe a fumanehang ho {{category}}."
   },
-  "leftPane": {
-    "dashboard": "Tafole ya Tshebetso",
-    "search": "Batla",
-    "savedTerms": "Mantswe a Bolokilweng",
-    "analytics": "Tekolo"
+  "analytics": {
+    "loading": "E laeta data ya analytics...",
+    "stats": {
+      "totalTerms": "Mantswe Kaofela",
+      "uniqueLanguages": "Dipuo tse Fapaneng",
+      "uniqueDomains": "Dikarolo tse Fapaneng",
+      "topLanguage": "Puo e Phahameng"
+    },
+    "popularTerms": {
+      "title": "Mantswe a Tummeng",
+      "subtitle": "Mantswe a sebediswang haholo dikarolong tsohle"
+    },
+    "categoryDistribution": {
+      "title": "Kabo ya Dikarolo",
+      "subtitle": "Mantswe a hlophisitsweng ka dikarolo tsa dipalopalo"
+    },
+    "topDomains": {
+      "title": "Dikarolo tse Phahameng",
+      "subtitle": "Dikarolo tsa dipalopalo tse sebetsang haholo"
+    },
+    "trendsAndInsights": {
+      "title": "Ditlwaelo le Tsebo",
+      "subtitle": "Tlhahlobo e thehilweng ho data le diphetho",
+      "languageDiversity": {
+        "title": "Sekala sa ho Fapana ha Dipuo",
+        "coverage": "ya dipuo tsa Afrika Borwa tse sebedisitsweng",
+        "terms": "mantswe"
+      },
+      "domainFocus": {
+        "title": "Dikarolo tsa Tsepamiso"
+      },
+      "dataQuality": {
+        "title": "Ditekanyetso tsa Boleng ba Data",
+        "completenessScore": "Matshwao a ho Phethahala",
+        "translationCoverage": "Kgahllamelo ya Phetolelo",
+        "definitionQuality": "Boleng ba Ditlhaloso"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Kakaretso ya Analytics",
+      "subtitle": "Tjhebo ya boleng ba data le ditekanyetso tsa tshebetso",
+      "dataQualityScore": {
+        "title": "Matshwao a Boleng ba Data",
+        "subtitle": "Kgahllamelo e Phethahetseng"
+      },
+      "coverageEfficiency": {
+        "title": "Bokgoni ba Kgahllamelo",
+        "subtitle": "Boleng ba Kabo",
+        "excellent": "Ho Kgabane",
+        "good": "Ho Hotle"
+      },
+      "popularCategory": {
+        "title": "Karolo e Tummeng ka ho Fetisisa",
+        "subtitle": "Karolo e Etelletseng Pele"
+      },
+      "termGrowth": {
+        "title": "Sekgahla sa Kgolo ya Mantswe",
+        "subtitle": "Kgweding Ena"
+      }
+    }
+  },
+  "searchPage": {
+    "searchPlaceholder": "Lentswe la ho batla",
+    "language": "Puo",
+    "domain": "Sebaka",
+    "fuzzySearch": "Patlo e sa Tobileng",
+    "loading": "E a laisa...",
+    "noResults": "Ha ho diphetho tsa \"{{term}}\".",
+    "showAll": "Bontsha Tsohle",
+    "showTermsWithLetter": "Bontsha mantswe a qalang ka {{letter}}",
+    "pagination": {
+      "previous": "Morao",
+      "next": "Pele",
+      "pageInfo": "Leqephe la {{current}} ho tsa {{total}}"
+    }
+  },
+  "helpPage": {
+    "howCanWeHelp": "Re Ka O Thusa Jwang?",
+    "commonTopics": "Ditaba Tse Tlwaelehileng",
+    "articleLink": "Atikele →",
+    "cantFind": "Ha o fumane seo o se batlang?",
+    "submitRequest": "Romela kopo →",
+    "previous": "E fetileng",
+    "next": "E latelang",
+    "pageInfo": "Leqephe {{current}} ho {{total}}"
   }
 }

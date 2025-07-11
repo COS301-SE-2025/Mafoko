@@ -8,7 +8,14 @@ import reactDom from 'eslint-plugin-react-dom';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'node_modules/**', 'dev-dist/**', 'dist/**', 'build/**'],
+    ignores: [
+      'dist',
+      'node_modules/**',
+      'dev-dist/**',
+      'dist/**',
+      'build/**',
+      'coverage/**',
+    ],
   },
   {
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked],

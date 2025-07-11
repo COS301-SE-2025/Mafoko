@@ -18,7 +18,48 @@ vi.mock('react-router-dom', async () => {
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, options?: { category?: string; count?: number }) => {
+      const translations: Record<string, string> = {
+        'glossaryPage.title': 'Multilingual Glossary',
+        'glossaryPage.subtitle':
+          'Browse categories, explore terms, and discover translations',
+        'glossaryPage.loading': 'Loading...',
+        'glossaryPage.categories': 'Categories',
+        'glossaryPage.randomTerms': 'Random Terms',
+        'glossaryPage.selectCategory': 'Select a category to view terms',
+        'glossaryPage.searchAllTerms': 'Search all terms...',
+        'glossaryPage.searchTermsInCategory': 'Search terms in {{category}}...',
+        'glossaryPage.termsInCategory': 'Terms in {{category}}',
+        'glossaryPage.termDetails': 'Term Details',
+        'glossaryPage.showTranslations': 'Show Translations',
+        'glossaryPage.translationsHeader': 'Translations',
+        'glossaryPage.noTranslations':
+          'No translations available for this term',
+        'glossaryPage.selectTerm':
+          'Select a term to view details and translations',
+        'glossaryPage.exportData': 'Export Data',
+        'glossaryPage.downloadTerms': 'Download {{count}} terms',
+        'glossaryPage.csvFormat': 'CSV Format',
+        'glossaryPage.spreadsheetCompatible': 'Spreadsheet compatible',
+        'glossaryPage.jsonFormat': 'JSON Format',
+        'glossaryPage.developerFriendly': 'Developer friendly',
+        'glossaryPage.htmlTable': 'HTML Table',
+        'glossaryPage.webFriendly': 'Web friendly',
+        'glossaryPage.printableDocument': 'Printable document',
+      };
+
+      let result = translations[key] || key;
+
+      // Handle template interpolation for category and count
+      if (options?.category) {
+        result = result.replace('{{category}}', options.category);
+      }
+      if (options?.count !== undefined) {
+        result = result.replace('{{count}}', String(options.count));
+      }
+
+      return result;
+    },
     i18n: { changeLanguage: () => Promise.resolve(), language: 'en' },
   }),
 }));

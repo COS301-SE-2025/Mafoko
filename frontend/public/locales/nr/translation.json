@@ -1,0 +1,206 @@
+{
+  "navigation": {
+    "home": "Ikhaya",
+    "dictionary": "Isichazamazwi",
+    "glossary": "Irhelo lamagama",
+    "savedTerms": "Amagama Atlotjhiweko",
+    "dashboard": "Ibhodi",
+    "help": "Isizo",
+    "darkMode": "Indlela emnyama"
+  },
+
+  "landingPage": {
+    "registerButton": "Bhalisela",
+    "loginButton": "Ngena"
+  },
+  "loginPage": {
+    "title": "SIYAKWAMUKELA GODU!",
+    "subtitle": "Sibawa ufake imininingwana yakho yokungena.",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "Faka ikheli lakho le-imeyili",
+    "passwordLabel": "Iphasiwedi",
+    "passwordPlaceholder": "Faka iphasiwedi yakho",
+    "rememberMe": "Ngikhumbule",
+    "forgotPassword": "Ukhohlwe Yiphasiwedi?",
+    "loginButton": "Ngena",
+    "orDivider": "NAMKHA",
+    "loginWithGoogle": "Ngena nge-Google",
+    "noAccount": "Awunaso isikhwama?",
+    "registerLink": "Bhalisela",
+    "welcomeImageAlt": "Ukwamukela kokungena ku-Mavito",
+    "dsfsiLogoAlt": "Ilogo ye-DSFSI",
+    "errorTokenMissing": "Ungene ngepumelelo, kodwana awukho umtlolo-mqondiso otholakileko. Sibawa uthintane ngesizo.",
+    "errorDefault": "Ukungena kuhlulekile. Sibawa uhlole imininingwana yakho.",
+    "errorUnexpectedFormat": "Iphoso yokungena (isimo {{status}}). Isimo sephoso esingakalindelelwa.",
+    "errorWithStatus": "Ukungena kuhlulekile (isimo {{status}}). Sibawa uzame godu.",
+    "errorNetwork": "Kwenzeke iphoso: {{message}}.",
+    "errorUnknownNetwork": "Kwenzeke iphoso yenethiwekhi engakaziwa. Sibawa uzame godu."
+  },
+  "registrationPage": {
+    "title": "THOMA KHONA NJANI",
+    "subtitle": "Dala i-akhawundi yakho ye-Mavito.",
+    "firstNameLabel": "Ibizo Lokuthoma",
+    "firstNamePlaceholder": "Faka ibizo lakho lokuthoma",
+    "lastNameLabel": "Isibongo",
+    "lastNamePlaceholder": "Faka isibongo sakho",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "Faka ikheli lakho le-imeyili",
+    "passwordLabel": "Iphasiwedi",
+    "passwordPlaceholder": "Dala iphasiwedi",
+    "confirmPasswordLabel": "Qinisekisa Iphasiwedi",
+    "confirmPasswordPlaceholder": "Qinisekisa iphasiwedi yakho",
+    "agreeToTerms": "Ngiyavuma",
+    "termsAndConditionsLink": "Imithetho Nemibandela",
+    "createAccountButton": "Dala I-akhawundi",
+    "creatingAccountButton": "Iyadaliwa...",
+    "orDivider": "NAMKHA",
+    "createWithGoogle": "Dala I-akhawundi nge-Google",
+    "haveAccount": "Sewuvele unayo i-akhawundi?",
+    "loginLink": "Ngena",
+    "welcomeImageAlt": "Ukwamukela ku-Mavito",
+    "dsfsiLogoAlt": "Ilogo ye-DSFSI",
+    "errorPasswordsDoNotMatch": "Amaphasiwedi awakafani.",
+    "errorAgreeToTerms": "Kumele uvume imithetho nemibandela.",
+    "alertSuccess": "Ubhaliso luphumelele! Sibawa uragele phambili ungene.",
+    "errorDefault": "Ukubhalisa kuhlulekile. Sibawa uzame godu.",
+    "errorUnexpectedFormat": "Iphoso: {{detailJson}}",
+    "errorWithStatus": "Ukubhalisa kuhlulekile (isimo {{status}}). Sibawa uzame godu.",
+    "errorNetwork": "Kwenzeke iphoso: {{message}}.",
+    "errorUnknownNetwork": "Kwenzeke iphoso yenethiwekhi engakaziwa. Sibawa uzame godu.",
+    "registerAsLabel": "Bhalisela Njenge",
+    "registerAsPlaceholder": "Khetha indima yakho",
+    "registerAsOptions": {
+      "contributor": "Umnikeli",
+      "linguist": "Isazi seLimi",
+      "researcher": "Umtjhejisisi",
+      "student": "Umfundi"
+    },
+    "userTypeLabels": {
+      "normalUser": "Umsebenzisi Wajayelekileko",
+      "applyingLinguist": "Ukubhalisela Ukuba Yisazi seLimi"
+    }
+  },
+  "dashboard": {
+    "welcome": "Siyakwamukela ku-Mavito",
+    "welcomeBack": "Wamukelekile godu",
+    "userName": "Ibizo Lomsebenzisi",
+    "userId": "Inomboro Yomsebenzisi",
+    "quickActions": "Izenzo Ezirhabako",
+    "searchNow": "Rhubhulula Khathesi",
+    "searchDescription": "Rhubhulula amagama ngeelimi ezinengi",
+    "downloadResources": "Thula Iinsetjenziswa",
+    "downloadDescription": "Thola begodu uthole iinsetjenziswa zamagama",
+    "contributeTerm": "Faka Igama",
+    "contributeDescription": "Nezela amagama amatjha ku-databekhu yethu",
+    "recentTerms": "Amagama Wamuva",
+    "hideTerms": "Fihla Amagama",
+    "viewAll": "Bona Koke",
+    "communityActivity": "Imisebenzi Yomphakathi",
+    "hideActivity": "Fihla Imisebenzi",
+    "viewAllActivity": "Bona Yoke Imisebenzi"
+  },
+  "glossaryPage": {
+    "title": "Irhelo lamagama Ngezilimi Ezinengi",
+    "subtitle": "Funda iingaba, hlola amagama, thola iintjhugululo",
+    "showTranslations": "Tjengisa Iintjhugululo",
+    "translationsHeader": "Iintjhugululo",
+    "noTranslations": "Akukho iintjhugululo ezitholakala kweligama",
+    "selectTerm": "Khetha igama ukubona imininingwana neentjhugululo",
+    "loading": "Iyalayitjha...",
+    "categories": "Iingaba",
+    "selectCategory": "Khetha Isigaba",
+    "termDetails": "Imininingwana Yegama",
+    "termsInCategory": "Amagama ku-{{category}}",
+    "randomTerms": "Amagama Angahlelwanga",
+    "searchTermsInCategory": "Rhubhulula amagama ku-{{category}}...",
+    "searchAllTerms": "Rhubhulula woke amagama...",
+    "noTermsFound": "Akukho magama atholakala afana no-\"{{query}}\" ku-{{category}}.",
+    "noTermsInCategory": "Akukho magama atholakala ku-{{category}}."
+  },
+  "analytics": {
+    "loading": "Ilayitjha idatha ye-analytics...",
+    "stats": {
+      "totalTerms": "Amagama Woke",
+      "uniqueLanguages": "Iilimi Ezihlukako",
+      "uniqueDomains": "Iingaba Ezihlukako",
+      "topLanguage": "Ilimi Eliphezulu"
+    },
+    "popularTerms": {
+      "title": "Amagama Athandwako",
+      "subtitle": "Amagama asetjwenza khulu eengabeni zoke"
+    },
+    "categoryDistribution": {
+      "title": "Ukusatshalaliswa Kweengaba",
+      "subtitle": "Amagama ahlelwe ngeengaba zeenomboro"
+    },
+    "topDomains": {
+      "title": "Iingaba Eziphezulu",
+      "subtitle": "Iingaba zeenomboro ezisebenza khulu"
+    },
+    "trendsAndInsights": {
+      "title": "Iindlela Nekuzwisisa",
+      "subtitle": "Ukuhlola okususelwa kwidatha nemiphumela",
+      "languageDiversity": {
+        "title": "Isilinganiso Sokwahluka Kweelimi",
+        "coverage": "yeelimi zeSewula Afrika ezisebenzisiweko",
+        "terms": "amagama"
+      },
+      "domainFocus": {
+        "title": "Iingaba Ekutjhejwe Kuzo"
+      },
+      "dataQuality": {
+        "title": "Iinlinganiso Zekhwalithi Yedatha",
+        "completenessScore": "Amanqaku Wokuphelela",
+        "translationCoverage": "Ukuvikela Kokutjhugulula",
+        "definitionQuality": "Ikhwalithi Yencazelo"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Ukurhunyeza Kwe-Analytics",
+      "subtitle": "Ukubuka ikhwalithi yedatha neenlinganiso zokusebenza",
+      "dataQualityScore": {
+        "title": "Amanqaku Wekhwalithi Yedatha",
+        "subtitle": "Ukuvikela Okupheleleko"
+      },
+      "coverageEfficiency": {
+        "title": "Ukusebenza Kokuvikela",
+        "subtitle": "Ikhwalithi Yokusatshalaliswa",
+        "excellent": "Kuhle Khulu",
+        "good": "Kuhle"
+      },
+      "popularCategory": {
+        "title": "Isigaba Esithandwa Khulu",
+        "subtitle": "Isigaba Esirhelegako"
+      },
+      "termGrowth": {
+        "title": "Izinga Lokukhula Kwamagama",
+        "subtitle": "Ngenyanga Le"
+      }
+    }
+  },
+  "searchPage": {
+    "language": "Ilimi",
+    "domain": "Indawo",
+    "fuzzySearch": "Ukufuna Okungazeleleki",
+    "loading": "Iyalayisha...",
+    "noResults": "Akukho miphumela etholakele ye-\"{{term}}\".",
+    "showAll": "Khombisa Koke",
+    "showTermsWithLetter": "Khombisa amagama athoma ngo-{{letter}}",
+    "pagination": {
+      "previous": "Emuva",
+      "next": "Phambili",
+      "pageInfo": "Ikhasi {{current}} kwama-{{total}}"
+    },
+    "searchPlaceholder": "Igama lokufuna"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Singakusiza Bunjani?",
+    "commonTopics": "Iindaba Ezijayelekileko",
+    "articleLink": "Indatjana →",
+    "cantFind": "Awukghoni ukuthola lokho okufunako?",
+    "submitRequest": "Thumela isibawo →",
+    "previous": "Yangaphambili",
+    "next": "Elandelako",
+    "pageInfo": "Ikhasi {{current}} kwa-{{total}}"
+  }
+}
