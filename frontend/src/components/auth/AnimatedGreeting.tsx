@@ -174,9 +174,9 @@ const AnimatedGreeting: React.FC = () => {
     <div
       className={`conversation-container ${isFadingOut ? 'fading-out' : ''}`}
     >
-      {visibleBubbles.map((message, index) => (
+      {visibleBubbles.map((message) => (
         <div
-          key={index}
+          key={`${message.side}-${message.text.substring(0, 20)}`}
           className={`message-bubble ${message.side} visible`}
           style={{
             animationPlayState: isFadingOut ? 'paused' : 'running',

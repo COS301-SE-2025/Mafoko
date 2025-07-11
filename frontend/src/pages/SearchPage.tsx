@@ -104,7 +104,7 @@ const SearchPage: React.FC = () => {
     };
 
     void runSearch();
-  }, [term, language, domain, false, fuzzySearch, currentPage]);
+  }, [term, language, domain, fuzzySearch, currentPage]);
 
   const preloadGlossary = async (): Promise<void> => {
     try {
@@ -148,7 +148,7 @@ const SearchPage: React.FC = () => {
         setIsLoading(false);
       }
     },
-    [language, domain, false, fuzzySearch],
+    [language, domain, fuzzySearch],
   );
 
   const fetchSuggestions = async (term: string): Promise<Suggestion[]> => {
