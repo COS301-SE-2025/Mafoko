@@ -12,6 +12,7 @@ env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: us-central1
   GAR_LOCATION: us-central1-docker.pkg.dev
+  GAR_REPOSITORY: mavito-images  # Added as separate variable for clarity
 
 jobs:
   deploy-migrations:
@@ -28,23 +29,37 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.DSFSI_SA_KEY }}
+          token_format: 'access_token'  # Required for Docker auth
 
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure Docker for GAR
+        run: |
+          gcloud auth configure-docker $GAR_LOCATION --quiet
+
+      - name: Verify Artifact Registry access
+        run: |
+          echo "Checking repository access..."
+          gcloud artifacts repositories list --location=$GCP_REGION
+          echo "Checking Docker auth..."
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION
 
       - name: Build and push image
         run: |
           docker build \
-            -t $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
+            -t $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest \
             -f backend/alembic-service/Dockerfile \
             backend
       
-          docker push $GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest
+          docker push $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest
 
       - name: Deploy and run migrations
         run: |
           gcloud run jobs deploy alembic-migrations \
-            --image=$GAR_LOCATION/$GCP_PROJECT_ID/mavito-images/alembic-service:latest \
+            --image=$GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest \
             --set-env-vars="DB_URL=postgresql+asyncpg://${{ secrets.DB_USER }}:$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")@/${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.INSTANCE_CONNECTION_NAME }}" \
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --region=$GCP_REGION \
