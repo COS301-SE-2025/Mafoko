@@ -33,9 +33,9 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Configure Docker auth (using JSON key directly)
+      - name: Configure Docker auth
         run: |
-          echo ${{ secrets.DSFSI_SA_KEY }} > sa-key.json
+          echo '${{ secrets.DSFSI_SA_KEY }}' > sa-key.json
           gcloud auth activate-service-account --key-file=sa-key.json
           gcloud auth configure-docker $GAR_LOCATION --quiet
           rm sa-key.json
