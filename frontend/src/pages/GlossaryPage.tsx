@@ -11,17 +11,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
-import LanguageSwitcher from '../components/LanguageSwitcher.tsx';
+
 import '../styles/GlossaryPage.scss';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 import { API_ENDPOINTS } from '../config';
-import {
-  Term,
-  TermTranslations,
-  SearchResponse,
-  UserData,
-} from '../types/glossaryTypes';
+import { Term, TermTranslations, SearchResponse } from '../types/glossaryTypes';
 import { downloadData } from '../utils/exportUtils';
 
 // API client with strongly typed responses
@@ -206,22 +201,17 @@ const GlossaryPage = () => {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [avatarInitials, setAvatarInitials] = useState<string>('U');
-  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
+
   const [availableLanguages, setAvailableLanguages] = useState<
     Record<string, string>
   >({});
   const [isDownloading, setIsDownloading] = useState(false);
   const [showExportPopup, setShowExportPopup] = useState(false);
   const exportPopupRef = useRef<HTMLDivElement>(null);
-  const [isAtBottom, setIsAtBottom] = useState(false);
-  const exportContainerRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
   useEffect(() => {
     void loadInitialData();
-    loadUserData();
   }, []);
 
   // Add glossary-page class to body for specific mobile styles
@@ -254,38 +244,32 @@ const GlossaryPage = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    // Handle escape key press
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowExportPopup(false);
+      }
+    };
+
+    if (showExportPopup) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscKey);
+    }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscKey);
     };
-  }, [exportPopupRef]);
+  }, [exportPopupRef, showExportPopup]);
 
   // Handle scroll events to detect when we're near the bottom of the page
-  const handleScroll = useCallback(() => {
-    // Only apply bottom detection for mobile
-    if (window.innerWidth <= 768) {
-      const scrollPosition = window.scrollY + window.innerHeight;
-      const bottomThreshold = document.body.scrollHeight - 100; // 100px from the bottom
-
-      if (scrollPosition >= bottomThreshold && !isAtBottom) {
-        setIsAtBottom(true);
-      } else if (scrollPosition < bottomThreshold && isAtBottom) {
-        setIsAtBottom(false);
-      }
-    }
-  }, [isAtBottom]);
-
-  // Add scroll event listener
+  // Effect to clean up on unmount
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    // Initial check
-    handleScroll();
-
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      // Reset state on unmount to prevent issues on next mount
+      setShowExportPopup(false);
     };
-  }, [handleScroll]);
+  }, []);
 
   const loadInitialData = async (): Promise<void> => {
     setLoading(true);
@@ -312,33 +296,6 @@ const GlossaryPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const loadUserData = (): void => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      setIsLoadingUserData(false);
-      return;
-    }
-
-    setIsLoadingUserData(true);
-    const storedUserDataString = localStorage.getItem('userData');
-    if (storedUserDataString) {
-      try {
-        const parsedData = JSON.parse(storedUserDataString) as UserData;
-        setUserData(parsedData);
-        if (parsedData.firstName && parsedData.lastName) {
-          setAvatarInitials(
-            `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
-          );
-        } else if (parsedData.firstName) {
-          setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
-        }
-      } catch {
-        localStorage.removeItem('userData');
-      }
-    }
-    setIsLoadingUserData(false);
   };
 
   const handleCategorySelect = useCallback(
@@ -547,7 +504,7 @@ const GlossaryPage = () => {
         )}
 
         <div className={`glossary-content ${isMobile ? 'pt-16' : ''}`}>
-          {/* Main Content with Profile at Top Right */}
+          {/* Main Content */}
           <div
             style={{
               flex: 1,
@@ -558,75 +515,6 @@ const GlossaryPage = () => {
               position: 'relative',
             }}
           >
-            {/* Profile Section at top right */}
-            <div
-              className="glossary-profile-section"
-              style={{
-                display: 'flex',
-                justifyContent: window.innerWidth > 767 ? 'flex-end' : 'center',
-                alignItems: 'center',
-                width: '100%',
-                padding:
-                  window.innerWidth > 767 ? '1rem 1rem 1rem 1.5rem' : '0.75rem',
-                flexShrink: 0,
-                zIndex: window.innerWidth > 767 ? 10 : 15,
-                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                marginRight: window.innerWidth > 767 ? '0.75rem' : '0',
-                marginTop: window.innerWidth > 767 ? '0' : '15px',
-                position: window.innerWidth > 767 ? 'relative' : 'fixed',
-                top: window.innerWidth > 767 ? 'auto' : '0',
-                left: window.innerWidth > 767 ? 'auto' : '0',
-                backgroundColor:
-                  window.innerWidth > 767 ? 'transparent' : 'var(--profile-bg)',
-              }}
-            >
-              {isLoadingUserData ? (
-                <div className="profile-section">
-                  {t('glossaryPage.loading')}
-                </div>
-              ) : userData ? (
-                <div
-                  className="profile-section"
-                  style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-                >
-                  <div
-                    className="profile-info"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                    }}
-                  >
-                    <div className="profile-avatar">{avatarInitials}</div>
-                    <div className="profile-details">
-                      {' '}
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                        }}
-                      >
-                        <LanguageSwitcher />
-                        <h3 style={{ margin: 0 }}>
-                          {userData.firstName} {userData.lastName}
-                        </h3>
-                      </div>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontSize: '0.85rem',
-                          color: '#a0aec0',
-                        }}
-                      >
-                        User ID: {userData.uuid}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
             {/* Main Content Container */}
             <div
               style={{
@@ -720,6 +608,7 @@ const GlossaryPage = () => {
                               setTranslations(null);
                               setSearchTerm('');
                               setError(null);
+                              setShowExportPopup(false); // Close export popup if open
                               setLoading(true);
 
                               // Load random terms
@@ -870,13 +759,7 @@ const GlossaryPage = () => {
                           </button>
                         </div>
                         {showTranslations && (
-                          <div
-                            className="glossary-translation-list"
-                            style={{
-                              overflowY: 'visible',
-                              maxHeight: 'none',
-                            }}
-                          >
+                          <div className="glossary-translation-list">
                             <h4 className="glossary-translations-header">
                               {t('glossaryPage.translationsHeader')}
                             </h4>
@@ -927,11 +810,16 @@ const GlossaryPage = () => {
                 </div>
               </div>
 
-              {/* Export Data Button at Bottom */}
-              {categoryTerms.length > 0 && (
+              {/* Floating Export Data Button */}
+              {selectedCategory && !showExportPopup && (
                 <div
-                  className={`glossary-export-container ${isAtBottom ? 'at-bottom' : ''}`}
-                  ref={exportContainerRef}
+                  className="glossary-floating-export-button"
+                  style={{
+                    position: 'fixed',
+                    bottom: '2rem',
+                    right: '2rem',
+                    zIndex: 900,
+                  }}
                 >
                   <button
                     type="button"
@@ -943,18 +831,17 @@ const GlossaryPage = () => {
                       backgroundColor: '#f00a50',
                       color: 'white',
                       border: 'none',
-                      borderRadius: '8px',
-                      padding: '0.75rem 1.5rem',
+                      borderRadius: '50%',
+                      width: '60px',
+                      height: '60px',
                       fontSize: '0.9rem',
                       fontWeight: 600,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem',
+                      justifyContent: 'center',
                       cursor: 'pointer',
                       boxShadow: '0 4px 12px rgba(240, 10, 80, 0.3)',
                       transition: 'all 0.2s ease',
-                      minWidth: '150px',
-                      justifyContent: 'center',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-2px)';
@@ -966,28 +853,19 @@ const GlossaryPage = () => {
                       e.currentTarget.style.boxShadow =
                         '0 4px 12px rgba(240, 10, 80, 0.3)';
                     }}
+                    title={t('glossaryPage.exportData')}
                   >
-                    <Download size={16} />
-                    {t('glossaryPage.exportData')}
+                    <Download size={24} />
                   </button>
                 </div>
               )}
             </div>
 
             {/* Export Data Popup Modal */}
-            {showExportPopup && (
+            {showExportPopup && selectedCategory && (
               <div
+                className="glossary-export-overlay"
                 style={{
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  zIndex: 1000,
                   paddingLeft: window.innerWidth > 767 ? '220px' : '0', // Account for sidebar on desktop only
                 }}
                 onClick={() => {
@@ -997,17 +875,6 @@ const GlossaryPage = () => {
                 <div
                   ref={exportPopupRef}
                   className="glossary-export-popup"
-                  style={{
-                    backgroundColor: 'var(--download-bg)',
-                    borderRadius: '12px',
-                    padding: '1.5rem',
-                    minWidth: window.innerWidth > 767 ? '400px' : '300px',
-                    maxWidth: window.innerWidth > 767 ? '500px' : '95vw',
-                    position: 'relative',
-                    marginLeft: window.innerWidth > 767 ? '2rem' : '0', // Move slightly to the right on desktop only
-                    boxShadow:
-                      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                  }}
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
@@ -1060,7 +927,7 @@ const GlossaryPage = () => {
                       className="glossary-export-title"
                     >
                       <Download size={20} />
-                      {t('glossaryPage.exportData')}
+                      {t('glossaryPage.exportData')} - {selectedCategory}
                     </h3>
                     <p
                       style={{
@@ -1072,7 +939,9 @@ const GlossaryPage = () => {
                     >
                       {t('glossaryPage.downloadTerms', {
                         category: selectedCategory,
-                        searchTerm,
+                        searchTerm: searchTerm
+                          ? ' matching "' + searchTerm + '"'
+                          : '',
                         count: filteredTerms.length,
                       })}
                     </p>
@@ -1401,10 +1270,12 @@ const GlossaryPage = () => {
                       </div>
                       <div>
                         <div style={{ fontWeight: 600 }}>
-                          {isDownloading ? 'Generating PDF...' : 'PDF Document'}
+                          {isDownloading
+                            ? 'Generating PDF...'
+                            : t('glossaryPage.pdfFormat')}
                         </div>
                         <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                          {t('glossaryPage.printableDocument')}
+                          {t('glossaryPage.printFriendly')}
                         </div>
                       </div>
                     </button>

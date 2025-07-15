@@ -80,7 +80,8 @@
     "savedTerms": "Saved Terms",
     "dashboard": "Dashboard",
     "help": "Help",
-    "darkMode": "Dark Mode"
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
   },
 
   "dashboard": {
@@ -119,7 +120,19 @@
     "searchTermsInCategory": "Search terms in {{category}}...",
     "searchAllTerms": "Search all terms...",
     "noTermsFound": "No terms found matching \"{{query}}\" in {{category}}.",
-    "noTermsInCategory": "No terms available in {{category}}."
+    "noTermsInCategory": "No terms available in {{category}}.",
+    "exportData": "Export Data",
+    "downloadTerms": "Download {{count}} terms from {{category}}{{searchTerm}}",
+    "csvFormat": "CSV Format",
+    "spreadsheetCompatible": "Compatible with Excel, Google Sheets, etc.",
+    "jsonFormat": "JSON Format",
+    "developerFriendly": "Developer-friendly structured data",
+    "htmlTable": "HTML Table Format",
+    "webFriendly": "Web-friendly formatted table",
+    "xlsFormat": "Excel Format",
+    "nativeSpreadsheet": "Native Microsoft Excel spreadsheet",
+    "pdfFormat": "PDF Format",
+    "printFriendly": "Print-friendly document format"
   },
 
   "analytics": {

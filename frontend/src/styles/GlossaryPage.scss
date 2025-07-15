@@ -54,6 +54,180 @@ $text-dark: #ffffff;
   ); /* More opaque background for overlays in dark mode */
 }
 
+/* Custom scrollbar styling - Hidden for most elements except panels */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+}
+
+/* Ensure most elements in the glossary page don't show scrollbars except panels */
+html,
+body {
+  &::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+  }
+}
+
+/* For Firefox - hide scrollbars on everything except panels */
+html,
+body {
+  scrollbar-width: none !important;
+}
+
+/* For IE and Edge - hide scrollbars on everything except panels */
+html,
+body {
+  -ms-overflow-style: none !important;
+}
+
+/* Floating export button styling */
+.glossary-floating-export-button {
+  animation: fadeIn 0.3s ease;
+  position: relative;
+
+  button {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 16px rgba(240, 10, 80, 0.5);
+    }
+
+    &:hover::after {
+      content: attr(title);
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--bg-tir);
+      color: var(--text-theme);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      opacity: 1;
+      animation: fadeIn 0.2s ease;
+    }
+  }
+
+  /* Mobile specific styles */
+  @media (max-width: 767px) {
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+    z-index: 999 !important;
+
+    button {
+      width: 56px !important;
+      height: 56px !important;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Export popup overlay styling */
+.glossary-export-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+
+  @media (max-width: 767px) {
+    padding: 0 1rem;
+    align-items: center;
+  }
+}
+
+/* Export popup styling */
+.glossary-export-popup {
+  background-color: var(--download-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.2),
+    0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  animation: popIn 0.3s ease-out;
+  z-index: 1051;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  @media (max-width: 767px) {
+    width: 100% !important;
+    max-width: 95vw !important;
+    margin: 0 auto !important;
+    padding: 1.25rem 1rem !important;
+    border-radius: 12px !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+
+    /* Improve mobile touch targets */
+    button {
+      min-height: 44px !important;
+      margin-bottom: 0.75rem !important;
+    }
+
+    /* Add spacing between options */
+    label {
+      padding: 0.5rem 0 !important;
+      display: block !important;
+    }
+
+    /* Make checkboxes more touch-friendly */
+    input[type='checkbox'] {
+      width: 20px !important;
+      height: 20px !important;
+      margin-right: 10px !important;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    min-width: 350px !important;
+    margin-left: 1rem !important;
+  }
+
+  @media (min-width: 768px) {
+    min-width: 400px;
+    max-width: 500px;
+    margin-left: 2rem;
+  }
+}
+
 .dashboard-container {
   position: fixed;
   background-color: var(--page-bg);
@@ -110,7 +284,7 @@ $text-dark: #ffffff;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1040;
+  z-index: 800; // Lower than the export popup
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   pointer-events: none;
@@ -348,13 +522,38 @@ $text-dark: #ffffff;
   padding: 1.5rem;
   margin: 0.5rem; /* Add margin around panels */
   display: flex;
+  max-height: calc(
+    100vh - 120px
+  ); /* Set maximum height with space for margins */
   flex-direction: column;
   height: 100%;
   min-height: 350px; /* Reduced min-height to fit more content */
   max-height: calc(
     100vh - 200px
   ); /* Adjusted to make sure export button is visible */
-  overflow: hidden;
+  overflow: hidden; /* Hide overflow for container, but allow scrolling in child elements */
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
+
+  /* Custom scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--glossary-border-color);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+  }
   border: 1px solid var(--glossary-border-color);
   transition: all 0.2s ease-in-out;
 
@@ -394,30 +593,43 @@ $text-dark: #ffffff;
   }
 }
 
-/* Custom scrollbar styles */
+/* Custom scrollbar styles for category and terms lists */
 .glossary-categories-list,
-.glossary-terms-list,
-.glossary-translation-list {
+.glossary-terms-list {
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
 
+  /* Styled scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
+    display: block;
     width: 6px;
   }
 
   &::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: rgba(0, 0, 0, 0.03);
     border-radius: 3px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: var(--glossary-border-color);
     border-radius: 3px;
+  }
 
-    &:hover {
-      background: #94a3b8;
-    }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+  }
+}
+
+/* Style translation list but don't add scrollbar */
+.glossary-translation-list {
+  overflow-y: visible; /* Allow content to flow naturally */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -461,9 +673,31 @@ $text-dark: #ffffff;
   gap: 0.2rem;
   flex: 1;
   overflow-y: auto;
-  padding-right: 0.5rem;
-  margin-right: -0.5rem;
+  padding-right: 0.25rem;
+  margin-right: 0;
   min-height: 200px;
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--glossary-border-color);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+    width: 0 !important;
+  }
 }
 
 .glossary-category-btn {
@@ -542,9 +776,30 @@ $text-dark: #ffffff;
   gap: 0.3rem;
   overflow-y: auto;
   flex: 1;
-  padding-right: 0.5rem;
-  margin-right: -0.5rem;
+  padding-right: 0.25rem;
+  margin-right: 0;
   min-height: 200px;
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--glossary-border-color);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+  }
 }
 
 .glossary-term-btn {
@@ -599,6 +854,38 @@ $text-dark: #ffffff;
   font-size: 0.85rem;
 }
 
+.glossary-details {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin; /* Firefox */
+  -ms-overflow-style: auto; /* IE and Edge */
+  min-height: 200px;
+  width: 100%; /* Ensure it takes full width */
+  height: 100%; /* Ensure it takes full height */
+
+  /* Styled scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--glossary-border-color);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+  }
+}
+
 .glossary-details-title {
   font-size: 0.9rem;
   font-weight: 600;
@@ -638,14 +925,12 @@ $text-dark: #ffffff;
   border-top: 1px solid var(--glossary-border-color);
   padding-top: 0.4rem;
   margin-top: 0.4rem;
-  max-height: 200px;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  padding-right: 0.5rem;
-  margin-right: -0.5rem;
-  flex: 1;
+  padding-right: 0;
+  margin-right: 0;
+  width: 100%;
 }
 
 .glossary-translation-item {
@@ -681,9 +966,11 @@ $text-dark: #ffffff;
 /* Re-enable thin scrollbars only for specific elements */
 .glossary-categories-list,
 .glossary-terms-list,
-.glossary-translation-list {
+.glossary-details {
   scrollbar-width: thin;
-  scrollbar-color: rgba(203, 213, 225, 0.8) transparent;
+  scrollbar-color: var(--glossary-border-color) transparent;
+  max-height: 100%; /* Ensure these elements can take up full height */
+  overflow-y: auto; /* Enable scrolling */
 
   &::-webkit-scrollbar {
     display: block;
@@ -696,11 +983,11 @@ $text-dark: #ffffff;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(203, 213, 225, 0.8);
+    background: var(--glossary-border-color);
     border-radius: 3px;
 
     &:hover {
-      background: rgba(148, 163, 184, 0.9);
+      background: var(--accent-color);
     }
   }
 }
@@ -1051,41 +1338,7 @@ $text-dark: #ffffff;
   }
 }
 
-.glossary-export-popup {
-  @media (max-width: 767px) {
-    width: 100% !important;
-    max-width: 95vw !important;
-    margin: 0 auto !important;
-    padding: 1.25rem 1rem !important;
-    border-radius: 12px !important;
-    max-height: 85vh !important;
-    overflow-y: auto !important;
-
-    /* Improve mobile touch targets */
-    button {
-      min-height: 44px !important;
-      margin-bottom: 0.75rem !important;
-    }
-
-    /* Add spacing between options */
-    label {
-      padding: 0.5rem 0 !important;
-      display: block !important;
-    }
-
-    /* Make checkboxes more touch-friendly */
-    input[type='checkbox'] {
-      width: 20px !important;
-      height: 20px !important;
-      margin-right: 10px !important;
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    min-width: 350px !important;
-    margin-left: 1rem !important;
-  }
-}
+/* Removed duplicate .glossary-export-popup styles that have been merged into the main definition above */
 
 /* Export button container styling */
 .glossary-export-container {
