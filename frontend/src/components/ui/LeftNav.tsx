@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import ToggleSwitch from './ToggleSwtich';
+import { Sun, Moon } from 'lucide-react';
 
 interface LeftNavProps {
   activeItem: string;
@@ -59,18 +61,30 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             <span className="left-nav-menu-label">{item.label}</span>
           </div>
         ))}
-        <div>
-          <button
-            onClick={toggleDarkMode}
-            className="text-theme bg-theme hover:text-accent-pink transition outline-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none"
-            type="button"
-            aria-label="Toggle dark mode"
-          >
-            {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
-            {t('navigation.darkMode')}
-          </button>
-        </div>
       </nav>
+
+      {/* Dark Mode Toggle - Bottom of sidebar */}
+      <div className="left-nav-footer">
+        <div className="dark-mode-toggle">
+          <div className="toggle-container">
+            {isDarkMode ? (
+              <Sun size={18} className="toggle-icon" />
+            ) : (
+              <Moon size={18} className="toggle-icon" />
+            )}
+            <span className="toggle-label">
+              {isDarkMode
+                ? t('navigation.lightMode')
+                : t('navigation.darkMode')}
+            </span>
+            <ToggleSwitch
+              label=""
+              checked={isDarkMode}
+              onChange={toggleDarkMode}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
