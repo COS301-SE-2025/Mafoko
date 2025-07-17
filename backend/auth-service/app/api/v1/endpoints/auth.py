@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta
 
-from mavito_common.schemas.user import UserCreate, User as UserSchema
+from mavito_common.schemas.user import UserCreate, User as UserSchema, UserUpdate
 from mavito_common.schemas.token import Token
 from mavito_common.core.security import create_access_token
 from mavito_common.core.config import settings
@@ -103,3 +103,38 @@ async def read_users_me(
     Get current logged-in user's details.
     """
     return current_user_response_schema
+
+
+@router.put("/me", response_model=UserSchema)
+async def update_user_profile(
+    *,
+    db: AsyncSession = Depends(get_db),
+    user_update: UserUpdate,
+    current_user: UserSchema = Depends(deps.get_current_active_user),
+):
+    """
+    Update current user's profile information.
+    Allows updating first_name, last_name, email, and password.
+    """
+    # Get the actual user model from the database
+    user_model = await crud_user.get_user_by_email(db, email=current_user.email)
+    if not user_model:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    # If updating email, check if the new email already exists
+    if user_update.email and user_update.email != current_user.email:
+        existing_user = await crud_user.get_user_by_email(db, email=user_update.email)
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered",
+            )
+
+    # Update the user
+    updated_user = await crud_user.update_user(
+        db, db_obj=user_model, obj_in=user_update
+    )
+
+    return updated_user
