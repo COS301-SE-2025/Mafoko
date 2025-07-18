@@ -57,6 +57,7 @@ const WorkspacePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('saved-terms');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('all');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<{
     [key: string]: boolean;
   }>({});
@@ -196,12 +197,21 @@ const WorkspacePage: React.FC = () => {
       }, 100);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropdown = document.querySelector('.groups-dropdown');
+      if (dropdown && !dropdown.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
+    document.addEventListener('mousedown', handleClickOutside);
     // Call once on mount to set initial state
     handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('mousedown', handleClickOutside);
       clearTimeout(resizeTimer);
     };
   }, []);
@@ -339,7 +349,11 @@ const WorkspacePage: React.FC = () => {
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
-              <div className="workspace-tabs bg-slate-800/40 p-1 rounded-xl">
+              <div
+                className={`workspace-tabs p-1 rounded-xl ${
+                  isDarkMode ? 'bg-slate-800/40' : 'bg-gray-200'
+                }`}
+              >
                 <button
                   type="button"
                   onClick={() => {
@@ -399,23 +413,119 @@ const WorkspacePage: React.FC = () => {
                         }}
                       />
                     </div>
-                    <select
-                      className={`px-4 py-3 border ${
-                        isDarkMode
-                          ? 'border-gray-600 bg-slate-700/50 text-white'
-                          : 'border-gray-300 bg-white text-gray-900'
-                      } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
-                      value={selectedGroup}
-                      onChange={(e) => {
-                        setSelectedGroup(e.target.value);
-                      }}
-                    >
-                      {groups.map((group) => (
-                        <option key={group} value={group}>
-                          {group === 'all' ? 'All Groups' : group}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        className={`groups-dropdown w-full px-4 py-3 border ${
+                          isDarkMode
+                            ? 'border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                            : 'border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent'
+                        } rounded-lg transition-colors duration-200 flex items-center justify-between`}
+                        style={
+                          isDarkMode
+                            ? {
+                                backgroundColor: '#212431',
+                                color: '#f5f5f5',
+                              }
+                            : {}
+                        }
+                        onClick={() => {
+                          setIsDropdownOpen(!isDropdownOpen);
+                        }}
+                      >
+                        <span>
+                          {selectedGroup === 'all'
+                            ? 'All Groups'
+                            : selectedGroup}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''} ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                          }`}
+                        />
+                      </button>
+
+                      {isDropdownOpen && (
+                        <div
+                          className={`absolute top-full left-0 right-0 mt-1 border rounded-lg shadow-lg z-50 ${
+                            isDarkMode
+                              ? 'border-gray-600 shadow-2xl'
+                              : 'border-gray-300 bg-white text-gray-900 shadow-black/10'
+                          }`}
+                          style={
+                            isDarkMode
+                              ? {
+                                  backgroundColor: '#212431',
+                                  color: '#f5f5f5',
+                                }
+                              : {}
+                          }
+                        >
+                          {groups.map((group) => (
+                            <button
+                              key={group}
+                              type="button"
+                              className={`w-full px-4 py-3 text-left transition-colors ${
+                                selectedGroup === group
+                                  ? isDarkMode
+                                    ? ''
+                                    : 'bg-gray-100 text-gray-900'
+                                  : isDarkMode
+                                    ? ''
+                                    : 'text-gray-900'
+                              } first:rounded-t-lg last:rounded-b-lg`}
+                              style={
+                                isDarkMode
+                                  ? {
+                                      backgroundColor:
+                                        selectedGroup === group
+                                          ? '#3a4050'
+                                          : 'transparent',
+                                      color: '#f5f5f5',
+                                    }
+                                  : {}
+                              }
+                              onMouseEnter={(e) => {
+                                if (selectedGroup !== group) {
+                                  if (isDarkMode) {
+                                    (
+                                      e.target as HTMLElement
+                                    ).style.backgroundColor = '#3a4050';
+                                    (e.target as HTMLElement).style.color =
+                                      '#f5f5f5';
+                                  } else {
+                                    (
+                                      e.target as HTMLElement
+                                    ).style.backgroundColor = '#f5f5f5';
+                                  }
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (selectedGroup !== group) {
+                                  if (isDarkMode) {
+                                    (
+                                      e.target as HTMLElement
+                                    ).style.backgroundColor = 'transparent';
+                                    (e.target as HTMLElement).style.color =
+                                      '#f5f5f5';
+                                  } else {
+                                    (
+                                      e.target as HTMLElement
+                                    ).style.backgroundColor = 'white';
+                                  }
+                                }
+                              }}
+                              onClick={() => {
+                                setSelectedGroup(group);
+                                setIsDropdownOpen(false);
+                              }}
+                            >
+                              {group === 'all' ? 'All Groups' : group}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Terms by Group */}
@@ -444,9 +554,13 @@ const WorkspacePage: React.FC = () => {
                             </span>
                           </div>
                           {expandedGroups[groupName] ? (
-                            <ChevronUp className="w-5 h-5 text-white" />
+                            <ChevronUp
+                              className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
+                            />
                           ) : (
-                            <ChevronDown className="w-5 h-5 text-white" />
+                            <ChevronDown
+                              className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
+                            />
                           )}
                         </div>
 
@@ -467,13 +581,11 @@ const WorkspacePage: React.FC = () => {
                                       >
                                         {term.term}
                                       </h4>
-                                      <span className="bg-blue-800 text-blue-100 px-2 py-1 rounded-full text-xs">
+                                      <span className="language-tag">
                                         {term.language}
                                       </span>
                                       {term.category && (
-                                        <span
-                                          className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-2 py-1 rounded-full text-xs`}
-                                        >
+                                        <span className="category-tag">
                                           {term.category}
                                         </span>
                                       )}
@@ -494,13 +606,35 @@ const WorkspacePage: React.FC = () => {
                                   <div className="flex items-center space-x-2 ml-4">
                                     <button
                                       type="button"
-                                      className="p-2 text-gray-300 hover:text-white"
+                                      className={`p-2 rounded-md transition-all duration-200 ${
+                                        isDarkMode
+                                          ? 'text-cyan-400 hover:text-white border border-transparent hover:border-cyan-500/30'
+                                          : 'text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 border border-transparent hover:border-cyan-200'
+                                      }`}
+                                      style={
+                                        isDarkMode
+                                          ? {
+                                              backgroundColor: '#31374eff',
+                                            }
+                                          : {}
+                                      }
                                     >
                                       <Edit2 className="w-4 h-4" />
                                     </button>
                                     <button
                                       type="button"
-                                      className="p-2 text-gray-300 hover:text-red-300"
+                                      className={`p-2 rounded-md transition-all duration-200 ${
+                                        isDarkMode
+                                          ? 'text-red-400 hover:text-white border border-transparent hover:border-red-500/30'
+                                          : 'text-red-600 hover:text-red-800 hover:bg-red-50 border border-transparent hover:border-red-200'
+                                      }`}
+                                      style={
+                                        isDarkMode
+                                          ? {
+                                              backgroundColor: '#31374eff',
+                                            }
+                                          : {}
+                                      }
                                     >
                                       <Trash2 className="w-4 h-4" />
                                     </button>
@@ -522,19 +656,31 @@ const WorkspacePage: React.FC = () => {
               <div className="tab-content">
                 <div className="space-y-8 h-full">
                   <div
-                    className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border flex-1 overflow-y-auto`}
+                    className={`${isDarkMode ? 'border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border flex-1 overflow-hidden`}
+                    style={isDarkMode ? { backgroundColor: '#292e41' } : {}}
                   >
-                    <div className="p-6 h-full">
+                    <div className="p-6 h-full flex flex-col">
                       <h3
-                        className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}
+                        className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4 flex-shrink-0`}
                       >
-                        Submission Progress
+                        {/* Submission Progress */}
                       </h3>
-                      <div className="space-y-4">
+                      <div
+                        className="space-y-4 flex-1 overflow-y-auto pr-2"
+                        style={{
+                          scrollbarWidth: 'thin',
+                          scrollbarColor: isDarkMode
+                            ? '#4B5563 #1F2937'
+                            : '#D1D5DB #F9FAFB',
+                        }}
+                      >
                         {submittedTerms.map((term) => (
                           <div
                             key={term.id}
-                            className={`border rounded-lg p-4 ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50/80'}`}
+                            className={`border rounded-lg p-4 ${isDarkMode ? 'border-slate-700' : 'border-gray-200 bg-gray-50/80'}`}
+                            style={
+                              isDarkMode ? { backgroundColor: '#272b3dff' } : {}
+                            }
                           >
                             <div className="flex items-center justify-between mb-3">
                               <h4
@@ -583,24 +729,56 @@ const WorkspacePage: React.FC = () => {
             {activeTab === 'glossaries' && (
               <div className="tab-content">
                 <div className="space-y-8 h-full">
-                  <div className="rounded-lg shadow-sm bg-transparent border-0 flex-1 overflow-y-auto">
-                    <div className="p-6 pt-2 h-full">
-                      <h3 className="text-xl font-medium text-white mb-6">
-                        Followed Glossaries
+                  <div
+                    className={`rounded-lg shadow-sm border-0 flex-1 overflow-hidden ${
+                      isDarkMode ? '' : 'bg-gray-50/30'
+                    }`}
+                    style={
+                      isDarkMode
+                        ? {
+                            backgroundColor: '#292e41',
+                          }
+                        : {}
+                    }
+                  >
+                    <div className="p-6 pt-2 h-full flex flex-col">
+                      <h3
+                        className={`text-xl font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6 flex-shrink-0`}
+                      >
+                        {/* Followed Glossaries */}
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div
+                        className="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1 overflow-y-auto pr-2"
+                        style={{
+                          scrollbarWidth: 'thin',
+                          scrollbarColor: isDarkMode
+                            ? '#4B5563 #1F2937'
+                            : '#D1D5DB #F9FAFB',
+                        }}
+                      >
                         {glossaries.map((glossary) => (
                           <div
                             key={glossary.id}
-                            className="border rounded-lg p-5 hover:shadow-md transition-all border-slate-700 bg-slate-800"
+                            className={`border rounded-lg p-5 hover:shadow-md transition-all ${
+                              isDarkMode
+                                ? 'border-slate-700'
+                                : 'border-gray-200 bg-white'
+                            }`}
+                            style={
+                              isDarkMode
+                                ? {
+                                    backgroundColor: '#232738ff',
+                                  }
+                                : {}
+                            }
                           >
                             <div className="flex items-start justify-between mb-3">
                               <div className="flex items-center space-x-3">
                                 <BookOpen
                                   className={`w-5 h-5 ${
                                     isDarkMode
-                                      ? 'text-blue-400'
-                                      : 'text-blue-600'
+                                      ? 'text-teal-400'
+                                      : 'text-teal-600'
                                   }`}
                                 />
                                 <div>
@@ -609,11 +787,9 @@ const WorkspacePage: React.FC = () => {
                                   >
                                     {glossary.name}
                                   </h4>
-                                  <p
-                                    className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                                  >
+                                  <span className="language-tag">
                                     {glossary.language}
-                                  </p>
+                                  </span>
                                 </div>
                               </div>
                               <div
@@ -635,17 +811,39 @@ const WorkspacePage: React.FC = () => {
                             <div className="mt-4 flex items-center space-x-3">
                               <button
                                 type="button"
-                                className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
                                   glossary.followed
-                                    ? 'bg-red-600 text-white hover:bg-red-500'
-                                    : 'bg-green-600 text-white hover:bg-green-500'
+                                    ? isDarkMode
+                                      ? 'text-white hover:bg-red-500'
+                                      : 'bg-red-500 text-black hover:bg-red-600'
+                                    : isDarkMode
+                                      ? 'text-white hover:bg-green-500'
+                                      : 'bg-green-500 text-black hover:bg-green-600'
                                 }`}
+                                style={
+                                  isDarkMode
+                                    ? {
+                                        backgroundColor: '#292e41',
+                                      }
+                                    : {}
+                                }
                               >
                                 {glossary.followed ? 'Unfollow' : 'Follow'}
                               </button>
                               <button
                                 type="button"
-                                className="px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-500 transition-all"
+                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                  isDarkMode
+                                    ? 'text-white hover:bg-blue-500'
+                                    : 'bg-blue-500 text-black hover:bg-blue-600'
+                                }`}
+                                style={
+                                  isDarkMode
+                                    ? {
+                                        backgroundColor: '#292e41',
+                                      }
+                                    : {}
+                                }
                               >
                                 View
                               </button>
