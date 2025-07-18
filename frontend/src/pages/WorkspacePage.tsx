@@ -11,6 +11,9 @@ import {
   Clock,
   Check,
   AlertCircle,
+  StickyNote,
+  Save,
+  X,
 } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
@@ -27,6 +30,7 @@ interface Term {
   category?: string;
   group: string;
   lastModified: string;
+  notes?: string;
 }
 
 interface SubmittedTerm {
@@ -61,6 +65,8 @@ const WorkspacePage: React.FC = () => {
   const [expandedGroups, setExpandedGroups] = useState<{
     [key: string]: boolean;
   }>({});
+  const [editingNotes, setEditingNotes] = useState<number | null>(null);
+  const [noteText, setNoteText] = useState('');
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -74,7 +80,7 @@ const WorkspacePage: React.FC = () => {
   }, [isDarkMode]);
 
   // Mock data
-  const savedTerms: Term[] = [
+  const [savedTerms, setSavedTerms] = useState<Term[]>([
     {
       id: 1,
       term: 'Landbou-insette',
@@ -84,6 +90,8 @@ const WorkspacePage: React.FC = () => {
       category: 'Agriculture',
       group: 'Thesis Research',
       lastModified: '2024-07-15',
+      notes:
+        'Important concept for Chapter 3 of thesis. Need to research more about seasonal variations.',
     },
     {
       id: 2,
@@ -104,6 +112,8 @@ const WorkspacePage: React.FC = () => {
       category: 'Biology',
       group: 'General Study',
       lastModified: '2024-07-13',
+      notes:
+        'Key process for understanding plant biology. Good example for explaining cellular respiration.',
     },
     {
       id: 4,
@@ -115,7 +125,7 @@ const WorkspacePage: React.FC = () => {
       group: 'Farming Methods',
       lastModified: '2024-07-12',
     },
-  ];
+  ]);
 
   const submittedTerms: SubmittedTerm[] = [
     {
@@ -266,6 +276,30 @@ const WorkspacePage: React.FC = () => {
       default:
         return null;
     }
+  };
+
+  // Functions for handling notes
+  const handleAddNote = (termId: number) => {
+    const term = savedTerms.find((t) => t.id === termId);
+    setEditingNotes(termId);
+    setNoteText(term?.notes || '');
+  };
+
+  const handleSaveNote = (termId: number) => {
+    setSavedTerms((prevTerms) =>
+      prevTerms.map((term) =>
+        term.id === termId
+          ? { ...term, notes: noteText.trim() || undefined }
+          : term,
+      ),
+    );
+    setEditingNotes(null);
+    setNoteText('');
+  };
+
+  const handleCancelNote = () => {
+    setEditingNotes(null);
+    setNoteText('');
   };
 
   const filteredTerms = savedTerms.filter((term) => {
@@ -540,7 +574,8 @@ const WorkspacePage: React.FC = () => {
                         >
                           <div className="flex items-center space-x-3">
                             <FolderPlus
-                              className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}
+                              className="w-5 h-5"
+                              style={{ color: '#f00a50' }}
                             />
                             <h3
                               className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
@@ -597,13 +632,132 @@ const WorkspacePage: React.FC = () => {
                                         {term.definition}
                                       </p>
                                     )}
-                                    <p
-                                      className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
-                                    >
-                                      Last modified: {term.lastModified}
-                                    </p>
+
+                                    {/* Notes Section */}
+                                    <div className="mb-2">
+                                      {editingNotes === term.id ? (
+                                        <div className="space-y-2">
+                                          <textarea
+                                            value={noteText}
+                                            onChange={(e) => {
+                                              setNoteText(e.target.value);
+                                            }}
+                                            placeholder="Add your notes here..."
+                                            className={`w-full p-2 text-sm border rounded-md resize-none ${
+                                              isDarkMode
+                                                ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
+                                                : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                                            } focus:ring-2 focus:ring-cyan-500 focus:border-transparent`}
+                                            rows={3}
+                                          />
+                                          <div className="flex items-center space-x-2">
+                                            <button
+                                              onClick={() => {
+                                                handleSaveNote(term.id);
+                                              }}
+                                              className={`p-1.5 rounded-md transition-all duration-200 ${
+                                                isDarkMode
+                                                  ? 'text-green-400 hover:text-white border border-transparent hover:border-green-500/30'
+                                                  : 'text-green-600 hover:text-green-800 hover:bg-green-50 border border-transparent hover:border-green-200'
+                                              }`}
+                                              style={
+                                                isDarkMode
+                                                  ? {
+                                                      backgroundColor:
+                                                        '#31374eff',
+                                                    }
+                                                  : {}
+                                              }
+                                            >
+                                              <Save className="w-3.5 h-3.5" />
+                                            </button>
+                                            <button
+                                              onClick={handleCancelNote}
+                                              className={`p-1.5 rounded-md transition-all duration-200 ${
+                                                isDarkMode
+                                                  ? 'text-gray-400 hover:text-white border border-transparent hover:border-gray-500/30'
+                                                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-transparent hover:border-gray-200'
+                                              }`}
+                                              style={
+                                                isDarkMode
+                                                  ? {
+                                                      backgroundColor:
+                                                        '#31374eff',
+                                                    }
+                                                  : {}
+                                              }
+                                            >
+                                              <X className="w-3.5 h-3.5" />
+                                            </button>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          {term.notes && (
+                                            <div
+                                              className={`p-2 rounded-md text-sm border-l-4 ${
+                                                isDarkMode
+                                                  ? 'bg-slate-700/30 border-l-yellow-400 text-gray-300'
+                                                  : 'bg-yellow-50 border-l-yellow-400 text-gray-700'
+                                              }`}
+                                            >
+                                              <div className="flex items-start justify-between">
+                                                <div className="flex items-start space-x-2">
+                                                  <StickyNote
+                                                    className={`w-4 h-4 mt-0.5 ${
+                                                      isDarkMode
+                                                        ? 'text-yellow-400'
+                                                        : 'text-yellow-600'
+                                                    }`}
+                                                  />
+                                                  <p className="flex-1">
+                                                    {term.notes}
+                                                  </p>
+                                                </div>
+                                                <button
+                                                  onClick={() => {
+                                                    handleAddNote(term.id);
+                                                  }}
+                                                  className={`ml-2 p-1 rounded-md transition-all duration-200 ${
+                                                    isDarkMode
+                                                      ? 'text-gray-400 hover:text-white hover:bg-slate-600'
+                                                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                                                  }`}
+                                                >
+                                                  <Edit2 className="w-3 h-3" />
+                                                </button>
+                                              </div>
+                                            </div>
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="flex items-center space-x-2 ml-4">
+                                    {!term.notes &&
+                                      editingNotes !== term.id && (
+                                        <button
+                                          onClick={() => {
+                                            handleAddNote(term.id);
+                                          }}
+                                          type="button"
+                                          className={`p-2 rounded-md transition-all duration-200 ${
+                                            isDarkMode
+                                              ? 'text-yellow-400 hover:text-white border border-transparent hover:border-yellow-500/30'
+                                              : 'text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50 border border-transparent hover:border-yellow-200'
+                                          }`}
+                                          style={
+                                            isDarkMode
+                                              ? {
+                                                  backgroundColor: '#31374eff',
+                                                }
+                                              : {}
+                                          }
+                                          title="Add note"
+                                        >
+                                          <StickyNote className="w-4 h-4" />
+                                        </button>
+                                      )}
                                     <button
                                       type="button"
                                       className={`p-2 rounded-md transition-all duration-200 ${
