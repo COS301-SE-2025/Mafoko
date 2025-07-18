@@ -53,10 +53,16 @@ $text-dark: #ffffff;
 /* Main Content Styles */
 .main-content {
   flex: 1;
-  padding: 0;
+  background-color: var(--page-bg);
+  padding-top: 1px;
   display: flex;
   flex-direction: column;
-  width: 100%; /* Ensure it takes up full width */
+  margin-left: 280px; /* Match the width of left-nav */
+
+  @media (max-width: 767px) {
+    padding-bottom: 120px;
+    margin-left: 0;
+  }
 }
 
 /* Top Bar Styles */
@@ -96,15 +102,16 @@ $text-dark: #ffffff;
 /* Workspace Content Styles */
 .workspace-content {
   flex: 1;
-  padding: 1.5rem 0; /* Remove horizontal padding to allow full width */
+  padding: 1.5rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  width: 100%; /* Ensure it takes up full width */
 }
 
 .workspace-content-wrapper {
   width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   padding: 0 1.5rem; /* Add horizontal padding to maintain readability */
