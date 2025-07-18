@@ -313,16 +313,16 @@ const WorkspacePage: React.FC = () => {
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
-              <div className="flex space-x-8">
+              <div className="flex space-x-4">
                 <button
                   type="button"
                   onClick={() => {
                     setActiveTab('saved-terms');
                   }}
-                  className={`py-2 px-2 border-b-2 font-medium text-sm ${
+                  className={`py-3 px-6 rounded-lg font-medium text-base ${
                     activeTab === 'saved-terms'
-                      ? 'border-red-500 text-red-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? 'bg-white text-gray-900'
+                      : 'text-white hover:bg-white/10'
                   }`}
                 >
                   Saved Terms
@@ -332,10 +332,10 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('progress');
                   }}
-                  className={`py-2 px-2 border-b-2 font-medium text-sm ${
+                  className={`py-3 px-6 rounded-lg font-medium text-base ${
                     activeTab === 'progress'
-                      ? 'border-red-500 text-red-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? 'bg-white text-gray-900'
+                      : 'text-white hover:bg-white/10'
                   }`}
                 >
                   Submission Progress
@@ -345,10 +345,10 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('glossaries');
                   }}
-                  className={`py-2 px-2 border-b-2 font-medium text-sm ${
+                  className={`py-3 px-6 rounded-lg font-medium text-base ${
                     activeTab === 'glossaries'
-                      ? 'border-red-500 text-red-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? 'bg-white text-gray-900'
+                      : 'text-white hover:bg-white/10'
                   }`}
                 >
                   Followed Glossaries
@@ -365,15 +365,15 @@ const WorkspacePage: React.FC = () => {
 
             {/* Saved Terms Tab */}
             {activeTab === 'saved-terms' && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {/* Search and Filter */}
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <input
                       type="text"
                       placeholder="Search terms..."
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-600 bg-slate-700/50 text-white rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
@@ -381,7 +381,7 @@ const WorkspacePage: React.FC = () => {
                     />
                   </div>
                   <select
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="px-4 py-3 border border-gray-600 bg-slate-700/50 text-white rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     value={selectedGroup}
                     onChange={(e) => {
                       setSelectedGroup(e.target.value);
@@ -396,75 +396,75 @@ const WorkspacePage: React.FC = () => {
                 </div>
 
                 {/* Terms by Group */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {Object.entries(groupedTerms).map(([groupName, terms]) => (
                     <div
                       key={groupName}
-                      className="bg-white rounded-lg shadow-sm border border-gray-200"
+                      className="bg-slate-800/70 rounded-lg shadow-sm border border-slate-700"
                     >
                       <div
-                        className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
+                        className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-700"
                         onClick={() => {
                           toggleGroup(groupName);
                         }}
                       >
                         <div className="flex items-center space-x-3">
-                          <FolderPlus className="w-5 h-5 text-gray-400" />
-                          <h3 className="text-lg font-medium text-gray-900">
+                          <FolderPlus className="w-5 h-5 text-white" />
+                          <h3 className="text-lg font-medium text-white">
                             {groupName}
                           </h3>
-                          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm">
+                          <span className="bg-slate-700 text-white px-3 py-1 rounded-full text-sm">
                             {terms.length} terms
                           </span>
                         </div>
                         {expandedGroups[groupName] ? (
-                          <ChevronUp className="w-5 h-5 text-gray-400" />
+                          <ChevronUp className="w-5 h-5 text-white" />
                         ) : (
-                          <ChevronDown className="w-5 h-5 text-gray-400" />
+                          <ChevronDown className="w-5 h-5 text-white" />
                         )}
                       </div>
 
                       {expandedGroups[groupName] && (
-                        <div className="border-t border-gray-200">
+                        <div className="border-t border-slate-700">
                           {terms.map((term) => (
                             <div
                               key={term.id}
-                              className="p-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50"
+                              className="p-4 border-b border-slate-700 last:border-b-0 hover:bg-slate-700"
                             >
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-2">
-                                    <h4 className="text-lg font-medium text-gray-900">
+                                    <h4 className="text-lg font-medium text-white">
                                       {term.term}
                                     </h4>
-                                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">
+                                    <span className="bg-blue-800 text-blue-100 px-2 py-1 rounded-full text-xs">
                                       {term.language}
                                     </span>
                                     {term.category && (
-                                      <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
+                                      <span className="bg-slate-700 text-white px-2 py-1 rounded-full text-xs">
                                         {term.category}
                                       </span>
                                     )}
                                   </div>
                                   {term.definition && (
-                                    <p className="text-gray-600 mb-2">
+                                    <p className="text-gray-300 mb-2">
                                       {term.definition}
                                     </p>
                                   )}
-                                  <p className="text-sm text-gray-500">
+                                  <p className="text-sm text-gray-400">
                                     Last modified: {term.lastModified}
                                   </p>
                                 </div>
                                 <div className="flex items-center space-x-2 ml-4">
                                   <button
                                     type="button"
-                                    className="p-2 text-gray-400 hover:text-gray-600"
+                                    className="p-2 text-gray-300 hover:text-white"
                                   >
                                     <Edit2 className="w-4 h-4" />
                                   </button>
                                   <button
                                     type="button"
-                                    className="p-2 text-gray-400 hover:text-red-500"
+                                    className="p-2 text-gray-300 hover:text-red-300"
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -482,20 +482,20 @@ const WorkspacePage: React.FC = () => {
 
             {/* Progress Tab */}
             {activeTab === 'progress' && (
-              <div className="space-y-6">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="space-y-8">
+                <div className="bg-slate-800/70 rounded-lg shadow-sm border border-slate-700">
                   <div className="p-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    <h3 className="text-lg font-medium text-white mb-4">
                       Submission Progress
                     </h3>
                     <div className="space-y-4">
                       {submittedTerms.map((term) => (
                         <div
                           key={term.id}
-                          className="border border-gray-200 rounded-lg p-4"
+                          className="border border-slate-700 rounded-lg p-4 bg-slate-700/50"
                         >
                           <div className="flex items-center justify-between mb-3">
-                            <h4 className="text-lg font-medium text-gray-900">
+                            <h4 className="text-lg font-medium text-white">
                               {term.term}
                             </h4>
                             <div
@@ -507,7 +507,7 @@ const WorkspacePage: React.FC = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                          <div className="flex items-center space-x-4 text-sm text-gray-300">
                             <span>Submitted: {term.submittedDate}</span>
                             {term.reviewedDate && (
                               <span>Reviewed: {term.reviewedDate}</span>
@@ -530,26 +530,26 @@ const WorkspacePage: React.FC = () => {
 
             {/* Glossaries Tab */}
             {activeTab === 'glossaries' && (
-              <div className="space-y-6">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="space-y-8">
+                <div className="bg-slate-800/70 rounded-lg shadow-sm border border-slate-700">
                   <div className="p-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    <h3 className="text-lg font-medium text-white mb-4">
                       Followed Glossaries
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {glossaries.map((glossary) => (
                         <div
                           key={glossary.id}
-                          className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                          className="border border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-slate-700/50"
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center space-x-3">
-                              <BookOpen className="w-5 h-5 text-gray-400" />
+                              <BookOpen className="w-5 h-5 text-white" />
                               <div>
-                                <h4 className="text-lg font-medium text-gray-900">
+                                <h4 className="text-lg font-medium text-white">
                                   {glossary.name}
                                 </h4>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-gray-300">
                                   {glossary.language}
                                 </p>
                               </div>
@@ -558,7 +558,7 @@ const WorkspacePage: React.FC = () => {
                               className={`w-3 h-3 rounded-full ${glossary.followed ? 'bg-green-500' : 'bg-gray-300'}`}
                             ></div>
                           </div>
-                          <div className="flex items-center justify-between text-sm text-gray-500">
+                          <div className="flex items-center justify-between text-sm text-gray-300">
                             <span>{glossary.termCount} terms</span>
                             <span>Updated: {glossary.lastUpdated}</span>
                           </div>
@@ -575,7 +575,7 @@ const WorkspacePage: React.FC = () => {
                             </button>
                             <button
                               type="button"
-                              className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200"
+                              className="px-3 py-1 bg-slate-600 text-white rounded-full text-sm hover:bg-slate-500"
                             >
                               View
                             </button>
