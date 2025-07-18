@@ -73,14 +73,24 @@ const WorkspacePage: React.FC = () => {
     'all',
   );
 
-  // Handle window resize
+  // Handle window resize with debounce for better performance
   useEffect(() => {
+    let resizeTimer: NodeJS.Timeout;
+
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        setIsMobile(window.innerWidth <= 768);
+      }, 100);
     };
+
     window.addEventListener('resize', handleResize);
+    // Call once on mount to set initial state
+    handleResize();
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimer);
     };
   }, []);
 
@@ -156,7 +166,7 @@ const WorkspacePage: React.FC = () => {
               <p>{t('common.loading')}</p>
             </div>
           ) : (
-            <>
+            <div className="workspace-content-wrapper">
               <div className="workspace-header">
                 <h1>{t('workspace.title')}</h1>
                 <p className="workspace-description">
@@ -220,39 +230,52 @@ const WorkspacePage: React.FC = () => {
                     <p>{t('workspace.emptyState')}</p>
                   </div>
                 ) : (
-                  filteredItems.map((item) => (
-                    <div key={item.id} className="workspace-item">
-                      <div className="col-name">
-                        {item.type === 'folder' ? (
-                          <Folder size={20} className="item-icon folder-icon" />
-                        ) : (
-                          <File size={20} className="item-icon file-icon" />
-                        )}
-                        <span className="item-name">{item.name}</span>
+                  <div className="workspace-items-container">
+                    {filteredItems.map((item, index) => (
+                      <div
+                        key={item.id}
+                        className="workspace-item"
+                        style={{
+                          animationDelay: `${String(index * 50)}ms`,
+                          opacity: 0,
+                          animation: 'fadeIn 0.3s ease forwards',
+                        }}
+                      >
+                        <div className="col-name">
+                          {item.type === 'folder' ? (
+                            <Folder
+                              size={20}
+                              className="item-icon folder-icon"
+                            />
+                          ) : (
+                            <File size={20} className="item-icon file-icon" />
+                          )}
+                          <span className="item-name">{item.name}</span>
+                        </div>
+                        <div className="col-modified">{item.lastModified}</div>
+                        <div className="col-owner">{item.owner}</div>
+                        <div className="col-actions">
+                          <button
+                            type="button"
+                            className="action-btn"
+                            aria-label="Edit"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button
+                            type="button"
+                            className="action-btn"
+                            aria-label="Share"
+                          >
+                            <Share size={16} />
+                          </button>
+                        </div>
                       </div>
-                      <div className="col-modified">{item.lastModified}</div>
-                      <div className="col-owner">{item.owner}</div>
-                      <div className="col-actions">
-                        <button
-                          type="button"
-                          className="action-btn"
-                          aria-label="Edit"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button
-                          type="button"
-                          className="action-btn"
-                          aria-label="Share"
-                        >
-                          <Share size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>
