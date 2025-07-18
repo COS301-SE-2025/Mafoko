@@ -48,7 +48,7 @@ $text-dark: #ffffff;
   min-height: 100vh;
   height: 100vh;
   width: 100%;
-  background-color: #363b4d; /* Hard-coded background color to match the screenshot */
+  background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
   color: var(--text-theme);
   overflow-x: hidden;
 }
@@ -56,7 +56,7 @@ $text-dark: #ffffff;
 /* Main Content Styles */
 .main-content {
   flex: 1;
-  background-color: #363b4d; /* Hard-coded background color to match the screenshot */
+  background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -114,7 +114,7 @@ $text-dark: #ffffff;
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: #363b4d; /* Match the container background */
+  background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
 }
 
 .workspace-content-wrapper {

@@ -61,6 +61,17 @@ const WorkspacePage: React.FC = () => {
     [key: string]: boolean;
   }>({});
 
+  // Apply theme to document based on isDarkMode state
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('theme-dark');
+      document.documentElement.classList.remove('theme-light');
+    } else {
+      document.documentElement.classList.add('theme-light');
+      document.documentElement.classList.remove('theme-dark');
+    }
+  }, [isDarkMode]);
+
   // Mock data
   const savedTerms: Term[] = [
     {
@@ -203,17 +214,32 @@ const WorkspacePage: React.FC = () => {
   };
 
   const getStatusColor = (status: SubmittedTerm['status']) => {
-    switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-700';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'rejected':
-        return 'bg-red-100 text-red-700';
-      case 'under_review':
-        return 'bg-blue-100 text-blue-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
+    if (isDarkMode) {
+      switch (status) {
+        case 'approved':
+          return 'bg-green-800 text-green-100';
+        case 'pending':
+          return 'bg-yellow-800 text-yellow-100';
+        case 'rejected':
+          return 'bg-red-800 text-red-100';
+        case 'under_review':
+          return 'bg-blue-800 text-blue-100';
+        default:
+          return 'bg-gray-700 text-gray-100';
+      }
+    } else {
+      switch (status) {
+        case 'approved':
+          return 'bg-green-100 text-green-700';
+        case 'pending':
+          return 'bg-yellow-100 text-yellow-700';
+        case 'rejected':
+          return 'bg-red-100 text-red-700';
+        case 'under_review':
+          return 'bg-blue-100 text-blue-700';
+        default:
+          return 'bg-gray-100 text-gray-700';
+      }
     }
   };
 
@@ -321,7 +347,9 @@ const WorkspacePage: React.FC = () => {
                   }}
                   className={`py-3 px-6 rounded-lg font-medium text-base ${
                     activeTab === 'saved-terms'
-                      ? 'bg-white text-gray-900'
+                      ? isDarkMode
+                        ? 'bg-slate-700 text-white'
+                        : 'bg-white text-gray-900'
                       : 'text-white hover:bg-white/10'
                   }`}
                 >
@@ -334,7 +362,9 @@ const WorkspacePage: React.FC = () => {
                   }}
                   className={`py-3 px-6 rounded-lg font-medium text-base ${
                     activeTab === 'progress'
-                      ? 'bg-white text-gray-900'
+                      ? isDarkMode
+                        ? 'bg-slate-700 text-white'
+                        : 'bg-white text-gray-900'
                       : 'text-white hover:bg-white/10'
                   }`}
                 >
@@ -347,7 +377,9 @@ const WorkspacePage: React.FC = () => {
                   }}
                   className={`py-3 px-6 rounded-lg font-medium text-base ${
                     activeTab === 'glossaries'
-                      ? 'bg-white text-gray-900'
+                      ? isDarkMode
+                        ? 'bg-slate-700 text-white'
+                        : 'bg-white text-gray-900'
                       : 'text-white hover:bg-white/10'
                   }`}
                 >
@@ -373,7 +405,7 @@ const WorkspacePage: React.FC = () => {
                     <input
                       type="text"
                       placeholder="Search terms..."
-                      className="w-full pl-10 pr-4 py-3 border border-gray-600 bg-slate-700/50 text-white rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      className={`w-full pl-10 pr-4 py-3 border ${isDarkMode ? 'border-gray-600 bg-slate-700/50 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
@@ -381,7 +413,7 @@ const WorkspacePage: React.FC = () => {
                     />
                   </div>
                   <select
-                    className="px-4 py-3 border border-gray-600 bg-slate-700/50 text-white rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className={`px-4 py-3 border ${isDarkMode ? 'border-gray-600 bg-slate-700/50 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
                     value={selectedGroup}
                     onChange={(e) => {
                       setSelectedGroup(e.target.value);
@@ -400,20 +432,26 @@ const WorkspacePage: React.FC = () => {
                   {Object.entries(groupedTerms).map(([groupName, terms]) => (
                     <div
                       key={groupName}
-                      className="bg-slate-800/70 rounded-lg shadow-sm border border-slate-700"
+                      className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border`}
                     >
                       <div
-                        className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-700"
+                        className={`flex items-center justify-between p-4 cursor-pointer ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
                         onClick={() => {
                           toggleGroup(groupName);
                         }}
                       >
                         <div className="flex items-center space-x-3">
-                          <FolderPlus className="w-5 h-5 text-white" />
-                          <h3 className="text-lg font-medium text-white">
+                          <FolderPlus
+                            className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}
+                          />
+                          <h3
+                            className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                          >
                             {groupName}
                           </h3>
-                          <span className="bg-slate-700 text-white px-3 py-1 rounded-full text-sm">
+                          <span
+                            className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-3 py-1 rounded-full text-sm`}
+                          >
                             {terms.length} terms
                           </span>
                         </div>
@@ -425,33 +463,43 @@ const WorkspacePage: React.FC = () => {
                       </div>
 
                       {expandedGroups[groupName] && (
-                        <div className="border-t border-slate-700">
+                        <div
+                          className={`border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}
+                        >
                           {terms.map((term) => (
                             <div
                               key={term.id}
-                              className="p-4 border-b border-slate-700 last:border-b-0 hover:bg-slate-700"
+                              className={`p-4 border-b ${isDarkMode ? 'border-slate-700 last:border-b-0 hover:bg-slate-700' : 'border-gray-200 last:border-b-0 hover:bg-gray-50'}`}
                             >
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2 mb-2">
-                                    <h4 className="text-lg font-medium text-white">
+                                    <h4
+                                      className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                                    >
                                       {term.term}
                                     </h4>
                                     <span className="bg-blue-800 text-blue-100 px-2 py-1 rounded-full text-xs">
                                       {term.language}
                                     </span>
                                     {term.category && (
-                                      <span className="bg-slate-700 text-white px-2 py-1 rounded-full text-xs">
+                                      <span
+                                        className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-2 py-1 rounded-full text-xs`}
+                                      >
                                         {term.category}
                                       </span>
                                     )}
                                   </div>
                                   {term.definition && (
-                                    <p className="text-gray-300 mb-2">
+                                    <p
+                                      className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                    >
                                       {term.definition}
                                     </p>
                                   )}
-                                  <p className="text-sm text-gray-400">
+                                  <p
+                                    className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                                  >
                                     Last modified: {term.lastModified}
                                   </p>
                                 </div>
@@ -483,19 +531,25 @@ const WorkspacePage: React.FC = () => {
             {/* Progress Tab */}
             {activeTab === 'progress' && (
               <div className="space-y-8">
-                <div className="bg-slate-800/70 rounded-lg shadow-sm border border-slate-700">
+                <div
+                  className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border`}
+                >
                   <div className="p-6">
-                    <h3 className="text-lg font-medium text-white mb-4">
+                    <h3
+                      className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}
+                    >
                       Submission Progress
                     </h3>
                     <div className="space-y-4">
                       {submittedTerms.map((term) => (
                         <div
                           key={term.id}
-                          className="border border-slate-700 rounded-lg p-4 bg-slate-700/50"
+                          className={`border rounded-lg p-4 ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50/80'}`}
                         >
                           <div className="flex items-center justify-between mb-3">
-                            <h4 className="text-lg font-medium text-white">
+                            <h4
+                              className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                            >
                               {term.term}
                             </h4>
                             <div
@@ -507,15 +561,21 @@ const WorkspacePage: React.FC = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-4 text-sm text-gray-300">
+                          <div
+                            className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                          >
                             <span>Submitted: {term.submittedDate}</span>
                             {term.reviewedDate && (
                               <span>Reviewed: {term.reviewedDate}</span>
                             )}
                           </div>
                           {term.feedback && (
-                            <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-md">
-                              <p className="text-sm text-red-700">
+                            <div
+                              className={`mt-3 p-3 rounded-md ${isDarkMode ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}
+                            >
+                              <p
+                                className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}
+                              >
                                 {term.feedback}
                               </p>
                             </div>
@@ -531,25 +591,35 @@ const WorkspacePage: React.FC = () => {
             {/* Glossaries Tab */}
             {activeTab === 'glossaries' && (
               <div className="space-y-8">
-                <div className="bg-slate-800/70 rounded-lg shadow-sm border border-slate-700">
+                <div
+                  className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border`}
+                >
                   <div className="p-6">
-                    <h3 className="text-lg font-medium text-white mb-4">
+                    <h3
+                      className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}
+                    >
                       Followed Glossaries
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {glossaries.map((glossary) => (
                         <div
                           key={glossary.id}
-                          className="border border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-slate-700/50"
+                          className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50/80'}`}
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center space-x-3">
-                              <BookOpen className="w-5 h-5 text-white" />
+                              <BookOpen
+                                className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}
+                              />
                               <div>
-                                <h4 className="text-lg font-medium text-white">
+                                <h4
+                                  className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                                >
                                   {glossary.name}
                                 </h4>
-                                <p className="text-sm text-gray-300">
+                                <p
+                                  className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                >
                                   {glossary.language}
                                 </p>
                               </div>
@@ -558,7 +628,9 @@ const WorkspacePage: React.FC = () => {
                               className={`w-3 h-3 rounded-full ${glossary.followed ? 'bg-green-500' : 'bg-gray-300'}`}
                             ></div>
                           </div>
-                          <div className="flex items-center justify-between text-sm text-gray-300">
+                          <div
+                            className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                          >
                             <span>{glossary.termCount} terms</span>
                             <span>Updated: {glossary.lastUpdated}</span>
                           </div>
@@ -575,7 +647,7 @@ const WorkspacePage: React.FC = () => {
                             </button>
                             <button
                               type="button"
-                              className="px-3 py-1 bg-slate-600 text-white rounded-full text-sm hover:bg-slate-500"
+                              className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-slate-600 text-white hover:bg-slate-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                             >
                               View
                             </button>
