@@ -52,13 +52,15 @@ $text-dark: #ffffff;
 
 /* Workspace Container Styles */
 .workspace-container {
-  display: flex;
-  min-height: 100vh;
-  height: 100vh;
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
   color: var(--text-theme);
-  overflow-x: hidden;
+  display: flex;
+  overflow: hidden;
 }
 
 /* Group Card Styles */
@@ -66,6 +68,7 @@ $text-dark: #ffffff;
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 0.5rem; /* Reduced spacing between cards */
   
   .theme-light & {
     background-color: white;
@@ -87,6 +90,10 @@ $text-dark: #ffffff;
     .theme-dark & {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
     }
+  }
+  
+  &:last-child {
+    margin-bottom: 0; /* Remove margin from last card */
   }
 }
 
@@ -116,20 +123,121 @@ $text-dark: #ffffff;
   }
 }
 
+.create-new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #ef4444; /* red-500 */
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  
+  &:hover {
+    background-color: #dc2626; /* red-600 */
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Additional space optimization styles
+.space-y-8 {
+  > * + * {
+    margin-top: 1rem; /* Reduced from 2rem */
+  }
+  
+  &.h-full {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    
+    > *:last-child {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+  }
+}
+
+// Ensure content containers use full height
+.workspace-group-card,
+.tab-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+// Full height containers for tab content
+.tab-content > .space-y-8.h-full > div:last-child {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  
+  > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// Terms container optimization
+.space-y-6 {
+  > * + * {
+    margin-top: 0.75rem; /* Reduced from 1.5rem */
+  }
+  
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure full height usage */
+}
+
+// Grid layout optimization for glossaries
+.grid {
+  &.grid-cols-1 {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    height: 100%;
+    align-content: start;
+    
+    &.md\\:grid-cols-2 {
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  }
+  
+  &.gap-5 {
+    gap: 1.25rem;
+  }
+}
+
 /* Main Content Styles */
 .main-content {
-  flex: 1;
+  position: fixed;
+  top: 0;
+  left: 285px; /* Start right after sidebar */
+  right: 0; /* Extend to screen edge */
+  bottom: 0; /* Extend to screen bottom */
   background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin-left: 280px; /* Match the width of left-nav */
-  width: calc(100% - 280px); /* Take full width minus left nav width */
+  overflow-y: auto;
 
   @media (max-width: 767px) {
+    left: 0;
     padding-bottom: 120px;
-    margin-left: 0;
-    width: 100%;
   }
 }
 
@@ -142,11 +250,13 @@ $text-dark: #ffffff;
   border-bottom: 1px solid var(--workspace-border-color);
   background-color: var(--workspace-bg);
   width: 100%;
+  height: 60px; /* Fixed height for consistency */
 }
 
 .workspace-top-bar {
   padding: 0.75rem 1.5rem;
   width: 100%;
+  height: 60px; /* Fixed height for consistency */
 }
 
 /* Hamburger Icon Styles */
@@ -172,20 +282,62 @@ $text-dark: #ffffff;
 /* Workspace Content Styles */
 .workspace-content {
   flex: 1;
-  padding: 2rem 2rem 0 2rem;
+  padding: 1rem 1.5rem 1rem 1.5rem; /* Reduced padding to maximize space */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   width: 100%;
   background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
+  height: calc(100vh - 60px); /* Full height minus top bar */
+  
+  /* Custom scrollbar styles similar to analytics page */
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--page-bg);
+    border-radius: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    border: 2px solid var(--page-bg);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) var(--page-bg);
+}
+
+/* Workspace Content Wrapper */
+.workspace-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: var(--page-bg);
 }
 
 /* Tab Content Styles */
 .tab-content {
-  margin-top: 24px;
+  margin-top: 16px; /* Reduced margin */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
   
   .tab-panel {
     border-radius: 8px;
+    flex: 1;
+    overflow-y: auto;
     
     .theme-light & {
       background-color: white;
@@ -203,7 +355,7 @@ $text-dark: #ffffff;
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 1.5rem; /* Add horizontal padding to maintain readability */
+  padding: 0 1rem; /* Reduced padding to maximize space */
   box-sizing: border-box; /* Ensure padding doesn't increase width */
 }
 
@@ -249,14 +401,15 @@ $text-dark: #ffffff;
 
 /* Workspace Header */
 .workspace-header {
-  margin-bottom: 2rem;
+  margin-bottom: 0.75rem; /* Further reduced margin */
   width: 100%;
   padding: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  gap: 16px; /* Reduced gap */
   flex-wrap: wrap;
+  flex-shrink: 0; /* Prevent header from shrinking */
 
   h1 {
     font-size: 1.75rem;

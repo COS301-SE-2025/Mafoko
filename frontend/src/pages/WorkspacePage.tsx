@@ -335,7 +335,7 @@ const WorkspacePage: React.FC = () => {
         )}
 
         <div className={`workspace-content ${isMobile ? 'pt-16' : ''}`}>
-          <div className="workspace-content-wrapper">
+          <div className="workspace-content-wrapper w-full">
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
@@ -379,196 +379,200 @@ const WorkspacePage: React.FC = () => {
 
             {/* Saved Terms Tab */}
             {activeTab === 'saved-terms' && (
-              <div className="space-y-8">
-                {/* Search and Filter */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search terms..."
-                      className={`w-full pl-10 pr-4 py-3 border ${
-                        isDarkMode
-                          ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
-                          : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
-                      } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <select
-                    className={`px-4 py-3 border ${
-                      isDarkMode
-                        ? 'border-gray-600 bg-slate-700/50 text-white'
-                        : 'border-gray-300 bg-white text-gray-900'
-                    } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
-                    value={selectedGroup}
-                    onChange={(e) => {
-                      setSelectedGroup(e.target.value);
-                    }}
-                  >
-                    {groups.map((group) => (
-                      <option key={group} value={group}>
-                        {group === 'all' ? 'All Groups' : group}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Terms by Group */}
-                <div className="space-y-6">
-                  {Object.entries(groupedTerms).map(([groupName, terms]) => (
-                    <div key={groupName} className="workspace-group-card">
-                      <div
-                        className={`flex items-center justify-between p-4 cursor-pointer ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
-                        onClick={() => {
-                          toggleGroup(groupName);
+              <div className="tab-content">
+                <div className="space-y-8 h-full">
+                  {/* Search and Filter */}
+                  <div className="flex flex-col sm:flex-row gap-4 flex-shrink-0">
+                    <div className="flex-1 relative">
+                      <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Search terms..."
+                        className={`w-full pl-10 pr-4 py-3 border ${
+                          isDarkMode
+                            ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
+                            : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                        } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
+                        value={searchQuery}
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
                         }}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <FolderPlus
-                            className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}
-                          />
-                          <h3
-                            className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                          >
-                            {groupName}
-                          </h3>
-                          <span
-                            className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-3 py-1 rounded-full text-sm`}
-                          >
-                            {terms.length} terms
-                          </span>
-                        </div>
-                        {expandedGroups[groupName] ? (
-                          <ChevronUp className="w-5 h-5 text-white" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-white" />
-                        )}
-                      </div>
+                      />
+                    </div>
+                    <select
+                      className={`px-4 py-3 border ${
+                        isDarkMode
+                          ? 'border-gray-600 bg-slate-700/50 text-white'
+                          : 'border-gray-300 bg-white text-gray-900'
+                      } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
+                      value={selectedGroup}
+                      onChange={(e) => {
+                        setSelectedGroup(e.target.value);
+                      }}
+                    >
+                      {groups.map((group) => (
+                        <option key={group} value={group}>
+                          {group === 'all' ? 'All Groups' : group}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                      {expandedGroups[groupName] && (
+                  {/* Terms by Group */}
+                  <div className="space-y-6 flex-1 overflow-y-auto">
+                    {Object.entries(groupedTerms).map(([groupName, terms]) => (
+                      <div key={groupName} className="workspace-group-card">
                         <div
-                          className={`border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}
+                          className={`flex items-center justify-between p-4 cursor-pointer ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+                          onClick={() => {
+                            toggleGroup(groupName);
+                          }}
                         >
-                          {terms.map((term) => (
-                            <div
-                              key={term.id}
-                              className={`p-4 border-b ${isDarkMode ? 'border-slate-700 last:border-b-0 hover:bg-slate-700' : 'border-gray-200 last:border-b-0 hover:bg-gray-50'}`}
+                          <div className="flex items-center space-x-3">
+                            <FolderPlus
+                              className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}
+                            />
+                            <h3
+                              className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
                             >
-                              <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center space-x-2 mb-2">
-                                    <h4
-                                      className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                                    >
-                                      {term.term}
-                                    </h4>
-                                    <span className="bg-blue-800 text-blue-100 px-2 py-1 rounded-full text-xs">
-                                      {term.language}
-                                    </span>
-                                    {term.category && (
-                                      <span
-                                        className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-2 py-1 rounded-full text-xs`}
+                              {groupName}
+                            </h3>
+                            <span
+                              className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-3 py-1 rounded-full text-sm`}
+                            >
+                              {terms.length} terms
+                            </span>
+                          </div>
+                          {expandedGroups[groupName] ? (
+                            <ChevronUp className="w-5 h-5 text-white" />
+                          ) : (
+                            <ChevronDown className="w-5 h-5 text-white" />
+                          )}
+                        </div>
+
+                        {expandedGroups[groupName] && (
+                          <div
+                            className={`border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}
+                          >
+                            {terms.map((term) => (
+                              <div
+                                key={term.id}
+                                className={`p-4 border-b ${isDarkMode ? 'border-slate-700 last:border-b-0 hover:bg-slate-700' : 'border-gray-200 last:border-b-0 hover:bg-gray-50'}`}
+                              >
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <div className="flex items-center space-x-2 mb-2">
+                                      <h4
+                                        className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
                                       >
-                                        {term.category}
+                                        {term.term}
+                                      </h4>
+                                      <span className="bg-blue-800 text-blue-100 px-2 py-1 rounded-full text-xs">
+                                        {term.language}
                                       </span>
+                                      {term.category && (
+                                        <span
+                                          className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-2 py-1 rounded-full text-xs`}
+                                        >
+                                          {term.category}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {term.definition && (
+                                      <p
+                                        className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                      >
+                                        {term.definition}
+                                      </p>
                                     )}
-                                  </div>
-                                  {term.definition && (
                                     <p
-                                      className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                      className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
                                     >
-                                      {term.definition}
+                                      Last modified: {term.lastModified}
                                     </p>
-                                  )}
-                                  <p
-                                    className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
-                                  >
-                                    Last modified: {term.lastModified}
-                                  </p>
-                                </div>
-                                <div className="flex items-center space-x-2 ml-4">
-                                  <button
-                                    type="button"
-                                    className="p-2 text-gray-300 hover:text-white"
-                                  >
-                                    <Edit2 className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="p-2 text-gray-300 hover:text-red-300"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
+                                  </div>
+                                  <div className="flex items-center space-x-2 ml-4">
+                                    <button
+                                      type="button"
+                                      className="p-2 text-gray-300 hover:text-white"
+                                    >
+                                      <Edit2 className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="p-2 text-gray-300 hover:text-red-300"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
 
             {/* Progress Tab */}
             {activeTab === 'progress' && (
-              <div className="space-y-8">
-                <div
-                  className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border`}
-                >
-                  <div className="p-6">
-                    <h3
-                      className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}
-                    >
-                      Submission Progress
-                    </h3>
-                    <div className="space-y-4">
-                      {submittedTerms.map((term) => (
-                        <div
-                          key={term.id}
-                          className={`border rounded-lg p-4 ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50/80'}`}
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <h4
-                              className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                            >
-                              {term.term}
-                            </h4>
-                            <div
-                              className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${getStatusColor(term.status)}`}
-                            >
-                              {getStatusIcon(term.status)}
-                              <span className="capitalize">
-                                {term.status.replace('_', ' ')}
-                              </span>
-                            </div>
-                          </div>
+              <div className="tab-content">
+                <div className="space-y-8 h-full">
+                  <div
+                    className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border flex-1 overflow-y-auto`}
+                  >
+                    <div className="p-6 h-full">
+                      <h3
+                        className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}
+                      >
+                        Submission Progress
+                      </h3>
+                      <div className="space-y-4">
+                        {submittedTerms.map((term) => (
                           <div
-                            className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                            key={term.id}
+                            className={`border rounded-lg p-4 ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50/80'}`}
                           >
-                            <span>Submitted: {term.submittedDate}</span>
-                            {term.reviewedDate && (
-                              <span>Reviewed: {term.reviewedDate}</span>
+                            <div className="flex items-center justify-between mb-3">
+                              <h4
+                                className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                              >
+                                {term.term}
+                              </h4>
+                              <div
+                                className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${getStatusColor(term.status)}`}
+                              >
+                                {getStatusIcon(term.status)}
+                                <span className="capitalize">
+                                  {term.status.replace('_', ' ')}
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                            >
+                              <span>Submitted: {term.submittedDate}</span>
+                              {term.reviewedDate && (
+                                <span>Reviewed: {term.reviewedDate}</span>
+                              )}
+                            </div>
+                            {term.feedback && (
+                              <div
+                                className={`mt-3 p-3 rounded-md ${isDarkMode ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}
+                              >
+                                <p
+                                  className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}
+                                >
+                                  {term.feedback}
+                                </p>
+                              </div>
                             )}
                           </div>
-                          {term.feedback && (
-                            <div
-                              className={`mt-3 p-3 rounded-md ${isDarkMode ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}
-                            >
-                              <p
-                                className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}
-                              >
-                                {term.feedback}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -577,82 +581,78 @@ const WorkspacePage: React.FC = () => {
 
             {/* Glossaries Tab */}
             {activeTab === 'glossaries' && (
-              <div className="space-y-8">
-                <div
-                  className={`rounded-lg shadow-sm ${isDarkMode ? 'bg-transparent border-0' : 'bg-transparent border-0'}`}
-                >
-                  <div className="p-6 pt-2">
-                    <h3
-                      className={`text-xl font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6`}
-                    >
-                      Followed Glossaries
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      {glossaries.map((glossary) => (
-                        <div
-                          key={glossary.id}
-                          className={`border rounded-lg p-5 hover:shadow-md transition-all ${
-                            isDarkMode
-                              ? 'border-slate-700 bg-slate-800'
-                              : 'border-gray-200 bg-white'
-                          }`}
-                        >
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center space-x-3">
-                              <BookOpen
-                                className={`w-5 h-5 ${
-                                  isDarkMode ? 'text-blue-400' : 'text-blue-600'
-                                }`}
-                              />
-                              <div>
-                                <h4
-                                  className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                                >
-                                  {glossary.name}
-                                </h4>
-                                <p
-                                  className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                                >
-                                  {glossary.language}
-                                </p>
+              <div className="tab-content">
+                <div className="space-y-8 h-full">
+                  <div className="rounded-lg shadow-sm bg-transparent border-0 flex-1 overflow-y-auto">
+                    <div className="p-6 pt-2 h-full">
+                      <h3 className="text-xl font-medium text-white mb-6">
+                        Followed Glossaries
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {glossaries.map((glossary) => (
+                          <div
+                            key={glossary.id}
+                            className="border rounded-lg p-5 hover:shadow-md transition-all border-slate-700 bg-slate-800"
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center space-x-3">
+                                <BookOpen
+                                  className={`w-5 h-5 ${
+                                    isDarkMode
+                                      ? 'text-blue-400'
+                                      : 'text-blue-600'
+                                  }`}
+                                />
+                                <div>
+                                  <h4
+                                    className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                                  >
+                                    {glossary.name}
+                                  </h4>
+                                  <p
+                                    className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                  >
+                                    {glossary.language}
+                                  </p>
+                                </div>
                               </div>
+                              <div
+                                className={`w-3.5 h-3.5 rounded-full ring-2 ${
+                                  glossary.followed
+                                    ? 'bg-green-500 ring-green-400/30'
+                                    : 'bg-gray-400 ring-gray-300/30'
+                                }`}
+                              ></div>
                             </div>
                             <div
-                              className={`w-3.5 h-3.5 rounded-full ring-2 ${
-                                glossary.followed
-                                  ? 'bg-green-500 ring-green-400/30'
-                                  : 'bg-gray-400 ring-gray-300/30'
-                              }`}
-                            ></div>
-                          </div>
-                          <div
-                            className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} my-2`}
-                          >
-                            <span className="font-medium">
-                              {glossary.termCount} terms
-                            </span>
-                            <span>Updated: {glossary.lastUpdated}</span>
-                          </div>
-                          <div className="mt-4 flex items-center space-x-3">
-                            <button
-                              type="button"
-                              className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-                                glossary.followed
-                                  ? 'bg-red-600 text-white hover:bg-red-500'
-                                  : 'bg-green-600 text-white hover:bg-green-500'
-                              }`}
+                              className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} my-2`}
                             >
-                              {glossary.followed ? 'Unfollow' : 'Follow'}
-                            </button>
-                            <button
-                              type="button"
-                              className="px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-500 transition-all"
-                            >
-                              View
-                            </button>
+                              <span className="font-medium">
+                                {glossary.termCount} terms
+                              </span>
+                              <span>Updated: {glossary.lastUpdated}</span>
+                            </div>
+                            <div className="mt-4 flex items-center space-x-3">
+                              <button
+                                type="button"
+                                className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                                  glossary.followed
+                                    ? 'bg-red-600 text-white hover:bg-red-500'
+                                    : 'bg-green-600 text-white hover:bg-green-500'
+                                }`}
+                              >
+                                {glossary.followed ? 'Unfollow' : 'Follow'}
+                              </button>
+                              <button
+                                type="button"
+                                className="px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-500 transition-all"
+                              >
+                                View
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
