@@ -67,6 +67,10 @@ const WorkspacePage: React.FC = () => {
   }>({});
   const [editingNotes, setEditingNotes] = useState<number | null>(null);
   const [noteText, setNoteText] = useState('');
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [selectedGroupsForDeletion, setSelectedGroupsForDeletion] = useState<
+    string[]
+  >([]);
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -100,8 +104,10 @@ const WorkspacePage: React.FC = () => {
         'The variety of life in the world or in a particular habitat or ecosystem.',
       language: 'English',
       category: 'Environmental Science',
-      group: 'Thesis Research',
+      group: 'All Terms',
       lastModified: '2024-07-14',
+      notes:
+        'This term was moved to All Terms when its original group was deleted.',
     },
     {
       id: 3,
@@ -194,7 +200,13 @@ const WorkspacePage: React.FC = () => {
     },
   ];
 
-  const groups = ['all', 'Thesis Research', 'General Study', 'Farming Methods'];
+  const [groups, setGroups] = useState([
+    'all',
+    'All Terms',
+    'Farming Methods',
+    'General Study',
+    'Thesis Research',
+  ]);
 
   // Handle window resize with debounce for better performance
   useEffect(() => {
@@ -300,6 +312,59 @@ const WorkspacePage: React.FC = () => {
   const handleCancelNote = () => {
     setEditingNotes(null);
     setNoteText('');
+  };
+
+  // Functions for handling bulk group deletion
+  const handleEnterDeleteMode = () => {
+    setIsDeleteMode(true);
+    setSelectedGroupsForDeletion([]);
+  };
+
+  const handleExitDeleteMode = () => {
+    setIsDeleteMode(false);
+    setSelectedGroupsForDeletion([]);
+  };
+
+  const handleToggleGroupSelection = (groupName: string) => {
+    if (groupName === 'all' || groupName === 'All Terms') return; // Don't allow selecting these groups
+
+    setSelectedGroupsForDeletion((prev) =>
+      prev.includes(groupName)
+        ? prev.filter((g) => g !== groupName)
+        : [...prev, groupName],
+    );
+  };
+
+  const handleDeleteSelectedGroups = () => {
+    if (selectedGroupsForDeletion.length === 0) return;
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ${selectedGroupsForDeletion.length.toString()} group(s)? This will move all terms from these groups to "All Terms" group.`,
+    );
+
+    if (!confirmDelete) return;
+
+    // Move all terms from deleted groups to "All Terms"
+    setSavedTerms((prevTerms) =>
+      prevTerms.map((term) =>
+        selectedGroupsForDeletion.includes(term.group)
+          ? { ...term, group: 'All Terms' }
+          : term,
+      ),
+    );
+
+    // Remove the groups from the groups list
+    setGroups((prevGroups) =>
+      prevGroups.filter((group) => !selectedGroupsForDeletion.includes(group)),
+    );
+
+    // If the currently selected group was deleted, switch to "all"
+    if (selectedGroupsForDeletion.includes(selectedGroup)) {
+      setSelectedGroup('all');
+    }
+
+    // Exit delete mode
+    handleExitDeleteMode();
   };
 
   const filteredTerms = savedTerms.filter((term) => {
@@ -418,10 +483,58 @@ const WorkspacePage: React.FC = () => {
               </div>
 
               <div className="workspace-actions">
-                <button type="button" className="create-new-btn">
-                  <Plus className="w-5 h-5" />
-                  <span>New Group</span>
-                </button>
+                {isDeleteMode ? (
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={handleDeleteSelectedGroups}
+                      disabled={selectedGroupsForDeletion.length === 0}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        selectedGroupsForDeletion.length === 0
+                          ? isDarkMode
+                            ? 'bg-slate-700/40 text-gray-500 cursor-not-allowed border border-slate-600'
+                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                          : isDarkMode
+                            ? 'bg-red-600/80 text-white hover:bg-red-600 border border-red-500'
+                            : 'bg-red-500 text-white hover:bg-red-600'
+                      }`}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2 inline" />
+                      Delete Selected (
+                      {selectedGroupsForDeletion.length.toString()})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleExitDeleteMode}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        isDarkMode
+                          ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30 border border-red-600/30'
+                          : 'bg-red-500 text-white hover:bg-red-600'
+                      }`}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <button type="button" className="create-new-btn">
+                      <Plus className="w-5 h-5" />
+                      <span>New Group</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleEnterDeleteMode}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        isDarkMode
+                          ? 'bg-slate-700/60 text-red-400 hover:bg-slate-600 hover:text-red-300 border border-slate-600'
+                          : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
+                      }`}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2 inline" />
+                      Delete Groups
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -567,16 +680,48 @@ const WorkspacePage: React.FC = () => {
                     {Object.entries(groupedTerms).map(([groupName, terms]) => (
                       <div key={groupName} className="workspace-group-card">
                         <div
-                          className={`flex items-center justify-between p-4 cursor-pointer ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
-                          onClick={() => {
-                            toggleGroup(groupName);
-                          }}
+                          className={`flex items-center justify-between p-4 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
                         >
-                          <div className="flex items-center space-x-3">
-                            <FolderPlus
-                              className="w-5 h-5"
-                              style={{ color: '#f00a50' }}
-                            />
+                          <div
+                            className="flex items-center space-x-3 flex-1 cursor-pointer"
+                            onClick={() => {
+                              if (!isDeleteMode) {
+                                toggleGroup(groupName);
+                              }
+                            }}
+                          >
+                            {isDeleteMode &&
+                            groupName !== 'all' &&
+                            groupName !== 'All Terms' ? (
+                              <div className="flex items-center space-x-3">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedGroupsForDeletion.includes(
+                                    groupName,
+                                  )}
+                                  onChange={() => {
+                                    handleToggleGroupSelection(groupName);
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                  }}
+                                  className={`w-4 h-4 rounded border-2 ${
+                                    isDarkMode
+                                      ? 'border-gray-600 bg-slate-700 text-red-500 focus:ring-red-500'
+                                      : 'border-gray-300 bg-white text-red-500 focus:ring-red-500'
+                                  }`}
+                                />
+                                <FolderPlus
+                                  className="w-5 h-5"
+                                  style={{ color: '#f00a50' }}
+                                />
+                              </div>
+                            ) : (
+                              <FolderPlus
+                                className="w-5 h-5"
+                                style={{ color: '#f00a50' }}
+                              />
+                            )}
                             <h3
                               className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
                             >
@@ -588,15 +733,31 @@ const WorkspacePage: React.FC = () => {
                               {terms.length} terms
                             </span>
                           </div>
-                          {expandedGroups[groupName] ? (
-                            <ChevronUp
-                              className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
-                            />
-                          ) : (
-                            <ChevronDown
-                              className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
-                            />
-                          )}
+                          <div className="flex items-center space-x-2">
+                            {!isDeleteMode && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  toggleGroup(groupName);
+                                }}
+                                className={`p-1 rounded-md transition-all duration-200 ${
+                                  isDarkMode
+                                    ? 'hover:bg-slate-600/50'
+                                    : 'hover:bg-gray-200'
+                                }`}
+                              >
+                                {expandedGroups[groupName] ? (
+                                  <ChevronUp
+                                    className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
+                                  />
+                                ) : (
+                                  <ChevronDown
+                                    className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
+                                  />
+                                )}
+                              </button>
+                            )}
+                          </div>
                         </div>
 
                         {expandedGroups[groupName] && (
@@ -652,6 +813,7 @@ const WorkspacePage: React.FC = () => {
                                           />
                                           <div className="flex items-center space-x-2">
                                             <button
+                                              type="button"
                                               onClick={() => {
                                                 handleSaveNote(term.id);
                                               }}
@@ -672,6 +834,7 @@ const WorkspacePage: React.FC = () => {
                                               <Save className="w-3.5 h-3.5" />
                                             </button>
                                             <button
+                                              type="button"
                                               onClick={handleCancelNote}
                                               className={`p-1.5 rounded-md transition-all duration-200 ${
                                                 isDarkMode
@@ -715,6 +878,7 @@ const WorkspacePage: React.FC = () => {
                                                   </p>
                                                 </div>
                                                 <button
+                                                  type="button"
                                                   onClick={() => {
                                                     handleAddNote(term.id);
                                                   }}
@@ -758,23 +922,6 @@ const WorkspacePage: React.FC = () => {
                                           <StickyNote className="w-4 h-4" />
                                         </button>
                                       )}
-                                    <button
-                                      type="button"
-                                      className={`p-2 rounded-md transition-all duration-200 ${
-                                        isDarkMode
-                                          ? 'text-cyan-400 hover:text-white border border-transparent hover:border-cyan-500/30'
-                                          : 'text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 border border-transparent hover:border-cyan-200'
-                                      }`}
-                                      style={
-                                        isDarkMode
-                                          ? {
-                                              backgroundColor: '#31374eff',
-                                            }
-                                          : {}
-                                      }
-                                    >
-                                      <Edit2 className="w-4 h-4" />
-                                    </button>
                                     <button
                                       type="button"
                                       className={`p-2 rounded-md transition-all duration-200 ${
