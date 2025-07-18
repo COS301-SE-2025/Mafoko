@@ -7,9 +7,9 @@ $accent-teal: #00ceaf;
 $accent-blue: #212431;
 $accent-white: #ffffff;
 $background-light: #f5f5f5;
-$background-dark: #363b4d;
+$background-dark: #1e2433; /* Darker background for dark mode to match screenshot */
 $secondary-light: #ffffff;
-$secondary-dark: #212431;
+$secondary-dark: #292e41; /* Slightly lighter than background for card backgrounds */
 $tertiary-light: #212431;
 $tertiary-dark: #ffffff;
 $text-light: #212431;
@@ -23,10 +23,14 @@ $text-dark: #ffffff;
   --bg-secondary: #{$secondary-dark};
   --bg-first: #{$background-light};
   --bg-tir: #{$secondary-light};
-  --workspace-border-color: #d1d5db; /* Light gray border for light mode */
+  --workspace-border-color: #e5e7eb; /* Light gray border for light mode */
   --workspace-bg: #{$secondary-light}; /* White background for workspace section in light mode */
   --page-bg: #{$background-light};
   --page-bg-semitrans: rgba(245, 245, 245, 0.98);
+  --tab-active-bg: #ffffff;
+  --tab-active-text: #111827;
+  --tab-inactive-text: #4B5563;
+  --tab-hover-bg: rgba(0, 0, 0, 0.05);
 }
 
 .theme-dark {
@@ -36,10 +40,14 @@ $text-dark: #ffffff;
   --bg-secondary: #{$secondary-light};
   --bg-first: #{$background-dark};
   --bg-tir: #{$secondary-dark};
-  --workspace-border-color: #4a5568; /* Dark gray border for dark mode */
+  --workspace-border-color: rgba(255, 255, 255, 0.1); /* Dark gray border for dark mode */
   --workspace-bg: #{$secondary-dark}; /* Dark background for workspace section in dark mode */
   --page-bg: #{$background-dark};
-  --page-bg-semitrans: rgba(54, 59, 77, 0.98);
+  --page-bg-semitrans: rgba(30, 36, 51, 0.98);
+  --tab-active-bg: #475569; /* Brighter slate color for better contrast */
+  --tab-active-text: #ffffff;
+  --tab-inactive-text: rgba(255, 255, 255, 0.85);
+  --tab-hover-bg: rgba(255, 255, 255, 0.1);
 }
 
 /* Workspace Container Styles */
@@ -51,6 +59,61 @@ $text-dark: #ffffff;
   background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
   color: var(--text-theme);
   overflow-x: hidden;
+}
+
+/* Group Card Styles */
+.workspace-group-card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  .theme-light & {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .theme-dark & {
+    background-color: var(--bg-tir);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    
+    .theme-light & {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .theme-dark & {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* Button Styles */
+.glossary-view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  
+  &.primary-action {
+    background-color: #2563eb; /* blue-600 */
+    color: white;
+    
+    &:hover {
+      background-color: #1d4ed8; /* blue-700 */
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
 }
 
 /* Main Content Styles */
@@ -117,6 +180,25 @@ $text-dark: #ffffff;
   background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
 }
 
+/* Tab Content Styles */
+.tab-content {
+  margin-top: 24px;
+  
+  .tab-panel {
+    border-radius: 8px;
+    
+    .theme-light & {
+      background-color: white;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .theme-dark & {
+      background-color: var(--bg-tir);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
 .workspace-content-wrapper {
   width: 100%;
   display: flex;
@@ -173,6 +255,8 @@ $text-dark: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
 
   h1 {
     font-size: 1.75rem;
@@ -186,6 +270,56 @@ $text-dark: #ffffff;
     opacity: 0.7;
     margin-bottom: 1.25rem;
     font-size: 0.95rem;
+  }
+  
+  /* Tab Navigation */
+  .workspace-tabs {
+    display: flex;
+    gap: 8px;
+    
+    .tab-button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      letter-spacing: 0.01em;
+      
+      &.active {
+        background-color: #475569; /* slate-600 */
+        color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        font-weight: 500;
+        
+        .theme-light & {
+          background-color: white;
+          color: #111827; /* gray-900 */
+        }
+      }
+      
+      &:not(.active) {
+        background-color: transparent;
+        color: rgba(255, 255, 255, 0.9);
+        
+        .theme-light & {
+          color: #4B5563; /* gray-600 */
+        }
+        
+        .theme-dark & {
+          color: rgba(255, 255, 255, 0.8);
+        }
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+          
+          .theme-light & {
+            background-color: rgba(0, 0, 0, 0.05);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -239,7 +373,7 @@ $text-dark: #ffffff;
     gap: 0.5rem;
     background-color: var(--accent-color);
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 0.75rem 1.5rem;
     color: white;
     font-weight: 500;

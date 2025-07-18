@@ -339,19 +339,13 @@ const WorkspacePage: React.FC = () => {
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
-              <div className="flex space-x-4">
+              <div className="workspace-tabs bg-slate-800/40 p-1 rounded-xl">
                 <button
                   type="button"
                   onClick={() => {
                     setActiveTab('saved-terms');
                   }}
-                  className={`py-3 px-6 rounded-lg font-medium text-base ${
-                    activeTab === 'saved-terms'
-                      ? isDarkMode
-                        ? 'bg-slate-700 text-white'
-                        : 'bg-white text-gray-900'
-                      : 'text-white hover:bg-white/10'
-                  }`}
+                  className={`tab-button ${activeTab === 'saved-terms' ? 'active' : ''}`}
                 >
                   Saved Terms
                 </button>
@@ -360,13 +354,7 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('progress');
                   }}
-                  className={`py-3 px-6 rounded-lg font-medium text-base ${
-                    activeTab === 'progress'
-                      ? isDarkMode
-                        ? 'bg-slate-700 text-white'
-                        : 'bg-white text-gray-900'
-                      : 'text-white hover:bg-white/10'
-                  }`}
+                  className={`tab-button ${activeTab === 'progress' ? 'active' : ''}`}
                 >
                   Submission Progress
                 </button>
@@ -375,13 +363,7 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('glossaries');
                   }}
-                  className={`py-3 px-6 rounded-lg font-medium text-base ${
-                    activeTab === 'glossaries'
-                      ? isDarkMode
-                        ? 'bg-slate-700 text-white'
-                        : 'bg-white text-gray-900'
-                      : 'text-white hover:bg-white/10'
-                  }`}
+                  className={`tab-button ${activeTab === 'glossaries' ? 'active' : ''}`}
                 >
                   Followed Glossaries
                 </button>
@@ -389,7 +371,7 @@ const WorkspacePage: React.FC = () => {
 
               <div className="workspace-actions">
                 <button type="button" className="create-new-btn">
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-5 h-5" />
                   <span>New Group</span>
                 </button>
               </div>
@@ -405,7 +387,11 @@ const WorkspacePage: React.FC = () => {
                     <input
                       type="text"
                       placeholder="Search terms..."
-                      className={`w-full pl-10 pr-4 py-3 border ${isDarkMode ? 'border-gray-600 bg-slate-700/50 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
+                      className={`w-full pl-10 pr-4 py-3 border ${
+                        isDarkMode
+                          ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                      } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
@@ -413,7 +399,11 @@ const WorkspacePage: React.FC = () => {
                     />
                   </div>
                   <select
-                    className={`px-4 py-3 border ${isDarkMode ? 'border-gray-600 bg-slate-700/50 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
+                    className={`px-4 py-3 border ${
+                      isDarkMode
+                        ? 'border-gray-600 bg-slate-700/50 text-white'
+                        : 'border-gray-300 bg-white text-gray-900'
+                    } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
                     value={selectedGroup}
                     onChange={(e) => {
                       setSelectedGroup(e.target.value);
@@ -430,10 +420,7 @@ const WorkspacePage: React.FC = () => {
                 {/* Terms by Group */}
                 <div className="space-y-6">
                   {Object.entries(groupedTerms).map(([groupName, terms]) => (
-                    <div
-                      key={groupName}
-                      className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border`}
-                    >
+                    <div key={groupName} className="workspace-group-card">
                       <div
                         className={`flex items-center justify-between p-4 cursor-pointer ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
                         onClick={() => {
@@ -592,24 +579,30 @@ const WorkspacePage: React.FC = () => {
             {activeTab === 'glossaries' && (
               <div className="space-y-8">
                 <div
-                  className={`${isDarkMode ? 'bg-slate-800/70 border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border`}
+                  className={`rounded-lg shadow-sm ${isDarkMode ? 'bg-transparent border-0' : 'bg-transparent border-0'}`}
                 >
-                  <div className="p-6">
+                  <div className="p-6 pt-2">
                     <h3
-                      className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}
+                      className={`text-xl font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6`}
                     >
                       Followed Glossaries
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       {glossaries.map((glossary) => (
                         <div
                           key={glossary.id}
-                          className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-slate-700 bg-slate-700/50' : 'border-gray-200 bg-gray-50/80'}`}
+                          className={`border rounded-lg p-5 hover:shadow-md transition-all ${
+                            isDarkMode
+                              ? 'border-slate-700 bg-slate-800'
+                              : 'border-gray-200 bg-white'
+                          }`}
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <BookOpen
-                                className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`}
+                                className={`w-5 h-5 ${
+                                  isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                                }`}
                               />
                               <div>
                                 <h4
@@ -625,29 +618,35 @@ const WorkspacePage: React.FC = () => {
                               </div>
                             </div>
                             <div
-                              className={`w-3 h-3 rounded-full ${glossary.followed ? 'bg-green-500' : 'bg-gray-300'}`}
+                              className={`w-3.5 h-3.5 rounded-full ring-2 ${
+                                glossary.followed
+                                  ? 'bg-green-500 ring-green-400/30'
+                                  : 'bg-gray-400 ring-gray-300/30'
+                              }`}
                             ></div>
                           </div>
                           <div
-                            className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                            className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} my-2`}
                           >
-                            <span>{glossary.termCount} terms</span>
+                            <span className="font-medium">
+                              {glossary.termCount} terms
+                            </span>
                             <span>Updated: {glossary.lastUpdated}</span>
                           </div>
-                          <div className="mt-3 flex items-center space-x-2">
+                          <div className="mt-4 flex items-center space-x-3">
                             <button
                               type="button"
-                              className={`px-3 py-1 rounded-full text-sm ${
+                              className={`px-4 py-1.5 rounded-full text-sm font-medium ${
                                 glossary.followed
-                                  ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                                  : 'bg-green-100 text-green-700 hover:bg-green-200'
+                                  ? 'bg-red-600 text-white hover:bg-red-500'
+                                  : 'bg-green-600 text-white hover:bg-green-500'
                               }`}
                             >
                               {glossary.followed ? 'Unfollow' : 'Follow'}
                             </button>
                             <button
                               type="button"
-                              className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-slate-600 text-white hover:bg-slate-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                              className="px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-500 transition-all"
                             >
                               View
                             </button>
