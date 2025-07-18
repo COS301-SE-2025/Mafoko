@@ -226,7 +226,7 @@ $text-dark: #ffffff;
 .main-content {
   position: fixed;
   top: 0;
-  left: 285px; /* Start right after sidebar */
+  left: 0; /* Moved 50px to the left (285px - 50px) */
   right: 0; /* Extend to screen edge */
   bottom: 0; /* Extend to screen bottom */
   background-color: var(--page-bg); /* Use theme variable instead of hard-coded color */
