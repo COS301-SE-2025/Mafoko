@@ -46,22 +46,27 @@ $text-dark: #ffffff;
 .workspace-container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--page-bg);
+  height: 100vh;
+  width: 100%;
+  background-color: #363b4d; /* Hard-coded background color to match the screenshot */
   color: var(--text-theme);
+  overflow-x: hidden;
 }
 
 /* Main Content Styles */
 .main-content {
   flex: 1;
-  background-color: var(--page-bg);
-  padding-top: 1px;
+  background-color: #363b4d; /* Hard-coded background color to match the screenshot */
+  padding: 0;
   display: flex;
   flex-direction: column;
   margin-left: 280px; /* Match the width of left-nav */
+  width: calc(100% - 280px); /* Take full width minus left nav width */
 
   @media (max-width: 767px) {
     padding-bottom: 120px;
     margin-left: 0;
+    width: 100%;
   }
 }
 
@@ -73,10 +78,12 @@ $text-dark: #ffffff;
   justify-content: space-between;
   border-bottom: 1px solid var(--workspace-border-color);
   background-color: var(--workspace-bg);
+  width: 100%;
 }
 
 .workspace-top-bar {
   padding: 0.75rem 1.5rem;
+  width: 100%;
 }
 
 /* Hamburger Icon Styles */
@@ -102,16 +109,16 @@ $text-dark: #ffffff;
 /* Workspace Content Styles */
 .workspace-content {
   flex: 1;
-  padding: 1.5rem;
+  padding: 2rem 2rem 0 2rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  background-color: #363b4d; /* Match the container background */
 }
 
 .workspace-content-wrapper {
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   padding: 0 1.5rem; /* Add horizontal padding to maintain readability */
@@ -160,9 +167,12 @@ $text-dark: #ffffff;
 
 /* Workspace Header */
 .workspace-header {
-  margin-bottom: 1.25rem;
+  margin-bottom: 2rem;
   width: 100%;
-  padding: 0 1.5rem; /* Add horizontal padding to match content area */
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h1 {
     font-size: 1.75rem;
@@ -229,8 +239,8 @@ $text-dark: #ffffff;
     gap: 0.5rem;
     background-color: var(--accent-color);
     border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
     color: white;
     font-weight: 500;
     cursor: pointer;
