@@ -56,6 +56,7 @@ $text-dark: #ffffff;
   padding: 0;
   display: flex;
   flex-direction: column;
+  width: 100%; /* Ensure it takes up full width */
 }
 
 /* Top Bar Styles */
@@ -95,18 +96,19 @@ $text-dark: #ffffff;
 /* Workspace Content Styles */
 .workspace-content {
   flex: 1;
-  padding: 1.5rem;
+  padding: 1.5rem 0; /* Remove horizontal padding to allow full width */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 100%; /* Ensure it takes up full width */
 }
 
 .workspace-content-wrapper {
   width: 100%;
-  max-width: 1200px;
   display: flex;
   flex-direction: column;
+  padding: 0 1.5rem; /* Add horizontal padding to maintain readability */
+  box-sizing: border-box; /* Ensure padding doesn't increase width */
 }
 
 /* Loading Container */
@@ -152,8 +154,8 @@ $text-dark: #ffffff;
 /* Workspace Header */
 .workspace-header {
   margin-bottom: 1.25rem;
-  max-width: 1200px;
   width: 100%;
+  padding: 0 1.5rem; /* Add horizontal padding to match content area */
 
   h1 {
     font-size: 1.75rem;
@@ -246,20 +248,20 @@ $text-dark: #ffffff;
 /* Workspace List */
 .workspace-list {
   background-color: var(--workspace-bg);
-  border-radius: 8px;
+  border-radius: 0; /* Remove border radius for full-width appearance */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   margin-top: 0;
-  max-width: 1200px;
   width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .workspace-list-header {
   display: grid;
-  grid-template-columns: minmax(200px, 2.5fr) minmax(120px, 1fr) minmax(
-      120px,
-      1fr
-    ) 90px;
+  grid-template-columns:
+    minmax(200px, 2.5fr) minmax(120px, 1fr) minmax(120px, 1fr)
+    90px;
   padding: 0.75rem 1.25rem;
   font-weight: 600;
   border-bottom: 1px solid var(--workspace-border-color);
@@ -277,10 +279,9 @@ $text-dark: #ffffff;
 
 .workspace-item {
   display: grid;
-  grid-template-columns: minmax(200px, 2.5fr) minmax(120px, 1fr) minmax(
-      120px,
-      1fr
-    ) 90px;
+  grid-template-columns:
+    minmax(200px, 2.5fr) minmax(120px, 1fr) minmax(120px, 1fr)
+    90px;
   padding: 0.65rem 1.25rem;
   border-bottom: 1px solid var(--workspace-border-color);
   transition: all 0.2s ease;
