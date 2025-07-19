@@ -31,6 +31,7 @@ class UserUpdate(BaseModel):  # Defined independently for clarity on updatable f
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     password: Optional[str] = None
+    current_password: str  # Required for security validation
     role: Optional[UserRole] = None
     is_active: Optional[bool] = None
     is_verified: Optional[bool] = None

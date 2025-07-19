@@ -123,6 +123,16 @@ async def update_user_profile(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
+    # Validate current password for security
+    authenticated_user = await crud_user.authenticate(
+        db, email=current_user.email, password=user_update.current_password
+    )
+    if not authenticated_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect current password",
+        )
+
     # If updating email, check if the new email already exists
     if user_update.email and user_update.email != current_user.email:
         existing_user = await crud_user.get_user_by_email(db, email=user_update.email)
@@ -132,9 +142,14 @@ async def update_user_profile(
                 detail="Email already registered",
             )
 
+    # Create update data without the current_password field
+    update_data = user_update.model_dump(
+        exclude={"current_password"}, exclude_unset=True
+    )
+
     # Update the user
     updated_user = await crud_user.update_user(
-        db, db_obj=user_model, obj_in=user_update
+        db, db_obj=user_model, obj_in=update_data
     )
 
     return updated_user
