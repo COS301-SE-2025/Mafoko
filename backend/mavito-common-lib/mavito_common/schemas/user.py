@@ -35,8 +35,11 @@ class UserUpdate(BaseModel):  # Defined independently for clarity on updatable f
     role: Optional[UserRole] = None
     is_active: Optional[bool] = None
     is_verified: Optional[bool] = None
-    profile_pic_url: Optional[str] = None
     account_locked: Optional[bool] = None  # If admins can update this
+
+
+class UserProfilePictureUpdate(BaseModel):
+    profile_pic_url: str
 
 
 # Properties to return to client (this is your main User response model)
