@@ -60,7 +60,7 @@ const WorkspacePage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState('saved-terms');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGroup, setSelectedGroup] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<{
     [key: string]: boolean;
@@ -71,6 +71,8 @@ const WorkspacePage: React.FC = () => {
   const [selectedGroupsForDeletion, setSelectedGroupsForDeletion] = useState<
     string[]
   >([]);
+  const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
+  const [newGroupName, setNewGroupName] = useState('');
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -200,13 +202,24 @@ const WorkspacePage: React.FC = () => {
     },
   ];
 
-  const [groups, setGroups] = useState([
-    'all',
-    'All Terms',
-    'Farming Methods',
-    'General Study',
-    'Thesis Research',
-  ]);
+  const [groups, setGroups] = useState(() => {
+    const initialGroups = [
+      'all',
+      'All Terms',
+      'Farming Methods',
+      'General Study',
+      'Thesis Research',
+    ];
+
+    return initialGroups.sort((a, b) => {
+      // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
+      if (a === 'all') return -1;
+      if (b === 'all') return 1;
+      if (a === 'All Terms') return -1;
+      if (b === 'All Terms') return 1;
+      return a.localeCompare(b);
+    });
+  });
 
   // Handle window resize with debounce for better performance
   useEffect(() => {
@@ -358,29 +371,79 @@ const WorkspacePage: React.FC = () => {
       prevGroups.filter((group) => !selectedGroupsForDeletion.includes(group)),
     );
 
-    // If the currently selected group was deleted, switch to "all"
-    if (selectedGroupsForDeletion.includes(selectedGroup)) {
-      setSelectedGroup('all');
-    }
-
     // Exit delete mode
     handleExitDeleteMode();
   };
 
-  const filteredTerms = savedTerms.filter((term) => {
-    let matchesSearch = term.term
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+  // Functions for handling new group creation
+  const handleOpenNewGroupModal = () => {
+    setIsNewGroupModalOpen(true);
+    setNewGroupName('');
+  };
 
-    if (term.definition) {
-      matchesSearch =
-        matchesSearch ||
-        term.definition.toLowerCase().includes(searchQuery.toLowerCase());
+  const handleCloseNewGroupModal = () => {
+    setIsNewGroupModalOpen(false);
+    setNewGroupName('');
+  };
+
+  const handleCreateNewGroup = () => {
+    const trimmedName = newGroupName.trim();
+
+    if (!trimmedName) {
+      alert('Please enter a group name');
+      return;
     }
 
-    const matchesGroup =
-      selectedGroup === 'all' || term.group === selectedGroup;
-    return matchesSearch && matchesGroup;
+    if (groups.includes(trimmedName)) {
+      alert('A group with this name already exists');
+      return;
+    }
+
+    // Add the new group to the groups list with proper sorting
+    setGroups((prevGroups) => {
+      const newGroups = [...prevGroups, trimmedName];
+      return newGroups.sort((a, b) => {
+        // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
+        if (a === 'all') return -1;
+        if (b === 'all') return 1;
+        if (a === 'All Terms') return -1;
+        if (b === 'All Terms') return 1;
+        return a.localeCompare(b);
+      });
+    });
+
+    // Automatically expand the new group
+    setExpandedGroups((prev) => ({
+      ...prev,
+      [trimmedName]: true,
+    }));
+
+    handleCloseNewGroupModal();
+  };
+
+  // Get unique categories from terms
+  const getCategories = () => {
+    const categories = ['all'];
+    const uniqueCategories = [
+      ...new Set(
+        savedTerms
+          .map((term) => term.category)
+          .filter((category) => category !== undefined),
+      ),
+    ] as string[];
+
+    return categories.concat(uniqueCategories.sort());
+  };
+
+  const filteredTerms = savedTerms.filter((term) => {
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch =
+      term.term.toLowerCase().includes(searchLower) ||
+      (term.definition?.toLowerCase().includes(searchLower) ?? false);
+
+    const matchesCategory =
+      selectedCategory === 'all' || term.category === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
 
   // Group terms by their group property
@@ -394,6 +457,15 @@ const WorkspacePage: React.FC = () => {
     },
     {},
   );
+
+  // Add empty groups to always show all groups (excluding 'all' which is a filter option)
+  groups
+    .filter((group) => group !== 'all')
+    .forEach((group) => {
+      if (!(group in groupedTerms)) {
+        groupedTerms[group] = [];
+      }
+    });
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -517,7 +589,11 @@ const WorkspacePage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="flex items-center space-x-2">
-                    <button type="button" className="create-new-btn">
+                    <button
+                      type="button"
+                      className="create-new-btn"
+                      onClick={handleOpenNewGroupModal}
+                    >
                       <Plus className="w-5 h-5" />
                       <span>New Group</span>
                     </button>
@@ -581,9 +657,9 @@ const WorkspacePage: React.FC = () => {
                         }}
                       >
                         <span>
-                          {selectedGroup === 'all'
-                            ? 'All Groups'
-                            : selectedGroup}
+                          {selectedCategory === 'all'
+                            ? 'All Categories'
+                            : selectedCategory}
                         </span>
                         <ChevronDown
                           className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''} ${
@@ -608,12 +684,12 @@ const WorkspacePage: React.FC = () => {
                               : {}
                           }
                         >
-                          {groups.map((group) => (
+                          {getCategories().map((category) => (
                             <button
-                              key={group}
+                              key={category}
                               type="button"
                               className={`w-full px-4 py-3 text-left transition-colors ${
-                                selectedGroup === group
+                                selectedCategory === category
                                   ? isDarkMode
                                     ? ''
                                     : 'bg-gray-100 text-gray-900'
@@ -625,7 +701,7 @@ const WorkspacePage: React.FC = () => {
                                 isDarkMode
                                   ? {
                                       backgroundColor:
-                                        selectedGroup === group
+                                        selectedCategory === category
                                           ? '#3a4050'
                                           : 'transparent',
                                       color: '#f5f5f5',
@@ -633,7 +709,7 @@ const WorkspacePage: React.FC = () => {
                                   : {}
                               }
                               onMouseEnter={(e) => {
-                                if (selectedGroup !== group) {
+                                if (selectedCategory !== category) {
                                   if (isDarkMode) {
                                     (
                                       e.target as HTMLElement
@@ -648,7 +724,7 @@ const WorkspacePage: React.FC = () => {
                                 }
                               }}
                               onMouseLeave={(e) => {
-                                if (selectedGroup !== group) {
+                                if (selectedCategory !== category) {
                                   if (isDarkMode) {
                                     (
                                       e.target as HTMLElement
@@ -663,11 +739,11 @@ const WorkspacePage: React.FC = () => {
                                 }
                               }}
                               onClick={() => {
-                                setSelectedGroup(group);
+                                setSelectedCategory(category);
                                 setIsDropdownOpen(false);
                               }}
                             >
-                              {group === 'all' ? 'All Groups' : group}
+                              {category === 'all' ? 'All Categories' : category}
                             </button>
                           ))}
                         </div>
@@ -677,276 +753,286 @@ const WorkspacePage: React.FC = () => {
 
                   {/* Terms by Group */}
                   <div className="space-y-6 flex-1 overflow-y-auto">
-                    {Object.entries(groupedTerms).map(([groupName, terms]) => (
-                      <div key={groupName} className="workspace-group-card">
-                        <div
-                          className={`flex items-center justify-between p-4 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
-                        >
+                    {Object.entries(groupedTerms)
+                      .sort(([a], [b]) => {
+                        // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
+                        if (a === 'all') return -1;
+                        if (b === 'all') return 1;
+                        if (a === 'All Terms') return -1;
+                        if (b === 'All Terms') return 1;
+                        return a.localeCompare(b);
+                      })
+                      .map(([groupName, terms]) => (
+                        <div key={groupName} className="workspace-group-card">
                           <div
-                            className="flex items-center space-x-3 flex-1 cursor-pointer"
-                            onClick={() => {
-                              if (!isDeleteMode) {
-                                toggleGroup(groupName);
-                              }
-                            }}
+                            className={`flex items-center justify-between p-4 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
                           >
-                            {isDeleteMode &&
-                            groupName !== 'all' &&
-                            groupName !== 'All Terms' ? (
-                              <div className="flex items-center space-x-3">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedGroupsForDeletion.includes(
-                                    groupName,
-                                  )}
-                                  onChange={() => {
-                                    handleToggleGroupSelection(groupName);
-                                  }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                  }}
-                                  className={`w-4 h-4 rounded border-2 ${
-                                    isDarkMode
-                                      ? 'border-gray-600 bg-slate-700 text-red-500 focus:ring-red-500'
-                                      : 'border-gray-300 bg-white text-red-500 focus:ring-red-500'
-                                  }`}
-                                />
+                            <div
+                              className="flex items-center space-x-3 flex-1 cursor-pointer"
+                              onClick={() => {
+                                if (!isDeleteMode) {
+                                  toggleGroup(groupName);
+                                }
+                              }}
+                            >
+                              {isDeleteMode &&
+                              groupName !== 'all' &&
+                              groupName !== 'All Terms' ? (
+                                <div className="flex items-center space-x-3">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedGroupsForDeletion.includes(
+                                      groupName,
+                                    )}
+                                    onChange={() => {
+                                      handleToggleGroupSelection(groupName);
+                                    }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                    }}
+                                    className={`w-4 h-4 rounded border-2 ${
+                                      isDarkMode
+                                        ? 'border-gray-600 bg-slate-700 text-red-500 focus:ring-red-500'
+                                        : 'border-gray-300 bg-white text-red-500 focus:ring-red-500'
+                                    }`}
+                                  />
+                                  <FolderPlus
+                                    className="w-5 h-5"
+                                    style={{ color: '#f00a50' }}
+                                  />
+                                </div>
+                              ) : (
                                 <FolderPlus
                                   className="w-5 h-5"
                                   style={{ color: '#f00a50' }}
                                 />
-                              </div>
-                            ) : (
-                              <FolderPlus
-                                className="w-5 h-5"
-                                style={{ color: '#f00a50' }}
-                              />
-                            )}
-                            <h3
-                              className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                            >
-                              {groupName}
-                            </h3>
-                            <span
-                              className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-3 py-1 rounded-full text-sm`}
-                            >
-                              {terms.length} terms
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            {!isDeleteMode && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  toggleGroup(groupName);
-                                }}
-                                className={`p-1 rounded-md transition-all duration-200 ${
-                                  isDarkMode
-                                    ? 'hover:bg-slate-600/50'
-                                    : 'hover:bg-gray-200'
-                                }`}
+                              )}
+                              <h3
+                                className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
                               >
-                                {expandedGroups[groupName] ? (
-                                  <ChevronUp
-                                    className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
-                                  />
-                                ) : (
-                                  <ChevronDown
-                                    className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
-                                  />
-                                )}
-                              </button>
-                            )}
-                          </div>
-                        </div>
-
-                        {expandedGroups[groupName] && (
-                          <div
-                            className={`border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}
-                          >
-                            {terms.map((term) => (
-                              <div
-                                key={term.id}
-                                className={`p-4 border-b ${isDarkMode ? 'border-slate-700 last:border-b-0 hover:bg-slate-700' : 'border-gray-200 last:border-b-0 hover:bg-gray-50'}`}
+                                {groupName}
+                              </h3>
+                              <span
+                                className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-3 py-1 rounded-full text-sm`}
                               >
-                                <div className="flex items-start justify-between">
-                                  <div className="flex-1">
-                                    <div className="flex items-center space-x-2 mb-2">
-                                      <h4
-                                        className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                                      >
-                                        {term.term}
-                                      </h4>
-                                      <span className="language-tag">
-                                        {term.language}
-                                      </span>
-                                      {term.category && (
-                                        <span className="category-tag">
-                                          {term.category}
-                                        </span>
-                                      )}
-                                    </div>
-                                    {term.definition && (
-                                      <p
-                                        className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                                      >
-                                        {term.definition}
-                                      </p>
-                                    )}
+                                {terms.length} terms
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              {!isDeleteMode && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    toggleGroup(groupName);
+                                  }}
+                                  className={`p-1 rounded-md transition-all duration-200 ${
+                                    isDarkMode
+                                      ? 'hover:bg-slate-600/50'
+                                      : 'hover:bg-gray-200'
+                                  }`}
+                                >
+                                  {expandedGroups[groupName] ? (
+                                    <ChevronUp
+                                      className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
+                                    />
+                                  ) : (
+                                    <ChevronDown
+                                      className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
+                                    />
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                          </div>
 
-                                    {/* Notes Section */}
-                                    <div className="mb-2">
-                                      {editingNotes === term.id ? (
-                                        <div className="space-y-2">
-                                          <textarea
-                                            value={noteText}
-                                            onChange={(e) => {
-                                              setNoteText(e.target.value);
-                                            }}
-                                            placeholder="Add your notes here..."
-                                            className={`w-full p-2 text-sm border rounded-md resize-none ${
-                                              isDarkMode
-                                                ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
-                                                : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
-                                            } focus:ring-2 focus:ring-cyan-500 focus:border-transparent`}
-                                            rows={3}
-                                          />
-                                          <div className="flex items-center space-x-2">
-                                            <button
-                                              type="button"
-                                              onClick={() => {
-                                                handleSaveNote(term.id);
-                                              }}
-                                              className={`p-1.5 rounded-md transition-all duration-200 ${
-                                                isDarkMode
-                                                  ? 'text-green-400 hover:text-white border border-transparent hover:border-green-500/30'
-                                                  : 'text-green-600 hover:text-green-800 hover:bg-green-50 border border-transparent hover:border-green-200'
-                                              }`}
-                                              style={
-                                                isDarkMode
-                                                  ? {
-                                                      backgroundColor:
-                                                        '#31374eff',
-                                                    }
-                                                  : {}
-                                              }
-                                            >
-                                              <Save className="w-3.5 h-3.5" />
-                                            </button>
-                                            <button
-                                              type="button"
-                                              onClick={handleCancelNote}
-                                              className={`p-1.5 rounded-md transition-all duration-200 ${
-                                                isDarkMode
-                                                  ? 'text-gray-400 hover:text-white border border-transparent hover:border-gray-500/30'
-                                                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-transparent hover:border-gray-200'
-                                              }`}
-                                              style={
-                                                isDarkMode
-                                                  ? {
-                                                      backgroundColor:
-                                                        '#31374eff',
-                                                    }
-                                                  : {}
-                                              }
-                                            >
-                                              <X className="w-3.5 h-3.5" />
-                                            </button>
-                                          </div>
-                                        </div>
-                                      ) : (
-                                        <>
-                                          {term.notes && (
-                                            <div
-                                              className={`p-2 rounded-md text-sm border-l-4 ${
-                                                isDarkMode
-                                                  ? 'bg-slate-700/30 border-l-yellow-400 text-gray-300'
-                                                  : 'bg-yellow-50 border-l-yellow-400 text-gray-700'
-                                              }`}
-                                            >
-                                              <div className="flex items-start justify-between">
-                                                <div className="flex items-start space-x-2">
-                                                  <StickyNote
-                                                    className={`w-4 h-4 mt-0.5 ${
-                                                      isDarkMode
-                                                        ? 'text-yellow-400'
-                                                        : 'text-yellow-600'
-                                                    }`}
-                                                  />
-                                                  <p className="flex-1">
-                                                    {term.notes}
-                                                  </p>
-                                                </div>
-                                                <button
-                                                  type="button"
-                                                  onClick={() => {
-                                                    handleAddNote(term.id);
-                                                  }}
-                                                  className={`ml-2 p-1 rounded-md transition-all duration-200 ${
-                                                    isDarkMode
-                                                      ? 'text-gray-400 hover:text-white hover:bg-slate-600'
-                                                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                                                  }`}
-                                                >
-                                                  <Edit2 className="w-3 h-3" />
-                                                </button>
-                                              </div>
-                                            </div>
-                                          )}
-                                        </>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center space-x-2 ml-4">
-                                    {!term.notes &&
-                                      editingNotes !== term.id && (
-                                        <button
-                                          onClick={() => {
-                                            handleAddNote(term.id);
-                                          }}
-                                          type="button"
-                                          className={`p-2 rounded-md transition-all duration-200 ${
-                                            isDarkMode
-                                              ? 'text-yellow-400 hover:text-white border border-transparent hover:border-yellow-500/30'
-                                              : 'text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50 border border-transparent hover:border-yellow-200'
-                                          }`}
-                                          style={
-                                            isDarkMode
-                                              ? {
-                                                  backgroundColor: '#31374eff',
-                                                }
-                                              : {}
-                                          }
-                                          title="Add note"
+                          {expandedGroups[groupName] && (
+                            <div
+                              className={`border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}
+                            >
+                              {terms.map((term) => (
+                                <div
+                                  key={term.id}
+                                  className={`p-4 border-b ${isDarkMode ? 'border-slate-700 last:border-b-0 hover:bg-slate-700' : 'border-gray-200 last:border-b-0 hover:bg-gray-50'}`}
+                                >
+                                  <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                      <div className="flex items-center space-x-2 mb-2">
+                                        <h4
+                                          className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
                                         >
-                                          <StickyNote className="w-4 h-4" />
-                                        </button>
+                                          {term.term}
+                                        </h4>
+                                        <span className="language-tag">
+                                          {term.language}
+                                        </span>
+                                        {term.category && (
+                                          <span className="category-tag">
+                                            {term.category}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {term.definition && (
+                                        <p
+                                          className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                        >
+                                          {term.definition}
+                                        </p>
                                       )}
-                                    <button
-                                      type="button"
-                                      className={`p-2 rounded-md transition-all duration-200 ${
-                                        isDarkMode
-                                          ? 'text-red-400 hover:text-white border border-transparent hover:border-red-500/30'
-                                          : 'text-red-600 hover:text-red-800 hover:bg-red-50 border border-transparent hover:border-red-200'
-                                      }`}
-                                      style={
-                                        isDarkMode
-                                          ? {
-                                              backgroundColor: '#31374eff',
+
+                                      {/* Notes Section */}
+                                      <div className="mb-2">
+                                        {editingNotes === term.id ? (
+                                          <div className="space-y-2">
+                                            <textarea
+                                              value={noteText}
+                                              onChange={(e) => {
+                                                setNoteText(e.target.value);
+                                              }}
+                                              placeholder="Add your notes here..."
+                                              className={`w-full p-2 text-sm border rounded-md resize-none ${
+                                                isDarkMode
+                                                  ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
+                                                  : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+                                              } focus:ring-2 focus:ring-cyan-500 focus:border-transparent`}
+                                              rows={3}
+                                            />
+                                            <div className="flex items-center space-x-2">
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  handleSaveNote(term.id);
+                                                }}
+                                                className={`p-1.5 rounded-md transition-all duration-200 ${
+                                                  isDarkMode
+                                                    ? 'text-green-400 hover:text-white border border-transparent hover:border-green-500/30'
+                                                    : 'text-green-600 hover:text-green-800 hover:bg-green-50 border border-transparent hover:border-green-200'
+                                                }`}
+                                                style={
+                                                  isDarkMode
+                                                    ? {
+                                                        backgroundColor:
+                                                          '#31374eff',
+                                                      }
+                                                    : {}
+                                                }
+                                              >
+                                                <Save className="w-3.5 h-3.5" />
+                                              </button>
+                                              <button
+                                                type="button"
+                                                onClick={handleCancelNote}
+                                                className={`p-1.5 rounded-md transition-all duration-200 ${
+                                                  isDarkMode
+                                                    ? 'text-gray-400 hover:text-white border border-transparent hover:border-gray-500/30'
+                                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-transparent hover:border-gray-200'
+                                                }`}
+                                                style={
+                                                  isDarkMode
+                                                    ? {
+                                                        backgroundColor:
+                                                          '#31374eff',
+                                                      }
+                                                    : {}
+                                                }
+                                              >
+                                                <X className="w-3.5 h-3.5" />
+                                              </button>
+                                            </div>
+                                          </div>
+                                        ) : (
+                                          <>
+                                            {term.notes && (
+                                              <div
+                                                className={`p-2 rounded-md text-sm border-l-4 ${
+                                                  isDarkMode
+                                                    ? 'bg-slate-700/30 border-l-yellow-400 text-gray-300'
+                                                    : 'bg-yellow-50 border-l-yellow-400 text-gray-700'
+                                                }`}
+                                              >
+                                                <div className="flex items-start justify-between">
+                                                  <div className="flex items-start space-x-2">
+                                                    <StickyNote
+                                                      className={`w-4 h-4 mt-0.5 ${
+                                                        isDarkMode
+                                                          ? 'text-yellow-400'
+                                                          : 'text-yellow-600'
+                                                      }`}
+                                                    />
+                                                    <p className="flex-1">
+                                                      {term.notes}
+                                                    </p>
+                                                  </div>
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                      handleAddNote(term.id);
+                                                    }}
+                                                    className={`ml-2 p-1 rounded-md transition-all duration-200 ${
+                                                      isDarkMode
+                                                        ? 'text-gray-400 hover:text-white hover:bg-slate-600'
+                                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                                                    }`}
+                                                  >
+                                                    <Edit2 className="w-3 h-3" />
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            )}
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center space-x-2 ml-4">
+                                      {!term.notes &&
+                                        editingNotes !== term.id && (
+                                          <button
+                                            onClick={() => {
+                                              handleAddNote(term.id);
+                                            }}
+                                            type="button"
+                                            className={`p-2 rounded-md transition-all duration-200 ${
+                                              isDarkMode
+                                                ? 'text-yellow-400 hover:text-white border border-transparent hover:border-yellow-500/30'
+                                                : 'text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50 border border-transparent hover:border-yellow-200'
+                                            }`}
+                                            style={
+                                              isDarkMode
+                                                ? {
+                                                    backgroundColor:
+                                                      '#31374eff',
+                                                  }
+                                                : {}
                                             }
-                                          : {}
-                                      }
-                                    >
-                                      <Trash2 className="w-4 h-4" />
-                                    </button>
+                                            title="Add note"
+                                          >
+                                            <StickyNote className="w-4 h-4" />
+                                          </button>
+                                        )}
+                                      <button
+                                        type="button"
+                                        className={`p-2 rounded-md transition-all duration-200 ${
+                                          isDarkMode
+                                            ? 'text-red-400 hover:text-white border border-transparent hover:border-red-500/30'
+                                            : 'text-red-600 hover:text-red-800 hover:bg-red-50 border border-transparent hover:border-red-200'
+                                        }`}
+                                        style={
+                                          isDarkMode
+                                            ? {
+                                                backgroundColor: '#31374eff',
+                                              }
+                                            : {}
+                                        }
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                   </div>
                 </div>
               </div>
@@ -1160,6 +1246,122 @@ const WorkspacePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* New Group Modal */}
+      {isNewGroupModalOpen && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className={`relative rounded-lg shadow-xl max-w-md w-full mx-4 ${
+              isDarkMode ? 'bg-slate-800' : 'bg-white'
+            }`}
+          >
+            {/* Modal Header */}
+            <div
+              className={`flex items-center justify-between p-6 border-b ${
+                isDarkMode ? 'border-slate-600' : 'border-gray-200'
+              }`}
+            >
+              <h3
+                className={`text-lg font-medium ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}
+              >
+                Create New Group
+              </h3>
+              <button
+                type="button"
+                onClick={handleCloseNewGroupModal}
+                className={`p-2 rounded-md transition-all duration-200 ${
+                  isDarkMode
+                    ? 'text-gray-400 hover:text-white hover:bg-slate-700'
+                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6">
+              <div className="mb-4">
+                <label
+                  htmlFor="groupName"
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                >
+                  Group Name
+                </label>
+                <input
+                  type="text"
+                  id="groupName"
+                  value={newGroupName}
+                  onChange={(e) => {
+                    setNewGroupName(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleCreateNewGroup();
+                    } else if (e.key === 'Escape') {
+                      handleCloseNewGroupModal();
+                    }
+                  }}
+                  placeholder="Enter group name..."
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? 'border-gray-600 bg-slate-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent'
+                      : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent'
+                  }`}
+                  autoFocus
+                />
+              </div>
+              <p
+                className={`text-sm ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                }`}
+              >
+                Create a new group to organize your saved terms.
+              </p>
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              className={`flex items-center justify-end space-x-3 p-6 border-t ${
+                isDarkMode ? 'border-slate-600' : 'border-gray-200'
+              }`}
+            >
+              <button
+                type="button"
+                onClick={handleCloseNewGroupModal}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  isDarkMode
+                    ? 'text-gray-300 bg-slate-700 hover:bg-slate-600 border border-slate-600'
+                    : 'text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300'
+                }`}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateNewGroup}
+                disabled={!newGroupName.trim()}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  !newGroupName.trim()
+                    ? isDarkMode
+                      ? 'bg-slate-700 text-gray-500 cursor-not-allowed border border-slate-600'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-300'
+                    : isDarkMode
+                      ? 'bg-cyan-600 text-white hover:bg-cyan-700 border border-cyan-500'
+                      : 'bg-cyan-500 text-black hover:bg-cyan-600 border border-cyan-500'
+                }`}
+              >
+                <Plus className="w-4 h-4 mr-2 inline" />
+                Create Group
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
