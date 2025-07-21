@@ -1,6 +1,5 @@
 // In frontend/src/config.ts
 
-// Base URLs for each microservice
 const AUTH_SERVICE_URL =
   (import.meta.env.VITE_AUTH_SERVICE_URL as string) || 'http://localhost:8001';
 const SEARCH_SERVICE_URL =
@@ -9,7 +8,6 @@ const SEARCH_SERVICE_URL =
 const ANALYTICS_SERVICE_URL =
   (import.meta.env.VITE_ANALYTICS_SERVICE_URL as string) ||
   'http://localhost:8003';
-// Add the URL for your new service, pointing to the port defined in docker-compose.yml
 const LINGUIST_APP_SERVICE_URL =
   (import.meta.env.VITE_LINGUIST_APP_SERVICE_URL as string) ||
   'http://localhost:8004';
@@ -17,10 +15,15 @@ const LINGUIST_APP_SERVICE_URL =
 const VOTE_SERVICE_URL =
   (import.meta.env.VITE_VOTE_SERVICE_URL as string) || 'http://localhost:8005';
 
-// Add the URL for your new service, pointing to the port defined in docker-compose.yml
 const GLOSSARY_SERVICE_URL =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
+
+const TERM_SERVICE_URL =
+  (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
+const COMMENT_SERVICE_URL =
+  (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
+  'http://localhost:8008';
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---
@@ -71,4 +74,21 @@ export const API_ENDPOINTS = {
   glossarySearch: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/search`,
   glossaryLanguages: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/languages`,
   glossaryRandom: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/random`,
+
+  // --- Term Service ---
+  getTermDetail: (termId: string) =>
+    `${TERM_SERVICE_URL}/api/v1/terms/${termId}`,
+  getTermTranslations: (termId: string) =>
+    `${TERM_SERVICE_URL}/api/v1/terms/${termId}/translations`,
+
+  // --- Comment Service ---
+  getComments: (termId: string) =>
+    `${COMMENT_SERVICE_URL}/api/v1/comments?term_id=${termId}`,
+  postComment: `${COMMENT_SERVICE_URL}/api/v1/comments`,
+  deleteComment: (commentId: string) =>
+    `${COMMENT_SERVICE_URL}/api/v1/comments/${commentId}`,
+
+  // --- Vote Service (existing) ---
+  voteOnTerm: `${VOTE_SERVICE_URL}/api/v1/votes/terms`,
+  voteOnComment: `${VOTE_SERVICE_URL}/api/v1/votes/comments`,
 };
