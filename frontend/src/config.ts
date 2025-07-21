@@ -27,7 +27,11 @@ export const API_ENDPOINTS = {
   login: `${AUTH_SERVICE_URL}/api/v1/auth/login`,
   register: `${AUTH_SERVICE_URL}/api/v1/auth/register`,
   getMe: `${AUTH_SERVICE_URL}/api/v1/auth/me`,
+  updateProfile: `${AUTH_SERVICE_URL}/api/v1/auth/me`,
+  updateProfilePicture: `${AUTH_SERVICE_URL}/api/v1/auth/me/profile-picture`,
   generateSignedUrl: `${AUTH_SERVICE_URL}/api/v1/uploads/generate-signed-url`,
+  generateProfilePictureUploadUrl: `${AUTH_SERVICE_URL}/api/v1/auth/profile-picture/upload-url`,
+  getMyProfilePictureUrl: `${AUTH_SERVICE_URL}/api/v1/auth/me/profile-picture`,
   getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
   updateUserRole: (userId: string) =>
     `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,

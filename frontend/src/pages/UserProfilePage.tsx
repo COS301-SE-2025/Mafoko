@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Settings } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ArrowLeft, Settings, Camera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
@@ -31,6 +31,10 @@ const UserProfilePage: React.FC = () => {
   const [error, setError] = useState('');
   const [activeMenuItem, setActiveMenuItem] = useState('profile');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isUploadingProfilePicture, setIsUploadingProfilePicture] =
+    useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load profile picture URL
   const loadProfilePicture = useCallback(async () => {
@@ -132,6 +136,137 @@ const UserProfilePage: React.FC = () => {
     console.log('Downloads clicked');
   };
 
+  const handleProfilePictureClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleProfilePictureUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File size must be less than 5MB');
+      return;
+    }
+
+    setIsUploadingProfilePicture(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('No access token found. Please login first.');
+        return;
+      }
+
+      // Get upload URL
+      const uploadPayload = {
+        content_type: file.type,
+        filename: file.name,
+      };
+
+      console.log('Upload URL request payload:', uploadPayload);
+      console.log('File details:', {
+        type: file.type,
+        name: file.name,
+        size: file.size,
+      });
+
+      const uploadUrlResponse = await fetch(
+        API_ENDPOINTS.generateProfilePictureUploadUrl,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(uploadPayload),
+        },
+      );
+
+      if (!uploadUrlResponse.ok) {
+        const errorText = await uploadUrlResponse.text();
+        console.error('Upload URL error response:', errorText);
+        console.error('Response status:', uploadUrlResponse.status);
+        throw new Error(`Failed to get upload URL: ${errorText}`);
+      }
+
+      const { upload_url, gcs_key } = (await uploadUrlResponse.json()) as {
+        upload_url: string;
+        gcs_key: string;
+      };
+
+      // Upload file to signed URL
+      const uploadResponse = await fetch(upload_url, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      // Update profile with new picture key
+      const updateProfileResponse = await fetch(
+        API_ENDPOINTS.updateProfilePicture,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            profile_pic_url: gcs_key,
+          }),
+        },
+      );
+
+      if (!updateProfileResponse.ok) {
+        throw new Error('Failed to update profile picture');
+      }
+
+      // Refresh profile data and picture
+      const profileResponse = await fetch(API_ENDPOINTS.getMe, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+
+      if (profileResponse.ok) {
+        const updatedProfile = (await profileResponse.json()) as ProfileData;
+        setProfile(updatedProfile);
+        // Show success message
+        setUploadSuccess(true);
+        setTimeout(() => {
+          setUploadSuccess(false);
+        }, 3000);
+        // loadProfilePicture will be called via useEffect
+      }
+    } catch (err) {
+      console.error('Error uploading profile picture:', err);
+      setError('Failed to update profile picture: ' + (err as Error).message);
+    } finally {
+      setIsUploadingProfilePicture(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   if (error && !profile) {
     return (
       <div
@@ -198,23 +333,50 @@ const UserProfilePage: React.FC = () => {
           {/* Profile Picture and Name Section */}
           <div className="profile-info">
             {/* Profile Picture */}
-            <div className="profile-picture">
-              {loadingProfilePicture ? (
+            <div
+              className="profile-picture"
+              onClick={handleProfilePictureClick}
+              style={{ cursor: 'pointer', position: 'relative' }}
+            >
+              {isUploadingProfilePicture ? (
+                <div className="loading-placeholder">Uploading...</div>
+              ) : loadingProfilePicture ? (
                 <div className="loading-placeholder">Loading...</div>
               ) : profilePictureUrl ? (
-                <img
-                  src={profilePictureUrl}
-                  alt="Profile Picture"
-                  onError={() => {
-                    setProfilePictureUrl(null);
-                  }}
-                />
+                <>
+                  <img
+                    src={profilePictureUrl}
+                    alt="Profile Picture"
+                    onError={() => {
+                      setProfilePictureUrl(null);
+                    }}
+                  />
+                  <div className="picture-overlay">
+                    <Camera size={24} />
+                  </div>
+                </>
               ) : (
-                <div className="profile-placeholder">
-                  {profile?.first_name.charAt(0) || '?'}
-                </div>
+                <>
+                  <div className="profile-placeholder">
+                    {profile?.first_name.charAt(0) || '?'}
+                  </div>
+                  <div className="picture-overlay">
+                    <Camera size={24} />
+                  </div>
+                </>
               )}
             </div>
+
+            {/* Hidden File Input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                handleProfilePictureUpload(e).catch(console.error);
+              }}
+              style={{ display: 'none' }}
+            />
 
             {/* Username */}
             <h2 className="profile-name">Username</h2>
@@ -224,6 +386,13 @@ const UserProfilePage: React.FC = () => {
                 ? `${profile.first_name} ${profile.last_name}`
                 : 'Loading...'}
             </p>
+
+            {/* Success Message */}
+            {uploadSuccess && (
+              <p className="upload-success">
+                Profile picture updated successfully!
+              </p>
+            )}
           </div>
 
           {/* Menu Items */}

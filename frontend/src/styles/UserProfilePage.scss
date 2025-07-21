@@ -147,6 +147,17 @@ $card-dark: #3a4050;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: scale(1.02);
+
+        .picture-overlay {
+          opacity: 1;
+        }
+      }
 
       // Desktop sizing
       @media (min-width: 769px) {
@@ -177,6 +188,27 @@ $card-dark: #3a4050;
         color: var(--profile-secondary-text);
         font-size: 0.875rem;
       }
+
+      .picture-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        border-radius: 50%;
+        color: white;
+
+        // Always show on mobile for better UX
+        @media (max-width: 768px) {
+          opacity: 0.3;
+        }
+      }
     }
 
     .profile-name {
@@ -202,6 +234,15 @@ $card-dark: #3a4050;
       @media (min-width: 769px) {
         font-size: 1rem;
       }
+    }
+
+    .upload-success {
+      font-size: 0.875rem;
+      color: var(--profile-accent);
+      text-align: center;
+      margin-top: 0.5rem;
+      font-weight: 500;
+      animation: fadeInOut 3s ease-in-out;
     }
   }
 
@@ -315,4 +356,21 @@ $card-dark: #3a4050;
   color: #{$accent-pink};
   font-weight: 500;
   padding: 2rem 1rem;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
