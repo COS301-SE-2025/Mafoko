@@ -1,5 +1,4 @@
 name: Run Database Migrations
-
 on:
   workflow_dispatch:
   push:
@@ -7,39 +6,32 @@ on:
     paths:
       - 'backend/migrations/**'
       - 'backend/alembic-service/**'
-
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: us-central1
   GAR_LOCATION: us-central1-docker.pkg.dev
   GAR_REPOSITORY: mavito-images
-
 jobs:
   deploy-migrations:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.DSFSI_SA_KEY }}
           # Remove token_format to avoid token creation
-
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
-
       - name: Configure Docker auth
         run: |
           echo '${{ secrets.DSFSI_SA_KEY }}' > sa-key.json
           gcloud auth activate-service-account --key-file=sa-key.json
           gcloud auth configure-docker $GAR_LOCATION --quiet
           rm sa-key.json
-
       - name: Build and push image
         run: |
           docker build \
@@ -47,7 +39,6 @@ jobs:
             -f backend/alembic-service/Dockerfile \
             backend
           docker push $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest
-
       - name: Deploy and run migrations
         run: |
           gcloud run jobs deploy alembic-migrations \
@@ -59,10 +50,11 @@ jobs:
             --command="python" \
             --args="-m" \
             --args="alembic" \
+            --args="-c" \ # Added this argument
+            --args="migrations/alembic.ini" \ # Added this argument
             --args="upgrade" \
             --args="head" \
             --quiet
-            
           gcloud run jobs execute alembic-migrations \
             --region=$GCP_REGION \
             --project=$GCP_PROJECT_ID \
