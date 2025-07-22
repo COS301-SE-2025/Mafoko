@@ -56,8 +56,13 @@ jobs:
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --region=$GCP_REGION \
             --project=$GCP_PROJECT_ID \
-            --command="alembic upgrade head" \
+            --command="python" \
+            --args="-m" \
+            --args="alembic" \
+            --args="upgrade" \
+            --args="head" \
             --quiet
+            
           gcloud run jobs execute alembic-migrations \
             --region=$GCP_REGION \
             --project=$GCP_PROJECT_ID \
