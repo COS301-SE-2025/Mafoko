@@ -23,7 +23,6 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.DSFSI_SA_KEY }}
-          # Remove token_format to avoid token creation
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
       - name: Configure Docker auth
@@ -43,15 +42,19 @@ jobs:
         run: |
           gcloud run jobs deploy alembic-migrations \
             --image=$GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest \
-            --set-env-vars="DB_URL=postgresql+asyncpg://${{ secrets.DB_USER }}:$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")@/${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.INSTANCE_CONNECTION_NAME }}" \
+            --set-env-vars="DB_URL=postgresql+asyncpg://${{ secrets.DB_USER }}:$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")@/${{ secrets.DB_NAME }}?host=/cloudsql/${{ secrets.INSTANCE_CONNECTION_NAME }}",\
+            "DB_USER=${{ secrets.DB_USER }}",\
+            "DB_PASSWORD=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${{ secrets.DB_PASSWORD }}'))")",\
+            "DB_NAME=${{ secrets.DB_NAME }}",\
+            "INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }}" \
             --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --region=$GCP_REGION \
             --project=$GCP_PROJECT_ID \
             --command="python" \
             --args="-m" \
             --args="alembic" \
-            --args="-c" \ # Added this argument
-            --args="migrations/alembic.ini" \ # Added this argument
+            --args="-c" \
+            --args="migrations/alembic.ini" \
             --args="upgrade" \
             --args="head" \
             --quiet
