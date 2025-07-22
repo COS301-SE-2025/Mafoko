@@ -8,19 +8,14 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 
-# --- MODIFICATION START ---
 # Import the centralized settings from your common library
 from mavito_common.core.config import settings
 from mavito_common.db.base_class import Base
 
-# --- MODIFICATION END ---
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
-
-config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URL)
 
 
 target_metadata = Base.metadata
