@@ -1,11 +1,12 @@
 #!/bin/sh
-# alembic-service/entrypoint.sh
-
 set -e
 
-echo "Entrypoint: Installing/updating editable common library..."
-# CHANGE THE PATH IN THE LINE BELOW
+echo "Installing common library..."
 pip install -e /mavito-common-lib-src
 
-# Now, execute the command passed to the container
-exec "$@"
+# Execute the command (fallback to migrations if none provided)
+if [ "$#" -eq 0 ]; then
+    exec python -m alembic upgrade head
+else
+    exec "$@"
+fi

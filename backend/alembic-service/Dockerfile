@@ -1,24 +1,23 @@
+# alembic-service/Dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Add these system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    python3-dev \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first (optimizes layer caching)
-COPY ./alembic-service/requirements.txt .
+COPY ./alembic-service/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy only the essential files (not the whole backend)
-COPY ./migrations/alembic.ini .
-COPY ./migrations/alembic /app/alembic
-COPY ./alembic-service/entrypoint.sh .
+COPY ./mavito-common-lib /app/mavito-common-lib-src
 
-# Make entrypoint executable
-RUN chmod +x entrypoint.sh
+
+COPY ./migrations /app/migrations
+COPY ./migrations/alembic.ini /app/alembic.ini
+
+COPY ./alembic-service/entrypoint.sh /app/entrypoint.sh
+
+RUN sed -i 's/\r$//' /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 
 ENTRYPOINT ["/app/entrypoint.sh"]
+
+CMD ["sleep", "infinity"]
