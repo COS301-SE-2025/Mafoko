@@ -74,6 +74,16 @@ const WorkspacePage: React.FC = () => {
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
 
+  // Initialize groups from saved terms
+  const initialGroups = [
+    'all',
+    'All Terms',
+    'Thesis Research',
+    'General Study',
+    'Farming Methods',
+  ];
+  const [groups, setGroups] = useState<string[]>(initialGroups);
+
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
     if (isDarkMode) {
@@ -202,25 +212,6 @@ const WorkspacePage: React.FC = () => {
     },
   ];
 
-  const [groups, setGroups] = useState(() => {
-    const initialGroups = [
-      'all',
-      'All Terms',
-      'Farming Methods',
-      'General Study',
-      'Thesis Research',
-    ];
-
-    return initialGroups.sort((a, b) => {
-      // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
-      if (a === 'all') return -1;
-      if (b === 'all') return 1;
-      if (a === 'All Terms') return -1;
-      if (b === 'All Terms') return 1;
-      return a.localeCompare(b);
-    });
-  });
-
   // Handle window resize with debounce for better performance
   useEffect(() => {
     let resizeTimer: NodeJS.Timeout;
@@ -256,36 +247,6 @@ const WorkspacePage: React.FC = () => {
       ...prev,
       [groupName]: !prev[groupName],
     }));
-  };
-
-  const getStatusColor = (status: SubmittedTerm['status']) => {
-    if (isDarkMode) {
-      switch (status) {
-        case 'approved':
-          return 'bg-green-800 text-green-100';
-        case 'pending':
-          return 'bg-yellow-800 text-yellow-100';
-        case 'rejected':
-          return 'bg-red-800 text-red-100';
-        case 'under_review':
-          return 'bg-blue-800 text-blue-100';
-        default:
-          return 'bg-gray-700 text-gray-100';
-      }
-    } else {
-      switch (status) {
-        case 'approved':
-          return 'bg-green-100 text-green-700';
-        case 'pending':
-          return 'bg-yellow-100 text-yellow-700';
-        case 'rejected':
-          return 'bg-red-100 text-red-700';
-        case 'under_review':
-          return 'bg-blue-100 text-blue-700';
-        default:
-          return 'bg-gray-100 text-gray-700';
-      }
-    }
   };
 
   const getStatusIcon = (status: SubmittedTerm['status']) => {
@@ -516,15 +477,11 @@ const WorkspacePage: React.FC = () => {
         )}
 
         <div className={`workspace-content ${isMobile ? 'pt-16' : ''}`}>
-          <div className="workspace-content-wrapper w-full">
+          <div className="workspace-content-wrapper">
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
-              <div
-                className={`workspace-tabs p-1 rounded-xl ${
-                  isDarkMode ? 'bg-slate-800/40' : 'bg-gray-200'
-                }`}
-              >
+              <div className="workspace-tabs">
                 <button
                   type="button"
                   onClick={() => {
@@ -561,28 +518,16 @@ const WorkspacePage: React.FC = () => {
                       type="button"
                       onClick={handleDeleteSelectedGroups}
                       disabled={selectedGroupsForDeletion.length === 0}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        selectedGroupsForDeletion.length === 0
-                          ? isDarkMode
-                            ? 'bg-slate-700/40 text-gray-500 cursor-not-allowed border border-slate-600'
-                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                          : isDarkMode
-                            ? 'bg-red-600/80 text-white hover:bg-red-600 border border-red-500'
-                            : 'bg-red-500 text-white hover:bg-red-600'
-                      }`}
+                      className={`delete-selected-btn ${selectedGroupsForDeletion.length === 0 ? 'disabled' : ''}`}
                     >
-                      <Trash2 className="w-4 h-4 mr-2 inline" />
+                      <Trash2 className="icon" />
                       Delete Selected (
                       {selectedGroupsForDeletion.length.toString()})
                     </button>
                     <button
                       type="button"
                       onClick={handleExitDeleteMode}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        isDarkMode
-                          ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30 border border-red-600/30'
-                          : 'bg-red-500 text-white hover:bg-red-600'
-                      }`}
+                      className="cancel-delete-btn"
                     >
                       Cancel
                     </button>
@@ -600,13 +545,9 @@ const WorkspacePage: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleEnterDeleteMode}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        isDarkMode
-                          ? 'bg-slate-700/60 text-red-400 hover:bg-slate-600 hover:text-red-300 border border-slate-600'
-                          : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
-                      }`}
+                      className="delete-mode-btn"
                     >
-                      <Trash2 className="w-4 h-4 mr-2 inline" />
+                      <Trash2 className="icon" />
                       Delete Groups
                     </button>
                   </div>
@@ -619,17 +560,13 @@ const WorkspacePage: React.FC = () => {
               <div className="tab-content">
                 <div className="space-y-8 h-full">
                   {/* Search and Filter */}
-                  <div className="flex flex-col sm:flex-row gap-4 flex-shrink-0">
-                    <div className="flex-1 relative">
-                      <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <div className="flex-col sm:flex-row">
+                    <div className="flex-1">
+                      <Search className="absolute" />
                       <input
                         type="text"
                         placeholder="Search terms..."
-                        className={`w-full pl-10 pr-4 py-3 border ${
-                          isDarkMode
-                            ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
-                            : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
-                        } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent`}
+                        className="search-input"
                         value={searchQuery}
                         onChange={(e) => {
                           setSearchQuery(e.target.value);
@@ -639,19 +576,7 @@ const WorkspacePage: React.FC = () => {
                     <div className="relative">
                       <button
                         type="button"
-                        className={`groups-dropdown w-full px-4 py-3 border ${
-                          isDarkMode
-                            ? 'border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-transparent'
-                            : 'border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent'
-                        } rounded-lg transition-colors duration-200 flex items-center justify-between`}
-                        style={
-                          isDarkMode
-                            ? {
-                                backgroundColor: '#212431',
-                                color: '#f5f5f5',
-                              }
-                            : {}
-                        }
+                        className="groups-dropdown"
                         onClick={() => {
                           setIsDropdownOpen(!isDropdownOpen);
                         }}
@@ -662,82 +587,17 @@ const WorkspacePage: React.FC = () => {
                             : selectedCategory}
                         </span>
                         <ChevronDown
-                          className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''} ${
-                            isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                          }`}
+                          className={`w-4 ${isDropdownOpen ? 'rotate-180' : ''}`}
                         />
                       </button>
 
                       {isDropdownOpen && (
-                        <div
-                          className={`absolute top-full left-0 right-0 mt-1 border rounded-lg shadow-lg z-50 ${
-                            isDarkMode
-                              ? 'border-gray-600 shadow-2xl'
-                              : 'border-gray-300 bg-white text-gray-900 shadow-black/10'
-                          }`}
-                          style={
-                            isDarkMode
-                              ? {
-                                  backgroundColor: '#212431',
-                                  color: '#f5f5f5',
-                                }
-                              : {}
-                          }
-                        >
+                        <div className="dropdown-menu">
                           {getCategories().map((category) => (
                             <button
                               key={category}
                               type="button"
-                              className={`w-full px-4 py-3 text-left transition-colors ${
-                                selectedCategory === category
-                                  ? isDarkMode
-                                    ? ''
-                                    : 'bg-gray-100 text-gray-900'
-                                  : isDarkMode
-                                    ? ''
-                                    : 'text-gray-900'
-                              } first:rounded-t-lg last:rounded-b-lg`}
-                              style={
-                                isDarkMode
-                                  ? {
-                                      backgroundColor:
-                                        selectedCategory === category
-                                          ? '#3a4050'
-                                          : 'transparent',
-                                      color: '#f5f5f5',
-                                    }
-                                  : {}
-                              }
-                              onMouseEnter={(e) => {
-                                if (selectedCategory !== category) {
-                                  if (isDarkMode) {
-                                    (
-                                      e.target as HTMLElement
-                                    ).style.backgroundColor = '#3a4050';
-                                    (e.target as HTMLElement).style.color =
-                                      '#f5f5f5';
-                                  } else {
-                                    (
-                                      e.target as HTMLElement
-                                    ).style.backgroundColor = '#f5f5f5';
-                                  }
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (selectedCategory !== category) {
-                                  if (isDarkMode) {
-                                    (
-                                      e.target as HTMLElement
-                                    ).style.backgroundColor = 'transparent';
-                                    (e.target as HTMLElement).style.color =
-                                      '#f5f5f5';
-                                  } else {
-                                    (
-                                      e.target as HTMLElement
-                                    ).style.backgroundColor = 'white';
-                                  }
-                                }
-                              }}
+                              className={`dropdown-item ${selectedCategory === category ? 'selected' : ''}`}
                               onClick={() => {
                                 setSelectedCategory(category);
                                 setIsDropdownOpen(false);
@@ -764,11 +624,9 @@ const WorkspacePage: React.FC = () => {
                       })
                       .map(([groupName, terms]) => (
                         <div key={groupName} className="workspace-group-card">
-                          <div
-                            className={`flex items-center justify-between p-4 ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
-                          >
+                          <div className="group-header">
                             <div
-                              className="flex items-center space-x-3 flex-1 cursor-pointer"
+                              className="group-info"
                               onClick={() => {
                                 if (!isDeleteMode) {
                                   toggleGroup(groupName);
@@ -790,55 +648,30 @@ const WorkspacePage: React.FC = () => {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                     }}
-                                    className={`w-4 h-4 rounded border-2 ${
-                                      isDarkMode
-                                        ? 'border-gray-600 bg-slate-700 text-red-500 focus:ring-red-500'
-                                        : 'border-gray-300 bg-white text-red-500 focus:ring-red-500'
-                                    }`}
+                                    className="group-checkbox"
                                   />
-                                  <FolderPlus
-                                    className="w-5 h-5"
-                                    style={{ color: '#f00a50' }}
-                                  />
+                                  <FolderPlus className="group-icon" />
                                 </div>
                               ) : (
-                                <FolderPlus
-                                  className="w-5 h-5"
-                                  style={{ color: '#f00a50' }}
-                                />
+                                <FolderPlus className="group-icon" />
                               )}
-                              <h3
-                                className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                              >
-                                {groupName}
-                              </h3>
-                              <span
-                                className={`${isDarkMode ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-700'} px-3 py-1 rounded-full text-sm`}
-                              >
+                              <h3 className="group-title">{groupName}</h3>
+                              <span className="term-count">
                                 {terms.length} terms
                               </span>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="group-actions">
                               {!isDeleteMode && (
                                 <button
                                   type="button"
                                   onClick={() => {
                                     toggleGroup(groupName);
                                   }}
-                                  className={`p-1 rounded-md transition-all duration-200 ${
-                                    isDarkMode
-                                      ? 'hover:bg-slate-600/50'
-                                      : 'hover:bg-gray-200'
-                                  }`}
                                 >
                                   {expandedGroups[groupName] ? (
-                                    <ChevronUp
-                                      className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
-                                    />
+                                    <ChevronUp className="chevron-icon" />
                                   ) : (
-                                    <ChevronDown
-                                      className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-[#212431]'}`}
-                                    />
+                                    <ChevronDown className="chevron-icon" />
                                   )}
                                 </button>
                               )}
@@ -846,20 +679,13 @@ const WorkspacePage: React.FC = () => {
                           </div>
 
                           {expandedGroups[groupName] && (
-                            <div
-                              className={`border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}
-                            >
+                            <div className="group-content">
                               {terms.map((term) => (
-                                <div
-                                  key={term.id}
-                                  className={`p-4 border-b ${isDarkMode ? 'border-slate-700 last:border-b-0 hover:bg-slate-700' : 'border-gray-200 last:border-b-0 hover:bg-gray-50'}`}
-                                >
-                                  <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                      <div className="flex items-center space-x-2 mb-2">
-                                        <h4
-                                          className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                                        >
+                                <div key={term.id} className="term-item">
+                                  <div className="term-header">
+                                    <div className="term-info">
+                                      <div className="term-title-row">
+                                        <h4 className="term-title">
                                           {term.term}
                                         </h4>
                                         <span className="language-tag">
@@ -872,108 +698,60 @@ const WorkspacePage: React.FC = () => {
                                         )}
                                       </div>
                                       {term.definition && (
-                                        <p
-                                          className={`mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                                        >
+                                        <p className="term-definition">
                                           {term.definition}
                                         </p>
                                       )}
 
                                       {/* Notes Section */}
-                                      <div className="mb-2">
+                                      <div className="notes-section">
                                         {editingNotes === term.id ? (
-                                          <div className="space-y-2">
+                                          <div className="notes-editor">
                                             <textarea
                                               value={noteText}
                                               onChange={(e) => {
                                                 setNoteText(e.target.value);
                                               }}
                                               placeholder="Add your notes here..."
-                                              className={`w-full p-2 text-sm border rounded-md resize-none ${
-                                                isDarkMode
-                                                  ? 'border-gray-600 bg-slate-700/50 text-white placeholder-gray-400'
-                                                  : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
-                                              } focus:ring-2 focus:ring-cyan-500 focus:border-transparent`}
+                                              className="notes-textarea"
                                               rows={3}
                                             />
-                                            <div className="flex items-center space-x-2">
+                                            <div className="notes-actions">
                                               <button
                                                 type="button"
                                                 onClick={() => {
                                                   handleSaveNote(term.id);
                                                 }}
-                                                className={`p-1.5 rounded-md transition-all duration-200 ${
-                                                  isDarkMode
-                                                    ? 'text-green-400 hover:text-white border border-transparent hover:border-green-500/30'
-                                                    : 'text-green-600 hover:text-green-800 hover:bg-green-50 border border-transparent hover:border-green-200'
-                                                }`}
-                                                style={
-                                                  isDarkMode
-                                                    ? {
-                                                        backgroundColor:
-                                                          '#31374eff',
-                                                      }
-                                                    : {}
-                                                }
+                                                className="save-btn"
                                               >
-                                                <Save className="w-3.5 h-3.5" />
+                                                <Save className="icon" />
                                               </button>
                                               <button
                                                 type="button"
                                                 onClick={handleCancelNote}
-                                                className={`p-1.5 rounded-md transition-all duration-200 ${
-                                                  isDarkMode
-                                                    ? 'text-gray-400 hover:text-white border border-transparent hover:border-gray-500/30'
-                                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-transparent hover:border-gray-200'
-                                                }`}
-                                                style={
-                                                  isDarkMode
-                                                    ? {
-                                                        backgroundColor:
-                                                          '#31374eff',
-                                                      }
-                                                    : {}
-                                                }
+                                                className="cancel-btn"
                                               >
-                                                <X className="w-3.5 h-3.5" />
+                                                <X className="icon" />
                                               </button>
                                             </div>
                                           </div>
                                         ) : (
                                           <>
                                             {term.notes && (
-                                              <div
-                                                className={`p-2 rounded-md text-sm border-l-4 ${
-                                                  isDarkMode
-                                                    ? 'bg-slate-700/30 border-l-yellow-400 text-gray-300'
-                                                    : 'bg-yellow-50 border-l-yellow-400 text-gray-700'
-                                                }`}
-                                              >
-                                                <div className="flex items-start justify-between">
-                                                  <div className="flex items-start space-x-2">
-                                                    <StickyNote
-                                                      className={`w-4 h-4 mt-0.5 ${
-                                                        isDarkMode
-                                                          ? 'text-yellow-400'
-                                                          : 'text-yellow-600'
-                                                      }`}
-                                                    />
-                                                    <p className="flex-1">
-                                                      {term.notes}
-                                                    </p>
+                                              <div className="notes-display">
+                                                <div className="notes-content">
+                                                  <div className="notes-text">
+                                                    <StickyNote className="sticky-note-icon" />
+                                                    <p>{term.notes}</p>
                                                   </div>
                                                   <button
                                                     type="button"
                                                     onClick={() => {
                                                       handleAddNote(term.id);
                                                     }}
-                                                    className={`ml-2 p-1 rounded-md transition-all duration-200 ${
-                                                      isDarkMode
-                                                        ? 'text-gray-400 hover:text-white hover:bg-slate-600'
-                                                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                                                    }`}
+                                                    className="edit-note-btn"
                                                   >
-                                                    <Edit2 className="w-3 h-3" />
+                                                    <Edit2 className="edit-icon" />
                                                   </button>
                                                 </div>
                                               </div>
@@ -982,7 +760,7 @@ const WorkspacePage: React.FC = () => {
                                         )}
                                       </div>
                                     </div>
-                                    <div className="flex items-center space-x-2 ml-4">
+                                    <div className="term-actions">
                                       {!term.notes &&
                                         editingNotes !== term.id && (
                                           <button
@@ -990,40 +768,17 @@ const WorkspacePage: React.FC = () => {
                                               handleAddNote(term.id);
                                             }}
                                             type="button"
-                                            className={`p-2 rounded-md transition-all duration-200 ${
-                                              isDarkMode
-                                                ? 'text-yellow-400 hover:text-white border border-transparent hover:border-yellow-500/30'
-                                                : 'text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50 border border-transparent hover:border-yellow-200'
-                                            }`}
-                                            style={
-                                              isDarkMode
-                                                ? {
-                                                    backgroundColor:
-                                                      '#31374eff',
-                                                  }
-                                                : {}
-                                            }
+                                            className="add-note-btn"
                                             title="Add note"
                                           >
-                                            <StickyNote className="w-4 h-4" />
+                                            <StickyNote className="icon" />
                                           </button>
                                         )}
                                       <button
                                         type="button"
-                                        className={`p-2 rounded-md transition-all duration-200 ${
-                                          isDarkMode
-                                            ? 'text-red-400 hover:text-white border border-transparent hover:border-red-500/30'
-                                            : 'text-red-600 hover:text-red-800 hover:bg-red-50 border border-transparent hover:border-red-200'
-                                        }`}
-                                        style={
-                                          isDarkMode
-                                            ? {
-                                                backgroundColor: '#31374eff',
-                                              }
-                                            : {}
-                                        }
+                                        className="delete-btn"
                                       >
-                                        <Trash2 className="w-4 h-4" />
+                                        <Trash2 className="icon" />
                                       </button>
                                     </div>
                                   </div>
@@ -1042,65 +797,32 @@ const WorkspacePage: React.FC = () => {
             {activeTab === 'progress' && (
               <div className="tab-content">
                 <div className="space-y-8 h-full">
-                  <div
-                    className={`${isDarkMode ? 'border-slate-700' : 'bg-white/90 border-gray-200'} rounded-lg shadow-sm border flex-1 overflow-hidden`}
-                    style={isDarkMode ? { backgroundColor: '#292e41' } : {}}
-                  >
-                    <div className="p-6 h-full flex flex-col">
-                      <h3
-                        className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4 flex-shrink-0`}
-                      >
-                        {/* Submission Progress */}
-                      </h3>
-                      <div
-                        className="space-y-4 flex-1 overflow-y-auto pr-2"
-                        style={{
-                          scrollbarWidth: 'thin',
-                          scrollbarColor: isDarkMode
-                            ? '#4B5563 #1F2937'
-                            : '#D1D5DB #F9FAFB',
-                        }}
-                      >
+                  <div className="progress-container">
+                    <div className="progress-header">
+                      <h3 className="progress-title">Submission Progress</h3>
+                      <div className="progress-content">
                         {submittedTerms.map((term) => (
-                          <div
-                            key={term.id}
-                            className={`border rounded-lg p-4 ${isDarkMode ? 'border-slate-700' : 'border-gray-200 bg-gray-50/80'}`}
-                            style={
-                              isDarkMode ? { backgroundColor: '#272b3dff' } : {}
-                            }
-                          >
-                            <div className="flex items-center justify-between mb-3">
-                              <h4
-                                className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                              >
+                          <div key={term.id} className="progress-item">
+                            <div className="progress-item-header">
+                              <h4 className="progress-term-title">
                                 {term.term}
                               </h4>
                               <div
-                                className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${getStatusColor(term.status)}`}
+                                className={`status-badge status-${term.status.replace('_', '-')}`}
                               >
                                 {getStatusIcon(term.status)}
-                                <span className="capitalize">
-                                  {term.status.replace('_', ' ')}
-                                </span>
+                                <span>{term.status.replace('_', ' ')}</span>
                               </div>
                             </div>
-                            <div
-                              className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                            >
+                            <div className="progress-dates">
                               <span>Submitted: {term.submittedDate}</span>
                               {term.reviewedDate && (
                                 <span>Reviewed: {term.reviewedDate}</span>
                               )}
                             </div>
                             {term.feedback && (
-                              <div
-                                className={`mt-3 p-3 rounded-md ${isDarkMode ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}
-                              >
-                                <p
-                                  className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}
-                                >
-                                  {term.feedback}
-                                </p>
+                              <div className="progress-feedback">
+                                <p>{term.feedback}</p>
                               </div>
                             )}
                           </div>
@@ -1116,122 +838,45 @@ const WorkspacePage: React.FC = () => {
             {activeTab === 'glossaries' && (
               <div className="tab-content">
                 <div className="space-y-8 h-full">
-                  <div
-                    className={`rounded-lg shadow-sm border-0 flex-1 overflow-hidden ${
-                      isDarkMode ? '' : 'bg-gray-50/30'
-                    }`}
-                    style={
-                      isDarkMode
-                        ? {
-                            backgroundColor: '#292e41',
-                          }
-                        : {}
-                    }
-                  >
-                    <div className="p-6 pt-2 h-full flex flex-col">
-                      <h3
-                        className={`text-xl font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6 flex-shrink-0`}
-                      >
-                        {/* Followed Glossaries */}
-                      </h3>
-                      <div
-                        className="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1 overflow-y-auto pr-2"
-                        style={{
-                          scrollbarWidth: 'thin',
-                          scrollbarColor: isDarkMode
-                            ? '#4B5563 #1F2937'
-                            : '#D1D5DB #F9FAFB',
-                        }}
-                      >
+                  <div className="glossaries-container">
+                    <div className="glossaries-header">
+                      <h3 className="glossaries-title">Followed Glossaries</h3>
+                      <div className="glossaries-grid">
                         {glossaries.map((glossary) => (
-                          <div
-                            key={glossary.id}
-                            className={`border rounded-lg p-5 hover:shadow-md transition-all ${
-                              isDarkMode
-                                ? 'border-slate-700'
-                                : 'border-gray-200 bg-white'
-                            }`}
-                            style={
-                              isDarkMode
-                                ? {
-                                    backgroundColor: '#232738ff',
-                                  }
-                                : {}
-                            }
-                          >
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex items-center space-x-3">
-                                <BookOpen
-                                  className={`w-5 h-5 ${
-                                    isDarkMode
-                                      ? 'text-teal-400'
-                                      : 'text-teal-600'
-                                  }`}
-                                />
-                                <div>
-                                  <h4
-                                    className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                                  >
+                          <div key={glossary.id} className="glossary-card">
+                            <div className="glossary-header">
+                              <div className="glossary-info">
+                                <BookOpen className="book-icon" />
+                                <div className="glossary-details">
+                                  <h4 className="glossary-title">
                                     {glossary.name}
                                   </h4>
-                                  <span className="language-tag">
-                                    {glossary.language}
-                                  </span>
                                 </div>
                               </div>
                               <div
-                                className={`w-3.5 h-3.5 rounded-full ring-2 ${
-                                  glossary.followed
-                                    ? 'bg-green-500 ring-green-400/30'
-                                    : 'bg-gray-400 ring-gray-300/30'
+                                className={`follow-indicator ${
+                                  glossary.followed ? 'followed' : 'unfollowed'
                                 }`}
-                              ></div>
+                              />
                             </div>
-                            <div
-                              className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} my-2`}
-                            >
-                              <span className="font-medium">
+                            <div className="glossary-stats">
+                              <span className="term-count">
                                 {glossary.termCount} terms
                               </span>
                               <span>Updated: {glossary.lastUpdated}</span>
                             </div>
-                            <div className="mt-4 flex items-center space-x-3">
+                            <div className="glossary-actions">
                               <button
                                 type="button"
-                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                                className={`follow-btn ${
                                   glossary.followed
-                                    ? isDarkMode
-                                      ? 'text-white hover:bg-red-500'
-                                      : 'bg-red-500 text-black hover:bg-red-600'
-                                    : isDarkMode
-                                      ? 'text-white hover:bg-green-500'
-                                      : 'bg-green-500 text-black hover:bg-green-600'
+                                    ? 'following'
+                                    : 'not-following'
                                 }`}
-                                style={
-                                  isDarkMode
-                                    ? {
-                                        backgroundColor: '#292e41',
-                                      }
-                                    : {}
-                                }
                               >
                                 {glossary.followed ? 'Unfollow' : 'Follow'}
                               </button>
-                              <button
-                                type="button"
-                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                                  isDarkMode
-                                    ? 'text-white hover:bg-blue-500'
-                                    : 'bg-blue-500 text-black hover:bg-blue-600'
-                                }`}
-                                style={
-                                  isDarkMode
-                                    ? {
-                                        backgroundColor: '#292e41',
-                                      }
-                                    : {}
-                                }
-                              >
+                              <button type="button" className="view-btn">
                                 View
                               </button>
                             </div>
@@ -1249,47 +894,24 @@ const WorkspacePage: React.FC = () => {
 
       {/* New Group Modal */}
       {isNewGroupModalOpen && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-          <div
-            className={`relative rounded-lg shadow-xl max-w-md w-full mx-4 ${
-              isDarkMode ? 'bg-slate-800' : 'bg-white'
-            }`}
-          >
+        <div className="modal-overlay">
+          <div className="modal-container">
             {/* Modal Header */}
-            <div
-              className={`flex items-center justify-between p-6 border-b ${
-                isDarkMode ? 'border-slate-600' : 'border-gray-200'
-              }`}
-            >
-              <h3
-                className={`text-lg font-medium ${
-                  isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}
-              >
-                Create New Group
-              </h3>
+            <div className="modal-header">
+              <h3 className="modal-title">Create New Group</h3>
               <button
                 type="button"
                 onClick={handleCloseNewGroupModal}
-                className={`p-2 rounded-md transition-all duration-200 ${
-                  isDarkMode
-                    ? 'text-gray-400 hover:text-white hover:bg-slate-700'
-                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-                }`}
+                className="close-btn"
               >
-                <X className="w-5 h-5" />
+                <X className="close-icon" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6">
-              <div className="mb-4">
-                <label
-                  htmlFor="groupName"
-                  className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}
-                >
+            <div className="modal-body">
+              <div className="form-group">
+                <label htmlFor="groupName" className="form-label">
                   Group Name
                 </label>
                 <input
@@ -1307,37 +929,21 @@ const WorkspacePage: React.FC = () => {
                     }
                   }}
                   placeholder="Enter group name..."
-                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
-                    isDarkMode
-                      ? 'border-gray-600 bg-slate-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent'
-                      : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent'
-                  }`}
+                  className="form-input"
                   autoFocus
                 />
               </div>
-              <p
-                className={`text-sm ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}
-              >
+              <p className="form-description">
                 Create a new group to organize your saved terms.
               </p>
             </div>
 
             {/* Modal Footer */}
-            <div
-              className={`flex items-center justify-end space-x-3 p-6 border-t ${
-                isDarkMode ? 'border-slate-600' : 'border-gray-200'
-              }`}
-            >
+            <div className="modal-footer">
               <button
                 type="button"
                 onClick={handleCloseNewGroupModal}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  isDarkMode
-                    ? 'text-gray-300 bg-slate-700 hover:bg-slate-600 border border-slate-600'
-                    : 'text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300'
-                }`}
+                className="cancel-btn"
               >
                 Cancel
               </button>
@@ -1345,17 +951,9 @@ const WorkspacePage: React.FC = () => {
                 type="button"
                 onClick={handleCreateNewGroup}
                 disabled={!newGroupName.trim()}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  !newGroupName.trim()
-                    ? isDarkMode
-                      ? 'bg-slate-700 text-gray-500 cursor-not-allowed border border-slate-600'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-300'
-                    : isDarkMode
-                      ? 'bg-cyan-600 text-white hover:bg-cyan-700 border border-cyan-500'
-                      : 'bg-cyan-500 text-black hover:bg-cyan-600 border border-cyan-500'
-                }`}
+                className={`create-btn ${!newGroupName.trim() ? 'disabled' : ''}`}
               >
-                <Plus className="w-4 h-4 mr-2 inline" />
+                <Plus className="plus-icon" />
                 Create Group
               </button>
             </div>
