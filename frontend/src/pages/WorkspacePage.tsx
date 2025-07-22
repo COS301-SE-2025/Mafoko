@@ -7,13 +7,13 @@ import {
   Trash2,
   FolderPlus,
   Search,
-  BookOpen,
   Clock,
   Check,
   AlertCircle,
   StickyNote,
   Save,
   X,
+  BookOpen,
 } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
@@ -73,6 +73,42 @@ const WorkspacePage: React.FC = () => {
   >([]);
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
+
+  // Glossaries state
+  const [glossaries, setGlossaries] = useState<Glossary[]>([
+    {
+      id: 1,
+      name: 'Agriculture Glossary',
+      language: 'Afrikaans',
+      termCount: 245,
+      lastUpdated: '2024-07-15',
+      followed: true,
+    },
+    {
+      id: 2,
+      name: 'Environmental Science Terms',
+      language: 'English',
+      termCount: 189,
+      lastUpdated: '2024-07-14',
+      followed: true,
+    },
+    {
+      id: 3,
+      name: 'Biology Fundamentals',
+      language: 'English',
+      termCount: 156,
+      lastUpdated: '2024-07-13',
+      followed: false,
+    },
+    {
+      id: 4,
+      name: 'Farming Techniques',
+      language: 'Afrikaans',
+      termCount: 98,
+      lastUpdated: '2024-07-12',
+      followed: true,
+    },
+  ]);
 
   // Initialize groups from saved terms
   const initialGroups = [
@@ -175,40 +211,48 @@ const WorkspacePage: React.FC = () => {
       submittedDate: '2024-07-17',
       reviewedDate: null,
     },
-  ];
-
-  const glossaries: Glossary[] = [
     {
-      id: 1,
-      name: 'Agriculture Glossary',
-      language: 'Afrikaans',
-      termCount: 245,
-      lastUpdated: '2024-07-15',
-      followed: true,
+      id: 5,
+      term: 'Organic Farming Practices',
+      status: 'approved',
+      submittedDate: '2024-07-12',
+      reviewedDate: '2024-07-16',
     },
     {
-      id: 2,
-      name: 'Environmental Science Terms',
-      language: 'English',
-      termCount: 189,
-      lastUpdated: '2024-07-14',
-      followed: true,
+      id: 6,
+      term: 'Water Conservation',
+      status: 'pending',
+      submittedDate: '2024-07-18',
+      reviewedDate: null,
     },
     {
-      id: 3,
-      name: 'Biology Fundamentals',
-      language: 'English',
-      termCount: 156,
-      lastUpdated: '2024-07-13',
-      followed: false,
+      id: 7,
+      term: 'Crop Rotation Benefits',
+      status: 'rejected',
+      submittedDate: '2024-07-11',
+      reviewedDate: '2024-07-15',
+      feedback: 'Please provide more scientific references',
     },
     {
-      id: 4,
-      name: 'Farming Techniques',
-      language: 'Afrikaans',
-      termCount: 98,
-      lastUpdated: '2024-07-12',
-      followed: true,
+      id: 8,
+      term: 'Biodiversity Conservation',
+      status: 'under_review',
+      submittedDate: '2024-07-19',
+      reviewedDate: null,
+    },
+    {
+      id: 9,
+      term: 'Integrated Pest Management',
+      status: 'approved',
+      submittedDate: '2024-07-13',
+      reviewedDate: '2024-07-17',
+    },
+    {
+      id: 10,
+      term: 'Soil Health Assessment',
+      status: 'pending',
+      submittedDate: '2024-07-20',
+      reviewedDate: null,
     },
   ];
 
@@ -249,20 +293,17 @@ const WorkspacePage: React.FC = () => {
     }));
   };
 
-  const getStatusIcon = (status: SubmittedTerm['status']) => {
-    switch (status) {
-      case 'approved':
-        return <Check className="w-4 h-4" />;
-      case 'pending':
-        return <Clock className="w-4 h-4" />;
-      case 'rejected':
-        return <AlertCircle className="w-4 h-4" />;
-      case 'under_review':
-        return <Clock className="w-4 h-4" />;
-      default:
-        return null;
-    }
+  const toggleFollow = (glossaryId: number) => {
+    setGlossaries((prev) =>
+      prev.map((glossary) =>
+        glossary.id === glossaryId
+          ? { ...glossary, followed: !glossary.followed }
+          : glossary,
+      ),
+    );
   };
+
+  // Removed unused getStatusIcon function
 
   // Functions for handling notes
   const handleAddNote = (termId: number) => {
@@ -795,39 +836,113 @@ const WorkspacePage: React.FC = () => {
 
             {/* Progress Tab */}
             {activeTab === 'progress' && (
-              <div className="tab-content">
-                <div className="space-y-8 h-full">
-                  <div className="progress-container">
-                    <div className="progress-header">
-                      <h3 className="progress-title">Submission Progress</h3>
-                      <div className="progress-content">
-                        {submittedTerms.map((term) => (
-                          <div key={term.id} className="progress-item">
-                            <div className="progress-item-header">
-                              <h4 className="progress-term-title">
-                                {term.term}
-                              </h4>
-                              <div
-                                className={`status-badge status-${term.status.replace('_', '-')}`}
-                              >
-                                {getStatusIcon(term.status)}
-                                <span>{term.status.replace('_', ' ')}</span>
-                              </div>
+              <div
+                className={`space-y-6 ${isDarkMode ? 'bg-[#1e2433] min-h-screen' : 'bg-[#f5f5f5] min-h-screen'}`}
+              >
+                <div
+                  className={`${isDarkMode ? 'bg-[#292e41] border-gray-600' : 'bg-white border-gray-200'} rounded-lg shadow-sm border`}
+                >
+                  <div className="p-6">
+                    <h3
+                      className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                    >
+                      Submission Progress
+                    </h3>
+                    <div
+                      className="space-y-4 max-h-96 overflow-y-auto pr-2"
+                      style={{ scrollbarWidth: 'thin' }}
+                    >
+                      <style>{`
+                        .submission-scrollbar::-webkit-scrollbar {
+                          width: 6px;
+                        }
+                        .submission-scrollbar::-webkit-scrollbar-track {
+                          background: ${isDarkMode ? '#374151' : '#f1f5f9'};
+                          border-radius: 3px;
+                        }
+                        .submission-scrollbar::-webkit-scrollbar-thumb {
+                          background: ${isDarkMode ? '#6b7280' : '#cbd5e1'};
+                          border-radius: 3px;
+                        }
+                        .submission-scrollbar::-webkit-scrollbar-thumb:hover {
+                          background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
+                        }
+                      `}</style>
+                      {submittedTerms.map((term) => (
+                        <div
+                          key={term.id}
+                          className={`submission-scrollbar ${isDarkMode ? 'border-gray-600 bg-[#1e2433]' : 'border-gray-200 bg-white'} border rounded-lg p-4`}
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <h4
+                              className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                            >
+                              {term.term}
+                            </h4>
+                            <div
+                              className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${(() => {
+                                const baseColors = {
+                                  approved: isDarkMode
+                                    ? 'bg-green-900/30 text-green-400 border border-green-700/50'
+                                    : 'bg-green-100 text-green-700',
+                                  pending: isDarkMode
+                                    ? 'bg-yellow-900/30 text-yellow-400 border border-yellow-700/50'
+                                    : 'bg-yellow-100 text-yellow-700',
+                                  rejected: isDarkMode
+                                    ? 'bg-red-900/30 text-red-400 border border-red-700/50'
+                                    : 'bg-red-100 text-red-700',
+                                  under_review: isDarkMode
+                                    ? 'bg-blue-900/30 text-blue-400 border border-blue-700/50'
+                                    : 'bg-blue-100 text-blue-700',
+                                };
+                                return (
+                                  baseColors[term.status] ||
+                                  (isDarkMode
+                                    ? 'bg-gray-800 text-gray-300 border border-gray-600'
+                                    : 'bg-gray-100 text-gray-700')
+                                );
+                              })()}`}
+                            >
+                              {(() => {
+                                switch (term.status) {
+                                  case 'approved':
+                                    return <Check className="w-4 h-4" />;
+                                  case 'pending':
+                                    return <Clock className="w-4 h-4" />;
+                                  case 'rejected':
+                                    return <AlertCircle className="w-4 h-4" />;
+                                  case 'under_review':
+                                    return <Clock className="w-4 h-4" />;
+                                  default:
+                                    return null;
+                                }
+                              })()}
+                              <span className="capitalize">
+                                {term.status.replace('_', ' ')}
+                              </span>
                             </div>
-                            <div className="progress-dates">
-                              <span>Submitted: {term.submittedDate}</span>
-                              {term.reviewedDate && (
-                                <span>Reviewed: {term.reviewedDate}</span>
-                              )}
-                            </div>
-                            {term.feedback && (
-                              <div className="progress-feedback">
-                                <p>{term.feedback}</p>
-                              </div>
+                          </div>
+                          <div
+                            className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                          >
+                            <span>Submitted: {term.submittedDate}</span>
+                            {term.reviewedDate && (
+                              <span>Reviewed: {term.reviewedDate}</span>
                             )}
                           </div>
-                        ))}
-                      </div>
+                          {term.feedback && (
+                            <div
+                              className={`mt-3 p-3 rounded-md ${
+                                isDarkMode
+                                  ? 'bg-red-900/20 border border-red-800/50 text-red-400'
+                                  : 'bg-red-50 border border-red-200 text-red-700'
+                              }`}
+                            >
+                              <p className="text-sm">{term.feedback}</p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -837,46 +952,160 @@ const WorkspacePage: React.FC = () => {
             {/* Glossaries Tab */}
             {activeTab === 'glossaries' && (
               <div className="tab-content">
-                <div className="space-y-8 h-full">
-                  <div className="glossaries-container">
-                    <div className="glossaries-header">
-                      <h3 className="glossaries-title">Followed Glossaries</h3>
-                      <div className="glossaries-grid">
+                <div className="space-y-6">
+                  <div
+                    className={`rounded-lg shadow-sm border ${isDarkMode ? 'border-gray-700' : 'bg-white border-gray-200'}`}
+                    style={isDarkMode ? { backgroundColor: '#292e41' } : {}}
+                  >
+                    <div className="p-6">
+                      <h3
+                        className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
+                      >
+                        Followed Glossaries
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {glossaries.map((glossary) => (
-                          <div key={glossary.id} className="glossary-card">
-                            <div className="glossary-header">
-                              <div className="glossary-info">
-                                <BookOpen className="book-icon" />
-                                <div className="glossary-details">
-                                  <h4 className="glossary-title">
+                          <div
+                            key={glossary.id}
+                            className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200 bg-white'}`}
+                            style={
+                              isDarkMode ? { backgroundColor: '#222535ff' } : {}
+                            }
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center space-x-3">
+                                <BookOpen
+                                  className="w-5 h-5"
+                                  style={{ color: '#00ceaf' }}
+                                />
+                                <div>
+                                  <h4
+                                    className={`text-lg font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
+                                  >
                                     {glossary.name}
                                   </h4>
+                                  <span className="language-tag">
+                                    {glossary.language}
+                                  </span>
                                 </div>
                               </div>
                               <div
-                                className={`follow-indicator ${
-                                  glossary.followed ? 'followed' : 'unfollowed'
-                                }`}
-                              />
+                                className={`w-3 h-3 rounded-full ${glossary.followed ? 'bg-green-500' : 'bg-gray-300'}`}
+                              ></div>
                             </div>
-                            <div className="glossary-stats">
-                              <span className="term-count">
-                                {glossary.termCount} terms
-                              </span>
+                            <div
+                              className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                            >
+                              <span>{glossary.termCount} terms</span>
                               <span>Updated: {glossary.lastUpdated}</span>
                             </div>
-                            <div className="glossary-actions">
+                            <div className="mt-3 flex items-center space-x-2">
                               <button
-                                type="button"
-                                className={`follow-btn ${
+                                onClick={() => {
+                                  toggleFollow(glossary.id);
+                                }}
+                                className={`px-3 py-1 rounded-full text-sm font-medium border border-transparent cursor-pointer transition-all duration-200 ease-in-out ${
                                   glossary.followed
-                                    ? 'following'
-                                    : 'not-following'
+                                    ? isDarkMode
+                                      ? 'text-red-300'
+                                      : 'text-red-500'
+                                    : isDarkMode
+                                      ? 'text-green-300'
+                                      : 'text-green-500'
                                 }`}
+                                style={
+                                  glossary.followed
+                                    ? isDarkMode
+                                      ? { backgroundColor: '#31374eff' }
+                                      : {
+                                          backgroundColor:
+                                            'rgba(239, 68, 68, 0.1)',
+                                        }
+                                    : isDarkMode
+                                      ? { backgroundColor: '#31374eff' }
+                                      : {
+                                          backgroundColor:
+                                            'rgba(16, 185, 129, 0.1)',
+                                        }
+                                }
+                                onMouseEnter={(e) => {
+                                  if (isDarkMode) {
+                                    if (glossary.followed) {
+                                      e.currentTarget.style.color = 'white';
+                                      e.currentTarget.style.borderColor =
+                                        'rgba(239, 68, 68, 0.3)';
+                                    } else {
+                                      e.currentTarget.style.color = 'white';
+                                      e.currentTarget.style.borderColor =
+                                        'rgba(16, 185, 129, 0.3)';
+                                    }
+                                  } else if (glossary.followed) {
+                                    e.currentTarget.style.color = '#dc2626';
+                                    e.currentTarget.style.backgroundColor =
+                                      '#fef2f2';
+                                    e.currentTarget.style.borderColor =
+                                      '#fecaca';
+                                  } else {
+                                    e.currentTarget.style.color = '#059669';
+                                    e.currentTarget.style.backgroundColor =
+                                      '#f0fdf4';
+                                    e.currentTarget.style.borderColor =
+                                      '#bbf7d0';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (isDarkMode) {
+                                    if (glossary.followed) {
+                                      e.currentTarget.style.color = '#fca5a5';
+                                      e.currentTarget.style.borderColor =
+                                        'transparent';
+                                    } else {
+                                      e.currentTarget.style.color = '#86efac';
+                                      e.currentTarget.style.borderColor =
+                                        'transparent';
+                                    }
+                                  } else if (glossary.followed) {
+                                    e.currentTarget.style.color = '#ef4444';
+                                    e.currentTarget.style.backgroundColor =
+                                      'rgba(239, 68, 68, 0.1)';
+                                    e.currentTarget.style.borderColor =
+                                      'transparent';
+                                  } else {
+                                    e.currentTarget.style.color = '#10b981';
+                                    e.currentTarget.style.backgroundColor =
+                                      'rgba(16, 185, 129, 0.1)';
+                                    e.currentTarget.style.borderColor =
+                                      'transparent';
+                                  }
+                                }}
                               >
                                 {glossary.followed ? 'Unfollow' : 'Follow'}
                               </button>
-                              <button type="button" className="view-btn">
+                              <button
+                                type="button"
+                                className={`px-3 py-1 rounded-full text-sm font-medium border-none cursor-pointer transition-all duration-200 ease-in-out ${
+                                  isDarkMode
+                                    ? 'text-white'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                                style={
+                                  isDarkMode
+                                    ? { backgroundColor: '#292e41' }
+                                    : {}
+                                }
+                                onMouseEnter={(e) => {
+                                  if (isDarkMode) {
+                                    e.currentTarget.style.backgroundColor =
+                                      '#3b83f67b';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (isDarkMode) {
+                                    e.currentTarget.style.backgroundColor =
+                                      '#292e41';
+                                  }
+                                }}
+                              >
                                 View
                               </button>
                             </div>
@@ -907,8 +1136,6 @@ const WorkspacePage: React.FC = () => {
                 <X className="close-icon" />
               </button>
             </div>
-
-            {/* Modal Body */}
             <div className="modal-body">
               <div className="form-group">
                 <label htmlFor="groupName" className="form-label">
