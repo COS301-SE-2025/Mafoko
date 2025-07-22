@@ -1,23 +1,24 @@
 FROM python:3.11-slim
 
-# Install system deps
-RUN apt-get update && apt-get install -y gcc && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y gettext-base && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && \
-    apt-get install -y gcc git gettext-base && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install common lib
-COPY ./mavito-common-lib /mavito-common-lib
-RUN pip install -e /mavito-common-lib
-
-# Install requirements
-COPY ./alembic-service/requirements.txt .
-RUN pip install -r requirements.txt
-
-# Copy migrations 
-COPY ./migrations /app/migrations
-
 WORKDIR /app
-ENTRYPOINT ["alembic"]
-CMD ["upgrade", "head"]
+
+# Add these system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first (optimizes layer caching)
+COPY ./alembic-service/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy only the essential files (not the whole backend)
+COPY ./migrations/alembic.ini .
+COPY ./migrations/alembic /app/alembic
+COPY ./alembic-service/entrypoint.sh .
+
+# Make entrypoint executable
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
