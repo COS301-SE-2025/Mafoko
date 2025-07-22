@@ -7,6 +7,8 @@ from typing import Optional, List, Any, Dict
 from pydantic import model_validator
 import logging
 
+import urllib
+
 logger = logging.getLogger(__name__)
 load_dotenv()
 
@@ -53,10 +55,14 @@ class Settings(BaseSettings):
             db_host = data.get("DB_HOST")
             db_port = data.get("DB_PORT")
 
+            if db_password:
+                encoded_password = urllib.parse.quote_plus(db_password)
+            else:
+                encoded_password = ""
             if instance_connection_name:
-                db_url = f"postgresql+asyncpg://{db_user}:{db_password}@/{db_name}?host=/cloudsql/{instance_connection_name}"
+                db_url = f"postgresql+asyncpg://{db_user}:{encoded_password}@/{db_name}?host=/cloudsql/{instance_connection_name}"
             elif db_host and db_port:
-                db_url = f"postgresql+asyncpg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+                db_url = f"postgresql+asyncpg://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}"
 
         if not db_url:
             raise ValueError(
