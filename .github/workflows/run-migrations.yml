@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
-      id-token: 'write' 
+      id-token: 'write'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -41,10 +41,21 @@ jobs:
           docker push $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest
       - name: Deploy and run migrations
         run: |
-          gcloud run jobs replace alembic-migrations \
-            --file backend/alembic-service/cloudrun_job.yaml \
+          # Use gcloud run jobs deploy with flags to update the existing job.
+          # This command will update the image, command, args, and Cloud SQL instances.
+          # It will NOT override environment variables already set on the job in Cloud Run.
+          gcloud run jobs deploy alembic-migrations \
+            --image=$GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest \
+            --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
             --region=$GCP_REGION \
             --project=$GCP_PROJECT_ID \
+            --command="python" \
+            --args="-m" \
+            --args="alembic" \
+            --args="-c" \
+            --args="migrations/alembic.ini" \
+            --args="upgrade" \
+            --args="head" \
             --quiet
 
           # Execute the job
