@@ -41,9 +41,6 @@ jobs:
           docker push $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest
       - name: Deploy and run migrations
         run: |
-          # Use gcloud run jobs replace --file to deploy the job definition which includes Secret Manager references
-          # You would save the Cloud Run Job YAML above to a file, e.g., cloudrun_job.yaml, in your repo
-          # For example, save it to `backend/alembic-service/cloudrun_job.yaml`
           gcloud run jobs replace alembic-migrations \
             --file backend/alembic-service/cloudrun_job.yaml \
             --region=$GCP_REGION \
