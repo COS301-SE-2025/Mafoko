@@ -664,6 +664,7 @@ const WorkspacePage: React.FC = () => {
                         maxHeight: '414px',
                         overflowY: 'auto',
                         scrollbarWidth: 'thin',
+                        marginTop: '-30px',
                       }}
                     >
                       <style>{`
