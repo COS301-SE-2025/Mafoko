@@ -925,7 +925,10 @@ const WorkspacePage: React.FC = () => {
                       {submittedTerms.map((term) => (
                         <div
                           key={term.id}
-                          className={`submission-scrollbar ${isDarkMode ? 'border-gray-600 bg-[#1e2433]' : 'border-gray-200 bg-white'} border rounded-lg p-4`}
+                          className={`submission-scrollbar border rounded-lg p-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
+                          style={{
+                            backgroundColor: isDarkMode ? '#23273a' : '#f5f5f5',
+                          }}
                         >
                           <div className="flex items-center justify-between mb-3">
                             <h4
@@ -1021,9 +1024,11 @@ const WorkspacePage: React.FC = () => {
                         {glossaries.map((glossary) => (
                           <div
                             key={glossary.id}
-                            className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200 bg-white'}`}
+                            className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
                             style={
-                              isDarkMode ? { backgroundColor: '#222535ff' } : {}
+                              isDarkMode
+                                ? { backgroundColor: '#222535ff' }
+                                : { backgroundColor: '#f5f5f5' }
                             }
                           >
                             <div className="flex items-start justify-between mb-3">
