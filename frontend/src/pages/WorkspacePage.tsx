@@ -599,257 +599,289 @@ const WorkspacePage: React.FC = () => {
             {/* Saved Terms Tab */}
             {activeTab === 'saved-terms' && (
               <div className="tab-content">
-                <div className="space-y-8 h-full">
-                  {/* Search and Filter */}
-                  <div className="flex-col sm:flex-row">
-                    <div className="flex-1">
-                      <Search className="absolute" />
-                      <input
-                        type="text"
-                        placeholder="Search terms..."
-                        className="search-input"
-                        value={searchQuery}
-                        onChange={(e) => {
-                          setSearchQuery(e.target.value);
-                        }}
-                      />
-                    </div>
-                    <div className="relative">
-                      <button
-                        type="button"
-                        className="groups-dropdown"
-                        onClick={() => {
-                          setIsDropdownOpen(!isDropdownOpen);
-                        }}
-                      >
-                        <span>
-                          {selectedCategory === 'all'
-                            ? 'All Categories'
-                            : selectedCategory}
-                        </span>
-                        <ChevronDown
-                          className={`w-4 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                <div
+                  className={`${isDarkMode ? 'bg-[#292e41] border-gray-600' : 'bg-white border-gray-200'} rounded-lg shadow-sm border p-6`}
+                >
+                  <div className="space-y-8 h-full">
+                    {/* Search and Filter */}
+                    <div className="flex-col sm:flex-row">
+                      <div className="flex-1">
+                        <Search className="absolute" />
+                        <input
+                          type="text"
+                          placeholder="Search terms..."
+                          className="search-input"
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                          }}
                         />
-                      </button>
+                      </div>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          className="groups-dropdown"
+                          onClick={() => {
+                            setIsDropdownOpen(!isDropdownOpen);
+                          }}
+                        >
+                          <span>
+                            {selectedCategory === 'all'
+                              ? 'All Categories'
+                              : selectedCategory}
+                          </span>
+                          <ChevronDown
+                            className={`w-4 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                          />
+                        </button>
 
-                      {isDropdownOpen && (
-                        <div className="dropdown-menu">
-                          {getCategories().map((category) => (
-                            <button
-                              key={category}
-                              type="button"
-                              className={`dropdown-item ${selectedCategory === category ? 'selected' : ''}`}
-                              onClick={() => {
-                                setSelectedCategory(category);
-                                setIsDropdownOpen(false);
-                              }}
-                            >
-                              {category === 'all' ? 'All Categories' : category}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Terms by Group */}
-                  <div className="space-y-6 flex-1 overflow-y-auto">
-                    {Object.entries(groupedTerms)
-                      .sort(([a], [b]) => {
-                        // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
-                        if (a === 'all') return -1;
-                        if (b === 'all') return 1;
-                        if (a === 'All Terms') return -1;
-                        if (b === 'All Terms') return 1;
-                        return a.localeCompare(b);
-                      })
-                      .map(([groupName, terms]) => (
-                        <div key={groupName} className="workspace-group-card">
-                          <div className="group-header">
-                            <div
-                              className="group-info"
-                              onClick={() => {
-                                if (!isDeleteMode) {
-                                  toggleGroup(groupName);
-                                }
-                              }}
-                            >
-                              {isDeleteMode &&
-                              groupName !== 'all' &&
-                              groupName !== 'All Terms' ? (
-                                <div className="flex items-center space-x-3">
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedGroupsForDeletion.includes(
-                                      groupName,
-                                    )}
-                                    onChange={() => {
-                                      handleToggleGroupSelection(groupName);
-                                    }}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                    }}
-                                    className="group-checkbox"
-                                  />
-                                  <FolderPlus className="group-icon" />
-                                </div>
-                              ) : (
-                                <FolderPlus className="group-icon" />
-                              )}
-                              <h3 className="group-title">{groupName}</h3>
-                              <span className="term-count">
-                                {terms.length} terms
-                              </span>
-                            </div>
-                            <div className="group-actions">
-                              {!isDeleteMode && (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    toggleGroup(groupName);
-                                  }}
-                                >
-                                  {expandedGroups[groupName] ? (
-                                    <ChevronUp className="chevron-icon" />
-                                  ) : (
-                                    <ChevronDown className="chevron-icon" />
-                                  )}
-                                </button>
-                              )}
-                            </div>
+                        {isDropdownOpen && (
+                          <div className="dropdown-menu">
+                            {getCategories().map((category) => (
+                              <button
+                                key={category}
+                                type="button"
+                                className={`dropdown-item ${selectedCategory === category ? 'selected' : ''}`}
+                                onClick={() => {
+                                  setSelectedCategory(category);
+                                  setIsDropdownOpen(false);
+                                }}
+                              >
+                                {category === 'all'
+                                  ? 'All Categories'
+                                  : category}
+                              </button>
+                            ))}
                           </div>
+                        )}
+                      </div>
+                    </div>
 
-                          {expandedGroups[groupName] && (
-                            <div className="group-content">
-                              {terms.map((term) => (
-                                <div
-                                  key={term.id}
-                                  className="term-item"
-                                  style={{
-                                    backgroundColor: isDarkMode
-                                      ? '#23273a'
-                                      : '#f3f4f6',
-                                    borderRadius: '0.5rem',
-                                    padding: '1rem',
-                                  }}
-                                >
-                                  <div
-                                    className="term-header"
-                                    style={{
-                                      backgroundColor: 'transparent',
-                                      borderRadius: '0.5rem',
+                    {/* Terms by Group */}
+                    <div
+                      className="space-y-6 flex-1 pr-2 saved-terms-scrollbar"
+                      style={{
+                        maxHeight: '414px',
+                        overflowY: 'auto',
+                        scrollbarWidth: 'thin',
+                      }}
+                    >
+                      <style>{`
+                        .saved-terms-scrollbar::-webkit-scrollbar {
+                          width: 6px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-track {
+                          background: ${isDarkMode ? '#374151' : '#f1f5f9'};
+                          border-radius: 3px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-thumb {
+                          background: ${isDarkMode ? '#6b7280' : '#cbd5e1'};
+                          border-radius: 3px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-thumb:hover {
+                          background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
+                        }
+                      `}</style>
+                      {Object.entries(groupedTerms)
+                        .sort(([a], [b]) => {
+                          // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
+                          if (a === 'all') return -1;
+                          if (b === 'all') return 1;
+                          if (a === 'All Terms') return -1;
+                          if (b === 'All Terms') return 1;
+                          return a.localeCompare(b);
+                        })
+                        .map(([groupName, terms]) => (
+                          <div
+                            key={groupName}
+                            className="workspace-group-card saved-terms-scrollbar"
+                          >
+                            <div className="group-header">
+                              <div
+                                className="group-info"
+                                onClick={() => {
+                                  if (!isDeleteMode) {
+                                    toggleGroup(groupName);
+                                  }
+                                }}
+                              >
+                                {isDeleteMode &&
+                                groupName !== 'all' &&
+                                groupName !== 'All Terms' ? (
+                                  <div className="flex items-center space-x-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedGroupsForDeletion.includes(
+                                        groupName,
+                                      )}
+                                      onChange={() => {
+                                        handleToggleGroupSelection(groupName);
+                                      }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                      }}
+                                      className="group-checkbox"
+                                    />
+                                    <FolderPlus className="group-icon" />
+                                  </div>
+                                ) : (
+                                  <FolderPlus className="group-icon" />
+                                )}
+                                <h3 className="group-title">{groupName}</h3>
+                                <span className="term-count">
+                                  {terms.length} terms
+                                </span>
+                              </div>
+                              <div className="group-actions">
+                                {!isDeleteMode && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      toggleGroup(groupName);
                                     }}
                                   >
-                                    <div className="term-info">
-                                      <div className="term-title-row">
-                                        <h4 className="term-title">
-                                          {term.term}
-                                        </h4>
-                                        <span className="language-tag">
-                                          {term.language}
-                                        </span>
-                                        {term.category && (
-                                          <span className="category-tag">
-                                            {term.category}
-                                          </span>
-                                        )}
-                                      </div>
-                                      {term.definition && (
-                                        <p className="term-definition">
-                                          {term.definition}
-                                        </p>
-                                      )}
+                                    {expandedGroups[groupName] ? (
+                                      <ChevronUp className="chevron-icon" />
+                                    ) : (
+                                      <ChevronDown className="chevron-icon" />
+                                    )}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
 
-                                      {/* Notes Section */}
-                                      <div className="notes-section">
-                                        {editingNotes === term.id ? (
-                                          <div className="notes-editor">
-                                            <textarea
-                                              value={noteText}
-                                              onChange={(e) => {
-                                                setNoteText(e.target.value);
-                                              }}
-                                              placeholder="Add your notes here..."
-                                              className="notes-textarea"
-                                              rows={3}
-                                            />
-                                            <div className="notes-actions">
-                                              <button
-                                                type="button"
-                                                onClick={() => {
-                                                  handleSaveNote(term.id);
+                            {expandedGroups[groupName] && (
+                              <div className="group-content">
+                                {terms.map((term) => (
+                                  <div
+                                    key={term.id}
+                                    className="term-item"
+                                    style={{
+                                      backgroundColor: isDarkMode
+                                        ? '#23273a'
+                                        : '#f3f4f6',
+                                      borderRadius: '0.5rem',
+                                      padding: '1rem',
+                                    }}
+                                  >
+                                    <div
+                                      className="term-header"
+                                      style={{
+                                        backgroundColor: 'transparent',
+                                        borderRadius: '0.5rem',
+                                      }}
+                                    >
+                                      <div className="term-info">
+                                        <div className="term-title-row">
+                                          <h4 className="term-title">
+                                            {term.term}
+                                          </h4>
+                                          <span className="language-tag">
+                                            {term.language}
+                                          </span>
+                                          {term.category && (
+                                            <span className="category-tag">
+                                              {term.category}
+                                            </span>
+                                          )}
+                                        </div>
+                                        {term.definition && (
+                                          <p className="term-definition">
+                                            {term.definition}
+                                          </p>
+                                        )}
+
+                                        {/* Notes Section */}
+                                        <div className="notes-section">
+                                          {editingNotes === term.id ? (
+                                            <div className="notes-editor">
+                                              <textarea
+                                                value={noteText}
+                                                onChange={(e) => {
+                                                  setNoteText(e.target.value);
                                                 }}
-                                                className="save-btn"
-                                              >
-                                                <Save className="icon" />
-                                              </button>
-                                              <button
-                                                type="button"
-                                                onClick={handleCancelNote}
-                                                className="cancel-btn"
-                                              >
-                                                <X className="icon" />
-                                              </button>
-                                            </div>
-                                          </div>
-                                        ) : (
-                                          <>
-                                            {term.notes && (
-                                              <div className="notes-display">
-                                                <div className="notes-content">
-                                                  <div className="notes-text">
-                                                    <StickyNote className="sticky-note-icon" />
-                                                    <p>{term.notes}</p>
-                                                  </div>
-                                                  <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                      handleAddNote(term.id);
-                                                    }}
-                                                    className="edit-note-btn"
-                                                  >
-                                                    <Edit2 className="edit-icon" />
-                                                  </button>
-                                                </div>
+                                                placeholder="Add your notes here..."
+                                                className="notes-textarea"
+                                                rows={3}
+                                              />
+                                              <div className="notes-actions">
+                                                <button
+                                                  type="button"
+                                                  onClick={() => {
+                                                    handleSaveNote(term.id);
+                                                  }}
+                                                  className="save-btn"
+                                                >
+                                                  <Save className="icon" />
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  onClick={handleCancelNote}
+                                                  className="cancel-btn"
+                                                >
+                                                  <X className="icon" />
+                                                </button>
                                               </div>
-                                            )}
-                                          </>
-                                        )}
+                                            </div>
+                                          ) : (
+                                            <>
+                                              {term.notes && (
+                                                <div className="notes-display">
+                                                  <div className="notes-content">
+                                                    <div className="notes-text">
+                                                      <StickyNote className="sticky-note-icon" />
+                                                      <p>{term.notes}</p>
+                                                    </div>
+                                                    <button
+                                                      type="button"
+                                                      onClick={() => {
+                                                        handleAddNote(term.id);
+                                                      }}
+                                                      className="edit-note-btn"
+                                                    >
+                                                      <Edit2 className="edit-icon" />
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div className="term-actions">
-                                      {!term.notes &&
-                                        editingNotes !== term.id && (
-                                          <button
-                                            onClick={() => {
-                                              handleAddNote(term.id);
-                                            }}
-                                            type="button"
-                                            className="add-note-btn"
-                                            title="Add note"
-                                            style={{
-                                              backgroundColor: isDarkMode
-                                                ? '#31374e'
-                                                : '#f2d20142',
-                                            }}
-                                          >
-                                            <StickyNote className="icon" />
-                                          </button>
-                                        )}
-                                      <button
-                                        type="button"
-                                        className="delete-btn"
-                                      >
-                                        <Trash2 className="icon" />
-                                      </button>
+                                      <div className="term-actions">
+                                        {!term.notes &&
+                                          editingNotes !== term.id && (
+                                            <button
+                                              onClick={() => {
+                                                handleAddNote(term.id);
+                                              }}
+                                              type="button"
+                                              className="add-note-btn"
+                                              title="Add note"
+                                              style={{
+                                                backgroundColor: isDarkMode
+                                                  ? '#31374e'
+                                                  : '#f2d20142',
+                                              }}
+                                            >
+                                              <StickyNote className="icon" />
+                                            </button>
+                                          )}
+                                        <button
+                                          type="button"
+                                          className="delete-btn"
+                                        >
+                                          <Trash2 className="icon" />
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 </div>
               </div>
