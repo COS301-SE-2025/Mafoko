@@ -722,8 +722,24 @@ const WorkspacePage: React.FC = () => {
                           {expandedGroups[groupName] && (
                             <div className="group-content">
                               {terms.map((term) => (
-                                <div key={term.id} className="term-item">
-                                  <div className="term-header">
+                                <div
+                                  key={term.id}
+                                  className="term-item"
+                                  style={{
+                                    backgroundColor: isDarkMode
+                                      ? '#23273a'
+                                      : '#f3f4f6',
+                                    borderRadius: '0.5rem',
+                                    padding: '1rem',
+                                  }}
+                                >
+                                  <div
+                                    className="term-header"
+                                    style={{
+                                      backgroundColor: 'transparent',
+                                      borderRadius: '0.5rem',
+                                    }}
+                                  >
                                     <div className="term-info">
                                       <div className="term-title-row">
                                         <h4 className="term-title">
@@ -811,6 +827,11 @@ const WorkspacePage: React.FC = () => {
                                             type="button"
                                             className="add-note-btn"
                                             title="Add note"
+                                            style={{
+                                              backgroundColor: isDarkMode
+                                                ? '#31374e'
+                                                : '#f2d20142',
+                                            }}
                                           >
                                             <StickyNote className="icon" />
                                           </button>
@@ -846,10 +867,10 @@ const WorkspacePage: React.FC = () => {
                     <h3
                       className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
                     >
-                      Submission Progress
+                      {/* Submission Progress */}
                     </h3>
                     <div
-                      className="space-y-4 max-h-96 overflow-y-auto pr-2"
+                      className="space-y-4 max-h-[414px] overflow-y-auto pr-2"
                       style={{ scrollbarWidth: 'thin' }}
                     >
                       <style>{`
@@ -961,7 +982,7 @@ const WorkspacePage: React.FC = () => {
                       <h3
                         className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
                       >
-                        Followed Glossaries
+                        {/* Followed Glossaries */}
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {glossaries.map((glossary) => (
