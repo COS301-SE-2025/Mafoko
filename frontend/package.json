@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://COS301-SE-2025.github.io/Mavito/",
+  "homepage": "https://COS301-SE-2025.github.io/Marito/",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

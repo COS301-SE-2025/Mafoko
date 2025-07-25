@@ -1,4 +1,4 @@
-# FR (Functional Requirements) - Mavito Application
+# FR (Functional Requirements) - Marito Application
 
 - **FR1: User Management**
     - FR1.1 User Registration

@@ -1,12 +1,12 @@
 {
-  "appTitle": "Mavito",
+  "appTitle": "Marito",
   "loading": "Iyalayisha...",
 
   "landingPage": {
-    "greeting": "Wamkelekile ku-Mavito PWA!",
+    "greeting": "Wamkelekile ku-Marito PWA!",
     "registerButton": "Bhalisa",
     "loginButton": "Ngena",
-    "footerText": "Iprojekthi ye-Mavito"
+    "footerText": "Iprojekthi ye-Marito"
   },
   "loginPage": {
     "title": "WAMKELEKILE KWAKHONA!",
@@ -22,7 +22,7 @@
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunayo i-akhawunti?",
     "registerLink": "[XH] Register",
-    "welcomeImageAlt": "[XH] Mavito Login Welcome",
+    "welcomeImageAlt": "[XH] Marito Login Welcome",
     "dsfsiLogoAlt": "[XH] DSFSI Logo",
     "errorTokenMissing": "[XH] Login successful, but no token received. Please contact support.",
     "errorDefault": "[XH] Login failed. Please check your credentials.",
@@ -33,7 +33,7 @@
   },
   "registrationPage": {
     "title": "QALISA NGOKU",
-    "subtitle": "Yenza i-akhawunti yakho ye-Mavito.",
+    "subtitle": "Yenza i-akhawunti yakho ye-Marito.",
     "firstNameLabel": "Igama Lokuqala",
     "firstNamePlaceholder": "Faka igama lakho lokuqala",
     "lastNameLabel": "Ifani",
@@ -52,7 +52,7 @@
     "createWithGoogle": "Yenza i-Akhawunti nge-Google",
     "haveAccount": "Sele unayo i-akhawunti?",
     "loginLink": "Ngena",
-    "welcomeImageAlt": "[XH] Mavito Welcome",
+    "welcomeImageAlt": "[XH] Marito Welcome",
     "dsfsiLogoAlt": "[XH] DSFSI Logo",
     "errorPasswordsDoNotMatch": "Iiphasiwedi azifani.",
     "errorAgreeToTerms": "Kufuneka uvume imigaqo nemiqathango.",

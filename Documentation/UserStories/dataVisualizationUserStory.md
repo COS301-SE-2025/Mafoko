@@ -1,6 +1,6 @@
 # User Story #7: Word Frequency Trends
 
-**ID:** US007.1 (Mavito Project)  
+**ID:** US007.1 (Marito Project)  
 **Title:** Historical Word Usage Visualization  
 
 **As a:** Linguist or language researcher studying lexical evolution,  

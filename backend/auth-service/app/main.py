@@ -5,7 +5,7 @@ from app.api.v1.endpoints import auth
 from app.api.v1.endpoints import uploads
 from app.api.v1.endpoints import admin
 
-app = FastAPI(title="Mavito Auth Service")
+app = FastAPI(title="Marito Auth Service")
 
 if settings.BACKEND_CORS_ORIGINS_LIST:
     app.add_middleware(
@@ -23,4 +23,4 @@ app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 
 @app.get("/", tags=["Health Check"])
 async def read_root():
-    return {"service": "Mavito Auth Service", "status": "ok"}
+    return {"service": "Marito Auth Service", "status": "ok"}

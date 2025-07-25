@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
 from app.api.v1.endpoints import search, suggest
 
-app = FastAPI(title="Mavito Search Service")
+app = FastAPI(title="Marito Search Service")
 
 if settings.BACKEND_CORS_ORIGINS_LIST:
     app.add_middleware(
@@ -20,4 +20,4 @@ app.include_router(suggest.router, prefix="/api/v1/suggest", tags=["Suggest"])
 
 @app.get("/", tags=["Health Check"])
 async def read_root():
-    return {"service": "Mavito Search Service", "status": "ok"}
+    return {"service": "Marito Search Service", "status": "ok"}

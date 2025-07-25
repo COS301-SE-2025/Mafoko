@@ -1,12 +1,12 @@
 {
-  "appTitle": "Mavito",
+  "appTitle": "Marito",
   "loading": "E ntse e jarwa...",
 
   "landingPage": {
-    "greeting": "O amohetswe ho Mavito PWA!",
+    "greeting": "O amohetswe ho Marito PWA!",
     "registerButton": "Ngodisa",
     "loginButton": "Kena",
-    "footerText": "Projeke ya Mavito"
+    "footerText": "Projeke ya Marito"
   },
   "loginPage": {
     "title": "RE A O AMOHELA HAPE!",
@@ -22,7 +22,7 @@
     "loginWithGoogle": "Kena ka Google",
     "noAccount": "Ha o na akhaonto?",
     "registerLink": "[ST] Register",
-    "welcomeImageAlt": "[ST] Mavito Login Welcome",
+    "welcomeImageAlt": "[ST] Marito Login Welcome",
     "dsfsiLogoAlt": "[ST] DSFSI Logo",
     "errorTokenMissing": "[ST] Login successful, but no token received. Please contact support.",
     "errorDefault": "[ST] Login failed. Please check your credentials.",
@@ -33,7 +33,7 @@
   },
   "registrationPage": {
     "title": "QALA JWALE",
-    "subtitle": "Theha akhaonto ya hao ya Mavito.",
+    "subtitle": "Theha akhaonto ya hao ya Marito.",
     "firstNameLabel": "Lebitso la Pele",
     "firstNamePlaceholder": "Kenya lebitso la hao la pele",
     "lastNameLabel": "Sefane",
@@ -52,7 +52,7 @@
     "createWithGoogle": "Theha Akhaonto ka Google",
     "haveAccount": "O se o na le akhaonto?",
     "loginLink": "Kena",
-    "welcomeImageAlt": "[ST] Mavito Welcome",
+    "welcomeImageAlt": "[ST] Marito Welcome",
     "dsfsiLogoAlt": "[ST] DSFSI Logo",
     "errorPasswordsDoNotMatch": "Mantswe a lekunutu ha a tshwane.",
     "errorAgreeToTerms": "O tlamehile ho dumela melawana le dipehelo.",

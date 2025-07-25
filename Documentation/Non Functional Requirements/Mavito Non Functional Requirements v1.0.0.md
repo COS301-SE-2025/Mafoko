@@ -1,4 +1,4 @@
-# NFR (Non-Functional Requirements) - Mavito Application
+# NFR (Non-Functional Requirements) - Marito Application
 
 - **NFR1 Performance (QR)**
     - NFR1.1 Fast Indexing & Caching: The system shall employ efficient indexing and caching mechanisms to ensure fast search query responses.

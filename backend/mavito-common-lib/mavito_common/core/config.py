@@ -14,7 +14,7 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Mavito API Default"
+    PROJECT_NAME: str = "Marito API Default"
     API_V1_STR: str = "/api/v1"
 
     SECRET_KEY: str = "!!!CONFIG_ERROR_SECRET_KEY_NOT_SET!!!"

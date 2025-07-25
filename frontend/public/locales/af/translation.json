@@ -1,12 +1,12 @@
 {
-  "appTitle": "Mavito",
+  "appTitle": "Marito",
   "loading": "Laai tans...",
 
   "landingPage": {
-    "greeting": "Welkom by Mavito PWA!",
+    "greeting": "Welkom by Marito PWA!",
     "registerButton": "Registreer",
     "loginButton": "Teken in",
-    "footerText": "Mavito Projek"
+    "footerText": "Marito Projek"
   },
   "loginPage": {
     "title": "WELKOM TERUG!",
@@ -22,7 +22,7 @@
     "loginWithGoogle": "Teken in met Google",
     "noAccount": "Het jy nie 'n rekening nie?",
     "registerLink": "Registreer",
-    "welcomeImageAlt": "[AF] Mavito Login Welcome",
+    "welcomeImageAlt": "[AF] Marito Login Welcome",
     "dsfsiLogoAlt": "[AF] DSFSI Logo",
     "errorTokenMissing": "[AF] Login successful, but no token received. Please contact support.",
     "errorDefault": "[AF] Login failed. Please check your credentials.",
@@ -33,7 +33,7 @@
   },
   "registrationPage": {
     "title": "BEGIN NOU",
-    "subtitle": "Skep jou Mavito-rekening.",
+    "subtitle": "Skep jou Marito-rekening.",
     "firstNameLabel": "Voornaam",
     "firstNamePlaceholder": "Voer jou voornaam in",
     "lastNameLabel": "Van",
@@ -52,7 +52,7 @@
     "createWithGoogle": "[AF] Create Account with Google",
     "haveAccount": "[AF] Already have an account?",
     "loginLink": "[AF] Login",
-    "welcomeImageAlt": "[AF] Mavito Welcome",
+    "welcomeImageAlt": "[AF] Marito Welcome",
     "dsfsiLogoAlt": "[AF] DSFSI Logo",
     "errorPasswordsDoNotMatch": "Wagwoorde stem nie ooreen nie.",
     "errorAgreeToTerms": "Jy moet instem tot die terme en voorwaardes.",

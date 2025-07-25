@@ -33,7 +33,7 @@ Marito is a multilingual, progressive web application (PWA) designed to provide 
 This document is primarily intended for:
 \begin{itemize}
     \item \textbf{Developers and engineers} responsible for implementing and maintaining the system.
-    \item \textbf{Project stakeholders and academic supervisors} overseeing the design, quality, and alignment of Mavito with its educational goals.
+    \item \textbf{Project stakeholders and academic supervisors} overseeing the design, quality, and alignment of Marito with its educational goals.
     \item \textbf{Testers and QA personnel} who require a clear specification of expected system behavior.
     \item \textbf{Future contributors} who may extend the application or onboard new glossaries and features.
 \end{itemize}
@@ -53,9 +53,9 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#1: Sync Updates}
 
-\textbf{ID:} US001 (Mavito Project) \\
+\textbf{ID:} US001 (Marito Project) \\
 \textbf{Title:} Automatic Synchronization of Downloaded Lexicon Data \\
-\textbf{As a:} Mavito application user (e.g., language enthusiast, NLP researcher, student) who has downloaded lexicon data for offline use, \\
+\textbf{As a:} Marito application user (e.g., language enthusiast, NLP researcher, student) who has downloaded lexicon data for offline use, \\
 \textbf{I want:} the application to automatically check for and apply updates to my downloaded lexicon data whenever I am online, \\
 \textbf{So that:} I can be confident that I am always working with the most current and accurate version of the linguistic information without needing to manually re-download or check for updates.
 
@@ -65,7 +65,7 @@ This section outlines the high-level user goals and core system interactions tha
     \item \textbf{Automatic Update Check:}
     \begin{itemize}
         \item \textbf{Given} I have previously downloaded lexicon data,
-        \item \textbf{And} I open the Mavito application with an active internet connection,
+        \item \textbf{And} I open the Marito application with an active internet connection,
         \item \textbf{Then} the application automatically initiates a check for updates to my downloaded data against the central repository in the background.
     \end{itemize}
 
@@ -130,16 +130,16 @@ This section outlines the high-level user goals and core system interactions tha
 \begin{itemize}
     \item This user story assumes that users primarily download data for offline reading and searching. Contributions and comments are made while online and sent to a central repository (as per Functional Requirement FR4.3).
     \item The complexity of only downloading changes/deltas (Acceptance Criterion 3.4) can be significant. For an initial implementation, syncing entire updated files might be a simpler starting point, with delta updates as a future enhancement.
-    \item Conflict resolution (Acceptance Criterion 8) is likely simplified if the local data is treated as a read-only cache that gets overwritten by server updates, which aligns with the current understanding of the Mavito project.
+    \item Conflict resolution (Acceptance Criterion 8) is likely simplified if the local data is treated as a read-only cache that gets overwritten by server updates, which aligns with the current understanding of the Marito project.
 \end{itemize}
 
 
 
 \subsection{User Story \#2: Download Language Resources for Offline Access}
 
-\textbf{ID:} US002 (Mavito Project) \\
+\textbf{ID:} US002 (Marito Project) \\
 \textbf{Title:} Download Select Language Resources for Offline Use \\
-\textbf{As a:} Mavito application user (e.g., language enthusiast, NLP researcher, student), \\
+\textbf{As a:} Marito application user (e.g., language enthusiast, NLP researcher, student), \\
 \textbf{I want:} to be able to select and download specific language resources (like individual lexicons, glossaries, or dictionaries) to my device, \\
 \textbf{So that:} I can access and use this information even when I do not have an active internet connection.
 
@@ -173,7 +173,7 @@ This section outlines the high-level user goals and core system interactions tha
     \begin{itemize}
         \item \textbf{Given} a language resource download completes successfully,
         \item \textbf{Then} the application notifies me that the download is complete.
-        \item \textbf{And} the downloaded resource is stored locally on my device in a way that the Mavito application can access it offline.
+        \item \textbf{And} the downloaded resource is stored locally on my device in a way that the Marito application can access it offline.
         \item \textbf{And} the application clearly indicates which resources have been successfully downloaded and are available offline.
     \end{itemize}
 
@@ -182,7 +182,7 @@ This section outlines the high-level user goals and core system interactions tha
         \item \textbf{Given} I have downloaded language resources,
         \item \textbf{Then} I can view a list of all my downloaded resources within the application.
         \item \textbf{And} I can remove/delete downloaded resources from my device to free up storage space.
-        \item \textbf{And} the application shows the amount of local storage space currently used by downloaded Mavito resources.
+        \item \textbf{And} the application shows the amount of local storage space currently used by downloaded Marito resources.
     \end{itemize}
 
     \item \textbf{Error Handling - Insufficient Storage:}
@@ -211,7 +211,7 @@ This section outlines the high-level user goals and core system interactions tha
     \begin{itemize}
         \item \textbf{Given} I have successfully downloaded a language resource,
         \item \textbf{And} I am offline,
-        \item \textbf{Then} I can access and use that downloaded resource within the Mavito application.
+        \item \textbf{Then} I can access and use that downloaded resource within the Marito application.
     \end{itemize}
 \end{enumerate}
 
@@ -227,9 +227,9 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#3: Search Feature}
 
-\textbf{ID:} US003 (Mavito Project) \\
+\textbf{ID:} US003 (Marito Project) \\
 \textbf{Title:} Multilingual Term Search \\
-\textbf{As a:} Mavito application user (e.g., casual user, linguist, or contributor), \\
+\textbf{As a:} Marito application user (e.g., casual user, linguist, or contributor), \\
 \textbf{I want:} to search across multiple multilingual glossaries and dictionaries using filters and smart suggestions, \\
 \textbf{So that:} I can quickly find definitions, translations, and related entries in my preferred language.
 
@@ -285,7 +285,7 @@ This section outlines the high-level user goals and core system interactions tha
 \end{itemize}
 
 \subsection{User Story \#4: Feedback Submissions}
-\textbf{ID:} US004 (Mavito Project) \\
+\textbf{ID:} US004 (Marito Project) \\
 \textbf{Title:} User Contributions and Feedback \\
 \textbf{As a:} logged-in user of the application, \\
 \textbf{I want:} to be able to comment on terms and submit feedback or error reports, \\
@@ -353,9 +353,9 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#5: Gamification Feature}
 
-\textbf{ID:} US005 (Mavito Project) \\
+\textbf{ID:} US005 (Marito Project) \\
 \textbf{Title:} Contribution-Based Rewards and Progress Tracking \\
-\textbf{As a:} frequent Mavito contributor (e.g., user who submits suggestions or comments), \\
+\textbf{As a:} frequent Marito contributor (e.g., user who submits suggestions or comments), \\
 \textbf{I want:} to earn points, unlock badges, and track my contribution progress, \\
 \textbf{So that:} I feel motivated to participate and can see recognition for my efforts.
 
@@ -401,9 +401,9 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#6: UpVote System}
 
-\textbf{ID:} US006 (Mavito Project) \\
+\textbf{ID:} US006 (Marito Project) \\
 \textbf{Title:} Crowdsourced Validation via UpVoting \\
-\textbf{As a:} Mavito application user (e.g., casual user, linguist, or academic) who wants to contribute to the accuracy and quality of lexicon entries, \\
+\textbf{As a:} Marito application user (e.g., casual user, linguist, or academic) who wants to contribute to the accuracy and quality of lexicon entries, \\
 \textbf{I want:} to upvote (or downvote) suggested changes or comments on terms in the lexicon, \\
 \textbf{So that:} the community can collectively validate contributions, and moderators can prioritize high-quality updates for integration into the central repository.
 
@@ -465,7 +465,7 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#7.1: Word Frequency Trends}
 
-\textbf{ID:} US007.1 (Mavito Project) \\
+\textbf{ID:} US007.1 (Marito Project) \\
 \textbf{Title:} Historical Word Usage Visualization \\
 \textbf{As a:} Linguist or language researcher studying lexical evolution, \\
 \textbf{I want:} To view historical trends of word usage frequency across different time periods, \\
@@ -517,9 +517,9 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#7.2: Contribution Analytics}
 
-\textbf{ID:} US007.2 (Mavito Project) \\
+\textbf{ID:} US007.2 (Marito Project) \\
 \textbf{Title:} User Contribution Visualization \\
-\textbf{As a:} Regular contributor to the Mavito platform, \\
+\textbf{As a:} Regular contributor to the Marito platform, \\
 \textbf{I want:} To see a breakdown of my edits and comments across languages, \\
 \textbf{So that:} I can track my impact and focus on underrepresented languages.
 
@@ -555,7 +555,7 @@ This section outlines the high-level user goals and core system interactions tha
 
 \subsection{User Story \#7.3: Trending Terms}
 
-\textbf{ID:} US007.3 (Mavito Project) \\
+\textbf{ID:} US007.3 (Marito Project) \\
 \textbf{Title:} Real-Time Popularity Tracking \\
 \textbf{As a:} Language learner or cultural researcher, \\
 \textbf{I want:} To see which words are currently trending in popularity, \\
@@ -604,9 +604,9 @@ This section outlines the high-level user goals and core system interactions tha
 
 
 \subsection{User Story \#8: Responsive Design}
-\textbf{ID:} US008 (Mavito Project) \\
+\textbf{ID:} US008 (Marito Project) \\
 \textbf{Title:} Responsive Layout for Mobile and Desktop Devices \\
-\textbf{As a:} user who may need to access the Mavito application while on the go, \\
+\textbf{As a:} user who may need to access the Marito application while on the go, \\
 \textbf{I want:} the user interface to adapt and remain fully functional on mobile phones, tablets, and desktops, \\
 \textbf{So that:} I can quickly and seamlessly use the application in any situation, regardless of the device I'm using.
 
@@ -615,7 +615,7 @@ This section outlines the high-level user goals and core system interactions tha
 \begin{enumerate}
     \item \textbf{Mobile Adaptability:}
     \begin{itemize}
-        \item \textbf{Given} I am using the Mavito application,
+        \item \textbf{Given} I am using the Marito application,
         \item \textbf{And} I am on a mobile device,
         \item \textbf{Then} the layout should automatically adjust to fit the screen without horizontal scrolling.
     \end{itemize}
@@ -629,7 +629,7 @@ This section outlines the high-level user goals and core system interactions tha
 
     \item \textbf{Touchscreen Swiping and Scrolling Support:}
     \begin{itemize}
-        \item \textbf{Given} I am using the Mavito app on a touchscreen device,
+        \item \textbf{Given} I am using the Marito app on a touchscreen device,
         \item \textbf{And} I am viewing content that extends beyond the initial screen (e.g., a list or feed),
         \item \textbf{Then} I should be able to scroll vertically or horizontally (depending on the content) using swipe gestures,
         \item \textbf{And} the scrolling should be smooth and responsive.
@@ -637,7 +637,7 @@ This section outlines the high-level user goals and core system interactions tha
 
     \item \textbf{Adaptive Mobile Navigation Elements:}
     \begin{itemize}
-        \item \textbf{Given} I am using the Mavito app on a mobile device,
+        \item \textbf{Given} I am using the Marito app on a mobile device,
         \item \textbf{Then} the navigation should adapt to a mobile-friendly layout, such as displaying a hamburger menu instead of a full-width navigation bar.
     \end{itemize}
 
@@ -650,7 +650,7 @@ This section outlines the high-level user goals and core system interactions tha
 
     \item \textbf{Mobile Hardware and OS Compatibility:}
     \begin{itemize}
-        \item \textbf{Given} I am using the Mavito app on a mobile device running a supported OS (e.g., Android 10+, iOS 13+),
+        \item \textbf{Given} I am using the Marito app on a mobile device running a supported OS (e.g., Android 10+, iOS 13+),
         \item \textbf{And} the device has at least 2 GB of RAM and a modern mobile browser (e.g., Chrome),
         \item \textbf{Then} all core features should work smoothly without crashes or performance lags.
     \end{itemize}
@@ -672,7 +672,7 @@ This section outlines the high-level user goals and core system interactions tha
 
 
 \subsection{User Story \#9: Dictionary & Glossary}
-\textbf{ID:} US009 (Mavito Project) \\
+\textbf{ID:} US009 (Marito Project) \\
 \textbf{Title:} Glossaries User Stories \\
 \textbf{As a:}  terminology researcher \\
 \textbf{I want:}  to view detailed information about a specific term, \\
@@ -711,7 +711,7 @@ This section outlines the high-level user goals and core system interactions tha
 \end{itemize}
 
 \subsection{User Story \#10: Glossary Category Navigation}
-\textbf{ID:} US010 (Mavito Project) \\
+\textbf{ID:} US010 (Marito Project) \\
 \textbf{Title:} Glossary Category Navigation \\
 \textbf{As a:} user interested in exploring specific domains (e.g., Agriculture, Legal), \\
 \textbf{I want:} to browse all terms within a particular category,\\
@@ -749,7 +749,7 @@ This section outlines the high-level user goals and core system interactions tha
 \end{itemize}
 
 \subsection{User Story \#11: Term Bank Translations}
-\textbf{ID:} US011 (Mavito Project) \\
+\textbf{ID:} US011 (Marito Project) \\
 \textbf{Title:} Access Multilingual Translations \\
 \textbf{As a:} multilingual user, \\
 \textbf{I want:} to toggle between translations for a term, \\
@@ -782,7 +782,7 @@ This section outlines the high-level user goals and core system interactions tha
 
 \section{Use Case Diagrams}
 
-This section presents the key use case diagrams developed for the Mavito application. Each diagram visualizes the interactions between user roles and the system, based on the user stories defined earlier in this document. These diagrams serve as a visual blueprint for understanding the system's expected behavior.
+This section presents the key use case diagrams developed for the Marito application. Each diagram visualizes the interactions between user roles and the system, based on the user stories defined earlier in this document. These diagrams serve as a visual blueprint for understanding the system's expected behavior.
 
 \subsection{Registration and Login Use Case Diagram}
 \begin{figure}[H]
@@ -796,7 +796,7 @@ This section presents the key use case diagrams developed for the Mavito applica
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Interface Language Switching Subsystem.jpg}
-  \caption{Interface Language Switching Use Case Diagram for Mavito}
+  \caption{Interface Language Switching Use Case Diagram for Marito}
   \label{fig:interface-lang-switch-use-case}
 \end{figure}
 
@@ -804,7 +804,7 @@ This section presents the key use case diagrams developed for the Mavito applica
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{SearchTermUseCase.png}
-  \caption{Search Term Use Case Diagram for Mavito}
+  \caption{Search Term Use Case Diagram for Marito}
   \label{fig:search-use-case}
 \end{figure}
 
@@ -1033,7 +1033,7 @@ The main use cases covered include:
 \section{Constraints}
 
 \subsection{Overview}
-This section outlines the constraints that govern the design, development, deployment, and maintenance of the \textbf{Mavito} application. These constraints stem from ethical considerations, client requirements, project context, budgetary limitations, and architectural guidelines. Adherence to these constraints is critical to the project's success and sustainability.
+This section outlines the constraints that govern the design, development, deployment, and maintenance of the \textbf{Marito} application. These constraints stem from ethical considerations, client requirements, project context, budgetary limitations, and architectural guidelines. Adherence to these constraints is critical to the project's success and sustainability.
 
 \subsection{Constraints}
 
@@ -1119,7 +1119,7 @@ This section outlines the constraints that govern the design, development, deplo
 \end{enumerate}
 
 \subsection{Summary}
-These constraints serve as the foundation for all architectural, design, and implementation decisions made during the development of \textbf{Mavito}. They ensure the solution is ethical, sustainable, inclusive, affordable, and aligned with the client’s goals of making multilingual resources accessible to all.
+These constraints serve as the foundation for all architectural, design, and implementation decisions made during the development of \textbf{Marito}. They ensure the solution is ethical, sustainable, inclusive, affordable, and aligned with the client’s goals of making multilingual resources accessible to all.
 
 
 \section{Domain Model}
@@ -1131,10 +1131,10 @@ These constraints serve as the foundation for all architectural, design, and imp
 \end{figure}
 
 \section{Architecture Patterns}
-The architectural foundation of Mavito combines the Microkernel and Microservices patterns to address both extensibility and service independence. This hybrid approach is essential for building a maintainable, scalable, and community-driven multilingual terminology platform. Each pattern plays a distinct role in supporting the system’s goals, and their selection is justified below.
+The architectural foundation of Marito combines the Microkernel and Microservices patterns to address both extensibility and service independence. This hybrid approach is essential for building a maintainable, scalable, and community-driven multilingual terminology platform. Each pattern plays a distinct role in supporting the system’s goals, and their selection is justified below.
 
 \subsection{Microkernel Pattern}
-The Microkernel pattern is employed in the frontend and core backend logic to support feature modularity. The Mavito PWA core includes only essential functionality: multilingual glossary viewing, search, and feedback submission. Additional services such as AI-enhanced semantic search, gamification metrics, or user-uploaded terms implemented as optional plugins that extend the core without modifying it.
+The Microkernel pattern is employed in the frontend and core backend logic to support feature modularity. The Marito PWA core includes only essential functionality: multilingual glossary viewing, search, and feedback submission. Additional services such as AI-enhanced semantic search, gamification metrics, or user-uploaded terms implemented as optional plugins that extend the core without modifying it.
 \newline
 \textbf{Motivation and Usage:}
 \begin{itemize}
@@ -1162,16 +1162,16 @@ On the backend, the system uses a Microservices architecture. Each core function
     \item \textbf{Deployment Flexibility:} Dockerized services and a plugin-based UI allow different deployments to include only the relevant modules.
 \end{itemize}
 \newline
-This combination ensures that Mavito remains agile, extensible, and robust, with clearly isolated responsibilities across its components. These are key traits for a system designed to support a growing multilingual terminology community.
+This combination ensures that Marito remains agile, extensible, and robust, with clearly isolated responsibilities across its components. These are key traits for a system designed to support a growing multilingual terminology community.
 
 \section{Design Patterns}
 
-The Mavito system employs several proven design patterns to promote modularity, clarity, and maintainability. These patterns are used across both frontend and backend components to ensure clean separation of concerns, extensibility, and testability.
+The Marito system employs several proven design patterns to promote modularity, clarity, and maintainability. These patterns are used across both frontend and backend components to ensure clean separation of concerns, extensibility, and testability.
 
 \subsection{Backend Design Patterns}
 
 \begin{itemize}
-    \item \textbf{Repository Pattern}: This pattern abstracts the data access layer, decoupling the application’s business logic from its persistence mechanisms. In Mavito, this is used to isolate FastAPI routes from direct interaction with JSON files or potential databases. This makes it easier to substitute or refactor storage formats later.
+    \item \textbf{Repository Pattern}: This pattern abstracts the data access layer, decoupling the application’s business logic from its persistence mechanisms. In Marito, this is used to isolate FastAPI routes from direct interaction with JSON files or potential databases. This makes it easier to substitute or refactor storage formats later.
 
     \item \textbf{Service Layer Pattern}: This pattern encapsulates business logic in service classes rather than embedding it in route handlers. For example, the glossary service processes user input, validates term entries, and formats responses. This keeps the FastAPI route functions minimal and focused on HTTP handling.
 
@@ -1185,18 +1185,18 @@ The Mavito system employs several proven design patterns to promote modularity, 
 \subsection{Frontend Design Patterns}
 
 \begin{itemize}
-    \item \textbf{Observer Pattern}: React’s reactive rendering model naturally supports this pattern. In Mavito, UI components subscribe to state changes such as term updates, language switching, or sync status. This enables real-time UI updates without manual DOM manipulation.
+    \item \textbf{Observer Pattern}: React’s reactive rendering model naturally supports this pattern. In Marito, UI components subscribe to state changes such as term updates, language switching, or sync status. This enables real-time UI updates without manual DOM manipulation.
 
-    \item \textbf{Model–View–Controller (MVC)}: Mavito uses React components as Views, application state as the Model, and event handlers or hooks as Controllers. This separation ensures testable, reusable components and a clear flow of data and control.
+    \item \textbf{Model–View–Controller (MVC)}: Marito uses React components as Views, application state as the Model, and event handlers or hooks as Controllers. This separation ensures testable, reusable components and a clear flow of data and control.
 
-    \item \textbf{Model–View–ViewModel (MVVM)}: For more complex UI flows, especially those with async behavior or derived state (e.g., loading indicators, sync status), Mavito uses custom React hooks as ViewModels to isolate logic from presentation. This allows clean and declarative UIs while keeping logic reusable across components.
+    \item \textbf{Model–View–ViewModel (MVVM)}: For more complex UI flows, especially those with async behavior or derived state (e.g., loading indicators, sync status), Marito uses custom React hooks as ViewModels to isolate logic from presentation. This allows clean and declarative UIs while keeping logic reusable across components.
 \end{itemize}
 \newline
 Together, these patterns ensure that both backend services and frontend components remain modular, understandable, and adaptable to future requirements. They also enable team members to work in parallel with minimal friction.
 
 
 \section{Technology Requirements}
-The Mavito system is built using modern, open-source technologies selected for their performance, maintainability, and compatibility with offline-first web applications and modular architectures. These technologies are categorized below according to their role in the stack.
+The Marito system is built using modern, open-source technologies selected for their performance, maintainability, and compatibility with offline-first web applications and modular architectures. These technologies are categorized below according to their role in the stack.
 \subsection{Frontend}
 \begin{itemize}
   \item \textbf{Framework:} React (via Vite) for fast, modular UI development.
