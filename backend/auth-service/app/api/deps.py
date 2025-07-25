@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 import jwt
-from pydantic import ValidationError  # For validating token payload
+from pydantic import ValidationError  # noqa F401 For validating token payload
 from typing import Optional
 import logging
 from mavito_common.models.user import UserRole
@@ -37,30 +37,17 @@ async def get_current_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY.encode(), algorithms=[settings.ALGORITHM]
-        )
-        # 'sub' (subject) in the JWT payload typically holds the user identifier (e.g., email)
-        user_identifier: Optional[str] = payload.get("sub")
-        if user_identifier is None:
-            raise credentials_exception
-        # Validate that the payload's subject matches what TokenPayload expects
-        token_data = TokenPayload(sub=user_identifier)
-    except jwt.ExpiredSignatureError:
-        logger.info(
-            f"Token has expired for sub: {payload.get('sub') if 'payload' in locals() else 'unknown'}"
-        )  # Check if payload exists
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    except (jwt.PyJWTError, ValidationError) as e:
-        logger.error(
-            f"Token validation error: {e.__class__.__name__} - {e}", exc_info=False
-        )
+
+    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+    print(payload)
+    print(settings.SECRET_KEY)
+    print(settings.ALGORITHM)
+    # 'sub' (subject) in the JWT payload typically holds the user identifier (e.g., email)
+    user_identifier: Optional[str] = payload.get("sub")
+    if user_identifier is None:
         raise credentials_exception
+    # Validate that the payload's subject matches what TokenPayload expects
+    token_data = TokenPayload(sub=user_identifier)
 
     assert (
         token_data.sub is not None
