@@ -38,10 +38,10 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
 
+    print("Decode secret", settings.SECRET_KEY)
+    print("Decode algorithm", settings.ALGORITHM)
     payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-    print(payload)
-    print(settings.SECRET_KEY)
-    print(settings.ALGORITHM)
+    print("Decode payload", payload)
     # 'sub' (subject) in the JWT payload typically holds the user identifier (e.g., email)
     user_identifier: Optional[str] = payload.get("sub")
     if user_identifier is None:
