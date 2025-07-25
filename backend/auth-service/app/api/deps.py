@@ -58,12 +58,6 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     except (jwt.PyJWTError, ValidationError) as e:
-        print(settings.SECRET_KEY)
-        print(settings.ALGORITHM)
-        print(payload)
-        print(token_data)
-        print(user_identifier)
-        print(jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]))
         logger.error(
             f"Token validation error: {e.__class__.__name__} - {e}", exc_info=False
         )
