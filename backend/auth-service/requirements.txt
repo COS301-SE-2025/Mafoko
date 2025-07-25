@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 passlib[bcrypt]
-PyJWT==2.8.0
+PyJWT==2.10.1
 pytest
 httpx
 python-multipart
