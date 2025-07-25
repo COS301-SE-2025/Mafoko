@@ -1,62 +1,115 @@
 // In frontend/src/config.ts
 
-// Base URLs for each microservice
-const AUTH_SERVICE_URL =
+// For production
+const API_GATEWAY_URL: string = import.meta.env.VITE_API_GATEWAY_URL as string;
+
+// Local development
+const AUTH_SERVICE_URL: string =
   (import.meta.env.VITE_AUTH_SERVICE_URL as string) || 'http://localhost:8001';
-const SEARCH_SERVICE_URL =
+const SEARCH_SERVICE_URL: string =
   (import.meta.env.VITE_SEARCH_SERVICE_URL as string) ||
   'http://localhost:8002';
-const ANALYTICS_SERVICE_URL =
+const ANALYTICS_SERVICE_URL: string =
   (import.meta.env.VITE_ANALYTICS_SERVICE_URL as string) ||
   'http://localhost:8003';
-// Add the URL for your new service, pointing to the port defined in docker-compose.yml
-const LINGUIST_APP_SERVICE_URL =
+const LINGUIST_APP_SERVICE_URL: string =
   (import.meta.env.VITE_LINGUIST_APP_SERVICE_URL as string) ||
   'http://localhost:8004';
-
-const VOTE_SERVICE_URL =
+const VOTE_SERVICE_URL: string =
   (import.meta.env.VITE_VOTE_SERVICE_URL as string) || 'http://localhost:8005';
-
-// Add the URL for your new service, pointing to the port defined in docker-compose.yml
-const GLOSSARY_SERVICE_URL =
+const GLOSSARY_SERVICE_URL: string =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
 
-export const API_ENDPOINTS = {
+// Smart endpoint generator
+const endpoint = (serviceUrl: string, path: string): string =>
+  import.meta.env.PROD ? `${API_GATEWAY_URL}${path}` : `${serviceUrl}${path}`;
+
+interface APIEndpoints {
+  login: string;
+  register: string;
+  getMe: string;
+  generateSignedUrl: string;
+  getAll: string;
+  updateUserRole: (userId: string) => string;
+  createApplication: string;
+  getUserUploads: (userId: string) => string;
+  getSignedDownloadUrl: (gcsKey: string) => string;
+  getUsersWithUploads: () => string;
+  search: string;
+  suggest: string;
+  descriptiveAnalytics: string;
+  submitVote: string;
+  glossary: string;
+  glossaryCategories: string;
+  glossaryTermsByCategory: (category: string) => string;
+  glossaryTermTranslations: (termId: string) => string;
+  glossarySearch: string;
+  glossaryLanguages: string;
+  glossaryRandom: string;
+}
+
+export const API_ENDPOINTS: APIEndpoints = {
   // --- Auth Service ---
-  login: `${AUTH_SERVICE_URL}/api/v1/auth/login`,
-  register: `${AUTH_SERVICE_URL}/api/v1/auth/register`,
-  getMe: `${AUTH_SERVICE_URL}/api/v1/auth/me`,
-  generateSignedUrl: `${AUTH_SERVICE_URL}/api/v1/uploads/generate-signed-url`,
-  getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
+  login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
+  register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
+  getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  generateSignedUrl: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/uploads/generate-signed-url',
+  ),
+  getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
-  // --- Linguist Application Service --- (NEW SECTION)
-  createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
+    endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
+
+  // --- Linguist Application Service ---
+  createApplication: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/',
+  ),
   getUserUploads: (userId: string) =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/uploads`,
+    endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/uploads`),
   getSignedDownloadUrl: (gcsKey: string) =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/download-url?gcs_key=${encodeURIComponent(gcsKey)}`,
+    endpoint(
+      AUTH_SERVICE_URL,
+      `/api/v1/admin/download-url?gcs_key=${encodeURIComponent(gcsKey)}`,
+    ),
   getUsersWithUploads: () =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/users-with-uploads`,
+    endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users-with-uploads'),
 
   // --- Search Service ---
-  search: `${SEARCH_SERVICE_URL}/api/v1/search`,
-  suggest: `${SEARCH_SERVICE_URL}/api/v1/suggest`,
+  search: endpoint(SEARCH_SERVICE_URL, '/api/v1/search'),
+  suggest: endpoint(SEARCH_SERVICE_URL, '/api/v1/suggest'),
 
   // --- Analytics Service ---
-  descriptiveAnalytics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive`,
+  descriptiveAnalytics: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive',
+  ),
 
-  submitVote: `${VOTE_SERVICE_URL}/api/v1/votes/`,
+  // --- Vote Service ---
+  submitVote: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/'),
 
   // --- Glossary Service ---
-  glossary: `${GLOSSARY_SERVICE_URL}/api/v1/glossary`,
-  glossaryCategories: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/categories`,
+  glossary: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary'),
+  glossaryCategories: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/categories',
+  ),
   glossaryTermsByCategory: (category: string) =>
-    `${GLOSSARY_SERVICE_URL}/api/v1/glossary/categories/${encodeURIComponent(category)}/terms`,
+    endpoint(
+      GLOSSARY_SERVICE_URL,
+      `/api/v1/glossary/categories/${encodeURIComponent(category)}/terms`,
+    ),
   glossaryTermTranslations: (termId: string) =>
-    `${GLOSSARY_SERVICE_URL}/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
-  glossarySearch: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/search`,
-  glossaryLanguages: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/languages`,
-  glossaryRandom: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/random`,
+    endpoint(
+      GLOSSARY_SERVICE_URL,
+      `/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
+    ),
+  glossarySearch: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/search'),
+  glossaryLanguages: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/languages',
+  ),
+  glossaryRandom: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/random'),
 };

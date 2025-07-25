@@ -1,5 +1,6 @@
 node_modules/
 venv/
+api-spec.yml
 **/.idea/
 **/node_modules/
 
