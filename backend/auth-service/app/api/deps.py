@@ -2,7 +2,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-import jwt  # PyJWT (ensure it's in requirements.txt: python-jose[cryptography] or PyJWT)
+from jose import jwt, JWTError
 from pydantic import ValidationError  # For validating token payload
 from typing import Optional
 import logging
@@ -30,7 +30,7 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)
 ) -> Optional[UserModel]:
     """
-    FIXED: PyJWT 2.10.1 InvalidAlgorithmError issue
+    SAME FUNCTION - just simplified exception handling
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -39,86 +39,28 @@ async def get_current_user(
     )
 
     try:
-        # FIX: PyJWT 2.10.1 requires very specific algorithm handling
-        # The issue is likely that PyJWT 2.10.1 has stricter algorithm validation
-
-        # Method 1: Try with explicit leeway and options
         payload = jwt.decode(
-            token,
-            settings.SECRET_KEY,
-            algorithms=["HS256"],  # Hardcode HS256 instead of settings.ALGORITHM
-            options={
-                "verify_signature": True,
-                "verify_exp": True,
-                "verify_nbf": True,
-                "verify_iat": True,
-                "verify_aud": False,
-                "verify_iss": False,
-            },
-            leeway=0,  # No time leeway
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
 
         user_identifier: Optional[str] = payload.get("sub")
         if user_identifier is None:
-            logger.error("JWT payload missing 'sub' claim")
             raise credentials_exception
 
         token_data = TokenPayload(sub=user_identifier)
 
-    except jwt.InvalidAlgorithmError as e:
-        logger.error(f"JWT InvalidAlgorithmError: {e}")
-        logger.error(f"Configured algorithm: '{settings.ALGORITHM}'")
-        logger.error(f"PyJWT version: {jwt.__version__}")
-
-        # FALLBACK: Try alternative decode methods for PyJWT 2.10.1
-        try:
-            # Try with bytes secret key
-            payload = jwt.decode(
-                token, settings.SECRET_KEY.encode("utf-8"), algorithms=["HS256"]
-            )
-            logger.info("SUCCESS: JWT decoded with bytes secret key")
-            user_identifier = payload.get("sub")
-            if user_identifier:
-                token_data = TokenPayload(sub=user_identifier)
-            else:
-                raise credentials_exception
-
-        except Exception as fallback_error:
-            logger.error(f"Fallback method also failed: {fallback_error}")
-            raise credentials_exception
-
-    except jwt.InvalidSignatureError as e:
-        logger.error(f"JWT InvalidSignatureError: {e}")
+    except JWTError as e:
+        logger.error(f"JWT validation error: {e}")
         raise credentials_exception
-
-    except jwt.ExpiredSignatureError as e:
-        logger.info(f"JWT ExpiredSignatureError: Token expired {e}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    except jwt.InvalidTokenError as e:
-        logger.error(f"JWT InvalidTokenError: {e}")
-        raise credentials_exception
-
     except ValidationError as e:
         logger.error(f"Token payload validation error: {e}")
         raise credentials_exception
 
-    except Exception as e:
-        logger.error(f"Unexpected JWT error: {e.__class__.__name__} - {e}")
-        raise credentials_exception
-
-    # Rest of the function remains the same
     assert token_data.sub is not None, "Token 'sub' should not be None here"
-
     user = await crud_user.get_user_by_email(db, email=token_data.sub)
-    if user is None:
-        logger.warning(f"User not found for email: {token_data.sub}")
-        raise credentials_exception
 
+    if user is None:
+        raise credentials_exception
     return user
 
 
