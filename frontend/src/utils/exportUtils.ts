@@ -1,4 +1,5 @@
 import { Term, TermTranslations } from '../types/glossaryTypes';
+import { isoLangMap } from './isoLangMap';
 // We're using dynamic imports for these to reduce initial bundle size
 // import { jsPDF } from 'jspdf';
 // import html2canvas from 'html2canvas';
@@ -1087,7 +1088,6 @@ export const generatePDF = async (
       for (const term of data) {
         // Check if we need a new page
         if (y > 270) {
-          // Leave margin at bottom
           pdf.addPage();
           y = margin;
         }
@@ -1317,7 +1317,7 @@ export const downloadData = async (
 
           // Add header row with filled background
           pdf.setFillColor(45, 55, 72); // #2d3748 - matches th background color in HTML
-          pdf.rect(margin, y, contentWidth, 10, 'F');
+          pdf.rect(margin, y - 6, contentWidth, 10, 'F');
 
           // Draw vertical lines between columns
           pdf.setDrawColor(255, 255, 255); // White line to separate columns
@@ -1480,6 +1480,7 @@ export const downloadData = async (
           for (let i = 1; i <= totalPages; i++) {
             pdf.setPage(i);
             pdf.setFontSize(9);
+
             pdf.setTextColor(113, 128, 150); // #718096 - light gray
             pdf.text(
               `Page ${String(i)} of ${String(totalPages)}`,
@@ -1546,11 +1547,19 @@ export const downloadData = async (
     filename = `marito-glossary-${categoryPrefix}${timestamp}.html`;
     mimeType = 'text/html';
   } else {
-    // For JSON, exclude the id and category fields
+    // For JSON, include only the required fields and iso_lang
     const cleanedData = data.map((item) => {
-      const { ...rest } = item; //add id and category later
+      const iso_lang =
+        item.language && isoLangMap[item.language]
+          ? isoLangMap[item.language]
+          : '';
       return {
-        ...rest,
+        id: item.id,
+        term: item.term,
+        definition: item.definition,
+        category: item.category,
+        language: item.language,
+        iso_lang,
       };
     });
     content = JSON.stringify(cleanedData, null, 2);
