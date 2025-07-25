@@ -2,14 +2,14 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-import jwt  # PyJWT (ensure it's in requirements.txt: python-jose[cryptography] or PyJWT)
+import jwt
 from pydantic import ValidationError  # For validating token payload
 from typing import Optional
 import logging
 from mavito_common.models.user import UserRole
 
 from mavito_common.core.config import settings
-from app.crud.crud_user import crud_user  # Your user CRUD operations
+from app.crud.crud_user import crud_user
 from mavito_common.schemas.token import TokenPayload  # Pydantic schema for token data
 from mavito_common.schemas.user import (
     User as UserSchema,
@@ -17,12 +17,11 @@ from mavito_common.schemas.user import (
 from mavito_common.models.user import (
     User as UserModel,
 )  # SQLAlchemy model for DB operations
-from mavito_common.db.session import get_db  # Your DB session dependency
+from mavito_common.db.session import get_db
 
 logger = logging.getLogger(__name__)
 
-# This tells FastAPI where to get the token from.
-# The tokenUrl should point to your login endpoint.
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
 
