@@ -99,7 +99,7 @@ const LoginPage: React.FC = () => {
       <div className="login-left-half">
         <img
           src={LsImage}
-          alt="Mavito Login Welcome"
+          alt="Marito Login Welcome"
           className="login-hero-image"
         />
       </div>

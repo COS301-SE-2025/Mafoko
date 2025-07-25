@@ -101,8 +101,8 @@ export const generateHTMLTable = (
 
   // Create a title based on category if provided
   const title = categoryName
-    ? 'Mavito Glossary: ' + categoryName
-    : 'Mavito Glossary';
+    ? 'Marito Glossary: ' + categoryName
+    : 'Marito Glossary';
   const subtitle = categoryName
     ? 'Terms in ' + categoryName + ' category'
     : 'Complete Glossary';
@@ -166,7 +166,7 @@ export const generatePDF = async (
 
     const options = {
       margin: 10,
-      filename: `mavito-glossary-${categoryPrefix}${timestamp}.pdf`,
+      filename: `marito-glossary-${categoryPrefix}${timestamp}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
@@ -216,11 +216,11 @@ export const downloadData = (
 
   if (format === 'csv') {
     content = generateCSV(data);
-    filename = `mavito-glossary-${categoryPrefix}${timestamp}.csv`;
+    filename = `marito-glossary-${categoryPrefix}${timestamp}.csv`;
     mimeType = 'text/csv';
   } else if (format === 'html') {
     content = generateHTMLTable(data, categoryName);
-    filename = `mavito-glossary-${categoryPrefix}${timestamp}.html`;
+    filename = `marito-glossary-${categoryPrefix}${timestamp}.html`;
     mimeType = 'text/html';
   } else {
     // For JSON, exclude the id and category fields
@@ -231,7 +231,7 @@ export const downloadData = (
       };
     });
     content = JSON.stringify(cleanedData, null, 2);
-    filename = `mavito-glossary-${categoryPrefix}${timestamp}.json`;
+    filename = `marito-glossary-${categoryPrefix}${timestamp}.json`;
     mimeType = 'application/json';
   }
 

@@ -635,7 +635,7 @@ const AdminPage: React.FC = () => {
         <h1 style={{ color: '#dc3545' }}>{authError}</h1>
         <button
           type="button"
-          onClick={() => (window.location.href = '/Mavito/dashboard')}
+          onClick={() => (window.location.href = '/Marito/dashboard')}
           style={{
             padding: '0.5rem 1rem',
             backgroundColor: '#007bff',

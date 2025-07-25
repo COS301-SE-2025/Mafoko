@@ -42,10 +42,10 @@
 
 # User Story #8: Contribution Analytics
 
-**ID:** US007.2 (Mavito Project)  
+**ID:** US007.2 (Marito Project)  
 **Title:** User Contribution Visualization  
 
-**As a:** Regular contributor to the Mavito platform,  
+**As a:** Regular contributor to the Marito platform,  
 **I want:** To see a breakdown of my edits and comments across languages,  
 **So that:** I can track my impact and focus on underrepresented languages.  
 
@@ -79,7 +79,7 @@
 
 # User Story #9: Trending Terms
 
-**ID:** US007.3 (Mavito Project)  
+**ID:** US007.3 (Marito Project)  
 **Title:** Real-Time Popularity Tracking  
 
 **As a:** Language learner or cultural researcher,  

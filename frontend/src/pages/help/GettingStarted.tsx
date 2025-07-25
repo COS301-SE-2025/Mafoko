@@ -88,7 +88,7 @@ const GettingStarted: React.FC = () => {
                         }}
                       >
                         <source
-                          src="/Mavito/videos/Updated-workflow-tut.mp4"
+                          src="/Marito/videos/Updated-workflow-tut.mp4"
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.

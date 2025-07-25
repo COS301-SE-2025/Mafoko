@@ -153,7 +153,7 @@ const DashboardPage: React.FC = () => {
       try {
         // Load recent terms
         const recentTermsResponse = await fetch(
-          '/Mavito/Mock_Data/recentTerms.json',
+          '/Marito/Mock_Data/recentTerms.json',
         );
         console.log('Recent terms response:', recentTermsResponse.status);
 
@@ -170,7 +170,7 @@ const DashboardPage: React.FC = () => {
 
         // Load community activities
         const communityActivitiesResponse = await fetch(
-          '/Mavito/Mock_Data/communityActivity.json', // Updated path
+          '/Marito/Mock_Data/communityActivity.json', // Updated path
         );
         console.log(
           'Community activities response:',

@@ -18,8 +18,8 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath: '/Mavito/locales/{{lng}}/{{ns}}.json',
-      addPath: '/Mavito/locales/add/{{lng}}/{{ns}}',
+      loadPath: '/Marito/locales/{{lng}}/{{ns}}.json',
+      addPath: '/Marito/locales/add/{{lng}}/{{ns}}',
     },
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
