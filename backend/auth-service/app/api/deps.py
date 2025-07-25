@@ -2,7 +2,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from jose import jwt, JWTError
+import jwt  # PyJWT (ensure it's in requirements.txt: python-jose[cryptography] or PyJWT)
 from pydantic import ValidationError  # For validating token payload
 from typing import Optional
 import logging
@@ -28,99 +28,46 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)
-) -> Optional[UserModel]:
+) -> Optional[UserModel]:  # Returns the SQLAlchemy UserModel or None
+    """
+    Decodes the JWT token to get the current user.
+    Raises HTTPException if token is invalid or user not found.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
     try:
-
-        # Step 1: Check token header without verification
-        try:
-            header = jwt.get_unverified_header(token)
-            logger.error(f"DEBUG - Token header: {header}")
-            logger.error(f"DEBUG - Token algorithm: '{header.get('alg')}'")
-            logger.error(f"DEBUG - Settings algorithm: '{settings.ALGORITHM}'")
-            logger.error(
-                f"DEBUG - Algorithm match: {header.get('alg') == settings.ALGORITHM}"
-            )
-        except Exception as header_error:
-            logger.error(f"DEBUG - Header parse error: {header_error}")
-            raise credentials_exception
-
-        # Step 2: Check token payload without verification
-        try:
-            unverified_payload = jwt.decode(token, options={"verify_signature": False})
-            logger.error(f"DEBUG - Unverified payload: {unverified_payload}")
-        except Exception as payload_error:
-            logger.error(f"DEBUG - Unverified payload error: {payload_error}")
-
-        # Step 3: Check secret key
-        logger.error(f"DEBUG - Secret key type: {type(settings.SECRET_KEY)}")
-        logger.error(f"DEBUG - Secret key length: {len(settings.SECRET_KEY)}")
-        logger.error(f"DEBUG - Secret key first 10 chars: {settings.SECRET_KEY[:10]}")
-
-        # Step 4: Try decode with explicit algorithm list
-        try:
-            payload = jwt.decode(
-                token, settings.SECRET_KEY, algorithms=["HS256"]  # Hardcoded to test
-            )
-            logger.error("DEBUG - SUCCESS with hardcoded HS256!")
-
-        except Exception as hardcoded_error:
-            logger.error(f"DEBUG - Failed with hardcoded HS256: {hardcoded_error}")
-
-            # Step 5: Try with settings.ALGORITHM
-            try:
-                payload = jwt.decode(
-                    token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-                )
-                logger.error("DEBUG - SUCCESS with settings.ALGORITHM!")
-
-            except Exception as settings_error:
-                logger.error(
-                    f"DEBUG - Failed with settings.ALGORITHM: {settings_error}"
-                )
-
-                # Step 6: Check if there are hidden characters in settings.ALGORITHM
-                logger.error(
-                    f"DEBUG - Algorithm bytes: {settings.ALGORITHM.encode('utf-8')!r}"
-                )
-                logger.error(f"DEBUG - Algorithm repr: {repr(settings.ALGORITHM)}")
-
-                # Step 7: Try with cleaned algorithm
-                clean_algorithm = settings.ALGORITHM.strip()
-                try:
-                    payload = jwt.decode(
-                        token, settings.SECRET_KEY, algorithms=[clean_algorithm]
-                    )
-                    logger.error("DEBUG - SUCCESS with cleaned algorithm!")
-
-                except Exception as clean_error:
-                    logger.error(
-                        f"DEBUG - Failed with cleaned algorithm: {clean_error}"
-                    )
-                    raise credentials_exception
-
-        # If we get here, one of the methods worked
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
+        # 'sub' (subject) in the JWT payload typically holds the user identifier (e.g., email)
         user_identifier: Optional[str] = payload.get("sub")
         if user_identifier is None:
             raise credentials_exception
-
+        # Validate that the payload's subject matches what TokenPayload expects
         token_data = TokenPayload(sub=user_identifier)
-
-    except JWTError as e:
-        logger.error(f"JWT validation error: {e}")
+    except jwt.ExpiredSignatureError:
+        logger.info(
+            f"Token has expired for sub: {payload.get('sub') if 'payload' in locals() else 'unknown'}"
+        )  # Check if payload exists
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except (jwt.PyJWTError, ValidationError) as e:
+        logger.error(
+            f"Token validation error: {e.__class__.__name__} - {e}", exc_info=False
+        )
         raise credentials_exception
-    except ValidationError as e:
-        logger.error(f"Token payload validation error: {e}")
-        raise credentials_exception
 
-    # Rest of function...
-    assert token_data.sub is not None
+    assert (
+        token_data.sub is not None
+    ), "Token 'sub' (user_identifier) should not be None here"  # Add this assertion
     user = await crud_user.get_user_by_email(db, email=token_data.sub)
+
     if user is None:
         raise credentials_exception
     return user

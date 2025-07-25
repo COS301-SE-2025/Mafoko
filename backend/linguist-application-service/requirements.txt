@@ -2,7 +2,7 @@ fastapi
 uvicorn[standard]
 alembic
 passlib[bcrypt]
-python-jose[cryptography]==3.3.0
+PyJWT
 pytest
 httpx
 python-multipart
