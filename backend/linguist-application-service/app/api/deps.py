@@ -36,8 +36,16 @@ async def get_current_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
+    logger.error(f"DEBUG - Incoming Token (first 50 chars): {token[:50]}...")
+    logger.error(f"DEBUG - Full Incoming Token: {token}")
     try:
+        header = jwt.get_unverified_header(token)
+        logger.error(f"DEBUG - Token header: {header}")
+        logger.error(f"DEBUG - Token algorithm: '{header.get('alg')}'")
+        logger.error(f"DEBUG - Settings algorithm: '{settings.ALGORITHM}'")
+        logger.error(
+            f"DEBUG - Algorithm match: {header.get('alg') == settings.ALGORITHM}"
+        )
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
@@ -53,6 +61,9 @@ async def get_current_user(
         raise credentials_exception
     except ValidationError as e:
         logger.error(f"Token payload validation error: {e}")
+        raise credentials_exception
+    except Exception as e:
+        logger.error(f"DEBUG - Error in get_current_user: {e}", exc_info=True)
         raise credentials_exception
 
     assert token_data.sub is not None, "Token 'sub' should not be None here"

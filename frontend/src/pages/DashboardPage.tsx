@@ -101,7 +101,6 @@ const DashboardPage: React.FC = () => {
       }
 
       // If not in localStorage or parsing failed, fetch from API
-      console.log('Before call', token);
       try {
         const response = await fetch(API_ENDPOINTS.getMe, {
           // <-- Use the new endpoint
@@ -111,9 +110,6 @@ const DashboardPage: React.FC = () => {
           },
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
-        console.log(response);
         if (response.ok) {
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.indexOf('application/json') !== -1) {
@@ -151,14 +147,13 @@ const DashboardPage: React.FC = () => {
       } finally {
         setIsLoadingUserData(false);
       }
-      console.log('After call token', token);
     };
 
     const loadDashboardWidgetsData = async () => {
       try {
         // Load recent terms
         const recentTermsResponse = await fetch(
-          '/Marito/Mock_Data/recentTerms.json',
+          '/Mavito/Mock_Data/recentTerms.json',
         );
         console.log('Recent terms response:', recentTermsResponse.status);
 
@@ -175,7 +170,7 @@ const DashboardPage: React.FC = () => {
 
         // Load community activities
         const communityActivitiesResponse = await fetch(
-          '/Marito/Mock_Data/communityActivity.json', // Updated path
+          '/Mavito/Mock_Data/communityActivity.json', // Updated path
         );
         console.log(
           'Community activities response:',
