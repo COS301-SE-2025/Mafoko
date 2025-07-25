@@ -9,20 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './frontend'  
+        working-directory: './frontend'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - run: npm install
-      - run: |
-          echo "VITE_API_GATEWAY_URL=${{ secrets.VITE_API_GATEWAY_URL }}" > .env
-          echo "VITE_PRODUCTION=true" >> .env
-          npm run build
-          rm .env
+      - run: npm run build:ci
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: './frontend/dist'  
+          publish_dir: './frontend/dist'
           keep_files: true
