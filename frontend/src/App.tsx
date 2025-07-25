@@ -17,7 +17,7 @@ import './App.css';
 
 function App() {
   return (
-    <div className="MavitoApp">
+    <div className="MaritoApp">
       <Routes>
         <Route path="/Landing" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
