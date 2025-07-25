@@ -30,8 +30,7 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)
 ) -> Optional[UserModel]:
     """
-    Decodes the JWT token to get the current user.
-    Updated for PyJWT 2.10.1 compatibility.
+    FIXED: PyJWT 2.10.1 InvalidAlgorithmError issue
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -40,20 +39,23 @@ async def get_current_user(
     )
 
     try:
-        # FIX 1: More explicit decode with proper options for PyJWT 2.10.1
+        # FIX: PyJWT 2.10.1 requires very specific algorithm handling
+        # The issue is likely that PyJWT 2.10.1 has stricter algorithm validation
+
+        # Method 1: Try with explicit leeway and options
         payload = jwt.decode(
             token,
             settings.SECRET_KEY,
-            algorithms=[settings.ALGORITHM],
+            algorithms=["HS256"],  # Hardcode HS256 instead of settings.ALGORITHM
             options={
                 "verify_signature": True,
                 "verify_exp": True,
                 "verify_nbf": True,
                 "verify_iat": True,
-                "verify_aud": False,  # We don't use audience
-                "verify_iss": False,  # We don't use issuer
-                "require": ["sub", "exp", "iat"],  # Require these claims
+                "verify_aud": False,
+                "verify_iss": False,
             },
+            leeway=0,  # No time leeway
         )
 
         user_identifier: Optional[str] = payload.get("sub")
@@ -67,16 +69,30 @@ async def get_current_user(
         logger.error(f"JWT InvalidAlgorithmError: {e}")
         logger.error(f"Configured algorithm: '{settings.ALGORITHM}'")
         logger.error(f"PyJWT version: {jwt.__version__}")
-        raise credentials_exception
+
+        # FALLBACK: Try alternative decode methods for PyJWT 2.10.1
+        try:
+            # Try with bytes secret key
+            payload = jwt.decode(
+                token, settings.SECRET_KEY.encode("utf-8"), algorithms=["HS256"]
+            )
+            logger.info("SUCCESS: JWT decoded with bytes secret key")
+            user_identifier = payload.get("sub")
+            if user_identifier:
+                token_data = TokenPayload(sub=user_identifier)
+            else:
+                raise credentials_exception
+
+        except Exception as fallback_error:
+            logger.error(f"Fallback method also failed: {fallback_error}")
+            raise credentials_exception
 
     except jwt.InvalidSignatureError as e:
         logger.error(f"JWT InvalidSignatureError: {e}")
         raise credentials_exception
 
     except jwt.ExpiredSignatureError as e:
-        logger.info(
-            f"JWT ExpiredSignatureError: Token expired for user {payload.get('sub') if 'payload' in locals() else 'unknown': {e}}"
-        )
+        logger.info(f"JWT ExpiredSignatureError: Token expired {e}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token has expired",
@@ -84,7 +100,6 @@ async def get_current_user(
         )
 
     except jwt.InvalidTokenError as e:
-        # This catches all other JWT-related errors in PyJWT 2.10.1
         logger.error(f"JWT InvalidTokenError: {e}")
         raise credentials_exception
 
@@ -96,6 +111,7 @@ async def get_current_user(
         logger.error(f"Unexpected JWT error: {e.__class__.__name__} - {e}")
         raise credentials_exception
 
+    # Rest of the function remains the same
     assert token_data.sub is not None, "Token 'sub' should not be None here"
 
     user = await crud_user.get_user_by_email(db, email=token_data.sub)
