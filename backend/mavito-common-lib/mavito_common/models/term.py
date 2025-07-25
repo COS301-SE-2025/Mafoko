@@ -4,7 +4,7 @@ from sqlalchemy import Column, Table, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from mavito_common.db.base_class import Base
-from typing import List
+from typing import List, TYPE_CHECKING
 
 # Association Table for the many-to-many relationship between terms (translations)
 term_translations = Table(
@@ -15,6 +15,9 @@ term_translations = Table(
         "translation_id", UUID(as_uuid=True), ForeignKey("terms.id"), primary_key=True
     ),
 )
+
+if TYPE_CHECKING:
+    from mavito_common.models.workspace import BookmarkedTerm
 
 
 class Term(Base):
@@ -34,4 +37,9 @@ class Term(Base):
         primaryjoin=id == term_translations.c.term_id,
         secondaryjoin=id == term_translations.c.translation_id,
         backref="related_from",  # helps in bi-directional linking
+    )
+
+    # Workspace relationship
+    bookmarked_by_users: Mapped[List["BookmarkedTerm"]] = relationship(
+        "BookmarkedTerm", back_populates="term", cascade="all, delete-orphan"
     )
