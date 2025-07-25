@@ -2,14 +2,14 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-import jwt
-from pydantic import ValidationError  # noqa F401 For validating token payload
+import jwt  # PyJWT (ensure it's in requirements.txt: python-jose[cryptography] or PyJWT)
+from pydantic import ValidationError  # For validating token payload
 from typing import Optional
 import logging
 from mavito_common.models.user import UserRole
 
 from mavito_common.core.config import settings
-from app.crud.crud_user import crud_user
+from app.crud.crud_user import crud_user  # Your user CRUD operations
 from mavito_common.schemas.token import TokenPayload  # Pydantic schema for token data
 from mavito_common.schemas.user import (
     User as UserSchema,
@@ -17,20 +17,21 @@ from mavito_common.schemas.user import (
 from mavito_common.models.user import (
     User as UserModel,
 )  # SQLAlchemy model for DB operations
-from mavito_common.db.session import get_db
+from mavito_common.db.session import get_db  # Your DB session dependency
 
 logger = logging.getLogger(__name__)
 
-
+# This tells FastAPI where to get the token from.
+# The tokenUrl should point to your login endpoint.
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)
-) -> Optional[UserModel]:  # Returns the SQLAlchemy UserModel or None
+) -> Optional[UserModel]:
     """
     Decodes the JWT token to get the current user.
-    Raises HTTPException if token is invalid or user not found.
+    Updated for PyJWT 2.10.1 compatibility.
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -38,24 +39,70 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    print("Decode secret", settings.SECRET_KEY)
-    print("Decode algorithm", settings.ALGORITHM)
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-    print("Decode payload", payload)
-    # 'sub' (subject) in the JWT payload typically holds the user identifier (e.g., email)
-    user_identifier: Optional[str] = payload.get("sub")
-    if user_identifier is None:
-        raise credentials_exception
-    # Validate that the payload's subject matches what TokenPayload expects
-    token_data = TokenPayload(sub=user_identifier)
+    try:
+        # FIX 1: More explicit decode with proper options for PyJWT 2.10.1
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
+            options={
+                "verify_signature": True,
+                "verify_exp": True,
+                "verify_nbf": True,
+                "verify_iat": True,
+                "verify_aud": False,  # We don't use audience
+                "verify_iss": False,  # We don't use issuer
+                "require": ["sub", "exp", "iat"],  # Require these claims
+            },
+        )
 
-    assert (
-        token_data.sub is not None
-    ), "Token 'sub' (user_identifier) should not be None here"  # Add this assertion
+        user_identifier: Optional[str] = payload.get("sub")
+        if user_identifier is None:
+            logger.error("JWT payload missing 'sub' claim")
+            raise credentials_exception
+
+        token_data = TokenPayload(sub=user_identifier)
+
+    except jwt.InvalidAlgorithmError as e:
+        logger.error(f"JWT InvalidAlgorithmError: {e}")
+        logger.error(f"Configured algorithm: '{settings.ALGORITHM}'")
+        logger.error(f"PyJWT version: {jwt.__version__}")
+        raise credentials_exception
+
+    except jwt.InvalidSignatureError as e:
+        logger.error(f"JWT InvalidSignatureError: {e}")
+        raise credentials_exception
+
+    except jwt.ExpiredSignatureError as e:
+        logger.info(
+            f"JWT ExpiredSignatureError: Token expired for user {payload.get('sub') if 'payload' in locals() else 'unknown': {e}}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    except jwt.InvalidTokenError as e:
+        # This catches all other JWT-related errors in PyJWT 2.10.1
+        logger.error(f"JWT InvalidTokenError: {e}")
+        raise credentials_exception
+
+    except ValidationError as e:
+        logger.error(f"Token payload validation error: {e}")
+        raise credentials_exception
+
+    except Exception as e:
+        logger.error(f"Unexpected JWT error: {e.__class__.__name__} - {e}")
+        raise credentials_exception
+
+    assert token_data.sub is not None, "Token 'sub' should not be None here"
+
     user = await crud_user.get_user_by_email(db, email=token_data.sub)
-
     if user is None:
+        logger.warning(f"User not found for email: {token_data.sub}")
         raise credentials_exception
+
     return user
 
 
