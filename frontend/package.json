@@ -6,15 +6,13 @@
   "homepage": "https://COS301-SE-2025.github.io/Marito/",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "build:ci": "echo \"VITE_API_GATEWAY_URL=$VITE_API_GATEWAY_URL\" > .env && echo \"VITE_PRODUCTION=true\" >> .env && npm run build && rm .env",
+    "build": "vite build",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "preview": "vite preview",
     "prepare": "husky",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage"
