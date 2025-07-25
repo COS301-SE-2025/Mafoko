@@ -9,8 +9,12 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  VITE_API_GATEWAY_URL: ${{ secrets.VITE_API_GATEWAY_URL }}
+  VITE_PRODUCTION: true
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,24 +24,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
       - run: npm ci
-      - run: npm run build:ci
-      - name: Verify dist directory exists
-        run: |
-          ls -la
-          ls -la dist/
+      - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: 'frontend/dist'  
-
-  deploy:
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
+          path: 'dist'
       - uses: actions/deploy-pages@v4
