@@ -48,12 +48,6 @@ async def get_current_user(
             raise credentials_exception
         # Validate that the payload's subject matches what TokenPayload expects
         token_data = TokenPayload(sub=user_identifier)
-        print(settings.SECRET_KEY)
-        print(settings.ALGORITHM)
-        print(payload)
-        print(token_data)
-        print(user_identifier)
-        print(jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]))
     except jwt.ExpiredSignatureError:
         logger.info(
             f"Token has expired for sub: {payload.get('sub') if 'payload' in locals() else 'unknown'}"
@@ -64,6 +58,12 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     except (jwt.PyJWTError, ValidationError) as e:
+        print(settings.SECRET_KEY)
+        print(settings.ALGORITHM)
+        print(payload)
+        print(token_data)
+        print(user_identifier)
+        print(jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]))
         logger.error(
             f"Token validation error: {e.__class__.__name__} - {e}", exc_info=False
         )
