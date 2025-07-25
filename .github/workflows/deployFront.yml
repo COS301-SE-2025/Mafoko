@@ -22,9 +22,13 @@ jobs:
           node-version: '20'
       - run: npm ci
       - run: npm run build:ci
+      - name: Verify dist directory exists
+        run: |
+          ls -la
+          ls -la dist/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: 'frontend/dist'  
 
   deploy:
     needs: build
