@@ -41,15 +41,30 @@ const getLogoAsBase64 = async (): Promise<string> => {
  */
 export const generateCSV = (data: Term[], includeHeader = true): string => {
   // Define CSV headers
-  const headers = ['ID', 'Term', 'Definition', 'Language'];
+  const headers = [
+    'ID',
+    'Term',
+    'Definition',
+    'Category',
+    'Language',
+    'iso_lang',
+  ];
 
   // Map the data to CSV rows
   const dataRows = data.map((item) => {
+    const iso_lang =
+      item.language &&
+      typeof isoLangMap !== 'undefined' &&
+      isoLangMap[item.language]
+        ? isoLangMap[item.language]
+        : '';
     return [
-      `"${item.id.replace(/"/g, '""')}"`, // Include ID field and escape quotes
-      `"${item.term.replace(/"/g, '""')}"`, // Escape quotes in CSV
+      `"${item.id.replace(/"/g, '""')}"`,
+      `"${item.term.replace(/"/g, '""')}"`,
       `"${item.definition.replace(/"/g, '""')}"`,
-      `"${item.language ? item.language.replace(/"/g, '""') : ''}"`, // Include language field
+      `"${item.category ? item.category.replace(/"/g, '""') : ''}"`,
+      `"${item.language ? item.language.replace(/"/g, '""') : ''}"`,
+      `"${iso_lang}"`,
     ].join(',');
   });
 
@@ -923,7 +938,7 @@ export const generatePDF = async (
 
         // Set font size and line height
         pdf.setFontSize(12);
-        let y = margin;
+        let y = margin + 25;
 
         // Add title
         pdf.setFontSize(18);
@@ -1316,7 +1331,7 @@ export const downloadData = async (
           );
 
           // Add header row with filled background
-          pdf.setFillColor(45, 55, 72); // #2d3748 - matches th background color in HTML
+          pdf.setFillColor(45, 55, 72);
           pdf.rect(margin, y - 6, contentWidth, 10, 'F');
 
           // Draw vertical lines between columns
