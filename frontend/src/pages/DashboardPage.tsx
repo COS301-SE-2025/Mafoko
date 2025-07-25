@@ -102,6 +102,7 @@ const DashboardPage: React.FC = () => {
 
       // If not in localStorage or parsing failed, fetch from API
       try {
+        console.log(token);
         const response = await fetch(API_ENDPOINTS.getMe, {
           // <-- Use the new endpoint
           headers: {
@@ -110,6 +111,9 @@ const DashboardPage: React.FC = () => {
           },
         });
 
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        console.log(response);
         if (response.ok) {
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.indexOf('application/json') !== -1) {
