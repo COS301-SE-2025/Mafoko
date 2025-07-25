@@ -20,7 +20,8 @@ $downvote-color: #e74c3c;
       color: darken($upvote-color, 20%);
       border-radius: 4px 0 0 4px;
 
-      &.active, &:hover {
+      &.active,
+      &:hover {
         background-color: $upvote-color;
         color: white;
       }
@@ -31,7 +32,8 @@ $downvote-color: #e74c3c;
       color: darken($downvote-color, 20%);
       border-radius: 0 4px 4px 0;
 
-      &.active, &:hover {
+      &.active,
+      &:hover {
         background-color: $downvote-color;
         color: white;
       }

@@ -29,14 +29,15 @@ $cosmic-shadow: #2a2f3a;
     display: flex;
     box-sizing: border-box;
     background-color: transparent;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     width: 100%;
     height: 100%;
-    
+
     .main-content {
       flex: 1;
       margin-left: 0;
-      
+
       @media (min-width: 768px) {
         margin-left: 280px;
       }
@@ -59,7 +60,7 @@ theme-light {
   --border-primary: rgba(0, 0, 0, 0.1);
   --text-secondary: #{$distant-thunder};
   --avatar-background: #d1d1d1;
-  
+
   // Comment specific
   --comment-text: #{$midnight-ink};
   --comment-meta: #{$distant-thunder};
@@ -84,7 +85,7 @@ theme-light {
   --border-primary: rgba(255, 255, 255, 0.1);
   --text-secondary: rgba(255, 255, 255, 0.6);
   --avatar-background: #555;
-  
+
   // Comment specific
   --comment-text: rgba(255, 255, 255, 0.9);
   --comment-meta: rgba(255, 255, 255, 0.6);
@@ -93,7 +94,8 @@ theme-light {
   --comment-thread-line: rgba(255, 255, 255, 0.3);
 }
 
-.term-page-light, .term-page-dark {
+.term-page-light,
+.term-page-dark {
   font-family: 'Inter', sans-serif;
   flex: 1;
   height: 100vh;
@@ -106,17 +108,17 @@ theme-light {
   background: $mermaid-tide;
   .top-bar {
     background: transparent;
-    
+
     .back-button svg {
       fill: $pure-snow;
     }
   }
-  
+
   .term-header {
     background: $mermaid-tide;
     color: $pure-snow;
   }
-  
+
   .content-container {
     background: $cotton-cloud;
     color: $midnight-ink;
@@ -126,45 +128,45 @@ theme-light {
 .term-page-dark {
   color: $pure-snow;
   background: $deep-space;
-  
+
   .top-bar {
     background: transparent;
-    
+
     .back-button svg {
       fill: $pure-snow;
     }
-    
+
     .action-button svg {
       fill: $pure-snow;
     }
   }
-  
+
   .term-header {
     background: $deep-space;
-    
+
     .category-tag {
       background: rgba(255, 255, 255, 0.2);
       color: $pure-snow;
     }
   }
-  
+
   .content-container {
     background: $cosmic-shadow;
     color: $pure-snow;
-    
+
     .term-section {
       .term-meta .source {
         color: rgba(255, 255, 255, 0.6);
       }
-      
+
       .section-title {
         color: rgba(255, 255, 255, 0.8);
       }
-      
+
       .related-term {
         border-color: rgba(255, 255, 255, 0.3);
         color: $pure-snow;
-        
+
         &:hover {
           border-color: $mermaid-tide;
           background: rgba($mermaid-tide, 0.1);
@@ -252,7 +254,7 @@ theme-light {
 
   .category-tag {
     background: rgba(255, 255, 255, 0.2);
-    padding: .25rem 1.25rem;
+    padding: 0.25rem 1.25rem;
     border-radius: 20px;
     font-size: 0.9375rem;
     font-weight: 600;
@@ -283,7 +285,7 @@ theme-light {
   padding-bottom: 5rem;
   position: relative;
   z-index: 10;
-  box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
   width: 100%;
   min-height: calc(100vh - 200px);
   box-sizing: border-box;
@@ -302,8 +304,8 @@ theme-light {
     border: none;
     cursor: pointer;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
     svg {
       fill: $pure-snow;
     }
@@ -454,7 +456,7 @@ theme-light {
         border: none;
         cursor: pointer;
         padding: 0.5rem;
-        
+
         svg {
           fill: var(--text-muted);
           transform: rotate(90deg);
@@ -487,7 +489,7 @@ theme-light {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      
+
       svg {
         fill: $strawberry-jam;
       }
@@ -537,7 +539,8 @@ theme-light {
     display: none;
   }
 
-  .term-page-light, .term-page-dark {
+  .term-page-light,
+  .term-page-dark {
     .top-bar {
       padding: 1rem 1rem 0;
     }
@@ -560,7 +563,8 @@ theme-light {
 }
 
 @media (max-width: 480px) {
-  .term-page-light, .term-page-dark {
+  .term-page-light,
+  .term-page-dark {
     .content-container {
       padding: 1.5rem 1rem 2rem;
     }
@@ -639,7 +643,8 @@ theme-light {
         text-align: center;
       }
 
-      .action-button, .vote-button {
+      .action-button,
+      .vote-button {
         background: none;
         border: none;
         cursor: pointer;
