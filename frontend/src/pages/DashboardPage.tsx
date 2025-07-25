@@ -101,8 +101,8 @@ const DashboardPage: React.FC = () => {
       }
 
       // If not in localStorage or parsing failed, fetch from API
+      console.log('Before call', token);
       try {
-        console.log(token);
         const response = await fetch(API_ENDPOINTS.getMe, {
           // <-- Use the new endpoint
           headers: {
@@ -151,6 +151,7 @@ const DashboardPage: React.FC = () => {
       } finally {
         setIsLoadingUserData(false);
       }
+      console.log('After call token', token);
     };
 
     const loadDashboardWidgetsData = async () => {
