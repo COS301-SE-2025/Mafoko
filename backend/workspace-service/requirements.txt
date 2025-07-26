@@ -9,4 +9,4 @@ psycopg2-binary
 ruff      
 black     
 mypy      
-mavito-common-lib==0.1.0
+# mavito-common-lib==0.1.0  # Temporarily commented out for testing
