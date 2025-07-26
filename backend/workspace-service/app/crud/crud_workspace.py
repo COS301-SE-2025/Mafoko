@@ -6,15 +6,13 @@ from typing import List, Optional, Dict, Any
 from uuid import UUID
 
 from mavito_common.models.workspace import (
-    BookmarkedTerm, 
-    BookmarkedGlossary, 
-    WorkspaceGroup, 
+    BookmarkedTerm,
+    BookmarkedGlossary,
+    WorkspaceGroup,
     WorkspaceGroupItem,
     GroupType,
-    ItemType
 )
 from mavito_common.models.term import Term
-from mavito_common.models.user import User
 from mavito_common.schemas.workspace import (
     BookmarkedTermCreate,
     BookmarkedGlossaryCreate,
@@ -22,21 +20,19 @@ from mavito_common.schemas.workspace import (
     WorkspaceGroupUpdate,
     WorkspaceGroupItemCreate,
     SearchTermsRequest,
-    BulkDeleteRequest
+    BulkDeleteRequest,
 )
 
 
 class CRUDWorkspace:
-    
+
     # Bookmarked Terms CRUD
     async def create_bookmarked_term(
         self, db: AsyncSession, *, obj_in: BookmarkedTermCreate, user_id: UUID
     ) -> BookmarkedTerm:
         """Create a new bookmarked term."""
         db_obj = BookmarkedTerm(
-            user_id=user_id,
-            term_id=obj_in.term_id,
-            notes=obj_in.notes
+            user_id=user_id, term_id=obj_in.term_id, notes=obj_in.notes
         )
         db.add(db_obj)
         await db.commit()
@@ -65,8 +61,7 @@ class CRUDWorkspace:
             .options(selectinload(BookmarkedTerm.term))
             .filter(
                 and_(
-                    BookmarkedTerm.user_id == user_id,
-                    BookmarkedTerm.term_id == term_id
+                    BookmarkedTerm.user_id == user_id, BookmarkedTerm.term_id == term_id
                 )
             )
         )
@@ -79,8 +74,7 @@ class CRUDWorkspace:
         result = await db.execute(
             select(BookmarkedTerm).filter(
                 and_(
-                    BookmarkedTerm.user_id == user_id,
-                    BookmarkedTerm.term_id == term_id
+                    BookmarkedTerm.user_id == user_id, BookmarkedTerm.term_id == term_id
                 )
             )
         )
@@ -97,9 +91,7 @@ class CRUDWorkspace:
     ) -> BookmarkedGlossary:
         """Create a new bookmarked glossary."""
         db_obj = BookmarkedGlossary(
-            user_id=user_id,
-            glossary_name=obj_in.glossary_name,
-            notes=obj_in.notes
+            user_id=user_id, glossary_name=obj_in.glossary_name, notes=obj_in.notes
         )
         db.add(db_obj)
         await db.commit()
@@ -126,7 +118,7 @@ class CRUDWorkspace:
             select(BookmarkedGlossary).filter(
                 and_(
                     BookmarkedGlossary.user_id == user_id,
-                    BookmarkedGlossary.glossary_name == glossary_name
+                    BookmarkedGlossary.glossary_name == glossary_name,
                 )
             )
         )
@@ -146,7 +138,7 @@ class CRUDWorkspace:
             user_id=user_id,
             name=obj_in.name,
             description=obj_in.description,
-            group_type=obj_in.group_type
+            group_type=obj_in.group_type,
         )
         db.add(db_obj)
         await db.commit()
@@ -160,7 +152,7 @@ class CRUDWorkspace:
         query = select(WorkspaceGroup).filter(WorkspaceGroup.user_id == user_id)
         if group_type:
             query = query.filter(WorkspaceGroup.group_type == group_type)
-        
+
         result = await db.execute(query)
         return result.scalars().all()
 
@@ -172,24 +164,23 @@ class CRUDWorkspace:
             select(WorkspaceGroup)
             .options(selectinload(WorkspaceGroup.items))
             .filter(
-                and_(
-                    WorkspaceGroup.id == group_id,
-                    WorkspaceGroup.user_id == user_id
-                )
+                and_(WorkspaceGroup.id == group_id, WorkspaceGroup.user_id == user_id)
             )
         )
         return result.scalars().first()
 
     async def update_workspace_group(
-        self, db: AsyncSession, *, group_id: UUID, user_id: UUID, obj_in: WorkspaceGroupUpdate
+        self,
+        db: AsyncSession,
+        *,
+        group_id: UUID,
+        user_id: UUID,
+        obj_in: WorkspaceGroupUpdate,
     ) -> Optional[WorkspaceGroup]:
         """Update workspace group."""
         result = await db.execute(
             select(WorkspaceGroup).filter(
-                and_(
-                    WorkspaceGroup.id == group_id,
-                    WorkspaceGroup.user_id == user_id
-                )
+                and_(WorkspaceGroup.id == group_id, WorkspaceGroup.user_id == user_id)
             )
         )
         db_obj = result.scalars().first()
@@ -207,10 +198,7 @@ class CRUDWorkspace:
         """Delete workspace group and its items."""
         result = await db.execute(
             select(WorkspaceGroup).filter(
-                and_(
-                    WorkspaceGroup.id == group_id,
-                    WorkspaceGroup.user_id == user_id
-                )
+                and_(WorkspaceGroup.id == group_id, WorkspaceGroup.user_id == user_id)
             )
         )
         db_obj = result.scalars().first()
@@ -230,7 +218,7 @@ class CRUDWorkspace:
             select(WorkspaceGroup).filter(
                 and_(
                     WorkspaceGroup.id == obj_in.group_id,
-                    WorkspaceGroup.user_id == user_id
+                    WorkspaceGroup.user_id == user_id,
                 )
             )
         )
@@ -241,7 +229,7 @@ class CRUDWorkspace:
             group_id=obj_in.group_id,
             item_type=obj_in.item_type,
             term_id=obj_in.term_id,
-            glossary_name=obj_in.glossary_name
+            glossary_name=obj_in.glossary_name,
         )
         db.add(db_obj)
         await db.commit()
@@ -258,8 +246,7 @@ class CRUDWorkspace:
             .join(WorkspaceGroup)
             .filter(
                 and_(
-                    WorkspaceGroupItem.id == item_id,
-                    WorkspaceGroup.user_id == user_id
+                    WorkspaceGroupItem.id == item_id, WorkspaceGroup.user_id == user_id
                 )
             )
         )
@@ -275,8 +262,10 @@ class CRUDWorkspace:
         self, db: AsyncSession, *, user_id: UUID, request: SearchTermsRequest
     ) -> List[BookmarkedTerm]:
         """Search bookmarked terms with filters."""
-        query = select(BookmarkedTerm).options(selectinload(BookmarkedTerm.term)).filter(
-            BookmarkedTerm.user_id == user_id
+        query = (
+            select(BookmarkedTerm)
+            .options(selectinload(BookmarkedTerm.term))
+            .filter(BookmarkedTerm.user_id == user_id)
         )
 
         if request.search_query:
@@ -284,15 +273,19 @@ class CRUDWorkspace:
             search_filter = or_(
                 BookmarkedTerm.notes.ilike(f"%{request.search_query}%"),
                 Term.term.ilike(f"%{request.search_query}%"),
-                Term.definition.ilike(f"%{request.search_query}%")
+                Term.definition.ilike(f"%{request.search_query}%"),
             )
             query = query.join(Term).filter(search_filter)
 
         if request.glossary_filter:
-            query = query.join(Term).filter(Term.glossary_name == request.glossary_filter)
+            query = query.join(Term).filter(
+                Term.glossary_name == request.glossary_filter
+            )
 
         if request.language_filter:
-            query = query.join(Term).filter(Term.language_code == request.language_filter)
+            query = query.join(Term).filter(
+                Term.language_code == request.language_filter
+            )
 
         if request.date_from:
             query = query.filter(BookmarkedTerm.created_at >= request.date_from)
@@ -324,7 +317,7 @@ class CRUDWorkspace:
                 select(BookmarkedTerm).filter(
                     and_(
                         BookmarkedTerm.user_id == user_id,
-                        BookmarkedTerm.term_id.in_(request.term_ids)
+                        BookmarkedTerm.term_id.in_(request.term_ids),
                     )
                 )
             )
@@ -345,7 +338,7 @@ class CRUDWorkspace:
                 select(BookmarkedGlossary).filter(
                     and_(
                         BookmarkedGlossary.user_id == user_id,
-                        BookmarkedGlossary.glossary_name.in_(request.glossary_names)
+                        BookmarkedGlossary.glossary_name.in_(request.glossary_names),
                     )
                 )
             )
@@ -399,7 +392,7 @@ class CRUDWorkspace:
             "bookmarked_terms": terms_count,
             "bookmarked_glossaries": glossaries_count,
             "workspace_groups": groups_count,
-            "unique_languages": languages_count
+            "unique_languages": languages_count,
         }
 
 
