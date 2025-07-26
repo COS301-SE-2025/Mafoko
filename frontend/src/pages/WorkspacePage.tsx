@@ -18,21 +18,16 @@ import {
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
+import { workspaceAPI } from '../utils/workspaceAPI';
+import type {
+  BookmarkedTerm,
+  BookmarkedGlossary,
+  WorkspaceGroup
+} from '../types/workspace';
 
 import '../styles/WorkspacePage.scss';
 
-// Define types for our data
-interface Term {
-  id: number;
-  term: string;
-  definition?: string;
-  language: string;
-  category?: string;
-  group: string;
-  lastModified: string;
-  notes?: string;
-}
-
+// Legacy interfaces for submitted terms (keeping until we have submission API)
 interface SubmittedTerm {
   id: number;
   term: string;
@@ -40,15 +35,6 @@ interface SubmittedTerm {
   submittedDate: string;
   reviewedDate: string | null;
   feedback?: string;
-}
-
-interface Glossary {
-  id: number;
-  name: string;
-  language: string;
-  termCount: number;
-  lastUpdated: string;
-  followed: boolean;
 }
 
 const WorkspacePage: React.FC = () => {
@@ -65,7 +51,7 @@ const WorkspacePage: React.FC = () => {
   const [expandedGroups, setExpandedGroups] = useState<{
     [key: string]: boolean;
   }>({});
-  const [editingNotes, setEditingNotes] = useState<number | null>(null);
+  const [editingNotes, setEditingNotes] = useState<string | null>(null);
   const [noteText, setNoteText] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedGroupsForDeletion, setSelectedGroupsForDeletion] = useState<
@@ -74,51 +60,16 @@ const WorkspacePage: React.FC = () => {
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
 
-  // Glossaries state
-  const [glossaries, setGlossaries] = useState<Glossary[]>([
-    {
-      id: 1,
-      name: 'Agriculture Glossary',
-      language: 'Afrikaans',
-      termCount: 245,
-      lastUpdated: '2024-07-15',
-      followed: true,
-    },
-    {
-      id: 2,
-      name: 'Environmental Science Terms',
-      language: 'English',
-      termCount: 189,
-      lastUpdated: '2024-07-14',
-      followed: true,
-    },
-    {
-      id: 3,
-      name: 'Biology Fundamentals',
-      language: 'English',
-      termCount: 156,
-      lastUpdated: '2024-07-13',
-      followed: false,
-    },
-    {
-      id: 4,
-      name: 'Farming Techniques',
-      language: 'Afrikaans',
-      termCount: 98,
-      lastUpdated: '2024-07-12',
-      followed: true,
-    },
-  ]);
+  // Real workspace data state
+  // const [bookmarkedTerms, setBookmarkedTerms] = useState<BookmarkedTerm[]>([]);
+  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<BookmarkedGlossary[]>([]);
+  const [workspaceGroups, setWorkspaceGroups] = useState<WorkspaceGroup[]>([]);
+  // const [workspaceOverview, setWorkspaceOverview] = useState<WorkspaceOverview | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Initialize groups from saved terms
-  const initialGroups = [
-    'all',
-    'All Terms',
-    'Thesis Research',
-    'General Study',
-    'Farming Methods',
-  ];
-  const [groups, setGroups] = useState<string[]>(initialGroups);
+  // Initialize groups from workspace groups
+  const [groups, setGroups] = useState<string[]>(['all', 'All Terms']);
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -132,54 +83,7 @@ const WorkspacePage: React.FC = () => {
   }, [isDarkMode]);
 
   // Mock data
-  const [savedTerms, setSavedTerms] = useState<Term[]>([
-    {
-      id: 1,
-      term: 'Landbou-insette',
-      definition:
-        'Crops that are planted and harvested during the same production season.',
-      language: 'Afrikaans',
-      category: 'Agriculture',
-      group: 'Thesis Research',
-      lastModified: '2024-07-15',
-      notes:
-        'Important concept for Chapter 3 of thesis. Need to research more about seasonal variations.',
-    },
-    {
-      id: 2,
-      term: 'Biodiversity',
-      definition:
-        'The variety of life in the world or in a particular habitat or ecosystem.',
-      language: 'English',
-      category: 'Environmental Science',
-      group: 'All Terms',
-      lastModified: '2024-07-14',
-      notes:
-        'This term was moved to All Terms when its original group was deleted.',
-    },
-    {
-      id: 3,
-      term: 'Photosynthesis',
-      definition:
-        'The process by which plants use sunlight, water, and carbon dioxide to produce oxygen and energy.',
-      language: 'English',
-      category: 'Biology',
-      group: 'General Study',
-      lastModified: '2024-07-13',
-      notes:
-        'Key process for understanding plant biology. Good example for explaining cellular respiration.',
-    },
-    {
-      id: 4,
-      term: 'Gewasrotasie',
-      definition:
-        'The practice of growing different types of crops in the same area across seasons.',
-      language: 'Afrikaans',
-      category: 'Agriculture',
-      group: 'Farming Methods',
-      lastModified: '2024-07-12',
-    },
-  ]);
+  const [savedTerms, setSavedTerms] = useState<BookmarkedTerm[]>([]);
 
   const submittedTerms: SubmittedTerm[] = [
     {
@@ -286,6 +190,42 @@ const WorkspacePage: React.FC = () => {
     };
   }, []);
 
+  // Load workspace data on component mount
+  useEffect(() => {
+    void loadWorkspaceData();
+  }, []);
+
+  // Function to load all workspace data
+  const loadWorkspaceData = async (): Promise<void> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const [bookmarkedTermsData, bookmarkedGlossariesData, workspaceGroupsData] = await Promise.all([
+        workspaceAPI.bookmarks.terms.getAll(),
+        workspaceAPI.bookmarks.glossaries.getAll(),
+        workspaceAPI.groups.getAll(),
+        // workspaceAPI.overview.getOverview(), // For future use
+      ]);
+
+      // setBookmarkedTerms(bookmarkedTermsData); // For future use
+      setSavedTerms(bookmarkedTermsData); // Use bookmarked terms as saved terms
+      setBookmarkedGlossaries(bookmarkedGlossariesData);
+      setWorkspaceGroups(workspaceGroupsData);
+      // setWorkspaceOverview(overviewData); // For future use
+
+      // Update groups list from workspace groups
+      const groupNames = ['all', 'All Terms', ...workspaceGroupsData.map(group => group.name)];
+      setGroups(groupNames);
+
+    } catch (error) {
+      console.error('Failed to load workspace data:', error);
+      setError('Failed to load workspace data. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleGroup = (groupName: string) => {
     setExpandedGroups((prev) => ({
       ...prev,
@@ -293,26 +233,21 @@ const WorkspacePage: React.FC = () => {
     }));
   };
 
-  const toggleFollow = (glossaryId: number) => {
-    setGlossaries((prev) =>
-      prev.map((glossary) =>
-        glossary.id === glossaryId
-          ? { ...glossary, followed: !glossary.followed }
-          : glossary,
-      ),
-    );
+  const toggleFollow = (glossaryId: string) => {
+    // TODO: Implement follow/unfollow for bookmarked glossaries
+    console.log('Toggle follow for glossary:', glossaryId);
   };
 
   // Removed unused getStatusIcon function
 
   // Functions for handling notes
-  const handleAddNote = (termId: number) => {
+  const handleAddNote = (termId: string) => {
     const term = savedTerms.find((t) => t.id === termId);
     setEditingNotes(termId);
     setNoteText(term?.notes || '');
   };
 
-  const handleSaveNote = (termId: number) => {
+  const handleSaveNote = (termId: string) => {
     setSavedTerms((prevTerms) =>
       prevTerms.map((term) =>
         term.id === termId
@@ -361,11 +296,12 @@ const WorkspacePage: React.FC = () => {
 
     // Move all terms from deleted groups to "All Terms"
     setSavedTerms((prevTerms) =>
-      prevTerms.map((term) =>
-        selectedGroupsForDeletion.includes(term.group)
-          ? { ...term, group: 'All Terms' }
-          : term,
-      ),
+      prevTerms.map((term) => {
+        const termGroupName = getTermGroupName(term.term_id);
+        return selectedGroupsForDeletion.includes(termGroupName)
+          ? { ...term } // BookmarkedTerm doesn't need group reassignment since groups are separate
+          : term;
+      }),
     );
 
     // Remove the groups from the groups list
@@ -429,32 +365,48 @@ const WorkspacePage: React.FC = () => {
     const uniqueCategories = [
       ...new Set(
         savedTerms
-          .map((term) => term.category)
-          .filter((category) => category !== undefined),
+          .map((bookmarkedTerm) => bookmarkedTerm.domain)
+          .filter((domain) => domain !== undefined),
       ),
     ] as string[];
 
     return categories.concat(uniqueCategories.sort());
   };
 
-  const filteredTerms = savedTerms.filter((term) => {
+  const filteredTerms = savedTerms.filter((bookmarkedTerm) => {
     const searchLower = searchQuery.toLowerCase();
+    
     const matchesSearch =
-      term.term.toLowerCase().includes(searchLower) ||
-      (term.definition?.toLowerCase().includes(searchLower) ?? false);
+      bookmarkedTerm.term?.toLowerCase().includes(searchLower) ||
+      bookmarkedTerm.definition?.toLowerCase().includes(searchLower) ||
+      (bookmarkedTerm.notes?.toLowerCase().includes(searchLower) ?? false);
 
     const matchesCategory =
-      selectedCategory === 'all' || term.category === selectedCategory;
+      selectedCategory === 'all' || bookmarkedTerm.domain === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
+  // Helper function to get group name for a term
+  const getTermGroupName = (termId: string): string => {
+    for (const group of workspaceGroups) {
+      const hasTermInGroup = group.items.some(item => 
+        item.item_type === 'term' && item.term_id === termId
+      );
+      if (hasTermInGroup) {
+        return group.name;
+      }
+    }
+    return 'All Terms'; // Default group
+  };
+
   // Group terms by their group property
-  const groupedTerms = filteredTerms.reduce<Record<string, Term[]>>(
+  const groupedTerms = filteredTerms.reduce<Record<string, BookmarkedTerm[]>>(
     (acc, term) => {
+      const groupName = getTermGroupName(term.term_id);
       // Create a new array for this group or use the existing one
-      const groupArray = acc[term.group] ?? [];
+      const groupArray = acc[groupName] ?? [];
       // Add the current term to its group array
-      acc[term.group] = [...groupArray, term];
+      acc[groupName] = [...groupArray, term];
       return acc;
     },
     {},
@@ -519,6 +471,37 @@ const WorkspacePage: React.FC = () => {
 
         <div className={`workspace-content ${isMobile ? 'pt-16' : ''}`}>
           <div className="workspace-content-wrapper">
+            
+            {/* Error Display */}
+            {error && (
+              <div
+                style={{
+                  background: '#553c2c',
+                  border: '1px solid #d69e2e',
+                  color: '#fbb6ce',
+                  padding: '12px',
+                  borderRadius: '6px',
+                  marginBottom: '1rem',
+                  textAlign: 'center',
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Loading Display */}
+            {loading && (
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '2rem',
+                  color: isDarkMode ? '#a0aec0' : '#4a5568',
+                }}
+              >
+                Loading workspace data...
+              </div>
+            )}
+            
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
@@ -780,9 +763,9 @@ const WorkspacePage: React.FC = () => {
                                           <span className="language-tag">
                                             {term.language}
                                           </span>
-                                          {term.category && (
+                                          {term.domain && (
                                             <span className="category-tag">
-                                              {term.category}
+                                              {term.domain}
                                             </span>
                                           )}
                                         </div>
@@ -1021,9 +1004,9 @@ const WorkspacePage: React.FC = () => {
                         {/* Followed Glossaries */}
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {glossaries.map((glossary) => (
+                        {bookmarkedGlossaries.map((bookmark) => (
                           <div
-                            key={glossary.id}
+                            key={bookmark.id}
                             className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
                             style={
                               isDarkMode
@@ -1041,131 +1024,50 @@ const WorkspacePage: React.FC = () => {
                                   <h4
                                     className={`text-lg font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
                                   >
-                                    {glossary.name}
+                                    {bookmark.domain} Glossary
                                   </h4>
                                   <span className="language-tag">
-                                    {glossary.language}
+                                    {bookmark.domain}
                                   </span>
                                 </div>
                               </div>
-                              <div
-                                className={`w-3 h-3 rounded-full ${glossary.followed ? 'bg-green-500' : 'bg-gray-300'}`}
-                              ></div>
+                              <div className="w-3 h-3 rounded-full bg-green-500"></div>
                             </div>
                             <div
                               className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
                             >
-                              <span>{glossary.termCount} terms</span>
-                              <span>Updated: {glossary.lastUpdated}</span>
+                              <span>Bookmarked glossary</span>
+                              <span>Added: {new Date(bookmark.bookmarked_at).toLocaleDateString()}</span>
                             </div>
+                            {bookmark.notes && (
+                              <div className="mt-2">
+                                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                  {bookmark.notes}
+                                </p>
+                              </div>
+                            )}
                             <div className="mt-3 flex items-center space-x-2">
                               <button
-                                onClick={() => {
-                                  toggleFollow(glossary.id);
-                                }}
-                                className={`px-3 py-1 rounded-full text-sm font-medium border border-transparent cursor-pointer transition-all duration-200 ease-in-out ${
-                                  glossary.followed
-                                    ? isDarkMode
-                                      ? 'text-red-300'
-                                      : 'text-red-500'
-                                    : isDarkMode
-                                      ? 'text-green-300'
-                                      : 'text-green-500'
-                                }`}
-                                style={
-                                  glossary.followed
-                                    ? isDarkMode
-                                      ? { backgroundColor: '#31374eff' }
-                                      : {
-                                          backgroundColor:
-                                            'rgba(239, 68, 68, 0.1)',
-                                        }
-                                    : isDarkMode
-                                      ? { backgroundColor: '#31374eff' }
-                                      : {
-                                          backgroundColor:
-                                            'rgba(16, 185, 129, 0.1)',
-                                        }
-                                }
-                                onMouseEnter={(e) => {
-                                  if (isDarkMode) {
-                                    if (glossary.followed) {
-                                      e.currentTarget.style.color = 'white';
-                                      e.currentTarget.style.borderColor =
-                                        'rgba(239, 68, 68, 0.3)';
-                                    } else {
-                                      e.currentTarget.style.color = 'white';
-                                      e.currentTarget.style.borderColor =
-                                        'rgba(16, 185, 129, 0.3)';
-                                    }
-                                  } else if (glossary.followed) {
-                                    e.currentTarget.style.color = '#dc2626';
-                                    e.currentTarget.style.backgroundColor =
-                                      '#fef2f2';
-                                    e.currentTarget.style.borderColor =
-                                      '#fecaca';
-                                  } else {
-                                    e.currentTarget.style.color = '#059669';
-                                    e.currentTarget.style.backgroundColor =
-                                      '#f0fdf4';
-                                    e.currentTarget.style.borderColor =
-                                      '#bbf7d0';
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  if (isDarkMode) {
-                                    if (glossary.followed) {
-                                      e.currentTarget.style.color = '#fca5a5';
-                                      e.currentTarget.style.borderColor =
-                                        'transparent';
-                                    } else {
-                                      e.currentTarget.style.color = '#86efac';
-                                      e.currentTarget.style.borderColor =
-                                        'transparent';
-                                    }
-                                  } else if (glossary.followed) {
-                                    e.currentTarget.style.color = '#ef4444';
-                                    e.currentTarget.style.backgroundColor =
-                                      'rgba(239, 68, 68, 0.1)';
-                                    e.currentTarget.style.borderColor =
-                                      'transparent';
-                                  } else {
-                                    e.currentTarget.style.color = '#10b981';
-                                    e.currentTarget.style.backgroundColor =
-                                      'rgba(16, 185, 129, 0.1)';
-                                    e.currentTarget.style.borderColor =
-                                      'transparent';
-                                  }
-                                }}
-                              >
-                                {glossary.followed ? 'Unfollow' : 'Follow'}
-                              </button>
-                              <button
                                 type="button"
-                                className={`px-3 py-1 rounded-full text-sm font-medium border-none cursor-pointer transition-all duration-200 ease-in-out ${
-                                  isDarkMode
-                                    ? 'text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                                style={
-                                  isDarkMode
-                                    ? { backgroundColor: '#292e41' }
-                                    : {}
-                                }
+                                onClick={() => {
+                                  toggleFollow(bookmark.id);
+                                }}
+                                className="px-3 py-1 text-sm border rounded"
+                                style={{
+                                  borderColor: '#00ceaf',
+                                  color: '#00ceaf',
+                                  backgroundColor: 'transparent',
+                                }}
                                 onMouseEnter={(e) => {
-                                  if (isDarkMode) {
-                                    e.currentTarget.style.backgroundColor =
-                                      '#3b83f67b';
-                                  }
+                                  e.currentTarget.style.backgroundColor = '#00ceaf';
+                                  e.currentTarget.style.color = '#fff';
                                 }}
                                 onMouseLeave={(e) => {
-                                  if (isDarkMode) {
-                                    e.currentTarget.style.backgroundColor =
-                                      '#292e41';
-                                  }
+                                  e.currentTarget.style.backgroundColor = 'transparent';
+                                  e.currentTarget.style.color = '#00ceaf';
                                 }}
                               >
-                                View
+                                Remove Bookmark
                               </button>
                             </div>
                           </div>

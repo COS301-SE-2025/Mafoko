@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config';
+import { workspaceAPI } from '../../utils/workspaceAPI';
 import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
 
@@ -19,6 +20,8 @@ interface TermCardProps {
   upvotes: number;
   downvotes: number;
   definition: string;
+  isBookmarked?: boolean;
+  onBookmarkChange?: (termId: string, isBookmarked: boolean) => void;
   onView?: () => void;
 }
 
@@ -44,12 +47,20 @@ const TermCard: React.FC<TermCardProps> = ({
   upvotes: initialUpvotes,
   downvotes: initialDownvotes,
   definition,
+  isBookmarked = false,
+  onBookmarkChange,
   onView,
 }) => {
   const [upvotes, setUpvotes] = useState(initialUpvotes);
   const [downvotes, setDownvotes] = useState(initialDownvotes);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
+  const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
+
+  // Update bookmark state when prop changes
+  useEffect(() => {
+    setBookmarked(isBookmarked);
+  }, [isBookmarked]);
 
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
     const token = localStorage.getItem('accessToken');
@@ -132,6 +143,41 @@ const TermCard: React.FC<TermCardProps> = ({
     }
   };
 
+  const handleBookmark = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.log('Please log in to bookmark terms.');
+      return;
+    }
+
+    setIsBookmarkLoading(true);
+    const previousBookmarkState = bookmarked;
+
+    try {
+      if (bookmarked) {
+        // Remove bookmark
+        await workspaceAPI.bookmarks.terms.delete(id);
+        setBookmarked(false);
+        onBookmarkChange?.(id, false);
+      } else {
+        // Add bookmark
+        await workspaceAPI.bookmarks.terms.create({ term_id: id });
+        setBookmarked(true);
+        onBookmarkChange?.(id, true);
+      }
+    } catch (error) {
+      console.error('Error toggling bookmark:', error);
+      // Revert optimistic update on error
+      setBookmarked(previousBookmarkState);
+      
+      // Show user-friendly error message
+      const action = bookmarked ? 'removing' : 'adding';
+      console.log(`Failed to ${action} bookmark. Please try again.`);
+    } finally {
+      setIsBookmarkLoading(false);
+    }
+  };
+
   return (
     <div className="term-card">
       <div className="term-header">
@@ -174,15 +220,13 @@ const TermCard: React.FC<TermCardProps> = ({
             type="button"
             className="social-button"
             aria-label="Bookmark"
-            onClick={() => {
-              setBookmarked((prev) => !prev);
-            }}
+            onClick={() => { void handleBookmark(); }}
+            disabled={isBookmarkLoading}
           >
             <Bookmark
               size={20}
               className={`icon bookmark${bookmarked ? ' bookmarked' : ''}`}
-              color={bookmarked ? undefined : undefined}
-              fill="none"
+              fill={bookmarked ? 'currentColor' : 'none'}
             />
           </button>
           <button type="button" className="social-button" aria-label="Share">

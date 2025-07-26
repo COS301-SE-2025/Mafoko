@@ -19,6 +19,8 @@ import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import { API_ENDPOINTS } from '../config';
 import { Term, TermTranslations, SearchResponse } from '../types/glossaryTypes';
 import { downloadData } from '../utils/exportUtils';
+import { workspaceAPI } from '../utils/workspaceAPI';
+import type { BookmarkedGlossary } from '../types/workspace';
 
 // API client with strongly typed responses
 
@@ -208,12 +210,17 @@ const GlossaryPage = () => {
   >({});
   const [isDownloading, setIsDownloading] = useState(false);
   const [showExportPopup, setShowExportPopup] = useState(false);
-  const [bookmarkedCategory, setBookmarkedCategory] = useState(false);
+  
+  // Bookmark-related state
+  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<BookmarkedGlossary[]>([]);
+  const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
+  
   const exportPopupRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
   useEffect(() => {
     void loadInitialData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Add glossary-page class to body for specific mobile styles
@@ -273,10 +280,58 @@ const GlossaryPage = () => {
     };
   }, []);
 
+  // Load bookmarked glossaries for the current user
+  const loadBookmarkedGlossaries = async (): Promise<void> => {
+    try {
+      setIsBookmarkLoading(true);
+      const bookmarks = await workspaceAPI.bookmarks.glossaries.getAll();
+      setBookmarkedGlossaries(bookmarks);
+    } catch (error) {
+      console.error('Failed to load bookmarked glossaries:', error);
+      // Don't show error to user for bookmark loading failure
+    } finally {
+      setIsBookmarkLoading(false);
+    }
+  };
+
+  // Handle category bookmark toggle
+  const handleCategoryBookmark = async (): Promise<void> => {
+    if (!selectedCategory) return;
+
+    try {
+      setIsBookmarkLoading(true);
+      
+      // Check if current category is already bookmarked
+      const isCurrentlyBookmarked = bookmarkedGlossaries.some(
+        bookmark => bookmark.domain === selectedCategory
+      );
+
+      if (isCurrentlyBookmarked) {
+        // Remove bookmark
+        await workspaceAPI.bookmarks.glossaries.delete(selectedCategory);
+        setBookmarkedGlossaries(prev => 
+          prev.filter(bookmark => bookmark.domain !== selectedCategory)
+        );
+      } else {
+        // Add bookmark
+        const newBookmark = await workspaceAPI.bookmarks.glossaries.create({
+          domain: selectedCategory,
+          notes: `Bookmarked glossary for ${selectedCategory}`,
+        });
+        setBookmarkedGlossaries(prev => [...prev, newBookmark]);
+      }
+    } catch (error) {
+      console.error('Failed to toggle category bookmark:', error);
+      // TODO: Show error toast to user
+    } finally {
+      setIsBookmarkLoading(false);
+    }
+  };
+
   const loadInitialData = async (): Promise<void> => {
     setLoading(true);
     try {
-      // Load categories, languages, and some random terms concurrently
+      // Load categories, languages, random terms, and bookmarked glossaries concurrently
       const [categoriesData, languagesData, randomTerms] = await Promise.all([
         dictionaryAPI.getCategories(),
         dictionaryAPI.getLanguages(),
@@ -290,6 +345,9 @@ const GlossaryPage = () => {
       if (randomTerms.length > 0) {
         setCategoryTerms(randomTerms);
       }
+
+      // Load bookmarked glossaries if user is authenticated
+      await loadBookmarkedGlossaries();
 
       setError(null);
     } catch (error) {
@@ -828,9 +886,8 @@ const GlossaryPage = () => {
                   {/* Bookmark Button */}
                   <button
                     type="button"
-                    onClick={() => {
-                      setBookmarkedCategory((prev) => !prev);
-                    }}
+                    onClick={() => { void handleCategoryBookmark(); }}
+                    disabled={isBookmarkLoading || !selectedCategory}
                     className="glossary-bookmark-button"
                     style={{
                       backgroundColor: '#f2d001',
@@ -844,14 +901,17 @@ const GlossaryPage = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      cursor: 'pointer',
+                      cursor: isBookmarkLoading || !selectedCategory ? 'not-allowed' : 'pointer',
                       boxShadow: '0 4px 12px rgba(242, 208, 1, 0.3)',
                       transition: 'all 0.2s ease',
+                      opacity: isBookmarkLoading || !selectedCategory ? 0.6 : 1,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow =
-                        '0 6px 16px rgba(242, 208, 1, 0.4)';
+                      if (!isBookmarkLoading && selectedCategory) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow =
+                          '0 6px 16px rgba(242, 208, 1, 0.4)';
+                      }
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)';
@@ -859,17 +919,36 @@ const GlossaryPage = () => {
                         '0 4px 12px rgba(242, 208, 1, 0.3)';
                     }}
                     title={
-                      bookmarkedCategory
-                        ? t('glossaryPage.bookmarked')
-                        : t('glossaryPage.bookmarkCategory')
+                      !selectedCategory
+                        ? 'Select a category to bookmark'
+                        : bookmarkedGlossaries.some(bookmark => bookmark.domain === selectedCategory)
+                          ? t('glossaryPage.bookmarked')
+                          : t('glossaryPage.bookmarkCategory')
                     }
                   >
-                    <Bookmark
-                      size={28}
-                      strokeWidth={2.5}
-                      color="#fff"
-                      fill={bookmarkedCategory ? '#fff' : 'none'}
-                    />
+                    {isBookmarkLoading ? (
+                      <div
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                          border: '2px solid #fff',
+                          borderTop: '2px solid transparent',
+                          borderRadius: '50%',
+                          animation: 'spin 1s linear infinite',
+                        }}
+                      />
+                    ) : (
+                      <Bookmark
+                        size={28}
+                        strokeWidth={2.5}
+                        color="#fff"
+                        fill={
+                          selectedCategory && bookmarkedGlossaries.some(bookmark => bookmark.domain === selectedCategory)
+                            ? '#fff'
+                            : 'none'
+                        }
+                      />
+                    )}
                   </button>
                   {/* Export Button */}
                   <button
