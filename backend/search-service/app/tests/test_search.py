@@ -31,7 +31,7 @@ async def test_search_with_filters(client: AsyncClient, db_session: AsyncSession
 
     # Act
     response = await client.get(
-        "/api/v1/search/", params={"query": "grain", "language": "English"}
+        "/api/v1/search", params={"query": "grain", "language": "English"}
     )
 
     # Assert
