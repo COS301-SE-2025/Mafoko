@@ -14,10 +14,15 @@
 
 
 ---
-
 ## Project Resources
-* [Functional Requirements (SRS) Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
-* [GitHub Project Board](https://github.com/COS301-SE-2025/Marito/projects)
+
+*  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
+*  [SRS Document](https://github.com/COS301-SE-2025/Mavito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
+*  [Figma Designs](https://www.figma.com/design/XUPY5uCBmWQULGmh3L0bqC/Marito_Designs?node-id=0-1&p=f&t=0je6YkOSQeV0tjmJ-0) 
+*  [Architectural requirements](https://9000) 
+*  [User Manual ](https://9000) 
+*  [Technical Installation Manual](https://9000) 
+*  [Coding Standards Document](https://9000) 
 
 ---
 

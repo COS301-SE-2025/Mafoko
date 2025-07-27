@@ -4,6 +4,8 @@ import '../../styles/HelpPage.scss';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/ui/Navbar.tsx';
 import LeftNav from '../../components/ui/LeftNav.tsx';
+import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface Article {
   title: string;
@@ -17,10 +19,10 @@ const HelpPage: React.FC = () => {
   const [results, setResults] = useState<Article[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('help');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const { isDarkMode } = useDarkMode();
+  const { t } = useTranslation();
 
   const articles: Article[] = useMemo(
     () => [
@@ -87,16 +89,6 @@ const HelpPage: React.FC = () => {
     };
   }, []);
 
-  // Changes the theme
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) setIsDarkMode(stored === 'false');
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
-
   const handleSearch = useCallback(
     async (t: string): Promise<void> => {
       await Promise.resolve();
@@ -146,7 +138,7 @@ const HelpPage: React.FC = () => {
 
   return (
     <div
-      className={`help-page-fixed-background  ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`help-page-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       <div className={`help-page-container`}>
         {/* Top bar for mobile only */}
@@ -163,7 +155,7 @@ const HelpPage: React.FC = () => {
           <div className="help-page-search-background">
             <div className="help-page-search-inner">
               <section>
-                <h1>How Can We Help?</h1>
+                <h1>{t('helpPage.howCanWeHelp')}</h1>
                 <HelpSearch
                   onSearch={handleSearch}
                   fetchSuggestions={fetchSuggestions}
@@ -175,7 +167,9 @@ const HelpPage: React.FC = () => {
           <div className="min-h-screen help-page pt-16">
             {!term && (
               <section className="help-page-topics-section w-full px-4">
-                <h2 className="help-page-topics-heading">Common Topics</h2>
+                <h2 className="help-page-topics-heading">
+                  {t('helpPage.commonTopics')}
+                </h2>
                 <div className="help-page-topics-grid">
                   {articles.map((topic, index) => (
                     // eslint-disable-next-line react-x/no-array-index-key
@@ -183,7 +177,7 @@ const HelpPage: React.FC = () => {
                       <h3>{topic.title}</h3>
                       <p>{topic.desc}</p>
                       <Link to={topic.link} className="help-page-article-link">
-                        Article →
+                        {t('helpPage.articleLink')}
                       </Link>
                     </div>
                   ))}
@@ -200,14 +194,14 @@ const HelpPage: React.FC = () => {
                         <h3>{res.title}</h3>
                         <p>{res.desc}</p>
                         <Link to={res.link} className="help-page-article-link">
-                          Article →
+                          {t('helpPage.articleLink')}
                         </Link>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <p className="text-theme opacity-60 text-center">
-                    No results found for "{term}".
+                    {t('searchPage.noResults', { term: term })}
                   </p>
                 )}
               </div>
@@ -222,10 +216,13 @@ const HelpPage: React.FC = () => {
                   }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
-                  Previous
+                  {t('helpPage.previous')}
                 </button>
                 <span>
-                  Page {currentPage} of {totalPages}
+                  {t('helpPage.pageInfo', {
+                    current: currentPage,
+                    total: totalPages,
+                  })}
                 </span>
                 <button
                   type="button"
@@ -235,15 +232,15 @@ const HelpPage: React.FC = () => {
                   }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
-                  Next
+                  {t('helpPage.next')}
                 </button>
               </div>
             )}
 
             <section className="help-page-support-cta">
-              <h3>Can’t find what you’re looking for?</h3>
+              <h3>{t('helpPage.cantFind')}</h3>
               <a href="mailto:veloxcapstone@gmail.com" className="support-link">
-                Submit a request →
+                {t('helpPage.submitRequest')}
               </a>
             </section>
           </div>

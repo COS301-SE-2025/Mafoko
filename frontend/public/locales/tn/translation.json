@@ -1,0 +1,206 @@
+{
+  "navigation": {
+    "home": "Gae",
+    "dictionary": "Thanodi",
+    "glossary": "Lenanetlhalosi",
+    "savedTerms": "Mafoko a a Bolokilweng",
+    "dashboard": "Bolaodi",
+    "help": "Thuso",
+    "darkMode": "Mokgwa o montsho"
+  },
+
+  "landingPage": {
+    "registerButton": "Ikwadise",
+    "loginButton": "Tsena"
+  },
+  "loginPage": {
+    "title": "O AMOGELESEGA GAPE!",
+    "subtitle": "Tswee-tswee tsenya dintlha tsa gago go tsena.",
+    "emailLabel": "Imeili",
+    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
+    "passwordLabel": "Khunololamoraba",
+    "passwordPlaceholder": "Tsenya khunololamoraba ya gago",
+    "rememberMe": "Nkgopole",
+    "forgotPassword": "O lebetse Khunololamoraba?",
+    "loginButton": "Tsena",
+    "orDivider": "KGOTSA",
+    "loginWithGoogle": "Tsena ka Google",
+    "noAccount": "Ga o na akhaonto?",
+    "registerLink": "Ikwadise",
+    "welcomeImageAlt": "Kamogelo ya go Tsena mo Mavito",
+    "dsfsiLogoAlt": "Letshwao la DSFSI",
+    "errorTokenMissing": "O tsene sentle, mme ga go na tokene e e amogetsweng. Tswee-tswee ikgolaganye le thuso.",
+    "errorDefault": "Go tsena go paletswe. Tswee-tswee tlhola dintlha tsa gago.",
+    "errorUnexpectedFormat": "Phoso ya go tsena (maemo {{status}}). Sebopego sa phoso se se sa solofetswang.",
+    "errorWithStatus": "Go tsena go paletswe (maemo {{status}}). Tswee-tswee leka gape.",
+    "errorNetwork": "Go diragetse phoso: {{message}}.",
+    "errorUnknownNetwork": "Go diragetse phoso e e sa itseweng ya neteweke. Tswee-tswee leka gape."
+  },
+  "registrationPage": {
+    "title": "SIMOLOLA JAANONG",
+    "subtitle": "Tlhola akhaonto ya gago ya Mavito.",
+    "firstNameLabel": "Leina la Ntlha",
+    "firstNamePlaceholder": "Tsenya leina la gago la ntlha",
+    "lastNameLabel": "Sefane",
+    "lastNamePlaceholder": "Tsenya sefane sa gago",
+    "emailLabel": "Imeili",
+    "emailPlaceholder": "Tsenya aterese ya gago ya imeili",
+    "passwordLabel": "Khunololamoraba",
+    "passwordPlaceholder": "Tlhola khunololamoraba",
+    "confirmPasswordLabel": "Netefatsa Khunololamoraba",
+    "confirmPasswordPlaceholder": "Netefatsa khunololamoraba ya gago",
+    "agreeToTerms": "Ke dumela",
+    "termsAndConditionsLink": "Melawana le Mabaka",
+    "createAccountButton": "Tlhola Akhaonto",
+    "creatingAccountButton": "E a Tlholwa...",
+    "orDivider": "KGOTSA",
+    "createWithGoogle": "Tlhola Akhaonto ka Google",
+    "haveAccount": "O setse o na le akhaonto?",
+    "loginLink": "Tsena",
+    "welcomeImageAlt": "Kamogelo ya Mavito",
+    "dsfsiLogoAlt": "Letshwao la DSFSI",
+    "errorPasswordsDoNotMatch": "Dikhunololamoraba ga di tshwane.",
+    "errorAgreeToTerms": "O tshwanetse go dumela melawana le mabaka.",
+    "alertSuccess": "O ikwadisitse ka katlego! Tswee-tswee tswelela go tsena.",
+    "errorDefault": "Go ikwadisa go paletswe. Tswee-tswee leka gape.",
+    "errorUnexpectedFormat": "Phoso: {{detailJson}}",
+    "errorWithStatus": "Go ikwadisa go paletswe (maemo {{status}}). Tswee-tswee leka gape.",
+    "errorNetwork": "Go diragetse phoso: {{message}}.",
+    "errorUnknownNetwork": "Go diragetse phoso e e sa itseweng ya neteweke. Tswee-tswee leka gape.",
+    "registerAsLabel": "Ikwadise Jaaka",
+    "registerAsPlaceholder": "Tlhopha seabe sa gago",
+    "registerAsOptions": {
+      "contributor": "Motlhagisi",
+      "linguist": "Mosekaseki wa Puo",
+      "researcher": "Mmatlisisi",
+      "student": "Moithuti"
+    },
+    "userTypeLabels": {
+      "normalUser": "Modirisi wa Tlwaelo",
+      "applyingLinguist": "Go Ikwadisa jaaka Mosekaseki wa Puo"
+    }
+  },
+  "dashboard": {
+    "welcome": "O amogelwa mo Mavito",
+    "welcomeBack": "O amogetswe gape",
+    "userName": "Leina la Modirisi",
+    "userId": "Nomoro ya Modirisi",
+    "quickActions": "Ditiro tsa Bonako",
+    "searchNow": "Batla Jaanong",
+    "searchDescription": "Batla mareo ka dipuo tse di farologaneng",
+    "downloadResources": "Gogela Didirisiwa",
+    "downloadDescription": "Bona le go gogela didirisiwa tsa mareo",
+    "contributeTerm": "Tsenya Lereo",
+    "contributeDescription": "Oketsa mareo a mantšhwa mo databeising ya rona",
+    "recentTerms": "Mareo a Gajaana",
+    "hideTerms": "Fitlha Mareo",
+    "viewAll": "Bona Tsotlhe",
+    "communityActivity": "Ditiro tsa Baagi",
+    "hideActivity": "Fitlha Ditiro",
+    "viewAllActivity": "Bona Ditiro Tsotlhe"
+  },
+  "glossaryPage": {
+    "title": "Lenanetlhalosi la Dipuo tse Dintsi",
+    "subtitle": "Lebelela dikarolo, batlisisa mafoko, bona diphetolelo",
+    "showTranslations": "Bontsha Diphetolelo",
+    "translationsHeader": "Diphetolelo",
+    "noTranslations": "Ga go na diphetolelo tse di leng teng tsa lefoko le",
+    "selectTerm": "Tlhopha lefoko go bona dintlha le diphetolelo",
+    "loading": "E a laisa...",
+    "categories": "Dikarolo",
+    "selectCategory": "Tlhopha Karolo",
+    "termDetails": "Dintlha tsa Lefoko",
+    "termsInCategory": "Mafoko mo {{category}}",
+    "randomTerms": "Mafoko a a sa Rulaganngwang",
+    "searchTermsInCategory": "Batla mafoko mo {{category}}...",
+    "searchAllTerms": "Batla mafoko otlhe...",
+    "noTermsFound": "Ga go mafoko a a fitlhelwang a a tshwanang le \"{{query}}\" mo {{category}}.",
+    "noTermsInCategory": "Ga go mafoko a a fitlhelwang mo {{category}}."
+  },
+  "analytics": {
+    "loading": "E laisa data ya analytics...",
+    "stats": {
+      "totalTerms": "Mafoko Otlhe",
+      "uniqueLanguages": "Dipuo tse di Farologaneng",
+      "uniqueDomains": "Dikarolo tse di Farologaneng",
+      "topLanguage": "Puo e e Kwa Godimo"
+    },
+    "popularTerms": {
+      "title": "Mafoko a a Tumileng",
+      "subtitle": "Mafoko a a dirisiwang thata mo dikarolong tsotlhe"
+    },
+    "categoryDistribution": {
+      "title": "Kgaoganyo ya Dikarolo",
+      "subtitle": "Mafoko a a kgaogantswe go ya ka dikarolo tsa dipalopalo"
+    },
+    "topDomains": {
+      "title": "Dikarolo tse di Kwa Godimo",
+      "subtitle": "Dikarolo tsa dipalopalo tse di dirang thata"
+    },
+    "trendsAndInsights": {
+      "title": "Ditlwaelo le Kitso",
+      "subtitle": "Tshekatsheko e e ikaegileng ka data le dipholo",
+      "languageDiversity": {
+        "title": "Seelo sa go Farologana ga Dipuo",
+        "coverage": "ya dipuo tsa Aforika Borwa tse di dirisitsweng",
+        "terms": "mafoko"
+      },
+      "domainFocus": {
+        "title": "Dikarolo tsa Tsepamo"
+      },
+      "dataQuality": {
+        "title": "Ditekanyetso tsa Boleng jwa Data",
+        "completenessScore": "Maduo a Botlalo",
+        "translationCoverage": "Tshegetso ya Diphetolelo",
+        "definitionQuality": "Boleng jwa Ditlhaloso"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Tshobokanyo ya Analytics",
+      "subtitle": "Tebelelo ya boleng jwa data le ditekanyetso tsa tiragatso",
+      "dataQualityScore": {
+        "title": "Maduo a Boleng jwa Data",
+        "subtitle": "Tshegetso e e Feletseng"
+      },
+      "coverageEfficiency": {
+        "title": "Bokgoni jwa Tshegetso",
+        "subtitle": "Boleng jwa Kgaoganyo",
+        "excellent": "Go Siame Thata",
+        "good": "Go Siame"
+      },
+      "popularCategory": {
+        "title": "Karolo e e Tumileng Thata",
+        "subtitle": "Karolo e e Eteletseng Pele"
+      },
+      "termGrowth": {
+        "title": "Seelo sa Kgolo ya Mafoko",
+        "subtitle": "Kgwedi Eno"
+      }
+    }
+  },
+  "searchPage": {
+    "language": "Puo",
+    "domain": "Lefelo",
+    "fuzzySearch": "Patlo e e sa Tlhamalalang",
+    "loading": "E a laisa...",
+    "noResults": "Ga go na dipholo tsa \"{{term}}\".",
+    "showAll": "Bontsha Tsotlhe",
+    "showTermsWithLetter": "Bontsha mafoko a a simololang ka {{letter}}",
+    "pagination": {
+      "previous": "Morago",
+      "next": "Pele",
+      "pageInfo": "Tsebe {{current}} ya {{total}}"
+    },
+    "searchPlaceholder": "Lefoko la go batla"
+  },
+  "helpPage": {
+    "howCanWeHelp": "Re Ka Go Thusa Jang?",
+    "commonTopics": "Dikgang Tse Di Tlwaelegileng",
+    "articleLink": "Athikele →",
+    "cantFind": "Ga o bone se o se batlang?",
+    "submitRequest": "Romela kopo →",
+    "previous": "E fetileng",
+    "next": "E latelang",
+    "pageInfo": "Tsebe {{current}} ya {{total}}"
+  }
+}

@@ -1,0 +1,48 @@
+// src/styles/VotingSection.scss
+$primary-color: #3498db;
+$upvote-color: #2ecc71;
+$downvote-color: #e74c3c;
+
+.voting-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .vote-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &.upvote {
+      background-color: lighten($upvote-color, 40%);
+      color: darken($upvote-color, 20%);
+      border-radius: 4px 0 0 4px;
+
+      &.active,
+      &:hover {
+        background-color: $upvote-color;
+        color: white;
+      }
+    }
+
+    &.downvote {
+      background-color: lighten($downvote-color, 40%);
+      color: darken($downvote-color, 20%);
+      border-radius: 0 4px 4px 0;
+
+      &.active,
+      &:hover {
+        background-color: $downvote-color;
+        color: white;
+      }
+    }
+  }
+
+  .vote-count {
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    font-weight: 500;
+  }
+}

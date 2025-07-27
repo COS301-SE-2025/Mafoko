@@ -3,6 +3,29 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SearchPage from '../src/pages/SearchPage';
 import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
+import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: (str: string) => {
+        if (str === 'searchPage.language') return 'Language';
+        if (str === 'searchPage.domain') return 'Domain';
+        if (str === 'searchPage.fuzzySearch') return 'Fuzzy Search';
+        if (str === 'searchPage.noResults') return 'No results found for';
+        if (str === 'searchPage.pagination.previous') return 'Previous';
+        if (str === 'searchPage.pagination.next') return 'Next';
+        return str;
+      },
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    };
+  },
+  Trans: ({ i18nKey }: { i18nKey: string }) => i18nKey,
+}));
 
 vi.mock('../src/components/ui/Navbar', () => ({
   __esModule: true,
@@ -80,13 +103,14 @@ describe('SearchPage', () => {
   test('renders SearchPage with key UI elements', () => {
     render(
       <Router>
-        <SearchPage />
+        <DarkModeProvider>
+          <SearchPage />
+        </DarkModeProvider>
       </Router>,
     );
 
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Domain')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
     expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 
@@ -98,7 +122,9 @@ describe('SearchPage', () => {
 
     render(
       <Router>
-        <SearchPage />
+        <DarkModeProvider>
+          <SearchPage />
+        </DarkModeProvider>
       </Router>,
     );
 
@@ -114,13 +140,15 @@ describe('SearchPage', () => {
   test('renders SearchPage with key UI elements', () => {
     render(
       <Router>
-        <SearchPage />
+        <DarkModeProvider>
+          <SearchPage />
+        </DarkModeProvider>
       </Router>,
     );
 
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Domain')).toBeInTheDocument();
-    expect(screen.getByText('AI Search')).toBeInTheDocument();
+    /*expect(screen.getByText('AI Search')).toBeInTheDocument();*/
     expect(screen.getByText('Fuzzy Search')).toBeInTheDocument();
   });
 });

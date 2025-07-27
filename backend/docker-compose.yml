@@ -67,6 +67,8 @@ services:
     volumes:
       - ./analytics-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
     command: >
       sh -c "pip install -e /mavito-common-lib-src && 
              pip install --no-cache-dir -r /app/requirements.txt &&

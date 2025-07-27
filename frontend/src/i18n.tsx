@@ -9,7 +9,19 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    supportedLngs: ['en', 'zu', 'af', 'st', 'xh'],
+    supportedLngs: [
+      'en',
+      'zu',
+      'af',
+      'st',
+      'xh',
+      'nso',
+      'tn',
+      'ss',
+      've',
+      'ts',
+      'nr',
+    ],
     fallbackLng: 'en',
     debug: true, // Enable debug to see what's happening with translations
     ns: ['translation'],

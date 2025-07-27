@@ -21,6 +21,12 @@ const GLOSSARY_SERVICE_URL: string =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
 
+const TERM_SERVICE_URL =
+  (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
+const COMMENT_SERVICE_URL =
+  (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
+  'http://localhost:8008';
+
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
   import.meta.env.PROD ? `${API_GATEWAY_URL}${path}` : `${serviceUrl}${path}`;
@@ -39,6 +45,11 @@ interface APIEndpoints {
   search: string;
   suggest: string;
   descriptiveAnalytics: string;
+  categoryFrequency: string;
+  languageCoverage: string;
+  popularTerms: (limit?: number, domain?: string, language?: string) => string;
+  totalStatistics: string;
+  uniqueTerms: string;
   submitVote: string;
   glossary: string;
   glossaryCategories: string;
@@ -47,6 +58,13 @@ interface APIEndpoints {
   glossarySearch: string;
   glossaryLanguages: string;
   glossaryRandom: string;
+  getTermDetail: (termId: string) => string;
+  getTermTranslations: (termId: string) => string;
+  getComments: (termId: string) => string;
+  postComment: string;
+  deleteComment: (commentId: string) => string;
+  voteOnTerm: string;
+  voteOnComment: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -86,9 +104,38 @@ export const API_ENDPOINTS: APIEndpoints = {
     ANALYTICS_SERVICE_URL,
     '/api/v1/analytics/descriptive',
   ),
+  categoryFrequency: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/category-frequency',
+  ),
+  languageCoverage: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/language-coverage',
+  ),
+  popularTerms: (limit?: number, domain?: string, language?: string) => {
+    const params = new URLSearchParams();
+    if (limit) params.append('limit', limit.toString());
+    if (domain) params.append('domain', domain);
+    if (language) params.append('language', language);
+    const queryString = params.toString();
+    return endpoint(
+      ANALYTICS_SERVICE_URL,
+      `/api/v1/analytics/descriptive/popular-terms${queryString ? `?${queryString}` : ''}`,
+    );
+  },
+  totalStatistics: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/total-statistics',
+  ),
+  uniqueTerms: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/unique-terms',
+  ),
 
   // --- Vote Service ---
-  submitVote: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/'),
+  submitVote: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/'), // This path typically ends with a slash if it's a collection endpoint
+  voteOnTerm: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/terms'),
+  voteOnComment: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/comments'),
 
   // --- Glossary Service ---
   glossary: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary'),
@@ -112,4 +159,17 @@ export const API_ENDPOINTS: APIEndpoints = {
     '/api/v1/glossary/languages',
   ),
   glossaryRandom: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/random'),
+
+  // --- Term Service ---
+  getTermDetail: (termId: string) =>
+    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}`),
+  getTermTranslations: (termId: string) =>
+    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}/translations`),
+
+  // --- Comment Service ---
+  getComments: (termId: string) =>
+    endpoint(COMMENT_SERVICE_URL, `/api/v1/comments?term_id=${termId}`),
+  postComment: endpoint(COMMENT_SERVICE_URL, '/api/v1/comments'),
+  deleteComment: (commentId: string) =>
+    endpoint(COMMENT_SERVICE_URL, `/api/v1/comments/${commentId}`),
 };

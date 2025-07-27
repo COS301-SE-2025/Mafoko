@@ -9,6 +9,12 @@ const appSupportedLanguages = [
   { code: 'af', name: 'Afrikaans' },
   { code: 'st', name: 'Sesotho' },
   { code: 'xh', name: 'isiXhosa' },
+  { code: 'nso', name: 'Sepedi' },
+  { code: 'tn', name: 'Setswana' },
+  { code: 'ss', name: 'Siswati' },
+  { code: 've', name: 'Tshivenda' },
+  { code: 'ts', name: 'Xitsonga' },
+  { code: 'nr', name: 'isiNdebele' },
 ];
 
 const LanguageSwitcher: React.FC = () => {

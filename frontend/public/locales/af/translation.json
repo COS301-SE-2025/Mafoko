@@ -1,6 +1,13 @@
 {
-  "appTitle": "Marito",
-  "loading": "Laai tans...",
+  "navigation": {
+    "home": "Tuis",
+    "dictionary": "Woordeboek",
+    "glossary": "Woordelys",
+    "savedTerms": "Gestoorde Terme",
+    "dashboard": "Paneelbord",
+    "help": "Hulp",
+    "darkMode": "Donker modus"
+  },
 
   "landingPage": {
     "greeting": "Welkom by Marito PWA!",
@@ -61,35 +68,141 @@
     "errorUnexpectedFormat": "Fout: {{detailJson}}",
     "errorWithStatus": "Registrasie het misluk (status {{status}}). Probeer asseblief weer.",
     "errorNetwork": "'n Fout het voorgekom: {{message}}.",
-    "errorUnknownNetwork": "'n Onbekende netwerkfout het voorgekom. Probeer asseblief weer."
-  },
-
-  "languageSwitcher": {
-    "selectLanguage": "Kies Taal"
+    "errorUnknownNetwork": "'n Onbekende netwerkfout het voorgekom. Probeer asseblief weer.",
+    "registerAsLabel": "Registreer As",
+    "registerAsPlaceholder": "Kies jou rol",
+    "registerAsOptions": {
+      "contributor": "Bydraer",
+      "linguist": "Taalkundige",
+      "researcher": "Navorser",
+      "student": "Student"
+    },
+    "userTypeLabels": {
+      "normalUser": "Gewone Gebruiker",
+      "applyingLinguist": "Aansoek as Taalkundige"
+    }
   },
   "dashboard": {
-    "welcome": "Welkom terug, Bydraer!",
+    "welcome": "Welkom by Mavito",
+    "welcomeBack": "Welkom terug",
+    "userName": "Gebruikersnaam",
+    "userId": "Gebruiker ID",
     "quickActions": "Vinnige Aksies",
     "searchNow": "Soek Nou",
-    "searchDescription": "Verken ons veeltalige databasis",
+    "searchDescription": "Soek terminologie in verskeie tale",
     "downloadResources": "Laai Hulpbronne Af",
-    "downloadDescription": "Kry toegang tot inhoud vanlyn",
-    "contributeTerm": "Dra 'n Term By",
-    "contributeDescription": "Help om ons databasis te laat groei",
-    "recentTerms": "Onlangs Bekekene Terme",
-    "viewAll": "Bekyk Alle Onlangse Terme",
+    "downloadDescription": "Kry toegang tot en laai terminologie hulpbronne af",
+    "contributeTerm": "Dra Term By",
+    "contributeDescription": "Voeg nuwe terme by ons databasis",
+    "recentTerms": "Onlangse Terme",
     "hideTerms": "Versteek Terme",
-    "communityActivity": "Gemeenskapsaktiwiteit",
-    "viewAllActivity": "Bekyk Alle Aktiwiteit",
+    "viewAll": "Sien Alles",
+    "communityActivity": "Gemeenskap Aktiwiteit",
     "hideActivity": "Versteek Aktiwiteit",
-    "userName": "Gebruikersnaam",
-    "userId": "Gebruiker ID"
+    "viewAllActivity": "Sien Alle Aktiwiteit"
   },
-
-  "leftPane": {
-    "dashboard": "Dashboard",
-    "search": "Soek",
-    "savedTerms": "Gestoor Terme",
-    "analytics": "Analise"
+  "glossaryPage": {
+    "title": "Veeltalige Woordelys",
+    "subtitle": "Verken kategorieë, ontdek terme en vind vertalings",
+    "showTranslations": "Wys Vertalings",
+    "translationsHeader": "Vertalings",
+    "noTranslations": "Geen vertalings beskikbaar vir hierdie term nie",
+    "selectTerm": "Kies 'n term om besonderhede en vertalings te sien",
+    "loading": "Laai tans...",
+    "categories": "Kategorieë",
+    "selectCategory": "Kies 'n Kategorie",
+    "termDetails": "Termbesonderhede",
+    "termsInCategory": "Terme in {{category}}",
+    "randomTerms": "Ewekansige Terme",
+    "searchTermsInCategory": "Soek terme in {{category}}...",
+    "searchAllTerms": "Soek alle terme...",
+    "noTermsFound": "Geen terme gevind wat ooreenstem met \"{{query}}\" in {{category}} nie.",
+    "noTermsInCategory": "Geen terme beskikbaar in {{category}} nie."
+  },
+  "analytics": {
+    "loading": "Laai tans analitiese data...",
+    "stats": {
+      "totalTerms": "Totale Terme",
+      "uniqueLanguages": "Unieke Tale",
+      "uniqueDomains": "Unieke Domeine",
+      "topLanguage": "Top Taal"
+    },
+    "popularTerms": {
+      "title": "Populêre Terme",
+      "subtitle": "Mees gebruikte terme oor alle domeine"
+    },
+    "categoryDistribution": {
+      "title": "Kategorie Verspreiding",
+      "subtitle": "Terme gegroepeer volgens statistiese domeine"
+    },
+    "topDomains": {
+      "title": "Top Domeine",
+      "subtitle": "Mees aktiewe statistiese domeine"
+    },
+    "trendsAndInsights": {
+      "title": "Tendense & Insigte",
+      "subtitle": "Data-gedrewe insigte en tendensanalise",
+      "languageDiversity": {
+        "title": "Taaldiversiteitsindeks",
+        "coverage": "van Suid-Afrikaanse tale gedek",
+        "terms": "terme"
+      },
+      "domainFocus": {
+        "title": "Domein Fokusareas"
+      },
+      "dataQuality": {
+        "title": "Datakwaliteit Metrieke",
+        "completenessScore": "Volledigheid Telling",
+        "translationCoverage": "Vertaling Dekking",
+        "definitionQuality": "Definisie Kwaliteit"
+      }
+    },
+    "analyticsSummary": {
+      "title": "Analitiese Opsomming",
+      "subtitle": "Oorsig van datakwaliteit en prestasie metrieke",
+      "dataQualityScore": {
+        "title": "Datakwaliteit Telling",
+        "subtitle": "Volledige Dekking"
+      },
+      "coverageEfficiency": {
+        "title": "Dekkingsdoeltreffendheid",
+        "subtitle": "Verspreidingskwaliteit",
+        "excellent": "Uitstekend",
+        "good": "Goed"
+      },
+      "popularCategory": {
+        "title": "Mees Populêre Kategorie",
+        "subtitle": "Leidende Domein"
+      },
+      "termGrowth": {
+        "title": "Term Groeikoers",
+        "subtitle": "Hierdie Maand"
+      }
+    }
+  },
+  "searchPage": {
+    "searchPlaceholder": "Soekterm",
+    "language": "Taal",
+    "domain": "Domein",
+    "fuzzySearch": "Wasige Soektog",
+    "loading": "Laai tans...",
+    "noResults": "Geen resultate gevind vir \"{{term}}\" nie.",
+    "showAll": "Wys Alles",
+    "showTermsWithLetter": "Wys terme wat begin met {{letter}}",
+    "pagination": {
+      "previous": "Vorige",
+      "next": "Volgende",
+      "pageInfo": "Bladsy {{current}} van {{total}}"
+    }
+  },
+  "helpPage": {
+    "howCanWeHelp": "Hoe Kan Ons Help?",
+    "commonTopics": "Algemene Onderwerpe",
+    "articleLink": "Artikel →",
+    "cantFind": "Kan jy nie kry wat jy soek nie?",
+    "submitRequest": "Dien 'n versoek in →",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "pageInfo": "Bladsy {{current}} van {{total}}"
   }
 }

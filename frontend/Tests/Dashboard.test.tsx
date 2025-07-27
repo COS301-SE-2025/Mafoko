@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import { DarkModeProvider } from '../src/components/ui/DarkModeComponent';
 
 const mockNavigate = vi.fn<(path: string) => void>();
 
@@ -64,7 +65,9 @@ test('renders fallback username when no user data exists', async () => {
 
   render(
     <Router>
-      <DashboardPage />
+      <DarkModeProvider>
+        <DashboardPage />
+      </DarkModeProvider>
     </Router>,
   );
 
@@ -116,7 +119,9 @@ test('shows recent terms after toggle and successful fetch', async () => {
 
   render(
     <Router>
-      <DashboardPage />
+      <DarkModeProvider>
+        <DashboardPage />
+      </DarkModeProvider>
     </Router>,
   );
 
@@ -138,7 +143,9 @@ test('shows fallback terms like Agroforestry on fetch failure', async () => {
 
   render(
     <Router>
-      <DashboardPage />
+      <DarkModeProvider>
+        <DashboardPage />
+      </DarkModeProvider>
     </Router>,
   );
 

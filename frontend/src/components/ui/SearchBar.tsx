@@ -1,5 +1,6 @@
 import type { FC, InputHTMLAttributes } from 'react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import '../../styles/SearchBar.scss';
 import { Autocomplete, TextField } from '@mui/material';
 
@@ -12,7 +13,6 @@ interface SearchBarProps extends InputHTMLAttributes<HTMLInputElement> {
   onSearch: (value: string) => Promise<void>;
   fetchSuggestions: (term: string) => Promise<Suggestion[]>;
   minChars?: number;
-  placeholder?: string;
   debounceMs?: number;
 }
 
@@ -20,9 +20,9 @@ const SearchBar: FC<SearchBarProps> = ({
   onSearch,
   fetchSuggestions,
   minChars = 1,
-  placeholder = 'Search term',
   debounceMs = 300,
 }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState('');
   const [options, setOptions] = useState<string[]>([]);
 
@@ -72,7 +72,7 @@ const SearchBar: FC<SearchBarProps> = ({
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder={placeholder}
+          placeholder={t('searchPage.searchPlaceholder')}
           variant="outlined"
           fullWidth
           sx={{

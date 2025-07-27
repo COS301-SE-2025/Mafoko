@@ -5,6 +5,7 @@ pandas
 pytest
 httpx
 pytest-asyncio
+psycopg2-binary
 ruff      
 black     
 mypy    
