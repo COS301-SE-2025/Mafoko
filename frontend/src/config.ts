@@ -96,8 +96,8 @@ export const API_ENDPOINTS: APIEndpoints = {
     endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users-with-uploads'),
 
   // --- Search Service ---
-  search: endpoint(SEARCH_SERVICE_URL, '/api/v1/search/'),
-  suggest: endpoint(SEARCH_SERVICE_URL, '/api/v1/suggest/'),
+  search: endpoint(SEARCH_SERVICE_URL, '/api/v1/search'),
+  suggest: endpoint(SEARCH_SERVICE_URL, '/api/v1/suggest'),
 
   // --- Analytics Service ---
   descriptiveAnalytics: endpoint(

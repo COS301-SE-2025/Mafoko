@@ -22,7 +22,7 @@ from mavito_common.db.session import get_db
 router = APIRouter(redirect_slashes=False)
 
 
-@router.get("/", response_model=Dict[str, Any])
+@router.get("", response_model=Dict[str, Any])
 async def search_endpoint(
     db: AsyncSession = Depends(get_db),
     query: str = Query("", description="Search term"),

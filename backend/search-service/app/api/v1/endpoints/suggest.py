@@ -28,7 +28,7 @@ class Suggestion(BaseModel):
     label: str
 
 
-@router.get("/", response_model=List[Suggestion])
+@router.get("", response_model=List[Suggestion])
 async def suggest_endpoint(
     db: AsyncSession = Depends(get_db),
     query: str = Query(..., description="Partial search term"),
