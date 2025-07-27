@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
 from app.api.v1.endpoints import search, suggest
 
-app = FastAPI(title="Marito Search Service")
+app = FastAPI(title="Marito Search Service", redirect_slashes=False)
 
 if settings.BACKEND_CORS_ORIGINS_LIST:
     app.add_middleware(

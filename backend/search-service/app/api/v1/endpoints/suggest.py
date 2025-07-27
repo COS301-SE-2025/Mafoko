@@ -20,7 +20,7 @@ from typing import List
 from app.crud.crud_search import suggest_terms_in_db
 from mavito_common.db.session import get_db
 
-router = APIRouter()
+router = APIRouter(redirect_slashes=False)
 
 
 class Suggestion(BaseModel):
