@@ -16,6 +16,32 @@ import GlossaryPage from './pages/GlossaryPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import './App.css';
 
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Register all Chart.js components once at the application entry point
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+);
+
 function App() {
   return (
     <div className="MaritoApp">
