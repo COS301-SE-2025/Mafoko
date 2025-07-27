@@ -27,7 +27,7 @@
     "loginWithGoogle": "Tsena ka Google",
     "noAccount": "Ga o na akhaonte?",
     "registerLink": "Ngwadiša",
-    "welcomeImageAlt": "Kamogelo ya go Tsena go Mavito",
+    "welcomeImageAlt": "Kamogelo ya go Tsena go Marito",
     "dsfsiLogoAlt": "Logo ya DSFSI",
     "errorTokenMissing": "O tsene ka katlego, fela ga go na tokene yeo e amogetšwego. Ka kopo ikopanye le thekgo.",
     "errorDefault": "Go tsena go paletšwe. Ka kopo lekola dintlha tša gago.",
@@ -38,7 +38,7 @@
   },
   "registrationPage": {
     "title": "THOMA BJALE",
-    "subtitle": "Hlola akhaonte ya gago ya Mavito.",
+    "subtitle": "Hlola akhaonte ya gago ya Marito.",
     "firstNameLabel": "Leina la Mathomo",
     "firstNamePlaceholder": "Tsenya leina la gago la mathomo",
     "lastNameLabel": "Sefane",
@@ -57,7 +57,7 @@
     "createWithGoogle": "Hlola Akhaonte ka Google",
     "haveAccount": "O šetše o na le akhaonte?",
     "loginLink": "Tsena",
-    "welcomeImageAlt": "Kamogelo ya Mavito",
+    "welcomeImageAlt": "Kamogelo ya Marito",
     "dsfsiLogoAlt": "Logo ya DSFSI",
     "errorPasswordsDoNotMatch": "Diphasewete ga di swane.",
     "errorAgreeToTerms": "O swanetše go dumela melao le dipeelano.",
@@ -81,7 +81,7 @@
     }
   },
   "dashboard": {
-    "welcome": "O amogetswe go Mavito",
+    "welcome": "O amogetswe go Marito",
     "welcomeBack": "O boile gape",
     "userName": "Leina la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
