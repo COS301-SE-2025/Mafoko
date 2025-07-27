@@ -18,6 +18,7 @@ import './App.css';
 
 import {
   Chart as ChartJS,
+  PieController,
   ArcElement,
   CategoryScale,
   LinearScale,
@@ -31,6 +32,7 @@ import {
 
 // Register all Chart.js components once at the application entry point
 ChartJS.register(
+  PieController,
   ArcElement,
   CategoryScale,
   LinearScale,
