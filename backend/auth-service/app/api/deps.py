@@ -63,9 +63,9 @@ async def get_current_user(
         )
         raise credentials_exception
 
-    assert token_data.sub is not None, (
-        "Token 'sub' (user_identifier) should not be None here"
-    )  # Add this assertion
+    assert (
+        token_data.sub is not None
+    ), "Token 'sub' (user_identifier) should not be None here"  # Add this assertion
     user = await crud_user.get_user_by_email(db, email=token_data.sub)
 
     if user is None:
