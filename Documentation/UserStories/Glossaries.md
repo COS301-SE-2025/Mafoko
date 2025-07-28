@@ -1,7 +1,4 @@
-
 # Marito Glossaries User Stories
-
-
 
 ## User Story #9: Term Detail View
 
@@ -29,15 +26,13 @@
    - **And** be visually distinct from complete entries.
 
 ### Notes/Assumptions:
+
 - Integrates with US003 search results
 - Preserves all existing search filters when navigating from results to term view
 
 ## User Story #10: Glossary Category Navigation
 
-
-
-**ID:** US010 (Marito Project)  
-
+**ID:** US010 (Marito Project)
 
 **Title:** Browse Terms by Subject Area  
 **As a:** user interested in exploring specific domains (e.g., Agriculture, Legal),  
@@ -49,7 +44,6 @@
 1. **Category Selection:**
    - **Given** I access the glossary browser,
    - **Then** I should see all available categories.
-  
 
 2. **Term Listing:**
    - **Given** I select a category (e.g., "Agriculture"),
@@ -62,12 +56,13 @@
    - **And** options to navigate to similar categories.
 
 ### Notes/Assumptions:
+
 - Categories are predefined based on dataset taxonomy
 - Works both online and for downloaded glossaries
 
 ## User Story #11: Term Bank Translations
 
-**ID:** US011 (Marito Project)  
+**ID:** US011 (Marito Project)
 
 **Title:** Access Multilingual Translations  
 **As a:** multilingual user,  
@@ -86,5 +81,5 @@
    - **Then** display "Translation not available."
 
 ### Notes/Assumptions:
-- Uses the `translations` field from the dataset.
 
+- Uses the `translations` field from the dataset.

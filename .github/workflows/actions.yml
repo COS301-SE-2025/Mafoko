@@ -39,7 +39,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -79,7 +79,7 @@ jobs:
           DB_PASSWORD: "testpassword"
           DB_NAME: "testdb"
           DB_HOST: "localhost" # The service is mapped to localhost
-          DB_PORT: "5432"      # The service port is mapped to the host port
+          DB_PORT: "5432" # The service port is mapped to the host port
         run: |
           echo "--- Running tests for Auth Service ---"
           (cd auth-service && PYTHONPATH=. pytest)
@@ -102,7 +102,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm ci

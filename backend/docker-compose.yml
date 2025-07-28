@@ -1,6 +1,6 @@
 # docker-compose.yml
 
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -27,9 +27,9 @@ services:
     volumes:
       - ./auth-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
-      - ./dsfsi_sa_key.json:/app/sa-key.json:ro   
+      - ./dsfsi_sa_key.json:/app/sa-key.json:ro
     environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json        
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json
     depends_on:
       - db
     command: >
@@ -86,9 +86,9 @@ services:
     volumes:
       - ./linguist-application-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
-      - ./dsfsi_sa_key.json:/app/sa-key.json:ro   
+      - ./dsfsi_sa_key.json:/app/sa-key.json:ro
     environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json        
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-key.json
     depends_on:
       - db
     command: >
@@ -115,7 +115,6 @@ services:
              pip install --no-cache-dir -r /app/requirements.txt && 
              uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
 
-
   glossary-service:
     build:
       context: .
@@ -133,7 +132,7 @@ services:
     command: >
       sh -c "pip install -e /mavito-common-lib-src && 
              pip install --no-cache-dir -r /app/requirements.txt && 
-             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"             
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
 
   workspace-service:
     build:

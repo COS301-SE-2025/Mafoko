@@ -4,7 +4,7 @@
 
 **Use Case Name:** Contribution Gamification
 
-**Actor(s):** User (Casual User , Linguist,  Academic)
+**Actor(s):** User (Casual User , Linguist, Academic)
 
 **Description:** Tracks and rewards user contributions through a point-based system. Allows users to earn badges, level up, and view their progress dashboard.
 

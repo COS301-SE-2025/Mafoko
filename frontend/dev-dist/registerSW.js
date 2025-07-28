@@ -1,1 +1,5 @@
-if('serviceWorker' in navigator) navigator.serviceWorker.register('/Mavito/dev-sw.js?dev-sw', { scope: '/Mavito/', type: 'classic' })
+if ('serviceWorker' in navigator)
+  navigator.serviceWorker.register('/Mavito/dev-sw.js?dev-sw', {
+    scope: '/Mavito/',
+    type: 'classic',
+  });

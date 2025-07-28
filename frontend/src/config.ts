@@ -14,10 +14,12 @@ const GLOSSARY_SERVICE_URL: string =
   import.meta.env.VITE_GLOSSARY_SERVICE_URL || 'http://localhost:8006';
 const WORKSPACE_SERVICE_URL: string =
   import.meta.env.VITE_WORKSPACE_SERVICE_URL || 'http://localhost:8007';
-const TERM_SERVICE_URL: string =
-  String(import.meta.env.VITE_TERM_SERVICE_URL || 'http://localhost:8008');
-const COMMENT_SERVICE_URL: string =
-  String(import.meta.env.VITE_COMMENT_SERVICE_URL || 'http://localhost:8009');
+const TERM_SERVICE_URL: string = String(
+  import.meta.env.VITE_TERM_SERVICE_URL || 'http://localhost:8008',
+);
+const COMMENT_SERVICE_URL: string = String(
+  import.meta.env.VITE_COMMENT_SERVICE_URL || 'http://localhost:8009',
+);
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---

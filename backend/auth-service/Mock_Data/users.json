@@ -504,7 +504,7 @@
     "profile_pic": "https://randomuser.me/api/portraits/women/21.jpg"
   },
   {
-      "id": 43,
+    "id": 43,
     "name": "Werner",
     "surname": "Du Toit",
     "email": "werner.dutoit@mavito.org",
@@ -720,4 +720,3 @@
     "profile_pic": "https://randomuser.me/api/portraits/women/30.jpg"
   }
 ]
-  
