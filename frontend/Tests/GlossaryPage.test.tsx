@@ -1052,15 +1052,12 @@ describe('GlossaryPage', () => {
         </Router>,
       );
 
-      // Wait for the categories to be loaded and select one
-      await waitFor(() => screen.getAllByRole('button'));
-      const categoryButton = screen.getByText('Agriculture');
+      // Wait for the specific category button to appear
+      const categoryButton = await screen.findByText('Agriculture');
       fireEvent.click(categoryButton);
 
       // Wait for the export button to be visible and click it
-      const exportButton = await waitFor(() =>
-        screen.getByTitle('Export Data'),
-      );
+      const exportButton = await screen.findByTitle('Export Data');
 
       fireEvent.click(exportButton);
 
