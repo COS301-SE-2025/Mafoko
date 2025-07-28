@@ -5,7 +5,7 @@ from mavito_common.core.config import settings
 # This assumes you will create an endpoint file for application logic
 from app.api.v1.endpoints import applications
 
-app = FastAPI(title="Marito Linguist Application Service")
+app = FastAPI(title="Marito Linguist Application Service", redirect_slashes=False)
 
 # Set up CORS middleware from your shared settings
 if settings.BACKEND_CORS_ORIGINS_LIST:
