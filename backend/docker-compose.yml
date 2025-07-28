@@ -142,7 +142,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "8007:8080" # Workspace service port
+      - "8009:8080" # Workspace service port
     volumes:
       - ./workspace-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
