@@ -1,3 +1,4 @@
+
 # NFR (Non-Functional Requirements) - Marito Application
 
 - **NFR1 Performance (QR)**

@@ -45,3 +45,4 @@
 * Voting requires user authentication to prevent abuse.
 
 * The system prevents a user from casting the same vote multiple times.
+

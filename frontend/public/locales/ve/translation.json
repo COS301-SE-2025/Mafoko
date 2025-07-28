@@ -26,7 +26,7 @@
     "loginWithGoogle": "Dzhenani nga Google",
     "noAccount": "A vha na akhauthu?",
     "registerLink": "Ṅwalisani",
-    "welcomeImageAlt": "Mavito Login Mwaḓamuni",
+    "welcomeImageAlt": "Marito Login Mwaḓamuni",
     "dsfsiLogoAlt": "Logo ya DSFSI",
     "errorTokenMissing": "Vho dzhena zwavhuḓi, fhedzi a hu na thokheni yo ṱanganedzwaho. Ri humbela vha kwamane na thikhedzo.",
     "errorDefault": "U dzhena ho kundelwa. Ri humbela vha sedze zwidodombedzwa zwavho.",
@@ -37,7 +37,7 @@
   },
   "registrationPage": {
     "title": "THOMANI ZWINO",
-    "subtitle": "Sikani akhauthu yanu ya Mavito.",
+    "subtitle": "Sikani akhauthu yanu ya Marito.",
     "firstNameLabel": "Dzina Ḽa U Thoma",
     "firstNamePlaceholder": "Ṅwalani dzina ḽanu ḽa u thoma",
     "lastNameLabel": "Tshifani",
@@ -56,7 +56,7 @@
     "createWithGoogle": "Sikani Akhauthu nga Google",
     "haveAccount": "Ni na akhauthu?",
     "loginLink": "Dzhenani",
-    "welcomeImageAlt": "Mavito Ṱanganedzo",
+    "welcomeImageAlt": "Marito Ṱanganedzo",
     "dsfsiLogoAlt": "Logo ya DSFSI",
     "errorPasswordsDoNotMatch": "Phasiwede a dzi tendelani.",
     "errorAgreeToTerms": "Ni fanela u tenda kha milayo na nyimele.",
@@ -80,7 +80,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Vho ṱanganedzwa kha Mavito",
+    "welcome": "Vho ṱanganedzwa kha Marito",
     "userName": "Dzina ḽa Mushumisi",
     "userId": "Nomboro ya Mushumisi",
     "quickActions": "Nyito dza Tshihaḓu",

@@ -9,10 +9,10 @@ from mavito_common.models.user import User as UserModel
 from mavito_common.schemas.linguist_application import LinguistApplicationCreate
 from app.crud.crud_linguist_application import crud_linguist_application
 
-router = APIRouter()
+router = APIRouter(redirect_slashes=False)
 
 
-@router.post("/", status_code=201)
+@router.post("", status_code=201)
 async def create_linguist_application(
     *,
     db: AsyncSession = Depends(deps.get_db),

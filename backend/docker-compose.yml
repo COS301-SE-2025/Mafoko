@@ -160,12 +160,6 @@ services:
     container_name: mavito_alembic_service
     env_file:
       - ./.env
-    volumes:
-      # Mount the common library to see the models
-      - ./mavito-common-lib:/mavito-common-lib-src
-      # Mount the central migrations directory
-      - ./migrations:/app/migrations
-      - ./alembic-service:/app
     depends_on:
       - db
     entrypoint: /app/entrypoint.sh

@@ -5,7 +5,7 @@ from mavito_common.core.config import settings
 # This assumes you will create an endpoint file for application logic
 from app.api.v1.endpoints import applications
 
-app = FastAPI(title="Mavito Linguist Application Service")
+app = FastAPI(title="Marito Linguist Application Service", redirect_slashes=False)
 
 # Set up CORS middleware from your shared settings
 if settings.BACKEND_CORS_ORIGINS_LIST:
@@ -29,4 +29,4 @@ app.include_router(
 @app.get("/", tags=["Health Check"])
 async def read_root():
     """A simple health check endpoint for the service."""
-    return {"service": "Mavito Linguist Application Service", "status": "ok"}
+    return {"service": "Marito Linguist Application Service", "status": "ok"}

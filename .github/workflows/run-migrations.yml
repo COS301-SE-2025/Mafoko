@@ -1,0 +1,65 @@
+name: Run Database Migrations
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/migrations/**'
+      - 'backend/alembic-service/**'
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: us-central1
+  GAR_LOCATION: us-central1-docker.pkg.dev
+  GAR_REPOSITORY: mavito-images
+jobs:
+  deploy-migrations:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.DSFSI_SA_KEY }}
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Configure Docker auth
+        run: |
+          echo '${{ secrets.DSFSI_SA_KEY }}' > sa-key.json
+          gcloud auth activate-service-account --key-file=sa-key.json
+          gcloud auth configure-docker $GAR_LOCATION --quiet
+          rm sa-key.json
+      - name: Build and push image
+        run: |
+          docker build \
+            -t $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest \
+            -f backend/alembic-service/Dockerfile \
+            backend
+          docker push $GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest
+      - name: Deploy and run migrations
+        run: |
+          # Use gcloud run jobs deploy with flags to update the existing job.
+          # This command will update the image, command, args, and Cloud SQL instances.
+          # It will NOT override environment variables already set on the job in Cloud Run.
+          gcloud run jobs deploy alembic-migrations \
+            --image=$GAR_LOCATION/$GCP_PROJECT_ID/$GAR_REPOSITORY/alembic-service:latest \
+            --set-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }} \
+            --region=$GCP_REGION \
+            --project=$GCP_PROJECT_ID \
+            --command="python" \
+            --args="-m" \
+            --args="alembic" \
+            --args="-c" \
+            --args="migrations/alembic.ini" \
+            --args="upgrade" \
+            --args="head" \
+            --quiet
+
+          # Execute the job
+          gcloud run jobs execute alembic-migrations \
+            --region=$GCP_REGION \
+            --project=$GCP_PROJECT_ID \
+            --wait

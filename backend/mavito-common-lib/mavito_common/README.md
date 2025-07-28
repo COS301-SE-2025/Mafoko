@@ -1,6 +1,6 @@
-# Mavito: A PWA for Multilingual Lexicons and Glossaries
+# Marito: A PWA for Multilingual Lexicons and Glossaries
 
-The Mavito project provides a platform for language enthusiasts, NLP researchers, and linguists to access, browse, and contribute to multilingual glossaries, dictionaries, and terminology banks. This repository contains the backend for the Mavito application, architected as a set of independent microservices.
+The Marito project provides a platform for language enthusiasts, NLP researchers, and linguists to access, browse, and contribute to multilingual glossaries, dictionaries, and terminology banks. This repository contains the backend for the Marito application, architected as a set of independent microservices.
 
 ## Architecture Overview
 

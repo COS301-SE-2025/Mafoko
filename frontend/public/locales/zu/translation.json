@@ -28,7 +28,7 @@
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunayo i-akhawunti?",
     "registerLink": "Bhalisa",
-    "welcomeImageAlt": "Ukwamukelwa kokungena ngemvume kwe-Mavito",
+    "welcomeImageAlt": "Ukwamukelwa kokungena ngemvume kwe-Marito",
     "dsfsiLogoAlt": "Ilogo ye-DSFSI",
     "errorTokenMissing": "Ukungena ngemvume kuphumelele, kodwa alikho ithokheni elitholiwe. Sicela uxhumane nosekelo.",
     "errorDefault": "Ukungena ngemvume kwehlulekile. Sicela uhlole imininingwane yakho.",
@@ -40,7 +40,7 @@
 
   "registrationPage": {
     "title": "QALA MANJE",
-    "subtitle": "Dala i-akhawunti yakho ye-Mavito.",
+    "subtitle": "Dala i-akhawunti yakho ye-Marito.",
     "firstNameLabel": "Igama Lokuqala",
     "firstNamePlaceholder": "Faka igama lakho lokuqala",
     "lastNameLabel": "Isibongo",
@@ -59,7 +59,7 @@
     "createWithGoogle": "Dala i-Akhawunti nge-Google",
     "haveAccount": "Usuvele unayo i-akhawunti?",
     "loginLink": "Ngena ngemvume",
-    "welcomeImageAlt": "Ukwamukelwa kwe-Mavito",
+    "welcomeImageAlt": "Ukwamukelwa kwe-Marito",
     "dsfsiLogoAlt": "Ilogo ye-DSFSI",
     "errorPasswordsDoNotMatch": "Amaphasiwedi awafani.",
     "errorAgreeToTerms": "Kufanele uvumelane nemigomo nemibandela.",
@@ -84,7 +84,7 @@
   },
 
   "dashboard": {
-    "welcome": "Siyakwamukela ku-Mavito",
+    "welcome": "Siyakwamukela ku-Marito",
     "welcomeBack": "Wamukelekile futhi",
     "userName": "Igama Lomsebenzisi",
     "userId": "Inombolo Yomsebenzisi",

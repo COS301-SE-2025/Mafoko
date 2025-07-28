@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
 from app.api.v1.endpoints import analytics
 
-app = FastAPI(title="Mavito Analytics Service")
+app = FastAPI(title="Marito Analytics Service")
 
 if settings.BACKEND_CORS_ORIGINS_LIST:
     app.add_middleware(
@@ -19,4 +19,4 @@ app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["Analytic
 
 @app.get("/", tags=["Health Check"])
 async def read_root():
-    return {"service": "Mavito Analytics Service", "status": "ok"}
+    return {"service": "Marito Analytics Service", "status": "ok"}
