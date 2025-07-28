@@ -1,23 +1,23 @@
 // In frontend/src/config.ts
 
-const AUTH_SERVICE_URL =
+const AUTH_SERVICE_URL: string =
   import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:8001';
-const SEARCH_SERVICE_URL =
+const SEARCH_SERVICE_URL: string =
   import.meta.env.VITE_SEARCH_SERVICE_URL || 'http://localhost:8002';
-const ANALYTICS_SERVICE_URL =
-  (import.meta.env.VITE_ANALYTICS_SERVICE_URL as string) || 'http://localhost:8003';
-const LINGUIST_APP_SERVICE_URL =
+const ANALYTICS_SERVICE_URL: string =
+  import.meta.env.VITE_ANALYTICS_SERVICE_URL || 'http://localhost:8003';
+const LINGUIST_APP_SERVICE_URL: string =
   import.meta.env.VITE_LINGUIST_APP_SERVICE_URL || 'http://localhost:8004';
-const VOTE_SERVICE_URL =
+const VOTE_SERVICE_URL: string =
   import.meta.env.VITE_VOTE_SERVICE_URL || 'http://localhost:8005';
-const GLOSSARY_SERVICE_URL =
+const GLOSSARY_SERVICE_URL: string =
   import.meta.env.VITE_GLOSSARY_SERVICE_URL || 'http://localhost:8006';
-const WORKSPACE_SERVICE_URL =
+const WORKSPACE_SERVICE_URL: string =
   import.meta.env.VITE_WORKSPACE_SERVICE_URL || 'http://localhost:8007';
-const TERM_SERVICE_URL =
-  (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8008';
-const COMMENT_SERVICE_URL =
-  (import.meta.env.VITE_COMMENT_SERVICE_URL as string) || 'http://localhost:8009';
+const TERM_SERVICE_URL: string =
+  String(import.meta.env.VITE_TERM_SERVICE_URL || 'http://localhost:8008');
+const COMMENT_SERVICE_URL: string =
+  String(import.meta.env.VITE_COMMENT_SERVICE_URL || 'http://localhost:8009');
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---
