@@ -8,11 +8,11 @@
 
 \begin{document}
 
-\section*{Mavito Project: Non-Functional Requirements}
+\section*{Marito Project: Non-Functional Requirements}
 \subsection*{Version 2.0.0}
 \vspace{1em}
 
-This document outlines the non-functional requirements (quality attributes) for the Mavito platform, reflecting the current system architecture.
+This document outlines the non-functional requirements (quality attributes) for the Marito platform, reflecting the current system architecture.
 
 \begin{description}[leftmargin=!, labelwidth=\widthof{\textbf{NFR10.3}}]
 
