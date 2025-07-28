@@ -14,6 +14,7 @@ import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
 import GlossaryPage from './pages/GlossaryPage.tsx';
 import WorkspacePage from './pages/WorkspacePage.tsx';
+import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import './App.css';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<GlossaryPage />} />
         <Route path="/workspace" element={<WorkspacePage />} />
+        <Route path="/term/:termId" element={<TermDetailPage />} />
       </Routes>
     </div>
   );

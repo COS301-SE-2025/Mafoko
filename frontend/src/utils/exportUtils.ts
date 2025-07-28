@@ -1,4 +1,5 @@
 import { Term, TermTranslations } from '../types/glossaryTypes';
+import { isoLangMap } from './isoLangMap';
 // We're using dynamic imports for these to reduce initial bundle size
 // import { jsPDF } from 'jspdf';
 // import html2canvas from 'html2canvas';
@@ -40,15 +41,30 @@ const getLogoAsBase64 = async (): Promise<string> => {
  */
 export const generateCSV = (data: Term[], includeHeader = true): string => {
   // Define CSV headers
-  const headers = ['ID', 'Term', 'Definition', 'Language'];
+  const headers = [
+    'ID',
+    'Term',
+    'Definition',
+    'Category',
+    'Language',
+    'iso_lang',
+  ];
 
   // Map the data to CSV rows
   const dataRows = data.map((item) => {
+    const iso_lang =
+      item.language &&
+      typeof isoLangMap !== 'undefined' &&
+      isoLangMap[item.language]
+        ? isoLangMap[item.language]
+        : '';
     return [
-      `"${item.id.replace(/"/g, '""')}"`, // Include ID field and escape quotes
-      `"${item.term.replace(/"/g, '""')}"`, // Escape quotes in CSV
+      `"${item.id.replace(/"/g, '""')}"`,
+      `"${item.term.replace(/"/g, '""')}"`,
       `"${item.definition.replace(/"/g, '""')}"`,
-      `"${item.language ? item.language.replace(/"/g, '""') : ''}"`, // Include language field
+      `"${item.category ? item.category.replace(/"/g, '""') : ''}"`,
+      `"${item.language ? item.language.replace(/"/g, '""') : ''}"`,
+      `"${iso_lang}"`,
     ].join(',');
   });
 
@@ -922,7 +938,7 @@ export const generatePDF = async (
 
         // Set font size and line height
         pdf.setFontSize(12);
-        let y = margin;
+        let y = margin + 25;
 
         // Add title
         pdf.setFontSize(18);
@@ -1087,7 +1103,6 @@ export const generatePDF = async (
       for (const term of data) {
         // Check if we need a new page
         if (y > 270) {
-          // Leave margin at bottom
           pdf.addPage();
           y = margin;
         }
@@ -1316,8 +1331,8 @@ export const downloadData = async (
           );
 
           // Add header row with filled background
-          pdf.setFillColor(45, 55, 72); // #2d3748 - matches th background color in HTML
-          pdf.rect(margin, y, contentWidth, 10, 'F');
+          pdf.setFillColor(45, 55, 72);
+          pdf.rect(margin, y - 6, contentWidth, 10, 'F');
 
           // Draw vertical lines between columns
           pdf.setDrawColor(255, 255, 255); // White line to separate columns
@@ -1480,6 +1495,7 @@ export const downloadData = async (
           for (let i = 1; i <= totalPages; i++) {
             pdf.setPage(i);
             pdf.setFontSize(9);
+
             pdf.setTextColor(113, 128, 150); // #718096 - light gray
             pdf.text(
               `Page ${String(i)} of ${String(totalPages)}`,
@@ -1546,11 +1562,19 @@ export const downloadData = async (
     filename = `marito-glossary-${categoryPrefix}${timestamp}.html`;
     mimeType = 'text/html';
   } else {
-    // For JSON, exclude the id and category fields
+    // For JSON, include only the required fields and iso_lang
     const cleanedData = data.map((item) => {
-      const { ...rest } = item; //add id and category later
+      const iso_lang =
+        item.language && isoLangMap[item.language]
+          ? isoLangMap[item.language]
+          : '';
       return {
-        ...rest,
+        id: item.id,
+        term: item.term,
+        definition: item.definition,
+        category: item.category,
+        language: item.language,
+        iso_lang,
       };
     });
     content = JSON.stringify(cleanedData, null, 2);

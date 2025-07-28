@@ -41,7 +41,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         </div>
         <div className="logo-container">
           <img
-            src="./icons/maskable_icon_x512.png"
+            src="/Mavito/icons/maskable_icon_x512.png"
             alt="DFSI Logo"
             className="dfsi-logo"
           />
