@@ -111,6 +111,31 @@ vi.mock('../src/utils/exportUtils', () => ({
   downloadData: vi.fn(),
 }));
 
+// Mock workspace API
+vi.mock('../src/utils/workspaceAPI', () => ({
+  workspaceAPI: {
+    bookmarks: {
+      glossaries: {
+        getAll: vi.fn().mockResolvedValue([
+          {
+            id: '1',
+            domain: 'Agriculture',
+            category: 'Agriculture',
+            description: 'Agricultural terms and definitions',
+            created_at: '2024-01-01T00:00:00Z',
+          },
+        ]),
+        create: vi.fn().mockResolvedValue({
+          id: '2',
+          domain: 'Technology',
+          category: 'Technology',
+        }),
+        delete: vi.fn().mockResolvedValue(undefined),
+      },
+    },
+  },
+}));
+
 // Mock window.innerWidth for mobile/desktop tests
 Object.defineProperty(window, 'innerWidth', {
   writable: true,
@@ -198,6 +223,20 @@ beforeEach(() => {
   // Default successful fetch responses
   (global.fetch as ReturnType<typeof vi.fn>).mockImplementation(
     (url: string, options?: RequestInit) => {
+      if (url.includes('/workspace/bookmarks/glossaries')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve([
+            {
+              id: '1',
+              domain: 'Agriculture',
+              category: 'Agriculture',
+              description: 'Agricultural terms and definitions',
+              created_at: '2024-01-01T00:00:00Z',
+            },
+          ]),
+        } as Response);
+      }
       if (url.includes('/categories') && !url.includes('/terms')) {
         return Promise.resolve({
           ok: true,
