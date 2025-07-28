@@ -13,6 +13,10 @@ class BookmarkedTermCreate(BaseModel):
     notes: Optional[str] = None
 
 
+class BookmarkedTermUpdate(BaseModel):
+    notes: Optional[str] = None
+
+
 class BookmarkedTermResponse(BaseModel):
     id: UUID
     user_id: UUID

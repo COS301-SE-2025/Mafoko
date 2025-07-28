@@ -17,6 +17,7 @@ from app.models import (
 )
 from app.schemas import (
     BookmarkedTermCreate,
+    BookmarkedTermUpdate,
     BookmarkedTermResponse,
     BookmarkedTermWithDetails,
     BookmarkedGlossaryCreate,
@@ -145,6 +146,42 @@ async def unbookmark_term(
     await db.commit()
 
     return {"message": "Term unbookmarked successfully"}
+
+
+@router.put("/bookmarks/terms/{term_id}", response_model=BookmarkedTermResponse)
+async def update_bookmarked_term(
+    term_id: UUID,
+    update_data: BookmarkedTermUpdate,
+    user_id: UUID = Query(..., description="User ID"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Update notes for a bookmarked term."""
+    bookmark_query = select(BookmarkedTerm).where(
+        and_(BookmarkedTerm.user_id == user_id, BookmarkedTerm.term_id == term_id)
+    )
+    bookmark_result = await db.execute(bookmark_query)
+    bookmark = bookmark_result.scalars().first()
+
+    if not bookmark:
+        raise HTTPException(status_code=404, detail="Bookmarked term not found")
+
+    # Update the notes
+    bookmark.notes = update_data.notes
+    
+    await db.commit()
+    await db.refresh(bookmark)
+
+    return BookmarkedTermResponse(
+        id=bookmark.id,
+        user_id=bookmark.user_id,
+        term_id=bookmark.term_id,
+        notes=bookmark.notes,
+        bookmarked_at=bookmark.bookmarked_at,
+        created_at=bookmark.created_at,
+    )
+
+
+# ========== GLOSSARY BOOKMARK ENDPOINTS ==========
 
 
 @router.post("/bookmarks/glossaries", response_model=BookmarkedGlossaryResponse)

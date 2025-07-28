@@ -233,13 +233,6 @@ const WorkspacePage: React.FC = () => {
     }));
   };
 
-  const toggleFollow = (glossaryId: string) => {
-    // TODO: Implement follow/unfollow for bookmarked glossaries
-    console.log('Toggle follow for glossary:', glossaryId);
-  };
-
-  // Removed unused getStatusIcon function
-
   // Functions for handling notes
   const handleAddNote = (termId: string) => {
     const term = savedTerms.find((t) => t.id === termId);
@@ -247,21 +240,90 @@ const WorkspacePage: React.FC = () => {
     setNoteText(term?.notes || '');
   };
 
-  const handleSaveNote = (termId: string) => {
-    setSavedTerms((prevTerms) =>
-      prevTerms.map((term) =>
-        term.id === termId
-          ? { ...term, notes: noteText.trim() || undefined }
-          : term,
-      ),
-    );
-    setEditingNotes(null);
-    setNoteText('');
+  const handleSaveNote = async (bookmarkId: string) => {
+    try {
+      // Find the term to get the term_id for the API call
+      const termToUpdate = savedTerms.find((term) => term.id === bookmarkId);
+      if (!termToUpdate) {
+        console.error('Term not found in local state');
+        return;
+      }
+
+      // Call the API to update the bookmark notes using term_id
+      await workspaceAPI.bookmarks.terms.update(termToUpdate.term_id, noteText.trim());
+      
+      // Update local state
+      setSavedTerms((prevTerms) =>
+        prevTerms.map((term) =>
+          term.id === bookmarkId
+            ? { ...term, notes: noteText.trim() || undefined }
+            : term,
+        ),
+      );
+      
+      setEditingNotes(null);
+      setNoteText('');
+      
+      console.log('Notes saved successfully');
+    } catch (error) {
+      console.error('Failed to save notes:', error);
+      setError('Failed to save notes. Please try again.');
+    }
   };
 
   const handleCancelNote = () => {
     setEditingNotes(null);
     setNoteText('');
+  };
+
+  // Function for deleting a saved term
+  const handleDeleteTerm = async (bookmarkId: string) => {
+    try {
+      // Find the term to get the term_id for the API call
+      const termToDelete = savedTerms.find((term) => term.id === bookmarkId);
+      if (!termToDelete) {
+        console.error('Term not found in local state');
+        return;
+      }
+
+      // Call the API to delete the bookmark using term_id
+      await workspaceAPI.bookmarks.terms.delete(termToDelete.term_id);
+      
+      // Remove the term from local state
+      setSavedTerms((prevTerms) => 
+        prevTerms.filter((term) => term.id !== bookmarkId)
+      );
+      
+      console.log('Term bookmark deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete term bookmark:', error);
+      setError('Failed to delete term. Please try again.');
+    }
+  };
+
+  // Function for deleting a bookmarked glossary
+  const handleDeleteGlossary = async (bookmarkId: string) => {
+    try {
+      // Find the glossary to get the domain for the API call
+      const glossaryToDelete = bookmarkedGlossaries.find((glossary) => glossary.id === bookmarkId);
+      if (!glossaryToDelete) {
+        console.error('Glossary not found in local state');
+        return;
+      }
+
+      // Call the API to delete the bookmark using domain
+      await workspaceAPI.bookmarks.glossaries.delete(glossaryToDelete.domain);
+      
+      // Remove the glossary from local state
+      setBookmarkedGlossaries((prevGlossaries) => 
+        prevGlossaries.filter((glossary) => glossary.id !== bookmarkId)
+      );
+      
+      console.log('Glossary bookmark deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete glossary bookmark:', error);
+      setError('Failed to delete glossary. Please try again.');
+    }
   };
 
   // Functions for handling bulk group deletion
@@ -792,7 +854,7 @@ const WorkspacePage: React.FC = () => {
                                                 <button
                                                   type="button"
                                                   onClick={() => {
-                                                    handleSaveNote(term.id);
+                                                    void handleSaveNote(term.id);
                                                   }}
                                                   className="save-btn"
                                                 >
@@ -854,6 +916,10 @@ const WorkspacePage: React.FC = () => {
                                         <button
                                           type="button"
                                           className="delete-btn"
+                                          onClick={() => {
+                                            void handleDeleteTerm(term.id);
+                                          }}
+                                          title="Delete bookmark"
                                         >
                                           <Trash2 className="icon" />
                                         </button>
@@ -1050,21 +1116,22 @@ const WorkspacePage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  toggleFollow(bookmark.id);
+                                  void handleDeleteGlossary(bookmark.id);
                                 }}
                                 className="px-3 py-1 text-sm border rounded"
+                                title="Remove glossary bookmark"
                                 style={{
-                                  borderColor: '#00ceaf',
-                                  color: '#00ceaf',
+                                  borderColor: '#ff6b6b',
+                                  color: '#ff6b6b',
                                   backgroundColor: 'transparent',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = '#00ceaf';
+                                  e.currentTarget.style.backgroundColor = '#ff6b6b';
                                   e.currentTarget.style.color = '#fff';
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.backgroundColor = 'transparent';
-                                  e.currentTarget.style.color = '#00ceaf';
+                                  e.currentTarget.style.color = '#ff6b6b';
                                 }}
                               >
                                 Remove Bookmark

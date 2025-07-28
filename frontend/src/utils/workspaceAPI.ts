@@ -107,6 +107,14 @@ export const bookmarkTermAPI = {
       method: 'DELETE',
     });
   },
+
+  update: async (termId: string, notes: string): Promise<BookmarkedTerm> => {
+    const response = await apiRequest(API_ENDPOINTS.unbookmarkTerm(termId), {
+      method: 'PUT',
+      body: JSON.stringify({ notes }),
+    });
+    return response.json() as Promise<BookmarkedTerm>;
+  },
 };
 
 // Bookmark Glossaries API
