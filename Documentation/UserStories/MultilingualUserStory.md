@@ -1,10 +1,10 @@
 # User Story #4: Multilingual Interface Support
 
-**ID:** US004 (Mavito Project)  
+**ID:** US004 (Marito Project)  
 
 **Title:** Support for Multiple Languages in User Interface  
 
-**As a:** Mavito application user (e.g., language enthusiast, NLP researcher, student) who speaks one of South Africa's 12 official languages,  
+**As a:** Marito application user (e.g., language enthusiast, NLP researcher, student) who speaks one of South Africa's 12 official languages,  
 
 **I want:** the application interface to be available in my preferred language,  
 
@@ -15,7 +15,7 @@
 ## Acceptance Criteria:  
 
 1. **Language Selection:**  
-   - [ ] **Given** I open the Mavito application for the first time,  
+   - [ ] **Given** I open the Marito application for the first time,  
    - [ ] **Then** the app prompts me to select my preferred language from a list of supported languages (e.g., isiZulu, Afrikaans, English, etc.).  
    - [ ] **And** the selected language is saved as my default for future sessions.  
 

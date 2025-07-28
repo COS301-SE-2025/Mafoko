@@ -230,7 +230,7 @@ export const generateHTMLTable = async (
   const formattedCategoryName = categoryName || '';
 
   const title = categoryName
-    ? 'Marito Glossary: ' + formattedCategoryName
+    ? 'Marito Glossary: ' + categoryName
     : 'Marito Glossary';
   const subtitle = categoryName
     ? 'Terms in ' + formattedCategoryName + ' category'

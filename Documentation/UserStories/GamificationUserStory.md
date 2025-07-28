@@ -1,8 +1,8 @@
 # User Story #8: Gamification Feature
 
-**ID:** US008 (Mavito Project)
+**ID:** US008 (Marito Project)
 **Title:** Contribution-Based Rewards and Progress Tracking
-**As a:** frequent Mavito contributor (e.g. user who submits suggestions or comments),
+**As a:** frequent Marito contributor (e.g. user who submits suggestions or comments),
 **I want:** to earn points, unlock badges, and track my contribution progress,
 **So that:** I feel motivated to participate and can see recognition for my efforts.
 

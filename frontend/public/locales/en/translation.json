@@ -1,7 +1,12 @@
 {
+  "appTitle": "Marito",
+  "loading": "Loading...",
+
   "landingPage": {
+    "greeting": "Welcome to Marito PWA!",
     "registerButton": "Register",
-    "loginButton": "Login"
+    "loginButton": "Login",
+    "footerText": "Marito Project"
   },
 
   "loginPage": {
@@ -18,7 +23,7 @@
     "loginWithGoogle": "Login with Google",
     "noAccount": "Don't have an account?",
     "registerLink": "Register",
-    "welcomeImageAlt": "Mavito Login Welcome",
+    "welcomeImageAlt": "Marito Login Welcome",
     "dsfsiLogoAlt": "DSFSI Logo",
     "errorTokenMissing": "Login successful, but no token received. Please contact support.",
     "errorDefault": "Login failed. Please check your credentials.",
@@ -30,7 +35,7 @@
 
   "registrationPage": {
     "title": "GET STARTED NOW",
-    "subtitle": "Create your Mavito account.",
+    "subtitle": "Create your Marito account.",
     "firstNameLabel": "First Name",
     "firstNamePlaceholder": "Enter your first name",
     "lastNameLabel": "Last Name",
@@ -49,7 +54,7 @@
     "createWithGoogle": "Create Account with Google",
     "haveAccount": "Already have an account?",
     "loginLink": "Login",
-    "welcomeImageAlt": "Mavito Welcome",
+    "welcomeImageAlt": "Marito Welcome",
     "dsfsiLogoAlt": "DSFSI Logo",
     "errorPasswordsDoNotMatch": "Passwords do not match.",
     "errorAgreeToTerms": "You must agree to the terms and conditions.",
@@ -85,7 +90,7 @@
   },
 
   "dashboard": {
-    "welcome": "Welcome to Mavito",
+    "welcome": "Welcome to Marito",
     "welcomeBack": "Welcome back",
     "userName": "User Name",
     "userId": "User ID",

@@ -16,9 +16,37 @@ import GlossaryPage from './pages/GlossaryPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import './App.css';
 
+import {
+  Chart as ChartJS,
+  PieController,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Register all Chart.js components once at the application entry point
+ChartJS.register(
+  PieController,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+);
+
 function App() {
   return (
-    <div className="MavitoApp">
+    <div className="MaritoApp">
       <Routes>
         <Route path="/Landing" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />

@@ -1,21 +1,23 @@
 // In frontend/src/config.ts
 
-const AUTH_SERVICE_URL =
+// For production
+const API_GATEWAY_URL: string = import.meta.env.VITE_API_GATEWAY_URL as string;
+
+// Local development
+const AUTH_SERVICE_URL: string =
   (import.meta.env.VITE_AUTH_SERVICE_URL as string) || 'http://localhost:8001';
-const SEARCH_SERVICE_URL =
+const SEARCH_SERVICE_URL: string =
   (import.meta.env.VITE_SEARCH_SERVICE_URL as string) ||
   'http://localhost:8002';
-const ANALYTICS_SERVICE_URL =
+const ANALYTICS_SERVICE_URL: string =
   (import.meta.env.VITE_ANALYTICS_SERVICE_URL as string) ||
   'http://localhost:8003';
-const LINGUIST_APP_SERVICE_URL =
+const LINGUIST_APP_SERVICE_URL: string =
   (import.meta.env.VITE_LINGUIST_APP_SERVICE_URL as string) ||
   'http://localhost:8004';
-
-const VOTE_SERVICE_URL =
+const VOTE_SERVICE_URL: string =
   (import.meta.env.VITE_VOTE_SERVICE_URL as string) || 'http://localhost:8005';
-
-const GLOSSARY_SERVICE_URL =
+const GLOSSARY_SERVICE_URL: string =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
 
@@ -25,70 +27,149 @@ const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
   'http://localhost:8008';
 
-export const API_ENDPOINTS = {
+// Smart endpoint generator
+const endpoint = (serviceUrl: string, path: string): string =>
+  import.meta.env.PROD ? `${API_GATEWAY_URL}${path}` : `${serviceUrl}${path}`;
+
+interface APIEndpoints {
+  login: string;
+  register: string;
+  getMe: string;
+  generateSignedUrl: string;
+  getAll: string;
+  updateUserRole: (userId: string) => string;
+  createApplication: string;
+  getUserUploads: (userId: string) => string;
+  getSignedDownloadUrl: (gcsKey: string) => string;
+  getUsersWithUploads: () => string;
+  search: string;
+  suggest: string;
+  descriptiveAnalytics: string;
+  categoryFrequency: string;
+  languageCoverage: string;
+  popularTerms: (limit?: number, domain?: string, language?: string) => string;
+  totalStatistics: string;
+  uniqueTerms: string;
+  submitVote: string;
+  glossary: string;
+  glossaryCategories: string;
+  glossaryTermsByCategory: (category: string) => string;
+  glossaryTermTranslations: (termId: string) => string;
+  glossarySearch: string;
+  glossaryLanguages: string;
+  glossaryRandom: string;
+  getTermDetail: (termId: string) => string;
+  getTermTranslations: (termId: string) => string;
+  getComments: (termId: string) => string;
+  postComment: string;
+  deleteComment: (commentId: string) => string;
+  voteOnTerm: string;
+  voteOnComment: string;
+}
+
+export const API_ENDPOINTS: APIEndpoints = {
   // --- Auth Service ---
-  login: `${AUTH_SERVICE_URL}/api/v1/auth/login`,
-  register: `${AUTH_SERVICE_URL}/api/v1/auth/register`,
-  getMe: `${AUTH_SERVICE_URL}/api/v1/auth/me`,
-  generateSignedUrl: `${AUTH_SERVICE_URL}/api/v1/uploads/generate-signed-url`,
-  getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
+  login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
+  register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
+  getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  generateSignedUrl: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/uploads/generate-signed-url',
+  ),
+  getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
-  // --- Linguist Application Service --- (NEW SECTION)
-  createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
+    endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
+
+  // --- Linguist Application Service ---
+  createApplication: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/',
+  ),
   getUserUploads: (userId: string) =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/uploads`,
+    endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/uploads`),
   getSignedDownloadUrl: (gcsKey: string) =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/download-url?gcs_key=${encodeURIComponent(gcsKey)}`,
+    endpoint(
+      AUTH_SERVICE_URL,
+      `/api/v1/admin/download-url?gcs_key=${encodeURIComponent(gcsKey)}`,
+    ),
   getUsersWithUploads: () =>
-    `${AUTH_SERVICE_URL}/api/v1/admin/users-with-uploads`,
+    endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users-with-uploads'),
 
   // --- Search Service ---
-  search: `${SEARCH_SERVICE_URL}/api/v1/search`,
-  suggest: `${SEARCH_SERVICE_URL}/api/v1/suggest`,
+  search: endpoint(SEARCH_SERVICE_URL, '/api/v1/search'),
+  suggest: endpoint(SEARCH_SERVICE_URL, '/api/v1/suggest'),
 
   // --- Analytics Service ---
-  descriptiveAnalytics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive`,
-  categoryFrequency: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/category-frequency`,
-  languageCoverage: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/language-coverage`,
+  descriptiveAnalytics: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive',
+  ),
+  categoryFrequency: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/category-frequency',
+  ),
+  languageCoverage: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/language-coverage',
+  ),
   popularTerms: (limit?: number, domain?: string, language?: string) => {
     const params = new URLSearchParams();
     if (limit) params.append('limit', limit.toString());
     if (domain) params.append('domain', domain);
     if (language) params.append('language', language);
     const queryString = params.toString();
-    return `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/popular-terms${queryString ? `?${queryString}` : ''}`;
+    return endpoint(
+      ANALYTICS_SERVICE_URL,
+      `/api/v1/analytics/descriptive/popular-terms${queryString ? `?${queryString}` : ''}`,
+    );
   },
-  totalStatistics: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/total-statistics`,
-  uniqueTerms: `${ANALYTICS_SERVICE_URL}/api/v1/analytics/descriptive/unique-terms`,
+  totalStatistics: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/total-statistics',
+  ),
+  uniqueTerms: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/descriptive/unique-terms',
+  ),
 
-  submitVote: `${VOTE_SERVICE_URL}/api/v1/votes/`,
+  // --- Vote Service ---
+  submitVote: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/'), // This path typically ends with a slash if it's a collection endpoint
+  voteOnTerm: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/terms'),
+  voteOnComment: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/comments'),
 
   // --- Glossary Service ---
-  glossary: `${GLOSSARY_SERVICE_URL}/api/v1/glossary`,
-  glossaryCategories: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/categories`,
+  glossary: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary'),
+  glossaryCategories: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/categories',
+  ),
   glossaryTermsByCategory: (category: string) =>
-    `${GLOSSARY_SERVICE_URL}/api/v1/glossary/categories/${encodeURIComponent(category)}/terms`,
+    endpoint(
+      GLOSSARY_SERVICE_URL,
+      `/api/v1/glossary/categories/${encodeURIComponent(category)}/terms`,
+    ),
   glossaryTermTranslations: (termId: string) =>
-    `${GLOSSARY_SERVICE_URL}/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
-  glossarySearch: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/search`,
-  glossaryLanguages: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/languages`,
-  glossaryRandom: `${GLOSSARY_SERVICE_URL}/api/v1/glossary/random`,
+    endpoint(
+      GLOSSARY_SERVICE_URL,
+      `/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
+    ),
+  glossarySearch: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/search'),
+  glossaryLanguages: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/languages',
+  ),
+  glossaryRandom: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/random'),
 
   // --- Term Service ---
   getTermDetail: (termId: string) =>
-    `${TERM_SERVICE_URL}/api/v1/terms/${termId}`,
+    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}`),
   getTermTranslations: (termId: string) =>
-    `${TERM_SERVICE_URL}/api/v1/terms/${termId}/translations`,
+    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}/translations`),
 
   // --- Comment Service ---
   getComments: (termId: string) =>
-    `${COMMENT_SERVICE_URL}/api/v1/comments?term_id=${termId}`,
-  postComment: `${COMMENT_SERVICE_URL}/api/v1/comments`,
+    endpoint(COMMENT_SERVICE_URL, `/api/v1/comments?term_id=${termId}`),
+  postComment: endpoint(COMMENT_SERVICE_URL, '/api/v1/comments'),
   deleteComment: (commentId: string) =>
-    `${COMMENT_SERVICE_URL}/api/v1/comments/${commentId}`,
-
-  // --- Vote Service (existing) ---
-  voteOnTerm: `${VOTE_SERVICE_URL}/api/v1/votes/terms`,
-  voteOnComment: `${VOTE_SERVICE_URL}/api/v1/votes/comments`,
+    endpoint(COMMENT_SERVICE_URL, `/api/v1/comments/${commentId}`),
 };

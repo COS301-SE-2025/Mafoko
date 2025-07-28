@@ -1,8 +1,8 @@
 # User Story #1: Search Feature
 
-**ID:** US001 (Mavito Project)
+**ID:** US001 (Marito Project)
 **Title:** Multilingual Term Search
-**As a** Mavito application user (eg., casual user, linguist, or contributer),
+**As a** Marito application user (eg., casual user, linguist, or contributer),
 **I want:** to search across multiple multilingual glossaries and dictionaries using filters and smart suggestions,
 **So that:** I can quickly find definitions, translations, and related entries in my preferred language.
 

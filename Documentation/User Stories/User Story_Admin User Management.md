@@ -2,7 +2,7 @@
 
 **Title:** Admin Review and Management of Platform Users
 
-**As a:** Mavito administrator,  
+**As a:** Marito administrator,  
 **I want:** to be able to view all registered users and manage researcher role applications by reviewing uploaded documents and approving or rejecting them,  
 **So that:** I can ensure only verified and legitimate users gain access to specialized research capabilities on the platform.
 

@@ -13,6 +13,7 @@ import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 import {
   Chart as ChartJS,
+  PieController,
   LineElement,
   CategoryScale,
   LinearScale,
@@ -26,6 +27,7 @@ import {
 import '../styles/AnalyticsPage.scss';
 
 ChartJS.register(
+  PieController,
   LineElement,
   CategoryScale,
   LinearScale,

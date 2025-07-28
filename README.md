@@ -10,15 +10,14 @@
 
 
 ## Project Description
-**Marito** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Mavito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
-
+**Marito** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Marito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
 
 
 ---
 ## Project Resources
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
-*  [SRS Document](https://github.com/COS301-SE-2025/Mavito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
+*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
 *  [Figma Designs](https://www.figma.com/design/XUPY5uCBmWQULGmh3L0bqC/Marito_Designs?node-id=0-1&p=f&t=0je6YkOSQeV0tjmJ-0) 
 *  [Architectural requirements](https://9000) 
 *  [User Manual ](https://9000) 
@@ -74,17 +73,17 @@ This structure ensures clean separation between environments, supports parallel 
   <a href="https://choosealicense.com/licenses/mit/">
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"/>
   </a>
-  <a href="https://github.com/COS301-SE-2025/Mavito/actions">
+  <a href="https://github.com/COS301-SE-2025/Marito/actions">
     <img src="https://github.com/COS301-SE-2025/Marito/actions/workflows/actions.yml/badge.svg?branch=main" alt="Build Status"/>
   </a>
-  <a href="https://codecov.io/gh/COS301-SE-2025/Mavito">
-    <img src="https://img.shields.io/codecov/c/github/COS301-SE-2025/Mavito" alt="Code Coverage"/>
+  <a href="https://codecov.io/gh/COS301-SE-2025/Marito">
+    <img src="https://img.shields.io/codecov/c/github/COS301-SE-2025/Marito" alt="Code Coverage"/>
   </a>
-  <a href="https://github.com/COS301-SE-2025/Mavito">
+  <a href="https://github.com/COS301-SE-2025/Marito">
     <img src="https://img.shields.io/badge/requirements-purple" alt="Requirements"/>
   </a>
-  <a href="https://github.com/COS301-SE-2025/Mavito/issues">
-    <img src="https://img.shields.io/github/issues/COS301-SE-2025/Mavito" alt="GitHub Issues"/>
+  <a href="https://github.com/COS301-SE-2025/Marito/issues">
+    <img src="https://img.shields.io/github/issues/COS301-SE-2025/Marito" alt="GitHub Issues"/>
   </a>
   <a href="https://uptimerobot.com/">
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>

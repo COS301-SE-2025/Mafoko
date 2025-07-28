@@ -237,7 +237,7 @@ const TermHelpPage: React.FC = () => {
                         }}
                       >
                         <source
-                          src="/Mavito/videos/search-page-tutorial.mp4"
+                          src="/Marito/videos/search-page-tutorial.mp4"
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
@@ -365,7 +365,7 @@ const TermHelpPage: React.FC = () => {
                         }}
                       >
                         <source
-                          src="/Mavito/videos/download-dictionary-turotial.mp4"
+                          src="/Marito/videos/download-dictionary-turotial.mp4"
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
