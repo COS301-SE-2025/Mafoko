@@ -210,17 +210,19 @@ const GlossaryPage = () => {
   >({});
   const [isDownloading, setIsDownloading] = useState(false);
   const [showExportPopup, setShowExportPopup] = useState(false);
-  
+
   // Bookmark-related state
-  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<BookmarkedGlossary[]>([]);
+  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<
+    BookmarkedGlossary[]
+  >([]);
   const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
-  
+
   const exportPopupRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
   useEffect(() => {
     void loadInitialData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Add glossary-page class to body for specific mobile styles
@@ -300,17 +302,17 @@ const GlossaryPage = () => {
 
     try {
       setIsBookmarkLoading(true);
-      
+
       // Check if current category is already bookmarked
       const isCurrentlyBookmarked = bookmarkedGlossaries.some(
-        bookmark => bookmark.domain === selectedCategory
+        (bookmark) => bookmark.domain === selectedCategory,
       );
 
       if (isCurrentlyBookmarked) {
         // Remove bookmark
         await workspaceAPI.bookmarks.glossaries.delete(selectedCategory);
-        setBookmarkedGlossaries(prev => 
-          prev.filter(bookmark => bookmark.domain !== selectedCategory)
+        setBookmarkedGlossaries((prev) =>
+          prev.filter((bookmark) => bookmark.domain !== selectedCategory),
         );
       } else {
         // Add bookmark
@@ -318,7 +320,7 @@ const GlossaryPage = () => {
           domain: selectedCategory,
           notes: `Bookmarked glossary for ${selectedCategory}`,
         });
-        setBookmarkedGlossaries(prev => [...prev, newBookmark]);
+        setBookmarkedGlossaries((prev) => [...prev, newBookmark]);
       }
     } catch (error) {
       console.error('Failed to toggle category bookmark:', error);
@@ -886,7 +888,9 @@ const GlossaryPage = () => {
                   {/* Bookmark Button */}
                   <button
                     type="button"
-                    onClick={() => { void handleCategoryBookmark(); }}
+                    onClick={() => {
+                      void handleCategoryBookmark();
+                    }}
                     disabled={isBookmarkLoading || !selectedCategory}
                     className="glossary-bookmark-button"
                     style={{
@@ -901,7 +905,10 @@ const GlossaryPage = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      cursor: isBookmarkLoading || !selectedCategory ? 'not-allowed' : 'pointer',
+                      cursor:
+                        isBookmarkLoading || !selectedCategory
+                          ? 'not-allowed'
+                          : 'pointer',
                       boxShadow: '0 4px 12px rgba(242, 208, 1, 0.3)',
                       transition: 'all 0.2s ease',
                       opacity: isBookmarkLoading || !selectedCategory ? 0.6 : 1,
@@ -921,7 +928,10 @@ const GlossaryPage = () => {
                     title={
                       !selectedCategory
                         ? 'Select a category to bookmark'
-                        : bookmarkedGlossaries.some(bookmark => bookmark.domain === selectedCategory)
+                        : bookmarkedGlossaries.some(
+                              (bookmark) =>
+                                bookmark.domain === selectedCategory,
+                            )
                           ? t('glossaryPage.bookmarked')
                           : t('glossaryPage.bookmarkCategory')
                     }
@@ -943,7 +953,10 @@ const GlossaryPage = () => {
                         strokeWidth={2.5}
                         color="#fff"
                         fill={
-                          selectedCategory && bookmarkedGlossaries.some(bookmark => bookmark.domain === selectedCategory)
+                          selectedCategory &&
+                          bookmarkedGlossaries.some(
+                            (bookmark) => bookmark.domain === selectedCategory,
+                          )
                             ? '#fff'
                             : 'none'
                         }

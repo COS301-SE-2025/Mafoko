@@ -17,7 +17,8 @@ const WORKSPACE_SERVICE_URL =
 const TERM_SERVICE_URL =
   (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8008';
 const COMMENT_SERVICE_URL =
-  (import.meta.env.VITE_COMMENT_SERVICE_URL as string) || 'http://localhost:8009';
+  (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
+  'http://localhost:8009';
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---
@@ -28,7 +29,7 @@ export const API_ENDPOINTS = {
   getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
   updateUserRole: (userId: string) =>
     `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
-  
+
   // --- Linguist Application Service ---
   createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
   getUserUploads: (userId: string) =>
@@ -78,13 +79,13 @@ export const API_ENDPOINTS = {
   bookmarkGlossary: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/bookmarks/glossaries`,
   unbookmarkGlossary: (domain: string) =>
     `${WORKSPACE_SERVICE_URL}/api/v1/workspace/bookmarks/glossaries/${encodeURIComponent(domain)}`,
-  
+
   // Group endpoints
   createGroup: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/groups`,
   getGroups: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/groups`,
   addItemToGroup: (groupId: string) =>
     `${WORKSPACE_SERVICE_URL}/api/v1/workspace/groups/${groupId}/items`,
-  
+
   // Search and overview
   searchWorkspace: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/search`,
   workspaceOverview: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/overview`,

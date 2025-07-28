@@ -14,7 +14,7 @@ import type {
   SearchTermsRequest,
   SearchTermsResponse,
   BulkDeleteRequest,
-  WorkspaceOverview
+  WorkspaceOverview,
 } from '../types/workspace';
 
 // Helper function to get user ID from localStorage or token
@@ -26,7 +26,7 @@ const getUserId = (): string => {
     const user = JSON.parse(userData) as { id?: string; user_id?: string };
     return user.id || user.user_id || '872aafc3-e9e4-46ea-a9e4-f44148f1dd24';
   }
-  
+
   // For testing purposes, use the existing user ID from database
   return '872aafc3-e9e4-46ea-a9e4-f44148f1dd24';
 };
@@ -35,20 +35,21 @@ const getUserId = (): string => {
 const apiRequest = async (
   url: string,
   options: RequestInit = {},
-  includeUserId: boolean = true
+  includeUserId: boolean = true,
 ): Promise<Response> => {
   const userId = includeUserId ? getUserId() : null;
-  
+
   // Add user_id as query parameter if needed
-  const finalUrl = includeUserId && userId 
-    ? `${url}${url.includes('?') ? '&' : '?'}user_id=${userId}`
-    : url;
+  const finalUrl =
+    includeUserId && userId
+      ? `${url}${url.includes('?') ? '&' : '?'}user_id=${userId}`
+      : url;
 
   // Build headers object safely
   const baseHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-  
+
   // Add additional headers if they exist and are a plain object
   let finalHeaders = baseHeaders;
   if (options.headers) {
@@ -57,7 +58,10 @@ const apiRequest = async (
       options.headers.forEach((value, key) => {
         finalHeaders[key] = value;
       });
-    } else if (typeof options.headers === 'object' && !Array.isArray(options.headers)) {
+    } else if (
+      typeof options.headers === 'object' &&
+      !Array.isArray(options.headers)
+    ) {
       // Spread plain object headers
       finalHeaders = { ...baseHeaders, ...options.headers };
     }
@@ -79,8 +83,13 @@ const apiRequest = async (
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({})) as { detail?: string };
-    throw new Error(errorData.detail || `HTTP ${response.status.toString()}: ${response.statusText}`);
+    const errorData = (await response.json().catch(() => ({}))) as {
+      detail?: string;
+    };
+    throw new Error(
+      errorData.detail ||
+        `HTTP ${response.status.toString()}: ${response.statusText}`,
+    );
   }
 
   return response;
@@ -96,7 +105,10 @@ export const bookmarkTermAPI = {
     return response.json() as Promise<BookmarkedTerm>;
   },
 
-  getAll: async (skip: number = 0, limit: number = 100): Promise<BookmarkedTerm[]> => {
+  getAll: async (
+    skip: number = 0,
+    limit: number = 100,
+  ): Promise<BookmarkedTerm[]> => {
     const url = `${API_ENDPOINTS.bookmarkTerm}?skip=${skip.toString()}&limit=${limit.toString()}`;
     const response = await apiRequest(url, { method: 'GET' });
     return response.json() as Promise<BookmarkedTerm[]>;
@@ -119,7 +131,9 @@ export const bookmarkTermAPI = {
 
 // Bookmark Glossaries API
 export const bookmarkGlossaryAPI = {
-  create: async (data: BookmarkedGlossaryCreate): Promise<BookmarkedGlossary> => {
+  create: async (
+    data: BookmarkedGlossaryCreate,
+  ): Promise<BookmarkedGlossary> => {
     const response = await apiRequest(API_ENDPOINTS.bookmarkGlossary, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -127,7 +141,10 @@ export const bookmarkGlossaryAPI = {
     return response.json() as Promise<BookmarkedGlossary>;
   },
 
-  getAll: async (skip: number = 0, limit: number = 100): Promise<BookmarkedGlossary[]> => {
+  getAll: async (
+    skip: number = 0,
+    limit: number = 100,
+  ): Promise<BookmarkedGlossary[]> => {
     const url = `${API_ENDPOINTS.bookmarkGlossary}?skip=${skip.toString()}&limit=${limit.toString()}`;
     const response = await apiRequest(url, { method: 'GET' });
     return response.json() as Promise<BookmarkedGlossary[]>;
@@ -151,11 +168,16 @@ export const workspaceGroupAPI = {
   },
 
   getAll: async (): Promise<WorkspaceGroup[]> => {
-    const response = await apiRequest(API_ENDPOINTS.getGroups, { method: 'GET' });
+    const response = await apiRequest(API_ENDPOINTS.getGroups, {
+      method: 'GET',
+    });
     return response.json() as Promise<WorkspaceGroup[]>;
   },
 
-  update: async (groupId: string, data: WorkspaceGroupUpdate): Promise<WorkspaceGroup> => {
+  update: async (
+    groupId: string,
+    data: WorkspaceGroupUpdate,
+  ): Promise<WorkspaceGroup> => {
     const url = `${API_ENDPOINTS.getGroups}/${groupId}`;
     const response = await apiRequest(url, {
       method: 'PUT',
@@ -169,7 +191,10 @@ export const workspaceGroupAPI = {
     await apiRequest(url, { method: 'DELETE' });
   },
 
-  addItem: async (groupId: string, data: WorkspaceGroupItemCreate): Promise<WorkspaceGroupItem> => {
+  addItem: async (
+    groupId: string,
+    data: WorkspaceGroupItemCreate,
+  ): Promise<WorkspaceGroupItem> => {
     const response = await apiRequest(API_ENDPOINTS.addItemToGroup(groupId), {
       method: 'POST',
       body: JSON.stringify(data),
@@ -185,7 +210,9 @@ export const workspaceGroupAPI = {
 
 // Search API
 export const workspaceSearchAPI = {
-  searchTerms: async (params: SearchTermsRequest): Promise<SearchTermsResponse> => {
+  searchTerms: async (
+    params: SearchTermsRequest,
+  ): Promise<SearchTermsResponse> => {
     const response = await apiRequest(API_ENDPOINTS.searchWorkspace, {
       method: 'POST',
       body: JSON.stringify(params),
@@ -208,7 +235,9 @@ export const workspaceBulkAPI = {
 // Overview API
 export const workspaceOverviewAPI = {
   getOverview: async (): Promise<WorkspaceOverview> => {
-    const response = await apiRequest(API_ENDPOINTS.workspaceOverview, { method: 'GET' });
+    const response = await apiRequest(API_ENDPOINTS.workspaceOverview, {
+      method: 'GET',
+    });
     return response.json() as Promise<WorkspaceOverview>;
   },
 };
@@ -228,19 +257,25 @@ export const workspaceAPI = {
 // Utility functions for common operations
 export const workspaceUtils = {
   // Check if a term is bookmarked
-  isTermBookmarked: (termId: string, bookmarkedTerms: BookmarkedTerm[]): boolean => {
-    return bookmarkedTerms.some(bookmark => bookmark.term_id === termId);
+  isTermBookmarked: (
+    termId: string,
+    bookmarkedTerms: BookmarkedTerm[],
+  ): boolean => {
+    return bookmarkedTerms.some((bookmark) => bookmark.term_id === termId);
   },
 
   // Check if a glossary is bookmarked
-  isGlossaryBookmarked: (domain: string, bookmarkedGlossaries: BookmarkedGlossary[]): boolean => {
-    return bookmarkedGlossaries.some(bookmark => bookmark.domain === domain);
+  isGlossaryBookmarked: (
+    domain: string,
+    bookmarkedGlossaries: BookmarkedGlossary[],
+  ): boolean => {
+    return bookmarkedGlossaries.some((bookmark) => bookmark.domain === domain);
   },
 
   // Get unique domains from bookmarked terms
   getBookmarkedDomains: (bookmarkedTerms: BookmarkedTerm[]): string[] => {
     const domains = bookmarkedTerms
-      .map(bookmark => bookmark.domain)
+      .map((bookmark) => bookmark.domain)
       .filter((domain): domain is string => Boolean(domain));
     return Array.from(new Set(domains));
   },
@@ -248,31 +283,44 @@ export const workspaceUtils = {
   // Get unique languages from bookmarked terms
   getBookmarkedLanguages: (bookmarkedTerms: BookmarkedTerm[]): string[] => {
     const languages = bookmarkedTerms
-      .map(bookmark => bookmark.language)
+      .map((bookmark) => bookmark.language)
       .filter((language): language is string => Boolean(language));
     return Array.from(new Set(languages));
   },
 
   // Filter bookmarked terms by search query
-  filterTermsByQuery: (terms: BookmarkedTerm[], query: string): BookmarkedTerm[] => {
+  filterTermsByQuery: (
+    terms: BookmarkedTerm[],
+    query: string,
+  ): BookmarkedTerm[] => {
     if (!query.trim()) return terms;
-    
+
     const lowerQuery = query.toLowerCase();
-    return terms.filter(bookmark => 
-      bookmark.term?.toLowerCase().includes(lowerQuery) ||
-      bookmark.definition?.toLowerCase().includes(lowerQuery) ||
-      bookmark.notes?.toLowerCase().includes(lowerQuery)
+    return terms.filter(
+      (bookmark) =>
+        bookmark.term?.toLowerCase().includes(lowerQuery) ||
+        bookmark.definition?.toLowerCase().includes(lowerQuery) ||
+        bookmark.notes?.toLowerCase().includes(lowerQuery),
     );
   },
 
   // Sort bookmarked terms
-  sortTerms: (terms: BookmarkedTerm[], sortBy: 'date_desc' | 'date_asc' | 'alphabetical'): BookmarkedTerm[] => {
+  sortTerms: (
+    terms: BookmarkedTerm[],
+    sortBy: 'date_desc' | 'date_asc' | 'alphabetical',
+  ): BookmarkedTerm[] => {
     return [...terms].sort((a, b) => {
       switch (sortBy) {
         case 'date_desc':
-          return new Date(b.bookmarked_at).getTime() - new Date(a.bookmarked_at).getTime();
+          return (
+            new Date(b.bookmarked_at).getTime() -
+            new Date(a.bookmarked_at).getTime()
+          );
         case 'date_asc':
-          return new Date(a.bookmarked_at).getTime() - new Date(b.bookmarked_at).getTime();
+          return (
+            new Date(a.bookmarked_at).getTime() -
+            new Date(b.bookmarked_at).getTime()
+          );
         case 'alphabetical':
           return (a.term || '').localeCompare(b.term || '');
         default:
