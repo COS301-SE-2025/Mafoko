@@ -226,15 +226,16 @@ beforeEach(() => {
       if (url.includes('/workspace/bookmarks/glossaries')) {
         return Promise.resolve({
           ok: true,
-          json: () => Promise.resolve([
-            {
-              id: '1',
-              domain: 'Agriculture',
-              category: 'Agriculture',
-              description: 'Agricultural terms and definitions',
-              created_at: '2024-01-01T00:00:00Z',
-            },
-          ]),
+          json: () =>
+            Promise.resolve([
+              {
+                id: '1',
+                domain: 'Agriculture',
+                category: 'Agriculture',
+                description: 'Agricultural terms and definitions',
+                created_at: '2024-01-01T00:00:00Z',
+              },
+            ]),
         } as Response);
       }
       if (url.includes('/categories') && !url.includes('/terms')) {
