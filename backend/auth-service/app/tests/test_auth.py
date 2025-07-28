@@ -132,12 +132,11 @@ class TestLoginForAccessToken:
     @pytest.mark.asyncio
     async def test_login_success(self, mock_db, mock_form_data, mock_user_model):
         """Test successful login."""
-        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud, patch(
-            "app.api.v1.endpoints.auth.create_access_token"
-        ) as mock_create_token, patch(
-            "app.api.v1.endpoints.auth.settings"
-        ) as mock_settings:
-
+        with (
+            patch("app.api.v1.endpoints.auth.crud_user") as mock_crud,
+            patch("app.api.v1.endpoints.auth.create_access_token") as mock_create_token,
+            patch("app.api.v1.endpoints.auth.settings") as mock_settings,
+        ):
             # Setup mocks - make them async
             mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
             mock_crud.is_user_active = AsyncMock(return_value=True)
@@ -206,12 +205,11 @@ class TestLoginForAccessToken:
         self, mock_db, mock_form_data, mock_user_model
     ):
         """Test login when setting last_login timestamp fails."""
-        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud, patch(
-            "app.api.v1.endpoints.auth.create_access_token"
-        ) as mock_create_token, patch(
-            "app.api.v1.endpoints.auth.settings"
-        ) as mock_settings:
-
+        with (
+            patch("app.api.v1.endpoints.auth.crud_user") as mock_crud,
+            patch("app.api.v1.endpoints.auth.create_access_token") as mock_create_token,
+            patch("app.api.v1.endpoints.auth.settings") as mock_settings,
+        ):
             # Setup mocks
             mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
             mock_crud.is_user_active = AsyncMock(return_value=True)
@@ -312,12 +310,10 @@ class TestAuthIntegration:
         mock_user = MagicMock(spec=UserModel)
         mock_user.email = "test@example.com"
 
-        with patch(
-            "app.api.v1.endpoints.auth.create_access_token"
-        ) as mock_create_token, patch(
-            "app.api.v1.endpoints.auth.settings"
-        ) as mock_settings:
-
+        with (
+            patch("app.api.v1.endpoints.auth.create_access_token") as mock_create_token,
+            patch("app.api.v1.endpoints.auth.settings") as mock_settings,
+        ):
             mock_settings.ACCESS_TOKEN_EXPIRE_MINUTES = 60
             mock_create_token.return_value = "token_123"
 

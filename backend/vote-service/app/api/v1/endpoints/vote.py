@@ -36,7 +36,7 @@ async def cast_vote(
     *,
     db: AsyncSession = Depends(get_db),
     vote_in: VoteCreate,
-    current_user: UserModel = Depends(get_current_active_user)
+    current_user: UserModel = Depends(get_current_active_user),
 ):
     """
     Casts, updates, or removes a vote on a term for the current user.
@@ -50,7 +50,6 @@ async def cast_vote(
     user_vote_status: VoteType | None = vote_in.vote
 
     if db_vote:
-
         # If the user is clicking the same button again, it's an un-vote.
         if db_vote.vote == vote_in.vote:
             await db.delete(db_vote)

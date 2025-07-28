@@ -286,10 +286,12 @@ async def test_get_all_users_success_multiple_users(mock_db, mock_admin_user):
         validated_user.role = role
         fake_validated.append(validated_user)
 
-    with patch("app.api.v1.endpoints.admin.crud_user") as mock_crud, patch(
-        "mavito_common.schemas.user.User.model_validate", side_effect=fake_validated
+    with (
+        patch("app.api.v1.endpoints.admin.crud_user") as mock_crud,
+        patch(
+            "mavito_common.schemas.user.User.model_validate", side_effect=fake_validated
+        ),
     ):
-
         mock_crud.get_all_users = AsyncMock(return_value=mock_users)
 
         result = await get_all_users(db=mock_db, current_user=mock_admin_user)
@@ -324,10 +326,13 @@ async def test_get_all_users_success_single_user(mock_db, mock_admin_user):
     fake_validated.email = mock_user.email
     fake_validated.role = mock_user.role
 
-    with patch("app.api.v1.endpoints.admin.crud_user") as mock_crud, patch(
-        "mavito_common.schemas.user.User.model_validate", return_value=fake_validated
+    with (
+        patch("app.api.v1.endpoints.admin.crud_user") as mock_crud,
+        patch(
+            "mavito_common.schemas.user.User.model_validate",
+            return_value=fake_validated,
+        ),
     ):
-
         mock_crud.get_all_users = AsyncMock(return_value=[mock_user])
 
         result = await get_all_users(db=mock_db, current_user=mock_admin_user)
@@ -358,11 +363,13 @@ async def test_get_all_users_validation_error(mock_db, mock_admin_user):
     mock_user.email = "test@example.com"
     mock_user.role = UserRole.contributor
 
-    with patch("app.api.v1.endpoints.admin.crud_user") as mock_crud, patch(
-        "mavito_common.schemas.user.User.model_validate",
-        side_effect=ValueError("Validation failed"),
+    with (
+        patch("app.api.v1.endpoints.admin.crud_user") as mock_crud,
+        patch(
+            "mavito_common.schemas.user.User.model_validate",
+            side_effect=ValueError("Validation failed"),
+        ),
     ):
-
         mock_crud.get_all_users = AsyncMock(return_value=[mock_user])
 
         with pytest.raises(ValueError) as exc_info:
@@ -508,10 +515,12 @@ async def test_get_all_users_with_mixed_user_states(mock_db, mock_admin_user):
         validated_user.role = user.role
         fake_validated.append(validated_user)
 
-    with patch("app.api.v1.endpoints.admin.crud_user") as mock_crud, patch(
-        "mavito_common.schemas.user.User.model_validate", side_effect=fake_validated
+    with (
+        patch("app.api.v1.endpoints.admin.crud_user") as mock_crud,
+        patch(
+            "mavito_common.schemas.user.User.model_validate", side_effect=fake_validated
+        ),
     ):
-
         mock_crud.get_all_users = AsyncMock(return_value=mock_users)
 
         result = await get_all_users(db=mock_db, current_user=mock_admin_user)

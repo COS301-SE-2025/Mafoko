@@ -22,7 +22,7 @@ import { workspaceAPI } from '../utils/workspaceAPI';
 import type {
   BookmarkedTerm,
   BookmarkedGlossary,
-  WorkspaceGroup
+  WorkspaceGroup,
 } from '../types/workspace';
 
 import '../styles/WorkspacePage.scss';
@@ -62,7 +62,9 @@ const WorkspacePage: React.FC = () => {
 
   // Real workspace data state
   // const [bookmarkedTerms, setBookmarkedTerms] = useState<BookmarkedTerm[]>([]);
-  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<BookmarkedGlossary[]>([]);
+  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<
+    BookmarkedGlossary[]
+  >([]);
   const [workspaceGroups, setWorkspaceGroups] = useState<WorkspaceGroup[]>([]);
   // const [workspaceOverview, setWorkspaceOverview] = useState<WorkspaceOverview | null>(null);
   const [loading, setLoading] = useState(false);
@@ -199,9 +201,13 @@ const WorkspacePage: React.FC = () => {
   const loadWorkspaceData = async (): Promise<void> => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const [bookmarkedTermsData, bookmarkedGlossariesData, workspaceGroupsData] = await Promise.all([
+      const [
+        bookmarkedTermsData,
+        bookmarkedGlossariesData,
+        workspaceGroupsData,
+      ] = await Promise.all([
         workspaceAPI.bookmarks.terms.getAll(),
         workspaceAPI.bookmarks.glossaries.getAll(),
         workspaceAPI.groups.getAll(),
@@ -215,9 +221,12 @@ const WorkspacePage: React.FC = () => {
       // setWorkspaceOverview(overviewData); // For future use
 
       // Update groups list from workspace groups
-      const groupNames = ['all', 'All Terms', ...workspaceGroupsData.map(group => group.name)];
+      const groupNames = [
+        'all',
+        'All Terms',
+        ...workspaceGroupsData.map((group) => group.name),
+      ];
       setGroups(groupNames);
-
     } catch (error) {
       console.error('Failed to load workspace data:', error);
       setError('Failed to load workspace data. Please try again.');
@@ -250,8 +259,11 @@ const WorkspacePage: React.FC = () => {
       }
 
       // Call the API to update the bookmark notes using term_id
-      await workspaceAPI.bookmarks.terms.update(termToUpdate.term_id, noteText.trim());
-      
+      await workspaceAPI.bookmarks.terms.update(
+        termToUpdate.term_id,
+        noteText.trim(),
+      );
+
       // Update local state
       setSavedTerms((prevTerms) =>
         prevTerms.map((term) =>
@@ -260,10 +272,10 @@ const WorkspacePage: React.FC = () => {
             : term,
         ),
       );
-      
+
       setEditingNotes(null);
       setNoteText('');
-      
+
       console.log('Notes saved successfully');
     } catch (error) {
       console.error('Failed to save notes:', error);
@@ -288,12 +300,12 @@ const WorkspacePage: React.FC = () => {
 
       // Call the API to delete the bookmark using term_id
       await workspaceAPI.bookmarks.terms.delete(termToDelete.term_id);
-      
+
       // Remove the term from local state
-      setSavedTerms((prevTerms) => 
-        prevTerms.filter((term) => term.id !== bookmarkId)
+      setSavedTerms((prevTerms) =>
+        prevTerms.filter((term) => term.id !== bookmarkId),
       );
-      
+
       console.log('Term bookmark deleted successfully');
     } catch (error) {
       console.error('Failed to delete term bookmark:', error);
@@ -305,7 +317,9 @@ const WorkspacePage: React.FC = () => {
   const handleDeleteGlossary = async (bookmarkId: string) => {
     try {
       // Find the glossary to get the domain for the API call
-      const glossaryToDelete = bookmarkedGlossaries.find((glossary) => glossary.id === bookmarkId);
+      const glossaryToDelete = bookmarkedGlossaries.find(
+        (glossary) => glossary.id === bookmarkId,
+      );
       if (!glossaryToDelete) {
         console.error('Glossary not found in local state');
         return;
@@ -313,12 +327,12 @@ const WorkspacePage: React.FC = () => {
 
       // Call the API to delete the bookmark using domain
       await workspaceAPI.bookmarks.glossaries.delete(glossaryToDelete.domain);
-      
+
       // Remove the glossary from local state
-      setBookmarkedGlossaries((prevGlossaries) => 
-        prevGlossaries.filter((glossary) => glossary.id !== bookmarkId)
+      setBookmarkedGlossaries((prevGlossaries) =>
+        prevGlossaries.filter((glossary) => glossary.id !== bookmarkId),
       );
-      
+
       console.log('Glossary bookmark deleted successfully');
     } catch (error) {
       console.error('Failed to delete glossary bookmark:', error);
@@ -437,7 +451,7 @@ const WorkspacePage: React.FC = () => {
 
   const filteredTerms = savedTerms.filter((bookmarkedTerm) => {
     const searchLower = searchQuery.toLowerCase();
-    
+
     const matchesSearch =
       bookmarkedTerm.term?.toLowerCase().includes(searchLower) ||
       bookmarkedTerm.definition?.toLowerCase().includes(searchLower) ||
@@ -451,8 +465,8 @@ const WorkspacePage: React.FC = () => {
   // Helper function to get group name for a term
   const getTermGroupName = (termId: string): string => {
     for (const group of workspaceGroups) {
-      const hasTermInGroup = group.items.some(item => 
-        item.item_type === 'term' && item.term_id === termId
+      const hasTermInGroup = group.items.some(
+        (item) => item.item_type === 'term' && item.term_id === termId,
       );
       if (hasTermInGroup) {
         return group.name;
@@ -533,7 +547,6 @@ const WorkspacePage: React.FC = () => {
 
         <div className={`workspace-content ${isMobile ? 'pt-16' : ''}`}>
           <div className="workspace-content-wrapper">
-            
             {/* Error Display */}
             {error && (
               <div
@@ -563,7 +576,7 @@ const WorkspacePage: React.FC = () => {
                 Loading workspace data...
               </div>
             )}
-            
+
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
@@ -854,7 +867,9 @@ const WorkspacePage: React.FC = () => {
                                                 <button
                                                   type="button"
                                                   onClick={() => {
-                                                    void handleSaveNote(term.id);
+                                                    void handleSaveNote(
+                                                      term.id,
+                                                    );
                                                   }}
                                                   className="save-btn"
                                                 >
@@ -1103,11 +1118,18 @@ const WorkspacePage: React.FC = () => {
                               className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
                             >
                               <span>Bookmarked glossary</span>
-                              <span>Added: {new Date(bookmark.bookmarked_at).toLocaleDateString()}</span>
+                              <span>
+                                Added:{' '}
+                                {new Date(
+                                  bookmark.bookmarked_at,
+                                ).toLocaleDateString()}
+                              </span>
                             </div>
                             {bookmark.notes && (
                               <div className="mt-2">
-                                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                <p
+                                  className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                >
                                   {bookmark.notes}
                                 </p>
                               </div>
@@ -1126,11 +1148,13 @@ const WorkspacePage: React.FC = () => {
                                   backgroundColor: 'transparent',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = '#ff6b6b';
+                                  e.currentTarget.style.backgroundColor =
+                                    '#ff6b6b';
                                   e.currentTarget.style.color = '#fff';
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = 'transparent';
+                                  e.currentTarget.style.backgroundColor =
+                                    'transparent';
                                   e.currentTarget.style.color = '#ff6b6b';
                                 }}
                               >

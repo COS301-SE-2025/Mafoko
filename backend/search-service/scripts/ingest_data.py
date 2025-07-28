@@ -64,7 +64,7 @@ def main():
     print(f"Found {len(raw_data)} multilingual entries to process.")
 
     for i, item in enumerate(raw_data):
-        print(f"Processing entry {i+1}/{len(raw_data)}...")
+        print(f"Processing entry {i + 1}/{len(raw_data)}...")
 
         # Create all term objects for this entry first
         created_terms = []

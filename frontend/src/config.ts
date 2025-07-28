@@ -4,27 +4,22 @@
 const AUTH_SERVICE_URL =
   import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:8001';
 const SEARCH_SERVICE_URL =
-  import.meta.env.VITE_SEARCH_SERVICE_URL ||
-  'http://localhost:8002';
+  import.meta.env.VITE_SEARCH_SERVICE_URL || 'http://localhost:8002';
 const ANALYTICS_SERVICE_URL =
-  import.meta.env.VITE_ANALYTICS_SERVICE_URL ||
-  'http://localhost:8003';
+  import.meta.env.VITE_ANALYTICS_SERVICE_URL || 'http://localhost:8003';
 // Add the URL for your new service, pointing to the port defined in docker-compose.yml
 const LINGUIST_APP_SERVICE_URL =
-  import.meta.env.VITE_LINGUIST_APP_SERVICE_URL ||
-  'http://localhost:8004';
+  import.meta.env.VITE_LINGUIST_APP_SERVICE_URL || 'http://localhost:8004';
 
 const VOTE_SERVICE_URL =
   import.meta.env.VITE_VOTE_SERVICE_URL || 'http://localhost:8005';
 
 // Add the URL for your new service, pointing to the port defined in docker-compose.yml
 const GLOSSARY_SERVICE_URL =
-  import.meta.env.VITE_GLOSSARY_SERVICE_URL ||
-  'http://localhost:8006';
+  import.meta.env.VITE_GLOSSARY_SERVICE_URL || 'http://localhost:8006';
 
 const WORKSPACE_SERVICE_URL =
-  import.meta.env.VITE_WORKSPACE_SERVICE_URL ||
-  'http://localhost:8007';
+  import.meta.env.VITE_WORKSPACE_SERVICE_URL || 'http://localhost:8007';
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---
@@ -84,13 +79,13 @@ export const API_ENDPOINTS = {
   bookmarkGlossary: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/bookmarks/glossaries`,
   unbookmarkGlossary: (domain: string) =>
     `${WORKSPACE_SERVICE_URL}/api/v1/workspace/bookmarks/glossaries/${encodeURIComponent(domain)}`,
-  
+
   // Group endpoints
   createGroup: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/groups`,
   getGroups: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/groups`,
   addItemToGroup: (groupId: string) =>
     `${WORKSPACE_SERVICE_URL}/api/v1/workspace/groups/${groupId}/items`,
-  
+
   // Search and overview
   searchWorkspace: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/search`,
   workspaceOverview: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/overview`,

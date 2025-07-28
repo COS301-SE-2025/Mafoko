@@ -167,7 +167,7 @@ async def update_bookmarked_term(
 
     # Update the notes
     bookmark.notes = update_data.notes
-    
+
     await db.commit()
     await db.refresh(bookmark)
 

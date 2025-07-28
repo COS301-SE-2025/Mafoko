@@ -17,7 +17,7 @@ async def create_linguist_application(
     *,
     db: AsyncSession = Depends(deps.get_db),
     application_in: LinguistApplicationCreate,
-    current_user: UserModel = Depends(deps.get_current_active_user)
+    current_user: UserModel = Depends(deps.get_current_active_user),
 ):
     """
     Create a new linguist application for the currently authenticated user.

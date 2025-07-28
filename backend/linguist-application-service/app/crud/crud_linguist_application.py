@@ -16,7 +16,7 @@ class CRUDLinguistApplication:
         db_obj = LinguistApplication(
             **obj_in.model_dump(),
             user_id=user_id,
-            status="pending"  # Explicitly set the initial status
+            status="pending",  # Explicitly set the initial status
         )
         db.add(db_obj)
         await db.commit()

@@ -224,7 +224,7 @@
     "next": "Next",
     "pageInfo": "Page {{current}} of {{total}}"
   },
-  
+
   "workspace": {
     "title": "Workspace",
     "description": "Manage and organize your terminology projects and shared resources",
@@ -242,7 +242,7 @@
     },
     "emptyState": "No items found. Create a new item or change your filter."
   },
-  
+
   "common": {
     "loading": "Loading..."
   }

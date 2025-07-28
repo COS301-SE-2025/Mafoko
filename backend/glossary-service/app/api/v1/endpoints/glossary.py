@@ -58,7 +58,7 @@ async def get_all_categories(db: AsyncSession) -> List[str]:
     query: Any = select(distinct(Term.domain)).order_by(Term.domain)
     result = await db.execute(query)
     # Transform categories for display
-    return [transform_category_name(domain) for domain, in result.all()]
+    return [transform_category_name(domain) for (domain,) in result.all()]
 
 
 async def get_terms_by_category(
@@ -365,7 +365,7 @@ async def get_available_languages(db: AsyncSession = Depends(get_db)) -> Dict[st
     # Query distinct languages from the database
     query: Any = select(distinct(Term.language))
     result = await db.execute(query)
-    languages = [lang for lang, in result.all()]
+    languages = [lang for (lang,) in result.all()]
 
     # Return only the languages that exist in our mapping
     return {lang: lang for lang in languages if lang in LANGUAGE_MAP.values()}
@@ -653,7 +653,7 @@ async def get_glossary_stats(db: AsyncSession = Depends(get_db)) -> Dict[str, An
     # Get available languages
     langs_list_sql: Any = select(distinct(Term.language))
     result = await db.execute(langs_list_sql)
-    languages = {lang: lang for lang, in result.all()}
+    languages = {lang: lang for (lang,) in result.all()}
 
     return {
         "total_terms": total_terms or 0,

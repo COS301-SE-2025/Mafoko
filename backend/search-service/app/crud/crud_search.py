@@ -15,7 +15,6 @@ async def search_terms_in_db(
     sort_by: str = "name",
     fuzzy: bool = False,
 ) -> List:  # The function will now return tuples of (Term, upvotes, downvotes)
-
     # --- NEW: Subquery to count upvotes and downvotes ---
     # This creates two columns: 'upvote_count' and 'downvote_count'
     vote_counts = (

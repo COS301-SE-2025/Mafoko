@@ -49,16 +49,16 @@ export interface WorkspaceGroupItem {
 export const GroupType = {
   TERMS: 'terms',
   GLOSSARIES: 'glossaries',
-  MIXED: 'mixed'
+  MIXED: 'mixed',
 } as const;
 
 export const ItemType = {
   TERM: 'term',
-  GLOSSARY: 'glossary'
+  GLOSSARY: 'glossary',
 } as const;
 
-export type GroupType = typeof GroupType[keyof typeof GroupType];
-export type ItemType = typeof ItemType[keyof typeof ItemType];
+export type GroupType = (typeof GroupType)[keyof typeof GroupType];
+export type ItemType = (typeof ItemType)[keyof typeof ItemType];
 
 // Request/Response interfaces
 export interface BookmarkedTermCreate {

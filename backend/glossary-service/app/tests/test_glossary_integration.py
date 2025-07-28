@@ -170,8 +170,8 @@ class TestGlossaryIntegration:
         for i in range(5):
             mock_term = MagicMock()
             mock_term.id = uuid.uuid4()
-            mock_term.term = f"Term {i+1}"
-            mock_term.definition = f"Definition {i+1}"
+            mock_term.term = f"Term {i + 1}"
+            mock_term.definition = f"Definition {i + 1}"
             mock_term.domain = "Statistics"
             mock_term.language = "English"
             mock_terms.append(mock_term)

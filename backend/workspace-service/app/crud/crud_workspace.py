@@ -25,7 +25,6 @@ from mavito_common.schemas.workspace import (
 
 
 class CRUDWorkspace:
-
     # Bookmarked Terms CRUD
     async def create_bookmarked_term(
         self, db: AsyncSession, *, obj_in: BookmarkedTermCreate, user_id: UUID

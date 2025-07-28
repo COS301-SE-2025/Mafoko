@@ -244,9 +244,9 @@ class TestAnalyticsServiceMocked:
         from api.v1.endpoints.analytics import router
 
         # Check router configuration
-        assert (
-            router.prefix == "" or router.prefix is None
-        ), "Router should not have a conflicting prefix"
+        assert router.prefix == "" or router.prefix is None, (
+            "Router should not have a conflicting prefix"
+        )
         assert hasattr(router, "routes"), "Router should have routes attribute"
         assert len(router.routes) > 0, "Router should have routes registered"
 
@@ -280,12 +280,12 @@ class TestAnalyticsServiceMocked:
         ]
 
         for func_name in expected_functions:
-            assert hasattr(
-                analytics_module, func_name
-            ), f"Module should have {func_name} function"
-            assert callable(
-                getattr(analytics_module, func_name)
-            ), f"{func_name} should be callable"
+            assert hasattr(analytics_module, func_name), (
+                f"Module should have {func_name} function"
+            )
+            assert callable(getattr(analytics_module, func_name)), (
+                f"{func_name} should be callable"
+            )
 
     @pytest.mark.asyncio
     async def test_analytics_with_realistic_data(self):
@@ -381,9 +381,9 @@ class TestAnalyticsServiceCompatibility:
         ]
 
         for endpoint in expected_endpoints:
-            assert any(
-                endpoint in path for path in route_paths
-            ), f"Endpoint {endpoint} should be available"
+            assert any(endpoint in path for path in route_paths), (
+                f"Endpoint {endpoint} should be available"
+            )
 
     def test_function_signatures_unchanged(self):
         """Test that function signatures are unchanged for compatibility."""
@@ -398,15 +398,15 @@ class TestAnalyticsServiceCompatibility:
 
         # Check get_domain_statistics signature
         domain_sig = inspect.signature(get_domain_statistics)
-        assert (
-            "db" in domain_sig.parameters
-        ), "get_domain_statistics should have db parameter"
+        assert "db" in domain_sig.parameters, (
+            "get_domain_statistics should have db parameter"
+        )
 
         # Check get_language_statistics signature
         language_sig = inspect.signature(get_language_statistics)
-        assert (
-            "db" in language_sig.parameters
-        ), "get_language_statistics should have db parameter"
+        assert "db" in language_sig.parameters, (
+            "get_language_statistics should have db parameter"
+        )
 
     def test_return_types_consistent(self):
         """Test that return types are consistent with expectations."""

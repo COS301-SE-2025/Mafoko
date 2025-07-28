@@ -169,7 +169,7 @@ const TermCard: React.FC<TermCardProps> = ({
       console.error('Error toggling bookmark:', error);
       // Revert optimistic update on error
       setBookmarked(previousBookmarkState);
-      
+
       // Show user-friendly error message
       const action = bookmarked ? 'removing' : 'adding';
       console.log(`Failed to ${action} bookmark. Please try again.`);
@@ -220,7 +220,9 @@ const TermCard: React.FC<TermCardProps> = ({
             type="button"
             className="social-button"
             aria-label="Bookmark"
-            onClick={() => { void handleBookmark(); }}
+            onClick={() => {
+              void handleBookmark();
+            }}
             disabled={isBookmarkLoading}
           >
             <Bookmark
