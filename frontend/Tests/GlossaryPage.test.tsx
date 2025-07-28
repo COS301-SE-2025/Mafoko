@@ -972,7 +972,7 @@ describe('GlossaryPage', () => {
       await waitFor(() => {
         expect(screen.getByText('Agriculture')).toBeInTheDocument();
       });
-      
+
       // Get the button and click it
       const categoryButton = screen.getByText('Agriculture');
       fireEvent.click(categoryButton);
