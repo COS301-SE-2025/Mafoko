@@ -1,30 +1,23 @@
 // In frontend/src/config.ts
 
-// Base URLs for each microservice
 const AUTH_SERVICE_URL =
   import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:8001';
 const SEARCH_SERVICE_URL =
-  import.meta.env.VITE_SEARCH_SERVICE_URL ||
-  'http://localhost:8002';
+  import.meta.env.VITE_SEARCH_SERVICE_URL || 'http://localhost:8002';
 const ANALYTICS_SERVICE_URL =
-  import.meta.env.VITE_ANALYTICS_SERVICE_URL ||
-  'http://localhost:8003';
-// Add the URL for your new service, pointing to the port defined in docker-compose.yml
+  import.meta.env.VITE_ANALYTICS_SERVICE_URL || 'http://localhost:8003';
 const LINGUIST_APP_SERVICE_URL =
-  import.meta.env.VITE_LINGUIST_APP_SERVICE_URL ||
-  'http://localhost:8004';
-
+  import.meta.env.VITE_LINGUIST_APP_SERVICE_URL || 'http://localhost:8004';
 const VOTE_SERVICE_URL =
   import.meta.env.VITE_VOTE_SERVICE_URL || 'http://localhost:8005';
-
-// Add the URL for your new service, pointing to the port defined in docker-compose.yml
 const GLOSSARY_SERVICE_URL =
-  import.meta.env.VITE_GLOSSARY_SERVICE_URL ||
-  'http://localhost:8006';
-
+  import.meta.env.VITE_GLOSSARY_SERVICE_URL || 'http://localhost:8006';
 const WORKSPACE_SERVICE_URL =
-  import.meta.env.VITE_WORKSPACE_SERVICE_URL ||
-  'http://localhost:8007';
+  import.meta.env.VITE_WORKSPACE_SERVICE_URL || 'http://localhost:8007';
+const TERM_SERVICE_URL =
+  (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8008';
+const COMMENT_SERVICE_URL =
+  (import.meta.env.VITE_COMMENT_SERVICE_URL as string) || 'http://localhost:8009';
 
 export const API_ENDPOINTS = {
   // --- Auth Service ---
@@ -35,7 +28,8 @@ export const API_ENDPOINTS = {
   getAll: `${AUTH_SERVICE_URL}/api/v1/admin/users`,
   updateUserRole: (userId: string) =>
     `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/role`,
-  // --- Linguist Application Service --- (NEW SECTION)
+  
+  // --- Linguist Application Service ---
   createApplication: `${LINGUIST_APP_SERVICE_URL}/api/v1/linguist-applications/`,
   getUserUploads: (userId: string) =>
     `${AUTH_SERVICE_URL}/api/v1/admin/users/${userId}/uploads`,
@@ -95,4 +89,21 @@ export const API_ENDPOINTS = {
   searchWorkspace: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/search`,
   workspaceOverview: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/overview`,
   bulkDelete: `${WORKSPACE_SERVICE_URL}/api/v1/workspace/bulk`,
+
+  // --- Term Service ---
+  getTermDetail: (termId: string) =>
+    `${TERM_SERVICE_URL}/api/v1/terms/${termId}`,
+  getTermTranslations: (termId: string) =>
+    `${TERM_SERVICE_URL}/api/v1/terms/${termId}/translations`,
+
+  // --- Comment Service ---
+  getComments: (termId: string) =>
+    `${COMMENT_SERVICE_URL}/api/v1/comments?term_id=${termId}`,
+  postComment: `${COMMENT_SERVICE_URL}/api/v1/comments`,
+  deleteComment: (commentId: string) =>
+    `${COMMENT_SERVICE_URL}/api/v1/comments/${commentId}`,
+
+  // --- Vote Service ---
+  voteOnTerm: `${VOTE_SERVICE_URL}/api/v1/votes/terms`,
+  voteOnComment: `${VOTE_SERVICE_URL}/api/v1/votes/comments`,
 };
