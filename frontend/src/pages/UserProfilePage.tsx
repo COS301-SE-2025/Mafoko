@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ArrowLeft, Settings, Camera } from 'lucide-react';
+import { ArrowLeft, Settings, Camera, Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
@@ -34,13 +34,43 @@ const UserProfilePage: React.FC = () => {
   const [isUploadingProfilePicture, setIsUploadingProfilePicture] =
     useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [usernameForm, setUsernameForm] = useState({
+    first_name: '',
+    last_name: '',
+    current_password: '',
+  });
+  const [isUpdatingUsername, setIsUpdatingUsername] = useState(false);
+  const [updateUsernameSuccess, setUpdateUsernameSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load profile picture URL
   const loadProfilePicture = useCallback(async () => {
     if (!profile?.profile_pic_url) {
       setProfilePictureUrl(null);
       return;
+    }
+
+    // Check if we have a cached URL in sessionStorage (lasts for browser session)
+    const cachedData = sessionStorage.getItem(`profilePic_${profile.id}`);
+    if (cachedData) {
+      try {
+        const { url, timestamp } = JSON.parse(cachedData) as {
+          url: string;
+          timestamp: number;
+        };
+        // Cache expires after 1 hour (3600000 ms)
+        const isExpired = Date.now() - timestamp > 3600000;
+        if (!isExpired) {
+          setProfilePictureUrl(url);
+          return;
+        } else {
+          // Remove expired cache
+          sessionStorage.removeItem(`profilePic_${profile.id}`);
+        }
+      } catch {
+        // Invalid cache format, remove it
+        sessionStorage.removeItem(`profilePic_${profile.id}`);
+      }
     }
 
     setLoadingProfilePicture(true);
@@ -57,7 +87,18 @@ const UserProfilePage: React.FC = () => {
 
       if (response.ok) {
         const data = (await response.json()) as { view_url: string };
+
         setProfilePictureUrl(data.view_url);
+
+        // Cache in sessionStorage for the browser session with timestamp
+        const cacheData = {
+          url: data.view_url,
+          timestamp: Date.now(),
+        };
+        sessionStorage.setItem(
+          `profilePic_${profile.id}`,
+          JSON.stringify(cacheData),
+        );
       } else {
         setProfilePictureUrl(null);
       }
@@ -67,9 +108,8 @@ const UserProfilePage: React.FC = () => {
     } finally {
       setLoadingProfilePicture(false);
     }
-  }, [profile?.profile_pic_url]);
+  }, [profile?.profile_pic_url, profile?.id]);
 
-  // Load current profile data
   useEffect(() => {
     const loadProfile = async () => {
       try {
@@ -89,6 +129,11 @@ const UserProfilePage: React.FC = () => {
         if (response.ok) {
           const data = (await response.json()) as ProfileData;
           setProfile(data);
+          setUsernameForm({
+            first_name: data.first_name,
+            last_name: data.last_name,
+            current_password: '',
+          });
         } else {
           setError('Failed to load profile data');
         }
@@ -100,14 +145,12 @@ const UserProfilePage: React.FC = () => {
     void loadProfile();
   }, []);
 
-  // Load profile picture when profile changes
   useEffect(() => {
     if (profile) {
       void loadProfilePicture();
     }
   }, [profile, loadProfilePicture]);
 
-  // Handle responsive layout
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -123,7 +166,6 @@ const UserProfilePage: React.FC = () => {
   };
 
   const handleSettingsClick = () => {
-    // Navigate to settings page when implemented
     console.log('Settings clicked');
   };
 
@@ -132,7 +174,6 @@ const UserProfilePage: React.FC = () => {
   };
 
   const handleDownloadsClick = () => {
-    // Navigate to downloads page when implemented
     console.log('Downloads clicked');
   };
 
@@ -248,7 +289,30 @@ const UserProfilePage: React.FC = () => {
       if (profileResponse.ok) {
         const updatedProfile = (await profileResponse.json()) as ProfileData;
         setProfile(updatedProfile);
-        // Show success message
+
+        // Clear cached profile picture from sessionStorage
+        sessionStorage.removeItem(`profilePic_${updatedProfile.id}`);
+
+        // Clear cached profile picture URL to force reload on dashboard
+        const storedUserDataString = localStorage.getItem('userData');
+        if (storedUserDataString) {
+          try {
+            const existingUserData = JSON.parse(storedUserDataString) as {
+              uuid: string;
+              firstName: string;
+              lastName: string;
+              profilePictureUrl?: string;
+            };
+            const updatedUserData = {
+              ...existingUserData,
+              profilePictureUrl: undefined, // Clear cached URL
+            };
+            localStorage.setItem('userData', JSON.stringify(updatedUserData));
+          } catch (error) {
+            console.error('Failed to clear cached profile picture URL:', error);
+          }
+        }
+
         setUploadSuccess(true);
         setTimeout(() => {
           setUploadSuccess(false);
@@ -264,6 +328,113 @@ const UserProfilePage: React.FC = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+    }
+  };
+
+  const handleEditUsernameClick = () => {
+    setIsEditingUsername(true);
+    setError('');
+  };
+
+  const handleCancelEditUsername = () => {
+    setIsEditingUsername(false);
+    // Reset form to current profile data
+    if (profile) {
+      setUsernameForm({
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        current_password: '',
+      });
+    }
+    setError('');
+  };
+
+  const handleUsernameFormChange = (field: string, value: string) => {
+    setUsernameForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdateUsername = async () => {
+    if (!profile) return;
+
+    if (!usernameForm.first_name.trim() || !usernameForm.last_name.trim()) {
+      setError('First name and last name are required');
+      return;
+    }
+
+    if (!usernameForm.current_password) {
+      setError('Current password is required');
+      return;
+    }
+
+    setIsUpdatingUsername(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('No access token found. Please login first.');
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.updateMe, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          first_name: usernameForm.first_name.trim(),
+          last_name: usernameForm.last_name.trim(),
+          current_password: usernameForm.current_password,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedProfile = (await response.json()) as ProfileData;
+        setProfile(updatedProfile);
+
+        // Update localStorage to sync with dashboard
+        const storedUserDataString = localStorage.getItem('userData');
+        if (storedUserDataString) {
+          try {
+            const existingUserData = JSON.parse(storedUserDataString) as {
+              uuid: string;
+              firstName: string;
+              lastName: string;
+            };
+            const updatedUserData = {
+              ...existingUserData,
+              firstName: updatedProfile.first_name,
+              lastName: updatedProfile.last_name,
+            };
+            localStorage.setItem('userData', JSON.stringify(updatedUserData));
+          } catch (error) {
+            console.error('Failed to update localStorage userData:', error);
+          }
+        }
+
+        setIsEditingUsername(false);
+        setUpdateUsernameSuccess(true);
+        setTimeout(() => {
+          setUpdateUsernameSuccess(false);
+        }, 3000);
+        // Reset password field
+        setUsernameForm((prev) => ({
+          ...prev,
+          current_password: '',
+        }));
+      } else {
+        const errorData = (await response.json()) as { detail?: string };
+        setError(errorData.detail || 'Failed to update profile');
+      }
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      setError('Failed to update profile: ' + (err as Error).message);
+    } finally {
+      setIsUpdatingUsername(false);
     }
   };
 
@@ -379,24 +550,121 @@ const UserProfilePage: React.FC = () => {
             />
 
             {/* Username */}
-            <h2 className="profile-name">Username</h2>
+            {isEditingUsername ? (
+              <div className="username-edit-form">
+                <h2 className="profile-name">Edit Name</h2>
+                <div className="form-group">
+                  <label htmlFor="first_name">First Name</label>
+                  <input
+                    id="first_name"
+                    type="text"
+                    value={usernameForm.first_name}
+                    onChange={(e) => {
+                      handleUsernameFormChange('first_name', e.target.value);
+                    }}
+                    placeholder="Enter first name"
+                    disabled={isUpdatingUsername}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="last_name">Last Name</label>
+                  <input
+                    id="last_name"
+                    type="text"
+                    value={usernameForm.last_name}
+                    onChange={(e) => {
+                      handleUsernameFormChange('last_name', e.target.value);
+                    }}
+                    placeholder="Enter last name"
+                    disabled={isUpdatingUsername}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="current_password">Current Password</label>
+                  <input
+                    id="current_password"
+                    type="password"
+                    value={usernameForm.current_password}
+                    onChange={(e) => {
+                      handleUsernameFormChange(
+                        'current_password',
+                        e.target.value,
+                      );
+                    }}
+                    placeholder="Enter current password"
+                    disabled={isUpdatingUsername}
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void handleUpdateUsername();
+                    }}
+                    disabled={isUpdatingUsername}
+                    className="save-button"
+                  >
+                    {isUpdatingUsername ? 'Saving...' : 'Save'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelEditUsername}
+                    disabled={isUpdatingUsername}
+                    className="cancel-button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="username-display">
+                <h2 className="profile-name">Name</h2>
+                <div className="profile-details-container">
+                  <p className="profile-details">
+                    {profile
+                      ? `${profile.first_name} ${profile.last_name}`
+                      : 'Loading...'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleEditUsernameClick}
+                    className="edit-icon-button"
+                    title="Edit Name"
+                  >
+                    <Edit3 size={18} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleEditUsernameClick}
+                  className="edit-username-button"
+                >
+                  Edit Name
+                </button>
+              </div>
+            )}
 
-            <p className="profile-details">
-              {profile
-                ? `${profile.first_name} ${profile.last_name}`
-                : 'Loading...'}
-            </p>
-
-            {/* Success Message */}
+            {/* Success Messages */}
             {uploadSuccess && (
               <p className="upload-success">
                 Profile picture updated successfully!
               </p>
             )}
+            {updateUsernameSuccess && (
+              <p className="upload-success">Name updated successfully!</p>
+            )}
           </div>
 
           {/* Menu Items */}
           <div className="profile-menu">
+            {/* Role */}
+            <div className="menu-item">
+              <span className="menu-label">Role</span>
+              <span className="menu-action">
+                {profile ? profile.role : 'Loading...'}
+              </span>
+            </div>
+
             {/* Saved Terms */}
             <button
               type="button"
