@@ -109,7 +109,7 @@ const DashboardPage: React.FC = () => {
                   research for African languages.
                 </p>
                 
-                <p className="team-credit">Proudly developed by Team Velox</p>
+                <p className="team-credit">Proudly developed by Velox</p>
               </div>
 
               <div className="cta-section">
