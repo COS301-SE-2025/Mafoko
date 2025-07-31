@@ -108,7 +108,7 @@ const SearchPage: React.FC = () => {
 
   const preloadGlossary = async (): Promise<void> => {
     try {
-      const response = await fetch(`API_ENDPOINTS.search/api/v1/search/`);
+      const response = await fetch(API_ENDPOINTS.search);
       if (!response.ok) throw new Error('Failed to preload glossary');
       const terms = (await response.json()) as Term[];
       await storeTerms(terms);

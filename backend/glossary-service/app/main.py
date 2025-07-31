@@ -5,6 +5,7 @@ from app.api.v1.endpoints import glossary
 
 app = FastAPI(title="Marito Glossary Service")
 
+
 if settings.BACKEND_CORS_ORIGINS_LIST:
     app.add_middleware(
         CORSMiddleware,
@@ -20,3 +21,4 @@ app.include_router(glossary.router, prefix="/api/v1/glossary", tags=["Glossary"]
 @app.get("/", tags=["Health Check"])
 async def read_root():
     return {"service": "Marito Glossary  Service", "status": "ok"}
+

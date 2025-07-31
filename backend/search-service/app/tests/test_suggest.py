@@ -27,7 +27,7 @@ async def test_suggest_endpoint(client: AsyncClient, db_session: AsyncSession):
     await db_session.commit()
 
     # Act
-    response = await client.get("/api/v1/suggest/", params={"query": "Serv"})
+    response = await client.get("/api/v1/suggest", params={"query": "Serv"})
 
     # Assert
     assert response.status_code == 200

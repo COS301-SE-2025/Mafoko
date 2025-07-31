@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     host: true, // Exposes the server to your local network
   },
-  base: '/Mavito/',
+  base: '/Marito/',
   plugins: [
     react(),
     tailwindcss(),
@@ -42,15 +42,15 @@ export default defineConfig({
         */
       },
       manifest: {
-        name: 'Mavito - Multilingual Lexicons',
-        short_name: 'Mavito',
+        name: 'Marito - Multilingual Lexicons',
+        short_name: 'Marito',
         description:
           'A PWA for Multilingual Lexicons, Term Banks, and Glossaries for South African Languages.',
         theme_color: '#00CEAF',
         background_color: '#ffffff', // Background color for splash screen
         display: 'standalone',
-        start_url: '/Mavito/',
-        scope: '/Mavito/',
+        start_url: '/Marito/',
+        scope: '/Marito/',
         icons: [
           {
             src: '/icons/DFSI_Logo_192.png',

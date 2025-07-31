@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import {
   Chart as ChartJS,
+  PieController,
   ArcElement,
   CategoryScale,
   LinearScale,
@@ -12,6 +13,7 @@ import {
 } from 'chart.js';
 
 ChartJS.register(
+  PieController,
   ArcElement,
   CategoryScale,
   LinearScale,

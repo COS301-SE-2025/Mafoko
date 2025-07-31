@@ -12,7 +12,7 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <React.Suspense fallback={<div>Loading translations...</div>}>
-        <BrowserRouter basename="/Mavito">
+        <BrowserRouter basename="/Marito">
           <DarkModeProvider>
             <App />
           </DarkModeProvider>

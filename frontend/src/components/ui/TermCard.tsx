@@ -66,7 +66,6 @@ const TermCard: React.FC<TermCardProps> = ({
     // Optimistic UI Update
     if (userVote === currentVoteType) {
       setUserVote(null);
-      // UPDATED: Use a standard if/else block
       if (currentVoteType === 'up') {
         setUpvotes((c) => c - 1);
       } else {
@@ -89,7 +88,7 @@ const TermCard: React.FC<TermCardProps> = ({
 
     if (navigator.onLine) {
       try {
-        const response = await fetch(API_ENDPOINTS.submitVote, {
+        const response = await fetch(API_ENDPOINTS.voteOnTerm, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -104,6 +103,7 @@ const TermCard: React.FC<TermCardProps> = ({
         setUserVote(result.user_vote);
       } catch (error) {
         console.error('Error casting vote online:', error);
+        // Revert optimistic UI update on failure
         setUserVote(previousVote);
         setUpvotes(previousUpvotes);
         setDownvotes(previousDownvotes);
@@ -125,6 +125,7 @@ const TermCard: React.FC<TermCardProps> = ({
         }
       } catch (dbError) {
         console.error('Could not queue vote in IndexedDB:', dbError);
+        // Revert optimistic UI update on failure
         setUserVote(previousVote);
         setUpvotes(previousUpvotes);
         setDownvotes(previousDownvotes);

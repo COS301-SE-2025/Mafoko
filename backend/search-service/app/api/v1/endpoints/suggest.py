@@ -20,7 +20,7 @@ from typing import List
 from app.crud.crud_search import suggest_terms_in_db
 from mavito_common.db.session import get_db
 
-router = APIRouter()
+router = APIRouter(redirect_slashes=False)
 
 
 class Suggestion(BaseModel):
@@ -28,7 +28,7 @@ class Suggestion(BaseModel):
     label: str
 
 
-@router.get("/", response_model=List[Suggestion])
+@router.get("", response_model=List[Suggestion])
 async def suggest_endpoint(
     db: AsyncSession = Depends(get_db),
     query: str = Query(..., description="Partial search term"),

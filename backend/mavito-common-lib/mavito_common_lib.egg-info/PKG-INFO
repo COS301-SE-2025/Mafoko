@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: mavito-common-lib
 Version: 0.1.0
-Summary: Shared common library for the Mavito microservices project.
+Summary: Shared common library for the Marito microservices project.
 Author-email: Velox <Veloxcapstone@gmail.com>
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent

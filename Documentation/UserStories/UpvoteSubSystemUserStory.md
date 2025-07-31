@@ -1,6 +1,6 @@
 # User Story #2: Crowdsourced Term Validation
 
-**ID:** US002 (Mavito Project)
+**ID:** US002 (Marito Project)
 **Title:** Crowdsourced Validation via Up/Down Voting
 
 **As a:** Marito application user (e.g., linguist or contributor)

@@ -27,7 +27,7 @@
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunaso isikhwama?",
     "registerLink": "Bhalisela",
-    "welcomeImageAlt": "Ukwamukela kokungena ku-Mavito",
+    "welcomeImageAlt": "Ukwamukela kokungena ku-Marito",
     "dsfsiLogoAlt": "Ilogo ye-DSFSI",
     "errorTokenMissing": "Ungene ngepumelelo, kodwana awukho umtlolo-mqondiso otholakileko. Sibawa uthintane ngesizo.",
     "errorDefault": "Ukungena kuhlulekile. Sibawa uhlole imininingwana yakho.",
@@ -38,7 +38,7 @@
   },
   "registrationPage": {
     "title": "THOMA KHONA NJANI",
-    "subtitle": "Dala i-akhawundi yakho ye-Mavito.",
+    "subtitle": "Dala i-akhawundi yakho ye-Marito.",
     "firstNameLabel": "Ibizo Lokuthoma",
     "firstNamePlaceholder": "Faka ibizo lakho lokuthoma",
     "lastNameLabel": "Isibongo",
@@ -57,7 +57,7 @@
     "createWithGoogle": "Dala I-akhawundi nge-Google",
     "haveAccount": "Sewuvele unayo i-akhawundi?",
     "loginLink": "Ngena",
-    "welcomeImageAlt": "Ukwamukela ku-Mavito",
+    "welcomeImageAlt": "Ukwamukela ku-Marito",
     "dsfsiLogoAlt": "Ilogo ye-DSFSI",
     "errorPasswordsDoNotMatch": "Amaphasiwedi awakafani.",
     "errorAgreeToTerms": "Kumele uvume imithetho nemibandela.",
@@ -81,7 +81,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Siyakwamukela ku-Mavito",
+    "welcome": "Siyakwamukela ku-Marito",
     "welcomeBack": "Wamukelekile godu",
     "userName": "Ibizo Lomsebenzisi",
     "userId": "Inomboro Yomsebenzisi",

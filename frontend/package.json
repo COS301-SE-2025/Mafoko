@@ -3,18 +3,19 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://COS301-SE-2025.github.io/Mavito/",
+  "homepage": "https://COS301-SE-2025.github.io/Marito/",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext .ts,.tsx",
+    "build": "vite build",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "preview": "vite preview",
     "prepare": "husky",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
