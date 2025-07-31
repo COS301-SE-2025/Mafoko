@@ -7,6 +7,7 @@ import {
   Search,
   Download,
   FileType,
+  Bookmark,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LeftNav from '../components/ui/LeftNav.tsx';
@@ -207,6 +208,7 @@ const GlossaryPage = () => {
   >({});
   const [isDownloading, setIsDownloading] = useState(false);
   const [showExportPopup, setShowExportPopup] = useState(false);
+  const [bookmarkedCategory, setBookmarkedCategory] = useState(false);
   const exportPopupRef = useRef<HTMLDivElement>(null);
 
   // Load initial data on component mount
@@ -810,17 +812,66 @@ const GlossaryPage = () => {
                 </div>
               </div>
 
-              {/* Floating Export Data Button */}
+              {/* Floating Export Data Button & Bookmark Button */}
               {selectedCategory && !showExportPopup && (
                 <div
-                  className="glossary-floating-export-button"
                   style={{
                     position: 'fixed',
                     bottom: '2rem',
                     right: '2rem',
                     zIndex: 900,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '1.2rem',
                   }}
                 >
+                  {/* Bookmark Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBookmarkedCategory((prev) => !prev);
+                    }}
+                    className="glossary-bookmark-button"
+                    style={{
+                      backgroundColor: '#f2d001',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '60px',
+                      height: '60px',
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(242, 208, 1, 0.3)',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow =
+                        '0 6px 16px rgba(242, 208, 1, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow =
+                        '0 4px 12px rgba(242, 208, 1, 0.3)';
+                    }}
+                    title={
+                      bookmarkedCategory
+                        ? t('glossaryPage.bookmarked')
+                        : t('glossaryPage.bookmarkCategory')
+                    }
+                  >
+                    <Bookmark
+                      size={28}
+                      strokeWidth={2.5}
+                      color="#fff"
+                      fill={bookmarkedCategory ? '#fff' : 'none'}
+                    />
+                  </button>
+                  {/* Export Button */}
                   <button
                     type="button"
                     onClick={() => {

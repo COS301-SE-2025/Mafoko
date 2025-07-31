@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ThumbsUp, ThumbsDown, Share2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config';
 import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
@@ -49,6 +49,7 @@ const TermCard: React.FC<TermCardProps> = ({
   const [upvotes, setUpvotes] = useState(initialUpvotes);
   const [downvotes, setDownvotes] = useState(initialDownvotes);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
+  const [bookmarked, setBookmarked] = useState(false);
 
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
     const token = localStorage.getItem('accessToken');
@@ -169,6 +170,21 @@ const TermCard: React.FC<TermCardProps> = ({
           >
             <ThumbsDown size={20} className="icon" />
             <span className="count down">{downvotes}</span>
+          </button>
+          <button
+            type="button"
+            className="social-button"
+            aria-label="Bookmark"
+            onClick={() => {
+              setBookmarked((prev) => !prev);
+            }}
+          >
+            <Bookmark
+              size={20}
+              className={`icon bookmark${bookmarked ? ' bookmarked' : ''}`}
+              color={bookmarked ? undefined : undefined}
+              fill="none"
+            />
           </button>
           <button type="button" className="social-button" aria-label="Share">
             <Share2 size={20} className="icon share" />
