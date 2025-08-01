@@ -1,0 +1,67 @@
+\subsection{User Story \#NUMBER: Workspace for Term and Glossary Management}
+
+\textbf{ID:} US002 (Marito Project) \\
+\textbf{Title:} Personalized Workspace for Managing Terms and Glossaries \\
+\textbf{As a:} Marito application user (e.g., linguist, researcher, contributer), \\
+\textbf{I want:} a workspace where I can view my saved terms, track the progress of submitted terms, view glossaries or languages I've saved, and organize them into named groups (e.g., ``Thesis Research''), \\
+\textbf{So that:} I can efficiently manage and organize my linguistic research and contributions in one place.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{View Saved Terms:}
+    \begin{itemize}
+        \item \textbf{Given} I have saved terms,
+        \item \textbf{Then} I can view them in a dedicated workspace section, with options to search and filter.
+    \end{itemize}
+
+    \item \textbf{Track Submitted Term Progress:}
+    \begin{itemize}
+        \item \textbf{Given} I have submitted terms for review,
+        \item \textbf{Then} I can see their current status (e.g., ``Under Review'', ``Approved'', ``Rejected'') in my workspace.
+    \end{itemize}
+
+    \item \textbf{View Saved Glossaries or Languages:}
+    \begin{itemize}
+        \item \textbf{Given} I have saved glossaries or language sets,
+        \item \textbf{Then} I can view them in my workspace for quick access.
+    \end{itemize}
+
+    \item \textbf{Group Terms and Glossaries:}
+    \begin{itemize}
+        \item \textbf{Given} I want to organize my saved items,
+        \item \textbf{Then} I can create named groups (e.g., ``Thesis Research'') and assign terms or glossaries to these groups.
+    \end{itemize}
+
+    \item \textbf{Manage Groups:}
+    \begin{itemize}
+        \item \textbf{Then} I can rename or delete groups,
+        \item \textbf{And} I can move items between groups.
+    \end{itemize}
+
+    \item \textbf{Offline Accessibility:}
+    \begin{itemize}
+        \item \textbf{Given} I am offline,
+        \item \textbf{Then} I can still access my saved workspace data including saved terms and glossaries.
+    \end{itemize}
+
+    \item \textbf{Data Syncing:}
+    \begin{itemize}
+        \item \textbf{Given} I go online,
+        \item \textbf{Then} any changes to saved data or submission statuses are synchronized automatically with the central repository.
+    \end{itemize}
+
+    \item \textbf{Mobile-Responsive UI:}
+    \begin{itemize}
+        \item \textbf{Then} the workspace UI is optimized for mobile, tablet, and desktop views.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Groups act like folders or collections and are only visible to the user who created them.
+    \item Saved term statuses are maintained on the backend and synced upon login or reconnection.
+    \item Offline access will use local caching or IndexedDB mechanisms.
+    \item Glossary or term contributions are assumed to be submitted while online.
+\end{itemize}
