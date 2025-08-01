@@ -92,3 +92,23 @@ export const CommentBubbleIcon = () => (
     />
   </svg>
 );
+
+export const EditIcon = () => (
+  <svg style={iconStyle} viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-7-7l4-4m-4 4L9 15m7-7l-4 4m4-4l-3-3m0 0l3 3m-3-3l-7 7"
+    />
+  </svg>
+);
+
+export const DeleteIcon = () => (
+  <svg style={iconStyle} viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+    />
+  </svg>
+);

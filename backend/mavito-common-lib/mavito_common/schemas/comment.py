@@ -1,69 +1,74 @@
-from pydantic import BaseModel, UUID4
+import uuid
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional, List
+from pydantic import BaseModel, Field
+from mavito_common.schemas.user import UserBase
 
 
 class CommentBase(BaseModel):
     """
-    Base model representing a comment on a term.
-
-    Attributes:
-        id (UUID4): Unique identifier for the comment.
-        user_id (UUID4): ID of the user who posted the comment.
-        content (str): The text content of the comment.
-        date_posted (datetime): Timestamp when the comment was created.
-        tombstone (bool): Marks the comment as soft-deleted if True.
-        replies (List[UUID4]): List of UUIDs of comments that are replies to this one.
-        term_id (UUID4): ID of the term this comment is associated with.
-        parent_id (Optional[UUID4]): ID of the parent comment if this is a reply.
+    Base schema for comment content and parent relationship.
     """
 
-    id: UUID4
-    user_id: UUID4
-    content: str
-    date_posted: datetime
-    tombstone: bool = False
-    term_id: UUID4
-    parent_id: Optional[UUID4] = None
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=1000,
+        description="The textual content of the comment.",
+    )
+    parent_id: Optional[uuid.UUID] = Field(
+        None, description="The ID of the parent comment if this is a reply."
+    )
 
 
-class Comment(CommentBase):
+class CommentCreate(CommentBase):
     """
-    Public-facing response model for a comment.
+    Schema for creating a new comment.
+    Requires term_id as it's a new comment on a specific term.
+    """
 
-    Inherits all fields from CommentBase.
+    term_id: uuid.UUID = Field(
+        ..., description="The ID of the term this comment belongs to."
+    )
+
+
+class CommentUpdate(CommentBase):
+    """
+    Schema for updating an existing comment.
+    Content can be updated. parent_id is typically not changed after creation.
     """
 
     pass
 
 
-class CommentCreate(BaseModel):
-    """
-    Schema for creating a new comment.
-
-    Attributes:
-        user_id (UUID4): ID of the user posting the comment.
-        content (str): Text content of the comment.
-        term_id (UUID4): ID of the term the comment is attached to.
-        parent_id (Optional[UUID4]): ID of a parent comment if this is a reply.
-    """
-
-    user_id: UUID4
-    content: str
-    term_id: UUID4
-    parent_id: Optional[UUID4] = None
-
-
 class CommentResponse(CommentBase):
     """
-    Comment response schema with nested replies expanded.
+    Public-facing response schema for a comment.
+    Includes all fields from the database model, plus aggregated vote counts
+    and nested user/reply information.
     """
 
-    replies: List["CommentResponse"] = []
-    """List of fully expanded replies (recursive)."""
+    id: uuid.UUID
+    term_id: uuid.UUID
+    user_id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+    is_deleted: bool = False
+    user: UserBase
+    upvotes: int = Field(0, description="Total number of upvotes for this comment.")
+    downvotes: int = Field(0, description="Total number of downvotes for this comment.")
+    user_vote: Optional[str] = Field(
+        None,
+        description="The current authenticated user's vote ('upvote', 'downvote', or null).",
+    )
+    replies: List["CommentResponse"] = Field(
+        [], description="List of replies to this comment."
+    )
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+        arbitrary_types_allowed = True
+        json_encoders = {uuid.UUID: lambda v: str(v), datetime: lambda v: v.isoformat()}
 
 
-CommentResponse.update_forward_refs()
+CommentResponse.model_rebuild()

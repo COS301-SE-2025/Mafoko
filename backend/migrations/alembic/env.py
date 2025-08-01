@@ -11,6 +11,12 @@ from alembic import context
 # Import the centralized settings from your common library
 from mavito_common.core.config import settings
 from mavito_common.db.base_class import Base
+import mavito_common.models.user  # noqa: F401
+import mavito_common.models.term  # noqa: F401
+import mavito_common.models.comment  # noqa: F401
+import mavito_common.models.comment_vote  # noqa: F401
+import mavito_common.models.term_vote  # noqa: F401
+import mavito_common.models.linguist_application  # noqa: F401
 
 config = context.config
 

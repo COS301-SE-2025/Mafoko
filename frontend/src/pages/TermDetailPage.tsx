@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CommentItem } from '../components/TermDetail/CommentItem';
 import { Comment, TermDetail } from '../types/termDetailTypes';
@@ -16,6 +16,54 @@ import {
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
+import { API_ENDPOINTS } from '../config';
+
+interface BackendComment {
+  id: string;
+  term_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  parent_id: string | null;
+  is_deleted: boolean;
+  user: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    profile_pic_url: string | null;
+  };
+  upvotes: number;
+  downvotes: number;
+  user_vote: 'upvote' | 'downvote' | null;
+  replies: BackendComment[];
+}
+
+interface UserData {
+  uuid: string;
+}
+
+const mapBackendCommentToFrontend = (
+  backendComment: BackendComment,
+): Comment => {
+  return {
+    id: backendComment.id,
+    user: {
+      id: backendComment.user.id || backendComment.user_id,
+      name: `${backendComment.user.first_name} ${backendComment.user.last_name}`,
+      avatar: backendComment.user.profile_pic_url || undefined,
+    },
+    content: backendComment.content,
+    timeAgo: new Date(backendComment.created_at).toLocaleString(),
+    votes: backendComment.upvotes - backendComment.downvotes,
+    upvotes: backendComment.upvotes,
+    downvotes: backendComment.downvotes,
+    userVote: backendComment.user_vote,
+    isReply: !!backendComment.parent_id,
+    replies: backendComment.replies.map(mapBackendCommentToFrontend),
+    isDeleted: backendComment.is_deleted,
+  };
+};
 
 export const TermDetailPage: React.FC = () => {
   const { termId } = useParams<{ termId: string }>();
@@ -23,27 +71,71 @@ export const TermDetailPage: React.FC = () => {
   const [newComment, setNewComment] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { isDarkMode } = useDarkMode();
-  const [activeMenuItem, setActiveMenuItem] = useState('terms');
+  const [activeMenuItem] = useState('terms');
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loadingComments, setLoadingComments] = useState(true);
+  const [errorComments, setErrorComments] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [replyingToCommentId, setReplyingToCommentId] = useState<string | null>(
+    null,
+  );
+  const [authToken, setAuthToken] = useState<string | null>(null);
+
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setAuthToken(token);
+
+    const storedUserDataString = localStorage.getItem('userData');
+    if (storedUserDataString) {
+      try {
+        const parsedData: unknown = JSON.parse(storedUserDataString);
+        if (
+          parsedData &&
+          typeof parsedData === 'object' &&
+          'uuid' in parsedData &&
+          typeof (parsedData as UserData).uuid === 'string'
+        ) {
+          setCurrentUserId((parsedData as UserData).uuid);
+        } else {
+          console.error(
+            'User data from localStorage is not in the expected format.',
+          );
+          localStorage.removeItem('userData');
+        }
+      } catch (error) {
+        console.error('Failed to parse user data from localStorage:', error);
+        localStorage.removeItem('userData');
+      }
+    } else {
+      setCurrentUserId(null);
+    }
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        commentInputRef.current &&
+        !commentInputRef.current.contains(event.target as Node)
+      ) {
+        setReplyingToCommentId(null);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
+    document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   const handleBack = () => {
     void navigate(-1);
-  };
-
-  const handleAddComment = () => {
-    if (!newComment.trim()) return;
-    console.log('New comment:', newComment);
-    setNewComment('');
   };
 
   const [term] = useState<TermDetail>({
@@ -62,34 +154,243 @@ export const TermDetailPage: React.FC = () => {
     ],
   });
 
-  const [comments] = useState<Comment[]>([
-    {
-      id: '1',
-      user: { id: '1', name: 'Noah Pierre' },
-      content:
-        "I'm a bit unclear about how this would fit into a sentence. Can someone help?",
-      timeAgo: '58 minutes ago',
-      votes: 10,
-      isReply: false,
-    },
-    {
-      id: '2',
-      user: { id: '2', name: 'AI Chat Bot' },
-      content:
-        'Die ontwerperswinkel verkoop goedere teen afslagoryse. Is a sentence where this would work.',
-      timeAgo: '58 minutes ago',
-      votes: 5,
-      isReply: false,
-    },
-    {
-      id: '3',
-      user: { id: '3', name: 'Molly Hall' },
-      content: 'This is great.',
-      timeAgo: '20 minutes ago',
-      votes: 2,
-      isReply: true,
-    },
-  ]);
+  const fetchComments = useCallback(async () => {
+    if (!termId) return;
+    if (!authToken) {
+      setErrorComments('Authentication required to load comments.');
+      setLoadingComments(false);
+      return;
+    }
+
+    setLoadingComments(true);
+    setErrorComments(null);
+    try {
+      const response = await fetch(API_ENDPOINTS.getComments(termId), {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('accessToken');
+          setErrorComments(
+            'Session expired or unauthorized. Please log in again.',
+          );
+        }
+        throw new Error(`HTTP error! status: ${String(response.status)}`);
+      }
+      const data = (await response.json()) as BackendComment[];
+      setComments(data.map(mapBackendCommentToFrontend));
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      if (
+        !(
+          error instanceof Error &&
+          (error.message.includes('401') || error.message.includes('403'))
+        )
+      ) {
+        setErrorComments('Failed to load comments. Please try again.');
+      }
+    } finally {
+      setLoadingComments(false);
+    }
+  }, [termId, authToken]);
+
+  useEffect(() => {
+    if (authToken) {
+      void fetchComments();
+    }
+  }, [fetchComments, authToken]);
+
+  const handleAddComment = async (parentCommentId: string | null = null) => {
+    if (!newComment.trim() || !termId) return;
+    if (!authToken) {
+      setErrorComments('Authentication required to add comments.');
+      return;
+    }
+
+    try {
+      const payload = {
+        term_id: termId,
+        content: newComment,
+        parent_id: parentCommentId,
+      };
+
+      const response = await fetch(API_ENDPOINTS.postComment, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('accessToken');
+          setErrorComments(
+            'Session expired or unauthorized. Please log in again to add comments.',
+          );
+        }
+        throw new Error(`HTTP error! status: ${String(response.status)}`);
+      }
+
+      await fetchComments();
+      setNewComment('');
+      setReplyingToCommentId(null);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      if (
+        !(
+          error instanceof Error &&
+          (error.message.includes('401') || error.message.includes('403'))
+        )
+      ) {
+        setErrorComments('Failed to add comment. Please try again.');
+      }
+    }
+  };
+
+  const handleVoteComment = async (
+    commentId: string,
+    voteType: 'upvote' | 'downvote',
+  ) => {
+    if (!authToken) {
+      setErrorComments('Authentication required to vote.');
+      return;
+    }
+
+    try {
+      const payload = {
+        comment_id: commentId,
+        vote: voteType,
+      };
+
+      const response = await fetch(API_ENDPOINTS.voteOnComment, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('accessToken');
+          setErrorComments(
+            'Session expired or unauthorized. Please log in again to vote.',
+          );
+        }
+        throw new Error(`HTTP error! status: ${String(response.status)}`);
+      }
+
+      await fetchComments();
+    } catch (error) {
+      console.error('Error voting on comment:', error);
+      if (
+        !(
+          error instanceof Error &&
+          (error.message.includes('401') || error.message.includes('403'))
+        )
+      ) {
+        setErrorComments('Failed to cast vote. Please try again.');
+      }
+    }
+  };
+
+  const handleEditComment = async (commentId: string, newContent: string) => {
+    if (!authToken) {
+      setErrorComments('Authentication required to edit comments.');
+      return;
+    }
+    try {
+      const payload = {
+        content: newContent,
+      };
+      const response = await fetch(API_ENDPOINTS.editComment(commentId), {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('accessToken');
+          setErrorComments(
+            'Session expired or unauthorized. Please log in again to edit comments.',
+          );
+        } else if (response.status === 404) {
+          setErrorComments('Comment not found.');
+        } else {
+          throw new Error(`HTTP error! status: ${String(response.status)}`);
+        }
+      }
+      await fetchComments();
+    } catch (error) {
+      console.error('Error editing comment:', error);
+      if (
+        !(
+          error instanceof Error &&
+          (error.message.includes('401') || error.message.includes('403'))
+        )
+      ) {
+        setErrorComments('Failed to edit comment. Please try again.');
+      }
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!authToken) {
+      setErrorComments('Authentication required to delete comments.');
+      return;
+    }
+    try {
+      const response = await fetch(API_ENDPOINTS.deleteComment(commentId), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('accessToken');
+          setErrorComments(
+            'Session expired or unauthorized. Please log in again to delete comments.',
+          );
+        } else if (response.status === 404) {
+          setErrorComments('Comment not found.');
+        } else {
+          throw new Error(`HTTP error! status: ${String(response.status)}`);
+        }
+      }
+      await fetchComments();
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      if (
+        !(
+          error instanceof Error &&
+          (error.message.includes('401') || error.message.includes('403'))
+        )
+      ) {
+        setErrorComments('Failed to delete comment. Please try again.');
+      }
+    }
+  };
+
+  const handleReplyClick = useCallback((commentId: string): void => {
+    setReplyingToCommentId(commentId);
+    setNewComment('');
+    const commentInput = document.querySelector('.add-comment input');
+    if (commentInput) {
+      (commentInput as HTMLInputElement).focus();
+    }
+  }, []);
 
   return (
     <div
@@ -99,10 +400,7 @@ export const TermDetailPage: React.FC = () => {
         {isMobile ? (
           <Navbar />
         ) : (
-          <LeftNav
-            activeItem={activeMenuItem}
-            setActiveItem={setActiveMenuItem}
-          />
+          <LeftNav activeItem={activeMenuItem} setActiveItem={() => {}} />
         )}
         <div className="main-content">
           <div
@@ -199,29 +497,58 @@ export const TermDetailPage: React.FC = () => {
               <section className="comments-section">
                 <div className="comments-header">
                   <h3 className="section-title">Comments</h3>
-                  <span className="comment-count">25</span>
+                  <span className="comment-count">{comments.length}</span>
                 </div>
 
                 <div className="comments-list">
+                  {loadingComments && <p>Loading comments...</p>}
+                  {errorComments && (
+                    <p className="error-message">{errorComments}</p>
+                  )}
+                  {!loadingComments && comments.length === 0 && (
+                    <p>No comments yet. Be the first to comment!</p>
+                  )}
                   {comments.map((comment) => (
-                    <CommentItem key={comment.id} comment={comment} />
+                    <CommentItem
+                      key={comment.id}
+                      comment={comment}
+                      onVote={handleVoteComment}
+                      onReply={handleReplyClick}
+                      onEdit={handleEditComment}
+                      onDelete={handleDeleteComment}
+                      currentUserId={currentUserId}
+                    />
                   ))}
                 </div>
 
-                <div className="add-comment">
+                <div className="add-comment" ref={commentInputRef}>
+                  {replyingToCommentId && (
+                    <div className="replying-to-info">
+                      Replying to:{' '}
+                      {comments.find((c) => c.id === replyingToCommentId)?.user
+                        .name || 'comment'}
+                    </div>
+                  )}
                   <input
                     type="text"
                     value={newComment}
                     onChange={(e) => {
                       setNewComment(e.target.value);
                     }}
-                    placeholder="Add a comment...."
-                    aria-label="Add a comment"
+                    placeholder={
+                      replyingToCommentId
+                        ? 'Add a reply...'
+                        : 'Add a comment....'
+                    }
+                    aria-label={
+                      replyingToCommentId ? 'Add a reply' : 'Add a comment'
+                    }
                   />
                   <button
                     type="button"
-                    onClick={handleAddComment}
+                    onClick={() => void handleAddComment(replyingToCommentId)}
                     aria-label="Send comment"
+                    className="send-comment-button"
                   >
                     <SendIcon />
                   </button>

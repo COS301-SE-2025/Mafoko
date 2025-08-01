@@ -11,7 +11,6 @@ import { API_ENDPOINTS } from '../config';
 type UserType = 'contributor' | 'linguist';
 type DocumentType = 'idDocument' | 'cv' | 'certifications' | 'researchPapers';
 
-// --- Define interfaces for all expected API responses for type safety ---
 interface SignedUrlResponse {
   upload_url: string;
   gcs_key: string;
@@ -121,7 +120,6 @@ const RegistrationPage: React.FC = () => {
       });
 
       if (!registerResponse.ok) {
-        // FIX: Use type assertion to eliminate 'any'
         const errorData = (await registerResponse.json()) as ApiErrorResponse;
         throw new Error(errorData.detail || 'Registration failed.');
       }
@@ -144,7 +142,6 @@ const RegistrationPage: React.FC = () => {
         );
       }
 
-      // FIX: Use type assertion to fix unsafe assignment and access
       const loginData = (await loginResponse.json()) as LoginSuccessResponse;
       const accessToken = loginData.access_token;
       localStorage.setItem('accessToken', accessToken);
@@ -201,7 +198,6 @@ const RegistrationPage: React.FC = () => {
         });
 
         if (!appResponse.ok) {
-          // FIX: Use type assertion here as well
           const errorData = (await appResponse.json()) as ApiErrorResponse;
           throw new Error(
             errorData.detail || 'Failed to submit linguist application.',
@@ -209,8 +205,6 @@ const RegistrationPage: React.FC = () => {
         }
       }
 
-      alert(t('registrationPage.successMessage'));
-      // FIX: Use 'void' operator to handle floating promise
       void navigate('/dashboard');
     } catch (err) {
       if (err instanceof Error) {
