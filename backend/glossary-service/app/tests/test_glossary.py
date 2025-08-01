@@ -51,7 +51,7 @@ async def mock_get_terms_by_category(category_name: str):
         raise HTTPException(
             status_code=404, detail=f"No terms found for category: {category_name}"
         )
-    # Return terms that match the category
+    # Return terms that match the category with translations
     return [
         {
             "id": "123",
@@ -59,6 +59,7 @@ async def mock_get_terms_by_category(category_name: str):
             "definition": "A greeting",
             "category": category_name,
             "language": "English",
+            "translations": {"Spanish": "hola", "French": "bonjour"},
         }
     ]
 
@@ -119,8 +120,12 @@ async def mock_get_term_translations(term_id: str):
     if term_id in ["nonexistent", "nonexistent-id"]:
         from fastapi import HTTPException
 
-        raise HTTPException(status_code=404, detail="Term not found")
-    return {"term": "hello", "translations": {"Spanish": "hola", "French": "bonjour"}}
+        raise HTTPException(status_code=404, detail=f"Term not found: {term_id}")
+    return {
+        "term": "hello",
+        "definition": "A greeting",
+        "translations": {"Spanish": "hola", "French": "bonjour"},
+    }
 
 
 @mock_router.get("/random")
@@ -213,6 +218,23 @@ class TestBasicEndpoints:
         data = response.json()
         assert isinstance(data, list)
         assert len(data) >= 0
+        # Check if response includes translations field
+        if len(data) > 0:
+            assert "translations" in data[0]
+
+    def test_get_terms_by_category_url_encoded(self, client):
+        """Test category endpoint with URL-encoded category names."""
+        # Test with URL-encoded slash (Data%2FScience)
+        response = client.get("/categories/Data%2FScience/terms")
+        # Should either return results or 404, but not crash
+        assert response.status_code in [200, 404]
+
+    def test_get_terms_by_category_with_or_separator(self, client):
+        """Test category endpoint with 'or' separator in category names."""
+        # Test with 'or' separator that should be converted to '/'
+        response = client.get("/categories/Statistics%20or%20Probability/terms")
+        # Should either return results or 404, but not crash
+        assert response.status_code in [200, 404]
 
     def test_get_terms_by_category_not_found(self, client):
         """Test category not found scenario."""
@@ -294,6 +316,7 @@ class TestBasicEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert "term" in data
+        assert "definition" in data
         assert "translations" in data
 
     def test_get_term_translations_not_found(self, client):
@@ -329,6 +352,24 @@ class TestInputValidation:
         """Test category endpoint with spaces in category name."""
         response = client.get("/categories/Data%20Science/terms")
         # Should either return results or 404, but not crash
+        assert response.status_code in [200, 404]
+
+    def test_category_with_special_characters(self, client):
+        """Test category endpoint with special characters."""
+        # Test with forward slash (encoded)
+        response = client.get("/categories/Statistics%2FProbability/terms")
+        assert response.status_code in [200, 404]
+
+        # Test with 'or' keyword
+        response = client.get(
+            "/categories/Data%20Science%20or%20Machine%20Learning/terms"
+        )
+        assert response.status_code in [200, 404]
+
+    def test_term_translations_with_invalid_uuid(self, client):
+        """Test term translations endpoint with invalid UUID format."""
+        response = client.get("/terms/invalid-uuid/translations")
+        # Should either return results (if found by name) or 404
         assert response.status_code in [200, 404]
 
     def test_advanced_search_boundary_values(self, client):
