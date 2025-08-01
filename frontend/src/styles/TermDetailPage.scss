@@ -624,7 +624,7 @@ $cosmic-shadow: #2a2f3a;
       margin-bottom: 0.75rem;
       color: var(--comment-text-color);
     }
-    
+
     .edit-comment-container {
       .edit-comment-textarea {
         border: 1px solid var(--border-primary);
@@ -659,7 +659,7 @@ $cosmic-shadow: #2a2f3a;
             text-decoration: underline;
           }
 
-          &[type="submit"] {
+          &[type='submit'] {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -668,7 +668,6 @@ $cosmic-shadow: #2a2f3a;
             background: var(--link-color);
             border-radius: 50%;
             transition: all 0.2s;
-
 
             &:hover {
               opacity: 0.8;
@@ -681,7 +680,7 @@ $cosmic-shadow: #2a2f3a;
               height: 16px;
             }
           }
-          
+
           svg {
             fill: var(--link-color);
             width: 16px;
@@ -749,8 +748,7 @@ $cosmic-shadow: #2a2f3a;
 
   .options-menu-container {
     position: relative;
-    
-    }
+  }
 
   .options-dropdown {
     position: absolute;
@@ -800,7 +798,7 @@ $cosmic-shadow: #2a2f3a;
     margin: 1rem 0;
     font-size: 0.9rem;
     font-weight: 500;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -883,7 +881,7 @@ $cosmic-shadow: #2a2f3a;
       font-size: 1rem;
       color: var(--on-surface-text);
     }
-    
+
     .delete-confirm-actions {
       margin-top: 1.5rem;
       display: flex;
