@@ -108,13 +108,36 @@ const SearchPage: React.FC = () => {
 
   const preloadGlossary = async (): Promise<void> => {
     try {
-      const response = await fetch(API_ENDPOINTS.search);
-      if (!response.ok) throw new Error('Failed to preload glossary');
-      const terms = (await response.json()) as Term[];
-      await storeTerms(terms);
-      console.log(`Cached ${String(terms.length)} terms for offline use`);
+      // Try to get a small sample of terms for preloading
+      const response = await fetch(`${API_ENDPOINTS.search}?term=&limit=100`);
+      if (!response.ok) {
+        console.debug('Could not preload glossary - search endpoint unavailable');
+        return;
+      }
+      
+      const data = await response.json();
+      
+      // Check if data is an array of terms or has a different structure
+      let terms: Term[] = [];
+      if (Array.isArray(data)) {
+        terms = data as Term[];
+      } else if (data && Array.isArray(data.terms)) {
+        terms = data.terms as Term[];
+      } else if (data && Array.isArray(data.results)) {
+        terms = data.results as Term[];
+      } else if (data && Array.isArray(data.items)) {
+        terms = data.items as Term[];
+      } else {
+        console.debug('Search endpoint returned unexpected data structure, skipping preload. Structure:', Object.keys(data || {}));
+        return;
+      }
+      
+      if (terms.length > 0) {
+        await storeTerms(terms);
+        console.log(`Cached ${String(terms.length)} terms for offline use`);
+      }
     } catch (err) {
-      console.warn('Could not preload glossary:', err);
+      console.debug('Could not preload glossary:', err);
     }
   };
 

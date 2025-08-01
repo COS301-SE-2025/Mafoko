@@ -11,6 +11,16 @@ from alembic import context
 # Import the centralized settings from your common library
 from mavito_common.core.config import settings
 from mavito_common.db.base_class import Base
+from mavito_common.models.term import Term
+from mavito_common.models.user import User
+from mavito_common.models.workspace import (
+    BookmarkedTerm,
+    BookmarkedGlossary,
+    WorkspaceGroup,
+    WorkspaceGroupItem,
+)
+from mavito_common.models.linguist_application import LinguistApplication
+from mavito_common.models.term_vote import TermVote
 
 config = context.config
 

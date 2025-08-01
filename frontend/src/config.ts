@@ -26,6 +26,8 @@ const TERM_SERVICE_URL =
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
   'http://localhost:8008';
+const WORKSPACE_SERVICE_URL: string =
+  import.meta.env.VITE_WORKSPACE_SERVICE_URL || 'http://localhost:8009';
 
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
@@ -65,6 +67,18 @@ interface APIEndpoints {
   deleteComment: (commentId: string) => string;
   voteOnTerm: string;
   voteOnComment: string;
+  // --- Workspace Service ---
+  bookmarkTerm: string;
+  unbookmarkTerm: (termId: string) => string;
+  bookmarkGlossary: string;
+  unbookmarkGlossary: (domain: string) => string;
+  createGroup: string;
+  getGroups: string;
+  addItemToGroup: (groupId: string) => string;
+  bulkAddToGroup: (groupId: string) => string;
+  searchWorkspace: string;
+  workspaceOverview: string;
+  bulkDelete: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -172,4 +186,42 @@ export const API_ENDPOINTS: APIEndpoints = {
   postComment: endpoint(COMMENT_SERVICE_URL, '/api/v1/comments'),
   deleteComment: (commentId: string) =>
     endpoint(COMMENT_SERVICE_URL, `/api/v1/comments/${commentId}`),
+
+  // --- Workspace Service ---
+  bookmarkTerm: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/terms',
+  ),
+  unbookmarkTerm: (termId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/bookmarks/terms/${termId}`,
+    ),
+  bookmarkGlossary: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/glossaries',
+  ),
+  unbookmarkGlossary: (domain: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/bookmarks/glossaries/${encodeURIComponent(domain)}`,
+    ),
+  createGroup: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups'),
+  getGroups: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups'),
+  addItemToGroup: (groupId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${groupId}/items`,
+    ),
+  bulkAddToGroup: (groupId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${groupId}/items/bulk`,
+    ),
+  searchWorkspace: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/search'),
+  workspaceOverview: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/overview',
+  ),
+  bulkDelete: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/bulk'),
 };

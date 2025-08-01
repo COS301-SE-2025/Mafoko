@@ -134,7 +134,24 @@ services:
       sh -c "pip install -e /mavito-common-lib-src && 
              pip install --no-cache-dir -r /app/requirements.txt && 
              uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"             
-
+  workspace-service:
+    build:
+      context: .
+      dockerfile: ./workspace-service/Dockerfile
+    container_name: mavito_workspace_service
+    env_file:
+      - ./.env
+    ports:
+      - "8009:8080" # Workspace service port
+    volumes:
+      - ./workspace-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src && 
+             pip install --no-cache-dir -r /app/requirements.txt && 
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
   alembic-service:
     build:
       context: .
@@ -142,6 +159,9 @@ services:
     container_name: mavito_alembic_service
     env_file:
       - ./.env
+    volumes:
+      - ./migrations:/app/migrations
+      - ./mavito-common-lib:/app/mavito-common-lib
     depends_on:
       - db
     entrypoint: /app/entrypoint.sh

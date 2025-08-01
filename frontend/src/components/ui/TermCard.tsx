@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config';
+import { workspaceAPI } from '../../utils/workspaceAPI';
 import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
 
@@ -50,6 +51,25 @@ const TermCard: React.FC<TermCardProps> = ({
   const [downvotes, setDownvotes] = useState(initialDownvotes);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
   const [bookmarked, setBookmarked] = useState(false);
+
+  // Check if term is bookmarked when component mounts
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return; // User not logged in
+
+      try {
+        const bookmarks = await workspaceAPI.bookmarks.terms.getAll();
+        const isBookmarked = bookmarks.some(bookmark => bookmark.term_id === id);
+        setBookmarked(isBookmarked);
+      } catch (error) {
+        // Silently fail if we can't check bookmark status
+        console.debug('Could not check bookmark status:', error);
+      }
+    };
+
+    void checkBookmarkStatus();
+  }, [id]);
 
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
     const token = localStorage.getItem('accessToken');
@@ -133,6 +153,34 @@ const TermCard: React.FC<TermCardProps> = ({
     }
   };
 
+  const handleBookmark = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.log('Please log in to bookmark terms.');
+      return;
+    }
+
+    try {
+      if (bookmarked) {
+        // Remove bookmark
+        await workspaceAPI.bookmarks.terms.delete(id);
+        setBookmarked(false);
+        console.log('Term unbookmarked successfully');
+      } else {
+        // Add bookmark
+        await workspaceAPI.bookmarks.terms.create({
+          term_id: id,
+          notes: '', // No initial notes
+        });
+        setBookmarked(true);
+        console.log('Term bookmarked successfully');
+      }
+    } catch (error) {
+      console.error('Error toggling bookmark:', error);
+      // Could show a toast notification here
+    }
+  };
+
   return (
     <div className="term-card">
       <div className="term-header">
@@ -175,15 +223,13 @@ const TermCard: React.FC<TermCardProps> = ({
             type="button"
             className="social-button"
             aria-label="Bookmark"
-            onClick={() => {
-              setBookmarked((prev) => !prev);
-            }}
+            onClick={() => void handleBookmark()}
           >
             <Bookmark
               size={20}
               className={`icon bookmark${bookmarked ? ' bookmarked' : ''}`}
               color={bookmarked ? undefined : undefined}
-              fill="none"
+              fill={bookmarked ? 'currentColor' : 'none'}
             />
           </button>
           <button type="button" className="social-button" aria-label="Share">

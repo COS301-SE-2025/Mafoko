@@ -13,11 +13,13 @@ mavito_common/models/linguist_application.py
 mavito_common/models/term.py
 mavito_common/models/term_vote.py
 mavito_common/models/user.py
+mavito_common/models/workspace.py
 mavito_common/schemas/comment.py
 mavito_common/schemas/linguist_application.py
 mavito_common/schemas/term.py
 mavito_common/schemas/token.py
 mavito_common/schemas/user.py
+mavito_common/schemas/workspace.py
 mavito_common_lib.egg-info/PKG-INFO
 mavito_common_lib.egg-info/SOURCES.txt
 mavito_common_lib.egg-info/dependency_links.txt

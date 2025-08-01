@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   ChevronDown,
   ChevronUp,
@@ -18,21 +18,16 @@ import {
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
+import { workspaceAPI, workspaceGroupAPI } from '../utils/workspaceAPI';
+import type {
+  BookmarkedTerm,
+  BookmarkedGlossary,
+  WorkspaceGroup,
+} from '../types/workspace';
 
 import '../styles/WorkspacePage.scss';
 
-// Define types for our data
-interface Term {
-  id: number;
-  term: string;
-  definition?: string;
-  language: string;
-  category?: string;
-  group: string;
-  lastModified: string;
-  notes?: string;
-}
-
+// Legacy interfaces for submitted terms (keeping until we have submission API)
 interface SubmittedTerm {
   id: number;
   term: string;
@@ -40,15 +35,6 @@ interface SubmittedTerm {
   submittedDate: string;
   reviewedDate: string | null;
   feedback?: string;
-}
-
-interface Glossary {
-  id: number;
-  name: string;
-  language: string;
-  termCount: number;
-  lastUpdated: string;
-  followed: boolean;
 }
 
 const WorkspacePage: React.FC = () => {
@@ -62,10 +48,39 @@ const WorkspacePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Notification state for user feedback
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+    visible: boolean;
+  }>({
+    message: '',
+    type: 'info',
+    visible: false
+  });
+
+  // Confirmation modal state
+  const [confirmationModal, setConfirmationModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+    onCancel: () => {}
+  });
+
   const [expandedGroups, setExpandedGroups] = useState<{
     [key: string]: boolean;
-  }>({});
-  const [editingNotes, setEditingNotes] = useState<number | null>(null);
+  }>({
+    'All Terms': true, // All Terms folder should be expanded by default
+  });
+  const [editingNotes, setEditingNotes] = useState<string | null>(null);
   const [noteText, setNoteText] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedGroupsForDeletion, setSelectedGroupsForDeletion] = useState<
@@ -73,52 +88,25 @@ const WorkspacePage: React.FC = () => {
   >([]);
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
+  const [isTermSelectionModalOpen, setIsTermSelectionModalOpen] = useState(false);
+  const [createdGroupId, setCreatedGroupId] = useState<string | null>(null);
+  const [selectedTermIds, setSelectedTermIds] = useState<string[]>([]);
 
-  // Glossaries state
-  const [glossaries, setGlossaries] = useState<Glossary[]>([
-    {
-      id: 1,
-      name: 'Agriculture Glossary',
-      language: 'Afrikaans',
-      termCount: 245,
-      lastUpdated: '2024-07-15',
-      followed: true,
-    },
-    {
-      id: 2,
-      name: 'Environmental Science Terms',
-      language: 'English',
-      termCount: 189,
-      lastUpdated: '2024-07-14',
-      followed: true,
-    },
-    {
-      id: 3,
-      name: 'Biology Fundamentals',
-      language: 'English',
-      termCount: 156,
-      lastUpdated: '2024-07-13',
-      followed: false,
-    },
-    {
-      id: 4,
-      name: 'Farming Techniques',
-      language: 'Afrikaans',
-      termCount: 98,
-      lastUpdated: '2024-07-12',
-      followed: true,
-    },
-  ]);
+  // Real workspace data state
+  // const [bookmarkedTerms, setBookmarkedTerms] = useState<BookmarkedTerm[]>([]);
+  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<
+    BookmarkedGlossary[]
+  >([]);
+  const [workspaceGroups, setWorkspaceGroups] = useState<WorkspaceGroup[]>([]);
+  // const [workspaceOverview, setWorkspaceOverview] = useState<WorkspaceOverview | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Force re-render when workspace data changes
+  const [dataVersion, setDataVersion] = useState(0);
 
-  // Initialize groups from saved terms
-  const initialGroups = [
-    'all',
-    'All Terms',
-    'Thesis Research',
-    'General Study',
-    'Farming Methods',
-  ];
-  const [groups, setGroups] = useState<string[]>(initialGroups);
+  // Initialize groups (will be populated from workspace groups)
+  const [groups, setGroups] = useState<string[]>(['all', 'All Terms']);
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -131,55 +119,36 @@ const WorkspacePage: React.FC = () => {
     }
   }, [isDarkMode]);
 
+  // Helper functions for user notifications
+  const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setNotification({ message, type, visible: true });
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, visible: false }));
+    }, 4000);
+  };
+
+  const showSuccess = (message: string) => showNotification(message, 'success');
+  const showError = (message: string) => showNotification(message, 'error');
+  const showInfo = (message: string) => showNotification(message, 'info');
+
+  // Helper function for confirmation modal
+  const showConfirmation = (title: string, message: string, onConfirm: () => void) => {
+    setConfirmationModal({
+      isOpen: true,
+      title,
+      message,
+      onConfirm: () => {
+        setConfirmationModal(prev => ({ ...prev, isOpen: false }));
+        onConfirm();
+      },
+      onCancel: () => {
+        setConfirmationModal(prev => ({ ...prev, isOpen: false }));
+      }
+    });
+  };
+
   // Mock data
-  const [savedTerms, setSavedTerms] = useState<Term[]>([
-    {
-      id: 1,
-      term: 'Landbou-insette',
-      definition:
-        'Crops that are planted and harvested during the same production season.',
-      language: 'Afrikaans',
-      category: 'Agriculture',
-      group: 'Thesis Research',
-      lastModified: '2024-07-15',
-      notes:
-        'Important concept for Chapter 3 of thesis. Need to research more about seasonal variations.',
-    },
-    {
-      id: 2,
-      term: 'Biodiversity',
-      definition:
-        'The variety of life in the world or in a particular habitat or ecosystem.',
-      language: 'English',
-      category: 'Environmental Science',
-      group: 'All Terms',
-      lastModified: '2024-07-14',
-      notes:
-        'This term was moved to All Terms when its original group was deleted.',
-    },
-    {
-      id: 3,
-      term: 'Photosynthesis',
-      definition:
-        'The process by which plants use sunlight, water, and carbon dioxide to produce oxygen and energy.',
-      language: 'English',
-      category: 'Biology',
-      group: 'General Study',
-      lastModified: '2024-07-13',
-      notes:
-        'Key process for understanding plant biology. Good example for explaining cellular respiration.',
-    },
-    {
-      id: 4,
-      term: 'Gewasrotasie',
-      definition:
-        'The practice of growing different types of crops in the same area across seasons.',
-      language: 'Afrikaans',
-      category: 'Agriculture',
-      group: 'Farming Methods',
-      lastModified: '2024-07-12',
-    },
-  ]);
+  const [savedTerms, setSavedTerms] = useState<BookmarkedTerm[]>([]);
 
   const submittedTerms: SubmittedTerm[] = [
     {
@@ -286,6 +255,87 @@ const WorkspacePage: React.FC = () => {
     };
   }, []);
 
+  // Load workspace data on component mount
+  useEffect(() => {
+    console.log('[DEBUG INIT] Component mounted, loading workspace data');
+    console.log('[DEBUG AUTH] Current token:', localStorage.getItem('accessToken') ? 'Token exists' : 'No token found');
+    void loadWorkspaceData();
+  }, []);
+
+  // Function to load all workspace data
+  const loadWorkspaceData = async (): Promise<void> => {
+    setLoading(true);
+    setError(null);
+
+    // Check if user is authenticated
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setError('Please log in to access your workspace.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const [
+        bookmarkedTermsData,
+        bookmarkedGlossariesData,
+        workspaceGroupsData,
+      ] = await Promise.all([
+        workspaceAPI.bookmarks.terms.getAll(),
+        workspaceAPI.bookmarks.glossaries.getAll(),
+        workspaceAPI.groups.getAll(),
+      ]);
+
+      // Combine terms from bookmarks and groups
+      const termSet = new Set<BookmarkedTerm>();
+      
+      // Add all bookmarked terms
+      bookmarkedTermsData.forEach(term => termSet.add(term));
+      
+      // Add terms from groups that might not be bookmarked
+      workspaceGroupsData.forEach(group => {
+        group.items?.forEach(item => {
+          if (item.item_type === 'term' && item.term_id) {
+            // Try to find the term in bookmarked terms first
+            const existingTerm = bookmarkedTermsData.find(t => t.term_id === item.term_id);
+            if (existingTerm) {
+              termSet.add(existingTerm);
+            }
+          }
+        });
+      });
+
+      const allTerms = Array.from(termSet);
+
+      // Set the state with fetched data
+      setSavedTerms(allTerms);
+      setBookmarkedGlossaries(bookmarkedGlossariesData);
+      setWorkspaceGroups(workspaceGroupsData);
+
+      // Update groups list from workspace groups
+      const groupNames = [
+        'all',
+        'All Terms',
+        ...workspaceGroupsData.map((group) => group.name),
+      ];
+      setGroups(groupNames);
+    } catch (error) {
+      console.error('Failed to load workspace data:', error);
+      
+      // Check if this is an authentication error
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('User not found') || 
+          errorMessage.includes('Not authenticated') || 
+          errorMessage.includes('401')) {
+        setError('Please log in to access your workspace.');
+      } else {
+        setError('Failed to load workspace data. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleGroup = (groupName: string) => {
     setExpandedGroups((prev) => ({
       ...prev,
@@ -293,40 +343,119 @@ const WorkspacePage: React.FC = () => {
     }));
   };
 
-  const toggleFollow = (glossaryId: number) => {
-    setGlossaries((prev) =>
-      prev.map((glossary) =>
-        glossary.id === glossaryId
-          ? { ...glossary, followed: !glossary.followed }
-          : glossary,
-      ),
-    );
-  };
-
-  // Removed unused getStatusIcon function
-
   // Functions for handling notes
-  const handleAddNote = (termId: number) => {
+  const handleAddNote = (termId: string) => {
     const term = savedTerms.find((t) => t.id === termId);
     setEditingNotes(termId);
     setNoteText(term?.notes || '');
   };
 
-  const handleSaveNote = (termId: number) => {
-    setSavedTerms((prevTerms) =>
-      prevTerms.map((term) =>
-        term.id === termId
-          ? { ...term, notes: noteText.trim() || undefined }
-          : term,
-      ),
-    );
-    setEditingNotes(null);
-    setNoteText('');
+  const handleSaveNote = async (bookmarkId: string) => {
+    try {
+      // Find the term to get the term_id for the API call
+      const termToUpdate = savedTerms.find((term) => term.id === bookmarkId);
+      if (!termToUpdate) {
+        console.error('Term not found in local state');
+        return;
+      }
+
+      // Call the API to update the bookmark notes using term_id
+      await workspaceAPI.bookmarks.terms.update(
+        termToUpdate.term_id,
+        noteText.trim(),
+      );
+
+      // Update local state
+      setSavedTerms((prevTerms) =>
+        prevTerms.map((term) =>
+          term.id === bookmarkId
+            ? { ...term, notes: noteText.trim() || undefined }
+            : term,
+        ),
+      );
+
+      setEditingNotes(null);
+      setNoteText('');
+
+      console.log('Notes saved successfully');
+    } catch (error) {
+      console.error('Failed to save notes:', error);
+      setError('Failed to save notes. Please try again.');
+    }
   };
 
   const handleCancelNote = () => {
     setEditingNotes(null);
     setNoteText('');
+  };
+
+  // Function for deleting a saved term
+  const handleDeleteTerm = async (bookmarkId: string) => {
+    try {
+      // Find the term to get the term_id for the API call
+      const termToDelete = savedTerms.find((term) => term.id === bookmarkId);
+      if (!termToDelete) {
+        console.error('Term not found in local state');
+        return;
+      }
+
+      // Call the API to delete the bookmark using term_id
+      await workspaceAPI.bookmarks.terms.delete(termToDelete.term_id);
+
+      // Remove the term from local state
+      setSavedTerms((prevTerms) =>
+        prevTerms.filter((term) => term.id !== bookmarkId),
+      );
+
+      console.log('Term bookmark deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete term bookmark:', error);
+      setError('Failed to delete term. Please try again.');
+    }
+  };
+
+  // Function for deleting a bookmarked glossary
+  const handleDeleteGlossary = async (domain: string) => {
+    try {
+      console.log('=== STARTING GLOSSARY DELETION ===');
+      console.log('Attempting to delete glossary with domain:', domain);
+      console.log('Current bookmarked glossaries count:', bookmarkedGlossaries.length);
+      console.log('Current bookmarked glossaries:', bookmarkedGlossaries.map(g => ({ id: g.id, domain: g.domain })));
+      
+      // Find the glossary to confirm it exists
+      const glossaryToDelete = bookmarkedGlossaries.find(
+        (glossary) => glossary.domain === domain,
+      );
+      if (!glossaryToDelete) {
+        console.error('Glossary not found in local state. Domain:', domain);
+        console.error('Available glossary domains:', bookmarkedGlossaries.map(g => g.domain));
+        return;
+      }
+
+      console.log('Found glossary to delete:', glossaryToDelete);
+      console.log('Deleting glossary with domain:', domain);
+
+      // Call the API to delete the bookmark using domain
+      console.log('Calling API to delete bookmark...');
+      await workspaceAPI.bookmarks.glossaries.delete(domain);
+      console.log('API call completed successfully');
+
+      // Remove the glossary from local state using domain instead of id
+      console.log('Updating local state...');
+      setBookmarkedGlossaries((prevGlossaries) => {
+        console.log('Previous glossaries count:', prevGlossaries.length);
+        const newGlossaries = prevGlossaries.filter((glossary) => glossary.domain !== domain);
+        console.log('New glossaries count after filter:', newGlossaries.length);
+        console.log('New glossaries:', newGlossaries.map(g => ({ id: g.id, domain: g.domain })));
+        return newGlossaries;
+      });
+
+      console.log('=== GLOSSARY DELETION COMPLETED ===');
+    } catch (error) {
+      console.error('=== GLOSSARY DELETION FAILED ===');
+      console.error('Failed to delete glossary bookmark:', error);
+      setError('Failed to delete glossary. Please try again.');
+    }
   };
 
   // Functions for handling bulk group deletion
@@ -350,31 +479,42 @@ const WorkspacePage: React.FC = () => {
     );
   };
 
-  const handleDeleteSelectedGroups = () => {
+  const handleDeleteSelectedGroups = async () => {
     if (selectedGroupsForDeletion.length === 0) return;
 
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${selectedGroupsForDeletion.length.toString()} group(s)? This will move all terms from these groups to "All Terms" group.`,
+    const deleteAction = async () => {
+      try {
+        setLoading(true);
+
+        // Delete each selected group via API
+        for (const groupName of selectedGroupsForDeletion) {
+          // Find the group to get its ID
+          const groupToDelete = workspaceGroups.find(g => g.name === groupName);
+          if (groupToDelete) {
+            await workspaceGroupAPI.delete(groupToDelete.id);
+          }
+        }
+
+        // Refresh workspace data to reflect the changes
+        await loadWorkspaceData();
+        showSuccess(`Successfully deleted ${selectedGroupsForDeletion.length} group(s)!`);
+
+        // Exit delete mode
+        handleExitDeleteMode();
+        
+      } catch (error) {
+        console.error('Failed to delete groups:', error);
+        showError('Failed to delete groups. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    showConfirmation(
+      'Delete Groups',
+      `Are you sure you want to delete ${selectedGroupsForDeletion.length} group(s)? This will move all terms from these groups to "All Terms" group.`,
+      deleteAction
     );
-
-    if (!confirmDelete) return;
-
-    // Move all terms from deleted groups to "All Terms"
-    setSavedTerms((prevTerms) =>
-      prevTerms.map((term) =>
-        selectedGroupsForDeletion.includes(term.group)
-          ? { ...term, group: 'All Terms' }
-          : term,
-      ),
-    );
-
-    // Remove the groups from the groups list
-    setGroups((prevGroups) =>
-      prevGroups.filter((group) => !selectedGroupsForDeletion.includes(group)),
-    );
-
-    // Exit delete mode
-    handleExitDeleteMode();
   };
 
   // Functions for handling new group creation
@@ -388,39 +528,155 @@ const WorkspacePage: React.FC = () => {
     setNewGroupName('');
   };
 
-  const handleCreateNewGroup = () => {
+  const handleCreateNewGroup = async () => {
     const trimmedName = newGroupName.trim();
 
     if (!trimmedName) {
-      alert('Please enter a group name');
+      showError('Please enter a group name');
       return;
     }
 
-    if (groups.includes(trimmedName)) {
-      alert('A group with this name already exists');
+    // Check if group name already exists
+    if (workspaceGroups.some(group => group.name === trimmedName)) {
+      showError('A group with this name already exists');
       return;
     }
 
-    // Add the new group to the groups list with proper sorting
-    setGroups((prevGroups) => {
-      const newGroups = [...prevGroups, trimmedName];
-      return newGroups.sort((a, b) => {
-        // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
-        if (a === 'all') return -1;
-        if (b === 'all') return 1;
-        if (a === 'All Terms') return -1;
-        if (b === 'All Terms') return 1;
-        return a.localeCompare(b);
+    try {
+      setLoading(true);
+
+      // Create the group using the API
+      const newGroup = await workspaceGroupAPI.create({
+        name: trimmedName,
+        group_type: 'terms',
+        description: `Group for organizing terms: ${trimmedName}`,
       });
-    });
 
-    // Automatically expand the new group
-    setExpandedGroups((prev) => ({
-      ...prev,
-      [trimmedName]: true,
-    }));
+      // Update the workspace groups state
+      setWorkspaceGroups(prev => [...prev, newGroup]);
 
-    handleCloseNewGroupModal();
+      // Expand the newly created group so it's ready to show terms
+      setExpandedGroups(prev => ({
+        ...prev,
+        [newGroup.name]: true
+      }));
+
+      // Store the created group ID and close the first modal
+      setCreatedGroupId(newGroup.id);
+      setIsNewGroupModalOpen(false);
+      
+      // Open the term selection modal
+      setIsTermSelectionModalOpen(true);
+      setSelectedTermIds([]); // Reset selected terms
+
+    } catch (error) {
+      console.error('Failed to create group:', error);
+      showError('Failed to create group. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Functions for handling term selection modal
+  const handleCloseTermSelectionModal = () => {
+    setIsTermSelectionModalOpen(false);
+    setCreatedGroupId(null);
+    setSelectedTermIds([]);
+    setNewGroupName('');
+  };
+
+  const handleTermSelection = (termId: string) => {
+    setSelectedTermIds(prev => 
+      prev.includes(termId) 
+        ? prev.filter(id => id !== termId)
+        : [...prev, termId]
+    );
+  };
+
+  const handleAddTermsToGroup = async () => {
+    if (!createdGroupId || selectedTermIds.length === 0) {
+      showError('Please select at least one term to add to the group');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Use the bulk add API to add selected terms to the group
+      const addedItems = await workspaceGroupAPI.bulkAddTerms(createdGroupId, selectedTermIds);
+
+      // Get fresh data from the API to ensure consistency
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const [
+        bookmarkedTermsData,
+        bookmarkedGlossariesData,
+        workspaceGroupsData,
+      ] = await Promise.all([
+        workspaceAPI.bookmarks.terms.getAll(),
+        workspaceAPI.bookmarks.glossaries.getAll(),
+        workspaceAPI.groups.getAll(),
+      ]);
+
+      // Update all state with a slight delay to ensure proper ordering
+      setSavedTerms(bookmarkedTermsData);
+      setBookmarkedGlossaries(bookmarkedGlossariesData);
+      
+      // Update workspace groups and force re-render
+      setWorkspaceGroups(workspaceGroupsData);
+
+      // Update groups list from workspace groups
+      const groupNames = [
+        'all',
+        'All Terms',
+        ...workspaceGroupsData.map((group) => group.name),
+      ];
+      setGroups(groupNames);
+      
+      // Find the group name that was just updated and expand it so user can see the added terms
+      const updatedGroup = workspaceGroupsData.find(group => group.id === createdGroupId);
+      if (updatedGroup) {
+        setExpandedGroups(prev => ({
+          ...prev,
+          [updatedGroup.name]: true
+        }));
+      }
+      
+      // Force complete re-render
+      setDataVersion(prev => prev + 1);
+
+      // Use setTimeout to ensure state updates are processed
+      setTimeout(() => {
+        // State update completion check
+      }, 100);
+
+      // Close the modal first
+      handleCloseTermSelectionModal();
+      
+      // Reload all workspace data to ensure UI is in sync
+      await loadWorkspaceData();
+
+      // Force a complete re-render by updating dataVersion
+      setDataVersion(prev => prev + 1);
+
+      // Show more informative success message
+      if (addedItems.length > 0) {
+        showSuccess(`Successfully added ${addedItems.length} term(s) to the group!`);
+      } else {
+        showInfo('No new terms were added - they may already be in the group.');
+      }
+
+    } catch (error) {
+      console.error('Failed to add terms to group:', error);
+      // Check if it's a specific error about duplicates
+      if (error instanceof Error && error.message.includes('already in the group')) {
+        showInfo('All selected terms are already in this group.');
+      } else {
+        showError('Failed to add terms to group. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Get unique categories from terms
@@ -429,45 +685,73 @@ const WorkspacePage: React.FC = () => {
     const uniqueCategories = [
       ...new Set(
         savedTerms
-          .map((term) => term.category)
-          .filter((category) => category !== undefined),
+          .map((bookmarkedTerm) => bookmarkedTerm.domain)
+          .filter((domain) => domain !== undefined),
       ),
     ] as string[];
 
     return categories.concat(uniqueCategories.sort());
   };
 
-  const filteredTerms = savedTerms.filter((term) => {
+  const filteredTerms = savedTerms.filter((bookmarkedTerm) => {
     const searchLower = searchQuery.toLowerCase();
+
     const matchesSearch =
-      term.term.toLowerCase().includes(searchLower) ||
-      (term.definition?.toLowerCase().includes(searchLower) ?? false);
+      bookmarkedTerm.term?.toLowerCase().includes(searchLower) ||
+      bookmarkedTerm.definition?.toLowerCase().includes(searchLower) ||
+      (bookmarkedTerm.notes?.toLowerCase().includes(searchLower) ?? false);
 
     const matchesCategory =
-      selectedCategory === 'all' || term.category === selectedCategory;
+      selectedCategory === 'all' || bookmarkedTerm.domain === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   // Group terms by their group property
-  const groupedTerms = filteredTerms.reduce<Record<string, Term[]>>(
-    (acc, term) => {
-      // Create a new array for this group or use the existing one
-      const groupArray = acc[term.group] ?? [];
-      // Add the current term to its group array
-      acc[term.group] = [...groupArray, term];
-      return acc;
-    },
-    {},
-  );
+  const groupedTerms = useMemo(() => {
+    // Create the grouping function inside useMemo to capture current workspaceGroups
+    const getGroupForTerm = (termId: string): string => {
+      for (const group of workspaceGroups) {
+        const items = group.items || [];
+        for (const item of items) {
+          const itemTermIdStr = item.term_id?.toString();
+          const termIdStr = termId?.toString();
+          const match = item.item_type === 'term' && itemTermIdStr === termIdStr;
+          if (match) {
+            return group.name;
+          }
+        }
+      }
+      return 'All Terms';
+    };
 
-  // Add empty groups to always show all groups (excluding 'all' which is a filter option)
-  groups
-    .filter((group) => group !== 'all')
-    .forEach((group) => {
-      if (!(group in groupedTerms)) {
-        groupedTerms[group] = [];
+    const result: Record<string, BookmarkedTerm[]> = {};
+
+    // Initialize empty arrays for ALL workspace groups (not just the groups array)
+    result['All Terms'] = [];
+    
+    // Initialize arrays for all workspace groups to ensure they exist
+    workspaceGroups.forEach(group => {
+      result[group.name] = [];
+    });
+    
+    // Also initialize for any groups in the groups array that might not be in workspaceGroups yet
+    groups.filter(g => g !== 'all' && g !== 'All Terms').forEach(groupName => {
+      if (!result[groupName]) {
+        result[groupName] = [];
       }
     });
+
+    // Categorize each term using the local function
+    filteredTerms.forEach((term) => {
+      const groupName = getGroupForTerm(term.term_id);
+      if (!result[groupName]) {
+        result[groupName] = [];
+      }
+      result[groupName].push(term);
+    });
+    
+    return result;
+  }, [filteredTerms, workspaceGroups, groups, dataVersion]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -519,6 +803,50 @@ const WorkspacePage: React.FC = () => {
 
         <div className={`workspace-content ${isMobile ? 'pt-16' : ''}`}>
           <div className="workspace-content-wrapper">
+            {/* Error Display */}
+            {error && (
+              <div
+                style={{
+                  background: '#553c2c',
+                  border: '1px solid #d69e2e',
+                  color: '#fbb6ce',
+                  padding: '12px',
+                  borderRadius: '6px',
+                  marginBottom: '1rem',
+                  textAlign: 'center',
+                }}
+              >
+                {error}
+                {error.includes('log in') && (
+                  <div style={{ marginTop: '8px' }}>
+                    <a 
+                      href="/login" 
+                      style={{ 
+                        color: '#ffd700', 
+                        textDecoration: 'underline',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      Go to Login
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Loading Display */}
+            {loading && (
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '2rem',
+                  color: isDarkMode ? '#a0aec0' : '#4a5568',
+                }}
+              >
+                Loading workspace data...
+              </div>
+            )}
+
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
@@ -780,9 +1108,9 @@ const WorkspacePage: React.FC = () => {
                                           <span className="language-tag">
                                             {term.language}
                                           </span>
-                                          {term.category && (
+                                          {term.domain && (
                                             <span className="category-tag">
-                                              {term.category}
+                                              {term.domain}
                                             </span>
                                           )}
                                         </div>
@@ -809,7 +1137,9 @@ const WorkspacePage: React.FC = () => {
                                                 <button
                                                   type="button"
                                                   onClick={() => {
-                                                    handleSaveNote(term.id);
+                                                    void handleSaveNote(
+                                                      term.id,
+                                                    );
                                                   }}
                                                   className="save-btn"
                                                 >
@@ -871,6 +1201,10 @@ const WorkspacePage: React.FC = () => {
                                         <button
                                           type="button"
                                           className="delete-btn"
+                                          onClick={() => {
+                                            void handleDeleteTerm(term.id);
+                                          }}
+                                          title="Delete bookmark"
                                         >
                                           <Trash2 className="icon" />
                                         </button>
@@ -1021,9 +1355,9 @@ const WorkspacePage: React.FC = () => {
                         {/* Followed Glossaries */}
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {glossaries.map((glossary) => (
+                        {bookmarkedGlossaries.map((bookmark) => (
                           <div
-                            key={glossary.id}
+                            key={bookmark.id}
                             className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
                             style={
                               isDarkMode
@@ -1041,131 +1375,57 @@ const WorkspacePage: React.FC = () => {
                                   <h4
                                     className={`text-lg font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
                                   >
-                                    {glossary.name}
+                                    {bookmark.domain} Glossary
                                   </h4>
                                   <span className="language-tag">
-                                    {glossary.language}
+                                    {bookmark.domain}
                                   </span>
                                 </div>
                               </div>
-                              <div
-                                className={`w-3 h-3 rounded-full ${glossary.followed ? 'bg-green-500' : 'bg-gray-300'}`}
-                              ></div>
+                              <div className="w-3 h-3 rounded-full bg-green-500"></div>
                             </div>
                             <div
                               className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
                             >
-                              <span>{glossary.termCount} terms</span>
-                              <span>Updated: {glossary.lastUpdated}</span>
+                              <span>
+                                Added:{' '}
+                                {new Date(
+                                  bookmark.bookmarked_at,
+                                ).toLocaleDateString()}
+                              </span>
                             </div>
+                            {bookmark.notes && (
+                              <div className="mt-2">
+                                <p
+                                  className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                                >
+                                  {bookmark.notes}
+                                </p>
+                              </div>
+                            )}
                             <div className="mt-3 flex items-center space-x-2">
                               <button
-                                onClick={() => {
-                                  toggleFollow(glossary.id);
-                                }}
-                                className={`px-3 py-1 rounded-full text-sm font-medium border border-transparent cursor-pointer transition-all duration-200 ease-in-out ${
-                                  glossary.followed
-                                    ? isDarkMode
-                                      ? 'text-red-300'
-                                      : 'text-red-500'
-                                    : isDarkMode
-                                      ? 'text-green-300'
-                                      : 'text-green-500'
-                                }`}
-                                style={
-                                  glossary.followed
-                                    ? isDarkMode
-                                      ? { backgroundColor: '#31374eff' }
-                                      : {
-                                          backgroundColor:
-                                            'rgba(239, 68, 68, 0.1)',
-                                        }
-                                    : isDarkMode
-                                      ? { backgroundColor: '#31374eff' }
-                                      : {
-                                          backgroundColor:
-                                            'rgba(16, 185, 129, 0.1)',
-                                        }
-                                }
-                                onMouseEnter={(e) => {
-                                  if (isDarkMode) {
-                                    if (glossary.followed) {
-                                      e.currentTarget.style.color = 'white';
-                                      e.currentTarget.style.borderColor =
-                                        'rgba(239, 68, 68, 0.3)';
-                                    } else {
-                                      e.currentTarget.style.color = 'white';
-                                      e.currentTarget.style.borderColor =
-                                        'rgba(16, 185, 129, 0.3)';
-                                    }
-                                  } else if (glossary.followed) {
-                                    e.currentTarget.style.color = '#dc2626';
-                                    e.currentTarget.style.backgroundColor =
-                                      '#fef2f2';
-                                    e.currentTarget.style.borderColor =
-                                      '#fecaca';
-                                  } else {
-                                    e.currentTarget.style.color = '#059669';
-                                    e.currentTarget.style.backgroundColor =
-                                      '#f0fdf4';
-                                    e.currentTarget.style.borderColor =
-                                      '#bbf7d0';
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  if (isDarkMode) {
-                                    if (glossary.followed) {
-                                      e.currentTarget.style.color = '#fca5a5';
-                                      e.currentTarget.style.borderColor =
-                                        'transparent';
-                                    } else {
-                                      e.currentTarget.style.color = '#86efac';
-                                      e.currentTarget.style.borderColor =
-                                        'transparent';
-                                    }
-                                  } else if (glossary.followed) {
-                                    e.currentTarget.style.color = '#ef4444';
-                                    e.currentTarget.style.backgroundColor =
-                                      'rgba(239, 68, 68, 0.1)';
-                                    e.currentTarget.style.borderColor =
-                                      'transparent';
-                                  } else {
-                                    e.currentTarget.style.color = '#10b981';
-                                    e.currentTarget.style.backgroundColor =
-                                      'rgba(16, 185, 129, 0.1)';
-                                    e.currentTarget.style.borderColor =
-                                      'transparent';
-                                  }
-                                }}
-                              >
-                                {glossary.followed ? 'Unfollow' : 'Follow'}
-                              </button>
-                              <button
                                 type="button"
-                                className={`px-3 py-1 rounded-full text-sm font-medium border-none cursor-pointer transition-all duration-200 ease-in-out ${
-                                  isDarkMode
-                                    ? 'text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                                style={
-                                  isDarkMode
-                                    ? { backgroundColor: '#292e41' }
-                                    : {}
-                                }
+                                onClick={() => {
+                                  void handleDeleteGlossary(bookmark.domain);
+                                }}
+                                className="create-new-btn"
+                                title="Remove glossary bookmark"
+                                style={{
+                                  backgroundColor: 'var(--accent-color)',
+                                  color: 'white',
+                                  border: 'none',
+                                  fontSize: '0.875rem',
+                                  padding: '0.5rem 1rem',
+                                }}
                                 onMouseEnter={(e) => {
-                                  if (isDarkMode) {
-                                    e.currentTarget.style.backgroundColor =
-                                      '#3b83f67b';
-                                  }
+                                  e.currentTarget.style.backgroundColor = '#d91748';
                                 }}
                                 onMouseLeave={(e) => {
-                                  if (isDarkMode) {
-                                    e.currentTarget.style.backgroundColor =
-                                      '#292e41';
-                                  }
+                                  e.currentTarget.style.backgroundColor = 'var(--accent-color)';
                                 }}
                               >
-                                View
+                                Remove Bookmark
                               </button>
                             </div>
                           </div>
@@ -1241,6 +1501,144 @@ const WorkspacePage: React.FC = () => {
               >
                 <Plus className="plus-icon" />
                 Create Group
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Term Selection Modal */}
+      {isTermSelectionModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-container" style={{ maxWidth: '600px' }}>
+            {/* Modal Header */}
+            <div className="modal-header">
+              <h3 className="modal-title">Select Terms to Add to Group</h3>
+              <button
+                type="button"
+                onClick={handleCloseTermSelectionModal}
+                className="close-btn"
+              >
+                <X className="close-icon" />
+              </button>
+            </div>
+            <div className="modal-body">
+              <p className="form-description">
+                Select the terms you want to add to your new group. You can select multiple terms.
+              </p>
+              
+              {/* Terms List with improved scrollbar */}
+              <div 
+                className="terms-list" 
+                style={{ 
+                  maxHeight: '400px', 
+                  overflowY: 'auto', 
+                  marginTop: '1rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.5rem',
+                  padding: '0.5rem',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#cbd5e1 #f1f5f9'
+                }}
+              >
+                {savedTerms.length > 0 ? (
+                  savedTerms.map((term) => (
+                    <div
+                      key={term.id}
+                      className={`term-item ${selectedTermIds.includes(term.term_id) ? 'selected' : ''}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '0.75rem',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '0.5rem',
+                        marginBottom: '0.5rem',
+                        cursor: 'pointer',
+                        backgroundColor: selectedTermIds.includes(term.term_id) ? '#f3f4f6' : 'white',
+                      }}
+                      onClick={() => handleTermSelection(term.term_id)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedTermIds.includes(term.term_id)}
+                        onChange={() => handleTermSelection(term.term_id)}
+                        style={{ marginRight: '0.75rem' }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>
+                          {term.term}
+                        </div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                          {term.definition}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+                          Domain: {term.domain} | Language: {term.language}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+                    No bookmarked terms available. Bookmark some terms first to add them to groups.
+                  </div>
+                )}
+              </div>
+
+              {selectedTermIds.length > 0 && (
+                <div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem' }}>
+                  <strong>{selectedTermIds.length}</strong> term(s) selected
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="modal-footer">
+              <button
+                type="button"
+                onClick={handleCloseTermSelectionModal}
+                className="cancel-btn"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleAddTermsToGroup}
+                disabled={selectedTermIds.length === 0 || loading}
+                className={`create-btn ${selectedTermIds.length === 0 || loading ? 'disabled' : ''}`}
+              >
+                <Plus className="plus-icon" />
+                {loading ? 'Adding...' : `Add ${selectedTermIds.length} Term(s)`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Display */}
+      {notification.visible && (
+        <div className={`notification notification-${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {confirmationModal.isOpen && (
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <h3>{confirmationModal.title}</h3>
+            <p>{confirmationModal.message}</p>
+            <div className="confirmation-modal-buttons">
+              <button 
+                className="cancel-button" 
+                onClick={confirmationModal.onCancel}
+              >
+                Cancel
+              </button>
+              <button 
+                className="confirm-button" 
+                onClick={confirmationModal.onConfirm}
+              >
+                Delete
               </button>
             </div>
           </div>
