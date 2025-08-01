@@ -82,7 +82,6 @@
     "home": "Home",
     "dictionary": "Dictionary",
     "glossary": "Glossary",
-    "workspace": "Workspace",
     "savedTerms": "Saved Terms",
     "dashboard": "Dashboard",
     "help": "Help",
@@ -228,27 +227,5 @@
     "previous": "Previous",
     "next": "Next",
     "pageInfo": "Page {{current}} of {{total}}"
-  },
-  
-  "workspace": {
-    "title": "Workspace",
-    "description": "Manage and organize your terminology projects and shared resources",
-    "createNew": "Create New",
-    "filters": {
-      "all": "All Items",
-      "mine": "My Items",
-      "shared": "Shared with Me"
-    },
-    "columns": {
-      "name": "Name",
-      "lastModified": "Last Modified",
-      "owner": "Owner",
-      "actions": "Actions"
-    },
-    "emptyState": "No items found. Create a new item or change your filter."
-  },
-  
-  "common": {
-    "loading": "Loading..."
   }
 }

@@ -12,11 +12,7 @@ import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
 import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
-
-import WorkspacePage from './pages/WorkspacePage.tsx';
-
 import NewGlossary from './pages/NewGlossary';
-
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import './App.css';
 
@@ -67,13 +63,8 @@ function App() {
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
-
-        <Route path="/workspace" element={<WorkspacePage />} />
-
-  <Route path="/glossary" element={<NewGlossary />} />
- Feature/glossary_styles
+        <Route path="/glossary" element={<NewGlossary />} />
         <Route path="/term/:termId" element={<TermDetailPage />} />
-
       </Routes>
     </div>
   );

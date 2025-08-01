@@ -39,7 +39,7 @@ const Navbar = () => {
       t('navigation.home'),
       t('navigation.dictionary'),
       t('navigation.glossary'),
-      t('navigation.workspace'),
+      t('navigation.savedTerms'),
       t('navigation.dashboard'),
       t('navigation.help'),
     ],
@@ -55,8 +55,6 @@ const Navbar = () => {
         return '/search';
       case 'Glossary':
         return '/glossary';
-      case 'Workspace':
-        return '/workspace';
       case 'Dashboard':
         return '/analytics';
       default:
