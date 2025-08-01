@@ -4,7 +4,7 @@ from sqlalchemy import Column, Table, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from mavito_common.db.base_class import Base
-from typing import List
+from typing import List, TYPE_CHECKING
 
 # Association Table for the many-to-many relationship between terms (translations)
 term_translations = Table(
@@ -35,3 +35,8 @@ class Term(Base):
         secondaryjoin=id == term_translations.c.translation_id,
         backref="related_from",  # helps in bi-directional linking
     )
+
+    if TYPE_CHECKING:
+        from mavito_common.models.comment import Comment
+
+    comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="term")

@@ -22,5 +22,10 @@ export interface Comment {
   content: string;
   timeAgo: string;
   votes: number;
+  upvotes: number;
+  downvotes: number;
+  userVote: 'upvote' | 'downvote' | null;
   isReply: boolean;
+  replies: Comment[];
+  isDeleted: boolean;
 }
