@@ -8,6 +8,8 @@ mavito_common/db/base.py
 mavito_common/db/base_class.py
 mavito_common/db/session.py
 mavito_common/models/__init__.py
+mavito_common/models/comment.py
+mavito_common/models/comment_vote.py
 mavito_common/models/language.py
 mavito_common/models/linguist_application.py
 mavito_common/models/term.py

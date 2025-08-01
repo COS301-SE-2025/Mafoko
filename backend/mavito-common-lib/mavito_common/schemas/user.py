@@ -18,6 +18,7 @@ class UserBase(BaseModel):
     last_name: str
     role: Optional[UserRole] = None
     profile_pic_url: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Properties to receive via API on creation

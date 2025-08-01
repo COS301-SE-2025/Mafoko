@@ -1,6 +1,6 @@
 // src/pages/LoginPage.tsx
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
 import LsImage from '/LS_image.png';
 import { useTranslation } from 'react-i18next';
@@ -47,11 +47,11 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrorMessage(null); // Reset error message on new submission
+    setErrorMessage(null);
 
     const API_ENDPOINT = API_ENDPOINTS.login;
 
@@ -70,13 +70,10 @@ const LoginPage: React.FC = () => {
       const data = (await response.json()) as LoginResponse;
 
       if (response.ok) {
-        localStorage.removeItem('accessToken'); // Clear any existing token
-        localStorage.removeItem('userData'); // Clear stale user data from previous session
-        console.log('Login successful:', data);
-        console.log('Login successful. Token:', data.access_token);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userData');
         localStorage.setItem('accessToken', data.access_token);
-        // User details will be fetched on the dashboard page
-        await navigate('/dashboard'); // Redirect to dashboard
+        await navigate('/dashboard');
       } else {
         console.error('Login failed:', data.detail);
         setErrorMessage(data.detail || 'Login failed. Please try again.');

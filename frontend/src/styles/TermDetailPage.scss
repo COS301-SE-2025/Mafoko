@@ -45,7 +45,7 @@ $cosmic-shadow: #2a2f3a;
   }
 }
 
-theme-light {
+.theme-light {
   --surface-card: #{$fresh-linen};
   --surface-primary: #{$cotton-cloud};
   --on-surface-text: #{$midnight-ink};
@@ -60,16 +60,19 @@ theme-light {
   --border-primary: rgba(0, 0, 0, 0.1);
   --text-secondary: #{$distant-thunder};
   --avatar-background: #d1d1d1;
+  --bg-first: #{$cotton-cloud};
+  --bg-hover: #e0e0e0;
+  --text-color: #{$midnight-ink};
+  --link-color: #{$mermaid-tide};
 
   // Comment specific
-  --comment-text: #{$midnight-ink};
-  --comment-meta: #{$distant-thunder};
-  --comment-avatar: #d1d1d1;
-  --comment-divider: rgba($silver-mist, 0.3);
-  --comment-thread-line: rgba($silver-mist, 0.5);
+  --comment-text-color: #{$midnight-ink};
+  --comment-muted-color: #{$distant-thunder};
+  --comment-avatar-bg: #d1d1d1;
+  --comment-border-color: rgba($silver-mist, 0.3);
+  --comment-reply-line-color: rgba($silver-mist, 0.5);
 }
 
-// Dark Theme
 .theme-dark {
   --surface-card: #{$cosmic-shadow};
   --surface-primary: #{$deep-space};
@@ -85,13 +88,17 @@ theme-light {
   --border-primary: rgba(255, 255, 255, 0.1);
   --text-secondary: rgba(255, 255, 255, 0.6);
   --avatar-background: #555;
+  --bg-first: #{$deep-space};
+  --bg-hover: #4a5061;
+  --text-color: #{$pure-snow};
+  --link-color: #{$mermaid-tide};
 
   // Comment specific
-  --comment-text: rgba(255, 255, 255, 0.9);
-  --comment-meta: rgba(255, 255, 255, 0.6);
-  --comment-avatar: #555;
-  --comment-divider: rgba(255, 255, 255, 0.2);
-  --comment-thread-line: rgba(255, 255, 255, 0.3);
+  --comment-text-color: rgba(255, 255, 255, 0.9);
+  --comment-muted-color: rgba(255, 255, 255, 0.6);
+  --comment-avatar-bg: #555;
+  --comment-border-color: rgba(255, 255, 255, 0.2);
+  --comment-reply-line-color: rgba(255, 255, 255, 0.3);
 }
 
 .term-page-light,
@@ -405,7 +412,7 @@ theme-light {
     }
 
     .comments-list {
-      background: var(--bg-card);
+      background: var(--surface-card);
       border-radius: 20px;
       padding: 1.5rem;
       max-height: 50vh;
@@ -430,7 +437,7 @@ theme-light {
       border-radius: 20px;
       padding: 0.5rem 1rem;
       margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-primary);
 
       input {
         flex-grow: 1;
@@ -439,7 +446,7 @@ theme-light {
         outline: none;
         font-size: 0.9375rem;
         padding: 0.5rem 0;
-        color: var(--text-color);
+        color: var(--on-surface-text);
 
         @media (max-width: 480px) {
           font-size: 1rem;
@@ -447,7 +454,7 @@ theme-light {
         }
 
         &::placeholder {
-          color: var(--text-muted);
+          color: var(--text-secondary);
         }
       }
 
@@ -458,7 +465,7 @@ theme-light {
         padding: 0.5rem;
 
         svg {
-          fill: var(--text-muted);
+          fill: var(--text-secondary);
           transform: rotate(90deg);
         }
       }
@@ -493,11 +500,6 @@ theme-light {
       svg {
         fill: $strawberry-jam;
       }
-    }
-
-    .developed-by {
-      color: rgba(0, 0, 0, 0.25);
-      font-size: 1rem;
     }
   }
 }
@@ -571,6 +573,7 @@ theme-light {
   }
 }
 
+// CommentItem.scss
 .comment-item {
   display: flex;
   margin-bottom: 1.5rem;
@@ -621,12 +624,80 @@ theme-light {
       margin-bottom: 0.75rem;
       color: var(--comment-text-color);
     }
+    
+    .edit-comment-container {
+      .edit-comment-textarea {
+        border: 1px solid var(--border-primary);
+        background: var(--surface-primary);
+        color: var(--on-surface-text);
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 0.9375rem;
+        resize: vertical;
+        min-height: 80px;
+        margin-bottom: 0.5rem;
+      }
+
+      .edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 0.5rem;
+
+        button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-weight: 500;
+          font-size: 0.9375rem;
+          padding: 0;
+          color: var(--link-color);
+
+          &:hover {
+            text-decoration: underline;
+          }
+
+          &[type="submit"] {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--link-color);
+            border-radius: 50%;
+            transition: all 0.2s;
+
+
+            &:hover {
+              opacity: 0.8;
+              text-decoration: none;
+            }
+
+            svg {
+              fill: var(--on-primary-text);
+              width: 16px;
+              height: 16px;
+            }
+          }
+          
+          svg {
+            fill: var(--link-color);
+            width: 16px;
+            height: 16px;
+            transform: rotate(90deg);
+          }
+        }
+      }
+    }
 
     .comment-actions {
       display: flex;
       align-items: center;
       gap: 1rem;
       color: var(--comment-muted-color);
+      position: relative;
 
       .vote-container {
         display: flex;
@@ -676,12 +747,72 @@ theme-light {
     }
   }
 
+  .options-menu-container {
+    position: relative;
+    
+    }
+
+  .options-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-primary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      background: none;
+      border: none;
+      color: var(--comment-text-color);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+      font-size: 0.9375rem;
+
+      &:hover {
+        background-color: var(--interactive-hover);
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+        fill: var(--comment-text-color);
+      }
+    }
+  }
+
+  .replies-toggle {
+    background: none;
+    border: none;
+    color: var(--link-color);
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   &.reply {
     margin-left: 3.5rem;
     padding-left: 1rem;
     border-bottom: none;
 
     &:last-child {
+      border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
     }
@@ -722,6 +853,69 @@ theme-light {
       &::before {
         left: -1.25rem;
         height: calc(100% - 0.5rem);
+      }
+    }
+  }
+}
+
+.delete-confirm-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+
+  .delete-confirm-content {
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+
+    p {
+      margin-top: 0;
+      font-size: 1rem;
+      color: var(--on-surface-text);
+    }
+    
+    .delete-confirm-actions {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+
+      button {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &.cancel-button {
+          background: var(--interactive-hover);
+          color: var(--on-surface-text);
+          border: 1px solid var(--border-primary);
+
+          &:hover {
+            background: var(--border-primary);
+          }
+        }
+
+        &.delete-button {
+          background: $strawberry-jam;
+          color: $pure-snow;
+          border: 1px solid $strawberry-jam;
+
+          &:hover {
+            opacity: 0.8;
+          }
+        }
       }
     }
   }

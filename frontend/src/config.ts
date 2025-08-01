@@ -25,7 +25,7 @@ const TERM_SERVICE_URL =
   (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
-  'http://localhost:8008';
+  'http://localhost:8008'; // Changed to 8008
 
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
@@ -34,6 +34,10 @@ const endpoint = (serviceUrl: string, path: string): string =>
 interface APIEndpoints {
   login: string;
   register: string;
+  forgotPassword: string;
+  resetPassword: string;
+  verifyEmail: string;
+  resendVerification: string;
   getMe: string;
   generateSignedUrl: string;
   getAll: string;
@@ -51,6 +55,8 @@ interface APIEndpoints {
   totalStatistics: string;
   uniqueTerms: string;
   submitVote: string;
+  voteOnTerm: string;
+  voteOnComment: string;
   glossary: string;
   glossaryCategories: string;
   glossaryTermsByCategory: (category: string) => string;
@@ -62,15 +68,21 @@ interface APIEndpoints {
   getTermTranslations: (termId: string) => string;
   getComments: (termId: string) => string;
   postComment: string;
+  editComment: (commentId: string) => string;
   deleteComment: (commentId: string) => string;
-  voteOnTerm: string;
-  voteOnComment: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
   // --- Auth Service ---
-  login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
   register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
+  login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
+  forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
+  resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
+  verifyEmail: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/verify-email'),
+  resendVerification: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/resend-verification',
+  ),
   getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
   generateSignedUrl: endpoint(
     AUTH_SERVICE_URL,
@@ -83,7 +95,7 @@ export const API_ENDPOINTS: APIEndpoints = {
   // --- Linguist Application Service ---
   createApplication: endpoint(
     LINGUIST_APP_SERVICE_URL,
-    '/api/v1/linguist-applications/',
+    '/api/v1/linguist-applications',
   ),
   getUserUploads: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/uploads`),
@@ -133,7 +145,7 @@ export const API_ENDPOINTS: APIEndpoints = {
   ),
 
   // --- Vote Service ---
-  submitVote: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/'), // This path typically ends with a slash if it's a collection endpoint
+  submitVote: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/'),
   voteOnTerm: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/terms'),
   voteOnComment: endpoint(VOTE_SERVICE_URL, '/api/v1/votes/comments'),
 
@@ -168,8 +180,19 @@ export const API_ENDPOINTS: APIEndpoints = {
 
   // --- Comment Service ---
   getComments: (termId: string) =>
-    endpoint(COMMENT_SERVICE_URL, `/api/v1/comments?term_id=${termId}`),
+    endpoint(
+      COMMENT_SERVICE_URL,
+      `/api/v1/comments/by_term/${encodeURIComponent(termId)}`,
+    ),
   postComment: endpoint(COMMENT_SERVICE_URL, '/api/v1/comments'),
+  editComment: (commentId: string) =>
+    endpoint(
+      COMMENT_SERVICE_URL,
+      `/api/v1/comments/${encodeURIComponent(commentId)}`,
+    ),
   deleteComment: (commentId: string) =>
-    endpoint(COMMENT_SERVICE_URL, `/api/v1/comments/${commentId}`),
+    endpoint(
+      COMMENT_SERVICE_URL,
+      `/api/v1/comments/${encodeURIComponent(commentId)}`,
+    ),
 };

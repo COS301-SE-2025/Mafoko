@@ -1,7 +1,7 @@
 import enum
 import uuid
 from datetime import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, List
 
 from sqlalchemy import String, Boolean, DateTime, Enum as SaEnum, Integer
 from sqlalchemy.dialects.postgresql import UUID
@@ -12,6 +12,8 @@ from mavito_common.db.base_class import Base
 
 if TYPE_CHECKING:
     from mavito_common.models.linguist_application import LinguistApplication
+    from mavito_common.models.comment import Comment
+    from mavito_common.models.comment_vote import CommentVote
 
 
 class UserRole(str, enum.Enum):
@@ -56,4 +58,8 @@ class User(Base):
 
     linguist_application: Mapped[Optional["LinguistApplication"]] = relationship(
         "LinguistApplication", back_populates="user", uselist=False
+    )
+    comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="user")
+    comment_votes: Mapped[List["CommentVote"]] = relationship(
+        "CommentVote", back_populates="user"
     )
