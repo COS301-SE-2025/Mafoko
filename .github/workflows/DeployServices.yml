@@ -11,6 +11,7 @@ on:
       - 'backend/linguist-application-service/**'
       - 'backend/search-service/**'
       - 'backend/vote-service/**'
+      - 'backend/comment-service/**'
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -52,6 +53,7 @@ jobs:
             "linguist-application-service"
             "search-service"
             "vote-service"
+            "comment-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
@@ -69,6 +71,7 @@ jobs:
             "linguist-application-service"
             "search-service"
             "vote-service"
+            "comment-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
