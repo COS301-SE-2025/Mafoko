@@ -1,9 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ArrowLeft, Settings, Camera, Edit3 } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
 import LeftNav from '../components/ui/LeftNav';
+import ProfileHeader from '../components/profile/ProfileHeader';
+import ProfilePicture from '../components/profile/ProfilePicture';
+import ProfileEditDropdown from '../components/profile/ProfileEditDropdown';
+import ProfileEditForms from '../components/profile/ProfileEditForms';
+import ProfileSuccessMessages from '../components/profile/ProfileSuccessMessages';
 import '../styles/UserProfilePage.scss';
 
 interface ProfileData {
@@ -18,6 +22,20 @@ interface ProfileData {
   created_at: string;
   last_login: string | null;
   profile_pic_url: string | null;
+}
+
+interface LinguistApplication {
+  id: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+  reviewed_at: string | null;
+}
+
+type DocumentType = 'idDocument' | 'cv' | 'certifications' | 'researchPapers';
+
+interface SignedUrlResponse {
+  upload_url: string;
+  gcs_key: string;
 }
 
 const UserProfilePage: React.FC = () => {
@@ -35,14 +53,39 @@ const UserProfilePage: React.FC = () => {
     useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [showEditDropdown, setShowEditDropdown] = useState(false);
   const [usernameForm, setUsernameForm] = useState({
     first_name: '',
     last_name: '',
     current_password: '',
   });
+  const [emailForm, setEmailForm] = useState({
+    email: '',
+    current_password: '',
+  });
+  const [passwordForm, setPasswordForm] = useState({
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+  });
   const [isUpdatingUsername, setIsUpdatingUsername] = useState(false);
+  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [updateUsernameSuccess, setUpdateUsernameSuccess] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [updateEmailSuccess, setUpdateEmailSuccess] = useState(false);
+  const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState(false);
+  const [linguistApplication, setLinguistApplication] =
+    useState<LinguistApplication | null>(null);
+  const [showLinguistApplication, setShowLinguistApplication] = useState(false);
+  const [documentFiles, setDocumentFiles] = useState<{
+    [key in DocumentType]?: File;
+  }>({});
+  const [isSubmittingApplication, setIsSubmittingApplication] = useState(false);
+  const [applicationSubmitSuccess, setApplicationSubmitSuccess] =
+    useState(false);
+  const [loadingApplication, setLoadingApplication] = useState(false);
 
   const loadProfilePicture = useCallback(async () => {
     if (!profile?.profile_pic_url) {
@@ -100,6 +143,10 @@ const UserProfilePage: React.FC = () => {
           JSON.stringify(cacheData),
         );
       } else {
+        console.log(
+          'Profile picture API returned non-OK status:',
+          response.status,
+        );
         setProfilePictureUrl(null);
       }
     } catch (err) {
@@ -109,6 +156,35 @@ const UserProfilePage: React.FC = () => {
       setLoadingProfilePicture(false);
     }
   }, [profile?.profile_pic_url, profile?.id]);
+
+  const loadLinguistApplication = useCallback(async () => {
+    setLoadingApplication(true);
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+
+      const response = await fetch(API_ENDPOINTS.getMyApplication, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = (await response.json()) as LinguistApplication;
+        setLinguistApplication(data);
+      } else if (response.status === 404) {
+        setLinguistApplication(null);
+      } else {
+        setLinguistApplication(null);
+      }
+    } catch (err) {
+      console.error('Error loading linguist application:', err);
+      setLinguistApplication(null);
+    } finally {
+      setLoadingApplication(false);
+    }
+  }, []);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -134,6 +210,17 @@ const UserProfilePage: React.FC = () => {
             last_name: data.last_name,
             current_password: '',
           });
+          setEmailForm({
+            email: data.email,
+            current_password: '',
+          });
+          setPasswordForm({
+            current_password: '',
+            new_password: '',
+            confirm_password: '',
+          });
+
+          void loadLinguistApplication();
         } else {
           setError('Failed to load profile data');
         }
@@ -143,7 +230,7 @@ const UserProfilePage: React.FC = () => {
     };
 
     void loadProfile();
-  }, []);
+  }, [loadLinguistApplication]);
 
   useEffect(() => {
     if (profile) {
@@ -169,16 +256,8 @@ const UserProfilePage: React.FC = () => {
     console.log('Settings clicked');
   };
 
-  const handleSavedTermsClick = () => {
-    void navigate('/saved-terms');
-  };
-
-  const handleDownloadsClick = () => {
-    console.log('Downloads clicked');
-  };
-
-  const handleProfilePictureClick = () => {
-    fileInputRef.current?.click();
+  const handleToggleDropdown = () => {
+    setShowEditDropdown(!showEditDropdown);
   };
 
   const handleProfilePictureUpload = async (
@@ -324,15 +403,12 @@ const UserProfilePage: React.FC = () => {
       setError('Failed to update profile picture: ' + (err as Error).message);
     } finally {
       setIsUploadingProfilePicture(false);
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
     }
   };
 
   const handleEditUsernameClick = () => {
     setIsEditingUsername(true);
+    setShowEditDropdown(false);
     setError('');
   };
 
@@ -438,6 +514,313 @@ const UserProfilePage: React.FC = () => {
     }
   };
 
+  const handleEditEmailClick = () => {
+    setIsEditingEmail(true);
+    setShowEditDropdown(false);
+    setError('');
+  };
+
+  const handleCancelEditEmail = () => {
+    setIsEditingEmail(false);
+    // Reset form to current profile data
+    if (profile) {
+      setEmailForm({
+        email: profile.email,
+        current_password: '',
+      });
+    }
+    setError('');
+  };
+
+  const handleEmailFormChange = (field: string, value: string) => {
+    setEmailForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdateEmail = async () => {
+    if (!profile) return;
+
+    if (!emailForm.email.trim()) {
+      setError('Email is required');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailForm.email.trim())) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    if (!emailForm.current_password) {
+      setError('Current password is required');
+      return;
+    }
+
+    setIsUpdatingEmail(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('No access token found. Please login first.');
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.updateMe, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: emailForm.email.trim(),
+          current_password: emailForm.current_password,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedProfile = (await response.json()) as ProfileData;
+        setProfile(updatedProfile);
+
+        setIsEditingEmail(false);
+        setUpdateEmailSuccess(true);
+        setTimeout(() => {
+          setUpdateEmailSuccess(false);
+        }, 3000);
+        // Reset password field
+        setEmailForm((prev) => ({
+          ...prev,
+          current_password: '',
+        }));
+      } else {
+        const errorData = (await response.json()) as { detail?: string };
+        setError(errorData.detail || 'Failed to update email');
+      }
+    } catch (err) {
+      console.error('Error updating email:', err);
+      setError('Failed to update email: ' + (err as Error).message);
+    } finally {
+      setIsUpdatingEmail(false);
+    }
+  };
+
+  const handleEditPasswordClick = () => {
+    setIsEditingPassword(true);
+    setShowEditDropdown(false);
+    setError('');
+  };
+
+  const handleCancelEditPassword = () => {
+    setIsEditingPassword(false);
+    setPasswordForm({
+      current_password: '',
+      new_password: '',
+      confirm_password: '',
+    });
+    setError('');
+  };
+
+  const handlePasswordFormChange = (field: string, value: string) => {
+    setPasswordForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdatePassword = async () => {
+    if (!passwordForm.current_password) {
+      setError('Current password is required');
+      return;
+    }
+
+    if (!passwordForm.new_password) {
+      setError('New password is required');
+      return;
+    }
+
+    if (passwordForm.new_password !== passwordForm.confirm_password) {
+      setError('New passwords do not match');
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('No access token found. Please login first.');
+        return;
+      }
+
+      console.log('Attempting to update password...');
+      const response = await fetch(API_ENDPOINTS.updateMe, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          current_password: passwordForm.current_password,
+          new_password: passwordForm.new_password,
+        }),
+      });
+
+      console.log('Password update response status:', response.status);
+
+      if (response.ok) {
+        console.log('Password updated successfully');
+        setIsEditingPassword(false);
+        setUpdatePasswordSuccess(true);
+        setTimeout(() => {
+          setUpdatePasswordSuccess(false);
+        }, 3000);
+        // Reset form
+        setPasswordForm({
+          current_password: '',
+          new_password: '',
+          confirm_password: '',
+        });
+      } else {
+        const errorText = await response.text();
+        console.log('Password update error response:', errorText);
+        try {
+          const errorData = JSON.parse(errorText) as { detail?: string };
+          setError(errorData.detail || 'Failed to update password');
+        } catch {
+          setError(
+            `Failed to update password: ${response.status.toString()} ${response.statusText}`,
+          );
+        }
+      }
+    } catch (err) {
+      console.error('Error updating password:', err);
+      setError('Failed to update password: ' + (err as Error).message);
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
+  const handleFileSelect = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    docType: DocumentType,
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setDocumentFiles((prev) => ({ ...prev, [docType]: file }));
+    }
+  };
+
+  const handleSubmitLinguistApplication = async () => {
+    if (!documentFiles.idDocument || !documentFiles.cv) {
+      setError('ID Document and CV are required for linguist application');
+      return;
+    }
+
+    setIsSubmittingApplication(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('No access token found. Please login first.');
+        return;
+      }
+
+      const uploadedFileUrls: { [key: string]: string | undefined } = {};
+      const filesToUpload = Object.entries(documentFiles).filter(
+        (entry): entry is [DocumentType, File] => Boolean(entry[1]),
+      );
+
+      for (const [docType, file] of filesToUpload) {
+        const signedUrlRes = await fetch(API_ENDPOINTS.generateSignedUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            content_type: file.type,
+            filename: file.name,
+          }),
+        });
+
+        if (!signedUrlRes.ok) {
+          throw new Error(`Could not get upload URL for ${file.name}.`);
+        }
+
+        const signedUrlData = (await signedUrlRes.json()) as SignedUrlResponse;
+
+        const uploadRes = await fetch(signedUrlData.upload_url, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type },
+          body: file,
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error(`Failed to upload ${file.name}.`);
+        }
+        uploadedFileUrls[docType] = signedUrlData.gcs_key;
+      }
+
+      const applicationPayload = {
+        id_document_url: uploadedFileUrls.idDocument,
+        cv_document_url: uploadedFileUrls.cv,
+        certifications_document_url: uploadedFileUrls.certifications,
+        research_papers_document_url: uploadedFileUrls.researchPapers,
+      };
+
+      const appResponse = await fetch(API_ENDPOINTS.createApplication, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(applicationPayload),
+      });
+
+      if (!appResponse.ok) {
+        const errorData = (await appResponse.json()) as { detail?: string };
+        throw new Error(
+          errorData.detail || 'Failed to submit linguist application.',
+        );
+      }
+
+      setApplicationSubmitSuccess(true);
+      setTimeout(() => {
+        setApplicationSubmitSuccess(false);
+      }, 3000);
+
+      setShowLinguistApplication(false);
+      setDocumentFiles({});
+      void loadLinguistApplication();
+    } catch (err) {
+      console.error('Error submitting linguist application:', err);
+      setError('Failed to submit application: ' + (err as Error).message);
+    } finally {
+      setIsSubmittingApplication(false);
+    }
+  };
+
+  const getApplicationStatusText = () => {
+    if (loadingApplication) return 'Loading...';
+    if (!linguistApplication) return 'Not Applied';
+
+    switch (linguistApplication.status) {
+      case 'pending':
+        return 'Pending Review';
+      case 'approved':
+        return 'Approved';
+      case 'rejected':
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
+  };
+
   if (error && !profile) {
     return (
       <div
@@ -461,197 +844,86 @@ const UserProfilePage: React.FC = () => {
       )}
 
       <div className="main-content">
-        {/* Mobile Header */}
-        {isMobile && (
-          <div className="profile-header">
-            <button
-              type="button"
-              onClick={handleBackClick}
-              className="header-button"
-            >
-              <ArrowLeft size={24} />
-            </button>
-
-            <h1 className="header-title">User Profile</h1>
-
-            <button
-              type="button"
-              onClick={handleSettingsClick}
-              className="header-button"
-            >
-              <Settings size={24} />
-            </button>
-          </div>
-        )}
+        <ProfileHeader
+          isMobile={isMobile}
+          onBackClick={handleBackClick}
+          onSettingsClick={handleSettingsClick}
+        />
 
         {/* Profile Content */}
         <div className="profile-content">
-          {/* Desktop Header */}
-          {!isMobile && (
-            <div className="desktop-header">
-              <h1 className="page-title">User Profile</h1>
-              <button
-                type="button"
-                onClick={handleSettingsClick}
-                className="settings-button"
-              >
-                <Settings size={24} />
-                <span>Settings</span>
-              </button>
-            </div>
-          )}
+          {/* Error Display */}
+          {error && <div className="error-message">{error}</div>}
 
           {/* Profile Picture and Name Section */}
           <div className="profile-info">
-            {/* Profile Picture */}
-            <div
-              className="profile-picture"
-              onClick={handleProfilePictureClick}
-              style={{ cursor: 'pointer', position: 'relative' }}
-            >
-              {isUploadingProfilePicture ? (
-                <div className="loading-placeholder">Uploading...</div>
-              ) : loadingProfilePicture ? (
-                <div className="loading-placeholder">Loading...</div>
-              ) : profilePictureUrl ? (
-                <>
-                  <img
-                    src={profilePictureUrl}
-                    alt="Profile Picture"
-                    onError={() => {
-                      setProfilePictureUrl(null);
-                    }}
-                  />
-                  <div className="picture-overlay">
-                    <Camera size={24} />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="profile-placeholder">
-                    {profile?.first_name.charAt(0) || '?'}
-                  </div>
-                  <div className="picture-overlay">
-                    <Camera size={24} />
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* Hidden File Input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
+            <ProfilePicture
+              profilePictureUrl={profilePictureUrl}
+              isUploadingProfilePicture={isUploadingProfilePicture}
+              loadingProfilePicture={loadingProfilePicture}
+              profileFirstName={profile?.first_name}
+              onProfilePictureUpload={(e) => {
                 handleProfilePictureUpload(e).catch(console.error);
               }}
-              style={{ display: 'none' }}
             />
 
-            {/* Username */}
-            {isEditingUsername ? (
-              <div className="username-edit-form">
-                <h2 className="profile-name">Edit Name</h2>
-                <div className="form-group">
-                  <label htmlFor="first_name">First Name</label>
-                  <input
-                    id="first_name"
-                    type="text"
-                    value={usernameForm.first_name}
-                    onChange={(e) => {
-                      handleUsernameFormChange('first_name', e.target.value);
-                    }}
-                    placeholder="Enter first name"
-                    disabled={isUpdatingUsername}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="last_name">Last Name</label>
-                  <input
-                    id="last_name"
-                    type="text"
-                    value={usernameForm.last_name}
-                    onChange={(e) => {
-                      handleUsernameFormChange('last_name', e.target.value);
-                    }}
-                    placeholder="Enter last name"
-                    disabled={isUpdatingUsername}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="current_password">Current Password</label>
-                  <input
-                    id="current_password"
-                    type="password"
-                    value={usernameForm.current_password}
-                    onChange={(e) => {
-                      handleUsernameFormChange(
-                        'current_password',
-                        e.target.value,
-                      );
-                    }}
-                    placeholder="Enter current password"
-                    disabled={isUpdatingUsername}
-                  />
-                </div>
-                <div className="form-actions">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      void handleUpdateUsername();
-                    }}
-                    disabled={isUpdatingUsername}
-                    className="save-button"
-                  >
-                    {isUpdatingUsername ? 'Saving...' : 'Save'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancelEditUsername}
-                    disabled={isUpdatingUsername}
-                    className="cancel-button"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="username-display">
-                <h2 className="profile-name">Name</h2>
-                <div className="profile-details-container">
-                  <p className="profile-details">
-                    {profile
-                      ? `${profile.first_name} ${profile.last_name}`
-                      : 'Loading...'}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleEditUsernameClick}
-                    className="edit-icon-button"
-                    title="Edit Name"
-                  >
-                    <Edit3 size={18} />
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleEditUsernameClick}
-                  className="edit-username-button"
-                >
-                  Edit Name
-                </button>
-              </div>
+            <ProfileEditForms
+              editMode={
+                isEditingUsername
+                  ? 'username'
+                  : isEditingEmail
+                    ? 'email'
+                    : isEditingPassword
+                      ? 'password'
+                      : null
+              }
+              usernameForm={usernameForm}
+              emailForm={emailForm}
+              passwordForm={passwordForm}
+              isUpdatingUsername={isUpdatingUsername}
+              isUpdatingEmail={isUpdatingEmail}
+              isUpdatingPassword={isUpdatingPassword}
+              onUsernameFormChange={handleUsernameFormChange}
+              onEmailFormChange={handleEmailFormChange}
+              onPasswordFormChange={handlePasswordFormChange}
+              onUpdateUsername={() => {
+                void handleUpdateUsername();
+              }}
+              onUpdateEmail={() => {
+                void handleUpdateEmail();
+              }}
+              onUpdatePassword={() => {
+                void handleUpdatePassword();
+              }}
+              onCancelEditUsername={handleCancelEditUsername}
+              onCancelEditEmail={handleCancelEditEmail}
+              onCancelEditPassword={handleCancelEditPassword}
+            />
+
+            {!isEditingUsername && !isEditingEmail && !isEditingPassword && (
+              <ProfileEditDropdown
+                firstName={profile?.first_name || ''}
+                lastName={profile?.last_name || ''}
+                email={profile?.email || ''}
+                showDropdown={showEditDropdown}
+                onToggleDropdown={handleToggleDropdown}
+                onEditName={handleEditUsernameClick}
+                onEditEmail={handleEditEmailClick}
+                onEditPassword={handleEditPasswordClick}
+              />
             )}
 
-            {/* Success Messages */}
-            {uploadSuccess && (
-              <p className="upload-success">
-                Profile picture updated successfully!
-              </p>
-            )}
-            {updateUsernameSuccess && (
-              <p className="upload-success">Name updated successfully!</p>
+            <ProfileSuccessMessages
+              uploadSuccess={uploadSuccess}
+              updateUsernameSuccess={updateUsernameSuccess}
+              updateEmailSuccess={updateEmailSuccess}
+              updatePasswordSuccess={updatePasswordSuccess}
+            />
+
+            {applicationSubmitSuccess && (
+              <div className="success-message">
+                Linguist application submitted successfully!
+              </div>
             )}
           </div>
 
@@ -660,30 +932,148 @@ const UserProfilePage: React.FC = () => {
             {/* Role */}
             <div className="menu-item">
               <span className="menu-label">Role</span>
-              <span className="menu-action">
-                {profile ? profile.role : 'Loading...'}
-              </span>
+              <div className="menu-action-container">
+                <span className="menu-action">
+                  {profile ? profile.role : 'Loading...'}
+                </span>
+              </div>
             </div>
 
-            {/* Saved Terms */}
-            <button
-              type="button"
-              onClick={handleSavedTermsClick}
-              className="menu-item"
-            >
-              <span className="menu-label">Saved Terms</span>
-              <span className="menu-action">View All</span>
-            </button>
+            {/* Linguist Application Status */}
+            <div className="menu-item">
+              <span className="menu-label">Linguist Application</span>
+              <div className="menu-action-container">
+                <span className="menu-action">
+                  {getApplicationStatusText()}
+                </span>
+                {!linguistApplication && (
+                  <button
+                    type="button"
+                    className="dropdown-toggle"
+                    onClick={() => {
+                      setShowLinguistApplication(!showLinguistApplication);
+                    }}
+                    disabled={loadingApplication}
+                  >
+                    Apply
+                  </button>
+                )}
+              </div>
+            </div>
 
-            {/* Downloads */}
-            <button
-              type="button"
-              onClick={handleDownloadsClick}
-              className="menu-item"
-            >
-              <span className="menu-label">Downloads</span>
-              <span className="menu-action">View All</span>
-            </button>
+            {showLinguistApplication && !linguistApplication && (
+              <div className="linguist-application-dropdown">
+                <h3>Apply as Linguist</h3>
+                <p>Submit your documents to apply for linguist status:</p>
+
+                <div className="form-group">
+                  <label htmlFor="idDocument">ID Document (PDF) *</label>
+                  <input
+                    type="file"
+                    id="idDocument"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'idDocument');
+                    }}
+                    disabled={isSubmittingApplication}
+                  />
+                  {documentFiles.idDocument && (
+                    <span className="file-selected">
+                      {documentFiles.idDocument.name}
+                    </span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="cv">CV (PDF) *</label>
+                  <input
+                    type="file"
+                    id="cv"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'cv');
+                    }}
+                    disabled={isSubmittingApplication}
+                  />
+                  {documentFiles.cv && (
+                    <span className="file-selected">
+                      {documentFiles.cv.name}
+                    </span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="certifications">
+                    Certifications (PDF, Optional)
+                  </label>
+                  <input
+                    type="file"
+                    id="certifications"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'certifications');
+                    }}
+                    disabled={isSubmittingApplication}
+                  />
+                  {documentFiles.certifications && (
+                    <span className="file-selected">
+                      {documentFiles.certifications.name}
+                    </span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="researchPapers">
+                    Research Papers (PDF, Optional)
+                  </label>
+                  <input
+                    type="file"
+                    id="researchPapers"
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      handleFileSelect(e, 'researchPapers');
+                    }}
+                    disabled={isSubmittingApplication}
+                  />
+                  {documentFiles.researchPapers && (
+                    <span className="file-selected">
+                      {documentFiles.researchPapers.name}
+                    </span>
+                  )}
+                </div>
+
+                <div className="application-actions">
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={() => {
+                      setShowLinguistApplication(false);
+                      setDocumentFiles({});
+                      setError('');
+                    }}
+                    disabled={isSubmittingApplication}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="submit-button"
+                    onClick={() => {
+                      void handleSubmitLinguistApplication();
+                    }}
+                    disabled={
+                      isSubmittingApplication ||
+                      !documentFiles.idDocument ||
+                      !documentFiles.cv
+                    }
+                  >
+                    {isSubmittingApplication
+                      ? 'Submitting...'
+                      : 'Submit Application'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
