@@ -15,6 +15,7 @@ import AdminPage from './pages/AdminPage.tsx';
 import GlossaryPage from './pages/GlossaryPage.tsx';
 import WorkspacePage from './pages/WorkspacePage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
+import SettingsPage from './pages/SettingsPage.tsx';
 import './App.css';
 
 import {
@@ -63,7 +64,9 @@ function App() {
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+      /*...*/
         <Route path="/glossary" element={<GlossaryPage />} />
         <Route path="/workspace" element={<WorkspacePage />} />
         <Route path="/term/:termId" element={<TermDetailPage />} />

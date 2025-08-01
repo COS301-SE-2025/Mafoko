@@ -23,6 +23,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     { id: 'glossary', label: t('navigation.glossary'), path: '/glossary' },
     { id: 'workspace', label: t('navigation.workspace'), path: '/workspace' },
     { id: 'analytics', label: t('navigation.dashboard'), path: '/analytics' },
+    { id: 'settings', label: t('navigation.settings'), path: '/settings' },
     { id: 'help', label: t('navigation.help'), path: '/help' },
   ];
 
