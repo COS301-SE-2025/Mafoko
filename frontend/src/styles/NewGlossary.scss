@@ -44,7 +44,7 @@
 // Oval language badge for term cards
 .term-language-badge {
   display: inline-block;
-  background:#f2d20119;
+  background: #f2d20119;
   color: #f2d001;
   font-weight: 600;
   font-size: 0.95rem;
@@ -304,7 +304,7 @@
 .return-button {
   background: var(--return-button-bg) !important;
   color: var(--return-button-icon) !important;
-  
+
   svg {
     color: var(--return-button-icon) !important;
   }
@@ -364,25 +364,25 @@
   transition: box-shadow 0.2s;
   margin-bottom: 2rem;
   color: var(--text-theme);
-  
+
   /* Ensure all text elements inherit the theme color */
   * {
     color: var(--text-theme) !important;
   }
-  
+
   /* Specific overrides for certain elements that need different colors */
   .term-language-badge {
     color: #f2d001 !important;
   }
-  
+
   .translation-item .lang {
     color: var(--no-translation-color) !important;
   }
-  
+
   .loading-translations {
     color: var(--loading-color) !important;
   }
-  
+
   .no-translations {
     color: var(--no-translation-color) !important;
   }
@@ -555,7 +555,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  
+
   button {
     background-color: var(--bg-tir);
     color: var(--text-theme);
@@ -564,18 +564,18 @@
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       background-color: var(--glossary-border-color);
     }
-    
+
     &:hover:not(:disabled) {
       background-color: var(--button-background);
     }
   }
-  
+
   span {
     color: var(--text-theme);
     font-weight: 500;
