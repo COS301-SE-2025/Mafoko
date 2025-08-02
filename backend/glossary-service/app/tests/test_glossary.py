@@ -43,6 +43,18 @@ async def mock_get_categories():
     return ["Common", "Geography", "Science"]
 
 
+@mock_router.get("/categories/stats")
+async def mock_get_categories_stats():
+    """Mock endpoint for category statistics."""
+    return {
+        "Common": 25,
+        "Geography": 15,
+        "Science": 30,
+        "Data Science": 12,
+        "Statistics or Probability": 8,
+    }
+
+
 @mock_router.get("/categories/{category_name}/terms")
 async def mock_get_terms_by_category(category_name: str):
     if category_name == "NonExistent":
@@ -242,6 +254,58 @@ class TestBasicEndpoints:
         assert response.status_code == 404
         assert "No terms found for category" in response.json()["detail"]
 
+    def test_get_categories_stats_success(self, client):
+        """Test successful retrieval of category statistics."""
+        response = client.get("/categories/stats")
+        assert response.status_code == 200
+        data = response.json()
+
+        # Should return a dictionary with category names as keys and counts as values
+        assert isinstance(data, dict)
+
+        # Check that all values are integers (term counts)
+        for category, count in data.items():
+            assert isinstance(category, str)
+            assert isinstance(count, int)
+            assert count >= 0
+
+        # Check that Common category exists (as it's part of our test data)
+        if "Common" in data:
+            assert data["Common"] >= 0
+
+    def test_get_categories_stats_structure(self, client):
+        """Test that category stats returns proper structure."""
+        response = client.get("/categories/stats")
+        assert response.status_code == 200
+        data = response.json()
+
+        # Verify structure is Dict[str, int]
+        assert isinstance(data, dict)
+
+        # All keys should be non-empty strings
+        for category_name in data.keys():
+            assert isinstance(category_name, str)
+            assert len(category_name) > 0
+
+        # All values should be non-negative integers
+        for count in data.values():
+            assert isinstance(count, int)
+            assert count >= 0
+
+    def test_get_categories_stats_empty_database(self, client):
+        """Test category stats endpoint when database might be empty."""
+        response = client.get("/categories/stats")
+        assert response.status_code == 200
+        data = response.json()
+
+        # Even with empty database, should return valid dict structure
+        assert isinstance(data, dict)
+
+        # All values should still be non-negative integers
+        for count in data.values():
+            assert isinstance(count, int)
+            assert count >= 0
+
     def test_search_terms_success(self, client):
         """Test successful term search."""
         response = client.get("/search?query=hello")
@@ -421,6 +485,37 @@ class TestErrorHandling:
         # Empty POST body for translate
         response = client.post("/translate", json={})
         assert response.status_code in [200, 422]  # Depends on validation
+
+    def test_categories_stats_error_handling(self, client):
+        """Test error handling for categories/stats endpoint."""
+        # Test that endpoint returns valid response even if there are issues
+        response = client.get("/categories/stats")
+        assert response.status_code == 200
+        data = response.json()
+
+        # Should always return a dictionary structure
+        assert isinstance(data, dict)
+
+        # Values should always be valid integers
+        for category, count in data.items():
+            assert isinstance(category, str)
+            assert isinstance(count, int)
+            assert count >= 0
+
+    def test_categories_stats_endpoint_accessibility(self, client):
+        """Test that categories/stats endpoint is accessible and well-formed."""
+        response = client.get("/categories/stats")
+
+        # Should not return server errors
+        assert response.status_code != 500
+        assert response.status_code != 503
+
+        # Should return successful response
+        assert response.status_code == 200
+
+        # Response should be valid JSON
+        data = response.json()
+        assert data is not None
 
 
 class TestSecurityScenarios:

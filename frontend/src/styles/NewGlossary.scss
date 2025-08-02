@@ -1,27 +1,68 @@
+// Import variables and LeftNav styles from GlossaryPage and LeftNav
+@import './GlossaryPage.scss';
+@import './LeftNav.scss';
+
+/* Theme Class Definitions for Dark Mode Support */
+.theme-light {
+  --bg-theme: #{$tertiary-light};
+  --text-theme: #{$text-dark};
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-dark};
+  --bg-first: #{$background-light};
+  --bg-tir: #{$secondary-light};
+  --glossary-border-color: #e5e7eb;
+  --card-background: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.06);
+  --button-background: #f9fafb;
+  --loading-color: #{$accent-pink};
+  --no-translation-color: #6b7280;
+  --header-background: #ffffff;
+  --header-text: #111827;
+  --return-button-bg: #ffffff;
+  --return-button-icon: #6b7280;
+}
+
+.theme-dark {
+  --bg-theme: #{$tertiary-dark};
+  --text-theme: #ffffff;
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-light};
+  --bg-first: #{$background-dark};
+  --bg-tir: #{$secondary-dark};
+  --glossary-border-color: #374151;
+  --card-background: #1e2433;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --button-background: #374151;
+  --loading-color: #60a5fa;
+  --no-translation-color: #9ca3af;
+  --header-background: #1e2433;
+  --header-text: #ffffff;
+  --return-button-bg: #1e2433;
+  --return-button-icon: #cccccc;
+}
+
 // Oval language badge for term cards
 .term-language-badge {
   display: inline-block;
-  background: #00ceaf1f;
-  color: #00ceaf;
+  background: #f2d20119;
+  color: #f2d001;
   font-weight: 600;
   font-size: 0.95rem;
   padding: 0.25em 1em;
   border-radius: 999px;
   margin: 0.25rem 0;
-  box-shadow: 0 1px 4px #00ceaf4c;
-  border: 1px solid #00ceaf;
+  box-shadow: 0 1px 4px #f2d2018a;
+  border: 1px solid #f2d001;
 }
 /* NewGlossary.scss - Styles for the NewGlossary page (migrated from inline classes in NewGlossary.tsx) */
-
-// Import variables and LeftNav styles from GlossaryPage and LeftNav
-@import './GlossaryPage.scss';
-@import './LeftNav.scss';
 
 // Use the same dashboard-container as GlossaryPage (inherits background, layout)
 .dashboard-container {
   min-height: 100vh;
   display: flex;
   width: 100%;
+  background-color: var(--bg-first);
+  color: var(--text-theme);
 }
 
 .mobile-menu-overlay {
@@ -161,13 +202,14 @@
 }
 
 .glossary-card {
-  background: #fff;
+  background: var(--card-background);
   border-radius: 0.5625rem; /* 0.5rem + 5px = 0.5625rem */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px var(--card-shadow);
+  border: 1px solid var(--glossary-border-color);
   transition: box-shadow 0.2s;
   cursor: pointer;
   padding: 1.375rem; /* 1.25rem + 5px = 1.375rem, if you want to increase padding */
+  color: var(--text-theme);
 }
 .glossary-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -191,8 +233,8 @@
   height: 2.0625rem !important;
 }
 .glossary-card .term-count {
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--button-background);
+  color: var(--no-translation-color);
   font-size: 0.9375rem; /* 0.875rem + 5px = 0.9375rem */
   padding: 0.3125rem 0.625rem; /* 0.25rem + 5px = 0.3125rem, 0.5rem + 5px = 0.625rem */
   border-radius: 9999px;
@@ -200,11 +242,11 @@
 .glossary-card .glossary-title {
   font-size: 1.5625rem; /* 1.25rem + 5px = 1.5625rem */
   font-weight: 600;
-  color: #111827;
+  color: var(--text-theme);
   margin-bottom: 0.8125rem; /* 0.5rem + 5px = 0.8125rem */
 }
 .glossary-card .glossary-desc {
-  color: #6b7280;
+  color: var(--no-translation-color);
   font-size: 0.9375rem; /* 0.875rem + 5px = 0.9375rem */
   margin-bottom: 1.3125rem; /* 1rem + 5px = 1.3125rem */
 }
@@ -238,14 +280,34 @@
 .terms-list-header .header-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--header-text);
 }
 .terms-list-header .header-desc {
-  color: #6b7280;
+  color: var(--header-text);
+  opacity: 0.7;
 }
 .terms-list-header .header-count {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--header-text);
+  opacity: 0.7;
+}
+
+/* Header container styling */
+.terms-list-header,
+.glossary-header {
+  background: var(--header-background);
+  color: var(--header-text);
+}
+
+/* Return button styling */
+.back-btn,
+.return-button {
+  background: var(--return-button-bg) !important;
+  color: var(--return-button-icon) !important;
+
+  svg {
+    color: var(--return-button-icon) !important;
+  }
 }
 // Terms search bar restyle (match glossary search)
 .terms-list-search {
@@ -295,12 +357,35 @@
 
 // Add spacing between term cards
 .term-card {
-  background: #fff;
+  background: var(--card-background);
   border-radius: 0.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px var(--card-shadow);
+  border: 1px solid var(--glossary-border-color);
   transition: box-shadow 0.2s;
   margin-bottom: 2rem;
+  color: var(--text-theme);
+
+  /* Ensure all text elements inherit the theme color */
+  * {
+    color: var(--text-theme) !important;
+  }
+
+  /* Specific overrides for certain elements that need different colors */
+  .term-language-badge {
+    color: #f2d001 !important;
+  }
+
+  .translation-item .lang {
+    color: var(--no-translation-color) !important;
+  }
+
+  .loading-translations {
+    color: var(--loading-color) !important;
+  }
+
+  .no-translations {
+    color: var(--no-translation-color) !important;
+  }
 }
 .term-card:last-child {
   margin-bottom: 0;
@@ -383,19 +468,155 @@
   }
 }
 .term-card .translation-item {
-  background: #f9fafb;
+  background: var(--button-background);
   border-radius: 0.5rem;
   padding: 0.75rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--glossary-border-color);
 }
 .term-card .translation-item .lang {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--no-translation-color);
   margin-bottom: 0.25rem;
 }
 .term-card .translation-item .translation {
   font-size: 1rem;
   font-weight: 500;
-  color: #111827;
+  color: var(--text-theme);
+}
+
+.term-card .loading-translations,
+.term-card .no-translations {
+  text-align: center;
+  padding: 1rem;
+  color: var(--no-translation-color);
+  font-style: italic;
+  background: var(--button-background);
+  border-radius: 0.5rem;
+  border: 1px solid var(--glossary-border-color);
+}
+
+.term-card .loading-translations {
+  color: var(--loading-color);
+}
+
+/* Message styles for loading and empty states */
+.terms-list-message,
+.glossary-list-message {
+  text-align: center;
+  padding: 2rem;
+  color: var(--no-translation-color);
+  font-size: 1rem;
+}
+
+/* Export popup styles */
+.glossary-export-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.glossary-export-popup {
+  background: var(--card-background);
+  color: var(--text-theme);
+  border: 1px solid var(--glossary-border-color);
+}
+
+.glossary-format-menu-item {
+  background: var(--card-background) !important;
+  color: var(--text-theme) !important;
+  border-color: var(--glossary-border-color) !important;
+}
+
+.glossary-format-menu-item:hover {
+  background: var(--button-background) !important;
+}
+
+/* Search input styling */
+.glossary-search-input {
+  background: var(--card-background) !important;
+  color: var(--text-theme) !important;
+  border-color: var(--glossary-border-color) !important;
+}
+
+.glossary-search-input::placeholder {
+  color: var(--no-translation-color) !important;
+}
+
+/* Pagination button styling */
+.pagination-button {
+  background: var(--card-background) !important;
+  color: var(--text-theme) !important;
+  border-color: var(--glossary-border-color) !important;
+}
+
+/* Pagination controls styling to match SearchPage */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+
+  button {
+    background-color: var(--bg-tir);
+    color: var(--text-theme);
+    border: 1px solid var(--glossary-border-color);
+    border-radius: 0.375rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: var(--glossary-border-color);
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--button-background);
+    }
+  }
+
+  span {
+    color: var(--text-theme);
+    font-weight: 500;
+  }
+}
+
+/* Utility classes for Tailwind-like styling */
+.flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.space-x-4 > * + * {
+  margin-left: 1rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.rounded {
+  border-radius: 0.375rem;
+}
+
+.bg-theme {
+  background-color: var(--bg-tir);
+}
+
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
 }

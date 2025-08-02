@@ -7,6 +7,7 @@ import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar.tsx';
 import GlossaryHeader from '../components/ui/GlossaryHeader';
 import { downloadData } from '../utils/exportUtils';
+import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import '../styles/NewGlossary.scss';
 
 // --- FULL WORKING LOGIC RESTORED ---
@@ -28,6 +29,7 @@ interface Glossary {
 }
 
 const GlossaryApp = () => {
+  const { isDarkMode } = useDarkMode();
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
   const [glossaries, setGlossaries] = useState<Glossary[]>([]);
@@ -39,14 +41,34 @@ const GlossaryApp = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('glossary');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [bookmarkedCategory, setBookmarkedCategory] = useState(false);
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [expandedTermIds, setExpandedTermIds] = useState<Set<number>>(
     new Set(),
   );
+  const [termTranslations, setTermTranslations] = useState<
+    Record<string, { [lang: string]: string }>
+  >({});
+  const [loadingTranslations, setLoadingTranslations] = useState<Set<string>>(
+    new Set(),
+  );
   const [isDownloading, setIsDownloading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalTerms, setTotalTerms] = useState(0);
+  const [debouncedTermSearch, setDebouncedTermSearch] = useState('');
+  const termsPerPage = 20;
   const exportPopupRef = useRef<HTMLDivElement>(null);
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTermSearch(termSearch);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [termSearch]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -57,17 +79,6 @@ const GlossaryApp = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  useEffect(() => {
-    const match = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDarkMode(match.matches);
-    const listener = (e: MediaQueryListEvent) => {
-      setIsDarkMode(e.matches);
-    };
-    match.addEventListener('change', listener);
-    return () => {
-      match.removeEventListener('change', listener);
-    };
-  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -75,59 +86,60 @@ const GlossaryApp = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(API_ENDPOINTS.glossaryCategories)
+
+    // Use the new categories stats endpoint for faster loading
+    fetch(API_ENDPOINTS.glossaryCategoriesStats)
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch categories');
+        if (!res.ok) throw new Error('Failed to fetch category stats');
         return res.json();
       })
-      .then(async (data: unknown) => {
-        if (
-          Array.isArray(data) &&
-          data.length &&
-          typeof data[0] === 'object' &&
-          data[0] !== null &&
-          'name' in data[0]
-        ) {
-          setGlossaries(data as Glossary[]);
-        } else {
-          const categoryStrings = data as string[];
-          const glossariesData: Glossary[] = await Promise.all(
-            categoryStrings.map(async (cat: string, idx: number) => {
-              try {
-                const termsRes = await fetch(
-                  API_ENDPOINTS.glossaryTermsByCategory(cat),
-                );
-                if (!termsRes.ok) throw new Error();
-                const termsResponse: unknown = await termsRes.json();
-                const terms: Term[] = termsResponse as Term[];
-                const languages = Array.from(
-                  new Set(
-                    terms.flatMap((t) => Object.keys(t.translations || {})),
-                  ),
-                );
-                return {
-                  id: idx + 1,
-                  name: cat,
-                  description: '',
-                  termCount: terms.length,
-                  languages,
-                };
-              } catch {
-                return {
-                  id: idx + 1,
-                  name: cat,
-                  description: '',
-                  termCount: 0,
-                  languages: [],
-                };
-              }
-            }),
-          );
-          setGlossaries(glossariesData);
-        }
+      .then((data: Record<string, number>) => {
+        // Convert the stats object to glossary array
+        const glossariesData: Glossary[] = Object.entries(data).map(
+          ([name, termCount], idx) => ({
+            id: idx + 1,
+            name,
+            description: '',
+            termCount,
+            languages: [],
+          }),
+        );
+        setGlossaries(glossariesData);
       })
       .catch(() => {
-        setGlossaries([]);
+        // Fallback to original endpoint if stats endpoint fails
+        fetch(API_ENDPOINTS.glossaryCategories)
+          .then((res) => {
+            if (!res.ok) throw new Error('Failed to fetch categories');
+            return res.json();
+          })
+          .then((data: unknown) => {
+            if (
+              Array.isArray(data) &&
+              data.length &&
+              typeof data[0] === 'object' &&
+              data[0] !== null &&
+              'name' in data[0]
+            ) {
+              setGlossaries(data as Glossary[]);
+            } else {
+              // Convert category strings to glossary objects quickly without fetching terms
+              const categoryStrings = data as string[];
+              const glossariesData: Glossary[] = categoryStrings.map(
+                (cat: string, idx: number) => ({
+                  id: idx + 1,
+                  name: cat,
+                  description: '',
+                  termCount: undefined, // Will be loaded on demand when user clicks on glossary
+                  languages: [],
+                }),
+              );
+              setGlossaries(glossariesData);
+            }
+          })
+          .catch(() => {
+            setGlossaries([]);
+          });
       })
       .finally(() => {
         setLoading(false);
@@ -137,40 +149,216 @@ const GlossaryApp = () => {
   useEffect(() => {
     if (!selectedGlossary) return;
     setLoading(true);
-    fetch(API_ENDPOINTS.glossaryTermsByCategory(selectedGlossary.name))
+
+    // Use advanced search endpoint with pagination
+    const searchParams = new URLSearchParams({
+      domain: selectedGlossary.name,
+      page: currentPage.toString(),
+      limit: termsPerPage.toString(),
+    });
+
+    if (debouncedTermSearch.trim()) {
+      searchParams.append('query', debouncedTermSearch.trim());
+    }
+
+    fetch(
+      `${API_ENDPOINTS.glossaryAdvancedSearch}?${searchParams.toString()}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          domain: selectedGlossary.name,
+          query: debouncedTermSearch.trim() || undefined,
+          page: currentPage,
+          limit: termsPerPage,
+        }),
+      },
+    )
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch terms');
         return res.json();
       })
-      .then((data: unknown) => {
-        const termsData = data as Term[];
-        setTerms(
-          termsData.map((term: Term) => ({
-            ...term,
-            translations: term.translations || {},
-          })),
-        );
-      })
+      .then(
+        (data: {
+          results: Term[];
+          total: number;
+          page: number;
+          pages: number;
+        }) => {
+          setTerms(
+            data.results.map((term: Term) => ({
+              ...term,
+              translations: term.translations || {},
+            })),
+          );
+          setTotalTerms(data.total);
+        },
+      )
       .catch((err: unknown) => {
         console.error('Error fetching terms:', err);
-        setTerms([]);
+        // Fallback to original endpoint if advanced search fails
+        fetch(API_ENDPOINTS.glossaryTermsByCategory(selectedGlossary.name))
+          .then((res) => {
+            if (!res.ok) throw new Error('Failed to fetch terms');
+            return res.json();
+          })
+          .then((data: unknown) => {
+            const termsData = data as Term[];
+            const filteredTerms = termsData.filter(
+              (term) =>
+                !debouncedTermSearch.trim() ||
+                term.term
+                  .toLowerCase()
+                  .includes(debouncedTermSearch.toLowerCase()) ||
+                term.definition
+                  .toLowerCase()
+                  .includes(debouncedTermSearch.toLowerCase()),
+            );
+            const startIndex = (currentPage - 1) * termsPerPage;
+            const endIndex = startIndex + termsPerPage;
+            const paginatedTerms = filteredTerms.slice(startIndex, endIndex);
+
+            setTerms(
+              paginatedTerms.map((term: Term) => ({
+                ...term,
+                translations: term.translations || {},
+              })),
+            );
+            setTotalTerms(filteredTerms.length);
+          })
+          .catch(() => {
+            setTerms([]);
+            setTotalTerms(0);
+          });
       })
       .finally(() => {
         setLoading(false);
       });
+  }, [selectedGlossary, currentPage, debouncedTermSearch]);
+
+  // Reset page when glossary or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedGlossary, debouncedTermSearch]);
+
+  // Scroll to top when a glossary is selected
+  useEffect(() => {
+    if (selectedGlossary) {
+      // Use setTimeout to ensure the component has rendered first
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
+        // Fallback for browsers that don't support smooth scroll
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 100);
+    }
   }, [selectedGlossary]);
 
-  // Filter terms based on search
-  const filteredTerms = terms.filter(
-    (term) =>
-      term.term.toLowerCase().includes(termSearch.toLowerCase()) ||
-      term.definition.toLowerCase().includes(termSearch.toLowerCase()),
-  );
+  // Filter terms based on search (now handled by API, but kept for fallback)
+  const filteredTerms = terms;
 
   // Filter glossaries based on search
   const filteredGlossaries = glossaries.filter((g) =>
     g.name.toLowerCase().includes(glossarySearch.toLowerCase()),
   );
+
+  // Helper function to fetch translations for a specific term
+  const fetchTranslationsForTerm = async (
+    termId: string,
+  ): Promise<{ [lang: string]: string }> => {
+    try {
+      setLoadingTranslations((prev) => new Set(prev).add(termId));
+
+      const response = await fetch(
+        API_ENDPOINTS.glossaryTermTranslations(termId),
+      );
+      if (!response.ok) {
+        console.warn(
+          `Failed to fetch translations for term ${termId}:`,
+          response.status,
+        );
+        return {};
+      }
+
+      const data = (await response.json()) as {
+        translations?: { [lang: string]: string };
+      };
+      // Extract the translations object from the API response
+      return data.translations ?? {};
+    } catch (error) {
+      console.error(`Error fetching translations for term ${termId}:`, error);
+      return {};
+    } finally {
+      setLoadingTranslations((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(termId);
+        return newSet;
+      });
+    }
+  };
+
+  // Helper function to get all terms for export
+  const getAllTermsForExport = async (): Promise<Term[]> => {
+    if (!selectedGlossary) {
+      return filteredTerms;
+    }
+
+    try {
+      // First, try to get all terms without search filter using advanced search
+      const exportParams = new URLSearchParams({
+        domain: selectedGlossary.name,
+        page: '1',
+        limit: '10000', // Set a high limit to get all terms
+      });
+
+      // Don't include search query for export - we want ALL terms in the glossary
+
+      const response = await fetch(
+        `${API_ENDPOINTS.glossaryAdvancedSearch}?${exportParams.toString()}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            domain: selectedGlossary.name,
+            // No query parameter - get all terms
+            page: 1,
+            limit: 10000,
+          }),
+        },
+      );
+
+      if (response.ok) {
+        const data = (await response.json()) as { results: Term[] };
+        return data.results;
+      }
+    } catch (error) {
+      console.error('Advanced search failed, trying fallback:', error);
+    }
+
+    // Fallback to original endpoint to get all terms
+    try {
+      const fallbackResponse = await fetch(
+        API_ENDPOINTS.glossaryTermsByCategory(selectedGlossary.name),
+      );
+      if (fallbackResponse.ok) {
+        const fallbackData = (await fallbackResponse.json()) as Term[];
+        return fallbackData;
+      }
+    } catch (error) {
+      console.error('Failed to fetch all terms for export:', error);
+    }
+
+    // Last resort: return current page data
+    return filteredTerms;
+  };
 
   return (
     <div
@@ -209,9 +397,12 @@ const GlossaryApp = () => {
               <GlossaryHeader
                 title={selectedGlossary.name}
                 description={selectedGlossary.description}
-                countText={`${String(filteredTerms.length)} of ${String(selectedGlossary.termCount || terms.length)} terms`}
+                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})`}
                 onBack={() => {
                   setSelectedGlossary(null);
+                  setCurrentPage(1);
+                  setTermSearch('');
+                  setDebouncedTermSearch('');
                 }}
               />
 
@@ -275,8 +466,8 @@ const GlossaryApp = () => {
                 ) : (
                   <div
                     style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      display: 'flex',
+                      flexDirection: 'column',
                       gap: '1.5rem',
                     }}
                   >
@@ -287,21 +478,40 @@ const GlossaryApp = () => {
                           key={term.id}
                           style={{
                             display: 'flex',
-                            maxWidth: 470,
+                            maxWidth: 900,
                             margin: '0 auto',
                             width: '100%',
                           }}
                         >
                           <GlossaryTermCard
-                            term={term}
+                            term={{
+                              ...term,
+                              translations:
+                                termTranslations[term.id.toString()] ?? {},
+                            }}
                             isExpanded={isExpanded}
+                            isLoadingTranslations={loadingTranslations.has(
+                              term.id.toString(),
+                            )}
                             onToggleExpand={(id) => {
+                              const termIdStr = id.toString();
                               setExpandedTermIds((prev) => {
                                 const newSet = new Set(prev);
                                 if (newSet.has(id)) {
                                   newSet.delete(id);
                                 } else {
                                   newSet.add(id);
+                                  // Fetch translations when expanding if not already cached
+                                  if (!(termIdStr in termTranslations)) {
+                                    void fetchTranslationsForTerm(
+                                      termIdStr,
+                                    ).then((translations) => {
+                                      setTermTranslations((prev) => ({
+                                        ...prev,
+                                        [termIdStr]: translations,
+                                      }));
+                                    });
+                                  }
                                 }
                                 return newSet;
                               });
@@ -313,6 +523,74 @@ const GlossaryApp = () => {
                   </div>
                 )}
               </div>
+
+              {/* Pagination Controls */}
+              {totalTerms > termsPerPage && (
+                <div className="pagination-controls flex justify-center space-x-4 p-4">
+                  <button
+                    type="button"
+                    disabled={currentPage === 1}
+                    onClick={() => {
+                      setCurrentPage(currentPage - 1);
+                    }}
+                    className="px-4 py-2 bg-theme rounded disabled:opacity-50"
+                    style={{
+                      padding: '0.5rem 1rem',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '0.375rem',
+                      backgroundColor:
+                        currentPage === 1
+                          ? 'var(--glossary-border-color)'
+                          : 'var(--bg-tir)',
+                      color: 'var(--text-theme)',
+                      cursor:
+                        currentPage === 1 || loading
+                          ? 'not-allowed'
+                          : 'pointer',
+                      opacity: currentPage === 1 || loading ? 0.5 : 1,
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    Previous
+                  </button>
+                  <span style={{ color: 'var(--text-theme)' }}>
+                    Page {currentPage} of {Math.ceil(totalTerms / termsPerPage)}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={
+                      currentPage === Math.ceil(totalTerms / termsPerPage)
+                    }
+                    onClick={() => {
+                      setCurrentPage(currentPage + 1);
+                    }}
+                    className="px-4 py-2 bg-theme rounded disabled:opacity-50"
+                    style={{
+                      padding: '0.5rem 1rem',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '0.375rem',
+                      backgroundColor:
+                        currentPage >= Math.ceil(totalTerms / termsPerPage)
+                          ? 'var(--glossary-border-color)'
+                          : 'var(--bg-tir)',
+                      color: 'var(--text-theme)',
+                      cursor:
+                        currentPage >= Math.ceil(totalTerms / termsPerPage) ||
+                        loading
+                          ? 'not-allowed'
+                          : 'pointer',
+                      opacity:
+                        currentPage >= Math.ceil(totalTerms / termsPerPage) ||
+                        loading
+                          ? 0.5
+                          : 1,
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
               {/* Floating Export and Bookmark Buttons */}
               <div
                 style={{
@@ -546,8 +824,8 @@ const GlossaryApp = () => {
                     }}
                     className="glossary-export-subtitle"
                   >
-                    Download {filteredTerms.length} terms from{' '}
-                    {selectedGlossary.name} in your preferred format.
+                    Download all terms from {selectedGlossary.name} in your
+                    preferred format.
                   </p>
                 </div>
 
@@ -562,13 +840,12 @@ const GlossaryApp = () => {
                       setShowExportPopup(false);
                       const handleDownload = async () => {
                         try {
-                          const termsWithCategory = filteredTerms.map(
-                            (term) => ({
-                              ...term,
-                              id: String(term.id),
-                              category: selectedGlossary.name,
-                            }),
-                          );
+                          const allTerms = await getAllTermsForExport();
+                          const termsWithCategory = allTerms.map((term) => ({
+                            ...term,
+                            id: String(term.id),
+                            category: selectedGlossary.name,
+                          }));
                           await downloadData(
                             termsWithCategory,
                             'csv',
@@ -623,13 +900,12 @@ const GlossaryApp = () => {
                       setShowExportPopup(false);
                       const handleDownload = async () => {
                         try {
-                          const termsWithCategory = filteredTerms.map(
-                            (term) => ({
-                              ...term,
-                              id: String(term.id),
-                              category: selectedGlossary.name,
-                            }),
-                          );
+                          const allTerms = await getAllTermsForExport();
+                          const termsWithCategory = allTerms.map((term) => ({
+                            ...term,
+                            id: String(term.id),
+                            category: selectedGlossary.name,
+                          }));
                           await downloadData(
                             termsWithCategory,
                             'json',
@@ -684,13 +960,12 @@ const GlossaryApp = () => {
                       setShowExportPopup(false);
                       const handleDownload = async () => {
                         try {
-                          const termsWithCategory = filteredTerms.map(
-                            (term) => ({
-                              ...term,
-                              id: String(term.id),
-                              category: selectedGlossary.name,
-                            }),
-                          );
+                          const allTerms = await getAllTermsForExport();
+                          const termsWithCategory = allTerms.map((term) => ({
+                            ...term,
+                            id: String(term.id),
+                            category: selectedGlossary.name,
+                          }));
                           await downloadData(
                             termsWithCategory,
                             'html',
@@ -746,13 +1021,12 @@ const GlossaryApp = () => {
                       const handlePdfDownload = async () => {
                         try {
                           setIsDownloading(true);
-                          const termsWithCategory = filteredTerms.map(
-                            (term) => ({
-                              ...term,
-                              id: String(term.id),
-                              category: selectedGlossary.name,
-                            }),
-                          );
+                          const allTerms = await getAllTermsForExport();
+                          const termsWithCategory = allTerms.map((term) => ({
+                            ...term,
+                            id: String(term.id),
+                            category: selectedGlossary.name,
+                          }));
                           await downloadData(
                             termsWithCategory,
                             'pdf',

@@ -59,9 +59,11 @@ interface APIEndpoints {
   voteOnComment: string;
   glossary: string;
   glossaryCategories: string;
+  glossaryCategoriesStats: string;
   glossaryTermsByCategory: (category: string) => string;
   glossaryTermTranslations: (termId: string) => string;
   glossarySearch: string;
+  glossaryAdvancedSearch: string;
   glossaryLanguages: string;
   glossaryRandom: string;
   getTermDetail: (termId: string) => string;
@@ -155,6 +157,10 @@ export const API_ENDPOINTS: APIEndpoints = {
     GLOSSARY_SERVICE_URL,
     '/api/v1/glossary/categories',
   ),
+  glossaryCategoriesStats: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/categories/stats',
+  ),
   glossaryTermsByCategory: (category: string) =>
     endpoint(
       GLOSSARY_SERVICE_URL,
@@ -166,6 +172,10 @@ export const API_ENDPOINTS: APIEndpoints = {
       `/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
     ),
   glossarySearch: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/search'),
+  glossaryAdvancedSearch: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/search',
+  ),
   glossaryLanguages: endpoint(
     GLOSSARY_SERVICE_URL,
     '/api/v1/glossary/languages',

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Book, Bookmark, Download, Eye } from 'lucide-react';
+import React, { useState } from 'react';
+import { Book, Bookmark, Download } from 'lucide-react';
+import { useDarkMode } from './DarkModeComponent';
 
 interface Glossary {
   name: string;
@@ -20,11 +21,27 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
   onExport,
   onBookmark,
 }) => {
+  // Local state for bookmark visual
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  // Use the same dark mode hook as the rest of the app
+  const { isDarkMode } = useDarkMode();
+
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200">
+    <div
+      className="rounded-lg shadow-md hover:shadow-lg transition-shadow border"
+      style={{
+        backgroundColor: 'var(--card-background)',
+        borderColor: 'var(--glossary-border-color)',
+        color: 'var(--text-theme)',
+      }}
+    >
       <div className="p-4">
         <div className="flex items-start justify-between mb-1">
-          <Book className="w-6 h-6" color="#212431" />
+          <Book
+            className="w-6 h-6"
+            style={{ color: isDarkMode ? '#fcfcfcff' : '#000000ff' }}
+          />
           <span
             className="text-sm px-2 py-1 rounded-full"
             style={{
@@ -36,17 +53,29 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
             {glossary.termCount} terms
           </span>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-0.5">
+        <h3
+          className="text-lg font-semibold mb-0.5"
+          style={{ color: 'var(--text-theme)' }}
+        >
           {glossary.name}
         </h3>
-        <p className="text-gray-600 mb-1 text-xs line-clamp-1">
+        <p
+          className="mb-1 text-xs line-clamp-1"
+          style={{ color: 'var(--no-translation-color)' }}
+        >
           {glossary.description}
         </p>
-        <div className="flex items-center text-xs text-gray-500 mb-1">
+        <div
+          className="flex items-center text-xs mb-1"
+          style={{ color: 'var(--no-translation-color)' }}
+        >
           {/* <span>{glossary.languages && glossary.languages.length > 0 ? glossary.languages.join(', ') : '—'}</span> */}
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+        <div
+          className="flex items-center justify-between pt-2"
+          style={{ borderTop: '2px solid #00ceaf99' }}
+        >
           <div className="flex space-x-2">
             <button
               type="button"
@@ -54,17 +83,24 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
                 e.stopPropagation();
                 if (onExport) onExport(glossary);
               }}
-              className="p-2 rounded-lg transition-colors"
+              className="transition-colors"
               style={{
-                color: '#f00a50',
-                backgroundColor: '#f00a501a',
-                border: '1.5px solid #f00a4fa0',
+                color: '#ffffffff',
+                backgroundColor: '#f00a4fff',
+                border: '1.5px solid #f00a4fff',
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 0,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f00a4f6d';
+                e.currentTarget.style.backgroundColor = '#f00a4fe8';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f00a501a';
+                e.currentTarget.style.backgroundColor = '#f00a4fff';
               }}
               title="Export glossary"
             >
@@ -75,23 +111,34 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
+                setIsBookmarked((prev) => !prev);
                 if (onBookmark) onBookmark(glossary);
               }}
-              className="p-2 rounded-lg transition-colors"
+              className="transition-colors"
               style={{
-                color: '#f2d001',
-                backgroundColor: '#f2d0011a',
-                border: '1.5px solid #f2d001a0',
+                color: '#ffffffff',
+                backgroundColor: '#f2d201ff',
+                border: '1.5px solid #f2d201ff',
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 0,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f2d20158';
+                e.currentTarget.style.backgroundColor = '#f2d201dc';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f2d0011a';
+                e.currentTarget.style.backgroundColor = '#f2d201ff';
               }}
               title="Bookmark glossary"
             >
-              <Bookmark className="w-4 h-4" />
+              <Bookmark
+                className="w-4 h-4"
+                fill={isBookmarked ? '#fff' : 'none'}
+              />
             </button>
           </div>
 
@@ -101,22 +148,33 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
               e.stopPropagation();
               if (onView) onView(glossary);
             }}
-            className="flex items-center space-x-2 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+            className="text-sm font-medium transition-colors"
             style={{
-              backgroundColor: '#212431',
-              border: '1.5px solid #212431',
+              color: isDarkMode ? '#ffffffff' : '#000000',
+              backgroundColor: isDarkMode ? '#11131aff' : '#f0f0f0',
+              border: isDarkMode
+                ? '1.5px solid #11131aff'
+                : '1.5px solid #f0f0f0',
+              borderRadius: '999px',
+              padding: '0.35rem 1.1rem',
+              outline: 'none',
+              cursor: 'pointer',
+              marginLeft: 4,
+              fontWeight: 600,
+              letterSpacing: 0.2,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#181a22';
-              e.currentTarget.style.border = '1.5px solid #181a22';
+              e.currentTarget.style.backgroundColor = isDarkMode
+                ? '#191c27b3'
+                : '#f0f0f0aa';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#212431';
-              e.currentTarget.style.border = '1.5px solid #212431';
+              e.currentTarget.style.backgroundColor = isDarkMode
+                ? '#11131aff'
+                : '#f0f0f0';
             }}
           >
-            <Eye className="w-4 h-4" />
-            <span>View</span>
+            View
           </button>
         </div>
       </div>
