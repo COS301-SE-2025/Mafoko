@@ -38,5 +38,19 @@ class Term(Base):
 
     if TYPE_CHECKING:
         from mavito_common.models.comment import Comment
+        from mavito_common.models.bookmark import TermBookmark
+        from mavito_common.models.group_term import GroupTerm
+        from mavito_common.models.workspace_note import WorkspaceNote
 
     comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="term")
+    
+    # Workspace relationships
+    bookmarks: Mapped[List["TermBookmark"]] = relationship(
+        "TermBookmark", back_populates="term", cascade="all, delete-orphan"
+    )
+    group_terms: Mapped[List["GroupTerm"]] = relationship(
+        "GroupTerm", back_populates="term", cascade="all, delete-orphan"
+    )
+    workspace_notes: Mapped[List["WorkspaceNote"]] = relationship(
+        "WorkspaceNote", back_populates="term", cascade="all, delete-orphan"
+    )
