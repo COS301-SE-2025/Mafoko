@@ -52,6 +52,7 @@ const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
         }}
       >
         <button
+          type="button"
           onClick={onBack}
           className="back-btn"
           style={{

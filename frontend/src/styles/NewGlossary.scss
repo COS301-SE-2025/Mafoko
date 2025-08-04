@@ -620,3 +620,47 @@
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
 }
+
+/* Notification Styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideInFromRight 0.3s ease-out;
+  min-width: 250px;
+  max-width: 400px;
+
+  &.notification-success {
+    background-color: #10b981;
+    color: white;
+    border-left: 4px solid #065f46;
+  }
+
+  &.notification-error {
+    background-color: #ef4444;
+    color: white;
+    border-left: 4px solid #991b1b;
+  }
+
+  &.notification-info {
+    background-color: #3b82f6;
+    color: white;
+    border-left: 4px solid #1e40af;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

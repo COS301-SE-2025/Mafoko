@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../config';
 import { Search, Bookmark, Download, FileType } from 'lucide-react';
 import GlossaryTermCard from '../components/ui/GlossaryTermCard';
@@ -30,6 +31,7 @@ interface Glossary {
 
 const GlossaryApp = () => {
   const { isDarkMode } = useDarkMode();
+  const location = useLocation();
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
   const [glossaries, setGlossaries] = useState<Glossary[]>([]);
@@ -42,6 +44,7 @@ const GlossaryApp = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('glossary');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [bookmarkedCategory, setBookmarkedCategory] = useState(false);
+  const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<string[]>([]);
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [expandedTermIds, setExpandedTermIds] = useState<Set<number>>(
     new Set(),
@@ -58,6 +61,29 @@ const GlossaryApp = () => {
   const [debouncedTermSearch, setDebouncedTermSearch] = useState('');
   const termsPerPage = 20;
   const exportPopupRef = useRef<HTMLDivElement>(null);
+
+  // Notification state for user feedback
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+    visible: boolean;
+  }>({
+    message: '',
+    type: 'info',
+    visible: false
+  });
+
+  // Helper functions for user notifications
+  const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setNotification({ message, type, visible: true });
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, visible: false }));
+    }, 4000);
+  };
+
+  const showSuccess = (message: string) => { showNotification(message, 'success'); };
+  const showError = (message: string) => { showNotification(message, 'error'); };
+  // const showInfo = (message: string) => { showNotification(message, 'info'); };
 
   // Debounce search term
   useEffect(() => {
@@ -79,6 +105,21 @@ const GlossaryApp = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Handle navigation state from workspace page
+  useEffect(() => {
+    const state = location.state as { selectedGlossaryName?: string } | null;
+    if (state?.selectedGlossaryName && glossaries.length > 0) {
+      console.log('NAVIGATION STATE - Looking for glossary:', state.selectedGlossaryName);
+      const targetGlossary = glossaries.find(g => g.name === state.selectedGlossaryName);
+      if (targetGlossary) {
+        console.log('NAVIGATION STATE - Found glossary, selecting:', targetGlossary);
+        setSelectedGlossary(targetGlossary);
+        // Clear the navigation state to prevent re-selection on subsequent renders
+        window.history.replaceState(null, '', location.pathname);
+      }
+    }
+  }, [location.state, location.pathname, glossaries]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -242,6 +283,196 @@ const GlossaryApp = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedGlossary, debouncedTermSearch]);
+
+  // Check if selected glossary is bookmarked when it changes
+  useEffect(() => {
+    if (!selectedGlossary) {
+      setBookmarkedCategory(false);
+      return;
+    }
+
+    const checkBookmarkStatus = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setBookmarkedCategory(false);
+        return;
+      }
+
+      try {
+        // Fetch user's bookmarks to check if this glossary is bookmarked
+        const response = await fetch(API_ENDPOINTS.getBookmarks, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const bookmarksData = await response.json() as {
+            glossaries?: Array<{ domain: string }>;
+          };
+          const bookmarkedGlossariesData = bookmarksData.glossaries || [];
+          
+          // Extract glossary names into a simple array
+          const bookmarkedGlossaryNames: string[] = bookmarkedGlossariesData.map(
+            (bookmark: { domain: string }) => bookmark.domain
+          );
+          setBookmarkedGlossaries(bookmarkedGlossaryNames);
+          
+          // Check if current glossary is in the bookmarked glossaries
+          const isCurrentGlossaryBookmarked = bookmarkedGlossaryNames.includes(selectedGlossary.name);
+          
+          setBookmarkedCategory(isCurrentGlossaryBookmarked);
+          console.log(`Glossary ${selectedGlossary.name} bookmark status: ${isCurrentGlossaryBookmarked.toString()}`);
+          console.log(`All bookmarked glossaries:`, bookmarkedGlossaryNames);
+        } else {
+          setBookmarkedCategory(false);
+        }
+      } catch (error) {
+        console.error('Error checking bookmark status:', error);
+        setBookmarkedCategory(false);
+      }
+    };
+
+    void checkBookmarkStatus();
+  }, [selectedGlossary]);
+
+  // Reusable bookmark handler that both buttons can use
+  const handleBookmarkGlossary = async (glossary: Glossary | null = selectedGlossary) => {
+    console.log('🚀 [NUCLEAR DEBUG] BOOKMARK HANDLER CALLED!');
+    console.log('🚀 [NUCLEAR DEBUG] Glossary to bookmark:', glossary);
+    
+    if (!glossary) {
+      console.log('❌ [NUCLEAR DEBUG] No glossary provided!');
+      showError('No glossary selected!');
+      return false;
+    }
+    
+    const token = localStorage.getItem('accessToken');
+    console.log('🔑 [NUCLEAR DEBUG] Token exists:', !!token);
+    
+    if (!token) {
+      console.log('❌ [NUCLEAR DEBUG] No token found!');
+      showError('Please log in to bookmark glossaries.');
+      return false;
+    }
+
+    try {
+      // Check current bookmark status for this specific glossary
+      // Use the bookmarkedGlossaries array to check if this glossary is already bookmarked
+      const currentlyBookmarked = bookmarkedGlossaries.includes(glossary.name);
+      console.log(`🎯 [NUCLEAR DEBUG] Current bookmark state for ${glossary.name}: ${currentlyBookmarked ? 'BOOKMARKED' : 'NOT BOOKMARKED'}`);
+      console.log(`🎯 [NUCLEAR DEBUG] Bookmarked glossaries list:`, bookmarkedGlossaries);
+      
+      // Show immediate feedback
+      console.log(`Starting ${currentlyBookmarked ? 'UNBOOKMARK' : 'BOOKMARK'} operation for: ${glossary.name}`);
+      
+      // Update UI optimistically
+      if (selectedGlossary?.name === glossary.name) {
+        setBookmarkedCategory(!currentlyBookmarked);
+      }
+
+      if (currentlyBookmarked) {
+        // Unbookmark the glossary
+        const unbookmarkUrl = API_ENDPOINTS.unbookmarkGlossary(glossary.name);
+        console.log(`🌐 [NUCLEAR DEBUG] UNBOOKMARK URL: ${unbookmarkUrl}`);
+        
+        const response = await fetch(unbookmarkUrl, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        console.log(`📡 [NUCLEAR DEBUG] UNBOOKMARK Response status: ${response.status.toString()}`);
+        const responseText = await response.text();
+        console.log(`📡 [NUCLEAR DEBUG] UNBOOKMARK Response body: ${responseText}`);
+        
+        if (!response.ok) {
+          throw new Error(`Unbookmark failed: ${response.status.toString()} - ${responseText}`);
+        }
+        
+        console.log(`✅ [NUCLEAR DEBUG] Successfully unbookmarked glossary: ${glossary.name}`);
+        showSuccess(`Unbookmarked ${glossary.name}!`);
+        
+        // Update local bookmarked glossaries state
+        setBookmarkedGlossaries(prev => prev.filter(name => name !== glossary.name));
+      } else {
+        // Bookmark the glossary
+        const bookmarkUrl = API_ENDPOINTS.bookmarkGlossary;
+        console.log(`🌐 [NUCLEAR DEBUG] BOOKMARK URL: ${bookmarkUrl}`);
+        
+        const requestBody = { 
+          domain: glossary.name,
+          description: glossary.description 
+        };
+        console.log(`📤 [NUCLEAR DEBUG] BOOKMARK Request body:`, requestBody);
+        
+        const response = await fetch(bookmarkUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(requestBody),
+        });
+        
+        console.log(`📡 [NUCLEAR DEBUG] BOOKMARK Response status: ${response.status.toString()}`);
+        const responseText = await response.text();
+        console.log(`📡 [NUCLEAR DEBUG] BOOKMARK Response body: ${responseText}`);
+        
+        if (!response.ok) {
+          // Handle 409 conflict (already bookmarked) by treating it as success and updating UI
+          if (response.status === 409) {
+            console.log(`ℹ️ [NUCLEAR DEBUG] Glossary ${glossary.name} already bookmarked, updating UI state`);
+            showSuccess(`${glossary.name} is already bookmarked!`);
+            
+            // Update local state to reflect that it's bookmarked
+            setBookmarkedGlossaries(prev => {
+              if (!prev.includes(glossary.name)) {
+                return [...prev, glossary.name];
+              }
+              return prev;
+            });
+            
+            // Update UI state
+            if (selectedGlossary?.name === glossary.name) {
+              setBookmarkedCategory(true);
+            }
+          } else {
+            throw new Error(`Bookmark failed: ${response.status.toString()} - ${responseText}`);
+          }
+        } else {
+          console.log(`✅ [NUCLEAR DEBUG] Successfully bookmarked glossary: ${glossary.name}`);
+          showSuccess(`Bookmarked ${glossary.name}!`);
+          
+          // Update local bookmarked glossaries state
+          setBookmarkedGlossaries(prev => [...prev, glossary.name]);
+        }
+      }
+
+      // Set timestamp and trigger events
+      const timestamp = Date.now().toString();
+      localStorage.setItem('bookmarksChanged', timestamp);
+      console.log(`💾 [NUCLEAR DEBUG] Set bookmarksChanged flag to: ${timestamp}`);
+      
+      window.dispatchEvent(new CustomEvent('bookmarkChanged', { 
+        detail: { type: 'glossary', action: currentlyBookmarked ? 'unbookmark' : 'bookmark', name: glossary.name } 
+      }));
+      console.log(`📢 [NUCLEAR DEBUG] Dispatched bookmarkChanged event`);
+      
+      return true;
+    } catch (error) {
+      console.error('💥 [NUCLEAR DEBUG] CATASTROPHIC ERROR during bookmark operation:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      showError(`Bookmark operation failed: ${errorMessage}`);
+      
+      // Revert optimistic update on failure
+      if (selectedGlossary?.name === glossary.name) {
+        setBookmarkedCategory(bookmarkedCategory);
+      }
+      return false;
+    }
+  };
 
   // Scroll to top when a glossary is selected
   useEffect(() => {
@@ -606,7 +837,7 @@ const GlossaryApp = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setBookmarkedCategory((prev) => !prev);
+                    void handleBookmarkGlossary();
                   }}
                   style={{
                     backgroundColor: '#f2d001',
@@ -729,8 +960,9 @@ const GlossaryApp = () => {
                             description: g.description || '',
                             termCount: g.termCount ?? 0,
                           }}
+                          isBookmarked={bookmarkedGlossaries.includes(g.name)}
                           onBookmark={() => {
-                            setBookmarkedCategory((prev) => !prev);
+                            void handleBookmarkGlossary(g);
                           }}
                           onExport={() => {
                             setSelectedGlossary(g);
@@ -1090,6 +1322,13 @@ const GlossaryApp = () => {
           )}
         </div>
       </div>
+
+      {/* Notification Display */}
+      {notification.visible && (
+        <div className={`notification notification-${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
     </div>
   );
 };
