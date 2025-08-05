@@ -13,6 +13,7 @@ interface GlossaryCardProps {
   onView?: (glossary: Glossary) => void;
   onExport?: (glossary: Glossary) => void;
   onBookmark?: (glossary: Glossary) => void;
+  isBookmarked?: boolean;
 }
 
 const GlossaryCard: React.FC<GlossaryCardProps> = ({
@@ -20,9 +21,15 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
   onView,
   onExport,
   onBookmark,
+  isBookmarked: isBookmarkedProp = false,
 }) => {
-  // Local state for bookmark visual
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  // Use prop for bookmark status instead of local state
+  const [isBookmarked, setIsBookmarked] = useState(isBookmarkedProp);
+
+  // Update local state when prop changes
+  React.useEffect(() => {
+    setIsBookmarked(isBookmarkedProp);
+  }, [isBookmarkedProp]);
 
   // Use the same dark mode hook as the rest of the app
   const { isDarkMode } = useDarkMode();

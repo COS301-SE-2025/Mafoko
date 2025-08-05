@@ -131,6 +131,19 @@
             font-weight: 600;
           }
         }
+
+        // Style for bookmarked state
+        &.bookmarked {
+          .icon {
+            color: #f7074d; // Your accent pink color
+            fill: #f7074d; // Fill the bookmark icon when bookmarked
+          }
+        }
+
+        // Special styling for bookmark icon
+        .icon.bookmarked {
+          fill: #f7074d; // Fill the bookmark icon when bookmarked
+        }
       }
     }
   }
