@@ -17,13 +17,17 @@ class GroupTerm(Base):
     """
     Association table for many-to-many relationship between groups and terms.
     """
+
     __tablename__ = "group_terms"
-    
+
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     group_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("workspace_groups.id"), nullable=False, index=True
+        UUID(as_uuid=True),
+        ForeignKey("workspace_groups.id"),
+        nullable=False,
+        index=True,
     )
     term_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("terms.id"), nullable=False, index=True
@@ -33,5 +37,7 @@ class GroupTerm(Base):
     )
 
     # Relationships
-    group: Mapped["WorkspaceGroup"] = relationship("WorkspaceGroup", back_populates="group_terms")
+    group: Mapped["WorkspaceGroup"] = relationship(
+        "WorkspaceGroup", back_populates="group_terms"
+    )
     term: Mapped["Term"] = relationship("Term", back_populates="group_terms")

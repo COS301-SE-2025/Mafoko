@@ -43,7 +43,7 @@ class Term(Base):
         from mavito_common.models.workspace_note import WorkspaceNote
 
     comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="term")
-    
+
     # Workspace relationships
     bookmarks: Mapped[List["TermBookmark"]] = relationship(
         "TermBookmark", back_populates="term", cascade="all, delete-orphan"

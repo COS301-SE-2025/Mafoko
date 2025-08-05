@@ -66,7 +66,7 @@ class User(Base):
     comment_votes: Mapped[List["CommentVote"]] = relationship(
         "CommentVote", back_populates="user"
     )
-    
+
     # Workspace relationships
     term_bookmarks: Mapped[List["TermBookmark"]] = relationship(
         "TermBookmark", back_populates="user", cascade="all, delete-orphan"

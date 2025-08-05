@@ -14,7 +14,9 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
         allow_headers=["*"],
     )
 
-app.include_router(bookmarks.router, prefix="/api/v1/workspace/bookmarks", tags=["Bookmarks"])
+app.include_router(
+    bookmarks.router, prefix="/api/v1/workspace/bookmarks", tags=["Bookmarks"]
+)
 app.include_router(groups.router, prefix="/api/v1/workspace/groups", tags=["Groups"])
 app.include_router(notes.router, prefix="/api/v1/workspace/notes", tags=["Notes"])
 

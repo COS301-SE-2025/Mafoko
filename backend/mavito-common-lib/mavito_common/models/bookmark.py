@@ -17,8 +17,9 @@ class TermBookmark(Base):
     """
     Represents a term bookmarked by a user.
     """
+
     __tablename__ = "term_bookmarks"
-    
+
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
@@ -45,8 +46,9 @@ class GlossaryBookmark(Base):
     """
     Represents a glossary (domain) bookmarked by a user.
     """
+
     __tablename__ = "glossary_bookmarks"
-    
+
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )

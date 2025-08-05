@@ -11,7 +11,7 @@ from mavito_common.schemas.workspace_note import (
     CreateNoteRequest,
     UpdateNoteRequest,
     NoteResponse,
-    UpdateBookmarkNoteRequest
+    UpdateBookmarkNoteRequest,
 )
 from app.api import deps
 
@@ -32,48 +32,45 @@ async def create_note(
         term_uuid = uuid.UUID(note_request.term_id)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid term ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid term ID format"
         )
-    
+
     # Check if term exists
     result = await db.execute(select(Term).where(Term.id == term_uuid))
     term = result.scalar_one_or_none()
-    
+
     if not term:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Term not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Term not found"
         )
-    
+
     # Check if user has already created a note for this term
     from mavito_common.models.workspace_note import WorkspaceNote
+
     result = await db.execute(
         select(WorkspaceNote).where(
             and_(
                 WorkspaceNote.user_id == current_user.id,
-                WorkspaceNote.term_id == term_uuid
+                WorkspaceNote.term_id == term_uuid,
             )
         )
     )
     existing_note = result.scalar_one_or_none()
-    
+
     if existing_note:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Note for this term already exists. Use PUT to update."
+            detail="Note for this term already exists. Use PUT to update.",
         )
-    
+
     # Create note
     note = WorkspaceNote(
-        user_id=current_user.id,
-        term_id=term_uuid,
-        content=note_request.content
+        user_id=current_user.id, term_id=term_uuid, content=note_request.content
     )
     db.add(note)
     await db.commit()
     await db.refresh(note)
-    
+
     return NoteResponse(
         id=str(note.id),
         term_id=str(note.term_id),
@@ -84,8 +81,8 @@ async def create_note(
             "term": term.term,
             "definition": term.definition,
             "language": term.language,
-            "domain": term.domain
-        }
+            "domain": term.domain,
+        },
     )
 
 
@@ -102,41 +99,44 @@ async def get_user_notes(
     Get all notes for the current user, optionally filtered by term.
     """
     from mavito_common.models.workspace_note import WorkspaceNote
-    
-    query = select(WorkspaceNote, Term).join(Term, WorkspaceNote.term_id == Term.id).where(
-        WorkspaceNote.user_id == current_user.id
+
+    query = (
+        select(WorkspaceNote, Term)
+        .join(Term, WorkspaceNote.term_id == Term.id)
+        .where(WorkspaceNote.user_id == current_user.id)
     )
-    
+
     if term_id:
         try:
             term_uuid = uuid.UUID(term_id)
             query = query.where(WorkspaceNote.term_id == term_uuid)
         except ValueError:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid term ID format"
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid term ID format"
             )
-    
+
     query = query.offset(skip).limit(limit).order_by(WorkspaceNote.updated_at.desc())
-    
+
     result = await db.execute(query)
-    
+
     notes = []
     for note, term in result.all():
-        notes.append(NoteResponse(
-            id=str(note.id),
-            term_id=str(note.term_id),
-            content=note.content,
-            created_at=note.created_at.isoformat(),
-            updated_at=note.updated_at.isoformat(),
-            term_info={
-                "term": term.term,
-                "definition": term.definition,
-                "language": term.language,
-                "domain": term.domain
-            }
-        ))
-    
+        notes.append(
+            NoteResponse(
+                id=str(note.id),
+                term_id=str(note.term_id),
+                content=note.content,
+                created_at=note.created_at.isoformat(),
+                updated_at=note.updated_at.isoformat(),
+                term_info={
+                    "term": term.term,
+                    "definition": term.definition,
+                    "language": term.language,
+                    "domain": term.domain,
+                },
+            )
+        )
+
     return notes
 
 
@@ -154,31 +154,29 @@ async def get_note(
         note_uuid = uuid.UUID(note_id)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid note ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid note ID format"
         )
-    
+
     from mavito_common.models.workspace_note import WorkspaceNote
+
     result = await db.execute(
         select(WorkspaceNote, Term)
         .join(Term, WorkspaceNote.term_id == Term.id)
         .where(
             and_(
-                WorkspaceNote.id == note_uuid,
-                WorkspaceNote.user_id == current_user.id
+                WorkspaceNote.id == note_uuid, WorkspaceNote.user_id == current_user.id
             )
         )
     )
-    
+
     result_tuple = result.first()
     if not result_tuple:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Note not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Note not found"
         )
-    
+
     note, term = result_tuple
-    
+
     return NoteResponse(
         id=str(note.id),
         term_id=str(note.term_id),
@@ -189,8 +187,8 @@ async def get_note(
             "term": term.term,
             "definition": term.definition,
             "language": term.language,
-            "domain": term.domain
-        }
+            "domain": term.domain,
+        },
     )
 
 
@@ -208,58 +206,58 @@ async def update_bookmark_note(
         bookmark_uuid = uuid.UUID(update_request.bookmark_id)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid bookmark ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid bookmark ID format"
         )
-    
+
     if update_request.bookmark_type == "term":
         from mavito_common.models.bookmark import TermBookmark
+
         result = await db.execute(
             select(TermBookmark).where(
                 and_(
                     TermBookmark.id == bookmark_uuid,
-                    TermBookmark.user_id == current_user.id
+                    TermBookmark.user_id == current_user.id,
                 )
             )
         )
         bookmark = result.scalar_one_or_none()
-        
+
         if not bookmark:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Term bookmark not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Term bookmark not found"
             )
-        
+
         bookmark.notes = update_request.notes
-        
+
     elif update_request.bookmark_type == "glossary":
         from mavito_common.models.bookmark import GlossaryBookmark
+
         result = await db.execute(
             select(GlossaryBookmark).where(
                 and_(
                     GlossaryBookmark.id == bookmark_uuid,
-                    GlossaryBookmark.user_id == current_user.id
+                    GlossaryBookmark.user_id == current_user.id,
                 )
             )
         )
         bookmark = result.scalar_one_or_none()
-        
+
         if not bookmark:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Glossary bookmark not found"
+                detail="Glossary bookmark not found",
             )
-        
+
         bookmark.notes = update_request.notes
-        
+
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid bookmark type. Must be 'term' or 'glossary'"
+            detail="Invalid bookmark type. Must be 'term' or 'glossary'",
         )
-    
+
     await db.commit()
-    
+
     return {"message": "Bookmark note updated successfully"}
 
 
@@ -278,36 +276,34 @@ async def update_note(
         note_uuid = uuid.UUID(note_id)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid note ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid note ID format"
         )
-    
+
     from mavito_common.models.workspace_note import WorkspaceNote
+
     result = await db.execute(
         select(WorkspaceNote).where(
             and_(
-                WorkspaceNote.id == note_uuid,
-                WorkspaceNote.user_id == current_user.id
+                WorkspaceNote.id == note_uuid, WorkspaceNote.user_id == current_user.id
             )
         )
     )
     note = result.scalar_one_or_none()
-    
+
     if not note:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Note not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Note not found"
         )
-    
+
     # Update note content
     note.content = update_request.content
     await db.commit()
     await db.refresh(note)
-    
+
     # Get term info for response
     term_result = await db.execute(select(Term).where(Term.id == note.term_id))
     term = term_result.scalar_one()
-    
+
     return NoteResponse(
         id=str(note.id),
         term_id=str(note.term_id),
@@ -318,8 +314,8 @@ async def update_note(
             "term": term.term,
             "definition": term.definition,
             "language": term.language,
-            "domain": term.domain
-        }
+            "domain": term.domain,
+        },
     )
 
 
@@ -337,30 +333,28 @@ async def delete_note(
         note_uuid = uuid.UUID(note_id)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid note ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid note ID format"
         )
-    
+
     from mavito_common.models.workspace_note import WorkspaceNote
+
     result = await db.execute(
         select(WorkspaceNote).where(
             and_(
-                WorkspaceNote.id == note_uuid,
-                WorkspaceNote.user_id == current_user.id
+                WorkspaceNote.id == note_uuid, WorkspaceNote.user_id == current_user.id
             )
         )
     )
     note = result.scalar_one_or_none()
-    
+
     if not note:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Note not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Note not found"
         )
-    
+
     await db.delete(note)
     await db.commit()
-    
+
     return {"message": "Note deleted successfully"}
 
 
@@ -378,31 +372,30 @@ async def get_note_by_term(
         term_uuid = uuid.UUID(term_id)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid term ID format"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid term ID format"
         )
-    
+
     from mavito_common.models.workspace_note import WorkspaceNote
+
     result = await db.execute(
         select(WorkspaceNote, Term)
         .join(Term, WorkspaceNote.term_id == Term.id)
         .where(
             and_(
                 WorkspaceNote.term_id == term_uuid,
-                WorkspaceNote.user_id == current_user.id
+                WorkspaceNote.user_id == current_user.id,
             )
         )
     )
-    
+
     result_tuple = result.first()
     if not result_tuple:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Note not found for this term"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Note not found for this term"
         )
-    
+
     note, term = result_tuple
-    
+
     return NoteResponse(
         id=str(note.id),
         term_id=str(note.term_id),
@@ -413,6 +406,6 @@ async def get_note_by_term(
             "term": term.term,
             "definition": term.definition,
             "language": term.language,
-            "domain": term.domain
-        }
+            "domain": term.domain,
+        },
     )

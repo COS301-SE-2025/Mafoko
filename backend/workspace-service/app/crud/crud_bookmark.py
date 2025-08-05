@@ -44,14 +44,20 @@ class CRUDBookmark:
         return bookmark
 
     async def create_glossary_bookmark(
-        self, db: AsyncSession, *, user_id: uuid.UUID, domain: str, description: Optional[str] = None, term_count: int = 0
+        self,
+        db: AsyncSession,
+        *,
+        user_id: uuid.UUID,
+        domain: str,
+        description: Optional[str] = None,
+        term_count: int = 0
     ) -> GlossaryBookmark:
         """Create a new glossary bookmark."""
         bookmark = GlossaryBookmark(
-            user_id=user_id, 
-            domain=domain, 
+            user_id=user_id,
+            domain=domain,
             description=description,
-            term_count=term_count
+            term_count=term_count,
         )
         db.add(bookmark)
         await db.commit()
@@ -75,7 +81,10 @@ class CRUDBookmark:
         """Get a specific glossary bookmark."""
         result = await db.execute(
             select(GlossaryBookmark).where(
-                and_(GlossaryBookmark.user_id == user_id, GlossaryBookmark.domain == domain)
+                and_(
+                    GlossaryBookmark.user_id == user_id,
+                    GlossaryBookmark.domain == domain,
+                )
             )
         )
         return result.scalar_one_or_none()
