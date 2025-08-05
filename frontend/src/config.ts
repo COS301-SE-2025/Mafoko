@@ -233,35 +233,83 @@ export const API_ENDPOINTS: APIEndpoints = {
 
   // --- Workspace Service ---
   getBookmarks: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/bookmarks'),
-  bookmarkTerm: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/bookmarks/terms'),
+  bookmarkTerm: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/terms',
+  ),
   unbookmarkTerm: (termId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/bookmarks/terms/${encodeURIComponent(termId)}`),
-  bookmarkGlossary: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/bookmarks/glossaries'),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/bookmarks/terms/${encodeURIComponent(termId)}`,
+    ),
+  bookmarkGlossary: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/glossaries',
+  ),
   unbookmarkGlossary: (domain: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/bookmarks/glossaries/${encodeURIComponent(domain)}`),
-  searchBookmarks: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/bookmarks/search'),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/bookmarks/glossaries/${encodeURIComponent(domain)}`,
+    ),
+  searchBookmarks: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/search',
+  ),
   createGroup: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups'),
   getUserGroups: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups'),
   getGroupWithTerms: (groupId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`,
+    ),
   updateGroup: (groupId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`,
+    ),
   deleteGroup: (groupId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`,
+    ),
   addTermsToGroup: (groupId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/groups/${encodeURIComponent(groupId)}/terms`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}/terms`,
+    ),
   removeTermFromGroup: (groupId: string, termId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/groups/${encodeURIComponent(groupId)}/terms/${encodeURIComponent(termId)}`),
-  bulkDeleteGroups: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups/bulk-delete'),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}/terms/${encodeURIComponent(termId)}`,
+    ),
+  bulkDeleteGroups: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/groups/bulk-delete',
+  ),
   createNote: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/notes'),
   getUserNotes: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/notes'),
   getNote: (noteId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`,
+    ),
   updateNote: (noteId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`,
+    ),
   deleteNote: (noteId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`,
+    ),
   getNoteByTerm: (termId: string) =>
-    endpoint(WORKSPACE_SERVICE_URL, `/api/v1/workspace/notes/term/${encodeURIComponent(termId)}`),
-  updateBookmarkNote: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/notes/bookmark-note'),
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/term/${encodeURIComponent(termId)}`,
+    ),
+  updateBookmarkNote: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/notes/bookmark-note',
+  ),
 };

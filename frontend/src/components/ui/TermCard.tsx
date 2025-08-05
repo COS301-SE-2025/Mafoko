@@ -148,7 +148,7 @@ const TermCard: React.FC<TermCardProps> = ({
       // Toggle bookmark state optimistically
       const wasBookmarked = isBookmarked;
       setIsBookmarked(!isBookmarked);
-      
+
       if (wasBookmarked) {
         // Unbookmark the term
         const response = await fetch(API_ENDPOINTS.unbookmarkTerm(id), {
@@ -175,7 +175,6 @@ const TermCard: React.FC<TermCardProps> = ({
 
       // Notify parent component of bookmark change
       onBookmarkChange?.(id, !isBookmarked);
-      
     } catch (error) {
       console.error('Error bookmarking term:', error);
       // Revert optimistic update on failure
@@ -224,10 +223,15 @@ const TermCard: React.FC<TermCardProps> = ({
           <button
             type="button"
             className={`social-button ${isBookmarked ? 'bookmarked' : ''}`}
-            onClick={() => { void handleBookmark(); }}
+            onClick={() => {
+              void handleBookmark();
+            }}
             aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
-            <Bookmark size={20} className={`icon ${isBookmarked ? 'bookmarked' : ''}`} />
+            <Bookmark
+              size={20}
+              className={`icon ${isBookmarked ? 'bookmarked' : ''}`}
+            />
           </button>
           <button type="button" className="social-button" aria-label="Share">
             <Share2 size={20} className="icon share" />

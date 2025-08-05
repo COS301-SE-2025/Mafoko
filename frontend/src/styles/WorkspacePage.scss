@@ -3525,7 +3525,7 @@ $text-dark: #ffffff;
   &::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 4px;
-    
+
     &:hover {
       background: #94a3b8;
     }
@@ -3549,19 +3549,19 @@ $text-dark: #ffffff;
   animation: slideIn 0.3s ease-out;
   max-width: 400px;
   font-size: 14px;
-  
+
   &.notification-success {
     background: #10b981;
     color: white;
     border-left: 4px solid #059669;
   }
-  
+
   &.notification-error {
     background: #ef4444;
     color: white;
     border-left: 4px solid #dc2626;
   }
-  
+
   &.notification-info {
     background: #3b82f6;
     color: white;
@@ -3648,7 +3648,9 @@ $text-dark: #ffffff;
   padding: 2rem;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   .theme-dark & {
     background-color: #374151;
@@ -3666,7 +3668,7 @@ $text-dark: #ffffff;
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
     line-height: 1.5;
-    
+
     .theme-light & {
       color: #6b7280;
     }

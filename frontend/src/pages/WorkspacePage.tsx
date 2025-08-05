@@ -68,7 +68,7 @@ interface WorkspaceGroup {
 
 const WorkspacePage: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // For navigation integration
   const [activeMenuItem, setActiveMenuItem] = useState('workspace');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -89,7 +89,7 @@ const WorkspacePage: React.FC = () => {
   }>({
     message: '',
     type: 'info',
-    visible: false
+    visible: false,
   });
 
   // Confirmation modal state
@@ -104,7 +104,7 @@ const WorkspacePage: React.FC = () => {
     title: '',
     message: '',
     onConfirm: () => {},
-    onCancel: () => {}
+    onCancel: () => {},
   });
 
   const [expandedGroups, setExpandedGroups] = useState<{
@@ -120,7 +120,8 @@ const WorkspacePage: React.FC = () => {
   >([]);
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
-  const [isTermSelectionModalOpen, setIsTermSelectionModalOpen] = useState(false);
+  const [isTermSelectionModalOpen, setIsTermSelectionModalOpen] =
+    useState(false);
   const [createdGroupId, setCreatedGroupId] = useState<string | null>(null);
   const [selectedTermIds, setSelectedTermIds] = useState<string[]>([]);
 
@@ -224,30 +225,43 @@ const WorkspacePage: React.FC = () => {
   }, [isDarkMode]);
 
   // Helper functions for user notifications
-  const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+  const showNotification = (
+    message: string,
+    type: 'success' | 'error' | 'info' = 'info',
+  ) => {
     setNotification({ message, type, visible: true });
     setTimeout(() => {
-      setNotification(prev => ({ ...prev, visible: false }));
+      setNotification((prev) => ({ ...prev, visible: false }));
     }, 4000);
   };
 
-  const showSuccess = (message: string) => { showNotification(message, 'success'); };
-  const showError = (message: string) => { showNotification(message, 'error'); };
-  const showInfo = (message: string) => { showNotification(message, 'info'); };
+  const showSuccess = (message: string) => {
+    showNotification(message, 'success');
+  };
+  const showError = (message: string) => {
+    showNotification(message, 'error');
+  };
+  const showInfo = (message: string) => {
+    showNotification(message, 'info');
+  };
 
   // Helper function for confirmation modal
-  const showConfirmation = (title: string, message: string, onConfirm: () => void) => {
+  const showConfirmation = (
+    title: string,
+    message: string,
+    onConfirm: () => void,
+  ) => {
     setConfirmationModal({
       isOpen: true,
       title,
       message,
       onConfirm: () => {
-        setConfirmationModal(prev => ({ ...prev, isOpen: false }));
+        setConfirmationModal((prev) => ({ ...prev, isOpen: false }));
         onConfirm();
       },
       onCancel: () => {
-        setConfirmationModal(prev => ({ ...prev, isOpen: false }));
-      }
+        setConfirmationModal((prev) => ({ ...prev, isOpen: false }));
+      },
     });
   };
 
@@ -278,16 +292,24 @@ const WorkspacePage: React.FC = () => {
   // Load workspace data on component mount
   useEffect(() => {
     console.log('[DEBUG INIT] Component mounted, loading workspace data');
-    console.log('[DEBUG AUTH] Current token:', localStorage.getItem('accessToken') ? 'Token exists' : 'No token found');
-    
+    console.log(
+      '[DEBUG AUTH] Current token:',
+      localStorage.getItem('accessToken') ? 'Token exists' : 'No token found',
+    );
+
     // Check if bookmarks have changed since last workspace load
     const lastBookmarkChange = localStorage.getItem('bookmarksChanged');
     const lastWorkspaceLoad = localStorage.getItem('workspaceLastLoaded');
-    
-    if (lastBookmarkChange && (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)) {
-      console.log('[DEBUG INIT] Bookmarks changed since last load, will refresh');
+
+    if (
+      lastBookmarkChange &&
+      (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
+    ) {
+      console.log(
+        '[DEBUG INIT] Bookmarks changed since last load, will refresh',
+      );
     }
-    
+
     void loadWorkspaceData();
   }, []);
 
@@ -295,14 +317,21 @@ const WorkspacePage: React.FC = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        console.log('[DEBUG REFRESH] Page became visible, checking for bookmark changes');
-        
+        console.log(
+          '[DEBUG REFRESH] Page became visible, checking for bookmark changes',
+        );
+
         // Check if bookmarks have changed since last visit
         const lastBookmarkChange = localStorage.getItem('bookmarksChanged');
         const lastWorkspaceLoad = localStorage.getItem('workspaceLastLoaded');
-        
-        if (lastBookmarkChange && (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)) {
-          console.log('[DEBUG REFRESH] Bookmarks changed, refreshing workspace data');
+
+        if (
+          lastBookmarkChange &&
+          (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
+        ) {
+          console.log(
+            '[DEBUG REFRESH] Bookmarks changed, refreshing workspace data',
+          );
           void loadWorkspaceData();
           localStorage.setItem('workspaceLastLoaded', Date.now().toString());
         }
@@ -314,14 +343,21 @@ const WorkspacePage: React.FC = () => {
 
     // Also add a focus listener as a backup
     const handleFocus = () => {
-      console.log('[DEBUG REFRESH] Window focused, checking for bookmark changes');
-      
+      console.log(
+        '[DEBUG REFRESH] Window focused, checking for bookmark changes',
+      );
+
       // Check if bookmarks have changed since last visit
       const lastBookmarkChange = localStorage.getItem('bookmarksChanged');
       const lastWorkspaceLoad = localStorage.getItem('workspaceLastLoaded');
-      
-      if (lastBookmarkChange && (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)) {
-        console.log('[DEBUG REFRESH] Bookmarks changed, refreshing workspace data');
+
+      if (
+        lastBookmarkChange &&
+        (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
+      ) {
+        console.log(
+          '[DEBUG REFRESH] Bookmarks changed, refreshing workspace data',
+        );
         void loadWorkspaceData();
         localStorage.setItem('workspaceLastLoaded', Date.now().toString());
       }
@@ -329,44 +365,69 @@ const WorkspacePage: React.FC = () => {
     window.addEventListener('focus', handleFocus);
 
     // Listen for bookmark changes from other parts of the app
-    const handleBookmarkChange = (event: CustomEvent<{action?: string; name?: string}>) => {
-      console.log('🚨 [NUCLEAR WORKSPACE DEBUG] BOOKMARK CHANGE EVENT RECEIVED!');
+    const handleBookmarkChange = (
+      event: CustomEvent<{ action?: string; name?: string }>,
+    ) => {
+      console.log(
+        '🚨 [NUCLEAR WORKSPACE DEBUG] BOOKMARK CHANGE EVENT RECEIVED!',
+      );
       console.log('🚨 [NUCLEAR WORKSPACE DEBUG] Event detail:', event.detail);
       console.log('🚨 [NUCLEAR WORKSPACE DEBUG] Event type:', event.type);
-      console.log('🚨 [NUCLEAR WORKSPACE DEBUG] Current time:', new Date().toISOString());
-      
+      console.log(
+        '🚨 [NUCLEAR WORKSPACE DEBUG] Current time:',
+        new Date().toISOString(),
+      );
+
       const action = event.detail.action ?? 'unknown';
       const name = event.detail.name ?? 'unknown';
-      console.log(`WORKSPACE: Received bookmark change event! Action: ${action}, Name: ${name}`);
-      
-      console.log('🔄 [NUCLEAR WORKSPACE DEBUG] About to reload workspace data...');
+      console.log(
+        `WORKSPACE: Received bookmark change event! Action: ${action}, Name: ${name}`,
+      );
+
+      console.log(
+        '🔄 [NUCLEAR WORKSPACE DEBUG] About to reload workspace data...',
+      );
       void loadWorkspaceData();
-      
+
       const timestamp = Date.now().toString();
       localStorage.setItem('workspaceLastLoaded', timestamp);
-      console.log('💾 [NUCLEAR WORKSPACE DEBUG] Set workspaceLastLoaded to:', timestamp);
+      console.log(
+        '💾 [NUCLEAR WORKSPACE DEBUG] Set workspaceLastLoaded to:',
+        timestamp,
+      );
     };
-    window.addEventListener('bookmarkChanged', handleBookmarkChange as EventListener);
-    console.log('👂 [NUCLEAR WORKSPACE DEBUG] Added bookmark change event listener!');
+    window.addEventListener(
+      'bookmarkChanged',
+      handleBookmarkChange as EventListener,
+    );
+    console.log(
+      '👂 [NUCLEAR WORKSPACE DEBUG] Added bookmark change event listener!',
+    );
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
-      window.removeEventListener('bookmarkChanged', handleBookmarkChange as EventListener);
+      window.removeEventListener(
+        'bookmarkChanged',
+        handleBookmarkChange as EventListener,
+      );
     };
   }, []);
 
   // Function to load all workspace data
   const loadWorkspaceData = async (): Promise<void> => {
     console.log('🔄 [NUCLEAR WORKSPACE DEBUG] loadWorkspaceData() CALLED!');
-    console.log('🔄 [NUCLEAR WORKSPACE DEBUG] Current time:', new Date().toISOString());
-    
+    console.log(
+      '🔄 [NUCLEAR WORKSPACE DEBUG] Current time:',
+      new Date().toISOString(),
+    );
+
     setLoading(true);
     setError(null);
 
     const token = localStorage.getItem('accessToken');
     console.log('🔑 [NUCLEAR WORKSPACE DEBUG] Token exists:', !!token);
-    
+
     if (!token) {
       console.log('❌ [NUCLEAR WORKSPACE DEBUG] No token found!');
       setError('Please log in to access your workspace.');
@@ -376,34 +437,56 @@ const WorkspacePage: React.FC = () => {
 
     try {
       console.log('📡 [NUCLEAR WORKSPACE DEBUG] About to fetch bookmarks...');
-      console.log('📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks URL:', API_ENDPOINTS.getBookmarks);
-      
+      console.log(
+        '📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks URL:',
+        API_ENDPOINTS.getBookmarks,
+      );
+
       // Fetch bookmarks (terms and glossaries)
       const bookmarksResponse = await fetch(API_ENDPOINTS.getBookmarks, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
-      console.log('📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks response status:', bookmarksResponse.status);
-      console.log('📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks response ok:', bookmarksResponse.ok);
-      
+
+      console.log(
+        '📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks response status:',
+        bookmarksResponse.status,
+      );
+      console.log(
+        '📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks response ok:',
+        bookmarksResponse.ok,
+      );
+
       if (!bookmarksResponse.ok) {
-        throw new Error(`Failed to fetch bookmarks: ${bookmarksResponse.status.toString()}`);
+        throw new Error(
+          `Failed to fetch bookmarks: ${bookmarksResponse.status.toString()}`,
+        );
       }
-      
-      const bookmarksData = await bookmarksResponse.json() as {
+
+      const bookmarksData = (await bookmarksResponse.json()) as {
         terms?: BookmarkedTerm[];
         glossaries?: BookmarkedGlossary[];
       };
-      console.log('📊 [NUCLEAR WORKSPACE DEBUG] Bookmarks data received:', bookmarksData);
-      console.log('📊 [NUCLEAR WORKSPACE DEBUG] Terms count:', (bookmarksData.terms?.length || 0).toString());
-      console.log('📊 [NUCLEAR WORKSPACE DEBUG] Glossaries count:', (bookmarksData.glossaries?.length || 0).toString());
-      
+      console.log(
+        '📊 [NUCLEAR WORKSPACE DEBUG] Bookmarks data received:',
+        bookmarksData,
+      );
+      console.log(
+        '📊 [NUCLEAR WORKSPACE DEBUG] Terms count:',
+        (bookmarksData.terms?.length || 0).toString(),
+      );
+      console.log(
+        '📊 [NUCLEAR WORKSPACE DEBUG] Glossaries count:',
+        (bookmarksData.glossaries?.length || 0).toString(),
+      );
+
       setSavedTerms(bookmarksData.terms || []);
       setBookmarkedGlossaries(bookmarksData.glossaries || []);
-      
-      console.log('✅ [NUCLEAR WORKSPACE DEBUG] Successfully updated workspace state!');
+
+      console.log(
+        '✅ [NUCLEAR WORKSPACE DEBUG] Successfully updated workspace state!',
+      );
 
       // Fetch workspace groups
       const groupsResponse = await fetch(API_ENDPOINTS.getUserGroups, {
@@ -411,15 +494,21 @@ const WorkspacePage: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       if (!groupsResponse.ok) {
         throw new Error('Failed to fetch groups');
       }
-      
-      const groupsData = await groupsResponse.json() as WorkspaceGroup[];
-      console.log('📊 [NUCLEAR WORKSPACE DEBUG] Groups data received:', groupsData);
-      console.log('📊 [NUCLEAR WORKSPACE DEBUG] Groups count:', groupsData.length.toString());
-      
+
+      const groupsData = (await groupsResponse.json()) as WorkspaceGroup[];
+      console.log(
+        '📊 [NUCLEAR WORKSPACE DEBUG] Groups data received:',
+        groupsData,
+      );
+      console.log(
+        '📊 [NUCLEAR WORKSPACE DEBUG] Groups count:',
+        groupsData.length.toString(),
+      );
+
       setWorkspaceGroups(groupsData);
 
       // Update groups list from workspace groups
@@ -431,7 +520,7 @@ const WorkspacePage: React.FC = () => {
       setGroups(groupNames);
 
       console.log('Workspace data loaded successfully');
-      
+
       // Mark that workspace data has been loaded
       localStorage.setItem('workspaceLastLoaded', Date.now().toString());
     } catch (error) {
@@ -479,16 +568,22 @@ const WorkspacePage: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          bookmark_id: bookmarkId,  // This is already the correct bookmark ID
-          notes: noteText.trim(),  // Changed back to 'notes' as per the correct schema
-          bookmark_type: 'term'
+          bookmark_id: bookmarkId, // This is already the correct bookmark ID
+          notes: noteText.trim(), // Changed back to 'notes' as per the correct schema
+          bookmark_type: 'term',
         }),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Update bookmark note failed:', response.status, errorText);
-        throw new Error(`Failed to update bookmark note: ${response.status.toString()} ${errorText}`);
+        console.error(
+          'Update bookmark note failed:',
+          response.status,
+          errorText,
+        );
+        throw new Error(
+          `Failed to update bookmark note: ${response.status.toString()} ${errorText}`,
+        );
       }
 
       // Update local state
@@ -532,12 +627,15 @@ const WorkspacePage: React.FC = () => {
       }
 
       // Delete bookmark via API
-      const response = await fetch(API_ENDPOINTS.unbookmarkTerm(termToDelete.term_id), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        API_ENDPOINTS.unbookmarkTerm(termToDelete.term_id),
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to delete term bookmark');
@@ -566,7 +664,7 @@ const WorkspacePage: React.FC = () => {
     try {
       console.log('=== STARTING GLOSSARY DELETION ===');
       console.log('Attempting to delete glossary with domain:', domain);
-      
+
       // Find the glossary to confirm it exists
       const glossaryToDelete = bookmarkedGlossaries.find(
         (glossary) => glossary.domain === domain,
@@ -601,9 +699,11 @@ const WorkspacePage: React.FC = () => {
       localStorage.setItem('bookmarksChanged', Date.now().toString());
 
       // Trigger bookmark change event for other components
-      window.dispatchEvent(new CustomEvent('bookmarkChanged', { 
-        detail: { type: 'glossary', action: 'unbookmark', name: domain } 
-      }));
+      window.dispatchEvent(
+        new CustomEvent('bookmarkChanged', {
+          detail: { type: 'glossary', action: 'unbookmark', name: domain },
+        }),
+      );
 
       console.log('=== GLOSSARY DELETION COMPLETED ===');
     } catch (error) {
@@ -650,14 +750,19 @@ const WorkspacePage: React.FC = () => {
         // Delete each selected group using real API
         for (const groupName of selectedGroupsForDeletion) {
           // Find the group to delete
-          const groupToDelete = workspaceGroups.find(g => g.name === groupName);
+          const groupToDelete = workspaceGroups.find(
+            (g) => g.name === groupName,
+          );
           if (groupToDelete) {
-            const response = await fetch(API_ENDPOINTS.deleteGroup(groupToDelete.id), {
-              method: 'DELETE',
-              headers: {
-                'Authorization': `Bearer ${token}`,
+            const response = await fetch(
+              API_ENDPOINTS.deleteGroup(groupToDelete.id),
+              {
+                method: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
               },
-            });
+            );
 
             if (!response.ok) {
               throw new Error(`Failed to delete group: ${groupToDelete.name}`);
@@ -667,11 +772,12 @@ const WorkspacePage: React.FC = () => {
 
         // Refresh workspace data to reflect the changes
         await loadWorkspaceData();
-        showSuccess(`Successfully deleted ${selectedGroupsForDeletion.length.toString()} group(s)!`);
+        showSuccess(
+          `Successfully deleted ${selectedGroupsForDeletion.length.toString()} group(s)!`,
+        );
 
         // Exit delete mode
         handleExitDeleteMode();
-        
       } catch (error) {
         console.error('Failed to delete groups:', error);
         showError('Failed to delete groups. Please try again.');
@@ -683,7 +789,9 @@ const WorkspacePage: React.FC = () => {
     showConfirmation(
       'Delete Groups',
       `Are you sure you want to delete ${selectedGroupsForDeletion.length.toString()} group(s)? This will move all terms from these groups to "All Terms" group.`,
-      () => { void deleteAction(); }
+      () => {
+        void deleteAction();
+      },
     );
   };
 
@@ -707,7 +815,7 @@ const WorkspacePage: React.FC = () => {
     }
 
     // Check if group name already exists
-    if (workspaceGroups.some(group => group.name === trimmedName)) {
+    if (workspaceGroups.some((group) => group.name === trimmedName)) {
       showError('A group with this name already exists');
       return;
     }
@@ -730,7 +838,7 @@ const WorkspacePage: React.FC = () => {
         },
         body: JSON.stringify({
           name: trimmedName,
-          description: `Group for organizing terms: ${trimmedName}`
+          description: `Group for organizing terms: ${trimmedName}`,
         }),
       });
 
@@ -738,25 +846,24 @@ const WorkspacePage: React.FC = () => {
         throw new Error('Failed to create group');
       }
 
-      const newGroup = await response.json() as WorkspaceGroup;
+      const newGroup = (await response.json()) as WorkspaceGroup;
 
       // Update the workspace groups state
-      setWorkspaceGroups(prev => [...prev, newGroup]);
+      setWorkspaceGroups((prev) => [...prev, newGroup]);
 
       // Expand the newly created group so it's ready to show terms
-      setExpandedGroups(prev => ({
+      setExpandedGroups((prev) => ({
         ...prev,
-        [newGroup.name]: true
+        [newGroup.name]: true,
       }));
 
       // Store the created group ID and close the first modal
       setCreatedGroupId(newGroup.id);
       setIsNewGroupModalOpen(false);
-      
+
       // Open the term selection modal
       setIsTermSelectionModalOpen(true);
       setSelectedTermIds([]); // Reset selected terms
-
     } catch (error) {
       console.error('Failed to create group:', error);
       showError('Failed to create group. Please try again.');
@@ -774,10 +881,10 @@ const WorkspacePage: React.FC = () => {
   };
 
   const handleTermSelection = (termId: string) => {
-    setSelectedTermIds(prev => 
-      prev.includes(termId) 
-        ? prev.filter(id => id !== termId)
-        : [...prev, termId]
+    setSelectedTermIds((prev) =>
+      prev.includes(termId)
+        ? prev.filter((id) => id !== termId)
+        : [...prev, termId],
     );
   };
 
@@ -797,28 +904,31 @@ const WorkspacePage: React.FC = () => {
       setLoading(true);
 
       // Add terms to group via API
-      const response = await fetch(API_ENDPOINTS.addTermsToGroup(createdGroupId), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        API_ENDPOINTS.addTermsToGroup(createdGroupId),
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            term_ids: selectedTermIds,
+          }),
         },
-        body: JSON.stringify({
-          term_ids: selectedTermIds
-        }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to add terms to group');
       }
 
-      const result = await response.json() as {
+      const result = (await response.json()) as {
         added_terms?: Array<unknown>;
       };
 
       // Close the modal first
       handleCloseTermSelectionModal();
-      
+
       // Reload all workspace data to ensure UI is in sync
       await loadWorkspaceData();
 
@@ -827,11 +937,12 @@ const WorkspacePage: React.FC = () => {
 
       // Show success message
       if (result.added_terms && result.added_terms.length > 0) {
-        showSuccess(`Successfully added ${result.added_terms.length.toString()} term(s) to the group!`);
+        showSuccess(
+          `Successfully added ${result.added_terms.length.toString()} term(s) to the group!`,
+        );
       } else {
         showInfo('No new terms were added - they may already be in the group.');
       }
-
     } catch (error) {
       console.error('Failed to add terms to group:', error);
       showError('Failed to add terms to group. Please try again.');
@@ -846,7 +957,8 @@ const WorkspacePage: React.FC = () => {
     const matchesSearch =
       bookmarkedTerm.term.toLowerCase().includes(searchLower) ||
       bookmarkedTerm.definition.toLowerCase().includes(searchLower) ||
-      (bookmarkedTerm.notes && bookmarkedTerm.notes.toLowerCase().includes(searchLower));
+      (bookmarkedTerm.notes &&
+        bookmarkedTerm.notes.toLowerCase().includes(searchLower));
 
     return matchesSearch;
   });
@@ -856,25 +968,40 @@ const WorkspacePage: React.FC = () => {
     // Create the grouping function inside useMemo to capture current workspaceGroups
     const getGroupForTerm = (termId: string): string => {
       console.log(`🔍 [GROUP DEBUG] Looking for group for term: ${termId}`);
-      console.log(`🔍 [GROUP DEBUG] Available workspace groups:`, workspaceGroups.map(g => ({ name: g.name, items: (g.items?.length || 0).toString() })));
-      
+      console.log(
+        `🔍 [GROUP DEBUG] Available workspace groups:`,
+        workspaceGroups.map((g) => ({
+          name: g.name,
+          items: (g.items?.length || 0).toString(),
+        })),
+      );
+
       for (const group of workspaceGroups) {
         const items = group.items || [];
-        console.log(`🔍 [GROUP DEBUG] Checking group "${group.name}" with ${items.length.toString()} items`);
-        
+        console.log(
+          `🔍 [GROUP DEBUG] Checking group "${group.name}" with ${items.length.toString()} items`,
+        );
+
         for (const item of items) {
           const itemTermIdStr = item.term_id.toString();
           const termIdStr = termId.toString();
-          const match = item.item_type === 'term' && itemTermIdStr === termIdStr;
-          console.log(`🔍 [GROUP DEBUG] Comparing item ${itemTermIdStr} with term ${termIdStr}, match: ${match.toString()}`);
-          
+          const match =
+            item.item_type === 'term' && itemTermIdStr === termIdStr;
+          console.log(
+            `🔍 [GROUP DEBUG] Comparing item ${itemTermIdStr} with term ${termIdStr}, match: ${match.toString()}`,
+          );
+
           if (match) {
-            console.log(`✅ [GROUP DEBUG] Found term ${termId} in group "${group.name}"`);
+            console.log(
+              `✅ [GROUP DEBUG] Found term ${termId} in group "${group.name}"`,
+            );
             return group.name;
           }
         }
       }
-      console.log(`❌ [GROUP DEBUG] Term ${termId} not found in any group, defaulting to "All Terms"`);
+      console.log(
+        `❌ [GROUP DEBUG] Term ${termId} not found in any group, defaulting to "All Terms"`,
+      );
       return 'All Terms';
     };
 
@@ -882,23 +1009,25 @@ const WorkspacePage: React.FC = () => {
 
     // Initialize empty arrays for ALL workspace groups (not just the groups array)
     result['All Terms'] = [];
-    
+
     // Initialize arrays for all workspace groups to ensure they exist
-    workspaceGroups.forEach(group => {
+    workspaceGroups.forEach((group) => {
       result[group.name] = [];
     });
-    
+
     // Also initialize for any groups in the groups array that might not be in workspaceGroups yet
-    groups.filter(g => g !== 'all' && g !== 'All Terms').forEach(groupName => {
-      result[groupName] = [];
-    });
+    groups
+      .filter((g) => g !== 'all' && g !== 'All Terms')
+      .forEach((groupName) => {
+        result[groupName] = [];
+      });
 
     // Categorize each term using the local function
     filteredTerms.forEach((term) => {
       const groupName = getGroupForTerm(term.term_id);
       result[groupName].push(term);
     });
-    
+
     return result;
   }, [filteredTerms, workspaceGroups, groups]);
 
@@ -968,12 +1097,12 @@ const WorkspacePage: React.FC = () => {
                 {error}
                 {error.includes('log in') && (
                   <div style={{ marginTop: '8px' }}>
-                    <a 
-                      href="/login" 
-                      style={{ 
-                        color: '#ffd700', 
+                    <a
+                      href="/login"
+                      style={{
+                        color: '#ffd700',
                         textDecoration: 'underline',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
                       }}
                     >
                       Go to Login
@@ -1523,12 +1652,15 @@ const WorkspacePage: React.FC = () => {
                                 type="button"
                                 onClick={() => {
                                   // Handle view glossary action
-                                  console.log('View glossary:', bookmark.domain);
+                                  console.log(
+                                    'View glossary:',
+                                    bookmark.domain,
+                                  );
                                   // Navigate to glossary page with selected glossary
-                                  void navigate('/glossary', { 
-                                    state: { 
-                                      selectedGlossaryName: bookmark.domain 
-                                    } 
+                                  void navigate('/glossary', {
+                                    state: {
+                                      selectedGlossaryName: bookmark.domain,
+                                    },
                                   });
                                 }}
                                 className="create-new-btn"
@@ -1541,10 +1673,12 @@ const WorkspacePage: React.FC = () => {
                                   padding: '0.5rem 1rem',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = '#d91748';
+                                  e.currentTarget.style.backgroundColor =
+                                    '#d91748';
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = 'var(--accent-color)';
+                                  e.currentTarget.style.backgroundColor =
+                                    'var(--accent-color)';
                                 }}
                               >
                                 View
@@ -1564,10 +1698,12 @@ const WorkspacePage: React.FC = () => {
                                   padding: '0.5rem 1rem',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = '#d91748';
+                                  e.currentTarget.style.backgroundColor =
+                                    '#d91748';
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = 'var(--accent-color)';
+                                  e.currentTarget.style.backgroundColor =
+                                    'var(--accent-color)';
                                 }}
                               >
                                 Remove Bookmark
@@ -1640,7 +1776,9 @@ const WorkspacePage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => { void handleCreateNewGroup(); }}
+                onClick={() => {
+                  void handleCreateNewGroup();
+                }}
                 disabled={!newGroupName.trim()}
                 className={`create-btn ${!newGroupName.trim() ? 'disabled' : ''}`}
               >
@@ -1669,21 +1807,22 @@ const WorkspacePage: React.FC = () => {
             </div>
             <div className="modal-body">
               <p className="form-description">
-                Select the terms you want to add to your new group. You can select multiple terms.
+                Select the terms you want to add to your new group. You can
+                select multiple terms.
               </p>
-              
+
               {/* Terms List with improved scrollbar */}
-              <div 
-                className="terms-list" 
-                style={{ 
-                  maxHeight: '400px', 
-                  overflowY: 'auto', 
+              <div
+                className="terms-list"
+                style={{
+                  maxHeight: '400px',
+                  overflowY: 'auto',
                   marginTop: '1rem',
                   border: '1px solid #e5e7eb',
                   borderRadius: '0.5rem',
                   padding: '0.5rem',
                   scrollbarWidth: 'thin',
-                  scrollbarColor: '#cbd5e1 #f1f5f9'
+                  scrollbarColor: '#cbd5e1 #f1f5f9',
                 }}
               >
                 {savedTerms.length > 0 ? (
@@ -1699,38 +1838,66 @@ const WorkspacePage: React.FC = () => {
                         borderRadius: '0.5rem',
                         marginBottom: '0.5rem',
                         cursor: 'pointer',
-                        backgroundColor: selectedTermIds.includes(term.term_id) ? '#f3f4f6' : 'white',
+                        backgroundColor: selectedTermIds.includes(term.term_id)
+                          ? '#f3f4f6'
+                          : 'white',
                       }}
-                      onClick={() => { handleTermSelection(term.term_id); }}
+                      onClick={() => {
+                        handleTermSelection(term.term_id);
+                      }}
                     >
                       <input
                         type="checkbox"
                         checked={selectedTermIds.includes(term.term_id)}
-                        onChange={() => { handleTermSelection(term.term_id); }}
+                        onChange={() => {
+                          handleTermSelection(term.term_id);
+                        }}
                         style={{ marginRight: '0.75rem' }}
                       />
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>
+                        <div
+                          style={{ fontWeight: '600', marginBottom: '0.25rem' }}
+                        >
                           {term.term}
                         </div>
                         <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
                           {term.definition}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.25rem' }}>
+                        <div
+                          style={{
+                            fontSize: '0.75rem',
+                            color: '#9ca3af',
+                            marginTop: '0.25rem',
+                          }}
+                        >
                           Domain: {term.domain} | Language: {term.language}
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
-                    No bookmarked terms available. Bookmark some terms first to add them to groups.
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      padding: '2rem',
+                      color: '#6b7280',
+                    }}
+                  >
+                    No bookmarked terms available. Bookmark some terms first to
+                    add them to groups.
                   </div>
                 )}
               </div>
 
               {selectedTermIds.length > 0 && (
-                <div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem' }}>
+                <div
+                  style={{
+                    marginTop: '1rem',
+                    padding: '0.75rem',
+                    backgroundColor: '#f9fafb',
+                    borderRadius: '0.5rem',
+                  }}
+                >
                   <strong>{selectedTermIds.length}</strong> term(s) selected
                 </div>
               )}
@@ -1747,12 +1914,16 @@ const WorkspacePage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => { void handleAddTermsToGroup(); }}
+                onClick={() => {
+                  void handleAddTermsToGroup();
+                }}
                 disabled={selectedTermIds.length === 0 || loading}
                 className={`create-btn ${selectedTermIds.length === 0 || loading ? 'disabled' : ''}`}
               >
                 <Plus className="plus-icon" />
-                {loading ? 'Adding...' : `Add ${selectedTermIds.length.toString()} Term(s)`}
+                {loading
+                  ? 'Adding...'
+                  : `Add ${selectedTermIds.length.toString()} Term(s)`}
               </button>
             </div>
           </div>
@@ -1773,16 +1944,16 @@ const WorkspacePage: React.FC = () => {
             <h3>{confirmationModal.title}</h3>
             <p>{confirmationModal.message}</p>
             <div className="confirmation-modal-buttons">
-              <button 
+              <button
                 type="button"
-                className="cancel-button" 
+                className="cancel-button"
                 onClick={confirmationModal.onCancel}
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="button"
-                className="confirm-button" 
+                className="confirm-button"
                 onClick={confirmationModal.onConfirm}
               >
                 Delete
