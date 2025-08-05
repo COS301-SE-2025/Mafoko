@@ -1,8 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, Depends, status
-from typing import List, Dict, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, or_, and_, distinct, text
-from sqlalchemy.orm import selectinload
+from sqlalchemy import select, or_, and_
 import uuid
 import httpx
 

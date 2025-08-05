@@ -4,7 +4,6 @@ from sqlalchemy import select, and_
 import uuid
 
 from mavito_common.models.bookmark import TermBookmark, GlossaryBookmark
-from mavito_common.models.term import Term
 
 
 class CRUDBookmark:

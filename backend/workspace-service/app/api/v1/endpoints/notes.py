@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, Depends, status
-from typing import List, Dict, Optional
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, or_, and_, distinct, text
-from sqlalchemy.orm import selectinload
+from sqlalchemy import select, and_
 import uuid
 
 from mavito_common.models.term import Term
