@@ -639,6 +639,7 @@ class TestUpdateUserProfile:
         with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
             mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
             mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
 
             result = await update_user_profile(
                 db=mock_db, user_update=user_update, current_user=mock_current_user
