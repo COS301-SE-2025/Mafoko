@@ -14,6 +14,9 @@ if TYPE_CHECKING:
     from mavito_common.models.linguist_application import LinguistApplication
     from mavito_common.models.comment import Comment
     from mavito_common.models.comment_vote import CommentVote
+    from mavito_common.models.bookmark import TermBookmark, GlossaryBookmark
+    from mavito_common.models.workspace_group import WorkspaceGroup
+    from mavito_common.models.workspace_note import WorkspaceNote
 
 
 class UserRole(str, enum.Enum):
@@ -62,4 +65,18 @@ class User(Base):
     comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="user")
     comment_votes: Mapped[List["CommentVote"]] = relationship(
         "CommentVote", back_populates="user"
+    )
+
+    # Workspace relationships
+    term_bookmarks: Mapped[List["TermBookmark"]] = relationship(
+        "TermBookmark", back_populates="user", cascade="all, delete-orphan"
+    )
+    glossary_bookmarks: Mapped[List["GlossaryBookmark"]] = relationship(
+        "GlossaryBookmark", back_populates="user", cascade="all, delete-orphan"
+    )
+    workspace_groups: Mapped[List["WorkspaceGroup"]] = relationship(
+        "WorkspaceGroup", back_populates="user", cascade="all, delete-orphan"
+    )
+    workspace_notes: Mapped[List["WorkspaceNote"]] = relationship(
+        "WorkspaceNote", back_populates="user", cascade="all, delete-orphan"
     )

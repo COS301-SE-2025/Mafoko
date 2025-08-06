@@ -17,6 +17,10 @@ import mavito_common.models.comment  # noqa: F401
 import mavito_common.models.comment_vote  # noqa: F401
 import mavito_common.models.term_vote  # noqa: F401
 import mavito_common.models.linguist_application  # noqa: F401
+import mavito_common.models.bookmark  # noqa: F401
+import mavito_common.models.workspace_group  # noqa: F401
+import mavito_common.models.group_term  # noqa: F401
+import mavito_common.models.workspace_note  # noqa: F401
 
 config = context.config
 

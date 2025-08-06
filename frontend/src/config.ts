@@ -26,6 +26,9 @@ const TERM_SERVICE_URL =
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
   'http://localhost:8008'; // Changed to 8008
+const WORKSPACE_SERVICE_URL =
+  (import.meta.env.VITE_WORKSPACE_SERVICE_URL as string) ||
+  'http://localhost:8009';
 
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
@@ -59,9 +62,11 @@ interface APIEndpoints {
   voteOnComment: string;
   glossary: string;
   glossaryCategories: string;
+  glossaryCategoriesStats: string;
   glossaryTermsByCategory: (category: string) => string;
   glossaryTermTranslations: (termId: string) => string;
   glossarySearch: string;
+  glossaryAdvancedSearch: string;
   glossaryLanguages: string;
   glossaryRandom: string;
   getTermDetail: (termId: string) => string;
@@ -70,6 +75,28 @@ interface APIEndpoints {
   postComment: string;
   editComment: (commentId: string) => string;
   deleteComment: (commentId: string) => string;
+  // --- Workspace Service ---
+  getBookmarks: string;
+  bookmarkTerm: string;
+  unbookmarkTerm: (termId: string) => string;
+  bookmarkGlossary: string;
+  unbookmarkGlossary: (domain: string) => string;
+  searchBookmarks: string;
+  createGroup: string;
+  getUserGroups: string;
+  getGroupWithTerms: (groupId: string) => string;
+  updateGroup: (groupId: string) => string;
+  deleteGroup: (groupId: string) => string;
+  addTermsToGroup: (groupId: string) => string;
+  removeTermFromGroup: (groupId: string, termId: string) => string;
+  bulkDeleteGroups: string;
+  createNote: string;
+  getUserNotes: string;
+  getNote: (noteId: string) => string;
+  updateNote: (noteId: string) => string;
+  deleteNote: (noteId: string) => string;
+  getNoteByTerm: (termId: string) => string;
+  updateBookmarkNote: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -155,6 +182,10 @@ export const API_ENDPOINTS: APIEndpoints = {
     GLOSSARY_SERVICE_URL,
     '/api/v1/glossary/categories',
   ),
+  glossaryCategoriesStats: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/categories/stats',
+  ),
   glossaryTermsByCategory: (category: string) =>
     endpoint(
       GLOSSARY_SERVICE_URL,
@@ -166,6 +197,10 @@ export const API_ENDPOINTS: APIEndpoints = {
       `/api/v1/glossary/terms/${encodeURIComponent(termId)}/translations`,
     ),
   glossarySearch: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/search'),
+  glossaryAdvancedSearch: endpoint(
+    GLOSSARY_SERVICE_URL,
+    '/api/v1/glossary/search',
+  ),
   glossaryLanguages: endpoint(
     GLOSSARY_SERVICE_URL,
     '/api/v1/glossary/languages',
@@ -195,4 +230,86 @@ export const API_ENDPOINTS: APIEndpoints = {
       COMMENT_SERVICE_URL,
       `/api/v1/comments/${encodeURIComponent(commentId)}`,
     ),
+
+  // --- Workspace Service ---
+  getBookmarks: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/bookmarks'),
+  bookmarkTerm: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/terms',
+  ),
+  unbookmarkTerm: (termId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/bookmarks/terms/${encodeURIComponent(termId)}`,
+    ),
+  bookmarkGlossary: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/glossaries',
+  ),
+  unbookmarkGlossary: (domain: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/bookmarks/glossaries/${encodeURIComponent(domain)}`,
+    ),
+  searchBookmarks: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/bookmarks/search',
+  ),
+  createGroup: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups'),
+  getUserGroups: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/groups'),
+  getGroupWithTerms: (groupId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`,
+    ),
+  updateGroup: (groupId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`,
+    ),
+  deleteGroup: (groupId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}`,
+    ),
+  addTermsToGroup: (groupId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}/terms`,
+    ),
+  removeTermFromGroup: (groupId: string, termId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/groups/${encodeURIComponent(groupId)}/terms/${encodeURIComponent(termId)}`,
+    ),
+  bulkDeleteGroups: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/groups/bulk-delete',
+  ),
+  createNote: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/notes'),
+  getUserNotes: endpoint(WORKSPACE_SERVICE_URL, '/api/v1/workspace/notes'),
+  getNote: (noteId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`,
+    ),
+  updateNote: (noteId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`,
+    ),
+  deleteNote: (noteId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/${encodeURIComponent(noteId)}`,
+    ),
+  getNoteByTerm: (termId: string) =>
+    endpoint(
+      WORKSPACE_SERVICE_URL,
+      `/api/v1/workspace/notes/term/${encodeURIComponent(termId)}`,
+    ),
+  updateBookmarkNote: endpoint(
+    WORKSPACE_SERVICE_URL,
+    '/api/v1/workspace/notes/bookmark-note',
+  ),
 };

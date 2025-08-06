@@ -208,6 +208,30 @@ async def get_categories(db: AsyncSession = Depends(get_db)) -> List[str]:
     return categories
 
 
+@router.get("/categories/stats", response_model=Dict[str, int])
+async def get_categories_with_counts(
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, int]:
+    """Get all categories with their term counts."""
+    # Query to get domain and count of terms for each domain
+    query = (
+        select(Term.domain, func.count(Term.id).label("term_count"))
+        .group_by(Term.domain)
+        .order_by(Term.domain)
+    )
+
+    result = await db.execute(query)
+    domain_counts = result.all()
+
+    # Transform to display format and create dictionary
+    category_counts = {}
+    for domain, count in domain_counts:
+        display_category = transform_category_name(domain, for_display=True)
+        category_counts[display_category] = count
+
+    return category_counts
+
+
 @router.get("/categories/{category_name}/terms")
 async def get_terms_by_category_api(
     category_name: str, db: AsyncSession = Depends(get_db)

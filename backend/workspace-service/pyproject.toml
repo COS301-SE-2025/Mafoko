@@ -1,0 +1,45 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "unit: marks tests as unit tests (fast, isolated tests)",
+    "integration: marks tests as integration tests (tests that interact with multiple components)",
+    "slow: marks tests as slow running tests (tests that take longer to execute)",
+]
+
+[tool.mypy]
+# This tells mypy to ignore errors from any library that doesn't have type hints
+ignore_missing_imports = true
+# Enforce that all function definitions must have type annotations
+disallow_untyped_defs = true
+
+# This section is specifically for modules we know cause issues in tests
+[[tool.mypy.overrides]]
+module = [
+    "pytest_asyncio.*",
+    "httpx.*"
+]
+ignore_missing_imports = true
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "app/tests/*",
+    "*/venv/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+show_missing = true
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
