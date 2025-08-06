@@ -11,6 +11,8 @@ on:
       - 'backend/linguist-application-service/**'
       - 'backend/search-service/**'
       - 'backend/vote-service/**'
+      - 'backend/comment-service/**'
+      - 'backend/workspace-service/**'
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -52,6 +54,8 @@ jobs:
             "linguist-application-service"
             "search-service"
             "vote-service"
+            "comment-service"
+            "workspace-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
@@ -69,6 +73,8 @@ jobs:
             "linguist-application-service"
             "search-service"
             "vote-service"
+            "comment-service"
+            "workspace-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
@@ -79,5 +85,6 @@ jobs:
               --project="$GCP_PROJECT_ID" \
               --platform=managed \
               --allow-unauthenticated \
-              --quiet
+              --quiet \
+              --set-env-vars="SECRET_KEY=${{ secrets.SECRET_KEY }},DB_USER=${{ secrets.DB_USER }},DB_NAME=${{ secrets.DB_NAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }},GCS_BUCKET_NAME=marito_bucket,BACKEND_CORS_ORIGINS=${{ secrets.BACKEND_CORS_ORIGINS }},ALGORITHM=HS256,GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}"
           done
