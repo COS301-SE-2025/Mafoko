@@ -6,6 +6,7 @@ import LsImage from '/LS_image.png';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import DfsiLogo from '/DFSI_Logo.png';
+import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { API_ENDPOINTS } from '../config';
 
 const GoogleLogo = () => (
@@ -86,9 +87,32 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Attempting Google Login');
-  };
+const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
+  console.log('Google token response:', tokenResponse.credential);
+  try {
+    const response = await fetch(API_ENDPOINTS.loginWithGoogle, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_token: tokenResponse.credential }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to authenticate with backend');
+    }
+
+    const data = await response.json();
+
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userData');
+        localStorage.setItem('accessToken', data.access_token);
+        await navigate('/dashboard');
+  } catch (error) {
+    console.error('Login failed:', error);
+    setErrorMessage(t('loginPage.errors.googleLoginFailed'));
+  }
+};
 
   return (
     <div className="login-page-full-container">
@@ -177,14 +201,11 @@ const LoginPage: React.FC = () => {
               <span>{t('loginPage.orDivider')}</span>
             </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="login-button google"
-            >
-              <GoogleLogo />
-              {t('loginPage.loginWithGoogle')}
-            </button>
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => setErrorMessage(t('loginPage errors googleLoginFailed'))}
+            />
+
           </form>
           <p className="register-link-prompt">
             {t('loginPage.noAccount')}{' '}

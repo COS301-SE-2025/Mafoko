@@ -1,11 +1,12 @@
 # app/crud/crud_user.py
+import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional, Union, Dict, Any
 from uuid import UUID
 
 from mavito_common.models.user import User as UserModel
-from mavito_common.schemas.user import UserCreate, UserUpdate
+from mavito_common.schemas.user import UserCreate, UserUpdate , UserCreateGoogle
 from mavito_common.core.security import get_password_hash, verify_password
 
 
@@ -38,30 +39,26 @@ class CRUDUser:
         result = await db.execute(select(UserModel).filter(UserModel.email == email))
         return result.scalars().first()
 
-    async def create_user(self, db: AsyncSession, *, obj_in: UserCreate) -> UserModel:
+    async def create_user(
+        self,
+        db: AsyncSession,
+        *,
+        obj_in: Union[UserCreate, UserCreateGoogle] 
+    ) -> UserModel:
         """
-        Create a new user.
-        - Hashes the plain password before storing.
-        - Uses fields from UserCreate schema and matches UserModel.
+        Create a new user, handling both standard and Google registrations.
         """
-        hashed_password = get_password_hash(obj_in.password)
+        db_obj = UserModel(**obj_in.model_dump())
 
-        # Create a dictionary of the data for the UserModel
-        # Exclude the plain password from the input schema
-        db_obj_data = obj_in.model_dump(exclude={"password"})
+        if isinstance(obj_in, UserCreate) and obj_in.password:
+            db_obj.password_hash = get_password_hash(obj_in.password)
+        else:
+            db_obj.password_hash = get_password_hash(str(uuid.uuid4()))
 
-        db_user = UserModel(
-            **db_obj_data,  # Spread common fields like email, first_name, last_name, role
-            password_hash=hashed_password,  # Store the hashed password
-            is_verified=False,  # Default from your SQL schema
-            account_locked=False,  # Default from your SQL schema
-            # is_active is also a field in our model, defaulting to True
-        )
-
-        db.add(db_user)
+        db.add(db_obj)
         await db.commit()
-        await db.refresh(db_user)
-        return db_user
+        await db.refresh(db_obj)
+        return db_obj
 
     async def update_user(
         self,

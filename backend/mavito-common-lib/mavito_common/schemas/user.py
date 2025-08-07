@@ -25,6 +25,9 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str  # Plain password received from client
 
+class UserCreateGoogle(UserBase):
+    role: UserRole = UserRole.contributor # Default role for new users
+    is_verified: bool = True # Google-verified users are automatically verified
 
 # Properties to receive via API on update
 class UserUpdate(BaseModel):  # Defined independently for clarity on updatable fields

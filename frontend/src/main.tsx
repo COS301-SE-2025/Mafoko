@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { DarkModeProvider } from './components/ui/DarkModeComponent.tsx';
 import App from './App.tsx';
 import './i18n';
 import './index.css';
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
@@ -14,7 +16,9 @@ if (rootElement) {
       <React.Suspense fallback={<div>Loading translations...</div>}>
         <BrowserRouter basename="/Marito">
           <DarkModeProvider>
-            <App />
+            <GoogleOAuthProvider clientId={googleClientId}>
+              <App />
+            </GoogleOAuthProvider>
           </DarkModeProvider>
         </BrowserRouter>
       </React.Suspense>

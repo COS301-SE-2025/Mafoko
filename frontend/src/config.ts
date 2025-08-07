@@ -37,6 +37,7 @@ const endpoint = (serviceUrl: string, path: string): string =>
 interface APIEndpoints {
   login: string;
   register: string;
+  loginWithGoogle: string;
   forgotPassword: string;
   resetPassword: string;
   verifyEmail: string;
@@ -103,6 +104,7 @@ export const API_ENDPOINTS: APIEndpoints = {
   // --- Auth Service ---
   register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
   login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
+  loginWithGoogle: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/google-login'),
   forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
   resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
   verifyEmail: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/verify-email'),

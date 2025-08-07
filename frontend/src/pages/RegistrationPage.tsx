@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/RegistrationPage.css';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import LsImage from '/LS_image.png';
 import DfsiLogo from '/DFSI_Logo.png';
 import { API_ENDPOINTS } from '../config';
@@ -217,9 +218,32 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
-  const handleGoogleSignUp = () => {
-    console.log('Attempting Google Sign Up');
-  };
+const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
+  console.log('Google token response:', tokenResponse.credential);
+  try {
+    const response = await fetch(API_ENDPOINTS.loginWithGoogle, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_token: tokenResponse.credential }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to authenticate with backend');
+    }
+
+    const data = await response.json();
+
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('userData');
+      localStorage.setItem('accessToken', data.access_token);
+      await navigate('/dashboard');
+  } catch (error) {
+    console.error('Login failed:', error);
+    setError(t('loginPage.errors.googleLoginFailed'));
+  }
+};
 
   const isLinguist = userType === 'linguist';
 
@@ -261,8 +285,6 @@ const RegistrationPage: React.FC = () => {
               {error}
             </p>
           )}
-
-          {/* FIX: Add void to onSubmit to handle promise */}
           <form
             onSubmit={(e) => void handleSubmit(e)}
             className="registration-form"
@@ -480,15 +502,10 @@ const RegistrationPage: React.FC = () => {
             <div className="social-login-divider">
               <span>{t('registrationPage.orDivider')}</span>
             </div>
-            <button
-              type="button"
-              onClick={handleGoogleSignUp}
-              className="register-button google"
-              disabled={isLoading}
-            >
-              <GoogleLogo />
-              {t('registrationPage.createWithGoogle')}
-            </button>
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => setError(t('loginPage errors googleLoginFailed'))}
+              />
           </form>
 
           <p className="login-link">
