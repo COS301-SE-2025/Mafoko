@@ -36,7 +36,10 @@ class CRUDUser:
         """
         Retrieve a user by their email address.
         """
-        result = await db.execute(select(UserModel).filter(UserModel.email == email))
+        normalized_email = email.lower()
+        result = await db.execute(
+            select(UserModel).filter(UserModel.email == normalized_email)
+        )
         return result.scalars().first()
 
     async def create_user(
@@ -46,7 +49,7 @@ class CRUDUser:
         Create a new user, handling both standard and Google registrations.
         """
         db_obj = UserModel(**obj_in.model_dump())
-
+        db_obj.email = db_obj.email.lower()
         if isinstance(obj_in, UserCreate) and obj_in.password:
             db_obj.password_hash = get_password_hash(obj_in.password)
         else:
