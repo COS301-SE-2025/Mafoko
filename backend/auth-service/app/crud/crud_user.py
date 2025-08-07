@@ -6,7 +6,7 @@ from typing import List, Optional, Union, Dict, Any
 from uuid import UUID
 
 from mavito_common.models.user import User as UserModel
-from mavito_common.schemas.user import UserCreate, UserUpdate , UserCreateGoogle
+from mavito_common.schemas.user import UserCreate, UserUpdate, UserCreateGoogle
 from mavito_common.core.security import get_password_hash, verify_password
 
 
@@ -40,10 +40,7 @@ class CRUDUser:
         return result.scalars().first()
 
     async def create_user(
-        self,
-        db: AsyncSession,
-        *,
-        obj_in: Union[UserCreate, UserCreateGoogle] 
+        self, db: AsyncSession, *, obj_in: Union[UserCreate, UserCreateGoogle]
     ) -> UserModel:
         """
         Create a new user, handling both standard and Google registrations.

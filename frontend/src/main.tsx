@@ -7,7 +7,7 @@ import App from './App.tsx';
 import './i18n';
 import './index.css';
 
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 const rootElement = document.getElementById('root');
 
 if (rootElement) {

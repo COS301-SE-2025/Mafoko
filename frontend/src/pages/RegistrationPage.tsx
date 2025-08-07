@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/RegistrationPage.css';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import LsImage from '/LS_image.png';
 import DfsiLogo from '/DFSI_Logo.png';
 import { API_ENDPOINTS } from '../config';
@@ -17,6 +17,12 @@ interface SignedUrlResponse {
   gcs_key: string;
 }
 
+interface LoginResponse {
+  access_token: string;
+  token_type: string;
+  detail?: string;
+}
+
 interface LoginSuccessResponse {
   access_token: string;
   token_type: string;
@@ -27,33 +33,6 @@ interface ApiErrorResponse {
 }
 
 // SVG for Google Logo
-const GoogleLogo = () => (
-  <svg
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 48 48"
-    height="24px"
-    width="24px"
-  >
-    <path
-      fill="#EA4335"
-      d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
-    ></path>
-    <path
-      fill="#4285F4"
-      d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
-    ></path>
-    <path
-      fill="#FBBC05"
-      d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
-    ></path>
-    <path
-      fill="#34A853"
-      d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
-    ></path>
-    <path fill="none" d="M0 0h48v48H0z"></path>
-  </svg>
-);
 
 const RegistrationPage: React.FC = () => {
   const { t } = useTranslation();
@@ -218,32 +197,32 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
-const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
-  console.log('Google token response:', tokenResponse.credential);
-  try {
-    const response = await fetch(API_ENDPOINTS.loginWithGoogle, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id_token: tokenResponse.credential }),
-    });
+  const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
+    console.log('Google token response:', tokenResponse.credential);
+    try {
+      const response = await fetch(API_ENDPOINTS.loginWithGoogle, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_token: tokenResponse.credential }),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to authenticate with backend');
-    }
+      if (!response.ok) {
+        throw new Error('Failed to authenticate with backend');
+      }
 
-    const data = await response.json();
+      const data = (await response.json()) as LoginResponse;
 
       localStorage.removeItem('accessToken');
       localStorage.removeItem('userData');
       localStorage.setItem('accessToken', data.access_token);
       await navigate('/dashboard');
-  } catch (error) {
-    console.error('Login failed:', error);
-    setError(t('loginPage.errors.googleLoginFailed'));
-  }
-};
+    } catch (error) {
+      console.error('Login failed:', error);
+      setError(t('loginPage.errors.googleLoginFailed'));
+    }
+  };
 
   const isLinguist = userType === 'linguist';
 
@@ -502,10 +481,14 @@ const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
             <div className="social-login-divider">
               <span>{t('registrationPage.orDivider')}</span>
             </div>
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() => setError(t('loginPage errors googleLoginFailed'))}
-              />
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                void handleGoogleLogin(credentialResponse);
+              }}
+              onError={() => {
+                setError(t('RegistrationPage errors googleLoginFailed'));
+              }}
+            />
           </form>
 
           <p className="login-link">

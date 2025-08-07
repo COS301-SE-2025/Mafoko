@@ -6,7 +6,7 @@ from datetime import timedelta
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from pydantic import BaseModel
-from mavito_common.schemas.user import UserCreate, User as UserSchema , UserCreateGoogle
+from mavito_common.schemas.user import UserCreate, User as UserSchema, UserCreateGoogle
 from mavito_common.schemas.token import Token
 from mavito_common.core.security import create_access_token
 from mavito_common.core.config import settings
@@ -95,27 +95,24 @@ async def login_for_access_token(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 class GoogleToken(BaseModel):
     id_token: str
 
+
 @router.post("/google-login", response_model=Token)
-async def google_login(
-    google_token: GoogleToken,
-    db: AsyncSession = Depends(get_db)
-):
+async def google_login(google_token: GoogleToken, db: AsyncSession = Depends(get_db)):
     """
     Handle Google Login/Registration via ID token.
     """
     try:
         idinfo = id_token.verify_oauth2_token(
-            google_token.id_token,
-            requests.Request(),
-            settings.GOOGLE_CLIENT_ID
+            google_token.id_token, requests.Request(), settings.GOOGLE_CLIENT_ID
         )
-        email = idinfo['email']
-        first_name = idinfo.get('given_name')
-        last_name = idinfo.get('family_name') or ""
-        profile_pic_url = idinfo.get('picture')
+        email = idinfo["email"]
+        first_name = idinfo.get("given_name")
+        last_name = idinfo.get("family_name") or ""
+        profile_pic_url = idinfo.get("picture")
 
         user = await crud_user.get_user_by_email(db, email=email)
 
@@ -124,16 +121,15 @@ async def google_login(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
-                profile_pic_url=profile_pic_url
-                
+                profile_pic_url=profile_pic_url,
             )
             user = await crud_user.create_user(db, obj_in=user_in)
-        
+
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
             data={"sub": user.email}, expires_delta=access_token_expires
         )
-        
+
         return {"access_token": access_token, "token_type": "bearer"}
 
     except ValueError as e:
@@ -152,7 +148,7 @@ async def google_login(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred",
         )
-        
+
 
 @router.get("/me", response_model=UserSchema)
 async def read_users_me(
