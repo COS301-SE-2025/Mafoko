@@ -30,6 +30,7 @@ vi.mock('../src/components/ui/LeftNav', () => ({
     <div data-testid="left-nav">
       Left Nav - Active: {activeItem}
       <button
+        type="button"
         onClick={() => {
           setActiveItem('profile');
         }}
@@ -50,10 +51,14 @@ vi.mock('../src/components/profile/ProfileHeader', () => ({
     onSettingsClick: () => void;
   }) => (
     <div data-testid="profile-header">
-      <button onClick={onBackClick} data-testid="back-button">
+      <button type="button" onClick={onBackClick} data-testid="back-button">
         Back
       </button>
-      <button onClick={onSettingsClick} data-testid="settings-button">
+      <button
+        type="button"
+        onClick={onSettingsClick}
+        data-testid="settings-button"
+      >
         Settings
       </button>
     </div>
@@ -99,13 +104,21 @@ vi.mock('../src/components/profile/ProfileEditDropdown', () => ({
         {firstName} {lastName}
       </div>
       <div data-testid="user-email">{email}</div>
-      <button onClick={onEditName} data-testid="edit-name-button">
+      <button type="button" onClick={onEditName} data-testid="edit-name-button">
         Edit Name
       </button>
-      <button onClick={onEditEmail} data-testid="edit-email-button">
+      <button
+        type="button"
+        onClick={onEditEmail}
+        data-testid="edit-email-button"
+      >
         Edit Email
       </button>
-      <button onClick={onEditPassword} data-testid="edit-password-button">
+      <button
+        type="button"
+        onClick={onEditPassword}
+        data-testid="edit-password-button"
+      >
         Edit Password
       </button>
     </div>
@@ -135,12 +148,14 @@ vi.mock('../src/components/profile/ProfileEditForms', () => ({
       return (
         <div data-testid="username-edit-form">
           <button
+            type="button"
             onClick={onUpdateUsername}
             data-testid="update-username-button"
           >
             Update Username
           </button>
           <button
+            type="button"
             onClick={onCancelEditUsername}
             data-testid="cancel-username-button"
           >
@@ -152,10 +167,18 @@ vi.mock('../src/components/profile/ProfileEditForms', () => ({
     if (editMode === 'email') {
       return (
         <div data-testid="email-edit-form">
-          <button onClick={onUpdateEmail} data-testid="update-email-button">
+          <button
+            type="button"
+            onClick={onUpdateEmail}
+            data-testid="update-email-button"
+          >
             Update Email
           </button>
-          <button onClick={onCancelEditEmail} data-testid="cancel-email-button">
+          <button
+            type="button"
+            onClick={onCancelEditEmail}
+            data-testid="cancel-email-button"
+          >
             Cancel
           </button>
         </div>
@@ -165,12 +188,14 @@ vi.mock('../src/components/profile/ProfileEditForms', () => ({
       return (
         <div data-testid="password-edit-form">
           <button
+            type="button"
             onClick={onUpdatePassword}
             data-testid="update-password-button"
           >
             Update Password
           </button>
           <button
+            type="button"
             onClick={onCancelEditPassword}
             data-testid="cancel-password-button"
           >

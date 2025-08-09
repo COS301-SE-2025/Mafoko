@@ -159,33 +159,12 @@ const UserProfilePage: React.FC = () => {
     }
   }, [profile?.profile_pic_url, profile?.id]);
 
-  const loadLinguistApplication = useCallback(async () => {
+  const loadLinguistApplication = useCallback(() => {
     setLoadingApplication(true);
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      const response = await fetch(API_ENDPOINTS.getMyApplication, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = (await response.json()) as LinguistApplication;
-        setLinguistApplication(data);
-      } else if (response.status === 404) {
-        setLinguistApplication(null);
-      } else {
-        setLinguistApplication(null);
-      }
-    } catch (err) {
-      console.error('Error loading linguist application:', err);
-      setLinguistApplication(null);
-    } finally {
-      setLoadingApplication(false);
-    }
+    // Since there's no backend endpoint to get existing applications,
+    // just set to null (user can only create new applications)
+    setLinguistApplication(null);
+    setLoadingApplication(false);
   }, []);
 
   useEffect(() => {
@@ -227,7 +206,7 @@ const UserProfilePage: React.FC = () => {
             confirm_password: '',
           });
 
-          void loadLinguistApplication();
+          loadLinguistApplication();
         } else {
           setError(
             t('profile.errors.loadFailed', 'Failed to load profile data'),
@@ -243,7 +222,7 @@ const UserProfilePage: React.FC = () => {
     };
 
     void loadProfile();
-  }, [loadLinguistApplication]);
+  }, [loadLinguistApplication, t]);
 
   useEffect(() => {
     if (profile) {
@@ -813,7 +792,7 @@ const UserProfilePage: React.FC = () => {
 
       setShowLinguistApplication(false);
       setDocumentFiles({});
-      void loadLinguistApplication();
+      loadLinguistApplication();
     } catch (err) {
       console.error('Error submitting linguist application:', err);
       setError('Failed to submit application: ' + (err as Error).message);
@@ -824,6 +803,12 @@ const UserProfilePage: React.FC = () => {
 
   const getApplicationStatusText = () => {
     if (loadingApplication) return t('common.loading', 'Loading...');
+
+    // If user role is linguist, their application was already approved
+    if (profile?.role === 'linguist') {
+      return t('profile.application.approved', 'Approved');
+    }
+
     if (!linguistApplication)
       return t('profile.application.notApplied', 'Not Applied');
 
@@ -977,7 +962,7 @@ const UserProfilePage: React.FC = () => {
                 <span className="menu-action">
                   {getApplicationStatusText()}
                 </span>
-                {!linguistApplication && (
+                {!linguistApplication && profile?.role !== 'linguist' && (
                   <button
                     type="button"
                     className="dropdown-toggle"
