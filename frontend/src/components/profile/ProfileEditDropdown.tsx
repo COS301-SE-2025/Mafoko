@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { User, Mail, Lock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileEditDropdownProps {
   firstName: string;
@@ -22,6 +23,7 @@ const ProfileEditDropdown: React.FC<ProfileEditDropdownProps> = ({
   onEditEmail,
   onEditPassword,
 }) => {
+  const { t } = useTranslation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,14 +50,16 @@ const ProfileEditDropdown: React.FC<ProfileEditDropdownProps> = ({
     <div className="profile-display">
       <div className="profile-name-container">
         <h2 className="profile-name">
-          {firstName && lastName ? `${firstName} ${lastName}` : 'Loading...'}
+          {firstName && lastName
+            ? `${firstName} ${lastName}`
+            : t('common.loading', 'Loading...')}
         </h2>
         <div className="edit-dropdown-container" ref={dropdownRef}>
           <button
             type="button"
             onClick={onToggleDropdown}
             className="edit-dropdown-button"
-            title="Edit profile"
+            title={t('profile.editProfile', 'Edit profile')}
           >
             ⋮
           </button>
@@ -67,7 +71,7 @@ const ProfileEditDropdown: React.FC<ProfileEditDropdownProps> = ({
                 className="dropdown-item"
               >
                 <User size={16} />
-                <span>Edit Name</span>
+                <span>{t('profile.editName', 'Edit Name')}</span>
               </button>
               <button
                 type="button"
@@ -75,7 +79,7 @@ const ProfileEditDropdown: React.FC<ProfileEditDropdownProps> = ({
                 className="dropdown-item"
               >
                 <Mail size={16} />
-                <span>Edit Email</span>
+                <span>{t('profile.editEmail', 'Edit Email')}</span>
               </button>
               <button
                 type="button"
@@ -83,13 +87,15 @@ const ProfileEditDropdown: React.FC<ProfileEditDropdownProps> = ({
                 className="dropdown-item"
               >
                 <Lock size={16} />
-                <span>Change Password</span>
+                <span>{t('profile.changePassword', 'Change Password')}</span>
               </button>
             </div>
           )}
         </div>
       </div>
-      <p className="profile-email">{email || 'Loading...'}</p>
+      <p className="profile-email">
+        {email || t('common.loading', 'Loading...')}
+      </p>
     </div>
   );
 };

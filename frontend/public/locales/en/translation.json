@@ -222,5 +222,82 @@
     "previous": "Previous",
     "next": "Next",
     "pageInfo": "Page {{current}} of {{total}}"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel"
+  },
+
+  "profile": {
+    "title": "User Profile",
+    "settings": "Settings",
+    "editProfile": "Edit profile",
+    "editName": "Edit Name",
+    "editEmail": "Edit Email",
+    "changePassword": "Change Password",
+    "role": "Role",
+    "linguistApplication": "Linguist Application",
+    "apply": "Apply",
+    "applyAsLinguist": "Apply as Linguist",
+    "submitDocuments": "Submit your documents to apply for linguist status:",
+    "submitting": "Submitting...",
+    "submitApplication": "Submit Application",
+    "applicationSuccess": "Linguist application submitted successfully!",
+    "forms": {
+      "editName": "Edit Name",
+      "editEmail": "Edit Email",
+      "changePassword": "Change Password",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter last name",
+      "emailAddress": "Email Address",
+      "emailAddressPlaceholder": "Enter email address",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmNewPassword": "Confirm New Password",
+      "confirmNewPasswordPlaceholder": "Confirm new password",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "documents": {
+      "idDocument": "ID Document (PDF) *",
+      "cv": "CV (PDF) *",
+      "certifications": "Certifications (PDF, Optional)",
+      "researchPapers": "Research Papers (PDF, Optional)"
+    },
+    "application": {
+      "notApplied": "Not Applied",
+      "pending": "Pending Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "unknown": "Unknown"
+    },
+    "errors": {
+      "noToken": "No access token found. Please login first.",
+      "loadFailed": "Failed to load profile data",
+      "loadError": "Error loading profile: {{message}}",
+      "invalidImage": "Please select a valid image file",
+      "fileTooLarge": "File size must be less than 5MB",
+      "uploadError": "Failed to update profile picture: {{message}}",
+      "nameRequired": "First name and last name are required",
+      "passwordRequired": "Current password is required",
+      "updateFailed": "Failed to update profile",
+      "updateError": "Failed to update profile: {{message}}",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "emailUpdateFailed": "Failed to update email",
+      "emailUpdateError": "Failed to update email: {{message}}",
+      "newPasswordRequired": "New password is required",
+      "passwordMismatch": "New passwords do not match",
+      "passwordUpdateFailed": "Failed to update password",
+      "passwordUpdateError": "Failed to update password: {{message}}",
+      "documentsRequired": "ID Document and CV are required for linguist application",
+      "applicationError": "Failed to submit application: {{message}}"
+    }
   }
 }

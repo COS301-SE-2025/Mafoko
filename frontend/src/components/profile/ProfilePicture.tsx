@@ -7,6 +7,7 @@ interface ProfilePictureProps {
   loadingProfilePicture: boolean;
   profileFirstName?: string;
   onProfilePictureUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onProfilePictureError?: () => void;
 }
 
 const ProfilePicture: React.FC<ProfilePictureProps> = ({
@@ -15,6 +16,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
   loadingProfilePicture,
   profileFirstName,
   onProfilePictureUpload,
+  onProfilePictureError,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -45,6 +47,8 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
                 );
                 // Hide the broken image and show placeholder instead
                 (e.target as HTMLImageElement).style.display = 'none';
+                // Trigger URL refresh callback if provided
+                onProfilePictureError?.();
               }}
             />
             <div className="picture-overlay">

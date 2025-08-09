@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface UsernameForm {
   first_name: string;
@@ -54,12 +55,17 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
   onCancelEditEmail,
   onCancelEditPassword,
 }) => {
+  const { t } = useTranslation();
   if (editMode === 'username') {
     return (
       <div className="edit-form">
-        <h2 className="profile-name">Edit Name</h2>
+        <h2 className="profile-name">
+          {t('profile.forms.editName', 'Edit Name')}
+        </h2>
         <div className="form-group">
-          <label htmlFor="first_name">First Name</label>
+          <label htmlFor="first_name">
+            {t('profile.forms.firstName', 'First Name')}
+          </label>
           <input
             id="first_name"
             type="text"
@@ -67,12 +73,17 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onUsernameFormChange('first_name', e.target.value);
             }}
-            placeholder="Enter first name"
+            placeholder={t(
+              'profile.forms.firstNamePlaceholder',
+              'Enter first name',
+            )}
             disabled={isUpdatingUsername}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="last_name">Last Name</label>
+          <label htmlFor="last_name">
+            {t('profile.forms.lastName', 'Last Name')}
+          </label>
           <input
             id="last_name"
             type="text"
@@ -80,12 +91,17 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onUsernameFormChange('last_name', e.target.value);
             }}
-            placeholder="Enter last name"
+            placeholder={t(
+              'profile.forms.lastNamePlaceholder',
+              'Enter last name',
+            )}
             disabled={isUpdatingUsername}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="current_password">Current Password</label>
+          <label htmlFor="current_password">
+            {t('profile.forms.currentPassword', 'Current Password')}
+          </label>
           <input
             id="current_password"
             type="password"
@@ -93,7 +109,10 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onUsernameFormChange('current_password', e.target.value);
             }}
-            placeholder="Enter current password"
+            placeholder={t(
+              'profile.forms.currentPasswordPlaceholder',
+              'Enter current password',
+            )}
             disabled={isUpdatingUsername}
           />
         </div>
@@ -104,7 +123,9 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             disabled={isUpdatingUsername}
             className="save-button"
           >
-            {isUpdatingUsername ? 'Saving...' : 'Save'}
+            {isUpdatingUsername
+              ? t('profile.forms.saving', 'Saving...')
+              : t('profile.forms.save', 'Save')}
           </button>
           <button
             type="button"
@@ -112,7 +133,7 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             disabled={isUpdatingUsername}
             className="cancel-button"
           >
-            Cancel
+            {t('profile.forms.cancel', 'Cancel')}
           </button>
         </div>
       </div>
@@ -122,9 +143,13 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
   if (editMode === 'email') {
     return (
       <div className="edit-form">
-        <h2 className="profile-name">Edit Email</h2>
+        <h2 className="profile-name">
+          {t('profile.forms.editEmail', 'Edit Email')}
+        </h2>
         <div className="form-group">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">
+            {t('profile.forms.emailAddress', 'Email Address')}
+          </label>
           <input
             id="email"
             type="email"
@@ -132,12 +157,17 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onEmailFormChange('email', e.target.value);
             }}
-            placeholder="Enter email address"
+            placeholder={t(
+              'profile.forms.emailAddressPlaceholder',
+              'Enter email address',
+            )}
             disabled={isUpdatingEmail}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="email_current_password">Current Password</label>
+          <label htmlFor="email_current_password">
+            {t('profile.forms.currentPassword', 'Current Password')}
+          </label>
           <input
             id="email_current_password"
             type="password"
@@ -145,7 +175,10 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onEmailFormChange('current_password', e.target.value);
             }}
-            placeholder="Enter current password"
+            placeholder={t(
+              'profile.forms.currentPasswordPlaceholder',
+              'Enter current password',
+            )}
             disabled={isUpdatingEmail}
           />
         </div>
@@ -156,7 +189,9 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             disabled={isUpdatingEmail}
             className="save-button"
           >
-            {isUpdatingEmail ? 'Saving...' : 'Save'}
+            {isUpdatingEmail
+              ? t('profile.forms.saving', 'Saving...')
+              : t('profile.forms.save', 'Save')}
           </button>
           <button
             type="button"
@@ -164,7 +199,7 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             disabled={isUpdatingEmail}
             className="cancel-button"
           >
-            Cancel
+            {t('profile.forms.cancel', 'Cancel')}
           </button>
         </div>
       </div>
@@ -174,9 +209,13 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
   if (editMode === 'password') {
     return (
       <div className="edit-form">
-        <h2 className="profile-name">Change Password</h2>
+        <h2 className="profile-name">
+          {t('profile.forms.changePassword', 'Change Password')}
+        </h2>
         <div className="form-group">
-          <label htmlFor="current_password_change">Current Password</label>
+          <label htmlFor="current_password_change">
+            {t('profile.forms.currentPassword', 'Current Password')}
+          </label>
           <input
             id="current_password_change"
             type="password"
@@ -184,12 +223,17 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onPasswordFormChange('current_password', e.target.value);
             }}
-            placeholder="Enter current password"
+            placeholder={t(
+              'profile.forms.currentPasswordPlaceholder',
+              'Enter current password',
+            )}
             disabled={isUpdatingPassword}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="new_password">New Password</label>
+          <label htmlFor="new_password">
+            {t('profile.forms.newPassword', 'New Password')}
+          </label>
           <input
             id="new_password"
             type="password"
@@ -197,12 +241,17 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onPasswordFormChange('new_password', e.target.value);
             }}
-            placeholder="Enter new password"
+            placeholder={t(
+              'profile.forms.newPasswordPlaceholder',
+              'Enter new password',
+            )}
             disabled={isUpdatingPassword}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="confirm_password">Confirm New Password</label>
+          <label htmlFor="confirm_password">
+            {t('profile.forms.confirmNewPassword', 'Confirm New Password')}
+          </label>
           <input
             id="confirm_password"
             type="password"
@@ -210,7 +259,10 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             onChange={(e) => {
               onPasswordFormChange('confirm_password', e.target.value);
             }}
-            placeholder="Confirm new password"
+            placeholder={t(
+              'profile.forms.confirmNewPasswordPlaceholder',
+              'Confirm new password',
+            )}
             disabled={isUpdatingPassword}
           />
         </div>
@@ -221,7 +273,9 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             disabled={isUpdatingPassword}
             className="save-button"
           >
-            {isUpdatingPassword ? 'Saving...' : 'Save'}
+            {isUpdatingPassword
+              ? t('profile.forms.saving', 'Saving...')
+              : t('profile.forms.save', 'Save')}
           </button>
           <button
             type="button"
@@ -229,7 +283,7 @@ const ProfileEditForms: React.FC<ProfileEditFormsProps> = ({
             disabled={isUpdatingPassword}
             className="cancel-button"
           >
-            Cancel
+            {t('profile.forms.cancel', 'Cancel')}
           </button>
         </div>
       </div>

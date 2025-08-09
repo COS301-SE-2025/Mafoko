@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
 import LeftNav from '../components/ui/LeftNav';
@@ -40,6 +41,7 @@ interface SignedUrlResponse {
 
 const UserProfilePage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
@@ -191,7 +193,12 @@ const UserProfilePage: React.FC = () => {
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) {
-          setError('No access token found. Please login first.');
+          setError(
+            t(
+              'profile.errors.noToken',
+              'No access token found. Please login first.',
+            ),
+          );
           return;
         }
 
@@ -222,10 +229,16 @@ const UserProfilePage: React.FC = () => {
 
           void loadLinguistApplication();
         } else {
-          setError('Failed to load profile data');
+          setError(
+            t('profile.errors.loadFailed', 'Failed to load profile data'),
+          );
         }
       } catch (err) {
-        setError('Error loading profile: ' + (err as Error).message);
+        setError(
+          t('profile.errors.loadError', 'Error loading profile: {{message}}', {
+            message: (err as Error).message,
+          }),
+        );
       }
     };
 
@@ -268,13 +281,17 @@ const UserProfilePage: React.FC = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      setError('Please select a valid image file');
+      setError(
+        t('profile.errors.invalidImage', 'Please select a valid image file'),
+      );
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setError('File size must be less than 5MB');
+      setError(
+        t('profile.errors.fileTooLarge', 'File size must be less than 5MB'),
+      );
       return;
     }
 
@@ -806,18 +823,19 @@ const UserProfilePage: React.FC = () => {
   };
 
   const getApplicationStatusText = () => {
-    if (loadingApplication) return 'Loading...';
-    if (!linguistApplication) return 'Not Applied';
+    if (loadingApplication) return t('common.loading', 'Loading...');
+    if (!linguistApplication)
+      return t('profile.application.notApplied', 'Not Applied');
 
     switch (linguistApplication.status) {
       case 'pending':
-        return 'Pending Review';
+        return t('profile.application.pending', 'Pending Review');
       case 'approved':
-        return 'Approved';
+        return t('profile.application.approved', 'Approved');
       case 'rejected':
-        return 'Rejected';
+        return t('profile.application.rejected', 'Rejected');
       default:
-        return 'Unknown';
+        return t('profile.application.unknown', 'Unknown');
     }
   };
 
@@ -864,6 +882,14 @@ const UserProfilePage: React.FC = () => {
               profileFirstName={profile?.first_name}
               onProfilePictureUpload={(e) => {
                 handleProfilePictureUpload(e).catch(console.error);
+              }}
+              onProfilePictureError={() => {
+                // Clear cached URL and reload profile picture when image fails to load
+                if (profile?.id) {
+                  sessionStorage.removeItem(`profilePic_${profile.id}`);
+                  setProfilePictureUrl(null);
+                  void loadProfilePicture();
+                }
               }}
             />
 
@@ -922,7 +948,10 @@ const UserProfilePage: React.FC = () => {
 
             {applicationSubmitSuccess && (
               <div className="success-message">
-                Linguist application submitted successfully!
+                {t(
+                  'profile.applicationSuccess',
+                  'Linguist application submitted successfully!',
+                )}
               </div>
             )}
           </div>
@@ -931,17 +960,19 @@ const UserProfilePage: React.FC = () => {
           <div className="profile-menu">
             {/* Role */}
             <div className="menu-item">
-              <span className="menu-label">Role</span>
+              <span className="menu-label">{t('profile.role', 'Role')}</span>
               <div className="menu-action-container">
                 <span className="menu-action">
-                  {profile ? profile.role : 'Loading...'}
+                  {profile ? profile.role : t('common.loading', 'Loading...')}
                 </span>
               </div>
             </div>
 
             {/* Linguist Application Status */}
             <div className="menu-item">
-              <span className="menu-label">Linguist Application</span>
+              <span className="menu-label">
+                {t('profile.linguistApplication', 'Linguist Application')}
+              </span>
               <div className="menu-action-container">
                 <span className="menu-action">
                   {getApplicationStatusText()}
@@ -955,7 +986,7 @@ const UserProfilePage: React.FC = () => {
                     }}
                     disabled={loadingApplication}
                   >
-                    Apply
+                    {t('profile.apply', 'Apply')}
                   </button>
                 )}
               </div>
@@ -963,11 +994,18 @@ const UserProfilePage: React.FC = () => {
 
             {showLinguistApplication && !linguistApplication && (
               <div className="linguist-application-dropdown">
-                <h3>Apply as Linguist</h3>
-                <p>Submit your documents to apply for linguist status:</p>
+                <h3>{t('profile.applyAsLinguist', 'Apply as Linguist')}</h3>
+                <p>
+                  {t(
+                    'profile.submitDocuments',
+                    'Submit your documents to apply for linguist status:',
+                  )}
+                </p>
 
                 <div className="form-group">
-                  <label htmlFor="idDocument">ID Document (PDF) *</label>
+                  <label htmlFor="idDocument">
+                    {t('profile.documents.idDocument', 'ID Document (PDF) *')}
+                  </label>
                   <input
                     type="file"
                     id="idDocument"
@@ -985,7 +1023,9 @@ const UserProfilePage: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="cv">CV (PDF) *</label>
+                  <label htmlFor="cv">
+                    {t('profile.documents.cv', 'CV (PDF) *')}
+                  </label>
                   <input
                     type="file"
                     id="cv"
@@ -1004,7 +1044,10 @@ const UserProfilePage: React.FC = () => {
 
                 <div className="form-group">
                   <label htmlFor="certifications">
-                    Certifications (PDF, Optional)
+                    {t(
+                      'profile.documents.certifications',
+                      'Certifications (PDF, Optional)',
+                    )}
                   </label>
                   <input
                     type="file"
@@ -1024,7 +1067,10 @@ const UserProfilePage: React.FC = () => {
 
                 <div className="form-group">
                   <label htmlFor="researchPapers">
-                    Research Papers (PDF, Optional)
+                    {t(
+                      'profile.documents.researchPapers',
+                      'Research Papers (PDF, Optional)',
+                    )}
                   </label>
                   <input
                     type="file"
@@ -1053,7 +1099,7 @@ const UserProfilePage: React.FC = () => {
                     }}
                     disabled={isSubmittingApplication}
                   >
-                    Cancel
+                    {t('common.cancel', 'Cancel')}
                   </button>
                   <button
                     type="button"
@@ -1068,8 +1114,8 @@ const UserProfilePage: React.FC = () => {
                     }
                   >
                     {isSubmittingApplication
-                      ? 'Submitting...'
-                      : 'Submit Application'}
+                      ? t('profile.submitting', 'Submitting...')
+                      : t('profile.submitApplication', 'Submit Application')}
                   </button>
                 </div>
               </div>

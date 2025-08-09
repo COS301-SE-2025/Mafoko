@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Settings } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileHeaderProps {
   isMobile: boolean;
@@ -12,6 +13,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onBackClick,
   onSettingsClick,
 }) => {
+  const { t } = useTranslation();
   if (isMobile) {
     return (
       <div className="profile-header">
@@ -19,7 +21,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <ArrowLeft size={24} />
         </button>
 
-        <h1 className="header-title">User Profile</h1>
+        <h1 className="header-title">{t('profile.title', 'User Profile')}</h1>
 
         <button
           type="button"
@@ -34,14 +36,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
   return (
     <div className="desktop-header">
-      <h1 className="page-title">User Profile</h1>
+      <h1 className="page-title">{t('profile.title', 'User Profile')}</h1>
       <button
         type="button"
         onClick={onSettingsClick}
         className="settings-button"
       >
         <Settings size={24} />
-        <span>Settings</span>
+        <span>{t('profile.settings', 'Settings')}</span>
       </button>
     </div>
   );
