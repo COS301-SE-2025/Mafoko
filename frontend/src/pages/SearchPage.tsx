@@ -12,40 +12,9 @@ import LeftNav from '../components/ui/LeftNav.tsx';
 import { API_ENDPOINTS } from '../config';
 import { storeTerms, getAllTerms } from '../utils/indexedDB';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
+import { LANGUAGES, SearchResponse, Suggestion } from '../types/search/types.ts';
+import { Term } from '../types/terms/types.ts';
 
-const languages = [
-  'Afrikaans',
-  'English',
-  'isiNdebele',
-  'isiXhosa',
-  'isiZulu',
-  'Sesotho',
-  'Setswana',
-  'siSwati',
-  'Tshivenda',
-  'Xitsonga',
-  'Sepedi',
-];
-
-interface Suggestion {
-  id: string;
-  label: string;
-}
-
-interface SearchResponse {
-  items: Term[];
-  total: number;
-}
-
-export interface Term {
-  id: string;
-  term: string;
-  language: string;
-  domain: string;
-  definition: string;
-  upvotes: number;
-  downvotes: number;
-}
 
 const SearchPage: React.FC = () => {
   const { t } = useTranslation();
@@ -139,9 +108,12 @@ const SearchPage: React.FC = () => {
       } catch (error: unknown) {
         console.error('Falling back to cached data', error);
         const cachedTerms = await getAllTerms();
-        const filtered = cachedTerms.filter((term) =>
-          term.term.toLowerCase().includes(t.toLowerCase()),
-        );
+        const filtered = cachedTerms.filter((term: Term) => {
+          return (
+            typeof term.term === 'string' &&
+            term.term.toLowerCase().includes(t.toLowerCase())
+          );
+        });
         setResults(filtered);
         setTotalPages(Math.ceil(filtered.length / pageSize));
       } finally {
@@ -188,7 +160,7 @@ const SearchPage: React.FC = () => {
 
   const fetchDomains = async (): Promise<string[]> => {
     try {
-      const terms = await getAllTerms();
+      const terms: Term[] = await getAllTerms();
       const domainSet = new Set<string>();
       for (const term of terms) {
         if (term.domain) domainSet.add(term.domain);
@@ -243,7 +215,7 @@ const SearchPage: React.FC = () => {
                   <div className="flex flex-wrap gap-4">
                     <DropdownFilter
                       label={t('searchPage.language')}
-                      options={languages}
+                      options={LANGUAGES}
                       selected={language}
                       onSelect={setLanguage}
                     />
@@ -337,7 +309,7 @@ const SearchPage: React.FC = () => {
                                   downvotes={term.downvotes}
                                   definition={term.definition}
                                   onView={() => {
-                                    void navigate(`/term/${term.id}`);
+                                    void navigate(`/term/${term.language}/${term.term}/${term.id}`);
                                   }}
                                 />
                               ))}

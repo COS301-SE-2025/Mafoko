@@ -64,7 +64,7 @@ function App() {
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<NewGlossary />} />
-        <Route path="/term/:termId" element={<TermDetailPage />} />
+        <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
       </Routes>
     </div>
   );
