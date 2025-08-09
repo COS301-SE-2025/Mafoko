@@ -12,9 +12,12 @@ import LeftNav from '../components/ui/LeftNav.tsx';
 import { API_ENDPOINTS } from '../config';
 import { storeTerms, getAllTerms } from '../utils/indexedDB';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
-import { LANGUAGES, SearchResponse, Suggestion } from '../types/search/types.ts';
+import {
+  LANGUAGES,
+  SearchResponse,
+  Suggestion,
+} from '../types/search/types.ts';
 import { Term } from '../types/terms/types.ts';
-
 
 const SearchPage: React.FC = () => {
   const { t } = useTranslation();
@@ -309,7 +312,9 @@ const SearchPage: React.FC = () => {
                                   downvotes={term.downvotes}
                                   definition={term.definition}
                                   onView={() => {
-                                    void navigate(`/term/${term.language}/${term.term}/${term.id}`);
+                                    void navigate(
+                                      `/term/${term.language}/${term.term}/${term.id}`,
+                                    );
                                   }}
                                 />
                               ))}
