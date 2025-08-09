@@ -503,7 +503,14 @@ const DashboardPage: React.FC = () => {
                       src={profilePictureUrl}
                       alt="Profile Picture"
                       onError={() => {
-                        setProfilePictureUrl(null);
+                        // Clear cached URL and reload profile picture when image fails to load
+                        if (userData?.uuid) {
+                          localStorage.removeItem(
+                            `profilePic_${userData.uuid}`,
+                          );
+                          setProfilePictureUrl(null);
+                          void loadProfilePicture();
+                        }
                       }}
                     />
                   ) : (
