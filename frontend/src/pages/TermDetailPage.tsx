@@ -161,6 +161,7 @@ export const TermDetailPage: React.FC = () => {
       }
     };
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const run = async () => {
@@ -172,6 +173,7 @@ export const TermDetailPage: React.FC = () => {
       };
       void run();
     }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
+
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
@@ -195,6 +197,7 @@ export const TermDetailPage: React.FC = () => {
 
       void runSearch();
     }, [term, language, fetchTerm, fetchRelatedTerms]);
+    /* eslint-enable react-hooks/exhaustive-deps */
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
