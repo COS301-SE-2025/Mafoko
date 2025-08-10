@@ -218,6 +218,8 @@
     "changePassword": "Verander Wagwoord",
     "role": "Rol",
     "linguistApplication": "Taalkundige Aansoek",
+    "logout": "Teken Uit",
+    "logoutButton": "Teken Uit",
     "apply": "Aansoek Doen",
     "applyAsLinguist": "Aansoek as Taalkundige",
     "submitDocuments": "Dien jou dokumente in om aansoek te doen vir taalkundige status:",

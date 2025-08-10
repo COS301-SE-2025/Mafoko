@@ -627,6 +627,11 @@ $card-dark: #3a4050;
             cursor: not-allowed;
           }
         }
+
+        .logout-buttons {
+          display: flex;
+          gap: 0.5rem;
+        }
       }
     }
 

@@ -238,6 +238,8 @@
     "changePassword": "Change Password",
     "role": "Role",
     "linguistApplication": "Linguist Application",
+    "logout": "Logout",
+    "logoutButton": "Sign Out",
     "apply": "Apply",
     "applyAsLinguist": "Apply as Linguist",
     "submitDocuments": "Submit your documents to apply for linguist status:",

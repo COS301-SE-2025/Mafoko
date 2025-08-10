@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LogOut } from 'lucide-react';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
 import LeftNav from '../components/ui/LeftNav';
@@ -88,6 +89,7 @@ const UserProfilePage: React.FC = () => {
   const [applicationSubmitSuccess, setApplicationSubmitSuccess] =
     useState(false);
   const [loadingApplication, setLoadingApplication] = useState(false);
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   const loadProfilePicture = useCallback(async () => {
     if (!profile?.profile_pic_url) {
@@ -172,12 +174,7 @@ const UserProfilePage: React.FC = () => {
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) {
-          setError(
-            t(
-              'profile.errors.noToken',
-              'No access token found. Please login first.',
-            ),
-          );
+          setError('No access token found. Please login first.');
           return;
         }
 
@@ -213,11 +210,7 @@ const UserProfilePage: React.FC = () => {
           );
         }
       } catch (err) {
-        setError(
-          t('profile.errors.loadError', 'Error loading profile: {{message}}', {
-            message: (err as Error).message,
-          }),
-        );
+        setError('Error loading profile: ' + (err as Error).message);
       }
     };
 
@@ -248,6 +241,23 @@ const UserProfilePage: React.FC = () => {
     console.log('Settings clicked');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    void navigate('/');
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutConfirmation(true);
+  };
+
+  const handleConfirmLogout = () => {
+    handleLogout();
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutConfirmation(false);
+  };
+
   const handleToggleDropdown = () => {
     setShowEditDropdown(!showEditDropdown);
   };
@@ -260,17 +270,13 @@ const UserProfilePage: React.FC = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      setError(
-        t('profile.errors.invalidImage', 'Please select a valid image file'),
-      );
+      setError('Please select a valid image file');
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setError(
-        t('profile.errors.fileTooLarge', 'File size must be less than 5MB'),
-      );
+      setError('File size must be less than 5MB');
       return;
     }
 
@@ -652,7 +658,6 @@ const UserProfilePage: React.FC = () => {
         return;
       }
 
-      console.log('Attempting to update password...');
       const response = await fetch(API_ENDPOINTS.updateMe, {
         method: 'PUT',
         headers: {
@@ -665,10 +670,7 @@ const UserProfilePage: React.FC = () => {
         }),
       });
 
-      console.log('Password update response status:', response.status);
-
       if (response.ok) {
-        console.log('Password updated successfully');
         setIsEditingPassword(false);
         setUpdatePasswordSuccess(true);
         setTimeout(() => {
@@ -681,16 +683,8 @@ const UserProfilePage: React.FC = () => {
           confirm_password: '',
         });
       } else {
-        const errorText = await response.text();
-        console.log('Password update error response:', errorText);
-        try {
-          const errorData = JSON.parse(errorText) as { detail?: string };
-          setError(errorData.detail || 'Failed to update password');
-        } catch {
-          setError(
-            `Failed to update password: ${response.status.toString()} ${response.statusText}`,
-          );
-        }
+        const errorData = (await response.json()) as { detail?: string };
+        setError(errorData.detail || 'Failed to update password');
       }
     } catch (err) {
       console.error('Error updating password:', err);
@@ -802,25 +796,18 @@ const UserProfilePage: React.FC = () => {
   };
 
   const getApplicationStatusText = () => {
-    if (loadingApplication) return t('common.loading', 'Loading...');
-
-    // If user role is linguist, their application was already approved
-    if (profile?.role === 'linguist') {
-      return t('profile.application.approved', 'Approved');
-    }
-
-    if (!linguistApplication)
-      return t('profile.application.notApplied', 'Not Applied');
+    if (loadingApplication) return 'Loading...';
+    if (!linguistApplication) return 'Not Applied';
 
     switch (linguistApplication.status) {
       case 'pending':
-        return t('profile.application.pending', 'Pending Review');
+        return 'Pending Review';
       case 'approved':
-        return t('profile.application.approved', 'Approved');
+        return 'Approved';
       case 'rejected':
-        return t('profile.application.rejected', 'Rejected');
+        return 'Rejected';
       default:
-        return t('profile.application.unknown', 'Unknown');
+        return 'Unknown';
     }
   };
 
@@ -933,10 +920,7 @@ const UserProfilePage: React.FC = () => {
 
             {applicationSubmitSuccess && (
               <div className="success-message">
-                {t(
-                  'profile.applicationSuccess',
-                  'Linguist application submitted successfully!',
-                )}
+                Linguist application submitted successfully!
               </div>
             )}
           </div>
@@ -945,24 +929,22 @@ const UserProfilePage: React.FC = () => {
           <div className="profile-menu">
             {/* Role */}
             <div className="menu-item">
-              <span className="menu-label">{t('profile.role', 'Role')}</span>
+              <span className="menu-label">Role</span>
               <div className="menu-action-container">
                 <span className="menu-action">
-                  {profile ? profile.role : t('common.loading', 'Loading...')}
+                  {profile ? profile.role : 'Loading...'}
                 </span>
               </div>
             </div>
 
             {/* Linguist Application Status */}
             <div className="menu-item">
-              <span className="menu-label">
-                {t('profile.linguistApplication', 'Linguist Application')}
-              </span>
+              <span className="menu-label">Linguist Application</span>
               <div className="menu-action-container">
                 <span className="menu-action">
                   {getApplicationStatusText()}
                 </span>
-                {!linguistApplication && profile?.role !== 'linguist' && (
+                {!linguistApplication && (
                   <button
                     type="button"
                     className="dropdown-toggle"
@@ -971,7 +953,7 @@ const UserProfilePage: React.FC = () => {
                     }}
                     disabled={loadingApplication}
                   >
-                    {t('profile.apply', 'Apply')}
+                    Apply
                   </button>
                 )}
               </div>
@@ -979,18 +961,11 @@ const UserProfilePage: React.FC = () => {
 
             {showLinguistApplication && !linguistApplication && (
               <div className="linguist-application-dropdown">
-                <h3>{t('profile.applyAsLinguist', 'Apply as Linguist')}</h3>
-                <p>
-                  {t(
-                    'profile.submitDocuments',
-                    'Submit your documents to apply for linguist status:',
-                  )}
-                </p>
+                <h3>Apply as Linguist</h3>
+                <p>Submit your documents to apply for linguist status:</p>
 
                 <div className="form-group">
-                  <label htmlFor="idDocument">
-                    {t('profile.documents.idDocument', 'ID Document (PDF) *')}
-                  </label>
+                  <label htmlFor="idDocument">ID Document (PDF) *</label>
                   <input
                     type="file"
                     id="idDocument"
@@ -1008,9 +983,7 @@ const UserProfilePage: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="cv">
-                    {t('profile.documents.cv', 'CV (PDF) *')}
-                  </label>
+                  <label htmlFor="cv">CV (PDF) *</label>
                   <input
                     type="file"
                     id="cv"
@@ -1029,10 +1002,7 @@ const UserProfilePage: React.FC = () => {
 
                 <div className="form-group">
                   <label htmlFor="certifications">
-                    {t(
-                      'profile.documents.certifications',
-                      'Certifications (PDF, Optional)',
-                    )}
+                    Certifications (PDF, Optional)
                   </label>
                   <input
                     type="file"
@@ -1052,10 +1022,7 @@ const UserProfilePage: React.FC = () => {
 
                 <div className="form-group">
                   <label htmlFor="researchPapers">
-                    {t(
-                      'profile.documents.researchPapers',
-                      'Research Papers (PDF, Optional)',
-                    )}
+                    Research Papers (PDF, Optional)
                   </label>
                   <input
                     type="file"
@@ -1084,7 +1051,7 @@ const UserProfilePage: React.FC = () => {
                     }}
                     disabled={isSubmittingApplication}
                   >
-                    {t('common.cancel', 'Cancel')}
+                    Cancel
                   </button>
                   <button
                     type="button"
@@ -1099,12 +1066,63 @@ const UserProfilePage: React.FC = () => {
                     }
                   >
                     {isSubmittingApplication
-                      ? t('profile.submitting', 'Submitting...')
-                      : t('profile.submitApplication', 'Submit Application')}
+                      ? 'Submitting...'
+                      : 'Submit Application'}
                   </button>
                 </div>
               </div>
             )}
+
+            {/* Logout */}
+            <div className="menu-item">
+              {showLogoutConfirmation ? (
+                <>
+                  <span className="menu-label">Sign out?</span>
+                  <div className="menu-action-container">
+                    <div className="logout-buttons">
+                      <button
+                        type="button"
+                        className="dropdown-toggle"
+                        onClick={handleConfirmLogout}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        className="dropdown-toggle"
+                        onClick={handleCancelLogout}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                    }}
+                  >
+                    <LogOut size={20} />
+                    <span className="menu-label">
+                      {t('profile.logout', 'Sign out')}
+                    </span>
+                  </div>
+                  <div className="menu-action-container">
+                    <button
+                      type="button"
+                      className="dropdown-toggle"
+                      onClick={handleLogoutClick}
+                    >
+                      {t('profile.logout', 'Sign out')}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
