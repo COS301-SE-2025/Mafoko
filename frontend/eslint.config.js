@@ -15,7 +15,7 @@ export default tseslint.config(
       'dist/**',
       'build/**',
       'coverage/**',
-      'src/components/**'
+      'src/components/**',
     ],
   },
 
