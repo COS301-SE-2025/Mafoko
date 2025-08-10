@@ -174,7 +174,6 @@ export const TermDetailPage: React.FC = () => {
       void run();
     }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
 
-
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       if (!term) return;
