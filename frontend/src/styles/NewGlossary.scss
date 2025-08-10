@@ -365,10 +365,10 @@
   margin-bottom: 2rem;
   color: var(--text-theme);
 
-  /* Ensure all text elements inherit the theme color */
-  * {
-    color: var(--text-theme) !important;
-  }
+  ///* Ensure all text elements inherit the theme color */
+  //* {
+  //  color: var(--text-theme) !important;
+  //}
 
   /* Specific overrides for certain elements that need different colors */
   .term-language-badge {

@@ -1,5 +1,5 @@
 import { openDB, DBSchema } from 'idb';
-import { Term } from '../pages/SearchPage';
+import { Term } from '../types/terms/types.ts';
 
 const DB_NAME = 'MaritoGlossaryDB';
 const TERMS_STORE_NAME = 'terms';
