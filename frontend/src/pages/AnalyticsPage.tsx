@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import HorizontalBarChart from '../components/data/HorizontalBarChart';
 import type { TermData } from '../components/data/HorizontalBarChart';
-import { FaGlobe, FaChartLine, FaDatabase, FaLanguage } from 'react-icons/fa';
+import { FaGlobe, FaDatabase, FaLanguage } from 'react-icons/fa';
 import StatCard from '../components/data/StatCard';
 import PieChart from '../components/data/PieChart';
 import Histogram from '../components/data/Histogram';
@@ -127,6 +127,9 @@ const AnalyticsPage: React.FC = () => {
   const [uniqueTermsData, setUniqueTermsData] = useState<
     Record<string, number>
   >({});
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+  const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
+  const [showAllLanguages, setShowAllLanguages] = useState<boolean>(false);
 
   // UI state
   const [activeMenuItem, setActiveMenuItem] = useState('analytics');
@@ -149,7 +152,8 @@ const AnalyticsPage: React.FC = () => {
   useEffect(() => {
     const fetchCategoryData = async () => {
       try {
-        const response = await fetch(API_ENDPOINTS.categoryFrequency);
+        const url = API_ENDPOINTS.categoryFrequency(selectedLanguage);
+        const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch category data');
         const data = (await response.json()) as Record<string, number>;
         const transformed: TermData[] = Object.entries(data).map(
@@ -169,7 +173,7 @@ const AnalyticsPage: React.FC = () => {
     };
 
     void fetchCategoryData();
-  }, []);
+  }, [selectedLanguage]);
 
   // Fetch popular terms data
   useEffect(() => {
@@ -218,7 +222,7 @@ const AnalyticsPage: React.FC = () => {
     void fetchTotalStatistics();
   }, []);
 
-  // Fetch unique terms data
+  // Fetch unique terms data and available languages
   useEffect(() => {
     const fetchUniqueTerms = async () => {
       try {
@@ -226,9 +230,13 @@ const AnalyticsPage: React.FC = () => {
         if (!response.ok) throw new Error('Failed to fetch unique terms');
         const data = (await response.json()) as Record<string, number>;
         setUniqueTermsData(data);
+        // Extract available languages from unique terms data
+        setAvailableLanguages(Object.keys(data));
       } catch (error: unknown) {
         console.warn('Unique terms API unavailable.', error);
-        setUniqueTermsData({ english: 450, afrikaans: 340, zulu: 280 });
+        const fallbackData = { english: 450, afrikaans: 340, zulu: 280 };
+        setUniqueTermsData(fallbackData);
+        setAvailableLanguages(Object.keys(fallbackData));
       } finally {
         setIsLoading(false);
       }
@@ -236,15 +244,6 @@ const AnalyticsPage: React.FC = () => {
 
     void fetchUniqueTerms();
   }, []);
-
-  // Get top language from unique terms data
-  const getTopLanguage = (): string => {
-    if (Object.keys(uniqueTermsData).length === 0) return 'English';
-    const topLanguage = Object.entries(uniqueTermsData).reduce((a, b) =>
-      uniqueTermsData[a[0]] > uniqueTermsData[b[0]] ? a : b,
-    );
-    return topLanguage[0].charAt(0).toUpperCase() + topLanguage[0].slice(1);
-  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -332,8 +331,18 @@ const AnalyticsPage: React.FC = () => {
                   />
                   <StatCard
                     title={t('analytics.stats.topLanguage')}
-                    value={getTopLanguage()}
-                    icon={<FaChartLine className="stat-icon" />}
+                    value={
+                      Object.keys(uniqueTermsData).length > 0
+                        ? Object.entries(uniqueTermsData)
+                            .sort(([, a], [, b]) => b - a)[0]?.[0]
+                            ?.charAt(0)
+                            .toUpperCase() +
+                          (Object.entries(uniqueTermsData)
+                            .sort(([, a], [, b]) => b - a)[0]?.[0]
+                            ?.slice(1) || '')
+                        : 'English'
+                    }
+                    icon={<FaLanguage className="stat-icon" />}
                     isDarkMode={isDarkMode}
                   />
                 </div>
@@ -374,22 +383,104 @@ const AnalyticsPage: React.FC = () => {
 
                   <div className="chart-card">
                     <div className="chart-header">
-                      <h2
-                        className="text-gray-800 text-xl font-semibold m-0 "
-                        style={{ color: 'var(--text-color)' }}
-                      >
-                        {t('analytics.categoryDistribution.title')}
-                      </h2>
-                      <p
-                        className="chart-subtitle"
+                      <div
                         style={{
-                          color: 'var(--text-color-secondary)',
-                          fontSize: '0.875rem',
-                          margin: '0.25rem 0 0 0',
+                          position: 'relative',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'flex-start',
+                          marginBottom: '0.5rem',
                         }}
                       >
-                        {t('analytics.categoryDistribution.subtitle')}
-                      </p>
+                        <div style={{ textAlign: 'center' }}>
+                          <h2
+                            className="text-gray-800 text-xl font-semibold m-0 "
+                            style={{ color: 'var(--text-color)' }}
+                          >
+                            {t('analytics.categoryDistribution.title')}
+                          </h2>
+                          <p
+                            className="chart-subtitle"
+                            style={{
+                              color: 'var(--text-color-secondary)',
+                              fontSize: '0.875rem',
+                              margin: '0.25rem 0 0 0',
+                            }}
+                          >
+                            {t('analytics.categoryDistribution.subtitle')}
+                          </p>
+                        </div>
+                        <div
+                          style={{
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-end',
+                            gap: '0.25rem',
+                          }}
+                        >
+                          <label
+                            htmlFor="language-filter"
+                            style={{
+                              fontSize: '0.75rem',
+                              color: 'var(--text-color-secondary)',
+                              fontWeight: '500',
+                            }}
+                          >
+                            Filter by Language
+                          </label>
+                          <select
+                            id="language-filter"
+                            value={selectedLanguage}
+                            onChange={(e) => {
+                              setSelectedLanguage(e.target.value);
+                            }}
+                            style={{
+                              padding: '0.375rem 0.75rem',
+                              borderRadius: '0.375rem',
+                              border: isDarkMode
+                                ? '1px solid #4a5568'
+                                : '1px solid var(--border-color)',
+                              backgroundColor: isDarkMode
+                                ? '#2d3748'
+                                : 'var(--background-color)',
+                              color: 'var(--text-color)',
+                              fontSize: '0.875rem',
+                              minWidth: '140px',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <option
+                              value=""
+                              style={{
+                                backgroundColor: isDarkMode
+                                  ? '#2d3748'
+                                  : '#ffffff',
+                                color: isDarkMode ? '#ffffff' : '#000000',
+                              }}
+                            >
+                              All Languages
+                            </option>
+                            {availableLanguages.map((language) => (
+                              <option
+                                key={language}
+                                value={language}
+                                style={{
+                                  backgroundColor: isDarkMode
+                                    ? '#2d3748'
+                                    : '#ffffff',
+                                  color: isDarkMode ? '#ffffff' : '#000000',
+                                }}
+                              >
+                                {language.charAt(0).toUpperCase() +
+                                  language.slice(1)}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <div className="mt-4 px-2">
                       <HorizontalBarChart
@@ -531,9 +622,16 @@ const AnalyticsPage: React.FC = () => {
                         className="language-breakdown"
                         style={{ marginTop: '1rem' }}
                       >
-                        {Object.entries(uniqueTermsData)
-                          .slice(0, 5)
-                          .map(([lang, count], index) => (
+                        {(() => {
+                          const sortedEntries = Object.entries(
+                            uniqueTermsData,
+                          ).sort(([, a], [, b]) => b - a);
+
+                          const displayEntries = showAllLanguages
+                            ? sortedEntries
+                            : sortedEntries.slice(0, 5);
+
+                          return displayEntries.map(([lang, count], index) => (
                             <div
                               key={`lang-${lang}`}
                               style={{
@@ -541,7 +639,7 @@ const AnalyticsPage: React.FC = () => {
                                 justifyContent: 'space-between',
                                 padding: '0.25rem 0',
                                 borderBottom:
-                                  index < 4
+                                  index < displayEntries.length - 1
                                     ? '1px solid var(--border-color)'
                                     : 'none',
                               }}
@@ -566,7 +664,36 @@ const AnalyticsPage: React.FC = () => {
                                 )}
                               </span>
                             </div>
-                          ))}
+                          ));
+                        })()}
+                        {Object.keys(uniqueTermsData).length > 5 && (
+                          <div
+                            style={{
+                              textAlign: 'center',
+                              marginTop: '0.75rem',
+                              paddingTop: '0.75rem',
+                              borderTop: '1px solid var(--border-color)',
+                            }}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowAllLanguages(!showAllLanguages);
+                              }}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                color: 'var(--primary-color)',
+                                fontSize: '0.875rem',
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                                padding: '0.25rem 0.5rem',
+                              }}
+                            >
+                              {showAllLanguages ? 'Show Less' : 'See All'}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
