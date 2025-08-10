@@ -230,7 +230,9 @@ const TermCard: React.FC<TermCardProps> = ({
         {definition.length > 80 ? `${definition.slice(0, 80)}...` : definition}
       </p>
       <button className="view-button" onClick={() => onView?.()} type="button">
-        <Link className="!text-theme" to={`/term/${language}/${term}/${id}`}><span className="text-teal-500">View</span></Link>
+        <Link className="!text-theme" to={`/term/${language}/${term}/${id}`}>
+          <span className="text-teal-500">View</span>
+        </Link>
       </button>
     </div>
   );

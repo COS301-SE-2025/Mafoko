@@ -3,10 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { CommentItem } from '../components/TermDetail/CommentItem';
 import { Comment } from '../types/termDetailTypes';
 import '../styles/TermDetailPage.scss';
-import {
-  SendIcon,
-  SuggestEditArrowIcon,
-} from '../components/Icons';
+import { SendIcon, SuggestEditArrowIcon } from '../components/Icons';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
@@ -116,159 +113,155 @@ export const TermDetailPage: React.FC = () => {
     });
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-  const handleSearch = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetchTerm();
-      setTerm(res.results[0]);
-    } catch (error: unknown) {
-      console.error('Falling back to cached data', error);
-      const cachedTerms = await getAllTerms();
-      const filtered = cachedTerms.filter(
-        (term) => term.term.toLowerCase() === name?.toLowerCase(),
-      );
-      setTerm(filtered[0]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
-    try {
-      const params = new URLSearchParams({
-        domain: String(domain),
-        sort_by: 'name',
-        page: '1',
-        page_size: '3',
-        fuzzy: 'false',
-      });
-
-      const response = await fetch(
-        `${API_ENDPOINTS.search}?${params.toString()}`,
-      );
-      if (!response.ok) throw new Error('Failed to fetch search results');
-      const data = (await response.json()) as SearchResponseType;
-      const res = data.results;
-      return res;
-    } catch (ex) {
-      console.error('Falling back to cached data', ex);
-      const cachedTerms = await getAllTerms();
-      const filtered = cachedTerms.filter((t) => {
-        console.log('Looking for related domain:', term?.domain);
-        return t.domain === term?.domain && t.id !== term.id;
-      });
-      console.log('Cached', cachedTerms);
-      console.log('Cached Related', filtered);
-      setRelatedTerms(filtered);
-      return filtered;
-    }
-  };
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const run = async () => {
-      if (id) {
-        await handleSearch();
-        const related = await fetchRelatedTerms(String(term?.domain));
-        setRelatedTerms(related);
-      }
-    };
-    void run();
-  }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    if (!term) return;
-
-    const runSearch = async () => {
+    const handleSearch = useCallback(async () => {
       setIsLoading(true);
       try {
         const res = await fetchTerm();
-
         setTerm(res.results[0]);
-
-        const related = await fetchRelatedTerms(term.domain);
-        setRelatedTerms(related);
       } catch (error: unknown) {
-        console.error('Search fetch failed:', error);
+        console.error('Falling back to cached data', error);
+        const cachedTerms = await getAllTerms();
+        const filtered = cachedTerms.filter(
+          (term) => term.term.toLowerCase() === name?.toLowerCase(),
+        );
+        setTerm(filtered[0]);
       } finally {
         setIsLoading(false);
       }
-    };
+    }, []);
 
-    void runSearch();
-  }, [term, language, fetchTerm, fetchRelatedTerms]);
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    setAuthToken(token);
-
-    const storedUserDataString = localStorage.getItem('userData');
-    if (storedUserDataString) {
+    const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
       try {
-        const parsedData: unknown = JSON.parse(storedUserDataString);
-        if (
-          parsedData &&
-          typeof parsedData === 'object' &&
-          'uuid' in parsedData &&
-          typeof (parsedData as UserData).uuid === 'string'
-        ) {
-          setCurrentUserId((parsedData as UserData).uuid);
-        } else {
-          console.error(
-            'User data from localStorage is not in the expected format.',
-          );
+        const params = new URLSearchParams({
+          domain: String(domain),
+          sort_by: 'name',
+          page: '1',
+          page_size: '3',
+          fuzzy: 'false',
+        });
+
+        const response = await fetch(
+          `${API_ENDPOINTS.search}?${params.toString()}`,
+        );
+        if (!response.ok) throw new Error('Failed to fetch search results');
+        const data = (await response.json()) as SearchResponseType;
+        const res = data.results;
+        return res;
+      } catch (ex) {
+        console.error('Falling back to cached data', ex);
+        const cachedTerms = await getAllTerms();
+        const filtered = cachedTerms.filter((t) => {
+          console.log('Looking for related domain:', term?.domain);
+          return t.domain === term?.domain && t.id !== term.id;
+        });
+        console.log('Cached', cachedTerms);
+        console.log('Cached Related', filtered);
+        setRelatedTerms(filtered);
+        return filtered;
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const run = async () => {
+        if (id) {
+          await handleSearch();
+          const related = await fetchRelatedTerms(String(term?.domain));
+          setRelatedTerms(related);
+        }
+      };
+      void run();
+    }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      if (!term) return;
+
+      const runSearch = async () => {
+        setIsLoading(true);
+        try {
+          const res = await fetchTerm();
+
+          setTerm(res.results[0]);
+
+          const related = await fetchRelatedTerms(term.domain);
+          setRelatedTerms(related);
+        } catch (error: unknown) {
+          console.error('Search fetch failed:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      void runSearch();
+    }, [term, language, fetchTerm, fetchRelatedTerms]);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const token = localStorage.getItem('accessToken');
+      setAuthToken(token);
+
+      const storedUserDataString = localStorage.getItem('userData');
+      if (storedUserDataString) {
+        try {
+          const parsedData: unknown = JSON.parse(storedUserDataString);
+          if (
+            parsedData &&
+            typeof parsedData === 'object' &&
+            'uuid' in parsedData &&
+            typeof (parsedData as UserData).uuid === 'string'
+          ) {
+            setCurrentUserId((parsedData as UserData).uuid);
+          } else {
+            console.error(
+              'User data from localStorage is not in the expected format.',
+            );
+            localStorage.removeItem('userData');
+          }
+        } catch (error) {
+          console.error('Failed to parse user data from localStorage:', error);
           localStorage.removeItem('userData');
         }
-      } catch (error) {
-        console.error('Failed to parse user data from localStorage:', error);
-        localStorage.removeItem('userData');
+      } else {
+        setCurrentUserId(null);
       }
-    } else {
-      setCurrentUserId(null);
-    }
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        commentInputRef.current &&
-        !commentInputRef.current.contains(event.target as Node)
-      ) {
-        setReplyingToCommentId(null);
-      }
-    };
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          commentInputRef.current &&
+          !commentInputRef.current.contains(event.target as Node)
+        ) {
+          setReplyingToCommentId(null);
+        }
+      };
 
-    window.addEventListener('resize', handleResize);
-    document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('resize', handleResize);
+      document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
 
-
-
-  // const handleBack = () => {
-  //   void navigate(-1);
-  // };
-
-
+    // const handleBack = () => {
+    //   void navigate(-1);
+    // };
 
     const response = await fetch(
       `${API_ENDPOINTS.search}?${params.toString()}`,
@@ -276,8 +269,6 @@ export const TermDetailPage: React.FC = () => {
     if (!response.ok) throw new Error('Failed to fetch search results');
     return (await response.json()) as SearchResponseType;
   };
-
-
 
   const languageKey = term?.language
     ? term.language.charAt(0).toUpperCase() +
@@ -543,7 +534,8 @@ export const TermDetailPage: React.FC = () => {
               ) : (
                 <div className="min-h-screen term-page pt-16 w-full">
                   <div className="flex justify-between items-center w-full mb-4">
-                    <button type="button"
+                    <button
+                      type="button"
                       className="bg-theme rounded-md text-sm mb-4 text-theme justify-start h-10 w-20"
                       onClick={() => {
                         void navigate(`/search`);
