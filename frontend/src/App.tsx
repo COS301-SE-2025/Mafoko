@@ -6,6 +6,7 @@ import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
 import WorkspacePage from './pages/WorkspacePage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import FeedbackPage from './pages/FeedbackPage';
 import HelpPage from './pages/help/HelpPage.tsx';
 import GettingStarted from './pages/help/GettingStarted';
 import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
@@ -56,6 +57,7 @@ function App() {
         <Route path="/home" element={<DashboardPage />} />
         <Route path="/workspace" element={<WorkspacePage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />

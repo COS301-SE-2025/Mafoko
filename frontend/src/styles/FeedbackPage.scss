@@ -1,0 +1,382 @@
+// FeedbackPage.scss
+// @import '../styles/theme.scss';
+
+// Main feedback page layout following dashboard pattern
+.feedback-main {
+  padding: 2rem;
+  padding-top: 80px;
+  min-height: calc(100vh - 80px);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+    padding-top: 60px;
+    min-height: calc(100vh - 60px);
+  }
+}
+
+// Top bar styling specific to feedback page
+.feedback-top-bar {
+  background: transparent;
+  border-bottom: none;
+  padding: 1rem 2rem;
+  
+  .hamburger-icon {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: var(--color-background);
+    }
+  }
+}
+
+// Feedback container
+.feedback-container {
+  max-width: 1200px;
+  margin: -50px auto 0 auto;
+  
+  
+  .feedback-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    
+    .feedback-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+      
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+    
+    .feedback-subtitle {
+      font-size: 1.25rem;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      
+      @media (max-width: 768px) {
+        font-size: 1.1rem;
+      }
+    }
+  }
+  
+  .feedback-card {
+    background: #f3f4f6;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  
+  .feedback-footer {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+  }
+}
+
+// Tab navigation
+.feedback-tabs {
+  border-bottom: 1px solid var(--color-border);
+  
+  .tabs-nav {
+    display: flex;
+    
+    .tab-button {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      
+      .tab-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        
+        .tab-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+      
+      &:hover:not(.active) {
+        background: var(--color-background);
+        color: var(--color-text);
+      }
+      
+      &.active {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        border-bottom: 2px solid var(--color-primary);
+        
+        &.suggestion {
+          background: #f2d2011a;
+          color: #f2d001;
+          border-bottom-color: #f2d001;
+        }
+        
+        &.complaint {
+          background: #f00a4f32;
+          color: #f00a50;
+          border-bottom-color: #f00a50;
+        }
+        
+        &.compliment {
+          background: #00ceaf1d;
+          color: #00ceaf;
+          border-bottom-color: #00ceaf;
+        }
+      }
+      
+      @media (max-width: 640px) {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        
+        .tab-content {
+          flex-direction: column;
+          gap: 0.25rem;
+          
+          .tab-icon {
+            width: 1rem;
+            height: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Form container
+.feedback-form-container {
+  padding: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  .form-header {
+    margin-bottom: 2rem;
+    
+    .form-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-description {
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+  }
+}
+
+// Form styling
+.feedback-form {
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+    
+    .form-group {
+      .form-label {
+        display: block;
+        font-weight: 500;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+      }
+      
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        background:  #d7d8dea5;
+        color: var(--color-text);
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+        
+        &:focus {
+          outline: none;
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px #ffffff;
+        }
+        
+        &::placeholder {
+          color: var(--color-text-muted);
+        }
+      }
+      
+      .form-textarea {
+        resize: vertical;
+        min-height: 120px;
+        font-family: inherit;
+      }
+    }
+    
+    .form-submit {
+      display: flex;
+      justify-content: flex-end;
+      
+      .submit-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 2rem;
+        background: #c8cacf;
+        color: rgb(69, 68, 68);
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        
+        .submit-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+        
+        &:hover {
+          background: #b0b0b0;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(114, 124, 138, 0.3);
+        }
+        
+        &.disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+.theme-dark .feedback-form .form-fields .form-submit .submit-button {
+  background: #212431 !important;
+  color : #fafafa;
+  &:hover {
+    background: #2a2d3d !important;
+  }
+}
+
+.theme-dark .feedback-container .feedback-card {
+  background: #2a2e3e !important;
+}
+
+// Dark mode override for form fields
+.theme-dark .feedback-form .form-fields .form-group .form-input,
+.theme-dark .feedback-form .form-fields .form-group .form-textarea {
+  background: #242735 !important;
+  color: #fff;
+}
+
+// Success state
+.feedback-success-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+  
+  .feedback-success-card {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    
+    .success-icon {
+      width: 4rem;
+      height: 4rem;
+      color: rgb(34, 197, 94);
+      margin: 0 auto 1.5rem;
+    }
+    
+    .success-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+    
+    .success-message {
+      color: var(--color-text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+    
+    .success-progress {
+      .progress-bar {
+        height: 0.5rem;
+        background: rgba(34, 197, 94, 0.2);
+        border-radius: 0.25rem;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+        
+        .progress-fill {
+          height: 100%;
+          background: rgb(34, 197, 94);
+          width: 100%;
+          animation: progressFill 3s ease-in-out;
+        }
+      }
+      
+      .progress-text {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+      }
+    }
+  }
+}
+
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.form-title.suggestion {
+  color: #f2d001;
+}
+.form-title.complaint {
+  color: #f00a50;
+}
+.form-title.compliment {
+  color: #00ceaf;
+}

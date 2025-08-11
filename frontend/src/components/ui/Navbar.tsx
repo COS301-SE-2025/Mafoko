@@ -41,6 +41,7 @@ const Navbar = () => {
       t('navigation.glossary'),
       'Workspace',
       t('navigation.dashboard'),
+      'Feedback',
       t('navigation.help'),
     ],
     [t],
@@ -59,8 +60,8 @@ const Navbar = () => {
         return '/workspace';
       case 'Dashboard':
         return '/analytics';
-      case 'Workspace':
-        return '/workspace';
+      case 'Feedback':
+        return '/feedback';
       default:
         return `/${item.toLowerCase().replace(/\s/g, '-')}`;
     }
