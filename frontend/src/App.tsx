@@ -4,7 +4,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
 import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
-import SavedTermsPage from './pages/SavedTermsPage';
+import WorkspacePage from './pages/WorkspacePage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import HelpPage from './pages/help/HelpPage.tsx';
 import GettingStarted from './pages/help/GettingStarted';
@@ -54,7 +54,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/home" element={<DashboardPage />} />
-        <Route path="/saved-terms" element={<SavedTermsPage />} />
+        <Route path="/workspace" element={<WorkspacePage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
@@ -65,6 +65,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<NewGlossary />} />
         <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
+        <Route path="/workspace" element={<WorkspacePage />} />
       </Routes>
     </div>
   );
