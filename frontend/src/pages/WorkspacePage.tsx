@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   ChevronUp,
-  Edit2,
   Plus,
-  Move,
+  Edit2,
   Trash2,
   FolderPlus,
   Search,
@@ -55,13 +54,6 @@ interface BookmarkedGlossary {
   notes?: string;
 }
 
-interface GlossaryStats {
-  [domain: string]: {
-    term_count: number;
-    language_count?: number;
-  };
-}
-
 interface WorkspaceGroup {
   id: string;
   name: string;
@@ -83,7 +75,7 @@ const WorkspacePage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   // Used to force re-renders when data is updated
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_dataVersion, setDataVersion] = useState(0);
+  const [dataVersion, setDataVersion] = useState(0);
   const { isDarkMode } = useDarkMode();
 
   const [activeTab, setActiveTab] = useState('saved-terms');
@@ -133,28 +125,11 @@ const WorkspacePage: React.FC = () => {
   const [createdGroupId, setCreatedGroupId] = useState<string | null>(null);
   const [selectedTermIds, setSelectedTermIds] = useState<string[]>([]);
 
-  // State for moving terms between groups
-  const [isMoveTermModalOpen, setIsMoveTermModalOpen] = useState(false);
-  const [termToMove, setTermToMove] = useState<{
-    termId: string;
-    termName: string;
-    currentGroup: string;
-  } | null>(null);
-
-  // State for renaming groups
-  const [isRenameGroupModalOpen, setIsRenameGroupModalOpen] = useState(false);
-  const [groupToRename, setGroupToRename] = useState<{
-    groupId: string;
-    currentName: string;
-  } | null>(null);
-  const [newGroupNameForRename, setNewGroupNameForRename] = useState('');
-
   // Real workspace data state
   // const [bookmarkedTerms, setBookmarkedTerms] = useState<BookmarkedTerm[]>([]);
   const [bookmarkedGlossaries, setBookmarkedGlossaries] = useState<
     BookmarkedGlossary[]
   >([]);
-  const [glossaryStats, setGlossaryStats] = useState<GlossaryStats>({});
   const [workspaceGroups, setWorkspaceGroups] = useState<WorkspaceGroup[]>([]);
   // const [workspaceOverview, setWorkspaceOverview] = useState<WorkspaceOverview | null>(null);
   const [loading, setLoading] = useState(false);
@@ -544,9 +519,6 @@ const WorkspacePage: React.FC = () => {
       ];
       setGroups(groupNames);
 
-      // Fetch glossary stats (don't block on failure)
-      await fetchGlossaryStats();
-
       console.log('Workspace data loaded successfully');
 
       // Mark that workspace data has been loaded
@@ -556,38 +528,6 @@ const WorkspacePage: React.FC = () => {
       setError('Failed to load workspace data. Please try again.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Function to fetch glossary stats
-  const fetchGlossaryStats = async (): Promise<void> => {
-    try {
-      const response = await fetch(API_ENDPOINTS.glossaryCategoriesStats);
-
-      if (!response.ok) {
-        console.warn('Failed to fetch glossary stats:', response.status);
-        return;
-      }
-
-      const statsData = (await response.json()) as Array<{
-        category: string;
-        term_count: number;
-        language_count?: number;
-      }>;
-
-      // Convert array to object for easier lookup
-      const statsMap: GlossaryStats = {};
-      statsData.forEach((stat) => {
-        statsMap[stat.category] = {
-          term_count: stat.term_count,
-          language_count: stat.language_count,
-        };
-      });
-
-      setGlossaryStats(statsMap);
-      console.log('✅ Glossary stats loaded successfully:', statsMap);
-    } catch (error) {
-      console.warn('Failed to fetch glossary stats:', error);
     }
   };
 
@@ -1011,192 +951,6 @@ const WorkspacePage: React.FC = () => {
     }
   };
 
-  // Functions for moving terms between groups
-  const handleMoveTermToGroup = (
-    termId: string,
-    termName: string,
-    currentGroup: string,
-  ) => {
-    setTermToMove({ termId, termName, currentGroup });
-    setIsMoveTermModalOpen(true);
-  };
-
-  const handleCloseMoveTermModal = () => {
-    setIsMoveTermModalOpen(false);
-    setTermToMove(null);
-  };
-
-  // Functions for renaming groups
-  const handleRenameGroup = (groupId: string, currentName: string) => {
-    setGroupToRename({ groupId, currentName });
-    setNewGroupNameForRename(currentName);
-    setIsRenameGroupModalOpen(true);
-  };
-
-  const handleCloseRenameGroupModal = () => {
-    setIsRenameGroupModalOpen(false);
-    setGroupToRename(null);
-    setNewGroupNameForRename('');
-  };
-
-  const handleConfirmRenameGroup = async () => {
-    if (!groupToRename || !newGroupNameForRename.trim()) {
-      showError('Please enter a valid group name');
-      return;
-    }
-
-    const trimmedName = newGroupNameForRename.trim();
-
-    // Check if the new name is the same as the current name
-    if (trimmedName === groupToRename.currentName) {
-      handleCloseRenameGroupModal();
-      return;
-    }
-
-    // Check if group name already exists
-    if (
-      workspaceGroups.some(
-        (group) =>
-          group.name === trimmedName && group.id !== groupToRename.groupId,
-      )
-    ) {
-      showError('A group with this name already exists');
-      return;
-    }
-
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      showError('Please log in to rename groups.');
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      // Update the group via API
-      const response = await fetch(
-        API_ENDPOINTS.updateGroup(groupToRename.groupId),
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: trimmedName,
-            description: `Group for organizing terms: ${trimmedName}`,
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to rename group');
-      }
-
-      // Close the modal
-      handleCloseRenameGroupModal();
-
-      // Reload workspace data to reflect changes
-      await loadWorkspaceData();
-
-      // Force a complete re-render
-      setDataVersion((prev: number) => prev + 1);
-
-      // Show success message
-      showSuccess(`Successfully renamed group to "${trimmedName}"!`);
-    } catch (error) {
-      console.error('Failed to rename group:', error);
-      showError('Failed to rename group. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleConfirmMoveTermToGroup = async (targetGroupId: string) => {
-    if (!termToMove) return;
-
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      showError('Please log in to move terms between groups.');
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      // First, remove the term from its current group (if it's not "All Terms")
-      if (termToMove.currentGroup !== 'All Terms') {
-        const currentGroup = workspaceGroups.find(
-          (g) => g.name === termToMove.currentGroup,
-        );
-        if (currentGroup) {
-          const removeResponse = await fetch(
-            API_ENDPOINTS.removeTermFromGroup(
-              currentGroup.id,
-              termToMove.termId,
-            ),
-            {
-              method: 'DELETE',
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-
-          if (!removeResponse.ok) {
-            throw new Error('Failed to remove term from current group');
-          }
-        }
-      }
-
-      // Then, add the term to the target group (if it's not "All Terms")
-      if (targetGroupId !== 'all-terms') {
-        const addResponse = await fetch(
-          API_ENDPOINTS.addTermsToGroup(targetGroupId),
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              term_ids: [termToMove.termId],
-            }),
-          },
-        );
-
-        if (!addResponse.ok) {
-          throw new Error('Failed to add term to target group');
-        }
-      }
-
-      // Close the modal
-      handleCloseMoveTermModal();
-
-      // Reload workspace data to reflect changes
-      await loadWorkspaceData();
-
-      // Force a complete re-render
-      setDataVersion((prev: number) => prev + 1);
-
-      // Show success message
-      const targetGroupName =
-        targetGroupId === 'all-terms'
-          ? 'All Terms'
-          : workspaceGroups.find((g) => g.id === targetGroupId)?.name ||
-            'selected group';
-
-      showSuccess(
-        `Successfully moved "${termToMove.termName}" to ${targetGroupName}!`,
-      );
-    } catch (error) {
-      console.error('Failed to move term:', error);
-      showError('Failed to move term. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const filteredTerms = savedTerms.filter((bookmarkedTerm) => {
     const searchLower = searchQuery.toLowerCase();
 
@@ -1268,16 +1022,10 @@ const WorkspacePage: React.FC = () => {
         result[groupName] = [];
       });
 
-    // Categorize each term using the local function AND ensure all terms appear in "All Terms"
+    // Categorize each term using the local function
     filteredTerms.forEach((term) => {
-      // Always add to "All Terms" group
-      result['All Terms'].push(term);
-
-      // Also add to specific group if it has one (and it's not "All Terms")
       const groupName = getGroupForTerm(term.term_id);
-      if (groupName !== 'All Terms') {
-        result[groupName].push(term);
-      }
+      result[groupName].push(term);
     });
 
     return result;
@@ -1381,18 +1129,7 @@ const WorkspacePage: React.FC = () => {
             {/* Header */}
             <div className="workspace-header">
               {/* Navigation Tabs */}
-              <div
-                style={{
-                  backgroundColor: isDarkMode
-                    ? '#212431ad'
-                    : 'rgba(196, 196, 196, 0.4)',
-                  display: 'flex',
-                  gap: '0.25rem',
-                  padding: '0.25rem',
-                  borderRadius: '0.75rem',
-                }}
-                className="workspace-tabs"
-              >
+              <div className="workspace-tabs">
                 <button
                   type="button"
                   onClick={() => {
@@ -1569,41 +1306,18 @@ const WorkspacePage: React.FC = () => {
                               </div>
                               <div className="group-actions">
                                 {!isDeleteMode && (
-                                  <>
-                                    {groupName !== 'All Terms' && (
-                                      <button
-                                        type="button"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          const group = workspaceGroups.find(
-                                            (g) => g.name === groupName,
-                                          );
-                                          if (group) {
-                                            handleRenameGroup(
-                                              group.id,
-                                              group.name,
-                                            );
-                                          }
-                                        }}
-                                        className="group-action-btn"
-                                        title="Rename group"
-                                      >
-                                        <Edit2 className="w-4 h-4" />
-                                      </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      toggleGroup(groupName);
+                                    }}
+                                  >
+                                    {expandedGroups[groupName] ? (
+                                      <ChevronUp className="chevron-icon" />
+                                    ) : (
+                                      <ChevronDown className="chevron-icon" />
                                     )}
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        toggleGroup(groupName);
-                                      }}
-                                    >
-                                      {expandedGroups[groupName] ? (
-                                        <ChevronUp className="chevron-icon" />
-                                      ) : (
-                                        <ChevronDown className="chevron-icon" />
-                                      )}
-                                    </button>
-                                  </>
+                                  </button>
                                 )}
                               </div>
                             </div>
@@ -1635,16 +1349,14 @@ const WorkspacePage: React.FC = () => {
                                           <h4 className="term-title">
                                             {term.term}
                                           </h4>
-                                          <div className="term-badges">
-                                            <span className="term-language-badge">
-                                              {term.language}
+                                          <span className="language-tag">
+                                            {term.language}
+                                          </span>
+                                          {term.domain && (
+                                            <span className="category-tag">
+                                              {term.domain}
                                             </span>
-                                            {term.domain && (
-                                              <span className="category-tag">
-                                                {term.domain}
-                                              </span>
-                                            )}
-                                          </div>
+                                          )}
                                         </div>
                                         {term.definition && (
                                           <p className="term-definition">
@@ -1674,11 +1386,6 @@ const WorkspacePage: React.FC = () => {
                                                     );
                                                   }}
                                                   className="save-btn"
-                                                  style={{
-                                                    backgroundColor: isDarkMode
-                                                      ? undefined
-                                                      : '#00ceaf16', // pink in light mode
-                                                  }}
                                                 >
                                                   <Save className="icon" />
                                                 </button>
@@ -1686,11 +1393,6 @@ const WorkspacePage: React.FC = () => {
                                                   type="button"
                                                   onClick={handleCancelNote}
                                                   className="cancel-btn"
-                                                  style={{
-                                                    backgroundColor: isDarkMode
-                                                      ? undefined
-                                                      : '#f8717148',
-                                                  }}
                                                 >
                                                   <X className="icon" />
                                                 </button>
@@ -1740,45 +1442,6 @@ const WorkspacePage: React.FC = () => {
                                               <StickyNote className="icon" />
                                             </button>
                                           )}
-                                        <button
-                                          type="button"
-                                          className="add-note-btn"
-                                          onClick={() => {
-                                            // Find the actual group this term belongs to (not "All Terms")
-                                            let currentGroup = 'All Terms';
-                                            for (const group of workspaceGroups) {
-                                              const items = group.items || [];
-                                              for (const item of items) {
-                                                if (
-                                                  item.item_type === 'term' &&
-                                                  item.term_id.toString() ===
-                                                    term.term_id.toString()
-                                                ) {
-                                                  currentGroup = group.name;
-                                                  break;
-                                                }
-                                              }
-                                              if (currentGroup !== 'All Terms')
-                                                break;
-                                            }
-                                            handleMoveTermToGroup(
-                                              term.term_id,
-                                              term.term,
-                                              currentGroup,
-                                            );
-                                          }}
-                                          title="Move to group"
-                                          style={{
-                                            backgroundColor: isDarkMode
-                                              ? '#31374e'
-                                              : '#00ceaf25',
-                                          }}
-                                        >
-                                          <Move
-                                            style={{ color: '#00ceaf' }}
-                                            className="icon"
-                                          />
-                                        </button>
                                         <button
                                           type="button"
                                           className="delete-btn"
@@ -1935,14 +1598,14 @@ const WorkspacePage: React.FC = () => {
                       >
                         {/* Followed Glossaries */}
                       </h3>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {bookmarkedGlossaries.map((bookmark) => (
                           <div
                             key={bookmark.id}
                             className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
                             style={
                               isDarkMode
-                                ? { backgroundColor: '#222535c0' }
+                                ? { backgroundColor: '#222535ff' }
                                 : { backgroundColor: '#f5f5f5' }
                             }
                           >
@@ -1956,21 +1619,25 @@ const WorkspacePage: React.FC = () => {
                                   <h4
                                     className={`text-lg font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
                                   >
-                                    {bookmark.domain}
+                                    {bookmark.domain} Glossary
                                   </h4>
+                                  <span className="language-tag">
+                                    {bookmark.domain}
+                                  </span>
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <span className="term-count-badge">
-                                  {glossaryStats[bookmark.domain].term_count ||
-                                    bookmark.term_count ||
-                                    0}{' '}
-                                  terms
-                                </span>
-                                <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                              </div>
+                              <div className="w-3 h-3 rounded-full bg-green-500"></div>
                             </div>
-                            {/* Date removed as requested */}
+                            <div
+                              className={`flex items-center justify-between text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                            >
+                              <span>
+                                Added:{' '}
+                                {new Date(
+                                  bookmark.bookmarked_at,
+                                ).toLocaleDateString()}
+                              </span>
+                            </div>
                             {bookmark.notes && (
                               <div className="mt-2">
                                 <p
@@ -1980,86 +1647,67 @@ const WorkspacePage: React.FC = () => {
                                 </p>
                               </div>
                             )}
-                            <div className="mt-3 flex items-center space-x-2 justify-center">
-                              <div
+                            <div className="mt-3 flex items-center space-x-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  // Handle view glossary action
+                                  console.log(
+                                    'View glossary:',
+                                    bookmark.domain,
+                                  );
+                                  // Navigate to glossary page with selected glossary
+                                  void navigate('/glossary', {
+                                    state: {
+                                      selectedGlossaryName: bookmark.domain,
+                                    },
+                                  });
+                                }}
+                                className="create-new-btn"
+                                title="View glossary"
                                 style={{
-                                  display: 'flex',
-                                  width: '100%',
-                                  justifyContent: 'space-between',
-                                  gap: '0.5rem',
+                                  backgroundColor: 'var(--accent-color)',
+                                  color: 'white',
+                                  border: 'none',
+                                  fontSize: '0.875rem',
+                                  padding: '0.5rem 1rem',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    '#d91748';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    'var(--accent-color)';
                                 }}
                               >
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    // Handle view glossary action
-                                    console.log(
-                                      'View glossary:',
-                                      bookmark.domain,
-                                    );
-                                    // Navigate to glossary page with selected glossary
-                                    void navigate('/glossary', {
-                                      state: {
-                                        selectedGlossaryName: bookmark.domain,
-                                      },
-                                    });
-                                  }}
-                                  className="create-new-btn"
-                                  title="View glossary"
-                                  style={{
-                                    backgroundColor: isDarkMode
-                                      ? '#1b1d28ff'
-                                      : '#e5e7eb', // dark blue in dark mode, grey in light mode
-                                    color: isDarkMode ? 'white' : '#363b4d',
-                                    border: 'none',
-                                    fontSize: '0.875rem',
-                                    padding: '0.5rem 1rem',
-                                    borderRadius: '9999px',
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                      isDarkMode ? '#212431bd' : '#d1d5db';
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                      isDarkMode ? '#1b1d28ff' : '#e5e7eb';
-                                  }}
-                                >
-                                  View
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    void handleDeleteGlossary(bookmark.domain);
-                                  }}
-                                  className="create-new-btn"
-                                  title="Remove glossary bookmark"
-                                  style={{
-                                    backgroundColor: '#d9174836',
-                                    color: '#d91748',
-                                    border: 'none',
-                                    fontSize: '0.75rem',
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: '10px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                      '#d9174880';
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor =
-                                      '#d9174836';
-                                  }}
-                                >
-                                  <Trash2
-                                    className="icon"
-                                    style={{ width: '16px', height: '16px' }}
-                                  />
-                                </button>
-                              </div>
+                                View
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  void handleDeleteGlossary(bookmark.domain);
+                                }}
+                                className="create-new-btn"
+                                title="Remove glossary bookmark"
+                                style={{
+                                  backgroundColor: 'var(--accent-color)',
+                                  color: 'white',
+                                  border: 'none',
+                                  fontSize: '0.875rem',
+                                  padding: '0.5rem 1rem',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    '#d91748';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor =
+                                    'var(--accent-color)';
+                                }}
+                              >
+                                Remove Bookmark
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -2276,216 +1924,6 @@ const WorkspacePage: React.FC = () => {
                 {loading
                   ? 'Adding...'
                   : `Add ${selectedTermIds.length.toString()} Term(s)`}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Move Term Modal */}
-      {isMoveTermModalOpen && termToMove && (
-        <div className="modal-overlay">
-          <div className="modal-container" style={{ maxWidth: '500px' }}>
-            {/* Modal Header */}
-            <div className="modal-header">
-              <h3 className="modal-title">Move Term to Group</h3>
-              <button
-                type="button"
-                onClick={handleCloseMoveTermModal}
-                className="close-btn"
-              >
-                <X className="close-icon" />
-              </button>
-            </div>
-            <div className="modal-body">
-              <p className="form-description">
-                Move "{termToMove.termName}" from "{termToMove.currentGroup}" to
-                a different group.
-              </p>
-
-              {/* Groups List */}
-              <div
-                className="groups-list"
-                style={{
-                  maxHeight: '300px',
-                  overflowY: 'auto',
-                  marginTop: '1rem',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '0.5rem',
-                  padding: '0.5rem',
-                }}
-              >
-                {/* All Terms option */}
-                <div
-                  className={`group-option ${termToMove.currentGroup === 'All Terms' ? 'disabled' : ''}`}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0.75rem',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '0.5rem',
-                    marginBottom: '0.5rem',
-                    cursor:
-                      termToMove.currentGroup === 'All Terms'
-                        ? 'not-allowed'
-                        : 'pointer',
-                    backgroundColor:
-                      termToMove.currentGroup === 'All Terms'
-                        ? '#f3f4f6'
-                        : 'white',
-                    opacity: termToMove.currentGroup === 'All Terms' ? 0.5 : 1,
-                  }}
-                  onClick={() => {
-                    if (termToMove.currentGroup !== 'All Terms') {
-                      void handleConfirmMoveTermToGroup('all-terms');
-                    }
-                  }}
-                >
-                  <FolderPlus
-                    className="w-4 h-4 mr-2"
-                    style={{ color: '#00ceaf' }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600' }}>All Terms</div>
-                    <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                      Remove from specific groups
-                    </div>
-                  </div>
-                  {termToMove.currentGroup === 'All Terms' && (
-                    <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                      Current
-                    </span>
-                  )}
-                </div>
-
-                {/* Workspace Groups */}
-                {workspaceGroups.map((group) => (
-                  <div
-                    key={group.id}
-                    className={`group-option ${termToMove.currentGroup === group.name ? 'disabled' : ''}`}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '0.75rem',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '0.5rem',
-                      marginBottom: '0.5rem',
-                      cursor:
-                        termToMove.currentGroup === group.name
-                          ? 'not-allowed'
-                          : 'pointer',
-                      backgroundColor:
-                        termToMove.currentGroup === group.name
-                          ? '#f3f4f6'
-                          : 'white',
-                      opacity: termToMove.currentGroup === group.name ? 0.5 : 1,
-                    }}
-                    onClick={() => {
-                      if (termToMove.currentGroup !== group.name) {
-                        void handleConfirmMoveTermToGroup(group.id);
-                      }
-                    }}
-                  >
-                    <FolderPlus
-                      className="w-4 h-4 mr-2"
-                      style={{ color: '#00ceaf' }}
-                    />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: '600' }}>{group.name}</div>
-                      <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                        {group.items?.length || 0} term(s)
-                      </div>
-                    </div>
-                    {termToMove.currentGroup === group.name && (
-                      <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                        Current
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="modal-footer">
-              <button
-                type="button"
-                onClick={handleCloseMoveTermModal}
-                className="cancel-btn"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Rename Group Modal */}
-      {isRenameGroupModalOpen && groupToRename && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            {/* Modal Header */}
-            <div className="modal-header">
-              <h3 className="modal-title">
-                <Edit2 className="w-5 h-5 inline mr-2" />
-                Rename Group
-              </h3>
-              <button
-                type="button"
-                onClick={handleCloseRenameGroupModal}
-                className="close-btn"
-              >
-                <X className="close-icon" />
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="form-group">
-                <label htmlFor="renameGroupName" className="form-label">
-                  Group Name
-                </label>
-                <input
-                  type="text"
-                  id="renameGroupName"
-                  value={newGroupNameForRename}
-                  onChange={(e) => {
-                    setNewGroupNameForRename(e.target.value);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      void handleConfirmRenameGroup();
-                    } else if (e.key === 'Escape') {
-                      handleCloseRenameGroupModal();
-                    }
-                  }}
-                  placeholder="Enter new group name..."
-                  className="form-input"
-                  autoFocus
-                />
-              </div>
-              <p className="form-description">
-                Rename "{groupToRename.currentName}" to a new name.
-              </p>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="modal-footer">
-              <button
-                type="button"
-                onClick={handleCloseRenameGroupModal}
-                className="cancel-btn"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  void handleConfirmRenameGroup();
-                }}
-                disabled={!newGroupNameForRename.trim() || loading}
-                className={`create-btn ${!newGroupNameForRename.trim() || loading ? 'disabled' : ''}`}
-              >
-                <Edit2 className="plus-icon" />
-                {loading ? 'Renaming...' : 'Rename Group'}
               </button>
             </div>
           </div>
