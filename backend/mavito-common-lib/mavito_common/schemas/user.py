@@ -8,7 +8,6 @@ import uuid  # Import for UUID type
 
 # Assuming UserRole is correctly defined in app/models/user.py
 from mavito_common.models.user import UserRole
-from .linguist_application import LinguistApplicationCreate  # noqa: F401
 
 
 # Shared properties

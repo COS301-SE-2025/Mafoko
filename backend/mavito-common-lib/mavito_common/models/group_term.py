@@ -18,6 +18,8 @@ class GroupTerm(Base):
     Association table for many-to-many relationship between groups and terms.
     """
 
+    __tablename__ = "group_terms"  # type: ignore
+
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )

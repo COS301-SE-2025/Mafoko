@@ -13,9 +13,7 @@ from mavito_common.schemas.token import TokenPayload  # Pydantic schema for toke
 from mavito_common.schemas.user import (
     User as UserSchema,
 )  # Pydantic schema for API response
-from mavito_common.models.user import (
-    User as UserModel,
-)  # SQLAlchemy model for DB operations
+from mavito_common.models.user import User as UserModel, UserRole
 from mavito_common.db.session import get_db  # Your DB session dependency
 
 logger = logging.getLogger(__name__)
@@ -93,3 +91,22 @@ async def get_current_active_user(
     # UserSchema should have model_config = ConfigDict(from_attributes=True)
     return UserSchema.model_validate(current_user)  # Pydantic V2
     # For Pydantic V1, it would be: return UserSchema.from_orm(current_user)
+
+
+async def get_current_active_admin(
+    current_user: UserModel = Depends(get_current_user),
+) -> UserSchema:
+    """
+    Dependency to get the current active user, ensuring they have an admin role.
+    """
+    if not await crud_user.is_user_active(current_user):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Inactive or locked user account.",
+        )
+    if current_user.role != UserRole.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user doesn't have enough privileges.",
+        )
+    return UserSchema.model_validate(current_user)

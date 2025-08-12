@@ -13,6 +13,7 @@ import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
 import NewGlossary from './pages/NewGlossary';
+import LinguistApplicationPage from './pages/LinguistApplicationPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import './App.css';
 
@@ -65,6 +66,10 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<NewGlossary />} />
         <Route path="/term/:termId" element={<TermDetailPage />} />
+        <Route
+          path="/linguist-application"
+          element={<LinguistApplicationPage />}
+        />
       </Routes>
     </div>
   );

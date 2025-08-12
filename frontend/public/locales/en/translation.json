@@ -75,14 +75,58 @@
     "userTypeLabels": {
       "normalUser": "Normal User",
       "applyingLinguist": "Applying as a Linguist"
+    },
+    "errors": {
+        "passwordMismatch": "Passwords do not match.",
+        "mustAgreeToTerms": "You must agree to the terms and conditions.",
+        "registrationFailed": "Registration failed. Please try again.",
+        "unexpectedError": "An unexpected error occurred.",
+        "googleLoginFailed": "Google login failed. Please try again.",
+        "passwordmustbe atleast8characterslong": "Password must be at least 8 characters long.",
+        "passwordmustcontainatleastonenumber": "Password must contain at least one number.",
+        "passwordmustcontainatleastoneuppercaseletter": "Password must contain at least one uppercase letter.",
+        "passwordmustbeprovidedfornewusers": "Password must be provided for new users."
     }
   },
+
+    "linguistApplicationPage": {
+      "title": "Linguist Application",
+      "description": "Please submit your application by providing a link to your Google Scholar profile and uploading your research papers. This information will be used for a PII-free assessment of your expertise.",
+      "googleScholarUrlLabel": "Google Scholar Profile URL",
+      "googleScholarUrlPlaceholder": "e.g., https://scholar.google.com/citations?user=...",
+      "researchPapersLabel": "Research Papers (PDF)",
+      "researchPapersHelpText": "Upload one or more of your peer-reviewed research papers in PDF format.",
+      "submitButton": "Submit Application",
+      "submittingButton": "Submitting...",
+      "successMessage": "Your application has been submitted successfully!",
+      "loadingStatus": "Checking application status...",
+      "heroTitle": "Become a Mavito Linguist",
+      "heroDescription": "Showcase your academic expertise and join our global linguist network.",
+      "status": {
+        "title": "Application Status",
+        "submitted": "Submitted",
+        "finalDecision": "Final Decision",
+        "underReview": "Under Review",
+        "pending": "Your application has been submitted and is currently under review. We will notify you once a decision has been made.",
+        "approved": "Congratulations! Your application has been approved. You are now a Mavito linguist.",
+        "rejected": "We regret to inform you that your application was not successful at this time. Thank you for your interest."
+      },
+      "errors": {
+        "missingFields": "Please provide your Google Scholar URL and at least one research paper.",
+        "notAuthenticated": "You must be logged in to submit an application. Please log in and try again.",
+        "uploadUrlFailed": "Failed to get a secure upload URL for your file: {{fileName}}.",
+        "uploadFailed": "Failed to upload your file: {{fileName}}.",
+        "submissionFailed": "Your application submission failed. Please try again.",
+        "unexpected": "An unexpected error occurred. Please try again later."
+      }
+    },
 
   "navigation": {
     "home": "Home",
     "dictionary": "Dictionary",
     "glossary": "Glossary",
     "savedTerms": "Saved Terms",
+    "linguistApplication": "Linguist Application",
     "dashboard": "Dashboard",
     "help": "Help",
     "darkMode": "Dark Mode",

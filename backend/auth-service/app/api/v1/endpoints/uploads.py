@@ -1,15 +1,12 @@
 import uuid
-from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException
+from datetime import timedelta, datetime
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
-
 from google.cloud import storage
 from mavito_common.core.config import settings
-from app.api import deps
+from app.api import deps  # noqa: F401
 from mavito_common.models.user import User as UserModel
-
-import google.auth
-import google.auth.transport.requests
+from app.api.deps import get_current_active_user
 
 router = APIRouter()
 
@@ -24,40 +21,35 @@ class SignedUrlResponse(BaseModel):
     gcs_key: str
 
 
-@router.post("/generate-signed-url", response_model=SignedUrlResponse)
-def generate_signed_url(
-    request_body: SignedUrlRequest,
-    current_user: UserModel = Depends(deps.get_current_active_user),
+@router.post(
+    "/generate-signed-url",
+    response_model=SignedUrlResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Generate a signed URL for a file upload",
+    description="Generates a signed URL that allows a client to upload a file directly to Google Cloud Storage.",
+)
+async def generate_signed_url(
+    request: SignedUrlRequest,
+    current_user: UserModel = Depends(get_current_active_user),
 ):
     try:
         storage_client = storage.Client()
+        bucket = storage_client.bucket(settings.GCS_BUCKET_NAME)
 
-        bucket_name = settings.GCS_BUCKET_NAME
-        bucket = storage_client.bucket(bucket_name)
+        gcs_key = f"uploads/{current_user.id}/{uuid.uuid4()}-{request.filename}"
+        blob = bucket.blob(gcs_key)
 
-        unique_file_key = f"linguist-applications/{current_user.id}/{uuid.uuid4()}-{request_body.filename}"
+        expiration_time = datetime.now() + timedelta(minutes=15)
+        upload_url = blob.generate_signed_url(
+            version="v4",
+            expiration=expiration_time,
+            method="PUT",
+            content_type=request.content_type,
+        )
 
-        blob = bucket.blob(unique_file_key)
-
-        credentials, project_id = google.auth.default()
-        credentials.refresh(google.auth.transport.requests.Request())
-
-        if hasattr(credentials, "service_account_email"):
-            url = blob.generate_signed_url(
-                version="v4",
-                method="PUT",
-                expiration=timedelta(minutes=15),
-                content_type=request_body.content_type,
-                service_account_email=credentials.service_account_email,
-                access_token=credentials.token,
-            )
-        else:
-            raise RuntimeError(
-                "Service account email not available in credentials for signed URL generation."
-            )
-
-        return SignedUrlResponse(upload_url=url, gcs_key=unique_file_key)
-
+        return SignedUrlResponse(upload_url=upload_url, gcs_key=gcs_key)
     except Exception as e:
-        print(f"Error generating signed URL: {e}")
-        raise HTTPException(status_code=500, detail=f"Error generating signed URL: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An error occurred while generating the signed URL: {e}",
+        )

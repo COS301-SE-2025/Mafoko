@@ -25,7 +25,7 @@ const TERM_SERVICE_URL =
   (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
-  'http://localhost:8008'; // Changed to 8008
+  'http://localhost:8008';
 const WORKSPACE_SERVICE_URL =
   (import.meta.env.VITE_WORKSPACE_SERVICE_URL as string) ||
   'http://localhost:8009';
@@ -46,7 +46,11 @@ interface APIEndpoints {
   generateSignedUrl: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
+  ApproveApplicationStatus: (applicationId: string) => string;
+  RejectApplicationStatus: (applicationId: string) => string;
   createApplication: string;
+  getAllApplications: string;
+  getLinguistApplication: string;
   getUserUploads: (userId: string) => string;
   getSignedDownloadUrl: (gcsKey: string) => string;
   getUsersWithUploads: () => string;
@@ -122,10 +126,31 @@ export const API_ENDPOINTS: APIEndpoints = {
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
 
   // --- Linguist Application Service ---
+  getAllApplications: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/all',
+  ),
   createApplication: endpoint(
     LINGUIST_APP_SERVICE_URL,
     '/api/v1/linguist-applications',
   ),
+  getLinguistApplication: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/me_application',
+  ),
+
+  ApproveApplicationStatus(applicationId) {
+    return endpoint(
+      LINGUIST_APP_SERVICE_URL,
+      `/api/v1/linguist-applications/${applicationId}/approve`,
+    );
+  },
+  RejectApplicationStatus(applicationId) {
+    return endpoint(
+      LINGUIST_APP_SERVICE_URL,
+      `/api/v1/linguist-applications/${applicationId}/reject`,
+    );
+  },
   getUserUploads: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/uploads`),
   getSignedDownloadUrl: (gcsKey: string) =>
