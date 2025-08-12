@@ -3,6 +3,8 @@ import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config';
 import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
+import { Link } from 'react-router-dom';
+import { LanguageColorMap } from '../../types/search/types.ts';
 
 interface VoteApiResponse {
   term_id: string;
@@ -23,20 +25,6 @@ interface TermCardProps {
   onView?: () => void;
   onBookmarkChange?: (termId: string, isBookmarked: boolean) => void;
 }
-
-const langColorMap: Record<string, string> = {
-  Afrikaans: 'blue',
-  English: 'yellow',
-  isiNdebele: 'pink',
-  isiXhosa: 'green',
-  isiZulu: 'green',
-  Sesotho: 'yellow',
-  Setswana: 'orange',
-  siSwati: 'teal',
-  Tshivenda: 'indigo',
-  Xitsonga: 'lime',
-  Sepedi: 'cyan',
-};
 
 const TermCard: React.FC<TermCardProps> = ({
   id,
@@ -187,13 +175,13 @@ const TermCard: React.FC<TermCardProps> = ({
       <div className="term-header">
         <div className="term-left">
           <h3
-            className="text-left font-bold text-lg truncate w-full term-title"
+            className="text-left font-bold text-lg truncate w-full"
             title={term}
           >
             {term.length > 40 ? `${term.slice(0, 40)}...` : term}
           </h3>
           <div className="pills">
-            <span className={`pill ${langColorMap[language] || 'gray'}`}>
+            <span className={`pill ${LanguageColorMap[language] || 'gray'}`}>
               {language}
             </span>
             <span className="pill gray">
@@ -242,7 +230,9 @@ const TermCard: React.FC<TermCardProps> = ({
         {definition.length > 80 ? `${definition.slice(0, 80)}...` : definition}
       </p>
       <button className="view-button" onClick={() => onView?.()} type="button">
-        View
+        <Link className="!text-theme" to={`/term/${language}/${term}/${id}`}>
+          <span className="text-teal-500">View</span>
+        </Link>
       </button>
     </div>
   );
