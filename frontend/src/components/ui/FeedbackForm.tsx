@@ -23,6 +23,7 @@ interface FeedbackFormProps {
   handleSubmit: (e: React.FormEvent) => void;
   activeTab: string;
   activeTabData: Tab;
+  isSubmitting?: boolean;
 }
 
 const FeedbackForm = ({
@@ -31,6 +32,7 @@ const FeedbackForm = ({
   handleSubmit,
   activeTab,
   activeTabData,
+  isSubmitting = false,
 }: FeedbackFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="feedback-form">
@@ -91,13 +93,13 @@ const FeedbackForm = ({
         <div className="form-submit">
           <button
             type="submit"
-            disabled={!formData.message.trim()}
+            disabled={!formData.message.trim() || isSubmitting}
             className={`submit-button ${
-              formData.message.trim() ? 'enabled' : 'disabled'
+              formData.message.trim() && !isSubmitting ? 'enabled' : 'disabled'
             }`}
           >
             <Send className="submit-icon" />
-            Submit {activeTabData.label}
+            {isSubmitting ? 'Submitting...' : `Submit ${activeTabData.label}`}
           </button>
         </div>
       </div>
