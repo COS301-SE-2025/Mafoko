@@ -58,7 +58,7 @@ async def get_descriptive_analytics(
     This endpoint combines all analytics for backward compatibility."""
 
     # Get individual analytics
-    category_counts = await get_category_frequency(db)
+    category_counts = await get_category_frequency(None, db)
     language_coverage = await get_language_coverage(db)
     term_lengths = await get_term_length_analysis(db)
     def_lengths = await get_definition_length_analysis(db)
