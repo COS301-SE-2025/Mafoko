@@ -15,6 +15,7 @@ import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
 import NewGlossary from './pages/NewGlossary';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
+import FeedbackHub from './pages/FeedbackHub';
 import './App.css';
 
 import {
@@ -68,6 +69,7 @@ function App() {
         <Route path="/glossary" element={<NewGlossary />} />
         <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
         <Route path="/workspace" element={<WorkspacePage />} />
+        <Route path="/feedbackhub" element={<FeedbackHub />} />
       </Routes>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
@@ -6,18 +6,52 @@ import { useDarkMode } from './DarkModeComponent.tsx';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import ToggleSwitch from './ToggleSwtich';
 import { Sun, Moon } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config';
 
 interface LeftNavProps {
   activeItem: string;
   setActiveItem: (item: string) => void;
 }
 
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: 'admin' | 'linguist' | 'contributor';
+}
+
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [userRole, setUserRole] = useState<string | null>(null);
 
-  const menuItems = [
+  // Check user role on component mount
+  useEffect(() => {
+    const checkUserRole = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const response = await fetch(API_ENDPOINTS.getMe, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const user: User = await response.json();
+          setUserRole(user.role);
+        }
+      } catch (err) {
+        console.error('Error checking user role:', err);
+      }
+    };
+
+    void checkUserRole();
+  }, []);
+
+  const baseMenuItems = [
     { id: 'dashboard', label: t('navigation.home'), path: '/dashboard' },
     { id: 'search', label: t('navigation.dictionary'), path: '/search' },
     { id: 'glossary', label: t('navigation.glossary'), path: '/glossary' },
@@ -26,6 +60,16 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     { id: 'feedback', label: 'Feedback', path: '/feedback' },
     { id: 'help', label: t('navigation.help'), path: '/help' },
   ];
+
+  // Add admin-only items if user is admin
+  const menuItems =
+    userRole === 'admin'
+      ? [
+          ...baseMenuItems.slice(0, 6),
+          { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
+          ...baseMenuItems.slice(6),
+        ]
+      : baseMenuItems;
 
   const handleItemClick = (itemId: string, path: string) => {
     setActiveItem(itemId);
