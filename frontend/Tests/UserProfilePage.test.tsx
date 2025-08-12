@@ -293,15 +293,6 @@ describe('UserProfilePage', () => {
             json: () => Promise.resolve(mockProfileData),
           } as Response);
         }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
-          } as Response);
-        }
         return Promise.resolve({
           ok: false,
           status: 404,
@@ -337,15 +328,6 @@ describe('UserProfilePage', () => {
             json: () => Promise.resolve(mockProfileData),
           } as Response);
         }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
-          } as Response);
-        }
         return Promise.resolve({
           ok: false,
           status: 404,
@@ -378,15 +360,6 @@ describe('UserProfilePage', () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(mockProfileData),
-          } as Response);
-        }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
           } as Response);
         }
         return Promise.resolve({
@@ -429,15 +402,6 @@ describe('UserProfilePage', () => {
             json: () => Promise.resolve(mockProfileData),
           } as Response);
         }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
-          } as Response);
-        }
         return Promise.resolve({
           ok: false,
           status: 404,
@@ -478,15 +442,6 @@ describe('UserProfilePage', () => {
             json: () => Promise.resolve(mockProfileData),
           } as Response);
         }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
-          } as Response);
-        }
         return Promise.resolve({
           ok: false,
           status: 404,
@@ -516,95 +471,6 @@ describe('UserProfilePage', () => {
     });
   });
 
-  test('displays linguist application status when no application exists', async () => {
-    localStorage.setItem('accessToken', 'dummy-token');
-
-    (global.fetch as ReturnType<typeof vi.fn>).mockImplementation(
-      (url: string) => {
-        if (typeof url === 'string' && url.includes('/api/v1/auth/me')) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(mockProfileData),
-          } as Response);
-        }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
-          } as Response);
-        }
-        return Promise.resolve({
-          ok: false,
-          status: 404,
-        } as Response);
-      },
-    );
-
-    render(
-      <Router>
-        <DarkModeProvider>
-          <UserProfilePage />
-        </DarkModeProvider>
-      </Router>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Not Applied')).toBeInTheDocument();
-      expect(screen.getByText('Apply')).toBeInTheDocument();
-    });
-  });
-
-  test('displays linguist application status when application exists', async () => {
-    localStorage.setItem('accessToken', 'dummy-token');
-
-    const mockApplication = {
-      id: 'app-123',
-      status: 'pending' as const,
-      created_at: '2023-01-01T00:00:00Z',
-      reviewed_at: null,
-    };
-
-    (global.fetch as ReturnType<typeof vi.fn>).mockImplementation(
-      (url: string) => {
-        if (typeof url === 'string' && url.includes('/api/v1/auth/me')) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(mockProfileData),
-          } as Response);
-        }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(mockApplication),
-          } as Response);
-        }
-        return Promise.resolve({
-          ok: false,
-          status: 404,
-        } as Response);
-      },
-    );
-
-    render(
-      <Router>
-        <DarkModeProvider>
-          <UserProfilePage />
-        </DarkModeProvider>
-      </Router>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Pending Review')).toBeInTheDocument();
-      expect(screen.queryByText('Apply')).not.toBeInTheDocument();
-    });
-  });
-
   test('handles mobile layout', async () => {
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -620,15 +486,6 @@ describe('UserProfilePage', () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(mockProfileData),
-          } as Response);
-        }
-        if (
-          typeof url === 'string' &&
-          url.includes('/api/v1/linguist-applications/me')
-        ) {
-          return Promise.resolve({
-            ok: false,
-            status: 404,
           } as Response);
         }
         return Promise.resolve({

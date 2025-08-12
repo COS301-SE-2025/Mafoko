@@ -26,20 +26,6 @@ interface ProfileData {
   profile_pic_url: string | null;
 }
 
-interface LinguistApplication {
-  id: string;
-  status: 'pending' | 'approved' | 'rejected';
-  created_at: string;
-  reviewed_at: string | null;
-}
-
-type DocumentType = 'idDocument' | 'cv' | 'certifications' | 'researchPapers';
-
-interface SignedUrlResponse {
-  upload_url: string;
-  gcs_key: string;
-}
-
 const UserProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -79,16 +65,6 @@ const UserProfilePage: React.FC = () => {
   const [updateUsernameSuccess, setUpdateUsernameSuccess] = useState(false);
   const [updateEmailSuccess, setUpdateEmailSuccess] = useState(false);
   const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState(false);
-  const [linguistApplication, setLinguistApplication] =
-    useState<LinguistApplication | null>(null);
-  const [showLinguistApplication, setShowLinguistApplication] = useState(false);
-  const [documentFiles, setDocumentFiles] = useState<{
-    [key in DocumentType]?: File;
-  }>({});
-  const [isSubmittingApplication, setIsSubmittingApplication] = useState(false);
-  const [applicationSubmitSuccess, setApplicationSubmitSuccess] =
-    useState(false);
-  const [loadingApplication, setLoadingApplication] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   const loadProfilePicture = useCallback(async () => {
@@ -161,20 +137,17 @@ const UserProfilePage: React.FC = () => {
     }
   }, [profile?.profile_pic_url, profile?.id]);
 
-  const loadLinguistApplication = useCallback(() => {
-    setLoadingApplication(true);
-    // Since there's no backend endpoint to get existing applications,
-    // just set to null (user can only create new applications)
-    setLinguistApplication(null);
-    setLoadingApplication(false);
-  }, []);
-
   useEffect(() => {
     const loadProfile = async () => {
       try {
         const token = localStorage.getItem('accessToken');
         if (!token) {
-          setError('No access token found. Please login first.');
+          setError(
+            t(
+              'profile.errors.noToken',
+              'No access token found. Please login first.',
+            ),
+          );
           return;
         }
 
@@ -202,8 +175,6 @@ const UserProfilePage: React.FC = () => {
             new_password: '',
             confirm_password: '',
           });
-
-          loadLinguistApplication();
         } else {
           setError(
             t('profile.errors.loadFailed', 'Failed to load profile data'),
@@ -215,7 +186,7 @@ const UserProfilePage: React.FC = () => {
     };
 
     void loadProfile();
-  }, [loadLinguistApplication, t]);
+  }, [t]);
 
   useEffect(() => {
     if (profile) {
@@ -270,13 +241,17 @@ const UserProfilePage: React.FC = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      setError('Please select a valid image file');
+      setError(
+        t('profile.errors.invalidImage', 'Please select a valid image file'),
+      );
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setError('File size must be less than 5MB');
+      setError(
+        t('profile.errors.fileTooLarge', 'File size must be less than 5MB'),
+      );
       return;
     }
 
@@ -438,12 +413,19 @@ const UserProfilePage: React.FC = () => {
     if (!profile) return;
 
     if (!usernameForm.first_name.trim() || !usernameForm.last_name.trim()) {
-      setError('First name and last name are required');
+      setError(
+        t(
+          'profile.errors.nameRequired',
+          'First name and last name are required',
+        ),
+      );
       return;
     }
 
     if (!usernameForm.current_password) {
-      setError('Current password is required');
+      setError(
+        t('profile.errors.passwordRequired', 'Current password is required'),
+      );
       return;
     }
 
@@ -545,14 +527,16 @@ const UserProfilePage: React.FC = () => {
     if (!profile) return;
 
     if (!emailForm.email.trim()) {
-      setError('Email is required');
+      setError(t('profile.errors.emailRequired', 'Email is required'));
       return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailForm.email.trim())) {
-      setError('Please enter a valid email address');
+      setError(
+        t('profile.errors.emailInvalid', 'Please enter a valid email address'),
+      );
       return;
     }
 
@@ -634,17 +618,23 @@ const UserProfilePage: React.FC = () => {
 
   const handleUpdatePassword = async () => {
     if (!passwordForm.current_password) {
-      setError('Current password is required');
+      setError(
+        t('profile.errors.passwordRequired', 'Current password is required'),
+      );
       return;
     }
 
     if (!passwordForm.new_password) {
-      setError('New password is required');
+      setError(
+        t('profile.errors.newPasswordRequired', 'New password is required'),
+      );
       return;
     }
 
     if (passwordForm.new_password !== passwordForm.confirm_password) {
-      setError('New passwords do not match');
+      setError(
+        t('profile.errors.passwordMismatch', 'New passwords do not match'),
+      );
       return;
     }
 
@@ -691,123 +681,6 @@ const UserProfilePage: React.FC = () => {
       setError('Failed to update password: ' + (err as Error).message);
     } finally {
       setIsUpdatingPassword(false);
-    }
-  };
-
-  const handleFileSelect = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    docType: DocumentType,
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setDocumentFiles((prev) => ({ ...prev, [docType]: file }));
-    }
-  };
-
-  const handleSubmitLinguistApplication = async () => {
-    if (!documentFiles.idDocument || !documentFiles.cv) {
-      setError('ID Document and CV are required for linguist application');
-      return;
-    }
-
-    setIsSubmittingApplication(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        setError('No access token found. Please login first.');
-        return;
-      }
-
-      const uploadedFileUrls: { [key: string]: string | undefined } = {};
-      const filesToUpload = Object.entries(documentFiles).filter(
-        (entry): entry is [DocumentType, File] => Boolean(entry[1]),
-      );
-
-      for (const [docType, file] of filesToUpload) {
-        const signedUrlRes = await fetch(API_ENDPOINTS.generateSignedUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            content_type: file.type,
-            filename: file.name,
-          }),
-        });
-
-        if (!signedUrlRes.ok) {
-          throw new Error(`Could not get upload URL for ${file.name}.`);
-        }
-
-        const signedUrlData = (await signedUrlRes.json()) as SignedUrlResponse;
-
-        const uploadRes = await fetch(signedUrlData.upload_url, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type },
-          body: file,
-        });
-
-        if (!uploadRes.ok) {
-          throw new Error(`Failed to upload ${file.name}.`);
-        }
-        uploadedFileUrls[docType] = signedUrlData.gcs_key;
-      }
-
-      const applicationPayload = {
-        id_document_url: uploadedFileUrls.idDocument,
-        cv_document_url: uploadedFileUrls.cv,
-        certifications_document_url: uploadedFileUrls.certifications,
-        research_papers_document_url: uploadedFileUrls.researchPapers,
-      };
-
-      const appResponse = await fetch(API_ENDPOINTS.createApplication, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(applicationPayload),
-      });
-
-      if (!appResponse.ok) {
-        const errorData = (await appResponse.json()) as { detail?: string };
-        throw new Error(
-          errorData.detail || 'Failed to submit linguist application.',
-        );
-      }
-
-      setApplicationSubmitSuccess(true);
-      setTimeout(() => {
-        setApplicationSubmitSuccess(false);
-      }, 3000);
-
-      setShowLinguistApplication(false);
-      setDocumentFiles({});
-      loadLinguistApplication();
-    } catch (err) {
-      console.error('Error submitting linguist application:', err);
-      setError('Failed to submit application: ' + (err as Error).message);
-    } finally {
-      setIsSubmittingApplication(false);
-    }
-  };
-
-  const getApplicationStatusText = () => {
-    if (loadingApplication) return 'Loading...';
-    if (!linguistApplication) return 'Not Applied';
-
-    switch (linguistApplication.status) {
-      case 'pending':
-        return 'Pending Review';
-      case 'approved':
-        return 'Approved';
-      case 'rejected':
-        return 'Rejected';
-      default:
-        return 'Unknown';
     }
   };
 
@@ -917,167 +790,27 @@ const UserProfilePage: React.FC = () => {
               updateEmailSuccess={updateEmailSuccess}
               updatePasswordSuccess={updatePasswordSuccess}
             />
-
-            {applicationSubmitSuccess && (
-              <div className="success-message">
-                Linguist application submitted successfully!
-              </div>
-            )}
           </div>
 
           {/* Menu Items */}
           <div className="profile-menu">
             {/* Role */}
             <div className="menu-item">
-              <span className="menu-label">Role</span>
+              <span className="menu-label">{t('profile.role', 'Role')}</span>
               <div className="menu-action-container">
                 <span className="menu-action">
-                  {profile ? profile.role : 'Loading...'}
+                  {profile ? profile.role : t('profile.loading', 'Loading...')}
                 </span>
               </div>
             </div>
-
-            {/* Linguist Application Status */}
-            <div className="menu-item">
-              <span className="menu-label">Linguist Application</span>
-              <div className="menu-action-container">
-                <span className="menu-action">
-                  {getApplicationStatusText()}
-                </span>
-                {!linguistApplication && (
-                  <button
-                    type="button"
-                    className="dropdown-toggle"
-                    onClick={() => {
-                      setShowLinguistApplication(!showLinguistApplication);
-                    }}
-                    disabled={loadingApplication}
-                  >
-                    Apply
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {showLinguistApplication && !linguistApplication && (
-              <div className="linguist-application-dropdown">
-                <h3>Apply as Linguist</h3>
-                <p>Submit your documents to apply for linguist status:</p>
-
-                <div className="form-group">
-                  <label htmlFor="idDocument">ID Document (PDF) *</label>
-                  <input
-                    type="file"
-                    id="idDocument"
-                    accept="application/pdf"
-                    onChange={(e) => {
-                      handleFileSelect(e, 'idDocument');
-                    }}
-                    disabled={isSubmittingApplication}
-                  />
-                  {documentFiles.idDocument && (
-                    <span className="file-selected">
-                      {documentFiles.idDocument.name}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="cv">CV (PDF) *</label>
-                  <input
-                    type="file"
-                    id="cv"
-                    accept="application/pdf"
-                    onChange={(e) => {
-                      handleFileSelect(e, 'cv');
-                    }}
-                    disabled={isSubmittingApplication}
-                  />
-                  {documentFiles.cv && (
-                    <span className="file-selected">
-                      {documentFiles.cv.name}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="certifications">
-                    Certifications (PDF, Optional)
-                  </label>
-                  <input
-                    type="file"
-                    id="certifications"
-                    accept="application/pdf"
-                    onChange={(e) => {
-                      handleFileSelect(e, 'certifications');
-                    }}
-                    disabled={isSubmittingApplication}
-                  />
-                  {documentFiles.certifications && (
-                    <span className="file-selected">
-                      {documentFiles.certifications.name}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="researchPapers">
-                    Research Papers (PDF, Optional)
-                  </label>
-                  <input
-                    type="file"
-                    id="researchPapers"
-                    accept="application/pdf"
-                    onChange={(e) => {
-                      handleFileSelect(e, 'researchPapers');
-                    }}
-                    disabled={isSubmittingApplication}
-                  />
-                  {documentFiles.researchPapers && (
-                    <span className="file-selected">
-                      {documentFiles.researchPapers.name}
-                    </span>
-                  )}
-                </div>
-
-                <div className="application-actions">
-                  <button
-                    type="button"
-                    className="cancel-button"
-                    onClick={() => {
-                      setShowLinguistApplication(false);
-                      setDocumentFiles({});
-                      setError('');
-                    }}
-                    disabled={isSubmittingApplication}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="submit-button"
-                    onClick={() => {
-                      void handleSubmitLinguistApplication();
-                    }}
-                    disabled={
-                      isSubmittingApplication ||
-                      !documentFiles.idDocument ||
-                      !documentFiles.cv
-                    }
-                  >
-                    {isSubmittingApplication
-                      ? 'Submitting...'
-                      : 'Submit Application'}
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Logout */}
             <div className="menu-item">
               {showLogoutConfirmation ? (
                 <>
-                  <span className="menu-label">Sign out?</span>
+                  <span className="menu-label">
+                    {t('profile.logoutConfirmation', 'Sign out?')}
+                  </span>
                   <div className="menu-action-container">
                     <div className="logout-buttons">
                       <button
@@ -1085,14 +818,14 @@ const UserProfilePage: React.FC = () => {
                         className="dropdown-toggle"
                         onClick={handleConfirmLogout}
                       >
-                        Yes
+                        {t('profile.yes', 'Yes')}
                       </button>
                       <button
                         type="button"
                         className="dropdown-toggle"
                         onClick={handleCancelLogout}
                       >
-                        No
+                        {t('profile.no', 'No')}
                       </button>
                     </div>
                   </div>
