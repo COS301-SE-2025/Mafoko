@@ -276,7 +276,6 @@ const RegistrationPage: React.FC = () => {
                 onChange={(e) => {
                   setAgreedToTerms(e.target.checked);
                 }}
-                required
                 disabled={isLoading}
               />
               <label htmlFor="terms" className="terms-label">
