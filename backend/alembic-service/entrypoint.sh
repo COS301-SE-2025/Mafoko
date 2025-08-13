@@ -1,11 +1,13 @@
 #!/bin/sh
-# alembic-service/entrypoint.sh
+set -e # Exit immediately if a command exits with a non-zero status
 
-set -e
+echo "Starting entrypoint script for Alembic (Cloud Run compatible)..."
 
-echo "Entrypoint: Installing/updating editable common library..."
-# CHANGE THE PATH IN THE LINE BELOW
-pip install -e /mavito-common-lib-src
 
-# Now, execute the command passed to the container
-exec "$@"
+# Execute the command (fallback to migrations if none provided)
+if [ "$#" -eq 0 ]; then
+    # Alembic.ini is at /app/migrations/alembic.ini
+    exec python -m alembic -c migrations/alembic.ini upgrade head
+else
+    exec "$@"
+fi

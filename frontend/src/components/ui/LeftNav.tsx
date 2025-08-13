@@ -21,8 +21,15 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     { id: 'dashboard', label: t('navigation.home'), path: '/dashboard' },
     { id: 'search', label: t('navigation.dictionary'), path: '/search' },
     { id: 'glossary', label: t('navigation.glossary'), path: '/glossary' },
-    { id: 'saved', label: t('navigation.savedTerms'), path: '/saved-terms' },
+    { id: 'workspace', label: 'Workspace', path: '/workspace' },
+    {
+      id: 'linguist-application',
+      label: t('navigation.linguistApplication'),
+      path: '/linguist-application',
+    },
     { id: 'analytics', label: t('navigation.dashboard'), path: '/analytics' },
+    { id: 'feedback', label: 'Feedback', path: '/feedback' },
+    { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
     { id: 'help', label: t('navigation.help'), path: '/help' },
   ];
 
@@ -41,7 +48,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         </div>
         <div className="logo-container">
           <img
-            src="./icons/maskable_icon_x512.png"
+            src="/Marito/icons/maskable_icon_x512.png"
             alt="DFSI Logo"
             className="dfsi-logo"
           />

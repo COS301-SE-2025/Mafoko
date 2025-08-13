@@ -8,7 +8,6 @@ import uuid  # Import for UUID type
 
 # Assuming UserRole is correctly defined in app/models/user.py
 from mavito_common.models.user import UserRole
-from .linguist_application import LinguistApplicationCreate  # noqa: F401
 
 
 # Shared properties
@@ -18,11 +17,17 @@ class UserBase(BaseModel):
     last_name: str
     role: Optional[UserRole] = None
     profile_pic_url: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     password: str  # Plain password received from client
+
+
+class UserCreateGoogle(UserBase):
+    role: UserRole = UserRole.contributor  # Default role for new users
+    is_verified: bool = True  # Google-verified users are automatically verified
 
 
 # Properties to receive via API on update

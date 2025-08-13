@@ -27,7 +27,7 @@
     "loginWithGoogle": "Tsena ka Google",
     "noAccount": "Ga o na akhaonto?",
     "registerLink": "Ikwadise",
-    "welcomeImageAlt": "Kamogelo ya go Tsena mo Mavito",
+    "welcomeImageAlt": "Kamogelo ya go Tsena mo Marito",
     "dsfsiLogoAlt": "Letshwao la DSFSI",
     "errorTokenMissing": "O tsene sentle, mme ga go na tokene e e amogetsweng. Tswee-tswee ikgolaganye le thuso.",
     "errorDefault": "Go tsena go paletswe. Tswee-tswee tlhola dintlha tsa gago.",
@@ -38,7 +38,7 @@
   },
   "registrationPage": {
     "title": "SIMOLOLA JAANONG",
-    "subtitle": "Tlhola akhaonto ya gago ya Mavito.",
+    "subtitle": "Tlhola akhaonto ya gago ya Marito.",
     "firstNameLabel": "Leina la Ntlha",
     "firstNamePlaceholder": "Tsenya leina la gago la ntlha",
     "lastNameLabel": "Sefane",
@@ -57,7 +57,7 @@
     "createWithGoogle": "Tlhola Akhaonto ka Google",
     "haveAccount": "O setse o na le akhaonto?",
     "loginLink": "Tsena",
-    "welcomeImageAlt": "Kamogelo ya Mavito",
+    "welcomeImageAlt": "Kamogelo ya Marito",
     "dsfsiLogoAlt": "Letshwao la DSFSI",
     "errorPasswordsDoNotMatch": "Dikhunololamoraba ga di tshwane.",
     "errorAgreeToTerms": "O tshwanetse go dumela melawana le mabaka.",
@@ -81,7 +81,7 @@
     }
   },
   "dashboard": {
-    "welcome": "O amogelwa mo Mavito",
+    "welcome": "O amogelwa mo Marito",
     "welcomeBack": "O amogetswe gape",
     "userName": "Leina la Modirisi",
     "userId": "Nomoro ya Modirisi",

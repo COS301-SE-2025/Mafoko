@@ -27,7 +27,7 @@
     "loginWithGoogle": "Nghena hi Google",
     "noAccount": "A mi na akhawunti?",
     "registerLink": "Tsarisa",
-    "welcomeImageAlt": "Ku amukela ka Mavito",
+    "welcomeImageAlt": "Ku amukela ka Marito",
     "dsfsiLogoAlt": "Logo ya DSFSI",
     "errorTokenMissing": "Mi nghenile hi ndzundzo, kambe ku hava thokeni leyi amukeriweke. Hi kombela mi tihlanganisa na mpfuno.",
     "errorDefault": "Ku nghena ku tsandzekile. Hi kombela mi kambisisa vuxokoxoko bya n'wina.",
@@ -38,7 +38,7 @@
   },
   "registrationPage": {
     "title": "SUNGULA SWESWI",
-    "subtitle": "Endla akhawunti ya wena ya Mavito.",
+    "subtitle": "Endla akhawunti ya wena ya Marito.",
     "firstNameLabel": "Vito ro Sungula",
     "firstNamePlaceholder": "Nghenisa vito ra wena ro sungula",
     "lastNameLabel": "Xivongo",
@@ -57,7 +57,7 @@
     "createWithGoogle": "Endla Akhawunti hi Google",
     "haveAccount": "Se u na akhawunti?",
     "loginLink": "Nghena",
-    "welcomeImageAlt": "Ku amukela eka Mavito",
+    "welcomeImageAlt": "Ku amukela eka Marito",
     "dsfsiLogoAlt": "Logo ya DSFSI",
     "errorPasswordsDoNotMatch": "Tiphasiwedi a ti fanani.",
     "errorAgreeToTerms": "U fanele ku pfumela eka milawu na swipimelo.",
@@ -81,7 +81,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Mi amukeriwa eka Mavito",
+    "welcome": "Mi amukeriwa eka Marito",
     "welcomeBack": "Mi tlhela mi amukeriwa",
     "userName": "Vito ra Mutirhisi",
     "userId": "Nomboro ya Mutirhisi",

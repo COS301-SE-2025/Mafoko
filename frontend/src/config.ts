@@ -25,7 +25,7 @@ const TERM_SERVICE_URL =
   (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
-  'http://localhost:8008'; // Changed to 8008
+  'http://localhost:8008';
 const WORKSPACE_SERVICE_URL =
   (import.meta.env.VITE_WORKSPACE_SERVICE_URL as string) ||
   'http://localhost:8009';
@@ -37,6 +37,7 @@ const endpoint = (serviceUrl: string, path: string): string =>
 interface APIEndpoints {
   login: string;
   register: string;
+  loginWithGoogle: string;
   forgotPassword: string;
   resetPassword: string;
   verifyEmail: string;
@@ -50,7 +51,11 @@ interface APIEndpoints {
   getMyProfilePictureUrl: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
+  ApproveApplicationStatus: (applicationId: string) => string;
+  RejectApplicationStatus: (applicationId: string) => string;
   createApplication: string;
+  getAllApplications: string;
+  getLinguistApplication: string;
   getUserUploads: (userId: string) => string;
   getSignedDownloadUrl: (gcsKey: string) => string;
   getUsersWithUploads: () => string;
@@ -108,6 +113,7 @@ export const API_ENDPOINTS: APIEndpoints = {
   // --- Auth Service ---
   register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
   login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
+  loginWithGoogle: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/google-login'),
   forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
   resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
   verifyEmail: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/verify-email'),
@@ -139,10 +145,31 @@ export const API_ENDPOINTS: APIEndpoints = {
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
 
   // --- Linguist Application Service ---
+  getAllApplications: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/all',
+  ),
   createApplication: endpoint(
     LINGUIST_APP_SERVICE_URL,
     '/api/v1/linguist-applications',
   ),
+  getLinguistApplication: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/me_application',
+  ),
+
+  ApproveApplicationStatus(applicationId) {
+    return endpoint(
+      LINGUIST_APP_SERVICE_URL,
+      `/api/v1/linguist-applications/${applicationId}/approve`,
+    );
+  },
+  RejectApplicationStatus(applicationId) {
+    return endpoint(
+      LINGUIST_APP_SERVICE_URL,
+      `/api/v1/linguist-applications/${applicationId}/reject`,
+    );
+  },
   getUserUploads: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/uploads`),
   getSignedDownloadUrl: (gcsKey: string) =>

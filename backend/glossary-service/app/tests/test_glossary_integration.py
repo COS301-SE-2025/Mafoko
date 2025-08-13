@@ -12,29 +12,220 @@ class TestGlossaryIntegration:
     """Integration tests focusing on the glossary API functions with lower coverage."""
 
     @pytest.mark.asyncio
-    async def test_get_terms_by_category_multiple_approaches(self):
-        """Test get_terms_by_category with different SQL approaches."""
+    async def test_transform_category_name(self):
+        """Test category name transformation between display and storage formats."""
+        from app.api.v1.endpoints.glossary import transform_category_name
+
+        # Test display format transformation (storage -> display)
+        assert (
+            transform_category_name("Statistics/Probability", for_display=True)
+            == "Statistics or Probability"
+        )
+        assert (
+            transform_category_name("Data Science/Machine Learning", for_display=True)
+            == "Data Science or Machine Learning"
+        )
+        assert (
+            transform_category_name("Simple Category", for_display=True)
+            == "Simple Category"
+        )
+
+        # Test storage format transformation (display -> storage)
+        assert (
+            transform_category_name("Statistics or Probability", for_display=False)
+            == "Statistics/Probability"
+        )
+        assert (
+            transform_category_name(
+                "Data Science OR Machine Learning", for_display=False
+            )
+            == "Data Science/Machine Learning"
+        )
+        assert (
+            transform_category_name("Simple Category", for_display=False)
+            == "Simple Category"
+        )
+
+        # Test edge cases
+        assert transform_category_name("A / B / C", for_display=False) == "A/B/C"
+        assert transform_category_name("A or B or C", for_display=False) == "A/B/C"
+
+    @pytest.mark.asyncio
+    async def test_get_terms_by_category_url_decoding(self):
+        """Test get_terms_by_category with URL-encoded category names."""
         from app.api.v1.endpoints.glossary import get_terms_by_category
 
         # Create a mock database session
         mock_db = AsyncMock()
 
-        # Set up mock data for the first SQL approach (Approach 1: TRIM)
+        # Mock Term
         mock_term_id = uuid.uuid4()
-        mock_row1 = (
-            mock_term_id,
-            "Statistical Analysis",
-            "The process of analyzing data",
-            "Statistics",
-            "English",
-        )
+        mock_term = MagicMock()
+        mock_term.id = mock_term_id
+        mock_term.term = "Statistical Analysis"
+        mock_term.definition = "The process of analyzing data"
+        mock_term.domain = "Statistics/Probability"  # Storage format with slash
+        mock_term.language = "English"
+        mock_term.translations = []
 
-        # Create a mock for the first approach that succeeds
-        mock_result1 = MagicMock()
-        mock_result1.fetchall.return_value = [mock_row1]
+        # Mock the ORM query result
+        mock_scalars = MagicMock()
+        mock_scalars.all.return_value = [mock_term]
+
+        mock_result = MagicMock()
+        mock_result.scalars.return_value = mock_scalars
 
         # Set up the db.execute to return our mock result
-        mock_db.execute.return_value = mock_result1
+        mock_db.execute.return_value = mock_result
+
+        # Test with URL-encoded category (Statistics%2FProbability -> Statistics/Probability)
+        result = await get_terms_by_category(mock_db, "Statistics%2FProbability")
+
+        # Assertions
+        assert len(result) == 1
+        assert result[0]["term"] == "Statistical Analysis"
+        assert (
+            result[0]["category"] == "Statistics/Probability"
+        )  # Should preserve storage format
+
+    @pytest.mark.asyncio
+    async def test_get_term_translations_by_uuid(self):
+        """Test get_term_translations function with UUID lookup."""
+        from app.api.v1.endpoints.glossary import get_term_translations
+
+        # Create a mock database session
+        mock_db = AsyncMock()
+
+        # Mock term with translations
+        mock_term_id = uuid.uuid4()
+        mock_term = MagicMock()
+        mock_term.term = "Hello"
+        mock_term.definition = "A greeting"
+
+        # Mock translations
+        mock_translation_es = MagicMock()
+        mock_translation_es.language = "Spanish"
+        mock_translation_es.term = "Hola"
+
+        mock_translation_fr = MagicMock()
+        mock_translation_fr.language = "French"
+        mock_translation_fr.term = "Bonjour"
+
+        mock_term.translations = [mock_translation_es, mock_translation_fr]
+
+        # Mock the database query result
+        mock_scalars = MagicMock()
+        mock_scalars.first.return_value = mock_term
+
+        mock_result = MagicMock()
+        mock_result.scalars.return_value = mock_scalars
+
+        mock_db.execute.return_value = mock_result
+
+        # Call the function with UUID
+        result = await get_term_translations(mock_db, str(mock_term_id))
+
+        # Assertions
+        assert result is not None
+        assert result["term"] == "Hello"
+        assert result["definition"] == "A greeting"
+        assert "translations" in result
+        assert result["translations"]["Spanish"] == "Hola"
+        assert result["translations"]["French"] == "Bonjour"
+
+    @pytest.mark.asyncio
+    async def test_get_term_translations_by_name(self):
+        """Test get_term_translations function with term name lookup."""
+        from app.api.v1.endpoints.glossary import get_term_translations
+
+        # Create a mock database session
+        mock_db = AsyncMock()
+
+        # Mock term with translations
+        mock_term = MagicMock()
+        mock_term.term = "Hello"
+        mock_term.definition = "A greeting"
+        mock_term.translations = []  # No translations
+
+        # Mock the database query result
+        mock_scalars = MagicMock()
+        mock_scalars.first.return_value = mock_term
+
+        mock_result = MagicMock()
+        mock_result.scalars.return_value = mock_scalars
+
+        mock_db.execute.return_value = mock_result
+
+        # Call the function with term name (not UUID)
+        result = await get_term_translations(mock_db, "hello")
+
+        # Assertions
+        assert result is not None
+        assert result["term"] == "Hello"
+        assert result["definition"] == "A greeting"
+        assert "translations" in result
+        assert result["translations"] == {}  # Empty translations
+
+    @pytest.mark.asyncio
+    async def test_get_term_translations_not_found(self):
+        """Test get_term_translations function when term is not found."""
+        from app.api.v1.endpoints.glossary import get_term_translations
+
+        # Create a mock database session
+        mock_db = AsyncMock()
+
+        # Mock empty query result
+        mock_scalars = MagicMock()
+        mock_scalars.first.return_value = None
+
+        mock_result = MagicMock()
+        mock_result.scalars.return_value = mock_scalars
+
+        mock_db.execute.return_value = mock_result
+
+        # Call the function with non-existent term
+        result = await get_term_translations(mock_db, "nonexistent")
+
+        # Assertions
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_get_terms_by_category_orm_approach(self):
+        """Test get_terms_by_category with ORM approach (new implementation)."""
+        from app.api.v1.endpoints.glossary import get_terms_by_category
+
+        # Create a mock database session
+        mock_db = AsyncMock()
+
+        # Mock Term with translations
+        mock_term_id = uuid.uuid4()
+        mock_term = MagicMock()
+        mock_term.id = mock_term_id
+        mock_term.term = "Statistical Analysis"
+        mock_term.definition = "The process of analyzing data"
+        mock_term.domain = "Statistics"
+        mock_term.language = "English"
+
+        # Mock translations
+        mock_translation_es = MagicMock()
+        mock_translation_es.language = "Spanish"
+        mock_translation_es.term = "Análisis Estadístico"
+
+        mock_translation_fr = MagicMock()
+        mock_translation_fr.language = "French"
+        mock_translation_fr.term = "Analyse Statistique"
+
+        mock_term.translations = [mock_translation_es, mock_translation_fr]
+
+        # Mock the ORM query result
+        mock_scalars = MagicMock()
+        mock_scalars.all.return_value = [mock_term]
+
+        mock_result = MagicMock()
+        mock_result.scalars.return_value = mock_scalars
+
+        # Set up the db.execute to return our mock result
+        mock_db.execute.return_value = mock_result
 
         # Call the function
         result = await get_terms_by_category(mock_db, "Statistics")
@@ -45,92 +236,77 @@ class TestGlossaryIntegration:
         assert result[0]["category"] == "Statistics"
         assert result[0]["language"] == "English"
         assert result[0]["id"] == str(mock_term_id)
-
-        # Test with trailing space issues - Approach 2
-        # Reset the mock
-        mock_db.execute.reset_mock()
-
-        # First approach returns empty
-        mock_empty_result = MagicMock()
-        mock_empty_result.fetchall.return_value = []
-
-        # Second approach returns results
-        mock_result2 = MagicMock()
-        mock_result2.fetchall.return_value = [mock_row1]
-
-        # Set up sequence of mock returns
-        mock_db.execute.side_effect = [mock_empty_result, mock_result2]
-
-        # Call the function again
-        result = await get_terms_by_category(mock_db, "Statistics")
-
-        # Assertions
-        assert len(result) == 1
-        assert result[0]["term"] == "Statistical Analysis"
-
-        # Test with approach 3 - exact match including trailing space
-        mock_db.execute.reset_mock()
-        mock_db.execute.side_effect = [
-            mock_empty_result,
-            mock_empty_result,
-            mock_result2,
-        ]
-
-        # Call the function
-        result = await get_terms_by_category(mock_db, "Statistics")
-
-        # Assertions
-        assert len(result) == 1
-        assert result[0]["term"] == "Statistical Analysis"
-
-        # Test with approach 4 - adding trailing space explicitly
-        mock_db.execute.reset_mock()
-        mock_db.execute.side_effect = [
-            mock_empty_result,
-            mock_empty_result,
-            mock_empty_result,
-            mock_result2,
-        ]
-
-        # Call the function
-        result = await get_terms_by_category(mock_db, "Statistics")
-
-        # Assertions
-        assert len(result) == 1
-        assert result[0]["term"] == "Statistical Analysis"
-
-        # Test with approach 5 - similar domains search
-        mock_db.execute.reset_mock()
-
-        # All previous approaches return empty
-        mock_db.execute.side_effect = [
-            mock_empty_result,  # First approach
-            mock_empty_result,  # Second approach
-            mock_empty_result,  # Third approach
-            mock_empty_result,  # Fourth approach
-            MagicMock(
-                fetchall=lambda: [("Statistics/Probability",)]
-            ),  # Similar domains
-            MagicMock(fetchall=lambda: [mock_row1]),  # Final domain search
-        ]
-
-        # Call the function
-        result = await get_terms_by_category(mock_db, "Statistics")
-
-        # Assertions
-        assert len(result) == 1
-        assert result[0]["term"] == "Statistical Analysis"
+        assert "translations" in result[0]
+        assert result[0]["translations"]["Spanish"] == "Análisis Estadístico"
+        assert result[0]["translations"]["French"] == "Analyse Statistique"
 
     @pytest.mark.asyncio
-    async def test_get_terms_by_category_exception_handling(self):
-        """Test get_terms_by_category function's exception handling."""
+    async def test_get_terms_by_category_fallback_sql(self):
+        """Test get_terms_by_category fallback to SQL when ORM returns empty."""
         from app.api.v1.endpoints.glossary import get_terms_by_category
 
         # Create a mock database session
         mock_db = AsyncMock()
 
-        # Set up db.execute to raise an exception
-        mock_db.execute.side_effect = Exception("Database error")
+        # Set up mock data for SQL fallback
+        mock_term_id = uuid.uuid4()
+        mock_row1 = (
+            mock_term_id,
+            "Statistical Analysis",
+            "The process of analyzing data",
+            "Statistics",
+            "English",
+        )
+
+        # Mock empty ORM result
+        mock_empty_scalars = MagicMock()
+        mock_empty_scalars.all.return_value = []
+        mock_empty_result = MagicMock()
+        mock_empty_result.scalars.return_value = mock_empty_scalars
+
+        # Mock SQL fallback result
+        mock_sql_result = MagicMock()
+        mock_sql_result.fetchall.return_value = [mock_row1]
+
+        # Mock Term for second ORM query (to get translations)
+        mock_term = MagicMock()
+        mock_term.id = mock_term_id
+        mock_term.term = "Statistical Analysis"
+        mock_term.definition = "The process of analyzing data"
+        mock_term.domain = "Statistics"
+        mock_term.language = "English"
+        mock_term.translations = []
+
+        mock_fallback_scalars = MagicMock()
+        mock_fallback_scalars.all.return_value = [mock_term]
+        mock_fallback_result = MagicMock()
+        mock_fallback_result.scalars.return_value = mock_fallback_scalars
+
+        # Set up sequence: ORM empty -> SQL with results -> ORM for translations
+        mock_db.execute.side_effect = [
+            mock_empty_result,  # First ORM query returns empty
+            mock_sql_result,  # SQL fallback returns results
+            mock_fallback_result,  # Second ORM query for translations
+        ]
+
+        # Call the function
+        result = await get_terms_by_category(mock_db, "Statistics")
+
+        # Assertions
+        assert len(result) == 1
+        assert result[0]["term"] == "Statistical Analysis"
+        assert result[0]["category"] == "Statistics"
+        assert result[0]["language"] == "English"
+        assert result[0]["id"] == str(mock_term_id)
+        assert "translations" in result[0]
+
+    @pytest.mark.asyncio
+    async def test_get_terms_by_category_exception_handling(self):
+        """Test get_terms_by_category function's fallback SQL approach."""
+        from app.api.v1.endpoints.glossary import get_terms_by_category
+
+        # Create a mock database session
+        mock_db = AsyncMock()
 
         # Set up orm term for the final approach
         mock_term = MagicMock()
@@ -139,23 +315,47 @@ class TestGlossaryIntegration:
         mock_term.definition = "The process of analyzing data"
         mock_term.domain = "Statistics"
         mock_term.language = "English"
+        mock_term.translations = []  # Mock empty translations list
 
-        # Set up mock for the ORM query that runs after exception
-        mock_scalars = MagicMock()
-        mock_scalars.all.return_value = [mock_term]
-        mock_result = MagicMock()
-        mock_result.scalars.return_value = mock_scalars
+        # Set up mock for the ORM query (first call) - returns empty results
+        mock_orm_scalars = MagicMock()
+        mock_orm_scalars.all.return_value = []  # Empty results from ORM
+        mock_orm_result = MagicMock()
+        mock_orm_result.scalars.return_value = mock_orm_scalars
 
-        # After the exception, db.execute is called with the ORM query
-        mock_db.execute.side_effect = [Exception("Database error"), mock_result]
+        # Set up mock for the SQL fallback query (second call) - returns data
+        mock_sql_result = MagicMock()
+        mock_sql_result.fetchall.return_value = [
+            (
+                str(mock_term.id),
+                mock_term.term,
+                mock_term.definition,
+                mock_term.domain,
+                mock_term.language,
+            )
+        ]
+
+        # Set up mock for the final ORM query (third call) - returns the term with translations
+        mock_final_scalars = MagicMock()
+        mock_final_scalars.all.return_value = [mock_term]
+        mock_final_result = MagicMock()
+        mock_final_result.scalars.return_value = mock_final_scalars
+
+        # Configure the sequence: ORM (empty) -> SQL (success) -> ORM (success)
+        mock_db.execute.side_effect = [
+            mock_orm_result,  # First ORM query returns empty
+            mock_sql_result,  # SQL query returns data
+            mock_final_result,  # Final ORM query returns results
+        ]
 
         # Call the function
         result = await get_terms_by_category(mock_db, "Statistics")
 
-        # Assertions - should still get results from ORM approach
+        # Assertions - should get results from SQL fallback approach
         assert len(result) == 1
         assert result[0]["term"] == "Statistical Analysis"
         assert result[0]["category"] == "Statistics"
+        assert "translations" in result[0]
 
     @pytest.mark.asyncio
     async def test_advanced_search_pagination(self):

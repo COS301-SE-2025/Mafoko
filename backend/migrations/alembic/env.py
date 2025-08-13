@@ -1,3 +1,5 @@
+# backend/migrations/alembic/env.py
+
 import asyncio
 from logging.config import fileConfig
 
@@ -6,32 +8,48 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 
-# --- Project Imports ---
-# Import the central config and the Base class from the common library
+# Import the centralized settings from your common library
 from mavito_common.core.config import settings
 from mavito_common.db.base_class import Base
-from mavito_common.models.user import User  # noqa: F401
-from mavito_common.models.term import Term  # noqa: F401
-from mavito_common.models.term_vote import TermVote  # noqa: F401
-from mavito_common.models.linguist_application import LinguistApplication  # noqa: F401
+import mavito_common.models.user  # noqa: F401
+import mavito_common.models.term  # noqa: F401
+import mavito_common.models.comment  # noqa: F401
+import mavito_common.models.comment_vote  # noqa: F401
+import mavito_common.models.term_vote  # noqa: F401
+import mavito_common.models.linguist_application  # noqa: F401
+import mavito_common.models.bookmark  # noqa: F401
+import mavito_common.models.workspace_group  # noqa: F401
+import mavito_common.models.group_term  # noqa: F401
+import mavito_common.models.workspace_note  # noqa: F401
 
-# --- Alembic Config ---
 config = context.config
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Point Alembic to your Base's metadata so it can find the tables
+
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode."""
-    url = settings.SQLALCHEMY_DATABASE_URL  #
+    """Run migrations in 'offline' mode.
+
+    This configures the context with just a URL
+    and not an Engine, though an Engine is acceptable
+    here as well.  By skipping the Engine creation
+    we don't even need a DBAPI to be available.
+
+    Calls to context.execute() here emit the given string to the
+    script output.
+
+    """
+    url = settings.SQLALCHEMY_DATABASE_URL
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        compare_type=True,
     )
 
     with context.begin_transaction():
@@ -39,7 +57,6 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection):
-    """Run migrations in a live DB connection."""
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
@@ -51,9 +68,15 @@ def do_run_migrations(connection):
 
 
 async def run_migrations_online() -> None:
-    """Run migrations in 'online' mode."""
+    """Run migrations in 'online' mode.
+
+    In this scenario we need to create an Engine
+    and associate a connection with the context.
+
+    """
+    # Use the URL from the centralized settings
     connectable = create_async_engine(
-        settings.SQLALCHEMY_DATABASE_URL,  #
+        settings.SQLALCHEMY_DATABASE_URL,
         poolclass=pool.NullPool,
     )
 
@@ -63,7 +86,6 @@ async def run_migrations_online() -> None:
     await connectable.dispose()
 
 
-# --- Entrypoint ---
 if context.is_offline_mode():
     run_migrations_offline()
 else:

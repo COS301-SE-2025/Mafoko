@@ -1,7 +1,16 @@
-# CORRECTED linguist-application-service/Dockerfile
+# Use a slim Python image as the base
 FROM python:3.11-slim
 
-# Set the standard working directory to /app
 WORKDIR /app
 
+COPY ./mavito-common-lib /app/mavito-common-lib
+
+RUN pip install --no-cache-dir -e /app/mavito-common-lib
+
 COPY ./linguist-application-service/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./linguist-application-service/app /app/app
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+

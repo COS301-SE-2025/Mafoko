@@ -1,0 +1,64 @@
+# api-spec.yml
+# OpenAPI 2.0 specification for the Marito Project API Gateway.
+
+swagger: '2.0'
+info:
+  title: Marito API Gateway
+  description: The single public entry point for all Marito backend microservices.
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+
+paths:
+  # --- Routes for Auth Service ---
+  /api/v1/auth/{proxy+}:
+    x-google-backend:
+      # Replace with the URL of your deployed 'auth-service' on Cloud Run
+      address: https://auth-service-885391982107.us-central1.run.app
+  
+  /api/v1/uploads/{proxy+}:
+    x-google-backend:
+      # This also points to your 'auth-service'
+      address: https://auth-service-885391982107.us-central1.run.app
+
+  /api/v1/admin/{proxy+}:
+    x-google-backend:
+      # This also points to your 'auth-service'
+      address: https://auth-service-885391982107.us-central1.run.app
+
+  # --- Routes for Search Service ---
+  /api/v1/search/{proxy+}:
+    x-google-backend:
+      # Replace with the URL of your deployed 'search-service'
+      address: https://search-service-885391982107.us-central1.run.app
+
+  /api/v1/suggest/{proxy+}:
+    x-google-backend:
+      # This also points to your 'search-service'
+      address: https://search-service-885391982107.us-central1.run.app
+
+  # --- Routes for Vote Service ---
+  /api/v1/votes/{proxy+}:
+    x-google-backend:
+      # Replace with the URL of your deployed 'vote-service'
+      address: https://vote-service-885391982107.us-central1.run.app
+
+  # --- Routes for Linguist Application Service ---
+  /api/v1/linguist-applications/{proxy+}:
+    x-google-backend:
+      # Replace with the URL of your deployed 'linguist-application-service'
+      address: https://linguist-application-service-885391982107.us-central1.run.app
+
+  # --- Routes for Glossary Service ---
+  /api/v1/glossary/{proxy+}:
+    x-google-backend:
+      # Replace with the URL of your deployed 'glossary-service'
+      address: https://glossary-service-885391982107.us-central1.run.app
+
+  # --- Routes for Analytics Service ---
+  /api/v1/analytics/{proxy+}:
+    x-google-backend:
+      # Replace with the URL of your deployed 'analytics-service'
+      address: https://analytics-service-885391982107.us-central1.run.app

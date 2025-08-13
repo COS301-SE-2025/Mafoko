@@ -1,56 +1,66 @@
-# app/crud/crud_user.py
+import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Optional, Union, Dict, Any
+from typing import List, Optional, Union, Dict, Any
+from uuid import UUID
 
 from mavito_common.models.user import User as UserModel
-from mavito_common.schemas.user import UserCreate, UserUpdate
+from mavito_common.schemas.user import UserCreate, UserUpdate, UserCreateGoogle
 from mavito_common.core.security import get_password_hash, verify_password
+from mavito_common.core.exceptions import InvalidPasswordError
 
 
 class CRUDUser:
     async def get_user_by_id(
         self, db: AsyncSession, *, user_id: int
     ) -> Optional[UserModel]:
-        """
-        Retrieve a user by their ID.
-        """
+        result = await db.execute(select(UserModel).filter(UserModel.id == user_id))
+        return result.scalars().first()
+
+    async def get_user_by_uuid(
+        self, db: AsyncSession, *, user_id: UUID
+    ) -> Optional[UserModel]:
         result = await db.execute(select(UserModel).filter(UserModel.id == user_id))
         return result.scalars().first()
 
     async def get_user_by_email(
         self, db: AsyncSession, *, email: str
     ) -> Optional[UserModel]:
-        """
-        Retrieve a user by their email address.
-        """
-        result = await db.execute(select(UserModel).filter(UserModel.email == email))
+        normalized_email = email.lower()
+        result = await db.execute(
+            select(UserModel).filter(UserModel.email == normalized_email)
+        )
         return result.scalars().first()
 
-    async def create_user(self, db: AsyncSession, *, obj_in: UserCreate) -> UserModel:
-        """
-        Create a new user.
-        - Hashes the plain password before storing.
-        - Uses fields from UserCreate schema and matches UserModel.
-        """
-        hashed_password = get_password_hash(obj_in.password)
+    async def create_user(
+        self, db: AsyncSession, *, obj_in: Union[UserCreate, UserCreateGoogle]
+    ) -> UserModel:
+        user_data = obj_in.model_dump(exclude={"password"})
+        user_data["email"] = user_data["email"].lower()
 
-        # Create a dictionary of the data for the UserModel
-        # Exclude the plain password from the input schema
-        db_obj_data = obj_in.model_dump(exclude={"password"})
+        if isinstance(obj_in, UserCreate):
+            if not obj_in.password:
+                raise InvalidPasswordError("Password must be provided for new users.")
+            if len(obj_in.password) < 8:
+                raise InvalidPasswordError(
+                    "Password must be at least 8 characters long."
+                )
+            if not any(char.isdigit() for char in obj_in.password):
+                raise InvalidPasswordError("Password must contain at least one number.")
+            if not any(char.isupper() for char in obj_in.password):
+                raise InvalidPasswordError(
+                    "Password must contain at least one uppercase letter."
+                )
 
-        db_user = UserModel(
-            **db_obj_data,  # Spread common fields like email, first_name, last_name, role
-            password_hash=hashed_password,  # Store the hashed password
-            is_verified=False,  # Default from your SQL schema
-            account_locked=False,  # Default from your SQL schema
-            # is_active is also a field in our model, defaulting to True
-        )
+            user_data["password_hash"] = get_password_hash(obj_in.password)
+        else:
+            user_data["password_hash"] = get_password_hash(str(uuid.uuid4()))
 
-        db.add(db_user)
+        db_obj = UserModel(**user_data)
+        db.add(db_obj)
         await db.commit()
-        await db.refresh(db_user)
-        return db_user
+        await db.refresh(db_obj)
+        return db_obj
 
     async def update_user(
         self,
@@ -59,27 +69,30 @@ class CRUDUser:
         db_obj: UserModel,
         obj_in: Union[UserUpdate, Dict[str, Any]],
     ) -> UserModel:
-        """
-        Update an existing user.
-        obj_in can be a Pydantic UserUpdate schema or a dictionary.
-        """
         if isinstance(obj_in, dict):
             update_data = obj_in
-        else:  # Pydantic model
-            update_data = obj_in.model_dump(
-                exclude_unset=True
-            )  # Only include fields that were actually set
+        else:
+            update_data = obj_in.model_dump(exclude_unset=True)
 
-        if (
-            "password" in update_data and update_data["password"]
-        ):  # If password is being updated
-            hashed_password = get_password_hash(update_data["password"])
-            db_obj.password_hash = hashed_password  # Update the password_hash field
-            del update_data[
-                "password"
-            ]  # Don't try to set 'password' attribute directly on model
+        if "password" in update_data and update_data["password"]:
+            password = update_data["password"]
+            if len(password) < 8:
+                raise InvalidPasswordError(
+                    "New password must be at least 8 characters long."
+                )
+            if not any(char.isdigit() for char in password):
+                raise InvalidPasswordError(
+                    "New password must contain at least one number."
+                )
+            if not any(char.isupper() for char in password):
+                raise InvalidPasswordError(
+                    "New password must contain at least one uppercase letter."
+                )
 
-        # Update other fields
+            hashed_password = get_password_hash(password)
+            db_obj.password_hash = hashed_password
+            del update_data["password"]
+
         for field, value in update_data.items():
             if hasattr(db_obj, field):
                 setattr(db_obj, field, value)
@@ -92,41 +105,30 @@ class CRUDUser:
     async def authenticate(
         self, db: AsyncSession, *, email: str, password: str
     ) -> Optional[UserModel]:
-        """
-        Authenticate a user by email and plain password.
-        Returns the user object if authentication is successful, otherwise None.
-        """
         user = await self.get_user_by_email(db, email=email)
         if not user:
-            return None  # User not found
-        if not verify_password(
-            password, user.password_hash
-        ):  # Compare with password_hash
-            return None  # Incorrect password
-        # Potentially check if user.account_locked or not user.is_verified here if needed
-        return user  # Authentication successful
+            return None
+        if not verify_password(password, user.password_hash):
+            return None
+        return user
 
     async def is_user_active(self, user: UserModel) -> bool:
-        """
-        Checks if a user is considered active.
-        Based on your SQL schema, this could mean not account_locked and is_verified.
-        Our UserModel also has an 'is_active' field. Let's use that.
-        """
-        return user.is_active and not user.account_locked  # Example logic
+        return user.is_active and not user.account_locked
 
     async def set_last_login(self, db: AsyncSession, *, user: UserModel) -> UserModel:
-        """
-        Updates the last_login timestamp for a user.
-        """
-        from sqlalchemy.sql import func  # For func.now()
+        from sqlalchemy.sql import func
 
-        user.last_login = func.now()  # This will use the database's NOW() function
+        user.last_login = func.now()
         db.add(user)
         await db.commit()
         await db.refresh(user)
         return user
 
+    async def get_all_users(self, db: AsyncSession) -> List[UserModel]:
+        result = await db.execute(
+            select(UserModel).order_by(UserModel.created_at.desc())
+        )
+        return list(result.scalars().all())
 
-# Create a global instance of the CRUDUser class.
-# This instance will be imported and used by your API endpoints.
+
 crud_user = CRUDUser()

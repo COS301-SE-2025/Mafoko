@@ -4,8 +4,9 @@ import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
 import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
-import SavedTermsPage from './pages/SavedTermsPage';
+import WorkspacePage from './pages/WorkspacePage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import FeedbackPage from './pages/FeedbackPage';
 import HelpPage from './pages/help/HelpPage.tsx';
 import GettingStarted from './pages/help/GettingStarted';
 import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
@@ -14,11 +15,43 @@ import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
 import GlossaryPage from './pages/GlossaryPage.tsx';
 import UserProfilePage from './pages/UserProfilePage.tsx';
+import NewGlossary from './pages/NewGlossary';
+import LinguistApplicationPage from './pages/LinguistApplicationPage.tsx';
+import { TermDetailPage } from './pages/TermDetailPage.tsx';
+import FeedbackHub from './pages/FeedbackHub';
 import './App.css';
+
+import {
+  Chart as ChartJS,
+  PieController,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Register all Chart.js components once at the application entry point
+ChartJS.register(
+  PieController,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 function App() {
   return (
-    <div className="MavitoApp">
+    <div className="MaritoApp">
       <Routes>
         <Route path="/Landing" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
@@ -26,8 +59,9 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/home" element={<DashboardPage />} />
-        <Route path="/saved-terms" element={<SavedTermsPage />} />
+        <Route path="/workspace" element={<WorkspacePage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
@@ -37,6 +71,13 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<GlossaryPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/new-glossary" element={<NewGlossary />} />
+        <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
+        <Route
+          path="/linguist-application"
+          element={<LinguistApplicationPage />}
+        />
+        <Route path="/feedbackhub" element={<FeedbackHub />} />
       </Routes>
     </div>
   );

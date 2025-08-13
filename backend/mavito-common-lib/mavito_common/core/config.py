@@ -7,12 +7,14 @@ from typing import Optional, List, Any, Dict
 from pydantic import model_validator
 import logging
 
+import urllib
+
 logger = logging.getLogger(__name__)
 load_dotenv()
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Mavito API Default"
+    PROJECT_NAME: str = "Marito API Default"
     API_V1_STR: str = "/api/v1"
 
     SECRET_KEY: str = "!!!CONFIG_ERROR_SECRET_KEY_NOT_SET!!!"
@@ -31,6 +33,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: str = ""
     BACKEND_CORS_ORIGINS_LIST: List[str] = []
 
+    GOOGLE_CLIENT_ID: str = "!!!CONFIG_ERROR_GOOGLE_CLIENT_ID_NOT_SET!!!"
     # Give the field a placeholder default to satisfy mypy during static analysis.
     # The validator below will ALWAYS overwrite this at runtime.
     SQLALCHEMY_DATABASE_URL: str = "postgresql+asyncpg://user:pass@host/db"
@@ -53,10 +56,14 @@ class Settings(BaseSettings):
             db_host = data.get("DB_HOST")
             db_port = data.get("DB_PORT")
 
+            if db_password:
+                encoded_password = urllib.parse.quote_plus(db_password)
+            else:
+                encoded_password = ""
             if instance_connection_name:
-                db_url = f"postgresql+asyncpg://{db_user}:{db_password}@/{db_name}?host=/cloudsql/{instance_connection_name}"
+                db_url = f"postgresql+asyncpg://{db_user}:{encoded_password}@/{db_name}?host=/cloudsql/{instance_connection_name}"
             elif db_host and db_port:
-                db_url = f"postgresql+asyncpg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+                db_url = f"postgresql+asyncpg://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}"
 
         if not db_url:
             raise ValueError(

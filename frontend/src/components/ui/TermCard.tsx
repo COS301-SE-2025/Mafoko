@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { ThumbsUp, ThumbsDown, Share2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config';
 import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
+import { Link } from 'react-router-dom';
+import { LanguageColorMap } from '../../types/search/types.ts';
 
 interface VoteApiResponse {
   term_id: string;
@@ -19,22 +21,10 @@ interface TermCardProps {
   upvotes: number;
   downvotes: number;
   definition: string;
+  isBookmarked?: boolean;
   onView?: () => void;
+  onBookmarkChange?: (termId: string, isBookmarked: boolean) => void;
 }
-
-const langColorMap: Record<string, string> = {
-  Afrikaans: 'blue',
-  English: 'yellow',
-  isiNdebele: 'pink',
-  isiXhosa: 'green',
-  isiZulu: 'green',
-  Sesotho: 'yellow',
-  Setswana: 'orange',
-  siSwati: 'teal',
-  Tshivenda: 'indigo',
-  Xitsonga: 'lime',
-  Sepedi: 'cyan',
-};
 
 const TermCard: React.FC<TermCardProps> = ({
   id,
@@ -44,11 +34,14 @@ const TermCard: React.FC<TermCardProps> = ({
   upvotes: initialUpvotes,
   downvotes: initialDownvotes,
   definition,
+  isBookmarked: initialIsBookmarked = false,
   onView,
+  onBookmarkChange,
 }) => {
   const [upvotes, setUpvotes] = useState(initialUpvotes);
   const [downvotes, setDownvotes] = useState(initialDownvotes);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
 
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
     const token = localStorage.getItem('accessToken');
@@ -65,7 +58,6 @@ const TermCard: React.FC<TermCardProps> = ({
     // Optimistic UI Update
     if (userVote === currentVoteType) {
       setUserVote(null);
-      // UPDATED: Use a standard if/else block
       if (currentVoteType === 'up') {
         setUpvotes((c) => c - 1);
       } else {
@@ -88,7 +80,7 @@ const TermCard: React.FC<TermCardProps> = ({
 
     if (navigator.onLine) {
       try {
-        const response = await fetch(API_ENDPOINTS.submitVote, {
+        const response = await fetch(API_ENDPOINTS.voteOnTerm, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -103,6 +95,7 @@ const TermCard: React.FC<TermCardProps> = ({
         setUserVote(result.user_vote);
       } catch (error) {
         console.error('Error casting vote online:', error);
+        // Revert optimistic UI update on failure
         setUserVote(previousVote);
         setUpvotes(previousUpvotes);
         setDownvotes(previousDownvotes);
@@ -124,10 +117,56 @@ const TermCard: React.FC<TermCardProps> = ({
         }
       } catch (dbError) {
         console.error('Could not queue vote in IndexedDB:', dbError);
+        // Revert optimistic UI update on failure
         setUserVote(previousVote);
         setUpvotes(previousUpvotes);
         setDownvotes(previousDownvotes);
       }
+    }
+  };
+
+  const handleBookmark = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.log('Please log in to bookmark terms.');
+      return;
+    }
+
+    try {
+      // Toggle bookmark state optimistically
+      const wasBookmarked = isBookmarked;
+      setIsBookmarked(!isBookmarked);
+
+      if (wasBookmarked) {
+        // Unbookmark the term
+        const response = await fetch(API_ENDPOINTS.unbookmarkTerm(id), {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error('Unbookmark action failed');
+        console.log(`Unbookmarked term: ${term}`);
+      } else {
+        // Bookmark the term
+        const response = await fetch(API_ENDPOINTS.bookmarkTerm, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ term_id: id }),
+        });
+        if (!response.ok) throw new Error('Bookmark action failed');
+        console.log(`Bookmarked term: ${term}`);
+      }
+
+      // Notify parent component of bookmark change
+      onBookmarkChange?.(id, !isBookmarked);
+    } catch (error) {
+      console.error('Error bookmarking term:', error);
+      // Revert optimistic update on failure
+      setIsBookmarked(isBookmarked);
     }
   };
 
@@ -136,13 +175,13 @@ const TermCard: React.FC<TermCardProps> = ({
       <div className="term-header">
         <div className="term-left">
           <h3
-            className="text-left font-bold text-lg truncate w-full term-title"
+            className="text-left font-bold text-lg truncate w-full"
             title={term}
           >
             {term.length > 40 ? `${term.slice(0, 40)}...` : term}
           </h3>
           <div className="pills">
-            <span className={`pill ${langColorMap[language] || 'gray'}`}>
+            <span className={`pill ${LanguageColorMap[language] || 'gray'}`}>
               {language}
             </span>
             <span className="pill gray">
@@ -169,6 +208,19 @@ const TermCard: React.FC<TermCardProps> = ({
             <ThumbsDown size={20} className="icon" />
             <span className="count down">{downvotes}</span>
           </button>
+          <button
+            type="button"
+            className={`social-button ${isBookmarked ? 'bookmarked' : ''}`}
+            onClick={() => {
+              void handleBookmark();
+            }}
+            aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+          >
+            <Bookmark
+              size={20}
+              className={`icon ${isBookmarked ? 'bookmarked' : ''}`}
+            />
+          </button>
           <button type="button" className="social-button" aria-label="Share">
             <Share2 size={20} className="icon share" />
           </button>
@@ -178,7 +230,9 @@ const TermCard: React.FC<TermCardProps> = ({
         {definition.length > 80 ? `${definition.slice(0, 80)}...` : definition}
       </p>
       <button className="view-button" onClick={() => onView?.()} type="button">
-        View
+        <Link className="!text-theme" to={`/term/${language}/${term}/${id}`}>
+          <span className="text-teal-500">View</span>
+        </Link>
       </button>
     </div>
   );

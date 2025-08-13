@@ -782,7 +782,7 @@ const GlossaryPage = () => {
                                       {language}
                                     </div>
                                     <div className="glossary-translation-text">
-                                      {String(translation)}
+                                      {translation}
                                     </div>
                                   </div>
                                 ),

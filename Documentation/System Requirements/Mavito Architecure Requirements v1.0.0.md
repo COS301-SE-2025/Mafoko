@@ -28,12 +28,12 @@
     - AR6.2 **Data Security:** Outline measures for securing data both in transit (e.g., HTTPS) and at rest. (Also NFR5.1)
 - **AR7 Architectural Patterns**
     - **Microkernel Architecture**
-      Adoption of a microkernel architecture for the backend of the Mavito project. This architecture will support clean separation between core system       
+      Adoption of a microkernel architecture for the backend of the Marito project. This architecture will support clean separation between core system       
       functionality and optional features, enabling the team to develop and maintain the platform in a more modular, scalable, and collaborative way.
     - **Core of Architecture**
       A microkernel architecture consists of a minimal, stable core application that handles essential operations, with optional features implemented as 
       independent plugins. These plugins integrate with the core through clearly defined interfaces and can be added, updated, or removed without affecting the main system.
-      In Mavito’s case, the core will manage fundamental features such as glossary browsing, term searching, and feedback submission, while features like AI-powered translations, text- 
+      In Marito’s case, the core will manage fundamental features such as glossary browsing, term searching, and feedback submission, while features like AI-powered translations, text- 
       to-speech, and usage statistics will be developed as modular plugins.
      - **Advantages**
       - Modularity: Each plugin can be developed independently allowing team members to work in parallel.

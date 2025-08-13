@@ -21,7 +21,7 @@ const LeftPane: React.FC<LeftPaneProps> = ({ activeItem, onItemClick }) => {
     <div className="left-pane">
       {/* Header */}
       <div className="left-pane-header">
-        <h2 className="app-title">Mavito</h2>
+        <h2 className="app-title">Marito</h2>
         <div className="logo-container">
           <img
             src="./icons/maskable_icon_x512.png"

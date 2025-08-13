@@ -1,13 +1,13 @@
 import enum
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import ForeignKey, String, DateTime, Enum as SaEnum, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, ARRAY
 
 from mavito_common.db.base_class import Base
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mavito_common.models.user import User
@@ -23,22 +23,17 @@ class LinguistApplication(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id"), unique=True, nullable=False
-    )
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     status: Mapped[ApplicationStatus] = mapped_column(
         SaEnum(ApplicationStatus, name="application_status_enum"),
         default=ApplicationStatus.pending,
         nullable=False,
     )
-    id_document_url: Mapped[str] = mapped_column(String, nullable=False)
-    cv_document_url: Mapped[str] = mapped_column(String, nullable=False)
-    certifications_document_url: Mapped[str | None] = mapped_column(
-        String, nullable=True
+    google_scholar_url: Mapped[str] = mapped_column(String, nullable=False)
+    research_papers_gcs_keys: Mapped[List[str]] = mapped_column(
+        ARRAY(String), nullable=False
     )
-    research_papers_document_url: Mapped[str | None] = mapped_column(
-        String, nullable=True
-    )
+
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

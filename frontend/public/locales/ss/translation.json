@@ -27,7 +27,7 @@
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunayo i-akhawunti?",
     "registerLink": "Bhalisa",
-    "welcomeImageAlt": "Kwemukela Kungena ku-Mavito",
+    "welcomeImageAlt": "Kwemukela Kungena ku-Marito",
     "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
     "errorTokenMissing": "Ungene ngemphumelelo, kodvwa kute ithokheni letfolakele. Ngicela utsintse lusito.",
     "errorDefault": "Kungena kuhlulekile. Ngicela uhlole imininingwane yakho.",
@@ -38,7 +38,7 @@
   },
   "registrationPage": {
     "title": "CALA MANJE",
-    "subtitle": "Yakha i-akhawunti yakho ye-Mavito.",
+    "subtitle": "Yakha i-akhawunti yakho ye-Marito.",
     "firstNameLabel": "Ligama Lekucala",
     "firstNamePlaceholder": "Faka ligama lakho lekucala",
     "lastNameLabel": "Sibongo",
@@ -57,7 +57,7 @@
     "createWithGoogle": "Yakha I-akhawunti nge-Google",
     "haveAccount": "Sewuvele unayo i-akhawunti?",
     "loginLink": "Ngena",
-    "welcomeImageAlt": "Kwemukela ku-Mavito",
+    "welcomeImageAlt": "Kwemukela ku-Marito",
     "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
     "errorPasswordsDoNotMatch": "Emaphasiwedi awahambelani.",
     "errorAgreeToTerms": "Kufanele uvume imigomo nemibandzela.",
@@ -81,7 +81,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Wemukelekile ku-Mavito",
+    "welcome": "Wemukelekile ku-Marito",
     "welcomeBack": "Wemukelekile futsi",
     "userName": "Ligama Lemsebentisi",
     "userId": "Inombolo Yemsebentisi",
