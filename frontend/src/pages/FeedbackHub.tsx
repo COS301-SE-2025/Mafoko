@@ -12,14 +12,13 @@ import {
   Eye,
   CheckCircle,
   Clock,
-  BarChart3,
   TrendingUp,
   Archive,
 } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
-import '../styles/AnalyticsPage.scss';
+import '../styles/FeedbackHub.scss';
 
 // Type for feedback object
 interface Feedback {
@@ -44,7 +43,7 @@ const AdminDashboard = () => {
       message:
         'It would be great if you could add a dark mode toggle to the application. Many users prefer dark themes, especially when working late hours.',
       date: '2025-08-10T14:30:00Z',
-      status: 'new',
+      status: 'Pending',
       priority: 'medium',
     },
     {
@@ -77,7 +76,7 @@ const AdminDashboard = () => {
       message:
         'Consider adding keyboard shortcuts for power users. This would significantly improve productivity.',
       date: '2025-08-09T11:20:00Z',
-      status: 'new',
+      status: 'Pending',
       priority: 'low',
     },
     {
@@ -88,7 +87,7 @@ const AdminDashboard = () => {
       message:
         'Mobile app crashes when trying to upload large files. This is affecting my daily workflow.',
       date: '2025-08-08T13:10:00Z',
-      status: 'new',
+      status: 'Pending',
       priority: 'high',
     },
     {
@@ -155,8 +154,8 @@ const AdminDashboard = () => {
     const compliments = feedbackData.filter(
       (item) => item.type === 'compliment',
     ).length;
-    const newItems = feedbackData.filter(
-      (item) => item.status === 'new',
+    const PendingItems = feedbackData.filter(
+      (item) => item.status === 'Pending',
     ).length;
     const inProgress = feedbackData.filter(
       (item) => item.status === 'in-progress',
@@ -170,7 +169,7 @@ const AdminDashboard = () => {
       suggestions,
       complaints,
       compliments,
-      newItems,
+      PendingItems,
       inProgress,
       resolved,
     };
@@ -179,52 +178,13 @@ const AdminDashboard = () => {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'suggestion':
-        return <Lightbulb className="h-4 w-4" />;
+        return <Lightbulb className="h-4 w-4" color="#f2d001" />;
       case 'complaint':
-        return <AlertCircle className="h-4 w-4" />;
+        return <AlertCircle className="h-4 w-4" color="#f00a50" />;
       case 'compliment':
-        return <Heart className="h-4 w-4" />;
+        return <Heart className="h-4 w-4" color="#00ceaf" />;
       default:
         return <MessageSquare className="h-4 w-4" />;
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'suggestion':
-        return 'text-blue-600 bg-blue-50';
-      case 'complaint':
-        return 'text-red-600 bg-red-50';
-      case 'compliment':
-        return 'text-green-600 bg-green-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'new':
-        return 'text-orange-600 bg-orange-50';
-      case 'in-progress':
-        return 'text-blue-600 bg-blue-50';
-      case 'resolved':
-        return 'text-green-600 bg-green-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'text-red-600 bg-red-50';
-      case 'medium':
-        return 'text-yellow-600 bg-yellow-50';
-      case 'low':
-        return 'text-green-600 bg-green-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
     }
   };
 
@@ -291,363 +251,75 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        <div
-          className={`feedback-hub-content ${isMobile ? 'pt-16' : ''}`}
-          style={{
-            backgroundColor: 'var(--page-bg)',
-            color: 'var(--text-color)',
-            minHeight: '100vh',
-            padding: isMobile ? '1rem' : '2rem',
-          }}
-        >
-          {/* FeedbackHub Header */}
-          <div
-            style={{
-              textAlign: 'center',
-              marginBottom: '2rem',
-              padding: '1rem 0',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.75rem',
-                marginBottom: '1rem',
-              }}
-            >
-              <BarChart3
-                style={{
-                  height: '2rem',
-                  width: '2rem',
-                  color: '#3AB0FF',
-                }}
-              />
-              <h1
-                style={{
-                  fontSize: '2rem',
-                  fontWeight: 'bold',
-                  color: 'var(--text-color)',
-                  margin: 0,
-                }}
-              >
-                FeedbackHub Admin
-              </h1>
-            </div>
-            <p
-              style={{
-                color: 'var(--text-color-secondary)',
-                fontSize: '1rem',
-                margin: 0,
-              }}
-            >
-              Manage customer feedback
-            </p>
-          </div>
+        <div className={`feedback-hub-content${isMobile ? ' pt-16' : ''}`}>
           {/* Stats Cards */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile
-                ? '1fr'
-                : 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '1.5rem',
-              marginBottom: '2rem',
-            }}
-          >
-            <div
-              style={{
-                background: 'var(--bg-card)',
-                padding: '1.5rem',
-                borderRadius: '0.75rem',
-                border: '1px solid var(--color-border)',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+          <div className="stats-cards">
+            <div className="stats-card">
+              <div className="stats-card-header">
                 <div>
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '500',
-                      color: 'var(--text-color-secondary)',
-                      margin: '0 0 0.5rem 0',
-                    }}
-                  >
-                    Total Feedback
-                  </p>
-                  <p
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: 'bold',
-                      color: 'var(--text-color)',
-                      margin: 0,
-                    }}
-                  >
-                    {stats.total}
-                  </p>
+                  <p className="stats-card-title">Total Feedback</p>
+                  <p className="stats-card-value">{stats.total}</p>
                 </div>
-                <MessageSquare
-                  style={{
-                    height: '2rem',
-                    width: '2rem',
-                    color: '#3AB0FF',
-                  }}
-                />
+                <MessageSquare className="stats-card-icon" />
               </div>
-              <div
-                style={{
-                  marginTop: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: '0.875rem',
-                  color: '#10B981',
-                }}
-              >
-                <TrendingUp
-                  style={{
-                    height: '1rem',
-                    width: '1rem',
-                    marginRight: '0.25rem',
-                  }}
-                />
+              <div className="stats-card-footer">
+                <TrendingUp className="stats-card-trend" />
                 <span>+12% from last week</span>
               </div>
             </div>
 
-            <div
-              style={{
-                background: 'var(--bg-card)',
-                padding: '1.5rem',
-                borderRadius: '0.75rem',
-                border: '1px solid var(--color-border)',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+            <div className="stats-card">
+              <div className="stats-card-header">
                 <div>
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '500',
-                      color: 'var(--text-color-secondary)',
-                      margin: '0 0 0.5rem 0',
-                    }}
-                  >
-                    Pending Review
-                  </p>
-                  <p
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: 'bold',
-                      color: 'var(--text-color)',
-                      margin: 0,
-                    }}
-                  >
-                    {stats.newItems}
-                  </p>
+                  <p className="stats-card-title">Pending Review</p>
+                  <p className="stats-card-value">{stats.PendingItems}</p>
                 </div>
-                <Clock
-                  style={{
-                    height: '2rem',
-                    width: '2rem',
-                    color: '#F59E0B',
-                  }}
-                />
+                <Clock className="stats-card-icon" />
               </div>
-              <div
-                style={{
-                  marginTop: '1rem',
-                  fontSize: '0.875rem',
-                  color: '#F59E0B',
-                }}
-              >
+              <div className="stats-card-footer">
                 <span>Needs attention</span>
               </div>
             </div>
 
-            <div
-              style={{
-                background: 'var(--bg-card)',
-                padding: '1.5rem',
-                borderRadius: '0.75rem',
-                border: '1px solid var(--color-border)',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+            <div className="stats-card">
+              <div className="stats-card-header">
                 <div>
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '500',
-                      color: 'var(--text-color-secondary)',
-                      margin: '0 0 0.5rem 0',
-                    }}
-                  >
-                    In Progress
-                  </p>
-                  <p
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: 'bold',
-                      color: 'var(--text-color)',
-                      margin: 0,
-                    }}
-                  >
-                    {stats.inProgress}
-                  </p>
+                  <p className="stats-card-title">In Progress</p>
+                  <p className="stats-card-value">{stats.inProgress}</p>
                 </div>
-                <Eye
-                  style={{
-                    height: '2rem',
-                    width: '2rem',
-                    color: '#3B82F6',
-                  }}
-                />
+                <Eye className="stats-card-icon" />
               </div>
-              <div
-                style={{
-                  marginTop: '1rem',
-                  fontSize: '0.875rem',
-                  color: '#3B82F6',
-                }}
-              >
+              <div className="stats-card-footer">
                 <span>Being addressed</span>
               </div>
             </div>
 
-            <div
-              style={{
-                background: 'var(--bg-card)',
-                padding: '1.5rem',
-                borderRadius: '0.75rem',
-                border: '1px solid var(--color-border)',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+            <div className="stats-card">
+              <div className="stats-card-header">
                 <div>
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '500',
-                      color: 'var(--text-color-secondary)',
-                      margin: '0 0 0.5rem 0',
-                    }}
-                  >
-                    Resolved
-                  </p>
-                  <p
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: 'bold',
-                      color: 'var(--text-color)',
-                      margin: 0,
-                    }}
-                  >
-                    {stats.resolved}
-                  </p>
+                  <p className="stats-card-title">Resolved</p>
+                  <p className="stats-card-value">{stats.resolved}</p>
                 </div>
-                <CheckCircle
-                  style={{
-                    height: '2rem',
-                    width: '2rem',
-                    color: '#10B981',
-                  }}
-                />
+                <CheckCircle className="stats-card-icon" />
               </div>
-              <div
-                style={{
-                  marginTop: '1rem',
-                  fontSize: '0.875rem',
-                  color: '#10B981',
-                }}
-              >
+              <div className="stats-card-footer">
                 <span>Successfully handled</span>
               </div>
             </div>
           </div>
 
           {/* Filters and Search */}
-          <div
-            style={{
-              background: 'var(--bg-card)',
-              padding: '1.5rem',
-              borderRadius: '0.75rem',
-              border: '1px solid var(--color-border)',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-              marginBottom: '1.5rem',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: isMobile ? 'column' : 'row',
-                gap: '1rem',
-                alignItems: isMobile ? 'stretch' : 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: isMobile ? 'column' : 'row',
-                  gap: '1rem',
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                  }}
-                >
-                  <Filter
-                    style={{
-                      height: '1rem',
-                      width: '1rem',
-                      color: 'var(--text-color-secondary)',
-                    }}
-                  />
+          <div className="filters-search">
+            <div className={`filters-container ${isMobile ? 'mobile' : ''}`}>
+              <div className={`filters-left ${isMobile ? 'mobile' : ''}`}>
+                <div className="filter-group">
+                  <Filter className="filter-icon" />
                   <select
                     value={filterType}
                     onChange={(e) => {
                       setFilterType(e.target.value);
                     }}
-                    style={{
-                      border: '1px solid var(--color-border)',
-                      borderRadius: '0.375rem',
-                      padding: '0.5rem 0.75rem',
-                      fontSize: '0.875rem',
-                      background: 'var(--bg-card)',
-                      color: 'var(--text-color)',
-                    }}
+                    className="filter-select"
                   >
                     <option value="all">All Types</option>
                     <option value="suggestion">Suggestions</option>
@@ -661,36 +333,17 @@ const AdminDashboard = () => {
                   onChange={(e) => {
                     setFilterStatus(e.target.value);
                   }}
-                  style={{
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '0.375rem',
-                    padding: '0.5rem 0.75rem',
-                    fontSize: '0.875rem',
-                    background: 'var(--bg-card)',
-                    color: 'var(--text-color)',
-                  }}
+                  className="filter-select"
                 >
                   <option value="all">All Statuses</option>
-                  <option value="new">New</option>
+                  <option value="Pending">Pending</option>
                   <option value="in-progress">In Progress</option>
                   <option value="resolved">Resolved</option>
                 </select>
               </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                }}
-              >
-                <Search
-                  style={{
-                    height: '1rem',
-                    width: '1rem',
-                    color: 'var(--text-color-secondary)',
-                  }}
-                />
+              <div className="search-group">
+                <Search className="search-icon" />
                 <input
                   type="text"
                   placeholder="Search feedback..."
@@ -698,52 +351,19 @@ const AdminDashboard = () => {
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
                   }}
-                  style={{
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '0.375rem',
-                    padding: '0.5rem 0.75rem',
-                    fontSize: '0.875rem',
-                    background: 'var(--bg-card)',
-                    color: 'var(--text-color)',
-                    width: isMobile ? '100%' : '16rem',
-                  }}
+                  className={`search-input ${isMobile ? 'mobile' : ''}`}
                 />
               </div>
             </div>
           </div>
 
           {/* Main Content */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr',
-              gap: '1.5rem',
-            }}
-          >
+          <div className={`main-grid ${isMobile ? 'mobile' : ''}`}>
             {/* Feedback List */}
             <div>
-              <div
-                style={{
-                  background: 'var(--bg-card)',
-                  borderRadius: '0.75rem',
-                  border: '1px solid var(--color-border)',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                <div
-                  style={{
-                    padding: '1.5rem',
-                    borderBottom: '1px solid var(--color-border)',
-                  }}
-                >
-                  <h2
-                    style={{
-                      fontSize: '1.125rem',
-                      fontWeight: '600',
-                      color: 'var(--text-color)',
-                      margin: 0,
-                    }}
-                  >
+              <div className="feedback-list-panel">
+                <div className="feedback-list-header">
+                  <h2 className="feedback-list-title">
                     Feedback Items ({filteredFeedback.length})
                   </h2>
                 </div>
@@ -754,217 +374,48 @@ const AdminDashboard = () => {
                       onClick={() => {
                         setSelectedFeedback(feedback);
                       }}
-                      style={{
-                        padding: '1.5rem',
-                        borderBottom: '1px solid var(--color-border)',
-                        cursor: 'pointer',
-                        transition: 'background-color 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.backgroundColor =
-                          isDarkMode
-                            ? 'rgba(255, 255, 255, 0.05)'
-                            : 'rgba(0, 0, 0, 0.02)';
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.backgroundColor =
-                          'transparent';
-                      }}
+                      className={`feedback-list-item ${isDarkMode ? 'dark-mode' : ''}`}
                     >
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'flex-start',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '0.75rem',
-                            flex: 1,
-                          }}
-                        >
+                      <div className="feedback-list-item-layout">
+                        <div className="feedback-list-item-main">
                           <div
-                            style={{
-                              padding: '0.5rem',
-                              borderRadius: '50%',
-                              backgroundColor: getTypeColor(
-                                feedback.type,
-                              ).includes('blue')
-                                ? 'rgba(59, 130, 246, 0.1)'
-                                : getTypeColor(feedback.type).includes('red')
-                                  ? 'rgba(239, 68, 68, 0.1)'
-                                  : 'rgba(34, 197, 94, 0.1)',
-                              color: getTypeColor(feedback.type).includes(
-                                'blue',
-                              )
-                                ? '#3B82F6'
-                                : getTypeColor(feedback.type).includes('red')
-                                  ? '#EF4444'
-                                  : '#22C55E',
-                            }}
+                            className={`feedback-icon-container ${feedback.type}`}
                           >
                             {getTypeIcon(feedback.type)}
                           </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                marginBottom: '0.5rem',
-                                flexWrap: 'wrap',
-                              }}
-                            >
+                          <div className="feedback-list-item-body">
+                            <div className="feedback-list-item-tags">
                               <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  padding: '0.25rem 0.75rem',
-                                  borderRadius: '9999px',
-                                  fontSize: '0.75rem',
-                                  fontWeight: '500',
-                                  backgroundColor: getTypeColor(
-                                    feedback.type,
-                                  ).includes('blue')
-                                    ? 'rgba(59, 130, 246, 0.1)'
-                                    : getTypeColor(feedback.type).includes(
-                                          'red',
-                                        )
-                                      ? 'rgba(239, 68, 68, 0.1)'
-                                      : 'rgba(34, 197, 94, 0.1)',
-                                  color: getTypeColor(feedback.type).includes(
-                                    'blue',
-                                  )
-                                    ? '#3B82F6'
-                                    : getTypeColor(feedback.type).includes(
-                                          'red',
-                                        )
-                                      ? '#EF4444'
-                                      : '#22C55E',
-                                }}
+                                className={`feedback-list-item-tag ${feedback.type}`}
                               >
                                 {feedback.type.charAt(0).toUpperCase() +
                                   feedback.type.slice(1)}
                               </span>
                               <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  padding: '0.25rem 0.75rem',
-                                  borderRadius: '9999px',
-                                  fontSize: '0.75rem',
-                                  fontWeight: '500',
-                                  backgroundColor: getStatusColor(
-                                    feedback.status,
-                                  ).includes('orange')
-                                    ? 'rgba(249, 115, 22, 0.1)'
-                                    : getStatusColor(feedback.status).includes(
-                                          'blue',
-                                        )
-                                      ? 'rgba(59, 130, 246, 0.1)'
-                                      : 'rgba(34, 197, 94, 0.1)',
-                                  color: getStatusColor(
-                                    feedback.status,
-                                  ).includes('orange')
-                                    ? '#F97316'
-                                    : getStatusColor(feedback.status).includes(
-                                          'blue',
-                                        )
-                                      ? '#3B82F6'
-                                      : '#22C55E',
-                                }}
+                                className={`status-tag ${feedback.status.toLowerCase().replace(' ', '-')}`}
                               >
                                 {feedback.status
                                   .replace('-', ' ')
                                   .replace(/\b\w/g, (l) => l.toUpperCase())}
                               </span>
                               <span
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  padding: '0.25rem 0.75rem',
-                                  borderRadius: '9999px',
-                                  fontSize: '0.75rem',
-                                  fontWeight: '500',
-                                  backgroundColor: getPriorityColor(
-                                    feedback.priority,
-                                  ).includes('red')
-                                    ? 'rgba(239, 68, 68, 0.1)'
-                                    : getPriorityColor(
-                                          feedback.priority,
-                                        ).includes('yellow')
-                                      ? 'rgba(245, 158, 11, 0.1)'
-                                      : 'rgba(34, 197, 94, 0.1)',
-                                  color: getPriorityColor(
-                                    feedback.priority,
-                                  ).includes('red')
-                                    ? '#EF4444'
-                                    : getPriorityColor(
-                                          feedback.priority,
-                                        ).includes('yellow')
-                                      ? '#F59E0B'
-                                      : '#22C55E',
-                                }}
+                                className={`priority-tag ${feedback.priority}`}
                               >
                                 {feedback.priority.charAt(0).toUpperCase() +
                                   feedback.priority.slice(1)}{' '}
                                 Priority
                               </span>
                             </div>
-                            <p
-                              style={{
-                                fontSize: '0.875rem',
-                                color: 'var(--text-color)',
-                                marginBottom: '0.5rem',
-                                lineHeight: '1.4',
-                                display: '-webkit-box',
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden',
-                              }}
-                            >
+                            <p className="feedback-message">
                               {feedback.message}
                             </p>
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                fontSize: '0.75rem',
-                                color: 'var(--text-color-secondary)',
-                                gap: '1rem',
-                              }}
-                            >
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '0.25rem',
-                                }}
-                              >
-                                <User
-                                  style={{
-                                    height: '0.75rem',
-                                    width: '0.75rem',
-                                  }}
-                                />
+                            <div className="feedback-meta">
+                              <div className="meta-item">
+                                <User className="meta-icon" />
                                 {feedback.name || 'Anonymous'}
                               </div>
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '0.25rem',
-                                }}
-                              >
-                                <Calendar
-                                  style={{
-                                    height: '0.75rem',
-                                    width: '0.75rem',
-                                  }}
-                                />
+                              <div className="meta-item">
+                                <Calendar className="meta-icon" />
                                 {formatDate(feedback.date)}
                               </div>
                             </div>
@@ -980,261 +431,96 @@ const AdminDashboard = () => {
             {/* Detail Panel */}
             <div>
               <div
-                style={{
-                  background: 'var(--bg-card)',
-                  borderRadius: '0.75rem',
-                  border: '1px solid var(--color-border)',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                  position: isMobile ? 'static' : 'sticky',
-                  top: isMobile ? 'auto' : '1.5rem',
-                }}
+                className={`feedback-detail-panel ${isMobile ? 'mobile' : ''}`}
               >
                 {selectedFeedback ? (
-                  <div style={{ padding: '1.5rem' }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginBottom: '1rem',
-                      }}
-                    >
-                      <h3
-                        style={{
-                          fontSize: '1.125rem',
-                          fontWeight: '600',
-                          color: 'var(--text-color)',
-                          margin: 0,
-                        }}
-                      >
+                  <div className="feedback-detail-content">
+                    <div className="feedback-detail-header">
+                      <h3 className="feedback-detail-title">
                         Feedback Details
                       </h3>
                       <span
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          padding: '0.25rem 0.75rem',
-                          borderRadius: '9999px',
-                          fontSize: '0.75rem',
-                          fontWeight: '500',
-                          backgroundColor: getTypeColor(
-                            selectedFeedback.type,
-                          ).includes('blue')
-                            ? 'rgba(59, 130, 246, 0.1)'
-                            : getTypeColor(selectedFeedback.type).includes(
-                                  'red',
-                                )
-                              ? 'rgba(239, 68, 68, 0.1)'
-                              : 'rgba(34, 197, 94, 0.1)',
-                          color: getTypeColor(selectedFeedback.type).includes(
-                            'blue',
-                          )
-                            ? '#3B82F6'
-                            : getTypeColor(selectedFeedback.type).includes(
-                                  'red',
-                                )
-                              ? '#EF4444'
-                              : '#22C55E',
-                        }}
+                        className={`feedback-detail-tag ${selectedFeedback.type}`}
                       >
                         {selectedFeedback.type.charAt(0).toUpperCase() +
                           selectedFeedback.type.slice(1)}
                       </span>
                     </div>
 
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem',
-                      }}
-                    >
-                      <div>
-                        <label
-                          style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            color: 'var(--text-color)',
-                            display: 'block',
-                            marginBottom: '0.25rem',
-                          }}
-                        >
-                          Status
-                        </label>
+                    <div className="feedback-detail-fields">
+                      <div className="form-field">
+                        <label className="form-label">Status</label>
                         <select
                           value={selectedFeedback.status}
                           onChange={(e) => {
                             updateStatus(selectedFeedback.id, e.target.value);
                           }}
-                          style={{
-                            width: '100%',
-                            border: '1px solid var(--color-border)',
-                            borderRadius: '0.375rem',
-                            padding: '0.5rem 0.75rem',
-                            fontSize: '0.875rem',
-                            background: 'var(--bg-card)',
-                            color: 'var(--text-color)',
-                          }}
+                          className="form-select"
                         >
-                          <option value="new">New</option>
+                          <option value="Pending">Pending</option>
                           <option value="in-progress">In Progress</option>
                           <option value="resolved">Resolved</option>
                         </select>
                       </div>
 
-                      <div>
-                        <label
-                          style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            color: 'var(--text-color)',
-                            display: 'block',
-                            marginBottom: '0.25rem',
+                      <div className="form-field">
+                        <label className="form-label">Priority</label>
+                        <select
+                          value={selectedFeedback.priority}
+                          onChange={(e) => {
+                            // In a real app, this would update the priority in the backend
+                            selectedFeedback.priority = e.target.value;
+                            // Force update (since selectedFeedback is not state)
+                            setSelectedFeedback({ ...selectedFeedback });
                           }}
+                          className="form-select"
                         >
-                          Message
-                        </label>
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                        </select>
+                      </div>
+
+                      <div className="form-field">
+                        <label className="form-label">Message</label>
                         <div
-                          style={{
-                            padding: '0.75rem',
-                            backgroundColor: isDarkMode
-                              ? 'rgba(255, 255, 255, 0.05)'
-                              : 'rgba(0, 0, 0, 0.02)',
-                            borderRadius: '0.375rem',
-                            fontSize: '0.875rem',
-                            color: 'var(--text-color)',
-                            lineHeight: '1.5',
-                          }}
+                          className={`message-display ${isDarkMode ? 'dark' : 'light'}`}
                         >
                           {selectedFeedback.message}
                         </div>
                       </div>
 
-                      <div>
-                        <label
-                          style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            color: 'var(--text-color)',
-                            display: 'block',
-                            marginBottom: '0.25rem',
-                          }}
-                        >
-                          Submitted By
-                        </label>
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '0.25rem',
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              fontSize: '0.875rem',
-                              color: 'var(--text-color)',
-                              gap: '0.5rem',
-                            }}
-                          >
-                            <User
-                              style={{
-                                height: '1rem',
-                                width: '1rem',
-                                color: 'var(--text-color-secondary)',
-                              }}
-                            />
+                      <div className="form-field">
+                        <label className="form-label">Submitted By</label>
+                        <div className="user-info">
+                          <div className="user-detail">
+                            <User className="detail-icon" />
                             {selectedFeedback.name || 'Anonymous'}
                           </div>
                           {selectedFeedback.email && (
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                fontSize: '0.875rem',
-                                color: 'var(--text-color)',
-                                gap: '0.5rem',
-                              }}
-                            >
-                              <Mail
-                                style={{
-                                  height: '1rem',
-                                  width: '1rem',
-                                  color: 'var(--text-color-secondary)',
-                                }}
-                              />
+                            <div className="user-detail">
+                              <Mail className="detail-icon" />
                               {selectedFeedback.email}
                             </div>
                           )}
                         </div>
                       </div>
 
-                      <div>
-                        <label
-                          style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            color: 'var(--text-color)',
-                            display: 'block',
-                            marginBottom: '0.25rem',
-                          }}
-                        >
-                          Submitted On
-                        </label>
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            fontSize: '0.875rem',
-                            color: 'var(--text-color)',
-                            gap: '0.5rem',
-                          }}
-                        >
-                          <Calendar
-                            style={{
-                              height: '1rem',
-                              width: '1rem',
-                              color: 'var(--text-color-secondary)',
-                            }}
-                          />
+                      <div className="form-field">
+                        <label className="form-label">Submitted On</label>
+                        <div className="date-display">
+                          <Calendar className="detail-icon" />
                           {formatDate(selectedFeedback.date)}
                         </div>
                       </div>
 
-                      <div
-                        style={{
-                          paddingTop: '1rem',
-                          borderTop: '1px solid var(--color-border)',
-                        }}
-                      >
+                      <div className="feedback-detail-actions">
                         <button
                           type="button"
                           onClick={() => {
                             updateStatus(selectedFeedback.id, 'resolved');
                           }}
-                          style={{
-                            width: '100%',
-                            backgroundColor: '#3B82F6',
-                            color: 'white',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '0.375rem',
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            border: 'none',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.2s ease',
-                          }}
-                          onMouseEnter={(e) => {
-                            (
-                              e.currentTarget as HTMLElement
-                            ).style.backgroundColor = '#2563EB';
-                          }}
-                          onMouseLeave={(e) => {
-                            (
-                              e.currentTarget as HTMLElement
-                            ).style.backgroundColor = '#3B82F6';
-                          }}
+                          className="action-button"
                         >
                           Mark as Resolved
                         </button>
@@ -1242,21 +528,8 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      padding: '1.5rem',
-                      textAlign: 'center',
-                      color: 'var(--text-color-secondary)',
-                    }}
-                  >
-                    <Archive
-                      style={{
-                        height: '3rem',
-                        width: '3rem',
-                        margin: '0 auto 1rem auto',
-                        color: 'var(--text-color-muted)',
-                      }}
-                    />
+                  <div className="feedback-detail-empty">
+                    <Archive className="feedback-detail-empty-icon" />
                     <p style={{ margin: 0 }}>
                       Select a feedback item to view details
                     </p>

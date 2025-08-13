@@ -1,10 +1,21 @@
+// Dark mode border overrides
+.theme-dark .feedback-card {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.theme-dark .feedback-form .form-fields .form-group .form-input,
+.theme-dark .feedback-form .form-fields .form-group .form-textarea {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.theme-dark .feedback-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
 // FeedbackPage.scss
 // @import '../styles/theme.scss';
 
 // Main feedback page layout following dashboard pattern
 .feedback-main {
   padding: 2rem;
-  padding-top: 80px;
+  //padding-top: 80px;
   min-height: calc(100vh - 80px);
   font-family:
     'Inter',
@@ -19,7 +30,7 @@
 
   @media (max-width: 768px) {
     padding: 1rem;
-    padding-top: 60px;
+    padding-top: 120px;
     min-height: calc(100vh - 60px);
   }
 }
@@ -50,34 +61,6 @@
   max-width: 1200px;
   margin: -50px auto 0 auto;
 
-  .feedback-header {
-    text-align: center;
-    margin-bottom: 3rem;
-
-    .feedback-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--color-text);
-      margin-bottom: 1rem;
-
-      @media (max-width: 768px) {
-        font-size: 2rem;
-      }
-    }
-
-    .feedback-subtitle {
-      font-size: 1.25rem;
-      color: var(--color-text-secondary);
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-
-      @media (max-width: 768px) {
-        font-size: 1.1rem;
-      }
-    }
-  }
-
   .feedback-card {
     background: #f3f4f6;
     border: 1px solid var(--color-border);
@@ -88,17 +71,11 @@
     overflow: hidden;
     margin-bottom: 2rem;
   }
-
-  .feedback-footer {
-    text-align: center;
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
-  }
 }
 
 // Tab navigation
 .feedback-tabs {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
   .tabs-nav {
     display: flex;
@@ -155,16 +132,16 @@
       }
 
       @media (max-width: 640px) {
-        padding: 0.75rem 1rem;
-        font-size: 0.875rem;
+        padding: 0.5rem 0.5rem;
+        font-size: 0.8rem;
 
         .tab-content {
           flex-direction: column;
           gap: 0.25rem;
 
           .tab-icon {
-            width: 1rem;
-            height: 1rem;
+            width: 0.85rem;
+            height: 0.85rem;
           }
         }
       }

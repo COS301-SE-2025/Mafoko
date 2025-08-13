@@ -72,22 +72,22 @@ const FeedbackPage = () => {
       id: 'suggestion',
       label: 'Suggestion',
       icon: Lightbulb,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
+      color: '#FFD600',
+      bg: '#FFFDE7',
     },
     {
       id: 'complaint',
       label: 'Complaint',
       icon: AlertCircle,
-      color: 'text-red-600',
-      bg: 'bg-red-50',
+      color: '#FF5252',
+      bg: '#FFEBEE',
     },
     {
       id: 'compliment',
       label: 'Compliment',
       icon: Heart,
-      color: 'text-green-600',
-      bg: 'bg-green-50',
+      color: '#43A047',
+      bg: '#E8F5E9',
     },
   ];
 
