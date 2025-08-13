@@ -331,22 +331,6 @@ const AnalyticsPage: React.FC = () => {
                     icon={<FaGlobe className="stat-icon" />}
                     isDarkMode={isDarkMode}
                   />
-                  <StatCard
-                    title={t('analytics.stats.topLanguage')}
-                    value={
-                      Object.keys(uniqueTermsData).length > 0
-                        ? Object.entries(uniqueTermsData)
-                            .sort(([, a], [, b]) => b - a)[0]?.[0]
-                            ?.charAt(0)
-                            .toUpperCase() +
-                          (Object.entries(uniqueTermsData)
-                            .sort(([, a], [, b]) => b - a)[0]?.[0]
-                            ?.slice(1) || '')
-                        : 'English'
-                    }
-                    icon={<FaLanguage className="stat-icon" />}
-                    isDarkMode={isDarkMode}
-                  />
                 </div>
               </div>
 
