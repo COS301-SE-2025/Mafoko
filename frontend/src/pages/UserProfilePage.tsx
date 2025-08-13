@@ -656,7 +656,7 @@ const UserProfilePage: React.FC = () => {
         },
         body: JSON.stringify({
           current_password: passwordForm.current_password,
-          new_password: passwordForm.new_password,
+          password: passwordForm.new_password,
         }),
       });
 
@@ -832,25 +832,16 @@ const UserProfilePage: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                    }}
-                  >
-                    <LogOut size={20} />
-                    <span className="menu-label">
-                      {t('profile.logout', 'Sign out')}
-                    </span>
-                  </div>
+                  <span className="menu-label">
+                    {t('profile.logout', 'Sign out')}
+                  </span>
                   <div className="menu-action-container">
                     <button
                       type="button"
                       className="dropdown-toggle"
                       onClick={handleLogoutClick}
                     >
-                      {t('profile.logout', 'Sign out')}
+                      <LogOut size={20} />
                     </button>
                   </div>
                 </>
