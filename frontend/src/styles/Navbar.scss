@@ -117,7 +117,9 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   z-index: 90;
   transform: translateY(-100%);
-  transition: transform 0.4s ease-in-out, max-height 0.4s ease-in-out;
+  transition:
+    transform 0.4s ease-in-out,
+    max-height 0.4s ease-in-out;
   padding: 1.5rem 1rem;
 
   &.is-open {
@@ -126,7 +128,7 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
     padding-top: 5rem;
     padding-bottom: 1.5rem;
   }
-  
+
   @media (min-width: 769px) {
     &.is-open {
       padding-top: 1.5rem;
@@ -259,7 +261,9 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
 
 .mobile-nav-dropdown {
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   max-height: 0;
   opacity: 0;
   padding: 0 1rem;
@@ -279,4 +283,3 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
     position: relative;
   }
 }
-

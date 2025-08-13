@@ -133,7 +133,7 @@ export const TermDetailPage: React.FC = () => {
     const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
       try {
         const params = new URLSearchParams({
-          domain: String(domain),
+          domain: domain,
           sort_by: 'name',
           page: '1',
           page_size: '3',

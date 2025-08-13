@@ -78,12 +78,13 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
   gap: 15px;
   text-align: left;
   transition: all 0.2s ease;
-  
+
   &:hover {
     transform: translateX(5px);
   }
 
-  .status-text, svg {
+  .status-text,
+  svg {
     color: inherit;
   }
 }
@@ -91,7 +92,7 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
 .section.completed {
   background-color: var(--progress-status-accepted);
   color: white;
-  
+
   .status-badge {
     background-color: white;
     color: var(--progress-status-accepted);
@@ -102,7 +103,7 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
 .section.rejected {
   background-color: var(--progress-status-rejected);
   color: white;
-  
+
   .status-badge {
     background-color: white;
     color: var(--progress-status-rejected);
@@ -145,12 +146,12 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
 .status-message {
   border-top: 1px solid var(--progress-border);
   padding-top: 20px;
-  
+
   h3 {
     font-size: 1.5rem;
     color: var(--progress-text);
   }
-  
+
   p {
     font-size: 1rem;
     color: var(--progress-text-muted);
@@ -167,7 +168,10 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     background-color: darken($linguist-accent-blue, 10%);
