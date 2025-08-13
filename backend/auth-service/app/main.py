@@ -1,6 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
+from mavito_common.core.exceptions import InvalidPasswordError
+
 from app.api.v1.endpoints import auth
 from app.api.v1.endpoints import uploads
 from app.api.v1.endpoints import admin
@@ -15,6 +18,17 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+
+@app.exception_handler(InvalidPasswordError)
+async def invalid_password_exception_handler(
+    request: Request, exc: InvalidPasswordError
+):
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"detail": str(exc)},
+    )
+
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["Uploads"])

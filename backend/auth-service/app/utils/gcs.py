@@ -18,7 +18,12 @@ def generate_download_url(gcs_key: str, expiration_minutes=15) -> str:
     bucket = storage_client.bucket(settings.GCS_BUCKET_NAME)
     blob = bucket.blob(gcs_key)
 
-    credentials, project_id = google.auth.default()
+    credentials, project_id = google.auth.default(
+        scopes=[
+            "https://www.googleapis.com/auth/devstorage.full_control",
+            "https://www.googleapis.com/auth/iam",
+        ]
+    )
     credentials.refresh(google.auth.transport.requests.Request())
 
     if hasattr(credentials, "service_account_email"):

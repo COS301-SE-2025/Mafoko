@@ -1229,8 +1229,8 @@ const WorkspacePage: React.FC = () => {
         );
 
         for (const item of items) {
-          const itemTermIdStr = item.term_id.toString();
-          const termIdStr = termId.toString();
+          const itemTermIdStr = item.term_id;
+          const termIdStr = termId;
           const match =
             item.item_type === 'term' && itemTermIdStr === termIdStr;
           console.log(
@@ -1751,8 +1751,7 @@ const WorkspacePage: React.FC = () => {
                                               for (const item of items) {
                                                 if (
                                                   item.item_type === 'term' &&
-                                                  item.term_id.toString() ===
-                                                    term.term_id.toString()
+                                                  item.term_id === term.term_id
                                                 ) {
                                                   currentGroup = group.name;
                                                   break;

@@ -7,6 +7,7 @@ httpx
 python-multipart
 pytest-asyncio
 google-cloud-storage
+google-auth
 ruff      
 black     
 mypy    

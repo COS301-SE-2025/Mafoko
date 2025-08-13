@@ -18,7 +18,7 @@ class WorkspaceGroup(Base):
     Represents a user-created group for organizing bookmarked terms.
     """
 
-    __tablename__ = "workspace_groups"
+    __tablename__ = "workspace_groups"  # type: ignore
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
