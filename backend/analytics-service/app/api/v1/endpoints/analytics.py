@@ -32,11 +32,17 @@ async def get_language_statistics(db: AsyncSession) -> Dict[str, int]:
     return {lang: count for lang, count in result.all()}
 
 
-async def get_domain_statistics(db: AsyncSession) -> Dict[str, int]:
+async def get_domain_statistics(
+    db: AsyncSession, language: Optional[str] = None
+) -> Dict[str, int]:
     """Get domain/category statistics from the database."""
-    query = select(Term.domain, func.count(Term.id).label("count")).group_by(
-        Term.domain
-    )
+    query = select(Term.domain, func.count(Term.id).label("count"))
+
+    # Apply language filter if provided
+    if language:
+        query = query.where(func.lower(Term.language) == language.lower())
+
+    query = query.group_by(Term.domain)
     result = await db.execute(query)
     all_rows = result.all()
     if hasattr(all_rows, "__await__"):
@@ -52,7 +58,7 @@ async def get_descriptive_analytics(
     This endpoint combines all analytics for backward compatibility."""
 
     # Get individual analytics
-    category_counts = await get_category_frequency(db)
+    category_counts = await get_category_frequency(None, db)
     language_coverage = await get_language_coverage(db)
     term_lengths = await get_term_length_analysis(db)
     def_lengths = await get_definition_length_analysis(db)
@@ -69,9 +75,12 @@ async def get_descriptive_analytics(
 
 
 @router.get("/descriptive/category-frequency")
-async def get_category_frequency(db: AsyncSession = Depends(get_db)) -> Dict[str, int]:
+async def get_category_frequency(
+    language: Annotated[Optional[str], Query()] = None,
+    db: AsyncSession = Depends(get_db),
+) -> Dict[str, int]:
     """Get frequency distribution of terms across different categories."""
-    return await get_domain_statistics(db)
+    return await get_domain_statistics(db, language)
 
 
 @router.get("/descriptive/language-coverage")

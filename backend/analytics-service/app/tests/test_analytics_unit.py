@@ -280,7 +280,7 @@ async def test_get_descriptive_analytics_endpoint():
     orig_get_definition_length_analysis = analytics.get_definition_length_analysis
     orig_get_unique_terms_count = analytics.get_unique_terms_count
 
-    async def mock_category_frequency(db):
+    async def mock_category_frequency(language, db):
         return {"Agriculture": 5}
 
     async def mock_language_coverage(db):
@@ -327,7 +327,7 @@ async def test_get_category_frequency_endpoint():
     mock_result.all.return_value = [("Agriculture", 5), ("Education", 3)]
     mock_db.execute.return_value = mock_result
 
-    result = await analytics.get_category_frequency(mock_db)
+    result = await analytics.get_category_frequency(language=None, db=mock_db)
     assert result == {"Agriculture": 5, "Education": 3}
 
 

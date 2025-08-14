@@ -204,5 +204,88 @@
     "previous": "Vorige",
     "next": "Volgende",
     "pageInfo": "Bladsy {{current}} van {{total}}"
+  },
+
+  "common": {
+    "loading": "Laai tans...",
+    "cancel": "Kanselleer"
+  },
+
+  "profile": {
+    "title": "Gebruiker Profiel",
+    "settings": "Instellings",
+    "editProfile": "Redigeer profiel",
+    "editName": "Redigeer Naam",
+    "editEmail": "Redigeer E-pos",
+    "changePassword": "Verander Wagwoord",
+    "role": "Rol",
+    "loading": "Laai...",
+    "linguistApplication": "Taalkundige Aansoek",
+    "logout": "Teken Uit",
+    "logoutButton": "Teken Uit",
+    "logoutConfirmation": "Teken uit?",
+    "yes": "Ja",
+    "no": "Nee",
+    "apply": "Aansoek Doen",
+    "applyAsLinguist": "Aansoek as Taalkundige",
+    "submitDocuments": "Dien jou dokumente in om aansoek te doen vir taalkundige status:",
+    "submitting": "Dien tans in...",
+    "submitApplication": "Dien Aansoek In",
+    "applicationSuccess": "Taalkundige aansoek suksesvol ingedien!",
+    "forms": {
+      "editName": "Redigeer Naam",
+      "editEmail": "Redigeer E-pos",
+      "changePassword": "Verander Wagwoord",
+      "firstName": "Voornaam",
+      "firstNamePlaceholder": "Voer voornaam in",
+      "lastName": "Van",
+      "lastNamePlaceholder": "Voer van in",
+      "emailAddress": "E-posadres",
+      "emailAddressPlaceholder": "Voer e-posadres in",
+      "currentPassword": "Huidige Wagwoord",
+      "currentPasswordPlaceholder": "Voer huidige wagwoord in",
+      "newPassword": "Nuwe Wagwoord",
+      "newPasswordPlaceholder": "Voer nuwe wagwoord in",
+      "confirmNewPassword": "Bevestig Nuwe Wagwoord",
+      "confirmNewPasswordPlaceholder": "Bevestig nuwe wagwoord",
+      "save": "Stoor",
+      "saving": "Stoor tans...",
+      "cancel": "Kanselleer"
+    },
+    "documents": {
+      "idDocument": "ID Dokument (PDF) *",
+      "cv": "CV (PDF) *",
+      "certifications": "Sertifikate (PDF, Opsioneel)",
+      "researchPapers": "Navorsingspapiere (PDF, Opsioneel)"
+    },
+    "application": {
+      "notApplied": "Nie Aansoek Gedoen Nie",
+      "pending": "Hangende Hersiening",
+      "approved": "Goedgekeur",
+      "rejected": "Afgekeur",
+      "unknown": "Onbekend"
+    },
+    "errors": {
+      "noToken": "Geen toegangsteken gevind nie. Teken asseblief eers in.",
+      "loadFailed": "Kon nie profiel data laai nie",
+      "loadError": "Fout met laai van profiel: {{message}}",
+      "invalidImage": "Kies asseblief 'n geldige beeld lêer",
+      "fileTooLarge": "Lêer grootte moet minder as 5MB wees",
+      "uploadError": "Kon nie profiel foto opdateer nie: {{message}}",
+      "nameRequired": "Voornaam en van is verplig",
+      "passwordRequired": "Huidige wagwoord is verplig",
+      "updateFailed": "Kon nie profiel opdateer nie",
+      "updateError": "Kon nie profiel opdateer nie: {{message}}",
+      "emailRequired": "E-pos is verplig",
+      "emailInvalid": "Voer asseblief 'n geldige e-posadres in",
+      "emailUpdateFailed": "Kon nie e-pos opdateer nie",
+      "emailUpdateError": "Kon nie e-pos opdateer nie: {{message}}",
+      "newPasswordRequired": "Nuwe wagwoord is verplig",
+      "passwordMismatch": "Nuwe wagwoorde stem nie ooreen nie",
+      "passwordUpdateFailed": "Kon nie wagwoord opdateer nie",
+      "passwordUpdateError": "Kon nie wagwoord opdateer nie: {{message}}",
+      "documentsRequired": "ID Dokument en CV is verplig vir taalkundige aansoek",
+      "applicationError": "Kon nie aansoek indien nie: {{message}}"
+    }
   }
 }

@@ -43,7 +43,12 @@ interface APIEndpoints {
   verifyEmail: string;
   resendVerification: string;
   getMe: string;
+  updateMe: string;
+  updateProfile: string;
+  updateProfilePicture: string;
   generateSignedUrl: string;
+  generateProfilePictureUploadUrl: string;
+  getMyProfilePictureUrl: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
   ApproveApplicationStatus: (applicationId: string) => string;
@@ -57,7 +62,7 @@ interface APIEndpoints {
   search: string;
   suggest: string;
   descriptiveAnalytics: string;
-  categoryFrequency: string;
+  categoryFrequency: (language?: string) => string;
   languageCoverage: string;
   popularTerms: (limit?: number, domain?: string, language?: string) => string;
   totalStatistics: string;
@@ -117,9 +122,23 @@ export const API_ENDPOINTS: APIEndpoints = {
     '/api/v1/auth/resend-verification',
   ),
   getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  updateMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  updateProfile: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  updateProfilePicture: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/me/profile-picture',
+  ),
   generateSignedUrl: endpoint(
     AUTH_SERVICE_URL,
     '/api/v1/uploads/generate-signed-url',
+  ),
+  generateProfilePictureUploadUrl: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/profile-picture/upload-url',
+  ),
+  getMyProfilePictureUrl: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/me/profile-picture',
   ),
   getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
@@ -170,10 +189,15 @@ export const API_ENDPOINTS: APIEndpoints = {
     ANALYTICS_SERVICE_URL,
     '/api/v1/analytics/descriptive',
   ),
-  categoryFrequency: endpoint(
-    ANALYTICS_SERVICE_URL,
-    '/api/v1/analytics/descriptive/category-frequency',
-  ),
+  categoryFrequency: (language?: string) => {
+    const params = new URLSearchParams();
+    if (language) params.append('language', language);
+    const queryString = params.toString();
+    return endpoint(
+      ANALYTICS_SERVICE_URL,
+      `/api/v1/analytics/descriptive/category-frequency${queryString ? `?${queryString}` : ''}`,
+    );
+  },
   languageCoverage: endpoint(
     ANALYTICS_SERVICE_URL,
     '/api/v1/analytics/descriptive/language-coverage',

@@ -198,5 +198,33 @@
     "previous": "Engaphambili",
     "next": "Elandelayo",
     "pageInfo": "Iphepha {{current}} kwi-{{total}}"
+  },
+
+  "profile": {
+    "role": "Indima",
+    "loading": "Iyalayisha...",
+    "logoutConfirmation": "Phuma?",
+    "yes": "Ewe",
+    "no": "Hayi",
+    "logout": "Phuma",
+    "errors": {
+      "noToken": "Akukho token yofikelelo ifunyenweyo. Nceda ungene kuqala.",
+      "loadFailed": "Kwasilela ukufaka idatha yeprofayili",
+      "invalidImage": "Nceda ukhethe ifayile yomfanekiso esebenzayo",
+      "fileTooLarge": "Ubukhulu befayile kufuneka bube ngaphantsi kwe-5MB",
+      "uploadError": "Kwasilela ukubuyekeza umfanekiso weprofayili: {{message}}",
+      "nameRequired": "Igama lokuqala nesibongo ziyafuneka",
+      "passwordRequired": "Ipasiwedi yangoku iyafuneka",
+      "updateFailed": "Kwasilela ukubuyekeza iprofayili",
+      "updateError": "Kwasilela ukubuyekeza iprofayili: {{message}}",
+      "emailRequired": "I-imeyili iyafuneka",
+      "emailInvalid": "Nceda ufake idilesi ye-imeyili esebenzayo",
+      "emailUpdateFailed": "Kwasilela ukubuyekeza i-imeyili",
+      "emailUpdateError": "Kwasilela ukubuyekeza i-imeyili: {{message}}",
+      "newPasswordRequired": "Ipasiwedi entsha iyafuneka",
+      "passwordMismatch": "Iipasiwedi ezintsha azifani",
+      "passwordUpdateFailed": "Kwasilela ukubuyekeza ipasiwedi",
+      "passwordUpdateError": "Kwasilela ukubuyekeza ipasiwedi: {{message}}"
+    }
   }
 }

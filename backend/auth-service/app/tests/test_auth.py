@@ -11,8 +11,9 @@ from app.api.v1.endpoints.auth import (
     register_new_user,
     login_for_access_token,
     read_users_me,
+    update_user_profile,
 )
-from mavito_common.schemas.user import UserCreate
+from mavito_common.schemas.user import UserCreate, UserUpdate
 from mavito_common.models.user import User as UserModel
 
 
@@ -301,6 +302,460 @@ class TestReadUsersMe:
         assert result == different_user
         assert result.email == "jane.smith@example.com"
         assert result.role == "researcher"
+
+
+class TestUpdateUserProfile:
+    """Test cases for the update_user_profile endpoint."""
+
+    @pytest.fixture
+    def mock_db(self):
+        """Mock database session."""
+        return AsyncMock(spec=AsyncSession)
+
+    @pytest.fixture
+    def mock_current_user(self):
+        """Mock current user schema."""
+        from uuid import uuid4
+        from datetime import datetime
+        from mavito_common.schemas.user import User as UserSchema
+
+        mock_user = MagicMock(spec=UserSchema)
+        mock_user.id = uuid4()
+        mock_user.first_name = "John"
+        mock_user.last_name = "Doe"
+        mock_user.email = "john.doe@example.com"
+        mock_user.is_active = True
+        mock_user.role = UserRole.contributor
+        mock_user.is_verified = True
+        mock_user.account_locked = False
+        mock_user.created_at = datetime.now()
+        mock_user.profile_pic_url = None
+        return mock_user
+
+    @pytest.fixture
+    def mock_user_model(self):
+        """Mock user database model."""
+        user = MagicMock(spec=UserModel)
+        user.first_name = "John"
+        user.last_name = "Doe"
+        user.email = "john.doe@example.com"
+        user.is_active = True
+        return user
+
+    @pytest.fixture
+    def updated_user_model(self):
+        """Mock updated user database model."""
+        user = MagicMock(spec=UserModel)
+        user.first_name = "Jane"
+        user.last_name = "Smith"
+        user.email = "john.doe@example.com"
+        user.is_active = True
+        return user
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_names_success(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test successful update of user first and last names."""
+        user_update = UserUpdate(
+            current_password="currentpass123", first_name="Jane", last_name="Smith"
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.get_user_by_email.assert_called_once_with(
+                mock_db, email=mock_current_user.email
+            )
+            # Verify update_user is called with data excluding current_password
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_first_name_only(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test updating only the first name."""
+        user_update = UserUpdate(current_password="currentpass123", first_name="Jane")
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_last_name_only(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test updating only the last name."""
+        user_update = UserUpdate(current_password="currentpass123", last_name="Smith")
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_email_success(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test successful email update."""
+        user_update = UserUpdate(
+            current_password="currentpass123", email="newemail@example.com"
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(
+                side_effect=[
+                    mock_user_model,
+                    None,
+                ]  # First call returns user, second returns None (email available)
+            )
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            assert mock_crud.get_user_by_email.call_count == 2
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_email_already_exists(
+        self, mock_db, mock_current_user, mock_user_model
+    ):
+        """Test email update when email already exists."""
+        existing_user = MagicMock(spec=UserModel)
+        user_update = UserUpdate(
+            current_password="currentpass123", email="existing@example.com"
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(
+                side_effect=[
+                    mock_user_model,
+                    existing_user,
+                ]  # First call returns user, second returns existing user
+            )
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+
+            with pytest.raises(HTTPException) as exc_info:
+                await update_user_profile(
+                    db=mock_db, user_update=user_update, current_user=mock_current_user
+                )
+
+            assert exc_info.value.status_code == status.HTTP_400_BAD_REQUEST
+            assert "Email already registered" in exc_info.value.detail
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            assert mock_crud.get_user_by_email.call_count == 2
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_user_not_found(self, mock_db, mock_current_user):
+        """Test update when user is not found in database."""
+        user_update = UserUpdate(current_password="currentpass123", first_name="Jane")
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=None)
+
+            with pytest.raises(HTTPException) as exc_info:
+                await update_user_profile(
+                    db=mock_db, user_update=user_update, current_user=mock_current_user
+                )
+
+            assert exc_info.value.status_code == status.HTTP_404_NOT_FOUND
+            assert "User not found" in exc_info.value.detail
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_password_update(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test password update."""
+        user_update = UserUpdate(
+            current_password="currentpass123", password="newpassword123"
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_multiple_fields(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test updating multiple fields at once."""
+        user_update = UserUpdate(
+            current_password="currentpass123",
+            first_name="Jane",
+            last_name="Smith",
+            email="jane.smith@example.com",
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(
+                side_effect=[
+                    mock_user_model,
+                    None,
+                ]  # User exists, new email is available
+            )
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_same_email(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test updating with same email (should not check for duplicates)."""
+        user_update = UserUpdate(
+            current_password="currentpass123",
+            first_name="Jane",
+            email=mock_current_user.email,  # Same email as current user
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            # Should only call get_user_by_email once (not checking for duplicate email)
+            mock_crud.get_user_by_email.assert_called_once_with(
+                mock_db, email=mock_current_user.email
+            )
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_database_error(
+        self, mock_db, mock_current_user, mock_user_model
+    ):
+        """Test handling database errors during update."""
+        user_update = UserUpdate(current_password="currentpass123", first_name="Jane")
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(
+                side_effect=Exception("Database update failed")
+            )
+
+            with pytest.raises(Exception) as exc_info:
+                await update_user_profile(
+                    db=mock_db, user_update=user_update, current_user=mock_current_user
+                )
+
+            assert "Database update failed" in str(exc_info.value)
+
+    @pytest.mark.parametrize(
+        "first_name,last_name",
+        [
+            ("Jane", "Smith"),
+            ("María", "García"),
+            ("李", "明"),
+            ("A", "B"),  # Single character names
+            ("Very Long First Name", "Very Long Last Name"),
+            ("Name-With-Hyphens", "Name-With-Hyphens"),
+            ("Name With Spaces", "Name With Spaces"),
+        ],
+    )
+    @pytest.mark.asyncio
+    async def test_update_user_profile_various_name_formats(
+        self,
+        first_name,
+        last_name,
+        mock_db,
+        mock_current_user,
+        mock_user_model,
+        updated_user_model,
+    ):
+        """Test updating names with various formats and characters."""
+        user_update = UserUpdate(
+            current_password="currentpass123",
+            first_name=first_name,
+            last_name=last_name,
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_empty_update(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test update with no fields specified (empty update)."""
+        user_update = UserUpdate(
+            current_password="currentpass123"
+        )  # Only password specified
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            mock_crud.update_user.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_incorrect_current_password(
+        self, mock_db, mock_current_user, mock_user_model
+    ):
+        """Test update with incorrect current password - should fail with 401."""
+        user_update = UserUpdate(current_password="wrongpassword", first_name="Jane")
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(
+                return_value=None
+            )  # Authentication fails
+
+            with pytest.raises(HTTPException) as exc_info:
+                await update_user_profile(
+                    db=mock_db, user_update=user_update, current_user=mock_current_user
+                )
+
+            assert exc_info.value.status_code == status.HTTP_401_UNAUTHORIZED
+            assert "Incorrect current password" in exc_info.value.detail
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="wrongpassword"
+            )
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_authentication_before_email_check(
+        self, mock_db, mock_current_user, mock_user_model
+    ):
+        """Test that password authentication happens before email uniqueness check."""
+        user_update = UserUpdate(
+            current_password="wrongpassword", email="new@example.com"
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(
+                return_value=None
+            )  # Authentication fails
+
+            with pytest.raises(HTTPException) as exc_info:
+                await update_user_profile(
+                    db=mock_db, user_update=user_update, current_user=mock_current_user
+                )
+
+            # Should fail on authentication, not reach email check
+            assert exc_info.value.status_code == status.HTTP_401_UNAUTHORIZED
+            assert "Incorrect current password" in exc_info.value.detail
+            # get_user_by_email should only be called once (for getting current user, not checking email)
+            mock_crud.get_user_by_email.assert_called_once_with(
+                mock_db, email=mock_current_user.email
+            )
+
+    @pytest.mark.asyncio
+    async def test_update_user_profile_password_change_with_validation(
+        self, mock_db, mock_current_user, mock_user_model, updated_user_model
+    ):
+        """Test successful password change with current password validation."""
+        user_update = UserUpdate(
+            current_password="currentpass123", password="newstrongpassword456"
+        )
+
+        with patch("app.api.v1.endpoints.auth.crud_user") as mock_crud:
+            mock_crud.get_user_by_email = AsyncMock(return_value=mock_user_model)
+            mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
+            mock_crud.update_user = AsyncMock(return_value=updated_user_model)
+
+            result = await update_user_profile(
+                db=mock_db, user_update=user_update, current_user=mock_current_user
+            )
+
+            assert result == updated_user_model
+            mock_crud.authenticate.assert_called_once_with(
+                mock_db, email=mock_current_user.email, password="currentpass123"
+            )
+            # Verify update_user called with data excluding current_password
+            mock_crud.update_user.assert_called_once()
+            call_args = mock_crud.update_user.call_args
+            update_data = call_args[1]["obj_in"]  # Get the obj_in parameter
+            # Ensure current_password is not in the update data
+            assert "current_password" not in update_data
+            assert update_data.get("password") == "newstrongpassword456"
 
 
 class TestAuthIntegration:
