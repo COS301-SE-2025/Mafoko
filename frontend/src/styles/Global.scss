@@ -1,0 +1,401 @@
+:root {
+  --base-text-size: 16px;
+  --text-spacing: 1;
+  --text-scaling: 1;
+  --nav-base-size: 16px;
+  
+    --colorblind-mode: 0;
+  --high-contrast-mode: 0;
+}
+
+html {
+  font-size: var(--base-text-size);
+}
+
+body {
+  line-height: calc(1.5 * var(--text-spacing));
+  letter-spacing: calc(0.01em * var(--text-spacing));
+  word-spacing: calc(0.05em * var(--text-spacing));
+}
+
+nanavbar, .left-nav, .left-nav-menu-item, .navbar-content {
+  font-size: calc(1rem * var(--text-scaling)) !important;
+
+  * {
+    font-size: inherit;
+  }
+
+  .navbar-title, .navbar-user-controls, .left-nav-menu-label {
+    font-size: calc(1rem * var(--text-scaling)) !important;
+  }
+
+  svg, .icon {
+    width: calc(1em * var(--text-scaling)) !important;
+    height: calc(1em * var(--text-scaling)) !important;
+  }
+}
+
+p, span, div, button, input, select, textarea, a, li, td, th {
+  font-size: calc(1rem * var(--text-scaling));
+}
+
+h1 {
+  font-size: calc(2rem * var(--text-scaling));
+  margin-bottom: calc(0.5em * var(--text-spacing));
+}
+
+h2 {
+  font-size: calc(1.5rem * var(--text-scaling));
+  margin-bottom: calc(0.5em * var(--text-spacing));
+}
+
+h3 {
+  font-size: calc(1.25rem * var(--text-scaling));
+  margin-bottom: calc(0.5em * var(--text-spacing));
+}
+
+h4 {
+  font-size: calc(1.125rem * var(--text-scaling));
+  margin-bottom: calc(0.5em * var(--text-spacing));
+}
+
+p, li {
+  margin-bottom: calc(1em * var(--text-spacing));
+}
+
+.nav-item, .menu-item {
+  margin: calc(0.5em * var(--text-spacing));
+  padding: calc(0.5em * var(--text-spacing));
+}
+
+label, .form-label {
+  font-size: calc(0.875rem * var(--text-scaling));
+  margin-bottom: calc(0.25em * var(--text-spacing));
+}
+
+
+[data-colorblind-mode="true"] {
+  --colorblind-mode: 1;
+  
+
+  .strawberry-jam, .accent-pink, [style*="#f00a50"] {
+    color: #ff8800 !important; /* Warm orange instead of red */
+    background-color: #ff8800 !important;
+    border-color: #ff8800 !important;
+  }
+  
+  .mermaid-tide, .accent-teal, [style*="#00ceaf"] {
+    color: #0077cc !important; /* Clear blue instead of teal */
+    background-color: #0077cc !important;
+    border-color: #0077cc !important;
+  }
+  
+  /* Update CSS custom properties for color blind mode */
+  &, * {
+    /* Red tones -> Orange */
+    &[style*="color: #f00a50"], &[style*="background: #f00a50"], &[style*="border: #f00a50"] {
+      color: #ff8800 !important;
+      background-color: #ff8800 !important;
+      border-color: #ff8800 !important;
+    }
+    
+    /* Teal tones -> Blue */
+    &[style*="color: #00ceaf"], &[style*="background: #00ceaf"], &[style*="border: #00ceaf"] {
+      color: #0077cc !important;
+      background-color: #0077cc !important;
+      border-color: #0077cc !important;
+    }
+    
+    /* General red -> orange */
+    &[style*="color: red"], &[style*="color: #ff0000"], &[style*="color: #f00"] {
+      color: #ff8800 !important;
+    }
+    
+    &[style*="background: red"], &[style*="background-color: red"], 
+    &[style*="background: #ff0000"], &[style*="background-color: #ff0000"] {
+      background-color: #ff8800 !important;
+    }
+    
+    /* General green -> blue */
+    &[style*="color: green"], &[style*="color: #00ff00"], &[style*="color: #0f0"] {
+      color: #0077cc !important;
+    }
+    
+    &[style*="background: green"], &[style*="background-color: green"],
+    &[style*="background: #00ff00"], &[style*="background-color: #00ff00"] {
+      background-color: #0077cc !important;
+    }
+  }
+  
+  .text-red, .text-danger, .error, .bg-red, .bg-danger {
+    color: #ff8800 !important;
+    background-color: #ff8800 !important;
+  }
+  
+  .text-green, .text-success, .success, .bg-green, .bg-success {
+    color: #0077cc !important;
+    background-color: #0077cc !important;
+  }
+  
+  .text-yellow, .text-warning, .warning, .bg-yellow, .bg-warning {
+    color: #ffcc00 !important;
+    background-color: #ffcc00 !important;
+  }
+  
+  .status-approved, .status-success {
+    color: #0077cc !important;
+    background-color: rgba(0, 119, 204, 0.1) !important;
+  }
+  
+  .status-rejected, .status-error {
+    color: #ff8800 !important;
+    background-color: rgba(255, 136, 0, 0.1) !important;
+  }
+  
+  .status-pending, .status-warning {
+    color: #ffcc00 !important;
+    background-color: rgba(255, 204, 0, 0.1) !important;
+  }
+}
+
+
+[data-high-contrast-mode="true"] {
+  --high-contrast-mode: 1;
+  
+  background: #000000 !important;
+  color: #ffffff !important;
+  
+  *, *::before, *::after {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+    outline-color: #ffffff !important;
+    background-color: #000000 !important;
+    background-image: none !important;
+  }
+  
+  div, span, p, h1, h2, h3, h4, h5, h6, li, td, th, section, article, aside, header, footer, main {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+  
+  body, html, .main-content, .content, .page-content, .section-content, 
+  .dashboard-container, .settings-section, .card, .panel, .container, .wrapper,
+  .settings-header, .settings-content, .accessibility-wrapper {
+    background-color: #000000 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+  }
+  
+  /* Specifically target all possible text containers */
+  .text, .label, .title, .description, .content, .body, .message, .info,
+  .section-title, .section-header, .subsection, .toggle-label, .slider-label,
+  .language-label, .accessibility-title {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+  
+  /* Navigation elements */
+  .navbar, .left-nav, nav, .menu, .dropdown-menu {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    
+    .nav-item, .menu-item, .dropdown-item {
+      color: #ffffff !important;
+      background-color: transparent !important;
+      
+      &:hover, &:focus, &.active {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+    }
+  }
+  
+  /* Interactive elements */
+  button, .btn, input, select, textarea, .form-control {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    
+    &:hover, &:focus, &:active {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    
+    &:disabled {
+      background-color: #333333 !important;
+      color: #cccccc !important;
+      border-color: #cccccc !important;
+    }
+  }
+  
+  /* Links */
+  a, .link {
+    color: #ffff00 !important; /* Bright yellow for visibility */
+    text-decoration: underline !important;
+    
+    &:hover, &:focus {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+    }
+    
+    &:visited {
+      color: #ff00ff !important; /* Magenta for visited links */
+    }
+  }
+  
+  /* Form elements */
+  .form-group, .input-group, .form-field {
+    background-color: #000000 !important;
+    border-color: #ffffff !important;
+  }
+  
+  /* Tables */
+  table, th, td {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+  }
+  
+  thead th {
+    background-color: #333333 !important;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #111111 !important;
+  }
+  
+  /* Cards and containers */
+  .settings-section, .section-header, .section-content {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+  }
+  
+  /* Status and accent colors - use high contrast alternatives */
+  .accent-pink, .strawberry-jam, .text-danger, .error {
+    color: #ff0000 !important;
+    background-color: #000000 !important;
+  }
+  
+  .accent-teal, .mermaid-tide, .text-success, .success {
+    color: #00ff00 !important;
+    background-color: #000000 !important;
+  }
+  
+  .accent-yellow, .sunflower-petal, .text-warning, .warning {
+    color: #ffff00 !important;
+    background-color: #000000 !important;
+  }
+  
+  /* Toggle switches and sliders */
+  .switch, .slider {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    
+    &.checked, &:checked {
+      background-color: #ffffff !important;
+      
+      .thumb {
+        background-color: #000000 !important;
+      }
+    }
+    
+    .thumb {
+      background-color: #ffffff !important;
+      border: 2px solid #ffffff !important;
+    }
+  }
+  
+  /* Icons */
+  svg, .icon {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+  
+  /* Modals and overlays */
+  .modal, .overlay, .dropdown, .tooltip, .popover {
+    background-color: #000000 !important;
+    border: 3px solid #ffffff !important;
+    color: #ffffff !important;
+  }
+  
+  /* Scrollbars */
+  ::-webkit-scrollbar {
+    background-color: #000000 !important;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #ffffff !important;
+    border: 1px solid #000000 !important;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #333333 !important;
+  }
+  
+    * {
+      box-shadow: none !important;
+      text-shadow: none !important;
+      background-image: none !important;
+    }  /* Override any transparent or inherit backgrounds that might cause issues */
+  *[style*="background: transparent"], 
+  *[style*="background-color: transparent"],
+  *[style*="background: inherit"],
+  *[style*="background-color: inherit"] {
+    background-color: #000000 !important;
+  }
+  
+  /* Force backgrounds on common layout elements */
+  .row, .col, .column, .flex, .grid, .container-fluid, .content-wrapper,
+  .page-wrapper, .app-wrapper, .layout, .sidebar, .main-panel {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+  
+  /* Override any white or light backgrounds */
+  *[style*="background: white"], 
+  *[style*="background-color: white"],
+  *[style*="background: #fff"],
+  *[style*="background-color: #fff"],
+  *[style*="background: #ffffff"],
+  *[style*="background-color: #ffffff"] {
+    background-color: #000000 !important;
+  }
+  
+  /* Focus indicators */
+  *:focus {
+    outline: 3px solid #ffff00 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Final aggressive override - catch all remaining elements */
+  * {
+    /* If any element somehow still has white/light background, force it to black */
+    &:not(input):not(select):not(textarea):not(button) {
+      background-color: #000000 !important;
+    }
+  }
+  
+  /* Ensure text is always visible by adding black backgrounds to text-containing elements */
+  :not(input):not(select):not(textarea):not(button):not(svg):not(path) {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ==============================
+   COMBINED MODE OVERRIDES
+   ============================== */
+/* When both color blind and high contrast modes are enabled */
+[data-colorblind-mode="true"][data-high-contrast-mode="true"] {
+  /* High contrast takes priority but uses color blind friendly colors */
+  .accent-pink, .strawberry-jam, .text-danger, .error {
+    color: #ff8800 !important; /* Color blind friendly orange instead of red */
+  }
+  
+  .accent-teal, .mermaid-tide, .text-success, .success {
+    color: #0077cc !important; /* Color blind friendly blue instead of green */
+  }
+}

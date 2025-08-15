@@ -19,7 +19,10 @@ import NewGlossary from './pages/NewGlossary';
 import LinguistApplicationPage from './pages/LinguistApplicationPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import FeedbackHub from './pages/FeedbackHub';
+import SettingsPage from './pages/SettingsPage';
 import './App.css';
+import './styles/Global.scss';
+
 
 import {
   Chart as ChartJS,
@@ -78,6 +81,7 @@ function App() {
           element={<LinguistApplicationPage />}
         />
         <Route path="/feedbackhub" element={<FeedbackHub />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </div>
   );
