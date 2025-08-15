@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight, User, Globe, Eye, Palette } from 'lucide-react';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
@@ -141,6 +142,7 @@ const SettingsPage: React.FC = () => {
 
   const [isMobile] = useState(window.innerWidth <= 768);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (settings.highContrastMode) {
@@ -215,7 +217,7 @@ const SettingsPage: React.FC = () => {
             <div 
               className="settings-section"
               onClick={() => {
-                console.log('Redirecting to ProfilePage.tsx');
+                navigate('/profile');
               }}
             >
               <div className="section-header">
