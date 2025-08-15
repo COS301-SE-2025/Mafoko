@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Instellings",
+    "subtitle": "Pas jou Marito-ervaring aan",
+    "selectLanguage": "Kies jou voorkeur taal",
+    "profile": {
+      "title": "Profiel & Rekening",
+      "description": "Bestuur jou profiel instellings en rekening voorkeure"
+    },
+    "appLanguage": {
+      "title": "Program Taal",
+      "description": "Kies jou voorkeur taal"
+    },
+    "accessibility": {
+      "title": "Toeganklikheid Opsies",
+      "textAndVisual": "Teks & Visuele Aanbieding",
+      "textSize": "Teks Grootte",
+      "textSpacing": "Teks Spasiëring",
+      "colorAndContrast": "Kleur & Kontras",
+      "highContrastMode": "Hoë Kontras Modus",
+      "darkMode": "Donker Modus"
+    }
+  },
+
   "navigation": {
     "home": "Tuis",
     "dictionary": "Woordeboek",

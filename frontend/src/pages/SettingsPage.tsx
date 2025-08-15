@@ -71,6 +71,14 @@ const SettingsPage: React.FC = () => {
     localStorage.setItem('userSettings', JSON.stringify(settings));
   }, [settings]);
 
+  // Sync settings with current language
+  useEffect(() => {
+    const currentLang = i18n.resolvedLanguage;
+    if (currentLang && currentLang !== settings.selectedLanguage) {
+      handleSettingChange('selectedLanguage', currentLang);
+    }
+  }, [i18n.resolvedLanguage]);
+
   const handleSettingChange = (key: keyof SettingsState, value: any) => {
     setSettings(prev => ({
       ...prev,
@@ -208,9 +216,9 @@ const SettingsPage: React.FC = () => {
       )}
       <div className="main-content">
           <header className="settings-header">
-            <h1>Settings</h1>
+            <h1>{t('settings.title')}</h1>
             <br />
-            <p>Customize your Marito experience</p>
+            <p>{t('settings.subtitle')}</p>
           </header>
 
           <div className="settings-content">
@@ -223,20 +231,20 @@ const SettingsPage: React.FC = () => {
               <div className="section-header">
                 <div className="section-title">
                   <User className="section-icon" />
-                  <h2>Profile & Account</h2>
+                  <h2>{t('settings.profile.title')}</h2>
                 </div>
                 <ChevronRight className="chevron-icon" />
               </div>
             </div>
 
             <SettingsSection 
-              title="App Language" 
+              title={t('settings.appLanguage.title')}
               icon={<Globe className="section-icon" />}
               showChevron={false}
             >
               <div className="language-selector">
                 <label htmlFor="language-select" className="language-label">
-                  {t('settings.selectLanguage', 'Select your preferred language')}
+                  {t('settings.selectLanguage')}
                 </label>
                 <select
                   id="language-select"
@@ -248,6 +256,13 @@ const SettingsPage: React.FC = () => {
                       document.documentElement.lang = languageCode;
                       localStorage.setItem('i18nextLng', languageCode);
                       handleSettingChange('selectedLanguage', languageCode);
+                      // Update the settings in localStorage to keep everything in sync
+                      const savedSettings = localStorage.getItem('userSettings');
+                      if (savedSettings) {
+                        const settings = JSON.parse(savedSettings);
+                        settings.selectedLanguage = languageCode;
+                        localStorage.setItem('userSettings', JSON.stringify(settings));
+                      }
                     } catch (err) {
                       console.error('Error changing language:', err);
                     }
@@ -264,16 +279,16 @@ const SettingsPage: React.FC = () => {
             <div className="accessibility-wrapper">
               <h2 className="accessibility-title">
                 <Eye className="section-icon" />
-                Accessibility Options
+                {t('settings.accessibility.title')}
               </h2>
 
               <SettingsSection 
-                title="Text & Visual Presentation" 
+                title={t('settings.accessibility.textAndVisual')}
                 icon={<div className="subsection-icon">Aa</div>}
                 showChevron={false}
               >
                 <SliderControl
-                  label="Text Size"
+                  label={t('settings.accessibility.textSize')}
                   value={settings.textSize}
                   min={12}
                   max={24}
@@ -282,7 +297,7 @@ const SettingsPage: React.FC = () => {
                   onChange={(value) => handleSettingChange('textSize', value)}
                 />
                 <SliderControl
-                  label="Text Spacing"
+                  label={t('settings.accessibility.textSpacing')}
                   value={settings.textSpacing}
                   min={0.8}
                   max={2}
@@ -293,17 +308,17 @@ const SettingsPage: React.FC = () => {
               </SettingsSection>
 
               <SettingsSection 
-                title="Colour & Contrast" 
+                title={t('settings.accessibility.colorAndContrast')}
                 icon={<Palette className="section-icon" />}
                 showChevron={false}
               >
                 <ToggleSwitch
-                  label="High Contrast Mode"
+                  label={t('settings.accessibility.highContrastMode')}
                   checked={settings.highContrastMode}
                   onChange={(checked) => handleSettingChange('highContrastMode', checked)}
                 />
                 <ToggleSwitch
-                  label="Dark Mode"
+                  label={t('settings.accessibility.darkMode')}
                   checked={isDarkMode}
                   onChange={() => {
                     toggleDarkMode();

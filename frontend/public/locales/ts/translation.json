@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Mindzulamiso",
+    "subtitle": "Lulamisa ntokoto wa wena wa Marito",
+    "selectLanguage": "Hlawula ririmi leri u ri lavaka",
+    "profile": {
+      "title": "Phrofayili na Akhawunti",
+      "description": "Lawula mindzulamiso ya phrofayili na ku hlawula ka akhawunti"
+    },
+    "appLanguage": {
+      "title": "Ririmi ra App",
+      "description": "Hlawula ririmi leri u ri lavaka"
+    },
+    "accessibility": {
+      "title": "Minhlawulo ya ku Fikelela",
+      "textAndVisual": "Matsalwa na ku Vonaka",
+      "textSize": "Vukulu bya Matsalwa",
+      "textSpacing": "Mpfhuka wa Matsalwa",
+      "colorAndContrast": "Muhlovo na ku Hambana",
+      "highContrastMode": "Ndlela ya ku Hambana Lokukulu",
+      "darkMode": "Ndlela ya Ntima"
+    }
+  },
+
   "navigation": {
     "home": "Kaya",
     "dictionary": "Dikixinari",
@@ -6,6 +29,7 @@
     "savedTerms": "Marito lama Hlayisiweke",
     "dashboard": "Bodo",
     "help": "Mpfuno",
+    "settings": "Mindzulamiso",
     "darkMode": "Muxaka wa ntima"
   },
 

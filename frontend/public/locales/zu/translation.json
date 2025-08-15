@@ -1,5 +1,40 @@
 {
   "navigation": {
+    "home": "Ekhaya",
+    "dictionary": "Isichazamazwi",
+    "glossary": "Uhlu Lwamagama",
+    "savedTerms": "Amagama Agciniwe",
+    "linguistApplication": "Isicelo Sokuba uSolwimi",
+    "dashboard": "Ibhodi",
+    "help": "Usizo",
+    "settings": "Izilungiselelo",
+    "darkMode": "Indlela Emnyama",
+    "lightMode": "Indlela Ekhanyayo"
+  },
+  "settings": {
+    "title": "Izilungiselelo",
+    "subtitle": "Lungiselela indlela yakho yokusebenzisa i-Marito",
+    "selectLanguage": "Khetha ulimi lwakho oluthandayo",
+    "profile": {
+      "title": "Iphrofayela nama-Akhawunti",
+      "description": "Phatha izilungiselelo zephrofayela yakho nezokuthandayo ze-akhawunti"
+    },
+    "appLanguage": {
+      "title": "Ulimi Lohlelo",
+      "description": "Khetha ulimi lwakho oluthandayo"
+    },
+    "accessibility": {
+      "title": "Izinketho Zokufinyeleleka",
+      "textAndVisual": "Umbhalo Nokubukeka",
+      "textSize": "Usayizi Wombhalo",
+      "textSpacing": "Ukubanga Kwemibhalo",
+      "colorAndContrast": "Umbala Nokuhluka",
+      "highContrastMode": "Indlela Yokuhluka Okuphakeme",
+      "darkMode": "Indlela Emnyama"
+    }
+  },
+
+  "navigation": {
     "home": "Ikhaya",
     "dictionary": "Isichazamazwi",
     "glossary": "Izihumusho",

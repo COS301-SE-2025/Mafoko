@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Mavhumbele",
+    "subtitle": "Dzudzanya tshenzhemo yau ya Marito",
+    "selectLanguage": "Khetha luambo lune wa lu takalela",
+    "profile": {
+      "title": "Phuroifaila na Akhauthu",
+      "description": "Langula mavhumbele a phuroifaila na zwithu zwine wa zwi takalela kha akhauthu"
+    },
+    "appLanguage": {
+      "title": "Luambo lwa App",
+      "description": "Khetha luambo lune wa lu takalela"
+    },
+    "accessibility": {
+      "title": "Zwikhetheo zwa u Swikelela",
+      "textAndVisual": "Maṅwalwa na Mbonalo",
+      "textSize": "Vhuhulwane ha Maṅwalwa",
+      "textSpacing": "Tshikhala tsha Maṅwalwa",
+      "colorAndContrast": "Muvhala na Phambano",
+      "highContrastMode": "Nḓila ya Phambano Khulwane",
+      "darkMode": "Nḓila Ntswu"
+    }
+  },
+
   "navigation": {
     "home": "Hayani",
     "dictionary": "Ṱhalusamaipfi",
@@ -6,6 +29,7 @@
     "savedTerms": "Maipfi o Vhulungwaho",
     "dashboard": "Bodo",
     "help": "Thuso",
+    "settings": "Mavhumbele",
     "darkMode": "Mutoli wo swifhalaho"
   },
   "landingPage": {

@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Dipeakanyo",
+    "subtitle": "Beakanya maitemogelo a gago a Marito",
+    "selectLanguage": "Kgetha polelo yeo o e ratago",
+    "profile": {
+      "title": "Profaele le Akhaonto",
+      "description": "Laola dipeakanyo tša profaele le dikgetho tša akhaonto"
+    },
+    "appLanguage": {
+      "title": "Polelo ya App",
+      "description": "Kgetha polelo yeo o e ratago"
+    },
+    "accessibility": {
+      "title": "Dikgetho tša go Fihlelela",
+      "textAndVisual": "Mongwalo le Ponagalo",
+      "textSize": "Bogolo bja Mongwalo",
+      "textSpacing": "Sekgala sa Mongwalo",
+      "colorAndContrast": "Mmala le Phapano",
+      "highContrastMode": "Mokgwa wa Phapano e Godimo",
+      "darkMode": "Mokgwa wo Moso"
+    }
+  },
+
   "navigation": {
     "home": "Gae",
     "dictionary": "Pukuntšu",

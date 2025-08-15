@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Iisethingi",
+    "subtitle": "Lungiselela amava akho e-Marito",
+    "selectLanguage": "Khetha ulwimi lwakho olukhetha kulo",
+    "profile": {
+      "title": "Iprofayile ne-Akhawunti",
+      "description": "Lawula iisethingi zeprofayile nezinto ozikhetha kwi-akhawunti"
+    },
+    "appLanguage": {
+      "title": "Ulwimi lwe-App",
+      "description": "Khetha ulwimi lwakho olukhetha kulo"
+    },
+    "accessibility": {
+      "title": "Iinketho zokuFikelela",
+      "textAndVisual": "Umbhalo nokuBonakala",
+      "textSize": "Ubungakanani boMbhalo",
+      "textSpacing": "Ukusuka koMbhalo",
+      "colorAndContrast": "Umbala noMahluko",
+      "highContrastMode": "Indlela yoMahluko oPhezulu",
+      "darkMode": "Indlela eMnyama"
+    }
+  },
+
   "navigation": {
     "home": "Ikhaya",
     "dictionary": "Isichazi-maga",
@@ -6,6 +29,7 @@
     "savedTerms": "Amagama Agciniweyo",
     "dashboard": "Ibhodi",
     "help": "Uncedo",
+    "settings": "Iisethingi",
     "darkMode": "Indlela emnyama"
   },
 
