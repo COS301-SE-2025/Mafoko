@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { API_ENDPOINTS } from '../config';
 import { Search, Bookmark, Download, FileType } from 'lucide-react';
 import GlossaryTermCard from '../components/ui/GlossaryTermCard';
@@ -32,6 +32,7 @@ interface Glossary {
 const GlossaryApp = () => {
   const { isDarkMode } = useDarkMode();
   const location = useLocation();
+  const { category } = useParams<{ category?: string }>();
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
   const [glossaries, setGlossaries] = useState<Glossary[]>([]);
@@ -137,6 +138,46 @@ const GlossaryApp = () => {
       }
     }
   }, [location.state, location.pathname, glossaries]);
+
+  // Handle URL parameter for direct category navigation
+  useEffect(() => {
+    if (category && glossaries.length > 0) {
+      console.log('URL PARAMETER - Looking for glossary:', category);
+
+      // Convert URL-friendly format back to proper case
+      // e.g., "agriculture" -> "Agriculture", "general-demographics" -> "General Demographics"
+      const categoryVariations = [
+        category, // as-is from URL
+        category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
+        category.replace(/-/g, ' '), // Replace hyphens with spaces
+        category.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()), // Title case
+        category.toUpperCase(), // All uppercase
+        category.toLowerCase(), // All lowercase
+      ];
+
+      // Try to find a matching glossary with any of the variations
+      let targetGlossary = null;
+      for (const variation of categoryVariations) {
+        targetGlossary = glossaries.find(
+          (g) => g.name.toLowerCase() === variation.toLowerCase(),
+        );
+        if (targetGlossary) break;
+      }
+
+      if (targetGlossary) {
+        console.log(
+          'URL PARAMETER - Found glossary, selecting:',
+          targetGlossary,
+        );
+        setSelectedGlossary(targetGlossary);
+      } else {
+        console.log(
+          'URL PARAMETER - No matching glossary found for:',
+          category,
+        );
+      }
+    }
+  }, [category, glossaries]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
