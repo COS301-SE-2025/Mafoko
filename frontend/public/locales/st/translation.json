@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Ditlhophiso",
+    "subtitle": "Lokisa boiphihlelo ba hao ba Marito",
+    "selectLanguage": "Kgetha puo eo o e ratang",
+    "profile": {
+      "title": "Profaele le Akhaonto",
+      "description": "Laola ditlhophiso tsa profaele le dikgetho tsa akhaonto"
+    },
+    "appLanguage": {
+      "title": "Puo ya App",
+      "description": "Kgetha puo eo o e ratang"
+    },
+    "accessibility": {
+      "title": "Dikgetho tsa ho Fihlella",
+      "textAndVisual": "Mongolo le Pontsho",
+      "textSize": "Boholo ba Mongolo",
+      "textSpacing": "Sebaka sa Mongolo",
+      "colorAndContrast": "Mmala le ho Fapana",
+      "highContrastMode": "Mokgwa wa ho Fapana ho Hoholo",
+      "darkMode": "Mokgwa o Lefifi"
+    }
+  },
+
   "navigation": {
     "home": "Lehae",
     "dictionary": "Bukantswe",
@@ -6,6 +29,7 @@
     "savedTerms": "Mantswe a Bolokilweng",
     "dashboard": "Letlapa",
     "help": "Thuso",
+    "settings": "Ditlhophiso",
     "darkMode": "Mokgwa o lefifi"
   },
 

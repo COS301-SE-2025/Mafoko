@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Tinhlelo",
+    "subtitle": "Lungisa indlela yakho yekusebentisa i-Marito",
+    "selectLanguage": "Khetsa lulwimi lolufunako",
+    "profile": {
+      "title": "Iphrofayili ne-Akhawunti",
+      "description": "Phatsa tinhlelo tephrofayili netintfo lotikhetsa ku-akhawunti"
+    },
+    "appLanguage": {
+      "title": "Lulwimi lwe-App",
+      "description": "Khetsa lulwimi lolufunako"
+    },
+    "accessibility": {
+      "title": "Tinketfo tekuFinyelela",
+      "textAndVisual": "Umbhalo nekuBonakala",
+      "textSize": "Busayizi beMbhalo",
+      "textSpacing": "Kukhushulwa kweMbhalo",
+      "colorAndContrast": "Umbala neMahluko",
+      "highContrastMode": "Indlela yeMahluko laPhakeme",
+      "darkMode": "Indlela leMnyama"
+    }
+  },
+
   "navigation": {
     "home": "Ekhaya",
     "dictionary": "Sichazamagama",
@@ -6,6 +29,7 @@
     "savedTerms": "Emagama Lacondziwe",
     "dashboard": "Ibhodi",
     "help": "Lusito",
+    "settings": "Tinhlelo",
     "darkMode": "Indlela lemnyama"
   },
 

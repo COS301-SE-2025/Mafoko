@@ -209,7 +209,7 @@ const UserProfilePage: React.FC = () => {
   };
 
   const handleSettingsClick = () => {
-    console.log('Settings clicked');
+    void navigate('/settings');
   };
 
   const handleLogout = () => {

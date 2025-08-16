@@ -31,6 +31,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     { id: 'feedback', label: 'Feedback', path: '/feedback' },
     { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
     { id: 'help', label: t('navigation.help'), path: '/help' },
+    { id: 'settings', label: t('navigation.settings'), path: '/settings' },
   ];
 
   const handleItemClick = (itemId: string, path: string) => {
@@ -43,7 +44,9 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       {/* Header */}
       <div className="left-nav-header">
         <div className="left-nav-title-section">
-          <h2 className="left-nav-app-title">Marito</h2>
+          <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
+            Marito
+          </h2>
           <LanguageSwitcher />
         </div>
         <div className="logo-container">

@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Amalungiselelo",
+    "subtitle": "Lungisa indlela yakho ye-Marito",
+    "selectLanguage": "Khetha ilimi lakho olithandako",
+    "profile": {
+      "title": "Iphrofayili ne-Akhawundi",
+      "description": "Phatha amalungiselelo wephrofayili nokhetho lwe-akhawundi"
+    },
+    "appLanguage": {
+      "title": "Ilimi le-App",
+      "description": "Khetha ilimi lakho olithandako"
+    },
+    "accessibility": {
+      "title": "Amakhetho wokuFikelela",
+      "textAndVisual": "Umbhalo nokuBonakala",
+      "textSize": "Ubungako boMbhalo",
+      "textSpacing": "Isikhala soMbhalo",
+      "colorAndContrast": "Umbala nokuHluka",
+      "highContrastMode": "Indlela yokuHluka okuPhezulu",
+      "darkMode": "Indlela emNyama"
+    }
+  },
+
   "navigation": {
     "home": "Ikhaya",
     "dictionary": "Isichazamazwi",
@@ -6,6 +29,7 @@
     "savedTerms": "Amagama Atlotjhiweko",
     "dashboard": "Ibhodi",
     "help": "Isizo",
+    "settings": "Amalungiselelo",
     "darkMode": "Indlela emnyama"
   },
 

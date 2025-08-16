@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Dipeelo",
+    "subtitle": "Rulaganya maitemogelo a gago a Marito",
+    "selectLanguage": "Tlhopha puo e o e ratang",
+    "profile": {
+      "title": "Porofaele le Akhaonto",
+      "description": "Laola dipeelo tsa porofaele le ditlhopho tsa akhaonto"
+    },
+    "appLanguage": {
+      "title": "Puo ya App",
+      "description": "Tlhopha puo e o e ratang"
+    },
+    "accessibility": {
+      "title": "Ditlhopho tsa Phitlhelelo",
+      "textAndVisual": "Mokwalo le Pontsho",
+      "textSize": "Bogolo jwa Mokwalo",
+      "textSpacing": "Sekgala sa Mokwalo",
+      "colorAndContrast": "Mmala le Pharologano",
+      "highContrastMode": "Mokgwa wa Pharologano e Kgolo",
+      "darkMode": "Mokgwa o Montsho"
+    }
+  },
+
   "navigation": {
     "home": "Gae",
     "dictionary": "Thanodi",
@@ -6,6 +29,7 @@
     "savedTerms": "Mafoko a a Bolokilweng",
     "dashboard": "Bolaodi",
     "help": "Thuso",
+    "settings": "Dipeelo",
     "darkMode": "Mokgwa o montsho"
   },
 

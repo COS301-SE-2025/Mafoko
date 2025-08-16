@@ -2,6 +2,29 @@
   "appTitle": "Marito",
   "loading": "Loading...",
 
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your Marito experience",
+    "selectLanguage": "Select your preferred language",
+    "profile": {
+      "title": "Profile & Account",
+      "description": "Manage your profile settings and account preferences"
+    },
+    "appLanguage": {
+      "title": "App Language",
+      "description": "Choose your preferred language"
+    },
+    "accessibility": {
+      "title": "Accessibility Options",
+      "textAndVisual": "Text & Visual Presentation",
+      "textSize": "Text Size",
+      "textSpacing": "Text Spacing",
+      "colorAndContrast": "Colour & Contrast",
+      "highContrastMode": "High Contrast Mode",
+      "darkMode": "Dark Mode"
+    }
+  },
+
   "landingPage": {
     "greeting": "Welcome to Marito PWA!",
     "registerButton": "Register",
@@ -125,10 +148,12 @@
     "home": "Home",
     "dictionary": "Dictionary",
     "glossary": "Glossary",
+    "settings": "Settings",
     "savedTerms": "Saved Terms",
     "linguistApplication": "Linguist Application",
     "dashboard": "Dashboard",
     "help": "Help",
+    "settings": "Settings",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode"
   },
