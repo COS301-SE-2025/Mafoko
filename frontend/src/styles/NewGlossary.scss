@@ -1,3 +1,23 @@
+/* Spinner animation for glossary loading */
+.glossary-list-spinner {
+  text-align: center;
+  min-height: 120px;
+}
+.spinner {
+  display: inline-block;
+}
+.spinner > span {
+  border: 6px solid #f2d001;
+  border-top: 6px solid #e5e7eb;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 // Import variables and LeftNav styles from GlossaryPage and LeftNav
 @import './GlossaryPage.scss';
 @import './LeftNav.scss';

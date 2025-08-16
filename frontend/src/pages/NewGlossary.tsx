@@ -1246,8 +1246,31 @@ const GlossaryApp = () => {
               </div>
               <div className="glossary-list">
                 {loading ? (
-                  <div className="glossary-list-message">
-                    Loading glossaries...
+                  <div
+                    className="glossary-list-spinner"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '180px',
+                    }}
+                  >
+                    <span
+                      className="spinner"
+                      style={{ width: 48, height: 48, display: 'inline-block' }}
+                    >
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: 48,
+                          height: 48,
+                          border: '6px solid #f2d001',
+                          borderTop: '6px solid #e5e7eb',
+                          borderRadius: '50%',
+                          animation: 'spin 1s linear infinite',
+                        }}
+                      />
+                    </span>
                   </div>
                 ) : glossaries.length === 0 ? (
                   <div className="glossary-list-message">
