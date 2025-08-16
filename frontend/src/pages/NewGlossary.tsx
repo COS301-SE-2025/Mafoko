@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../config';
 import { Search, Bookmark, Download, FileType, Filter } from 'lucide-react';
 import GlossaryTermCard from '../components/ui/GlossaryTermCard';
@@ -33,6 +33,7 @@ interface Glossary {
 const GlossaryApp = () => {
   const { isDarkMode } = useDarkMode();
   const location = useLocation();
+  const navigate = useNavigate();
   const { category } = useParams<{ category?: string }>();
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
@@ -147,11 +148,19 @@ const GlossaryApp = () => {
     if (category && glossaries.length > 0) {
       console.log('URL PARAMETER - Looking for glossary:', category);
 
+      // Clean and normalize the category from URL
+      const cleanCategory = category
+        .replace(/-+/g, ' ') // Replace hyphens with spaces
+        .replace(/\s+/g, ' ') // Normalize multiple spaces
+        .trim(); // Remove leading/trailing spaces
+
       // Convert URL-friendly format back to proper case
-      // e.g., "agriculture" -> "Agriculture", "general-demographics" -> "General Demographics"
       const categoryVariations = [
         category, // as-is from URL
-        category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
+        cleanCategory, // cleaned version
+        cleanCategory.charAt(0).toUpperCase() + cleanCategory.slice(1), // Capitalize first letter
+        cleanCategory.replace(/\b\w/g, (l) => l.toUpperCase()), // Title case
+        category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter of original
         category.replace(/-/g, ' '), // Replace hyphens with spaces
         category.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()), // Title case
         category.toUpperCase(), // All uppercase
@@ -162,7 +171,10 @@ const GlossaryApp = () => {
       let targetGlossary = null;
       for (const variation of categoryVariations) {
         targetGlossary = glossaries.find(
-          (g) => g.name.toLowerCase() === variation.toLowerCase(),
+          (g) =>
+            g.name.toLowerCase().replace(/\s+/g, '-') ===
+              variation.toLowerCase().replace(/\s+/g, '-') ||
+            g.name.toLowerCase() === variation.toLowerCase(),
         );
         if (targetGlossary) break;
       }
@@ -767,6 +779,8 @@ const GlossaryApp = () => {
                   setDebouncedTermSearch('');
                   setSelectedLanguage('');
                   setShowLanguageFilter(false);
+                  // Navigate back to main glossary page and update URL
+                  void navigate('/glossary');
                 }}
               />
 

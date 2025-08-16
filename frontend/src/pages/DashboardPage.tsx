@@ -180,7 +180,9 @@ const DashboardPage: React.FC = () => {
       // Convert category name to URL-friendly format (lowercase, spaces to hyphens)
       const urlFriendlyCategory = categoryName
         .toLowerCase()
-        .replace(/\s+/g, '-');
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-') // Remove duplicate hyphens
+        .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
       void navigate(`/glossary/${urlFriendlyCategory}`);
     },
     [navigate],
