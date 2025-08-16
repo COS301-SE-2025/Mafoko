@@ -74,7 +74,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       </nav>
 
       {/* Dark Mode Toggle - Bottom of sidebar */}
-      <div className="left-nav-footer">
+      {/* <div className="left-nav-footer">
         <div className="dark-mode-toggle">
           <div className="toggle-container">
             {isDarkMode ? (
@@ -94,7 +94,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
