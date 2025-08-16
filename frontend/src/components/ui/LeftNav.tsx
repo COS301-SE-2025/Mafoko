@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
-import ToggleSwitch from './ToggleSwtich';
-import { Sun, Moon } from 'lucide-react';
+// import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface LeftNavProps {
   activeItem: string;
@@ -47,7 +45,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
             Marito
           </h2>
-          <LanguageSwitcher />
         </div>
         <div className="logo-container">
           <img
@@ -74,7 +71,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       </nav>
 
       {/* Dark Mode Toggle - Bottom of sidebar */}
-      <div className="left-nav-footer">
+      {/* <div className="left-nav-footer">
         <div className="dark-mode-toggle">
           <div className="toggle-container">
             {isDarkMode ? (
@@ -94,7 +91,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

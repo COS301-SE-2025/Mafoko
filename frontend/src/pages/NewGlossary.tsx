@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../config';
-import { Search, Bookmark, Download, FileType } from 'lucide-react';
+import { Search, Bookmark, Download, FileType, Filter } from 'lucide-react';
 import GlossaryTermCard from '../components/ui/GlossaryTermCard';
 import GlossaryCard from '../components/ui/GlossaryCard';
 import LeftNav from '../components/ui/LeftNav';
@@ -9,6 +9,7 @@ import Navbar from '../components/ui/Navbar.tsx';
 import GlossaryHeader from '../components/ui/GlossaryHeader';
 import { downloadData } from '../utils/exportUtils';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
+import { LANGUAGES } from '../types/search/types';
 import '../styles/NewGlossary.scss';
 
 // --- FULL WORKING LOGIC RESTORED ---
@@ -32,8 +33,12 @@ interface Glossary {
 const GlossaryApp = () => {
   const { isDarkMode } = useDarkMode();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { category } = useParams<{ category?: string }>();
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+  const [showLanguageFilter, setShowLanguageFilter] = useState(false);
   const [glossaries, setGlossaries] = useState<Glossary[]>([]);
   const [selectedGlossary, setSelectedGlossary] = useState<Glossary | null>(
     null,
@@ -138,6 +143,57 @@ const GlossaryApp = () => {
     }
   }, [location.state, location.pathname, glossaries]);
 
+  // Handle URL parameter for direct category navigation
+  useEffect(() => {
+    if (category && glossaries.length > 0) {
+      console.log('URL PARAMETER - Looking for glossary:', category);
+
+      // Clean and normalize the category from URL
+      const cleanCategory = category
+        .replace(/-+/g, ' ') // Replace hyphens with spaces
+        .replace(/\s+/g, ' ') // Normalize multiple spaces
+        .trim(); // Remove leading/trailing spaces
+
+      // Convert URL-friendly format back to proper case
+      const categoryVariations = [
+        category, // as-is from URL
+        cleanCategory, // cleaned version
+        cleanCategory.charAt(0).toUpperCase() + cleanCategory.slice(1), // Capitalize first letter
+        cleanCategory.replace(/\b\w/g, (l) => l.toUpperCase()), // Title case
+        category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter of original
+        category.replace(/-/g, ' '), // Replace hyphens with spaces
+        category.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()), // Title case
+        category.toUpperCase(), // All uppercase
+        category.toLowerCase(), // All lowercase
+      ];
+
+      // Try to find a matching glossary with any of the variations
+      let targetGlossary = null;
+      for (const variation of categoryVariations) {
+        targetGlossary = glossaries.find(
+          (g) =>
+            g.name.toLowerCase().replace(/\s+/g, '-') ===
+              variation.toLowerCase().replace(/\s+/g, '-') ||
+            g.name.toLowerCase() === variation.toLowerCase(),
+        );
+        if (targetGlossary) break;
+      }
+
+      if (targetGlossary) {
+        console.log(
+          'URL PARAMETER - Found glossary, selecting:',
+          targetGlossary,
+        );
+        setSelectedGlossary(targetGlossary);
+      } else {
+        console.log(
+          'URL PARAMETER - No matching glossary found for:',
+          category,
+        );
+      }
+    }
+  }, [category, glossaries]);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
@@ -219,6 +275,10 @@ const GlossaryApp = () => {
       searchParams.append('query', debouncedTermSearch.trim());
     }
 
+    if (selectedLanguage && selectedLanguage !== '') {
+      searchParams.append('language', selectedLanguage);
+    }
+
     fetch(
       `${API_ENDPOINTS.glossaryAdvancedSearch}?${searchParams.toString()}`,
       {
@@ -229,6 +289,7 @@ const GlossaryApp = () => {
         body: JSON.stringify({
           domain: selectedGlossary.name,
           query: debouncedTermSearch.trim() || undefined,
+          language: selectedLanguage || undefined,
           page: currentPage,
           limit: termsPerPage,
         }),
@@ -264,7 +325,7 @@ const GlossaryApp = () => {
           })
           .then((data: unknown) => {
             const termsData = data as Term[];
-            const filteredTerms = termsData.filter(
+            let filteredTerms = termsData.filter(
               (term) =>
                 !debouncedTermSearch.trim() ||
                 term.term
@@ -274,6 +335,14 @@ const GlossaryApp = () => {
                   .toLowerCase()
                   .includes(debouncedTermSearch.toLowerCase()),
             );
+
+            // Apply language filter if selected
+            if (selectedLanguage && selectedLanguage !== '') {
+              filteredTerms = filteredTerms.filter(
+                (term) => term.language === selectedLanguage,
+              );
+            }
+
             const startIndex = (currentPage - 1) * termsPerPage;
             const endIndex = startIndex + termsPerPage;
             const paginatedTerms = filteredTerms.slice(startIndex, endIndex);
@@ -294,12 +363,12 @@ const GlossaryApp = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [selectedGlossary, currentPage, debouncedTermSearch]);
+  }, [selectedGlossary, currentPage, debouncedTermSearch, selectedLanguage]);
 
-  // Reset page when glossary or search changes
+  // Reset page when glossary, search, or language filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedGlossary, debouncedTermSearch]);
+  }, [selectedGlossary, debouncedTermSearch, selectedLanguage]);
 
   // Check if selected glossary is bookmarked when it changes
   useEffect(() => {
@@ -611,7 +680,10 @@ const GlossaryApp = () => {
         limit: '10000', // Set a high limit to get all terms
       });
 
-      // Don't include search query for export - we want ALL terms in the glossary
+      // Include language filter if selected, but not search query for export
+      if (selectedLanguage && selectedLanguage !== '') {
+        exportParams.append('language', selectedLanguage);
+      }
 
       const response = await fetch(
         `${API_ENDPOINTS.glossaryAdvancedSearch}?${exportParams.toString()}`,
@@ -622,7 +694,7 @@ const GlossaryApp = () => {
           },
           body: JSON.stringify({
             domain: selectedGlossary.name,
-            // No query parameter - get all terms
+            language: selectedLanguage || undefined,
             page: 1,
             limit: 10000,
           }),
@@ -644,6 +716,14 @@ const GlossaryApp = () => {
       );
       if (fallbackResponse.ok) {
         const fallbackData = (await fallbackResponse.json()) as Term[];
+
+        // Apply language filter if selected
+        if (selectedLanguage && selectedLanguage !== '') {
+          return fallbackData.filter(
+            (term) => term.language === selectedLanguage,
+          );
+        }
+
         return fallbackData;
       }
     } catch (error) {
@@ -691,12 +771,16 @@ const GlossaryApp = () => {
               <GlossaryHeader
                 title={selectedGlossary.name}
                 description={selectedGlossary.description}
-                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})`}
+                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})${selectedLanguage ? ` - Filtered by ${selectedLanguage}` : ''}`}
                 onBack={() => {
                   setSelectedGlossary(null);
                   setCurrentPage(1);
                   setTermSearch('');
                   setDebouncedTermSearch('');
+                  setSelectedLanguage('');
+                  setShowLanguageFilter(false);
+                  // Navigate back to main glossary page and update URL
+                  void navigate('/glossary');
                 }}
               />
 
@@ -744,6 +828,176 @@ const GlossaryApp = () => {
                   }}
                   autoComplete="off"
                 />
+              </div>
+
+              {/* Language Filter */}
+              <div
+                className="language-filter-container"
+                style={{
+                  width: '100%',
+                  maxWidth: '1000px',
+                  margin: '0 auto 2rem auto',
+                  position: 'relative',
+                }}
+              >
+                <div
+                  className="language-filter-header"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  <Filter
+                    size={16}
+                    style={{ color: 'var(--text-theme)', opacity: 0.7 }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '0.9rem',
+                      fontWeight: 500,
+                      color: 'var(--text-theme)',
+                      opacity: 0.7,
+                    }}
+                  >
+                    Filter by Language
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowLanguageFilter(!showLanguageFilter);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--accent-color)',
+                      cursor: 'pointer',
+                      fontSize: '0.85rem',
+                      fontWeight: 500,
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    {showLanguageFilter ? 'Hide' : 'Show'}
+                  </button>
+                </div>
+
+                {showLanguageFilter && (
+                  <div
+                    className="language-filter-options"
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: '0.5rem',
+                      padding: '1rem',
+                      background: 'var(--card-background)',
+                      border: '1px solid var(--glossary-border-color)',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 2px 4px var(--card-shadow)',
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedLanguage('');
+                      }}
+                      className={`language-filter-option ${selectedLanguage === '' ? 'active' : ''}`}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        border: '1px solid var(--glossary-border-color)',
+                        borderRadius: '1.5rem',
+                        background:
+                          selectedLanguage === ''
+                            ? 'var(--accent-color)'
+                            : 'var(--card-background)',
+                        color:
+                          selectedLanguage === ''
+                            ? 'white'
+                            : 'var(--text-theme)',
+                        cursor: 'pointer',
+                        fontSize: '0.85rem',
+                        fontWeight: 500,
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      All Languages
+                    </button>
+                    {LANGUAGES.map((language) => (
+                      <button
+                        key={language}
+                        type="button"
+                        onClick={() => {
+                          setSelectedLanguage(language);
+                        }}
+                        className={`language-filter-option ${selectedLanguage === language ? 'active' : ''}`}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          border: '1px solid var(--glossary-border-color)',
+                          borderRadius: '1.5rem',
+                          background:
+                            selectedLanguage === language
+                              ? 'var(--accent-color)'
+                              : 'var(--card-background)',
+                          color:
+                            selectedLanguage === language
+                              ? 'white'
+                              : 'var(--text-theme)',
+                          cursor: 'pointer',
+                          fontSize: '0.85rem',
+                          fontWeight: 500,
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        {language}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Active filter indicator */}
+                {selectedLanguage && (
+                  <div
+                    style={{
+                      marginTop: '0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.85rem',
+                      color: 'var(--text-theme)',
+                      opacity: 0.8,
+                    }}
+                  >
+                    <span>Active filter:</span>
+                    <span
+                      style={{
+                        background: 'var(--accent-color)',
+                        color: 'white',
+                        padding: '0.25rem 0.75rem',
+                        borderRadius: '1rem',
+                        fontSize: '0.8rem',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {selectedLanguage}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedLanguage('');
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--accent-color)',
+                        cursor: 'pointer',
+                        fontSize: '0.8rem',
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="terms-list">
@@ -1006,8 +1260,31 @@ const GlossaryApp = () => {
               </div>
               <div className="glossary-list">
                 {loading ? (
-                  <div className="glossary-list-message">
-                    Loading glossaries...
+                  <div
+                    className="glossary-list-spinner"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '180px',
+                    }}
+                  >
+                    <span
+                      className="spinner"
+                      style={{ width: 48, height: 48, display: 'inline-block' }}
+                    >
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: 48,
+                          height: 48,
+                          border: '6px solid #f2d001',
+                          borderTop: '6px solid #e5e7eb',
+                          borderRadius: '50%',
+                          animation: 'spin 1s linear infinite',
+                        }}
+                      />
+                    </span>
                   </div>
                 ) : glossaries.length === 0 ? (
                   <div className="glossary-list-message">
