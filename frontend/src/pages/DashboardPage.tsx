@@ -40,7 +40,10 @@ const DashboardPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [letters, setLetters] = useState<Letter[]>([]);
 
-  const colors = useMemo(() => ['#00CEAF', '#212431', '#F7074D', '#F2D001'], []);
+  const colors = useMemo(
+    () => ['#00CEAF', '#212431', '#F7074D', '#F2D001'],
+    [],
+  );
   const alphabet = useMemo(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), []);
 
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -326,9 +329,9 @@ const DashboardPage: React.FC = () => {
         id: Math.random(),
         char: alphabet[Math.floor(Math.random() * alphabet.length)],
         color: colors[Math.floor(Math.random() * colors.length)],
-        left: Math.random() * (85),
+        left: Math.random() * 85,
         top: -100,
-        speed: Math.random() * 1.5 + 0.5
+        speed: Math.random() * 1.5 + 0.5,
       };
     };
 
@@ -336,18 +339,22 @@ const DashboardPage: React.FC = () => {
     setLetters(initialLetters);
 
     const animate = () => {
-      setLetters(prevLetters => {
-        const newLetters = prevLetters.map(letter => ({
-          ...letter,
-          top: letter.top + letter.speed
-        })).filter(letter => letter.top < window.innerHeight + 100);
+      setLetters((prevLetters) => {
+        const newLetters = prevLetters
+          .map((letter) => ({
+            ...letter,
+            top: letter.top + letter.speed,
+          }))
+          .filter((letter) => letter.top < window.innerHeight + 100);
 
         if (Math.random() < 0.4 && newLetters.length < 25) {
           newLetters.push(createLetter());
         }
 
         if (newLetters.length < 20) {
-          newLetters.push(...Array.from({ length: 20 - newLetters.length }, createLetter));
+          newLetters.push(
+            ...Array.from({ length: 20 - newLetters.length }, createLetter),
+          );
         }
 
         return newLetters;
@@ -355,7 +362,9 @@ const DashboardPage: React.FC = () => {
     };
 
     const interval = setInterval(animate, 60);
-    return () => { clearInterval(interval); };
+    return () => {
+      clearInterval(interval);
+    };
   }, [alphabet, colors]);
 
   // Responsive navigation effect
@@ -385,8 +394,7 @@ const DashboardPage: React.FC = () => {
 
       <div className="main-content">
         <div className="top-bar">
-          <div className="welcome-section">
-          </div>
+          <div className="welcome-section"></div>
           {isLoadingUserData ? (
             <div className="profile-section">Loading profile...</div>
           ) : (
@@ -439,8 +447,12 @@ const DashboardPage: React.FC = () => {
           )}
         </div>
 
-        <div role="complementary" aria-label="falling-letters" className="abstract-bg">
-          {letters.map(letter => (
+        <div
+          role="complementary"
+          aria-label="falling-letters"
+          className="abstract-bg"
+        >
+          {letters.map((letter) => (
             <div
               key={letter.id}
               className="falling-letter"
@@ -449,7 +461,7 @@ const DashboardPage: React.FC = () => {
                 top: `${String(letter.top)}px`,
                 color: letter.color,
                 opacity: '0.1',
-                transform: `rotate(${String(letter.top)}deg)`
+                transform: `rotate(${String(letter.top)}deg)`,
               }}
             >
               {letter.char}
@@ -465,26 +477,38 @@ const DashboardPage: React.FC = () => {
                 <br />
                 <div className="intro-text">
                   <p>
-                    The term 'Marito' originates from Xitsonga, translating to 'words' or 'names'. 
-                    This is a progressive web application that bridges the gap between South Africa's rich linguistic 
-                    heritage and modern digital accessibility. Language enthusiasts, NLP researchers, and linguists can 
-                    use Marito as a unified platform to explore, contribute to, and preserve multilingual glossaries, 
-                    dictionaries, and terminology banks across 11 of South Africa's official languages.
+                    The term 'Marito' originates from Xitsonga, translating to
+                    'words' or 'names'. This is a progressive web application
+                    that bridges the gap between South Africa's rich linguistic
+                    heritage and modern digital accessibility. Language
+                    enthusiasts, NLP researchers, and linguists can use Marito
+                    as a unified platform to explore, contribute to, and
+                    preserve multilingual glossaries, dictionaries, and
+                    terminology banks across 11 of South Africa's official
+                    languages.
                   </p>
-                  
+
                   <p>
-                    Marito works seamlessly both offline and online, empowering communities to access comprehensive 
-                    language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. 
-                    This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the 
-                    University of Pretoria to democratize linguistic resources and advance natural language processing 
-                    research for African languages.
+                    Marito works seamlessly both offline and online, empowering
+                    communities to access comprehensive language resources,
+                    submit feedback, and collaborate on robust lexicons for
+                    low-resource languages. This platform is part of an ongoing
+                    initiative by DSFSI (Data Science for Social Impact) at the
+                    University of Pretoria to democratize linguistic resources
+                    and advance natural language processing research for African
+                    languages.
                   </p>
-                  
+
                   <p className="team-credit">Proudly developed by Velox</p>
                 </div>
 
                 <div className="cta-section">
-                  <a href="https://www.dsfsi.co.za/" className="cta-button primary-cta" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://www.dsfsi.co.za/"
+                    className="cta-button primary-cta"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Learn more about DSFSI
                   </a>
                 </div>

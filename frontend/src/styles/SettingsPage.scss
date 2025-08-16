@@ -1,7 +1,13 @@
 .main-content {
   background: #ffffff;
   color: #333333;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   transition: all 0.3s ease;
   min-height: 100vh;
   padding-left: calc(2rem * var(--text-spacing, 1));
@@ -109,7 +115,7 @@
 .section-icon {
   width: calc(20px * var(--text-scaling, 1));
   height: calc(20px * var(--text-scaling, 1));
-  color: #00CEAF;
+  color: #00ceaf;
 }
 
 .subsection-icon {
@@ -119,7 +125,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: #00CEAF;
+  color: #00ceaf;
   font-size: calc(1rem * var(--text-scaling, 1));
 }
 
@@ -197,7 +203,7 @@
   .accessibility-title {
     color: #ffffff;
   }
-  
+
   .slider {
     background: #374151;
   }
@@ -243,7 +249,7 @@
 
     &.checked {
       background-color: var(--accent-color);
-      
+
       .thumb {
         background-color: var(--text-dark);
         transform: translateX(calc(1.1rem * var(--text-scaling, 1)));
@@ -269,7 +275,7 @@
 
   .slider-value {
     font-weight: 600;
-    color: #00CEAF;
+    color: #00ceaf;
   }
 }
 
@@ -288,7 +294,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #00CEAF;
+    background: #00ceaf;
     cursor: pointer;
   }
 
@@ -296,7 +302,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #00CEAF;
+    background: #00ceaf;
     cursor: pointer;
     border: none;
   }
@@ -312,11 +318,11 @@
   .settings-content {
     padding: 1rem;
   }
-  
+
   .settings-header {
     padding: 1.5rem 1rem;
   }
-  
+
   .section-content {
     padding: 1rem;
   }

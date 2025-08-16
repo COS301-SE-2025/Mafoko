@@ -171,7 +171,7 @@ $card-dark: #3a4050;
   .content-wrapper {
     max-width: 1400px;
     margin: 0 auto;
-    
+
     .content-layout {
       display: flex;
       gap: 3rem;
@@ -232,7 +232,7 @@ $card-dark: #3a4050;
             transition: all 0.3s ease;
 
             &.primary-cta {
-              background: #F7074D;
+              background: #f7074d;
               color: #fff;
 
               &:hover {
@@ -255,7 +255,7 @@ $card-dark: #3a4050;
   @media (max-width: 1024px) {
     .content-wrapper .content-layout {
       flex-direction: column;
-      
+
       .content-side {
         padding-right: 0;
       }
@@ -264,13 +264,13 @@ $card-dark: #3a4050;
 
   @media (max-width: 768px) {
     padding: 20px;
-    
+
     .content-wrapper .content-layout {
       .content-side {
         .title {
           font-size: 2.5rem;
         }
-        
+
         .intro-text {
           font-size: 1rem;
         }
@@ -278,8 +278,6 @@ $card-dark: #3a4050;
     }
   }
 }
-
-
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {

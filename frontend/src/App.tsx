@@ -22,7 +22,6 @@ import SettingsPage from './pages/SettingsPage';
 import './App.css';
 import './styles/Global.scss';
 
-
 import {
   Chart as ChartJS,
   PieController,

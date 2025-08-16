@@ -44,7 +44,9 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       {/* Header */}
       <div className="left-nav-header">
         <div className="left-nav-title-section">
-          <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>Marito</h2>
+          <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
+            Marito
+          </h2>
           <LanguageSwitcher />
         </div>
         <div className="logo-container">

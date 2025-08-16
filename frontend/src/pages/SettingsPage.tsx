@@ -30,22 +30,112 @@ interface SettingsState {
   selectedLanguage: string;
 }
 
+interface SettingsSectionProps {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  showChevron?: boolean;
+}
+
+const SettingsSection: React.FC<SettingsSectionProps> = ({
+  title,
+  icon,
+  children,
+  showChevron = false,
+}) => (
+  <div className="settings-section">
+    <div className="section-header">
+      <div className="section-title">
+        {icon}
+        <h2>{title}</h2>
+      </div>
+      {showChevron && <ChevronRight className="chevron-icon" />}
+    </div>
+    <div className="section-content">{children}</div>
+  </div>
+);
+
+interface ToggleSwitchProps {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}
+
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  label,
+  checked,
+  onChange,
+}) => (
+  <label className="toggle-switch">
+    <span className="toggle-label">{label}</span>
+    <div
+      className={`switch ${checked ? 'checked' : ''}`}
+      onClick={() => {
+        onChange(!checked);
+      }}
+    >
+      <div className="thumb" />
+    </div>
+  </label>
+);
+
+interface SliderControlProps {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  unit?: string;
+  onChange: (value: number) => void;
+}
+
+const SliderControl: React.FC<SliderControlProps> = ({
+  label,
+  value,
+  min,
+  max,
+  step,
+  unit = '',
+  onChange,
+}) => (
+  <div className="slider-item">
+    <div className="slider-header">
+      <span className="slider-label">{label}</span>
+      <span className="slider-value">
+        {value.toString()}
+        {unit}
+      </span>
+    </div>
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(e) => {
+        onChange(Number(e.target.value));
+      }}
+      className="slider"
+    />
+  </div>
+);
+
 const SettingsPage: React.FC = () => {
   const { i18n, t } = useTranslation();
 
   const [settings, setSettings] = useState<SettingsState>(() => {
     const savedSettings = localStorage.getItem('userSettings');
-    const defaultSettings = {
+    const defaultSettings: SettingsState = {
       textSize: 16,
       textSpacing: 1,
       highContrastMode: false,
       darkMode: false,
-      selectedLanguage: i18n.resolvedLanguage || 'en'
+      selectedLanguage: i18n.resolvedLanguage || 'en',
     };
 
     if (savedSettings) {
       try {
-        const parsed = JSON.parse(savedSettings);
+        const parsed = JSON.parse(savedSettings) as Partial<SettingsState>;
         return { ...defaultSettings, ...parsed };
       } catch (e) {
         console.error('Failed to parse saved settings:', e);
@@ -57,17 +147,26 @@ const SettingsPage: React.FC = () => {
   });
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--base-text-size', `${settings.textSize}px`);
-    document.documentElement.style.setProperty('--text-scaling', `${settings.textSize/16}`);
-    document.documentElement.style.setProperty('--text-spacing', `${settings.textSpacing}`);
-    
+    document.documentElement.style.setProperty(
+      '--base-text-size',
+      `${settings.textSize.toString()}px`,
+    );
+    document.documentElement.style.setProperty(
+      '--text-scaling',
+      (settings.textSize / 16).toString(),
+    );
+    document.documentElement.style.setProperty(
+      '--text-spacing',
+      settings.textSpacing.toString(),
+    );
+
     // Apply high contrast mode
     if (settings.highContrastMode) {
       document.documentElement.setAttribute('data-high-contrast-mode', 'true');
     } else {
       document.documentElement.removeAttribute('data-high-contrast-mode');
     }
-    
+
     localStorage.setItem('userSettings', JSON.stringify(settings));
   }, [settings]);
 
@@ -77,76 +176,17 @@ const SettingsPage: React.FC = () => {
     if (currentLang && currentLang !== settings.selectedLanguage) {
       handleSettingChange('selectedLanguage', currentLang);
     }
-  }, [i18n.resolvedLanguage]);
+  }, [i18n.resolvedLanguage, settings.selectedLanguage]);
 
-  const handleSettingChange = (key: keyof SettingsState, value: any) => {
-    setSettings(prev => ({
+  const handleSettingChange = (
+    key: keyof SettingsState,
+    value: string | number | boolean,
+  ) => {
+    setSettings((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
-
-  const SettingsSection: React.FC<{ 
-    title: string; 
-    icon: React.ReactNode; 
-    children: React.ReactNode;
-    showChevron?: boolean;
-  }> = ({ title, icon, children, showChevron = false }) => (
-    <div className="settings-section">
-      <div className="section-header">
-        <div className="section-title">
-          {icon}
-          <h2>{title}</h2>
-        </div>
-        {showChevron && <ChevronRight className="chevron-icon" />}
-      </div>
-      <div className="section-content">
-        {children}
-      </div>
-    </div>
-  );
-
-  const ToggleSwitch: React.FC<{
-    label: string;
-    checked: boolean;
-    onChange: (checked: boolean) => void;
-  }> = ({ label, checked, onChange }) => (
-    <label className="toggle-switch">
-      <span className="toggle-label">{label}</span>
-      <div
-        className={`switch ${checked ? 'checked' : ''}`}
-        onClick={() => onChange(!checked)}
-      >
-        <div className="thumb" />
-      </div>
-    </label>
-  );
-
-  const SliderControl: React.FC<{
-    label: string;
-    value: number;
-    min: number;
-    max: number;
-    step: number;
-    unit?: string;
-    onChange: (value: number) => void;
-  }> = ({ label, value, min, max, step, unit = '', onChange }) => (
-    <div className="slider-item">
-      <div className="slider-header">
-        <span className="slider-label">{label}</span>
-        <span className="slider-value">{value}{unit}</span>
-      </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="slider"
-      />
-    </div>
-  );
 
   const [isMobile] = useState(window.innerWidth <= 768);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -156,33 +196,41 @@ const SettingsPage: React.FC = () => {
     if (settings.highContrastMode) {
       document.documentElement.setAttribute('data-high-contrast-mode', 'true');
     }
-  }, []);
+  }, [settings.highContrastMode]);
 
   React.useEffect(() => {
     const savedSettings = localStorage.getItem('accessibilitySettings');
     const savedUserSettings = localStorage.getItem('userSettings');
-    
+
     if (savedUserSettings) {
       try {
-        const parsedUserSettings = JSON.parse(savedUserSettings);
-        setSettings(prev => ({
+        const parsedUserSettings = JSON.parse(
+          savedUserSettings,
+        ) as Partial<SettingsState>;
+        setSettings((prev) => ({
           ...prev,
-          textSize: parsedUserSettings.textSize || 16,
-          textSpacing: parsedUserSettings.textSpacing || 1,
-          highContrastMode: parsedUserSettings.highContrastMode || false,
-          darkMode: isDarkMode
+          textSize: parsedUserSettings.textSize ?? 16,
+          textSpacing: parsedUserSettings.textSpacing ?? 1,
+          highContrastMode: parsedUserSettings.highContrastMode ?? false,
+          darkMode: isDarkMode,
         }));
       } catch (e) {
         console.error('Failed to parse user settings:', e);
       }
     } else if (savedSettings) {
-      const parsedSettings = JSON.parse(savedSettings);
-      setSettings(prev => ({
-        ...prev,
-        textSize: parsedSettings.textSize || 16,
-        textSpacing: parsedSettings.textSpacing || 1,
-        darkMode: isDarkMode
-      }));
+      try {
+        const parsedSettings = JSON.parse(
+          savedSettings,
+        ) as Partial<SettingsState>;
+        setSettings((prev) => ({
+          ...prev,
+          textSize: parsedSettings.textSize ?? 16,
+          textSpacing: parsedSettings.textSpacing ?? 1,
+          darkMode: isDarkMode,
+        }));
+      } catch (e) {
+        console.error('Failed to parse accessibility settings:', e);
+      }
     }
   }, [isDarkMode]);
 
@@ -192,13 +240,22 @@ const SettingsPage: React.FC = () => {
     const settingsToSave = {
       textSize: settings.textSize,
       textSpacing: settings.textSpacing,
-      highContrastMode: settings.highContrastMode
+      highContrastMode: settings.highContrastMode,
     };
-    localStorage.setItem('accessibilitySettings', JSON.stringify(settingsToSave));
+    localStorage.setItem(
+      'accessibilitySettings',
+      JSON.stringify(settingsToSave),
+    );
 
-    document.documentElement.style.setProperty('--base-text-size', `${settings.textSize}px`);
-    document.documentElement.style.setProperty('--text-spacing', settings.textSpacing.toString());
-    
+    document.documentElement.style.setProperty(
+      '--base-text-size',
+      `${settings.textSize.toString()}px`,
+    );
+    document.documentElement.style.setProperty(
+      '--text-spacing',
+      settings.textSpacing.toString(),
+    );
+
     // Apply high contrast mode
     if (settings.highContrastMode) {
       document.documentElement.setAttribute('data-high-contrast-mode', 'true');
@@ -208,125 +265,150 @@ const SettingsPage: React.FC = () => {
   }, [settings.textSize, settings.textSpacing, settings.highContrastMode]);
 
   return (
-    <div className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
+    <div
+      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+    >
       {isMobile ? (
         <Navbar />
       ) : (
         <LeftNav activeItem="settings" setActiveItem={() => {}} />
       )}
       <div className="main-content">
-          <header className="settings-header">
-            <h1>{t('settings.title')}</h1>
-            <br />
-            <p>{t('settings.subtitle')}</p>
-          </header>
+        <header className="settings-header">
+          <h1>{t('settings.title')}</h1>
+          <br />
+          <p>{t('settings.subtitle')}</p>
+        </header>
 
-          <div className="settings-content">
-            <div 
-              className="settings-section"
-              onClick={() => {
-                navigate('/profile');
-              }}
-            >
-              <div className="section-header">
-                <div className="section-title">
-                  <User className="section-icon" />
-                  <h2>{t('settings.profile.title')}</h2>
-                </div>
-                <ChevronRight className="chevron-icon" />
+        <div className="settings-content">
+          <div
+            className="settings-section"
+            onClick={() => {
+              void navigate('/profile');
+            }}
+          >
+            <div className="section-header">
+              <div className="section-title">
+                <User className="section-icon" />
+                <h2>{t('settings.profile.title')}</h2>
               </div>
+              <ChevronRight className="chevron-icon" />
             </div>
+          </div>
 
-            <SettingsSection 
-              title={t('settings.appLanguage.title')}
-              icon={<Globe className="section-icon" />}
-              showChevron={false}
-            >
-              <div className="language-selector">
-                <label htmlFor="language-select" className="language-label">
-                  {t('settings.selectLanguage')}
-                </label>
-                <select
-                  id="language-select"
-                  value={settings.selectedLanguage}
-                  onChange={async (e) => {
-                    const languageCode = e.target.value;
+          <SettingsSection
+            title={t('settings.appLanguage.title')}
+            icon={<Globe className="section-icon" />}
+            showChevron={false}
+          >
+            <div className="language-selector">
+              <label htmlFor="language-select" className="language-label">
+                {t('settings.selectLanguage')}
+              </label>
+              <select
+                id="language-select"
+                value={settings.selectedLanguage}
+                onChange={(e) => {
+                  const languageCode = e.target.value;
+                  void (async () => {
                     try {
                       await i18n.changeLanguage(languageCode);
                       document.documentElement.lang = languageCode;
                       localStorage.setItem('i18nextLng', languageCode);
                       handleSettingChange('selectedLanguage', languageCode);
                       // Update the settings in localStorage to keep everything in sync
-                      const savedSettings = localStorage.getItem('userSettings');
+                      const savedSettings =
+                        localStorage.getItem('userSettings');
                       if (savedSettings) {
-                        const settings = JSON.parse(savedSettings);
-                        settings.selectedLanguage = languageCode;
-                        localStorage.setItem('userSettings', JSON.stringify(settings));
+                        try {
+                          const settings = JSON.parse(
+                            savedSettings,
+                          ) as Partial<SettingsState>;
+                          const updatedSettings = {
+                            ...settings,
+                            selectedLanguage: languageCode,
+                          };
+                          localStorage.setItem(
+                            'userSettings',
+                            JSON.stringify(updatedSettings),
+                          );
+                        } catch (parseError) {
+                          console.error('Error parsing settings:', parseError);
+                        }
                       }
                     } catch (err) {
                       console.error('Error changing language:', err);
                     }
-                  }}
-                  className="language-dropdown"
-                >
-                  {appSupportedLanguages.map(lang => (
-                    <option key={lang.code} value={lang.code}>{lang.name}</option>
-                  ))}
-                </select>
-              </div>
+                  })();
+                }}
+                className="language-dropdown"
+              >
+                {appSupportedLanguages.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </SettingsSection>
+
+          <div className="accessibility-wrapper">
+            <h2 className="accessibility-title">
+              <Eye className="section-icon" />
+              {t('settings.accessibility.title')}
+            </h2>
+
+            <SettingsSection
+              title={t('settings.accessibility.textAndVisual')}
+              icon={<div className="subsection-icon">Aa</div>}
+              showChevron={false}
+            >
+              <SliderControl
+                label={t('settings.accessibility.textSize')}
+                value={settings.textSize}
+                min={12}
+                max={24}
+                step={1}
+                unit="px"
+                onChange={(value) => {
+                  handleSettingChange('textSize', value);
+                }}
+              />
+              <SliderControl
+                label={t('settings.accessibility.textSpacing')}
+                value={settings.textSpacing}
+                min={0.8}
+                max={2}
+                step={0.1}
+                unit="x"
+                onChange={(value) => {
+                  handleSettingChange('textSpacing', value);
+                }}
+              />
             </SettingsSection>
 
-            <div className="accessibility-wrapper">
-              <h2 className="accessibility-title">
-                <Eye className="section-icon" />
-                {t('settings.accessibility.title')}
-              </h2>
-
-              <SettingsSection 
-                title={t('settings.accessibility.textAndVisual')}
-                icon={<div className="subsection-icon">Aa</div>}
-                showChevron={false}
-              >
-                <SliderControl
-                  label={t('settings.accessibility.textSize')}
-                  value={settings.textSize}
-                  min={12}
-                  max={24}
-                  step={1}
-                  unit="px"
-                  onChange={(value) => handleSettingChange('textSize', value)}
-                />
-                <SliderControl
-                  label={t('settings.accessibility.textSpacing')}
-                  value={settings.textSpacing}
-                  min={0.8}
-                  max={2}
-                  step={0.1}
-                  unit="x"
-                  onChange={(value) => handleSettingChange('textSpacing', value)}
-                />
-              </SettingsSection>
-
-              <SettingsSection 
-                title={t('settings.accessibility.colorAndContrast')}
-                icon={<Palette className="section-icon" />}
-                showChevron={false}
-              >
-                <ToggleSwitch
-                  label={t('settings.accessibility.highContrastMode')}
-                  checked={settings.highContrastMode}
-                  onChange={(checked) => handleSettingChange('highContrastMode', checked)}
-                />
-                <ToggleSwitch
-                  label={t('settings.accessibility.darkMode')}
-                  checked={isDarkMode}
-                  onChange={() => {
-                    toggleDarkMode();
-                  }}
-                />
-              </SettingsSection>
-            </div>
+            <SettingsSection
+              title={t('settings.accessibility.colorAndContrast')}
+              icon={<Palette className="section-icon" />}
+              showChevron={false}
+            >
+              <ToggleSwitch
+                label={t('settings.accessibility.highContrastMode')}
+                checked={settings.highContrastMode}
+                onChange={(checked) => {
+                  handleSettingChange('highContrastMode', checked);
+                }}
+              />
+              <ToggleSwitch
+                label={t('settings.accessibility.darkMode')}
+                checked={isDarkMode}
+                onChange={() => {
+                  toggleDarkMode();
+                }}
+              />
+            </SettingsSection>
           </div>
+        </div>
       </div>
     </div>
   );
