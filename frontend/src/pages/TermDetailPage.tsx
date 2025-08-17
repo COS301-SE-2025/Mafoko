@@ -101,8 +101,7 @@ export const TermDetailPage: React.FC = () => {
 
   const commentInputRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fetchTerm = async (): Promise<SearchResponseType> => {
+  const fetchTerm = useCallback(async (): Promise<SearchResponseType> => {
     const params = new URLSearchParams({
       query: String(name),
       language: String(language),
@@ -111,91 +110,182 @@ export const TermDetailPage: React.FC = () => {
       page_size: '100',
       fuzzy: 'false',
     });
+    const resp = await fetch(`${API_ENDPOINTS.search}?${params.toString()}`);
+    if (!resp.ok) throw new Error('Failed to fetch search results');
+    return (await resp.json()) as SearchResponseType;
+  }, [name, language]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const handleSearch = useCallback(async () => {
+  const fetchRelatedTerms = useCallback(async (domain: string): Promise<Term[]> => {
+    const params = new URLSearchParams({
+      domain,
+      sort_by: 'name',
+      page: '1',
+      page_size: '3',
+      fuzzy: 'false',
+    });
+    try {
+      const resp = await fetch(`${API_ENDPOINTS.search}?${params.toString()}`);
+      if (!resp.ok) throw new Error('Failed to fetch search results');
+      const data = (await resp.json()) as SearchResponseType;
+      return data.items;
+    } catch (ex) {
+      const cached = await getAllTerms();
+      return cached.filter((t) => t.domain === domain);
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
       setIsLoading(true);
       try {
-        const res = await fetchTerm();
-        setTerm(res.results[0]);
-      } catch (error: unknown) {
-        console.error('Falling back to cached data', error);
-        const cachedTerms = await getAllTerms();
-        const filtered = cachedTerms.filter(
-          (term) => term.term.toLowerCase() === name?.toLowerCase(),
-        );
-        setTerm(filtered[0]);
-      } finally {
-        setIsLoading(false);
-      }
-    }, []);
+        let picked: Term | null = null;
 
-    const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
-      try {
-        const params = new URLSearchParams({
-          domain: domain,
-          sort_by: 'name',
-          page: '1',
-          page_size: '3',
-          fuzzy: 'false',
-        });
-
-        const response = await fetch(
-          `${API_ENDPOINTS.search}?${params.toString()}`,
-        );
-        if (!response.ok) throw new Error('Failed to fetch search results');
-        const data = (await response.json()) as SearchResponseType;
-        const res = data.results;
-        return res;
-      } catch (ex) {
-        console.error('Falling back to cached data', ex);
-        const cachedTerms = await getAllTerms();
-        const filtered = cachedTerms.filter((t) => {
-          console.log('Looking for related domain:', term?.domain);
-          return t.domain === term?.domain && t.id !== term.id;
-        });
-        console.log('Cached', cachedTerms);
-        console.log('Cached Related', filtered);
-        setRelatedTerms(filtered);
-        return filtered;
-      }
-    };
-
-    /* eslint-disable react-hooks/exhaustive-deps */
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      const run = async () => {
-        if (id) {
-          await handleSearch();
-          const related = await fetchRelatedTerms(String(term?.domain));
-          setRelatedTerms(related);
-        }
-      };
-      void run();
-    }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      if (!term) return;
-
-      const runSearch = async () => {
-        setIsLoading(true);
         try {
           const res = await fetchTerm();
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          picked = res.items?.[0] ?? null;
+        } catch {
+          const cached = await getAllTerms();
+          picked =
+              cached.find(
+                  (t) => t.term.toLowerCase() === (name ?? "").toLowerCase(),
+              ) ?? null;
+        }
+        //eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setTerm(picked);
+        }
 
-          setTerm(res.results[0]);
-
-          const related = await fetchRelatedTerms(term.domain);
-          setRelatedTerms(related);
-        } catch (error: unknown) {
-          console.error('Search fetch failed:', error);
-        } finally {
+        if (picked) {
+          const related = await fetchRelatedTerms(picked.domain);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (!cancelled) {
+            setRelatedTerms(related.filter((r) => r.id !== picked.id));
+          }
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (!cancelled) {
+            setRelatedTerms([]);
+          }
+        }
+      } finally {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
           setIsLoading(false);
         }
-      };
+      }
+    })();
 
-      void runSearch();
-    }, [term, language, fetchTerm, fetchRelatedTerms]);
+    return () => {
+      cancelled = true;
+    };
+  }, [id, name, language, fetchTerm, fetchRelatedTerms]);
+
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const fetchTerm = async (): Promise<SearchResponseType> => {
+  //   const params = new URLSearchParams({
+  //     query: String(name),
+  //     language: String(language),
+  //     sort_by: 'name',
+  //     page: '1',
+  //     page_size: '100',
+  //     fuzzy: 'false',
+  //   });
+  //   const response = await fetch(
+  //       `${API_ENDPOINTS.search}?${params.toString()}`,
+  //   );
+  //   if (!response.ok) throw new Error('Failed to fetch search results');
+  //
+  //   return (await response.json()) as SearchResponseType;
+  // };
+
+    // // eslint-disable-next-line react-hooks/rules-of-hooks
+    // const handleSearch = useCallback(async () => {
+    //   setIsLoading(true);
+    //   try {
+    //     const res = await fetchTerm();
+    //     console.log("TERM",res.items[0])
+    //     setTerm(res.items[0]);
+    //   } catch (error: unknown) {
+    //     console.error('Falling back to cached data', error);
+    //     const cachedTerms = await getAllTerms();
+    //     const filtered = cachedTerms.filter(
+    //       (term) => term.term.toLowerCase() === name?.toLowerCase(),
+    //     );
+    //     setTerm(filtered[0]);
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // }, []);
+
+    // const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
+    //   try {
+    //     const params = new URLSearchParams({
+    //       domain: domain,
+    //       sort_by: 'name',
+    //       page: '1',
+    //       page_size: '3',
+    //       fuzzy: 'false',
+    //     });
+    //
+    //     const response = await fetch(
+    //       `${API_ENDPOINTS.search}?${params.toString()}`,
+    //     );
+    //     if (!response.ok) throw new Error('Failed to fetch search results');
+    //     const data = (await response.json()) as SearchResponseType;
+    //     const res = data.items;
+    //     return res;
+    //   } catch (ex) {
+    //     console.error('Falling back to cached data', ex);
+    //     const cachedTerms = await getAllTerms();
+    //     const filtered = cachedTerms.filter((t) => {
+    //       console.log('Looking for related domain:', term?.domain);
+    //       return t.domain === term?.domain && t.id !== term.id;
+    //     });
+    //     console.log('Cached', cachedTerms);
+    //     console.log('Cached Related', filtered);
+    //     setRelatedTerms(filtered);
+    //     return filtered;
+    //   }
+    // };
+
+    // /* eslint-disable react-hooks/exhaustive-deps */
+    // // eslint-disable-next-line react-hooks/rules-of-hooks
+    // useEffect(() => {
+    //   const run = async () => {
+    //     if (id) {
+    //       await handleSearch();
+    //       const related = await fetchRelatedTerms(String(term?.domain));
+    //       setRelatedTerms(related);
+    //     }
+    //   };
+    //   void run();
+    // }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
+
+    // // eslint-disable-next-line react-hooks/rules-of-hooks
+    // useEffect(() => {
+    //   if (!term) return;
+    //
+    //   const runSearch = async () => {
+    //     setIsLoading(true);
+    //     try {
+    //       const res = await fetchTerm();
+    //
+    //       setTerm(res.items[0]);
+    //
+    //       const related = await fetchRelatedTerms(term.domain);
+    //       setRelatedTerms(related);
+    //     } catch (error: unknown) {
+    //       console.error('Search fetch failed:', error);
+    //     } finally {
+    //       setIsLoading(false);
+    //     }
+    //   };
+    //
+    //   void runSearch();
+    // }, [term, language, fetchTerm, fetchRelatedTerms]);
     /* eslint-enable react-hooks/exhaustive-deps */
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -265,12 +355,7 @@ export const TermDetailPage: React.FC = () => {
     //   void navigate(-1);
     // };
 
-    const response = await fetch(
-      `${API_ENDPOINTS.search}?${params.toString()}`,
-    );
-    if (!response.ok) throw new Error('Failed to fetch search results');
-    return (await response.json()) as SearchResponseType;
-  };
+
 
   const languageKey = term?.language
     ? term.language.charAt(0).toUpperCase() +
@@ -576,7 +661,7 @@ export const TermDetailPage: React.FC = () => {
                         </DropdownMenuContent>
                       </DropdownMenu>
 
-                      <MoreVertical className="cursor-pointer hover:text-yellow-400" />
+
                     </div>
                   </div>
 
@@ -628,8 +713,9 @@ export const TermDetailPage: React.FC = () => {
                                     {
                                       <Link
                                         to={`/term/${relatedTerms[0].language}/${relatedTerms[0].term}/${relatedTerms[0].id}`}
+                                        className="!text-pink-600"
                                       >
-                                        ${relatedTerms[0].term}
+                                        {relatedTerms[0].term}
                                       </Link>
                                     }
                                   </Badge>
@@ -642,8 +728,9 @@ export const TermDetailPage: React.FC = () => {
                                     {
                                       <Link
                                         to={`/term/${relatedTerms[1].language}/${relatedTerms[1].term}/${relatedTerms[1].id}`}
+                                        className="!text-pink-600"
                                       >
-                                        ${relatedTerms[1].term}
+                                        {relatedTerms[1].term}
                                       </Link>
                                     }
                                   </Badge>
@@ -656,8 +743,9 @@ export const TermDetailPage: React.FC = () => {
                                     {
                                       <Link
                                         to={`/term/${relatedTerms[2].language}/${relatedTerms[2].term}/${relatedTerms[2].id}`}
+                                        className="!text-pink-600"
                                       >
-                                        ${relatedTerms[2].term}
+                                        {relatedTerms[2].term}
                                       </Link>
                                     }
                                   </Badge>
