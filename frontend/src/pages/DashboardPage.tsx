@@ -23,14 +23,20 @@ const AnimatedLanguageCounter: React.FC = () => {
         if (currentCount >= 11) {
           clearInterval(interval);
           // Show the rest of the text after counting is done
-          setTimeout(() => { setShowText(true); }, 300);
+          setTimeout(() => {
+            setShowText(true);
+          }, 300);
         }
       }, 250); // Count every 250ms
 
-      return () => { clearInterval(interval); };
+      return () => {
+        clearInterval(interval);
+      };
     }, 500);
 
-    return () => { clearTimeout(timer); };
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -38,7 +44,10 @@ const AnimatedLanguageCounter: React.FC = () => {
       <span className="connecting-text">Connecting&nbsp;</span>
       <span className="animated-number">{count}</span>
       {showText && (
-        <span className="languages-text fade-in"> South African languages...</span>
+        <span className="languages-text fade-in">
+          {' '}
+          South African languages...
+        </span>
       )}
     </div>
   );
@@ -574,7 +583,9 @@ const DashboardPage: React.FC = () => {
         <div className="top-bar">
           <div className="welcome-section"></div>
           {isLoadingUserData ? (
-            <div className="profile-section">{t('dashboard.loadingProfile')}</div>
+            <div className="profile-section">
+              {t('dashboard.loadingProfile')}
+            </div>
           ) : (
             <div className="profile-section">
               <div className="profile-info">
@@ -617,7 +628,8 @@ const DashboardPage: React.FC = () => {
                       : t('dashboard.userName')}
                   </h3>
                   <p>
-                    {t('dashboard.userEmail')}: {userData ? userData.email || 'N/A' : 'N/A'}
+                    {t('dashboard.userEmail')}:{' '}
+                    {userData ? userData.email || 'N/A' : 'N/A'}
                   </p>
                 </div>
               </div>
@@ -652,22 +664,20 @@ const DashboardPage: React.FC = () => {
             <div className="content-layout">
               <div className="content-side">
                 <AnimatedLanguageCounter />
-                
+
                 {/* South Africa Map */}
                 <div className="map-container">
                   <SouthAfricaMap width={600} height={400} />
                 </div>
-                
+
                 <div className="intro-text">
-                  <p>
-                    {t('dashboard.aboutMarito.intro')}
-                  </p>
+                  <p>{t('dashboard.aboutMarito.intro')}</p>
 
-                  <p>
-                    {t('dashboard.aboutMarito.mission')}
-                  </p>
+                  <p>{t('dashboard.aboutMarito.mission')}</p>
 
-                  <p className="team-credit">{t('dashboard.aboutMarito.teamCredit')}</p>
+                  <p className="team-credit">
+                    {t('dashboard.aboutMarito.teamCredit')}
+                  </p>
                 </div>
 
                 <div className="cta-section">
@@ -704,27 +714,30 @@ const DashboardPage: React.FC = () => {
                     </div>
                   ) : (
                     <div className="terms-grid">
-                      {Array.isArray(randomTerms) && randomTerms.map((term) => (
-                        <div key={term.id} className="term-card">
-                          <div className="term-header">
-                            <h3 className="term-title">{term.term}</h3>
-                            <span className="term-language">
-                              {term.language}
-                            </span>
+                      {Array.isArray(randomTerms) &&
+                        randomTerms.map((term) => (
+                          <div key={term.id} className="term-card">
+                            <div className="term-header">
+                              <h3 className="term-title">{term.term}</h3>
+                              <span className="term-language">
+                                {term.language}
+                              </span>
+                            </div>
+                            <p className="term-definition">{term.definition}</p>
+                            <button
+                              type="button"
+                              className="term-category"
+                              onClick={() => {
+                                handleCategoryClick(term.category);
+                              }}
+                              title={t('dashboard.browseCategoryGlossary', {
+                                category: term.category,
+                              })}
+                            >
+                              {term.category}
+                            </button>
                           </div>
-                          <p className="term-definition">{term.definition}</p>
-                          <button
-                            type="button"
-                            className="term-category"
-                            onClick={() => {
-                              handleCategoryClick(term.category);
-                            }}
-                            title={t('dashboard.browseCategoryGlossary', { category: term.category })}
-                          >
-                            {term.category}
-                          </button>
-                        </div>
-                      ))}
+                        ))}
                       {!Array.isArray(randomTerms) && (
                         <p>{t('dashboard.noTermsAvailable')}</p>
                       )}

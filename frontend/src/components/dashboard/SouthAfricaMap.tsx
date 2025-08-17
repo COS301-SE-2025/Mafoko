@@ -17,84 +17,84 @@ interface SouthAfricaMapProps {
   height?: number | string;
 }
 
-const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({ 
-  className = '', 
+const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
+  className = '',
   style = {},
   width = '100%',
-  height = 700
+  height = 700,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const geometries: ProvinceGeometry[] = [
     {
       properties: {
-        name: "Eastern Cape",
-        language: "isiXhosa",
-        funFact: "Features distinctive click sounds"
-      }
+        name: 'Eastern Cape',
+        language: 'isiXhosa',
+        funFact: 'Features distinctive click sounds',
+      },
     },
     {
       properties: {
-        name: "Limpopo",
-        language: "Sepedi",
-        funFact: "Has eighteen noun classes"
-      }
+        name: 'Limpopo',
+        language: 'Sepedi',
+        funFact: 'Has eighteen noun classes',
+      },
     },
     {
       properties: {
-        name: "KwaZulu-Natal",
-        language: "isiZulu",
-        funFact: "Most spoken home language"
-      }
+        name: 'KwaZulu-Natal',
+        language: 'isiZulu',
+        funFact: 'Most spoken home language',
+      },
     },
     {
       properties: {
-        name: "Western Cape",
-        language: "Afrikaans",
-        funFact: "Evolved from Dutch origins"
-      }
+        name: 'Western Cape',
+        language: 'Afrikaans',
+        funFact: 'Evolved from Dutch origins',
+      },
     },
     {
       properties: {
-        name: "Northern Cape",
-        language: "Afrikaans",
-        funFact: "Shows unique regional variations"
-      }
+        name: 'Northern Cape',
+        language: 'Afrikaans',
+        funFact: 'Shows unique regional variations',
+      },
     },
     {
       properties: {
-        name: "North West",
-        language: "Setswana",
-        funFact: "Official language in Botswana"
-      }
+        name: 'North West',
+        language: 'Setswana',
+        funFact: 'Official language in Botswana',
+      },
     },
     {
       properties: {
-        name: "Free State",
-        language: "Sesotho",
-        funFact: "Famous for praise poems"
-      }
+        name: 'Free State',
+        language: 'Sesotho',
+        funFact: 'Famous for praise poems',
+      },
     },
     {
       properties: {
-        name: "Gauteng",
-        language: "isiZulu",
-        funFact: "Most linguistically diverse province"
-      }
+        name: 'Gauteng',
+        language: 'isiZulu',
+        funFact: 'Most linguistically diverse province',
+      },
     },
     {
       properties: {
-        name: "Mpumalanga",
-        language: "isiSwati",
-        funFact: "Related to isiZulu language"
-      }
-    }
+        name: 'Mpumalanga',
+        language: 'isiSwati',
+        funFact: 'Related to isiZulu language',
+      },
+    },
   ];
 
   // Function to get facts
   const getProvinceFact = (provinceName: string) => {
     let province = geometries.find(
-      geo => geo.properties.name.toLowerCase() === provinceName.toLowerCase()
+      (geo) => geo.properties.name.toLowerCase() === provinceName.toLowerCase(),
     );
 
     if (!province) {
@@ -109,10 +109,14 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
     const computedStyle = getComputedStyle(document.documentElement);
     return {
       bgTheme: computedStyle.getPropertyValue('--bg-theme').trim() || '#f5f5f5',
-      textTheme: computedStyle.getPropertyValue('--text-theme').trim() || '#212431',
-      accentTeal: computedStyle.getPropertyValue('--accent-teal').trim() || '#00ceaf',
-      accentPink: computedStyle.getPropertyValue('--accent-pink').trim() || '#f00a50',
-      secondaryLight: computedStyle.getPropertyValue('--secondary-light').trim() || '#ffffff',
+      textTheme:
+        computedStyle.getPropertyValue('--text-theme').trim() || '#212431',
+      accentTeal:
+        computedStyle.getPropertyValue('--accent-teal').trim() || '#00ceaf',
+      accentPink:
+        computedStyle.getPropertyValue('--accent-pink').trim() || '#f00a50',
+      secondaryLight:
+        computedStyle.getPropertyValue('--secondary-light').trim() || '#ffffff',
     };
   };
 
@@ -122,38 +126,52 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
 
       try {
         const themeColors = getThemeColors();
-        
+
         // Simple data array - let's try the basic format again
         // Debug: Log all available map keys
-        console.log("Map topology:", topology);
-        if (topology && topology.objects && topology.objects.default && topology.objects.default.geometries) {
-          console.log("Available map keys:", topology.objects.default.geometries.map((g: any) => g.properties['hc-key']));
+        console.log('Map topology:', topology);
+        if (
+          topology &&
+          topology.objects &&
+          topology.objects.default &&
+          topology.objects.default.geometries
+        ) {
+          console.log(
+            'Available map keys:',
+            topology.objects.default.geometries.map(
+              (g: any) => g.properties['hc-key'],
+            ),
+          );
         }
-        
+
         // NUCLEAR OPTION: Try every possible key for Gauteng
         const data = [
-          ["za-ec", 1],
-          ["za-np", 1], 
-          ["za-nl", 1],
-          ["za-wc", 1],
-          ["za-nc", 1],
-          ["za-nw", 1],
-          ["za-fs", 1],
-          ["za-gt", 1],  
-          ["za-mp", 1]
+          ['za-ec', 1],
+          ['za-np', 1],
+          ['za-nl', 1],
+          ['za-wc', 1],
+          ['za-nc', 1],
+          ['za-nw', 1],
+          ['za-fs', 1],
+          ['za-gt', 1],
+          ['za-mp', 1],
         ];
 
         // Debug: Find Gauteng geometry
         if (topology && topology.objects && topology.objects.default) {
-          const gautengGeometry = topology.objects.default.geometries.find((g: any) => 
-            g.properties && (
-              g.properties.name === 'Gauteng' || 
-              g.properties['hc-key'] === 'za-gt' ||
-              g.id === 'ZA.GT'
-            )
+          const gautengGeometry = topology.objects.default.geometries.find(
+            (g: any) =>
+              g.properties &&
+              (g.properties.name === 'Gauteng' ||
+                g.properties['hc-key'] === 'za-gt' ||
+                g.id === 'ZA.GT'),
           );
           if (gautengGeometry) {
-            console.log('✅ Gauteng found in topology:', gautengGeometry.properties.name, gautengGeometry.properties['hc-key']);
+            console.log(
+              '✅ Gauteng found in topology:',
+              gautengGeometry.properties.name,
+              gautengGeometry.properties['hc-key'],
+            );
           } else {
             console.log('❌ Gauteng NOT found in topology');
           }
@@ -161,32 +179,33 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
 
         // Create the chart with theme colors
         const chart = (Highcharts as any).mapChart(containerRef.current, {
-          chart: { 
+          chart: {
             map: topology,
             backgroundColor: 'transparent',
-            height: typeof height === 'number' ? height : parseInt(height.toString()),
-            width: typeof width === 'number' ? width : null
+            height:
+              typeof height === 'number' ? height : parseInt(height.toString()),
+            width: typeof width === 'number' ? width : null,
           },
 
-          title: { 
-            text: "", // Removed title text
+          title: {
+            text: '', // Removed title text
             style: {
               fontSize: '20px',
               fontWeight: 'bold',
-              color: themeColors.textTheme
-            }
+              color: themeColors.textTheme,
+            },
           },
 
-          colorAxis: { 
+          colorAxis: {
             min: 0,
             stops: [
               [0, themeColors.accentTeal + '40'],
-              [1, themeColors.accentTeal]
-            ]
+              [1, themeColors.accentTeal],
+            ],
           },
 
           legend: {
-            enabled: false
+            enabled: false,
           },
 
           tooltip: {
@@ -200,12 +219,12 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
               offsetX: 2,
               offsetY: 2,
               opacity: 0.3,
-              width: 4
+              width: 4,
             },
             padding: 0,
             style: {
               fontSize: '14px',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
             },
             outside: false,
             hideDelay: 500,
@@ -261,41 +280,43 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
                   </div>
                 </div>
               `;
-            }
+            },
           },
 
-          series: [{
-            type: 'map',
-            data: data,
-            name: "South African Provinces",
-            states: { 
-              hover: { 
-                color: themeColors.accentPink + '80',
-                borderColor: themeColors.accentPink,
-                borderWidth: 2
-              }
+          series: [
+            {
+              type: 'map',
+              data: data,
+              name: 'South African Provinces',
+              states: {
+                hover: {
+                  color: themeColors.accentPink + '80',
+                  borderColor: themeColors.accentPink,
+                  borderWidth: 2,
+                },
+              },
+              dataLabels: {
+                enabled: true,
+                format: '{point.name}',
+                style: {
+                  color: themeColors.textTheme,
+                  fontWeight: '600',
+                  fontSize: '12px',
+                  textOutline: `2px contrast`,
+                },
+              },
+              colorByPoint: false,
+              color: themeColors.accentTeal + '60',
+              borderColor: themeColors.accentTeal,
+              borderWidth: 2,
+              allAreas: true, // Show ALL areas, even without data
+              nullColor: themeColors.accentTeal + '60', // Same color for unmapped areas
             },
-            dataLabels: { 
-              enabled: true, 
-              format: "{point.name}",
-              style: {
-                color: themeColors.textTheme,
-                fontWeight: '600',
-                fontSize: '12px',
-                textOutline: `2px contrast`
-              }
-            },
-            colorByPoint: false,
-            color: themeColors.accentTeal + '60',
-            borderColor: themeColors.accentTeal,
-            borderWidth: 2,
-            allAreas: true,  // Show ALL areas, even without data
-            nullColor: themeColors.accentTeal + '60'  // Same color for unmapped areas
-          }],
+          ],
 
           credits: {
-            enabled: false
-          }
+            enabled: false,
+          },
         });
 
         (containerRef.current as any).chartInstance = chart;
@@ -305,43 +326,49 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
           if (chart && chart.series && chart.series[0]) {
             const series = chart.series[0];
             console.log('Map series points:', series.points);
-            
+
             // Find all points and log their properties
             series.points.forEach((point: any, index: number) => {
               console.log(`Point ${index}:`, {
                 name: point.name,
                 key: point.key,
                 id: point.id,
-                properties: point.properties
+                properties: point.properties,
               });
-              
+
               // If this is Gauteng, force it to be colored and ensure tooltip works
-              if (point.name === 'Gauteng' || point.key === 'za-gt' || point.id === 'ZA.GT') {
-                console.log('FOUND GAUTENG POINT! Forcing color and properties...');
+              if (
+                point.name === 'Gauteng' ||
+                point.key === 'za-gt' ||
+                point.id === 'ZA.GT'
+              ) {
+                console.log(
+                  'FOUND GAUTENG POINT! Forcing color and properties...',
+                );
                 point.update({
                   color: themeColors.accentTeal + '80',
                   borderColor: themeColors.accentTeal,
                   borderWidth: 3,
-                  name: 'Gauteng'  // Ensure the name is correct for tooltip
+                  name: 'Gauteng', // Ensure the name is correct for tooltip
                 });
-                
+
                 // Also manually set the properties for the tooltip
                 if (point.properties) {
                   point.properties.language = 'isiZulu';
-                  point.properties.funFact = 'Most linguistically diverse province';
+                  point.properties.funFact =
+                    'Most linguistically diverse province';
                 } else {
                   point.properties = {
                     language: 'isiZulu',
-                    funFact: 'Most linguistically diverse province'
+                    funFact: 'Most linguistically diverse province',
                   };
                 }
               }
             });
           }
         }, 1000);
-
       } catch (error) {
-        console.error("Error initializing map:", error);
+        console.error('Error initializing map:', error);
         if (containerRef.current) {
           const themeColors = getThemeColors();
           containerRef.current.innerHTML = `
@@ -366,7 +393,7 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
   }, [width, height]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`sa-map-container ${className}`}
       style={{
@@ -375,7 +402,7 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
         minWidth: '600px', // TODO: Adjust map width here
         maxWidth: '100%',
         margin: '0 auto',
-        ...style
+        ...style,
       }}
     />
   );
