@@ -8,6 +8,42 @@ import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
+// Animated Language Counter Component
+const AnimatedLanguageCounter: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const [showText, setShowText] = useState(false);
+
+  useEffect(() => {
+    // Start counting animation after a short delay
+    const timer = setTimeout(() => {
+      let currentCount = 0;
+      const interval = setInterval(() => {
+        currentCount += 1;
+        setCount(currentCount);
+        if (currentCount >= 11) {
+          clearInterval(interval);
+          // Show the rest of the text after counting is done
+          setTimeout(() => setShowText(true), 300);
+        }
+      }, 250); // Count every 250ms
+
+      return () => clearInterval(interval);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="animated-title">
+      <span className="connecting-text">Connecting </span>
+      <span className="animated-number">{count}</span>
+      {showText && (
+        <span className="languages-text fade-in"> South African languages...</span>
+      )}
+    </div>
+  );
+};
+
 interface RandomTerm {
   id: string;
   term: string;
@@ -538,7 +574,7 @@ const DashboardPage: React.FC = () => {
         <div className="top-bar">
           <div className="welcome-section"></div>
           {isLoadingUserData ? (
-            <div className="profile-section">Loading profile...</div>
+            <div className="profile-section">{t('dashboard.loadingProfile')}</div>
           ) : (
             <div className="profile-section">
               <div className="profile-info">
@@ -574,7 +610,7 @@ const DashboardPage: React.FC = () => {
                     onClick={() => {
                       void navigate('/profile');
                     }}
-                    title="Go to profile page"
+                    title={t('dashboard.goToProfile')}
                   >
                     {userData
                       ? `${userData.firstName} ${userData.lastName}`
@@ -615,8 +651,7 @@ const DashboardPage: React.FC = () => {
           <div className="content-wrapper">
             <div className="content-layout">
               <div className="content-side">
-                <h1 className="title">Unite Through Words</h1>
-                <br />
+                <AnimatedLanguageCounter />
                 
                 {/* South Africa Map */}
                 <div className="map-container">
@@ -625,29 +660,14 @@ const DashboardPage: React.FC = () => {
                 
                 <div className="intro-text">
                   <p>
-                    The term 'Marito' originates from Xitsonga, translating to
-                    'words' or 'names'. This is a progressive web application
-                    that bridges the gap between South Africa's rich linguistic
-                    heritage and modern digital accessibility. Language
-                    enthusiasts, NLP researchers, and linguists can use Marito
-                    as a unified platform to explore, contribute to, and
-                    preserve multilingual glossaries, dictionaries, and
-                    terminology banks across 11 of South Africa's official
-                    languages.
+                    {t('dashboard.aboutMarito.intro')}
                   </p>
 
                   <p>
-                    Marito works seamlessly both offline and online, empowering
-                    communities to access comprehensive language resources,
-                    submit feedback, and collaborate on robust lexicons for
-                    low-resource languages. This platform is part of an ongoing
-                    initiative by DSFSI (Data Science for Social Impact) at the
-                    University of Pretoria to democratize linguistic resources
-                    and advance natural language processing research for African
-                    languages.
+                    {t('dashboard.aboutMarito.mission')}
                   </p>
 
-                  <p className="team-credit">Proudly developed by Velox</p>
+                  <p className="team-credit">{t('dashboard.aboutMarito.teamCredit')}</p>
                 </div>
 
                 <div className="cta-section">
@@ -657,7 +677,7 @@ const DashboardPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Learn more about DSFSI
+                    {t('dashboard.aboutMarito.learnMoreDSFSI')}
                   </a>
                 </div>
               </div>
@@ -666,13 +686,13 @@ const DashboardPage: React.FC = () => {
               <div className="sidebar-content">
                 <div className="random-terms-section">
                   <div className="section-header">
-                    <h2>Discover Random Terms</h2>
+                    <h2>{t('dashboard.discoverRandomTerms')}</h2>
                     <button
                       type="button"
                       className="refresh-terms-btn"
                       onClick={() => void getRandomTerms()}
                       disabled={isLoadingTerms}
-                      title="Get new random terms"
+                      title={t('dashboard.getNewTerms')}
                     >
                       {isLoadingTerms ? '⟳' : '↻'}
                     </button>
@@ -680,7 +700,7 @@ const DashboardPage: React.FC = () => {
 
                   {isLoadingTerms ? (
                     <div className="terms-loading">
-                      <p>Loading terms...</p>
+                      <p>{t('dashboard.loadingTerms')}</p>
                     </div>
                   ) : (
                     <div className="terms-grid">
@@ -699,14 +719,14 @@ const DashboardPage: React.FC = () => {
                             onClick={() => {
                               handleCategoryClick(term.category);
                             }}
-                            title={`Browse ${term.category} glossary`}
+                            title={t('dashboard.browseCategoryGlossary', { category: term.category })}
                           >
                             {term.category}
                           </button>
                         </div>
                       ))}
                       {!Array.isArray(randomTerms) && (
-                        <p>No terms available</p>
+                        <p>{t('dashboard.noTermsAvailable')}</p>
                       )}
                     </div>
                   )}

@@ -153,7 +153,6 @@
     "linguistApplication": "Linguist Application",
     "dashboard": "Dashboard",
     "help": "Help",
-    "settings": "Settings",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode"
   },
@@ -176,7 +175,21 @@
     "viewAll": "View All",
     "communityActivity": "Community Activity",
     "hideActivity": "Hide Activity",
-    "viewAllActivity": "View All Activity"
+    "viewAllActivity": "View All Activity",
+    "title": "Unite Through Words",
+    "loadingProfile": "Loading profile...",
+    "goToProfile": "Go to profile page",
+    "discoverRandomTerms": "Discover Random Terms",
+    "getNewTerms": "Get new random terms",
+    "loadingTerms": "Loading terms...",
+    "noTermsAvailable": "No terms available",
+    "browseCategoryGlossary": "Browse {{category}} glossary",
+    "aboutMarito": {
+      "intro": "The term 'Marito' originates from Xitsonga, translating to 'words' or 'names'. This is a progressive web application that bridges the gap between South Africa's rich linguistic heritage and modern digital accessibility. Language enthusiasts, NLP researchers, and linguists can use Marito as a unified platform to explore, contribute to, and preserve multilingual glossaries, dictionaries, and terminology banks across 11 of South Africa's official languages.",
+      "mission": "Marito works seamlessly both offline and online, empowering communities to access comprehensive language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the University of Pretoria to democratize linguistic resources and advance natural language processing research for African languages.",
+      "teamCredit": "Proudly developed by Velox",
+      "learnMoreDSFSI": "Learn more about DSFSI"
+    }
   },
 
   "glossaryPage": {

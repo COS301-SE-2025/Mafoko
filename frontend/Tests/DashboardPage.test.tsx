@@ -37,7 +37,17 @@ vi.mock('react-i18next', () => ({
         'dashboard.viewAll': 'View All',
         'dashboard.communityActivity': 'Community Activity',
         'dashboard.hideActivity': 'Hide Activity',
-        'dashboard.viewAllActivity': 'View All Activity'
+        'dashboard.viewAllActivity': 'View All Activity',
+        'dashboard.loadingProfile': 'Loading profile...',
+        'dashboard.discoverRandomTerms': 'Discover Random Terms',
+        'dashboard.getNewTerms': 'Get New Terms',
+        'dashboard.loadingTerms': 'Loading terms...',
+        'dashboard.browseCategoryGlossary': 'Browse category in glossary',
+        'dashboard.goToProfile': 'Go to profile',
+        'dashboard.aboutMarito.intro': 'Welcome to Marito, your gateway to South African languages.',
+        'dashboard.aboutMarito.mission': 'Our mission is to bridge language barriers and celebrate linguistic diversity.',
+        'dashboard.aboutMarito.teamCredit': 'Proudly developed by our team.',
+        'dashboard.aboutMarito.learnMoreDSFSI': 'Learn More About DSFSI'
       };
       return translations[key] || key;
     },
@@ -130,6 +140,7 @@ Object.defineProperty(document.documentElement, 'removeAttribute', {
 describe('DashboardPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
     localStorageMock.getItem.mockReturnValue(null);
     sessionStorageMock.getItem.mockReturnValue(null);
     
@@ -190,6 +201,8 @@ describe('DashboardPage', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.clearAllTimers();
+    vi.useRealTimers();
   });
 
   const renderDashboardPage = () => {
@@ -202,11 +215,15 @@ describe('DashboardPage', () => {
 
   describe('Component Rendering', () => {
     it('should render the dashboard page correctly', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       renderDashboardPage();
       
       await waitFor(() => {
-        expect(screen.getByText('Unite Through Words')).toBeInTheDocument();
+        expect(screen.getByText('Connecting')).toBeInTheDocument();
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
     it('should render left navigation on desktop', () => {
@@ -233,7 +250,7 @@ describe('DashboardPage', () => {
     it('should display the intro text about Marito', () => {
       renderDashboardPage();
       
-      expect(screen.getByText(/The term 'Marito' originates from Xitsonga/)).toBeInTheDocument();
+      expect(screen.getByText('Welcome to Marito, your gateway to South African languages.')).toBeInTheDocument();
     });
   });
 
@@ -245,15 +262,21 @@ describe('DashboardPage', () => {
     });
 
     it('should display user profile information after loading', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       renderDashboardPage();
       
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
         expect(screen.getByText(/john.doe@example.com/)).toBeInTheDocument();
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
     it('should display user initials when no profile picture is available', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       // Ensure we have a valid token
       localStorageMock.getItem.mockImplementation((key) => {
         if (key === 'accessToken') return 'valid-token';
@@ -292,9 +315,13 @@ describe('DashboardPage', () => {
       await waitFor(() => {
         expect(screen.getByText('JD')).toBeInTheDocument();
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
     it('should navigate to profile page when clicking on username', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       renderDashboardPage();
       
       await waitFor(() => {
@@ -303,6 +330,8 @@ describe('DashboardPage', () => {
       });
       
       expect(mockNavigate).toHaveBeenCalledWith('/profile');
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
   });
 
@@ -316,11 +345,13 @@ describe('DashboardPage', () => {
     it('should display refresh button for random terms', () => {
       renderDashboardPage();
       
-      const refreshButton = screen.getByTitle('Get new random terms');
+      const refreshButton = screen.getByTitle('Get New Terms');
       expect(refreshButton).toBeInTheDocument();
     });
 
     it('should fetch new random terms when refresh button is clicked', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       // Mock user profile API first (called on mount)
       (global.fetch as any)
         .mockResolvedValueOnce({
@@ -369,7 +400,7 @@ describe('DashboardPage', () => {
         expect(screen.getByText('Ubuntu')).toBeInTheDocument();
       });
       
-      const refreshButton = screen.getByTitle('Get new random terms');
+      const refreshButton = screen.getByTitle('Get New Terms');
       fireEvent.click(refreshButton);
       
       await waitFor(() => {
@@ -377,12 +408,16 @@ describe('DashboardPage', () => {
           expect.stringContaining('/api/v1/glossary/random')
         );
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
   });
 
   describe('API Integration', () => {
     it('should fetch user profile data on component mount', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       localStorageMock.getItem.mockReturnValue('valid-token');
       
       renderDashboardPage();
@@ -397,9 +432,13 @@ describe('DashboardPage', () => {
           })
         );
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
     it('should handle API errors gracefully', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       // Mock random terms API success, but profile API error
       (global.fetch as any)
         .mockResolvedValueOnce({
@@ -415,9 +454,13 @@ describe('DashboardPage', () => {
         // Should show loading state since profile API failed
         expect(screen.getByText('Loading profile...')).toBeInTheDocument();
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
     it('should redirect to login when no token is available', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       localStorageMock.getItem.mockReturnValue(null);
       
       renderDashboardPage();
@@ -425,6 +468,8 @@ describe('DashboardPage', () => {
       await waitFor(() => {
         expect(mockNavigate).toHaveBeenCalledWith('/login');
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
   });
 
@@ -477,6 +522,8 @@ describe('DashboardPage', () => {
     });
 
     it('should fetch from API when no cached data is available', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       localStorageMock.getItem.mockImplementation((key) => {
         if (key === 'accessToken') return 'valid-token';
         return null; // No cached userData
@@ -494,6 +541,8 @@ describe('DashboardPage', () => {
           })
         );
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
   });
 
@@ -550,6 +599,8 @@ describe('DashboardPage', () => {
 
   describe('Error Handling', () => {
     it('should handle profile picture loading errors', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       renderDashboardPage();
       
       await waitFor(() => {
@@ -560,9 +611,13 @@ describe('DashboardPage', () => {
           expect(screen.getByText('JD')).toBeInTheDocument();
         }
       });
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
 
     it('should handle network errors gracefully', async () => {
+      vi.useRealTimers(); // Use real timers for this async test
+      
       // Mock random terms API success, but profile API error
       (global.fetch as any)
         .mockResolvedValueOnce({
@@ -576,6 +631,8 @@ describe('DashboardPage', () => {
       
       // Should not crash and show fallback content
       expect(screen.getByText('Loading profile...')).toBeInTheDocument();
+      
+      vi.useFakeTimers(); // Switch back to fake timers
     });
   });
 });

@@ -105,6 +105,7 @@
     "welcomeBack": "Wamkelekile kwakhona",
     "userName": "Igama Lomsebenzisi",
     "userId": "Inombolo Yomsebenzisi",
+    "userEmail": "I-imeyile",
     "quickActions": "Izenzo Ezikhawulezayo",
     "searchNow": "Khangela Ngoku",
     "searchDescription": "Khangela amagama kwiilwimi ezininzi",
@@ -117,7 +118,21 @@
     "viewAll": "Jonga Konke",
     "communityActivity": "Imisebenzi Yoluntu",
     "hideActivity": "Fihla Imisebenzi",
-    "viewAllActivity": "Jonga Yonke Imisebenzi"
+    "viewAllActivity": "Jonga Yonke Imisebenzi",
+    "title": "Manyanani Ngamagama",
+    "loadingProfile": "Iyalayisha iprofayile...",
+    "goToProfile": "Yiya kwiphepha leprofayile",
+    "discoverRandomTerms": "Fumana Amagama Angacwangciswanga",
+    "getNewTerms": "Fumana amagama amatsha angacwangciswanga",
+    "loadingTerms": "Iyalayisha amagama...",
+    "noTermsAvailable": "Akukho magama afumanekayo",
+    "browseCategoryGlossary": "Khangela {{category}} uluhlu lwamagama",
+    "aboutMarito": {
+      "intro": "Igama elithi 'Marito' livela ku-Xitsonga, elithetha 'amagama' okanye 'amagama'. Le yinkqubo yewebhu ehambele phambili edibanisa umsantsa phakathi kolifa oltyebileyo lolwimi loMzantsi Afrika kunye nokufikeleleka kwedijithali yanamhlanje. Abathandi beelwimi, abaphandi be-NLP, kunye neengcali zeelwimi banokusebenzisa iMarito njengeqonga elimanyeneyo ukuze baphonononge, bafake isandla, kwaye bagcine izichazi-magama ezininzi, izichazi-magama, kunye neebhanki zamagama kwiilwimi ezili-11 ezisemthethweni zoMzantsi Afrika.",
+      "mission": "IMarito isebenza ngokugqibeleleyo kokubini kwi-intanethi nangaphandle kwe-intanethi, inika amandla uluntu ukuba lufumane izixhobo zeelwimi ezipheleleyo, lunikeze ingxelo, kwaye lusebenzisane ekwakheni ii-lexicons ezomeleleyo kwiilwimi ezinezixhobo ezincinane. Le qonga yinxalenye yephulo eliqhubekayo le-DSFSI (iNzululwazi yeDatha yeMpembelelo yeNtlalo) kwiYunivesithi yasePretoria ukwenza izixhobo zeelwimi zifumaneke luluntu lonke kwaye zikhuthaze uphando lokusetyenziswa kolwimi lwendalo kwiilwimi zaseAfrika.",
+      "teamCredit": "Yakhelwe ngokuzingca yi-Velox",
+      "learnMoreDSFSI": "Funda ngakumbi nge-DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Uluhlu Lwamagama Ngeelwimi Ezininzi",

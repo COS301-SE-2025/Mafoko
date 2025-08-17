@@ -160,7 +160,7 @@ $card-dark: #3a4050;
 /* ===== MAIN CONTENT STYLES ===== */
 .main-content {
   margin-left: 280px;
-  padding: 40px;
+  padding: 0 40px;
   width: calc(100% - 280px);
   height: 100vh;
   overflow-y: auto;
@@ -180,14 +180,85 @@ $card-dark: #3a4050;
       .content-side {
         flex: 2;
         padding-right: 2rem;
+        padding-top: -20px;
 
         .title {
           font-size: 2.5rem;
           font-weight: 800;
-          margin-bottom: 2rem;
+          margin-bottom: 0;
+          margin-top: -60px;
           letter-spacing: -0.02em;
           color: var(--text-color);
           text-align: left;
+          position: relative;
+          top: -20px;
+        }
+
+        .animated-title {
+          font-size: 3.3rem;
+          font-weight: 800;
+          margin-bottom: 0;
+          margin-top: -60px;
+          letter-spacing: -0.02em;
+          color: var(--text-color);
+          text-align: center;
+          position: relative;
+          top: -20px;
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          .connecting-text {
+            color: var(--text-color);
+            margin-right: 0.3rem;
+            font-size: 1.1em;
+          }
+
+          .animated-number {
+            background: linear-gradient(45deg, #f00a50, #00ceaf, #f2d001);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 2s ease-in-out infinite, numberPulse 0.5s ease-in-out;
+            font-weight: 900;
+            font-size: 1.2em;
+            margin-right: 0.3rem;
+          }
+
+          .languages-text {
+            color: var(--text-color);
+            opacity: 0;
+            font-size: 1.1em;
+          }
+
+          .fade-in {
+            animation: fadeInText 0.8s ease-in-out forwards;
+          }
+        }
+
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes numberPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInText {
+          from { 
+            opacity: 0; 
+            transform: translateY(10px);
+          }
+          to { 
+            opacity: 1; 
+            transform: translateY(0);
+          }
         }
 
         .map-container {
