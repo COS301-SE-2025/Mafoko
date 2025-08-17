@@ -35,7 +35,7 @@ const AnimatedLanguageCounter: React.FC = () => {
 
   return (
     <div className="animated-title">
-      <span className="connecting-text">Connecting </span>
+      <span className="connecting-text">Connecting&nbsp;</span>
       <span className="animated-number">{count}</span>
       {showText && (
         <span className="languages-text fade-in"> South African languages...</span>

@@ -211,7 +211,6 @@ $card-dark: #3a4050;
 
           .connecting-text {
             color: var(--text-color);
-            margin-right: 0.3rem;
             font-size: 1.1em;
           }
 
@@ -266,8 +265,6 @@ $card-dark: #3a4050;
           min-height: 300px;
           margin: 2rem 0;
           border-radius: 12px;
-          background-color: var(--bg-card);
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .intro-text {
