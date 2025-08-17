@@ -105,6 +105,7 @@
     "welcomeBack": "O kgutlile hape",
     "userName": "Lebitso la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
+    "userEmail": "Imeile",
     "quickActions": "Diketso tse Potlakileng",
     "searchNow": "Batla Hona Jwale",
     "searchDescription": "Batla mareo ka dipuo tse ngata",
@@ -117,7 +118,21 @@
     "viewAll": "Bona Kaofela",
     "communityActivity": "Mesebetsi ya Setjhaba",
     "hideActivity": "Pata Mesebetsi",
-    "viewAllActivity": "Bona Mesebetsi Kaofela"
+    "viewAllActivity": "Bona Mesebetsi Kaofela",
+    "title": "Kopaneng ka Mantswe",
+    "loadingProfile": "E laeta profaele...",
+    "goToProfile": "Eya lenaneo la profaele",
+    "discoverRandomTerms": "Fumana Mantswe a sa Hlophiswang",
+    "getNewTerms": "Fumana mantswe a matjha a sa hlophiswang",
+    "loadingTerms": "E laeta mantswe...",
+    "noTermsAvailable": "Ha ho mantswe a fumanehang",
+    "browseCategoryGlossary": "Sheba {{category}} lenane la mantswe",
+    "aboutMarito": {
+      "intro": "Lentswe 'Marito' le tswa ho Xitsonga, le bolela 'mantswe' kapa 'mabitso'. Ena ke sesebeliswa sa webu se tsoelang pele se kopanyang sekgeo se mahareng sa boholo ba puo ba Afrika Borwa le phihlello ya sejwale-jwale ya dijithale. Barati ba dipuo, bafuputsi ba NLP, le ditsebi tsa dipuo ba ka sebedisa Marito jwalo ka sethala se kopaneng ho fuputsa, ho kenya letsoho, le ho boloka dinane tsa mantswe a dipuo tse ngata, dipukuntsu, le mabaka a mantswe ho dipuo tse 11 tse semmuso tsa Afrika Borwa.",
+      "mission": "Marito e sebetsa hantle kokubili inthaneteng le kantle ho inthanete, e nolofalletsa setjhaba ho fumana disebediswa tse felletseng tsa dipuo, ho fana ka maikutlo, le ho sebedisana ho haheng di-lexicons tse tiileng bakeng sa dipuo tse nang le disebediswa tse fokolang. Sethala sena ke karolo ya mosebetsi o tswellang o etswang ke DSFSI (Data Science for Social Impact) Yunibesithing ya Pretoria ho etsa hore disebediswa tsa dipuo di fumanehe setjhabeng sohle le ho tsoela pele diphuputso tsa ho sebetsana le puo ya tlhaho bakeng sa dipuo tsa Afrika.",
+      "teamCredit": "E hahilwe ka motlotlo ke Velox",
+      "learnMoreDSFSI": "Ithute haholwanyane ka DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Lenane la Mantswe a Dipuo tse Ngata",
