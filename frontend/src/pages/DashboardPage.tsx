@@ -7,6 +7,14 @@ import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
+interface RandomTerm {
+  id: string;
+  term: string;
+  definition: string;
+  language: string;
+  category: string;
+}
+
 interface UserProfileApiResponse {
   id: string;
   first_name: string;
@@ -31,6 +39,88 @@ interface Letter {
   speed: number;
 }
 
+// Mock data for random terms
+const MOCK_TERMS: RandomTerm[] = [
+  {
+    id: '1',
+    term: 'Ubuntu',
+    definition:
+      'A philosophy emphasizing the interconnectedness of humanity - "I am because we are"',
+    language: 'isiZulu',
+    category: 'Philosophy',
+  },
+  {
+    id: '2',
+    term: 'Lekgotla',
+    definition:
+      'A traditional meeting or gathering place where important decisions are made',
+    language: 'Sesotho',
+    category: 'Culture',
+  },
+  {
+    id: '3',
+    term: 'Vukuzenzele',
+    definition:
+      'Wake up and do it for yourself - a call for self-reliance and empowerment',
+    language: 'isiZulu',
+    category: 'Motivation',
+  },
+  {
+    id: '4',
+    term: 'Khongolose',
+    definition: 'To protect, preserve, or take care of something precious',
+    language: 'isiXhosa',
+    category: 'Action',
+  },
+  {
+    id: '5',
+    term: 'Sawubona',
+    definition:
+      'A greeting meaning "I see you" - acknowledging the whole person',
+    language: 'isiZulu',
+    category: 'Greeting',
+  },
+  {
+    id: '6',
+    term: 'Thokoza',
+    definition: 'An expression of gratitude, praise, or acknowledgment',
+    language: 'isiZulu',
+    category: 'Expression',
+  },
+  {
+    id: '7',
+    term: 'Indaba',
+    definition:
+      'A meeting, discussion, or conference to address important matters',
+    language: 'isiZulu',
+    category: 'Communication',
+  },
+  {
+    id: '8',
+    term: 'Bophelo',
+    definition:
+      'Life in its fullest sense - encompassing vitality and existence',
+    language: 'Sesotho',
+    category: 'Life',
+  },
+  {
+    id: '9',
+    term: 'Harambee',
+    definition:
+      'Let us all pull together - a call for collective effort and unity',
+    language: 'Swahili',
+    category: 'Unity',
+  },
+  {
+    id: '10',
+    term: 'Mamlambo',
+    definition:
+      'River goddess in Zulu mythology, associated with prosperity and fortune',
+    language: 'isiZulu',
+    category: 'Mythology',
+  },
+];
+
 const DashboardPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
 
@@ -39,6 +129,10 @@ const DashboardPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('dashboard');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [letters, setLetters] = useState<Letter[]>([]);
+
+  // Random terms state
+  const [randomTerms, setRandomTerms] = useState<RandomTerm[]>([]);
+  const [isLoadingTerms, setIsLoadingTerms] = useState(false);
 
   const colors = useMemo(
     () => ['#00CEAF', '#212431', '#F7074D', '#F2D001'],
@@ -53,6 +147,46 @@ const DashboardPage: React.FC = () => {
     null,
   );
   const [loadingProfilePicture, setLoadingProfilePicture] = useState(false);
+
+  // Function to get random terms from API
+  const getRandomTerms = useCallback(async () => {
+    setIsLoadingTerms(true);
+
+    try {
+      const response = await fetch(`${API_ENDPOINTS.glossaryRandom}?count=3`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch random terms');
+      }
+
+      const data = (await response.json()) as RandomTerm[];
+      setRandomTerms(data);
+    } catch (error) {
+      console.error('Error fetching random terms:', error);
+      // Fallback to mock data if API fails
+      const shuffled = [...MOCK_TERMS].sort(() => Math.random() - 0.5);
+      setRandomTerms(shuffled.slice(0, 3));
+    } finally {
+      setIsLoadingTerms(false);
+    }
+  }, []);
+
+  // Function to handle category click
+  const handleCategoryClick = useCallback(
+    (categoryName: string) => {
+      console.log('Navigating to glossary with category:', categoryName);
+
+      // Navigate to the dynamic glossary route
+      // Convert category name to URL-friendly format (lowercase, spaces to hyphens)
+      const urlFriendlyCategory = categoryName
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-') // Remove duplicate hyphens
+        .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+      void navigate(`/glossary/${urlFriendlyCategory}`);
+    },
+    [navigate],
+  );
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -149,6 +283,11 @@ const DashboardPage: React.FC = () => {
     // Fetch user data
     void fetchAndSetUserData().catch(console.error);
   }, [navigate]);
+
+  // Load random terms on component mount
+  useEffect(() => {
+    void getRandomTerms();
+  }, [getRandomTerms]);
 
   // Load profile picture for a specific user
   const loadProfilePictureForUser = async (user: UserData) => {
@@ -511,6 +650,54 @@ const DashboardPage: React.FC = () => {
                   >
                     Learn more about DSFSI
                   </a>
+                </div>
+              </div>
+
+              {/* Random Terms Section - Right Side */}
+              <div className="sidebar-content">
+                <div className="random-terms-section">
+                  <div className="section-header">
+                    <h2>Discover Random Terms</h2>
+                    <button
+                      type="button"
+                      className="refresh-terms-btn"
+                      onClick={() => void getRandomTerms()}
+                      disabled={isLoadingTerms}
+                      title="Get new random terms"
+                    >
+                      {isLoadingTerms ? '⟳' : '↻'}
+                    </button>
+                  </div>
+
+                  {isLoadingTerms ? (
+                    <div className="terms-loading">
+                      <p>Loading terms...</p>
+                    </div>
+                  ) : (
+                    <div className="terms-grid">
+                      {randomTerms.map((term) => (
+                        <div key={term.id} className="term-card">
+                          <div className="term-header">
+                            <h3 className="term-title">{term.term}</h3>
+                            <span className="term-language">
+                              {term.language}
+                            </span>
+                          </div>
+                          <p className="term-definition">{term.definition}</p>
+                          <button
+                            type="button"
+                            className="term-category"
+                            onClick={() => {
+                              handleCategoryClick(term.category);
+                            }}
+                            title={`Browse ${term.category} glossary`}
+                          >
+                            {term.category}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

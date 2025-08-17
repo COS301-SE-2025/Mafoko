@@ -71,6 +71,7 @@ function App() {
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<NewGlossary />} />
+        <Route path="/glossary/:category" element={<NewGlossary />} />
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
         <Route
