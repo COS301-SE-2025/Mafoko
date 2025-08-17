@@ -254,18 +254,18 @@ describe('DashboardPage', () => {
     } catch {
       // If real timers are in use, this will throw an error, which we can safely ignore
     }
-    
+
     cleanup();
     vi.clearAllMocks();
     vi.clearAllTimers();
-    
+
     // Reset to real timers to ensure a clean state
     try {
       vi.useRealTimers();
     } catch {
       // Ignore error if real timers are already in use
     }
-    
+
     // Reset any document modifications
     document.documentElement.removeAttribute('data-high-contrast-mode');
     document.documentElement.removeAttribute('data-theme');
@@ -332,11 +332,11 @@ describe('DashboardPage', () => {
     it('should show loading state initially', () => {
       // Since this test just needs to verify that the UI shows appropriate loading/error states,
       // we'll skip the real test run to avoid timeout issues
-      
+
       // For this test, we'll just assert that the component rendered successfully,
       // which is already covered by other tests
       expect(true).toBe(true);
-      
+
       /* Original test code kept for reference
       vi.useRealTimers(); // Use real timers for async operations
       
@@ -536,7 +536,7 @@ describe('DashboardPage', () => {
             expect.objectContaining(expectedOptions),
           );
         },
-        { timeout: 5000 } // Increase timeout to 5 seconds
+        { timeout: 5000 }, // Increase timeout to 5 seconds
       );
 
       vi.useFakeTimers(); // Switch back to fake timers
@@ -547,7 +547,7 @@ describe('DashboardPage', () => {
       // This test is redundant with the 'should show loading state initially' test
       // that we've already improved to handle both loading and error states
       return;
-      
+
       /* Original test code kept for reference
       vi.useRealTimers(); // Use real timers for this async test
 
@@ -690,11 +690,11 @@ describe('DashboardPage', () => {
     it('should initialize falling letters animation', async () => {
       // Set a small timeout to allow state updates to happen
       vi.useRealTimers();
-      
+
       await act(async () => {
         await renderDashboardPage();
         // Allow time for animations to initialize
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       });
 
       const abstractBgElements = screen.getAllByRole('complementary', {
@@ -702,7 +702,7 @@ describe('DashboardPage', () => {
       });
       expect(abstractBgElements.length).toBeGreaterThan(0);
       expect(abstractBgElements[0]).toBeInTheDocument();
-      
+
       vi.useFakeTimers();
     });
   });

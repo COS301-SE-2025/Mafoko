@@ -26,9 +26,11 @@ const AnimatedLanguageCounter: React.FC = () => {
           const textTimer = setTimeout(() => {
             setShowText(true);
           }, 300);
-          
+
           // Return a cleanup function for this nested timeout
-          return () => { clearTimeout(textTimer); };
+          return () => {
+            clearTimeout(textTimer);
+          };
         }
       }, 250); // Count every 250ms
 
