@@ -23,14 +23,14 @@ const AnimatedLanguageCounter: React.FC = () => {
         if (currentCount >= 11) {
           clearInterval(interval);
           // Show the rest of the text after counting is done
-          setTimeout(() => setShowText(true), 300);
+          setTimeout(() => { setShowText(true); }, 300);
         }
       }, 250); // Count every 250ms
 
-      return () => clearInterval(interval);
+      return () => { clearInterval(interval); };
     }, 500);
 
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); };
   }, []);
 
   return (

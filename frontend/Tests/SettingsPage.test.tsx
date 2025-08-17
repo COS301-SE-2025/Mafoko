@@ -189,7 +189,9 @@ describe('SettingsPage', () => {
       const profileSection = screen.getByText('Profile').closest('.settings-section');
       expect(profileSection).toBeInTheDocument();
       
-      fireEvent.click(profileSection!);
+      if (profileSection) {
+        fireEvent.click(profileSection);
+      }
       
       expect(mockNavigate).toHaveBeenCalledWith('/profile');
     });
@@ -199,7 +201,7 @@ describe('SettingsPage', () => {
     it('should change language when dropdown value changes', async () => {
       renderSettingsPage();
       
-      const languageSelect = screen.getByLabelText('Select Language') as HTMLSelectElement;
+      const languageSelect = screen.getByLabelText('Select Language');
       
       fireEvent.change(languageSelect, { target: { value: 'zu' } });
       
@@ -237,7 +239,7 @@ describe('SettingsPage', () => {
     it('should render text size slider with correct default value', () => {
       renderSettingsPage();
       
-      const textSizeSlider = screen.getByDisplayValue('16') as HTMLInputElement;
+      const textSizeSlider = screen.getByDisplayValue('16');
       expect(textSizeSlider).toBeInTheDocument();
       expect(textSizeSlider.type).toBe('range');
       expect(textSizeSlider.min).toBe('12');
@@ -247,7 +249,7 @@ describe('SettingsPage', () => {
     it('should update text size when slider value changes', () => {
       renderSettingsPage();
       
-      const textSizeSlider = screen.getByDisplayValue('16') as HTMLInputElement;
+      const textSizeSlider = screen.getByDisplayValue('16');
       
       fireEvent.change(textSizeSlider, { target: { value: '20' } });
       
@@ -268,7 +270,7 @@ describe('SettingsPage', () => {
     it('should render text spacing slider with correct default value', () => {
       renderSettingsPage();
       
-      const textSpacingSlider = screen.getByDisplayValue('1') as HTMLInputElement;
+      const textSpacingSlider = screen.getByDisplayValue('1');
       expect(textSpacingSlider).toBeInTheDocument();
       expect(textSpacingSlider.type).toBe('range');
       expect(textSpacingSlider.min).toBe('0.8');
@@ -278,7 +280,7 @@ describe('SettingsPage', () => {
     it('should update text spacing when slider value changes', () => {
       renderSettingsPage();
       
-      const textSpacingSlider = screen.getByDisplayValue('1') as HTMLInputElement;
+      const textSpacingSlider = screen.getByDisplayValue('1');
       
       fireEvent.change(textSpacingSlider, { target: { value: '1.5' } });
       
@@ -309,7 +311,9 @@ describe('SettingsPage', () => {
       const highContrastToggle = screen.getByText('High Contrast Mode').closest('.toggle-switch')?.querySelector('.switch');
       expect(highContrastToggle).toBeInTheDocument();
       
-      fireEvent.click(highContrastToggle!);
+      if (highContrastToggle) {
+        fireEvent.click(highContrastToggle);
+      }
       
       expect(highContrastToggle).toHaveClass('checked');
     });
@@ -319,7 +323,9 @@ describe('SettingsPage', () => {
       
       const highContrastToggle = screen.getByText('High Contrast Mode').closest('.toggle-switch')?.querySelector('.switch');
       
-      fireEvent.click(highContrastToggle!);
+      if (highContrastToggle) {
+        fireEvent.click(highContrastToggle);
+      }
       
       expect(document.documentElement.getAttribute('data-high-contrast-mode')).toBe('true');
     });
@@ -339,7 +345,9 @@ describe('SettingsPage', () => {
       const darkModeToggle = screen.getByText('Dark Mode').closest('.toggle-switch')?.querySelector('.switch');
       expect(darkModeToggle).toBeInTheDocument();
       
-      fireEvent.click(darkModeToggle!);
+      if (darkModeToggle) {
+        fireEvent.click(darkModeToggle);
+      }
       
       expect(mockToggleDarkMode).toHaveBeenCalledTimes(1);
     });

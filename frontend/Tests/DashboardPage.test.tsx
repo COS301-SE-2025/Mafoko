@@ -71,9 +71,9 @@ vi.mock('../src/components/ui/LeftNav.tsx', () => ({
   default: ({ activeItem, setActiveItem }: { activeItem: string; setActiveItem: (item: string) => void }) => (
     <nav data-testid="left-nav">
       <div data-testid="active-item">{activeItem}</div>
-      <button onClick={() => setActiveItem('dashboard')}>Dashboard</button>
-      <button onClick={() => setActiveItem('search')}>Search</button>
-      <button onClick={() => setActiveItem('glossary')}>Glossary</button>
+      <button type="button" onClick={() => { setActiveItem('dashboard'); }}>Dashboard</button>
+      <button type="button" onClick={() => { setActiveItem('search'); }}>Search</button>
+      <button type="button" onClick={() => { setActiveItem('glossary'); }}>Glossary</button>
     </nav>
   ),
 }));
@@ -151,7 +151,7 @@ describe('DashboardPage', () => {
     });
     
     // Mock fetch with different responses based on URL
-    (global.fetch as any).mockImplementation((url: string) => {
+    (global.fetch as jest.Mock).mockImplementation((url: string) => {
       if (url.includes('/api/v1/glossary/random')) {
         // Mock random terms API - always return a valid array
         return Promise.resolve({
@@ -284,7 +284,7 @@ describe('DashboardPage', () => {
       });
 
       // Mock API calls in the correct order - profile API first, then random terms
-      (global.fetch as any)
+      (global.fetch as jest.Mock)
         .mockResolvedValueOnce({
           ok: true,
           headers: { get: () => 'application/json' },
@@ -353,7 +353,7 @@ describe('DashboardPage', () => {
       vi.useRealTimers(); // Use real timers for this async test
       
       // Mock user profile API first (called on mount)
-      (global.fetch as any)
+      (global.fetch as jest.Mock)
         .mockResolvedValueOnce({
           ok: true,
           headers: { get: () => 'application/json' },
@@ -423,13 +423,17 @@ describe('DashboardPage', () => {
       renderDashboardPage();
       
       await waitFor(() => {
+        const expectedHeaders = {
+          'Authorization': 'Bearer valid-token'
+        } as const;
+        
+        const expectedOptions = {
+          headers: expectedHeaders
+        } as const;
+        
         expect(global.fetch).toHaveBeenCalledWith(
           expect.stringContaining('/api/v1/auth/me'),
-          expect.objectContaining({
-            headers: expect.objectContaining({
-              'Authorization': 'Bearer valid-token'
-            })
-          })
+          expect.objectContaining(expectedOptions)
         );
       });
       
@@ -440,7 +444,7 @@ describe('DashboardPage', () => {
       vi.useRealTimers(); // Use real timers for this async test
       
       // Mock random terms API success, but profile API error
-      (global.fetch as any)
+      (global.fetch as jest.Mock)
         .mockResolvedValueOnce({
           ok: true,
           headers: { get: () => 'application/json' },
@@ -532,13 +536,17 @@ describe('DashboardPage', () => {
       renderDashboardPage();
       
       await waitFor(() => {
+        const expectedHeaders = {
+          'Authorization': 'Bearer valid-token'
+        } as const;
+        
+        const expectedOptions = {
+          headers: expectedHeaders
+        } as const;
+        
         expect(global.fetch).toHaveBeenCalledWith(
           expect.stringContaining('/api/v1/auth/me'),
-          expect.objectContaining({
-            headers: expect.objectContaining({
-              'Authorization': 'Bearer valid-token'
-            })
-          })
+          expect.objectContaining(expectedOptions)
         );
       });
       
@@ -619,7 +627,7 @@ describe('DashboardPage', () => {
       vi.useRealTimers(); // Use real timers for this async test
       
       // Mock random terms API success, but profile API error
-      (global.fetch as any)
+      (global.fetch as jest.Mock)
         .mockResolvedValueOnce({
           ok: true,
           headers: { get: () => 'application/json' },
@@ -630,7 +638,9 @@ describe('DashboardPage', () => {
       renderDashboardPage();
       
       // Should not crash and show fallback content
-      expect(screen.getByText('Loading profile...')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Loading profile...')).toBeInTheDocument();
+      });
       
       vi.useFakeTimers(); // Switch back to fake timers
     });
