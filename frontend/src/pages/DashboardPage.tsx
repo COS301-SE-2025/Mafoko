@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
+import SouthAfricaMap from '../components/dashboard/SouthAfricaMap.tsx';
 import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
@@ -27,6 +28,7 @@ interface UserData {
   uuid: string;
   firstName: string;
   lastName: string;
+  email?: string;
   profilePictureUrl?: string;
 }
 
@@ -244,6 +246,7 @@ const DashboardPage: React.FC = () => {
               uuid: apiData.id,
               firstName: apiData.first_name,
               lastName: apiData.last_name,
+              email: apiData.email,
               profilePictureUrl: apiData.profile_pic_url,
             };
             setUserData(newUserData);
@@ -578,7 +581,7 @@ const DashboardPage: React.FC = () => {
                       : t('dashboard.userName')}
                   </h3>
                   <p>
-                    {t('dashboard.userId')}: {userData ? userData.uuid : 'N/A'}
+                    {t('dashboard.userEmail')}: {userData ? userData.email || 'N/A' : 'N/A'}
                   </p>
                 </div>
               </div>
@@ -614,6 +617,12 @@ const DashboardPage: React.FC = () => {
               <div className="content-side">
                 <h1 className="title">Unite Through Words</h1>
                 <br />
+                
+                {/* South Africa Map */}
+                <div className="map-container">
+                  <SouthAfricaMap width={600} height={400} />
+                </div>
+                
                 <div className="intro-text">
                   <p>
                     The term 'Marito' originates from Xitsonga, translating to
@@ -675,7 +684,7 @@ const DashboardPage: React.FC = () => {
                     </div>
                   ) : (
                     <div className="terms-grid">
-                      {randomTerms.map((term) => (
+                      {Array.isArray(randomTerms) && randomTerms.map((term) => (
                         <div key={term.id} className="term-card">
                           <div className="term-header">
                             <h3 className="term-title">{term.term}</h3>
@@ -696,6 +705,9 @@ const DashboardPage: React.FC = () => {
                           </button>
                         </div>
                       ))}
+                      {!Array.isArray(randomTerms) && (
+                        <p>No terms available</p>
+                      )}
                     </div>
                   )}
                 </div>
