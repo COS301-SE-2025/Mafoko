@@ -1,6 +1,9 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { API_ENDPOINTS } from '../../src/config';
 
+// Import integration-specific setup
+import '../integration-setup';
+
 describe('NewGlossary API Integration Tests', () => {
   let mockFetch: ReturnType<typeof vi.fn>;
 
