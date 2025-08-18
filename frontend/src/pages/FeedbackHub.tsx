@@ -187,6 +187,13 @@ const AdminDashboard = () => {
 
   // Use API stats if available, otherwise calculate from local data
   const stats = useMemo(() => {
+    const inProgress = feedbackData.filter(
+      (item) => item.status === FeedbackStatus.IN_PROGRESS,
+    ).length;
+    const closed = feedbackData.filter(
+      (item) => item.status === FeedbackStatus.CLOSED,
+    ).length;
+
     if (feedbackStats) {
       return {
         total: feedbackStats.total_feedback,
@@ -194,9 +201,9 @@ const AdminDashboard = () => {
         complaints: feedbackStats.by_type[FeedbackType.COMPLAINT] || 0,
         compliments: feedbackStats.by_type[FeedbackType.COMPLIMENT] || 0,
         openItems: feedbackStats.open_feedback,
-        inProgress: feedbackStats.by_type['in_progress'] || 0,
+        inProgress, // Use local calculation
         resolved: feedbackStats.resolved_feedback,
-        closed: feedbackStats.by_type['closed'] || 0,
+        closed, // Use local calculation
       };
     }
 
@@ -214,14 +221,8 @@ const AdminDashboard = () => {
     const openItems = feedbackData.filter(
       (item) => item.status === FeedbackStatus.OPEN,
     ).length;
-    const inProgress = feedbackData.filter(
-      (item) => item.status === FeedbackStatus.IN_PROGRESS,
-    ).length;
     const resolved = feedbackData.filter(
       (item) => item.status === FeedbackStatus.RESOLVED,
-    ).length;
-    const closed = feedbackData.filter(
-      (item) => item.status === FeedbackStatus.CLOSED,
     ).length;
 
     return {
