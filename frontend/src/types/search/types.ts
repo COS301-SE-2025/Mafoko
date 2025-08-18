@@ -47,6 +47,7 @@ export const LanguageClassMap: Record<string, string> = {
 };
 
 export type SearchResponseType = {
+  items: Term[];
   results: Term[];
   total: number;
   page: number;

@@ -88,9 +88,11 @@ $text-dark: #ffffff;
           }
 
           .dictionary-view {
-            max-width: 800px;
-            margin: auto;
+            max-width: 100%;
+
             padding: 1rem;
+            width: auto;
+            min-width: 0 !important;
           }
 
           .letter-group {
@@ -178,7 +180,14 @@ $text-dark: #ffffff;
           .terms-list {
             display: grid;
             gap: 1rem;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            min-width: 0 !important;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            align-items: start;
+          }
+
+          .terms-list {
+            display: grid;
+            gap: 1rem;
           }
         }
       }

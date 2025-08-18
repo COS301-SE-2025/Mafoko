@@ -2,6 +2,7 @@ pyproject.toml
 mavito_common/__init__.py
 mavito_common/core/__init__.py
 mavito_common/core/config.py
+mavito_common/core/exceptions.py
 mavito_common/core/security.py
 mavito_common/db/__init__.py
 mavito_common/db/base.py
