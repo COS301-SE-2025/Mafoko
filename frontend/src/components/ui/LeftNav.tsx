@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Moon, Sun } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
+import ToggleSwitch from './ToggleSwtich.tsx';
 
 interface LeftNavProps {
   activeItem: string;
@@ -14,7 +15,7 @@ interface LeftNavProps {
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [userRole, setUserRole] = useState<string>('');
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
 
@@ -203,7 +204,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       </nav>
 
       {/* Dark Mode Toggle - Bottom of sidebar */}
-      {/* <div className="left-nav-footer">
+      <div className="left-nav-footer">
         <div className="dark-mode-toggle">
           <div className="toggle-container">
             {isDarkMode ? (
@@ -223,7 +224,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             />
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
