@@ -3,9 +3,60 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import Navbar from '../components/ui/Navbar.tsx';
+import SouthAfricaMap from '../components/dashboard/SouthAfricaMap.tsx';
 import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
+
+// Animated Language Counter Component
+const AnimatedLanguageCounter: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const [showText, setShowText] = useState(false);
+
+  useEffect(() => {
+    // Start counting animation after a short delay
+    const timer = setTimeout(() => {
+      let currentCount = 0;
+      const interval = setInterval(() => {
+        currentCount += 1;
+        setCount(currentCount);
+        if (currentCount >= 11) {
+          clearInterval(interval);
+          // Show the rest of the text after counting is done
+          const textTimer = setTimeout(() => {
+            setShowText(true);
+          }, 300);
+
+          // Return a cleanup function for this nested timeout
+          return () => {
+            clearTimeout(textTimer);
+          };
+        }
+      }, 250); // Count every 250ms
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  return (
+    <div className="animated-title">
+      <span className="connecting-text">Connecting&nbsp;</span>
+      <span className="animated-number">{count}</span>
+      {showText && (
+        <span className="languages-text fade-in">
+          {' '}
+          South African languages...
+        </span>
+      )}
+    </div>
+  );
+};
 
 interface RandomTerm {
   id: string;
@@ -27,6 +78,7 @@ interface UserData {
   uuid: string;
   firstName: string;
   lastName: string;
+  email?: string;
   profilePictureUrl?: string;
 }
 
@@ -244,6 +296,7 @@ const DashboardPage: React.FC = () => {
               uuid: apiData.id,
               firstName: apiData.first_name,
               lastName: apiData.last_name,
+              email: apiData.email,
               profilePictureUrl: apiData.profile_pic_url,
             };
             setUserData(newUserData);
@@ -535,7 +588,9 @@ const DashboardPage: React.FC = () => {
         <div className="top-bar">
           <div className="welcome-section"></div>
           {isLoadingUserData ? (
-            <div className="profile-section">Loading profile...</div>
+            <div className="profile-section">
+              {t('dashboard.loadingProfile')}
+            </div>
           ) : (
             <div className="profile-section">
               <div className="profile-info">
@@ -571,14 +626,15 @@ const DashboardPage: React.FC = () => {
                     onClick={() => {
                       void navigate('/profile');
                     }}
-                    title="Go to profile page"
+                    title={t('dashboard.goToProfile')}
                   >
                     {userData
                       ? `${userData.firstName} ${userData.lastName}`
                       : t('dashboard.userName')}
                   </h3>
                   <p>
-                    {t('dashboard.userId')}: {userData ? userData.uuid : 'N/A'}
+                    {t('dashboard.userEmail')}:{' '}
+                    {userData ? userData.email || 'N/A' : 'N/A'}
                   </p>
                 </div>
               </div>
@@ -612,33 +668,21 @@ const DashboardPage: React.FC = () => {
           <div className="content-wrapper">
             <div className="content-layout">
               <div className="content-side">
-                <h1 className="title">Unite Through Words</h1>
-                <br />
+                <AnimatedLanguageCounter />
+
+                {/* South Africa Map */}
+                <div className="map-container">
+                  <SouthAfricaMap width={600} height={400} />
+                </div>
+
                 <div className="intro-text">
-                  <p>
-                    The term 'Marito' originates from Xitsonga, translating to
-                    'words' or 'names'. This is a progressive web application
-                    that bridges the gap between South Africa's rich linguistic
-                    heritage and modern digital accessibility. Language
-                    enthusiasts, NLP researchers, and linguists can use Marito
-                    as a unified platform to explore, contribute to, and
-                    preserve multilingual glossaries, dictionaries, and
-                    terminology banks across 11 of South Africa's official
-                    languages.
-                  </p>
+                  <p>{t('dashboard.aboutMarito.intro')}</p>
 
-                  <p>
-                    Marito works seamlessly both offline and online, empowering
-                    communities to access comprehensive language resources,
-                    submit feedback, and collaborate on robust lexicons for
-                    low-resource languages. This platform is part of an ongoing
-                    initiative by DSFSI (Data Science for Social Impact) at the
-                    University of Pretoria to democratize linguistic resources
-                    and advance natural language processing research for African
-                    languages.
-                  </p>
+                  <p>{t('dashboard.aboutMarito.mission')}</p>
 
-                  <p className="team-credit">Proudly developed by Velox</p>
+                  <p className="team-credit">
+                    {t('dashboard.aboutMarito.teamCredit')}
+                  </p>
                 </div>
 
                 <div className="cta-section">
@@ -648,7 +692,7 @@ const DashboardPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Learn more about DSFSI
+                    {t('dashboard.aboutMarito.learnMoreDSFSI')}
                   </a>
                 </div>
               </div>
@@ -657,13 +701,13 @@ const DashboardPage: React.FC = () => {
               <div className="sidebar-content">
                 <div className="random-terms-section">
                   <div className="section-header">
-                    <h2>Discover Random Terms</h2>
+                    <h2>{t('dashboard.discoverRandomTerms')}</h2>
                     <button
                       type="button"
                       className="refresh-terms-btn"
                       onClick={() => void getRandomTerms()}
                       disabled={isLoadingTerms}
-                      title="Get new random terms"
+                      title={t('dashboard.getNewTerms')}
                     >
                       {isLoadingTerms ? '⟳' : '↻'}
                     </button>
@@ -671,31 +715,37 @@ const DashboardPage: React.FC = () => {
 
                   {isLoadingTerms ? (
                     <div className="terms-loading">
-                      <p>Loading terms...</p>
+                      <p>{t('dashboard.loadingTerms')}</p>
                     </div>
                   ) : (
                     <div className="terms-grid">
-                      {randomTerms.map((term) => (
-                        <div key={term.id} className="term-card">
-                          <div className="term-header">
-                            <h3 className="term-title">{term.term}</h3>
-                            <span className="term-language">
-                              {term.language}
-                            </span>
+                      {Array.isArray(randomTerms) &&
+                        randomTerms.map((term) => (
+                          <div key={term.id} className="term-card">
+                            <div className="term-header">
+                              <h3 className="term-title">{term.term}</h3>
+                              <span className="term-language">
+                                {term.language}
+                              </span>
+                            </div>
+                            <p className="term-definition">{term.definition}</p>
+                            <button
+                              type="button"
+                              className="term-category"
+                              onClick={() => {
+                                handleCategoryClick(term.category);
+                              }}
+                              title={t('dashboard.browseCategoryGlossary', {
+                                category: term.category,
+                              })}
+                            >
+                              {term.category}
+                            </button>
                           </div>
-                          <p className="term-definition">{term.definition}</p>
-                          <button
-                            type="button"
-                            className="term-category"
-                            onClick={() => {
-                              handleCategoryClick(term.category);
-                            }}
-                            title={`Browse ${term.category} glossary`}
-                          >
-                            {term.category}
-                          </button>
-                        </div>
-                      ))}
+                        ))}
+                      {!Array.isArray(randomTerms) && (
+                        <p>{t('dashboard.noTermsAvailable')}</p>
+                      )}
                     </div>
                   )}
                 </div>

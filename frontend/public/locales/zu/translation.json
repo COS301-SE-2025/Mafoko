@@ -123,6 +123,7 @@
     "welcomeBack": "Wamukelekile futhi",
     "userName": "Igama Lomsebenzisi",
     "userId": "Inombolo Yomsebenzisi",
+    "userEmail": "I-imeyili",
     "quickActions": "Izenzo Ezisheshayo",
     "searchNow": "Sesha Manje",
     "searchDescription": "Sesha amagama ezilimi eziningi",
@@ -135,7 +136,21 @@
     "viewAll": "Buka Konke",
     "communityActivity": "Imisebenzi Yomphakathi",
     "hideActivity": "Fihla Imisebenzi",
-    "viewAllActivity": "Buka Yonke Imisebenzi"
+    "viewAllActivity": "Buka Yonke Imisebenzi",
+    "title": "Hlanganani Ngamagama",
+    "loadingProfile": "Ilayisha iphrofayili...",
+    "goToProfile": "Iya ekhasini lephrofayili",
+    "discoverRandomTerms": "Thola Amagama Anganakekile",
+    "getNewTerms": "Thola amagama amasha anganakekile",
+    "loadingTerms": "Ilayisha amagama...",
+    "noTermsAvailable": "Awekho amagama atholakalayo",
+    "browseCategoryGlossary": "Bheka {{category}} uhlu lwamagama",
+    "aboutMarito": {
+      "intro": "Igama elithi 'Marito' livela ku-Xitsonga, elichaza 'amagama' noma 'amagama'. Lena iyinhlelo yokusebenza yewebhu ephambili ehlanganisa igebe eliphakathi kokutholakala kolimi olunobukhosi eNingizimu Afrika kanye nokufinyelela kudijithali kwesimanje. Abathandi bezilimi, abacwaningi be-NLP, nabazi bezilimi bangasebenzisa iMarito njengenkundla ehlanganisiwe ukuze bahlole, bafake isandla, futhi balondoloze izichazamazwi eziningi, izichazamazwi, nezitokofela zamagama ezilimini eziyishumi nanye ezisemthethweni zaseNingizimu Afrika.",
+      "mission": "IMarito isebenza kahle kokubili ku-intanethi nangaphandle kwe-intanethi, inikeza amandla imiphakathi ukuze ithhole izinsiza zolimi eziphelele, inikeze impendulo, futhi ibambisane ekwakheni ama-lexicons aqinile ezilimini ezinezinsiza ezincanyana. Le nkundla iyingxenye yomzamo oqhubekayo we-DSFSI (Data Science for Social Impact) eNyuvesi yase-Pretoria wokwenza izinsiza zolimi zifinyeleleke wonke umuntu kanye nokuthuthukisa ucwaningo lokucubungula ulimi lwemvelo lwezilimi zase-Afrika.",
+      "teamCredit": "Yakhelwe ngokuziqhenya yi-Velox",
+      "learnMoreDSFSI": "Funda kabanzi nge-DSFSI"
+    }
   },
 
   "glossaryPage": {

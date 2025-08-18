@@ -33,6 +33,41 @@
     "darkMode": "Muxaka wa ntima"
   },
 
+  "dashboard": {
+    "welcome": "Mi amukeriwa eka Marito",
+    "welcomeBack": "Mi tlhela mi amukeriwa",
+    "userName": "Vito ra Mutirhisi",
+    "userId": "Nomboro ya Mutirhisi",
+    "userEmail": "Imeyili",
+    "quickActions": "Swiendlo swa Xihatla",
+    "searchNow": "Lavisisa Sweswi",
+    "searchDescription": "Lavisisa marito hi tindzimi to tala",
+    "downloadResources": "Koka Switirhisiwa",
+    "downloadDescription": "Kuma na ku koka switirhisiwa swa marito",
+    "contributeTerm": "Hoxa Rito",
+    "contributeDescription": "Engetela marito mantshwa eka databeyisi ya hina",
+    "recentTerms": "Marito ya Sweswi",
+    "hideTerms": "Tumbeta Marito",
+    "viewAll": "Vona Hinkwaswo",
+    "communityActivity": "Matshalatshala ya Vaaki",
+    "hideActivity": "Tumbeta Matshalatshala",
+    "viewAllActivity": "Vona Matshalatshala Hinkwayo",
+    "title": "Hlanganani hi Marito",
+    "loadingProfile": "Yi loda profayili...",
+    "goToProfile": "Ya eka tluka ra profayili",
+    "discoverRandomTerms": "Kuma Marito ya Khombo",
+    "getNewTerms": "Kuma marito mantshwa ya khombo",
+    "loadingTerms": "Yi loda marito...",
+    "noTermsAvailable": "Ku hava marito lama kumekaka",
+    "browseCategoryGlossary": "Languta {{category}} nxaxamelo wa marito",
+    "aboutMarito": {
+      "intro": "Rito 'Marito' ri huma eka Xitsonga, ri vula 'marito' kumbe 'mavito'. Lexi i xikumiwa xa webu lexi ya emahlweni lexi hlanganisaka ndhawu ya le xikarhi ka ndhavuko wa ririmi wa Afrika Dzonga na ku fikelela ka xidijitali xa sweswi. Vatiwa va tindzimi, valavi va NLP, na vutivi bya tindzimi va nga tirhisa Marito tanihi pulatifomo yo hlanganisiwa ku lavisisa, ku hoxa matshalatshala, na ku hlayisa swinyorwa swa marito ya tindzimi to hambana, mabuku ya marito, na mabenge ya marito eka tindzimi ta 11 ta ximfumo ta Afrika Dzonga.",
+      "mission": "Marito yi tirha kahle hinkwako eka inthanete na handle ka inthanete, yi nyika matimba vaaki ku fikelela switirhisiwa swa tindzimi swo fela, ku nyika mavonelo, na ku tirhisana ku aka ma-lexicons yo tiya eka tindzimi leti nga na switirhisiwa swintsongo. Pulatifomo leyi i xiphemu xa ntirho lowu ya emahlweni lowu endliwaka hi DSFSI (Data Science for Social Impact) eka Yunivesiti ya Pretoria ku endla leswaku switirhisiwa swa tindzimi swi fikeleleka vaaki hinkwavo na ku susa emahlweni dylondzo ya ku tirhisa ririmi ra ntumbuluko eka tindzimi ta Afrika.",
+      "teamCredit": "Yi akiwe hi ku tinyungubyisa hi Velox",
+      "learnMoreDSFSI": "Dyondza swo tala hi DSFSI"
+    }
+  },
+
   "landingPage": {
     "registerButton": "Tsarisa",
     "loginButton": "Nghena"
@@ -103,25 +138,6 @@
       "normalUser": "Mutirhisi wa Ntolovelo",
       "applyingLinguist": "Ku tsarisa tanihi Mutivi wa Ririmi"
     }
-  },
-  "dashboard": {
-    "welcome": "Mi amukeriwa eka Marito",
-    "welcomeBack": "Mi tlhela mi amukeriwa",
-    "userName": "Vito ra Mutirhisi",
-    "userId": "Nomboro ya Mutirhisi",
-    "quickActions": "Swiendlo swa Xihatla",
-    "searchNow": "Lavisisa Sweswi",
-    "searchDescription": "Lavisisa marito hi tindzimi to tala",
-    "downloadResources": "Koka Switirhisiwa",
-    "downloadDescription": "Kuma na ku koka switirhisiwa swa marito",
-    "contributeTerm": "Hoxa Rito",
-    "contributeDescription": "Engetela marito mantshwa eka databeyisi ya hina",
-    "recentTerms": "Marito ya Sweswi",
-    "hideTerms": "Tumbeta Marito",
-    "viewAll": "Vona Hinkwaswo",
-    "communityActivity": "Mitirho ya Vaaki",
-    "hideActivity": "Tumbeta Mitirho",
-    "viewAllActivity": "Vona Mitirho Hinkwayo"
   },
   "glossaryPage": {
     "title": "Nongoloko wa Marito hi Tindzimi to Tala",
