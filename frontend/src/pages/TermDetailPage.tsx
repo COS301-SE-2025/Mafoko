@@ -98,7 +98,10 @@ export const TermDetailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [relatedTerms, setRelatedTerms] = useState<Term[]>([]);
   const [term, setTerm] = useState<Term | null>(null);
-
+  const [isUpvote, setIsUpvote] = useState<boolean>(false);
+  const [isDownvote, setIsDownvote] = useState<boolean>(false);
+  const [downvotes, setDownvotes] = useState<number>(0);
+  const [upvotes, setUpvotes] = useState<number>(0);
   const commentInputRef = useRef<HTMLDivElement>(null);
 
   const fetchTerm = useCallback(async (): Promise<SearchResponseType> => {
@@ -175,6 +178,12 @@ export const TermDetailPage: React.FC = () => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!cancelled) {
           setIsLoading(false);
+          if(term && term.upvotes && term.downvotes)
+          {
+            setDownvotes(term.downvotes)
+            setUpvotes(term.upvotes)
+          }
+
         }
       }
     })();
@@ -496,6 +505,32 @@ export const TermDetailPage: React.FC = () => {
     }
   }, []);
 
+  const handleUpvote = () => {
+    setIsUpvote(!isUpvote);
+    if (isUpvote) {
+      if (term && term.upvotes) {
+        setUpvotes(upvotes + 1)
+      }
+    } else {
+      if (term && term.upvotes) {
+        setUpvotes(upvotes-1)
+      }
+    }
+  }
+
+  const handleDownvote = () => {
+    setIsDownvote(!isDownvote);
+    if (isDownvote) {
+      if (term && term.downvotes) {
+        setDownvotes(downvotes +1)
+      }
+    } else {
+      if (term && term.downvotes) {
+        setDownvotes(downvotes-1)
+      }
+    }
+  }
+
   return (
     <div
       className={`term-page-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
@@ -526,10 +561,13 @@ export const TermDetailPage: React.FC = () => {
                       Back
                     </button>
                     <div className="flex flex-row items-center gap-2">
-                      <ArrowUp className="cursor-pointer hover:text-teal-500" />
-                      <span className="text-xs">{term?.upvotes}</span>
-                      <ArrowDown className="cursor-pointer hover:text-teal-500" />
-                      <span className="text-xs">{term?.downvotes}</span>
+                      <ArrowUp
+                          onClick={handleUpvote}
+                          className={`cursor-pointer hover:text-teal-500 ${isUpvote ? "text-teal-400" : ""}`}
+                      />
+                      <span className="text-xs">{upvotes}</span>
+                      <ArrowDown onClick={handleDownvote} className={`cursor-pointer hover:text-teal-500 ${isDownvote ? "text-teal-400" : ""}`} />
+                      <span className="text-xs">{downvotes}</span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Share2 className="cursor-pointer hover:text-rose-500" />
@@ -578,7 +616,7 @@ export const TermDetailPage: React.FC = () => {
                           </Badge>
                         </div>
                         <CardTitle className="text-3xl md:text-4xl mt-4">
-                          {term?.term}
+                          <h1 className="term-title">{term?.term}</h1>
                         </CardTitle>
                         <div className="h-px bg-muted my-4 w-full" />
                       </CardHeader>
