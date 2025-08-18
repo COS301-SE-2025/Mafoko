@@ -9,3 +9,4 @@ from .bookmark import TermBookmark, GlossaryBookmark  # noqa: F401
 from .workspace_group import WorkspaceGroup  # noqa: F401
 from .group_term import GroupTerm  # noqa: F401
 from .workspace_note import WorkspaceNote  # noqa: F401
+from .feedback import Feedback  # noqa: F401

@@ -21,6 +21,7 @@ import mavito_common.models.bookmark  # noqa: F401
 import mavito_common.models.workspace_group  # noqa: F401
 import mavito_common.models.group_term  # noqa: F401
 import mavito_common.models.workspace_note  # noqa: F401
+import mavito_common.models.feedback  # noqa: F401
 
 config = context.config
 
