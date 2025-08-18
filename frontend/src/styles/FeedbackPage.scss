@@ -230,6 +230,25 @@
       }
     }
 
+    .error-message {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0.5rem;
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+
+      .error-icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+    }
+
     .form-submit {
       display: flex;
       justify-content: flex-end;
@@ -251,6 +270,10 @@
         .submit-icon {
           width: 1.25rem;
           height: 1.25rem;
+
+          &.loading {
+            animation: spin 1s linear infinite;
+          }
         }
 
         &:hover {
@@ -285,6 +308,13 @@
 .theme-dark .feedback-form .form-fields .form-group .form-textarea {
   background: #242735 !important;
   color: #fff;
+}
+
+// Dark mode error message
+.theme-dark .feedback-form .form-fields .error-message {
+  background: #451a1a !important;
+  border-color: #7f1d1d !important;
+  color: #fca5a5 !important;
 }
 
 // Success state
@@ -355,6 +385,15 @@
   }
   to {
     width: 100%;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
