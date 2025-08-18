@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Instellings",
+    "subtitle": "Pas jou Marito-ervaring aan",
+    "selectLanguage": "Kies jou voorkeur taal",
+    "profile": {
+      "title": "Profiel & Rekening",
+      "description": "Bestuur jou profiel instellings en rekening voorkeure"
+    },
+    "appLanguage": {
+      "title": "Program Taal",
+      "description": "Kies jou voorkeur taal"
+    },
+    "accessibility": {
+      "title": "Toeganklikheid Opsies",
+      "textAndVisual": "Teks & Visuele Aanbieding",
+      "textSize": "Teks Grootte",
+      "textSpacing": "Teks Spasiëring",
+      "colorAndContrast": "Kleur & Kontras",
+      "highContrastMode": "Hoë Kontras Modus",
+      "darkMode": "Donker Modus"
+    }
+  },
+
   "navigation": {
     "home": "Tuis",
     "dictionary": "Woordeboek",
@@ -87,6 +110,7 @@
     "welcomeBack": "Welkom terug",
     "userName": "Gebruikersnaam",
     "userId": "Gebruiker ID",
+    "userEmail": "E-pos",
     "quickActions": "Vinnige Aksies",
     "searchNow": "Soek Nou",
     "searchDescription": "Soek terminologie in verskeie tale",
@@ -99,7 +123,21 @@
     "viewAll": "Sien Alles",
     "communityActivity": "Gemeenskap Aktiwiteit",
     "hideActivity": "Versteek Aktiwiteit",
-    "viewAllActivity": "Sien Alle Aktiwiteit"
+    "viewAllActivity": "Sien Alle Aktiwiteit",
+    "title": "Verenig Deur Woorde",
+    "loadingProfile": "Laai profiel...",
+    "goToProfile": "Gaan na profiel bladsy",
+    "discoverRandomTerms": "Ontdek Lukrake Terme",
+    "getNewTerms": "Kry nuwe lukrake terme",
+    "loadingTerms": "Laai terme...",
+    "noTermsAvailable": "Geen terme beskikbaar nie",
+    "browseCategoryGlossary": "Verken {{category}} woordelys",
+    "aboutMarito": {
+      "intro": "Die term 'Marito' kom van Xitsonga en beteken 'woorde' of 'name'. Dit is 'n progressiewe webtoepassing wat die gaping tussen Suid-Afrika se ryk taalerfenis en moderne digitale toeganklikheid oorbrug. Taalliefhebbers, NLP-navorsers en taalkundiges kan Marito as 'n verenigde platform gebruik om veeltalige woordelyste, woordeboeke en terminologie-banke oor 11 van Suid-Afrika se amptelike tale te verken, by te dra en te bewaar.",
+      "mission": "Marito werk naatloos aanlyn en vanlyn, en bemagtig gemeenskappe om toegang tot omvattende taalhulpbronne te verkry, terugvoer in te dien en aan robuuste leksikons vir hulpbronbeperkte tale saam te werk. Hierdie platform is deel van 'n deurlopende inisiatief deur DSFSI (Data Science for Social Impact) by die Universiteit van Pretoria om taalhulpbronne te demokratiseer en natuurlike taalverwerkingsnavorsing vir Afrika-tale te bevorder.",
+      "teamCredit": "Trots ontwikkel deur Velox",
+      "learnMoreDSFSI": "Leer meer oor DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Veeltalige Woordelys",

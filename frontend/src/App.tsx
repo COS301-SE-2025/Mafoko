@@ -13,13 +13,14 @@ import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
 import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
-import GlossaryPage from './pages/GlossaryPage.tsx';
 import UserProfilePage from './pages/UserProfilePage.tsx';
 import NewGlossary from './pages/NewGlossary';
 import LinguistApplicationPage from './pages/LinguistApplicationPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import FeedbackHub from './pages/FeedbackHub';
+import SettingsPage from './pages/SettingsPage';
 import './App.css';
+import './styles/Global.scss';
 
 import {
   Chart as ChartJS,
@@ -69,15 +70,16 @@ function App() {
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/glossary" element={<GlossaryPage />} />
+        <Route path="/glossary" element={<NewGlossary />} />
+        <Route path="/glossary/:category" element={<NewGlossary />} />
         <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/new-glossary" element={<NewGlossary />} />
         <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
         <Route
           path="/linguist-application"
           element={<LinguistApplicationPage />}
         />
         <Route path="/feedbackhub" element={<FeedbackHub />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </div>
   );

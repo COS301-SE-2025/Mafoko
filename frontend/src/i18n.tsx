@@ -39,8 +39,11 @@ i18n
       caches: ['localStorage'],
     },
     react: {
-      useSuspense: true,
+      useSuspense: false,
       bindI18n: 'languageChanged loaded',
+      transEmptyNodeValue: '',
+      transSupportBasicHtmlNodes: true,
+      transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
     },
   })
   .then(() => {

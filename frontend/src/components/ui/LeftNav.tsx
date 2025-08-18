@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
-import ToggleSwitch from './ToggleSwtich';
-import { Sun, Moon, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
 
 interface LeftNavProps {
@@ -16,7 +14,7 @@ interface LeftNavProps {
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode } = useDarkMode();
   const [userRole, setUserRole] = useState<string>('');
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
 
@@ -33,6 +31,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     { id: 'analytics', label: t('navigation.dashboard'), path: '/analytics' },
     { id: 'feedback', label: 'Feedback', path: '/feedback' },
     { id: 'help', label: t('navigation.help'), path: '/help' },
+    { id: 'settings', label: t('navigation.settings'), path: '/settings' },
   ];
 
   const adminSubmenuItems = [
@@ -128,8 +127,9 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       {/* Header */}
       <div className="left-nav-header">
         <div className="left-nav-title-section">
-          <h2 className="left-nav-app-title">Marito</h2>
-          <LanguageSwitcher />
+          <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
+            Marito
+          </h2>
         </div>
         <div className="logo-container">
           <img
@@ -203,7 +203,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       </nav>
 
       {/* Dark Mode Toggle - Bottom of sidebar */}
-      <div className="left-nav-footer">
+      {/* <div className="left-nav-footer">
         <div className="dark-mode-toggle">
           <div className="toggle-container">
             {isDarkMode ? (
@@ -223,7 +223,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

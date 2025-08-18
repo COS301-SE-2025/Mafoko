@@ -52,6 +52,7 @@ const Navbar = () => {
       t('navigation.linguistApplication'),
       'Feedback',
       t('navigation.help'),
+      t('navigation.settings'),
     ],
     [t],
   );
@@ -78,6 +79,8 @@ const Navbar = () => {
         return '/analytics';
       case 'Feedback':
         return '/feedback';
+      case 'Settings':
+        return '/settings';
       default:
         return `/${item.toLowerCase().replace(/\s/g, '-')}`;
     }

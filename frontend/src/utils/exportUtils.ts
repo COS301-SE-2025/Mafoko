@@ -787,9 +787,9 @@ export const generatePDF = async (
         pdf.rect(margin, y - 6, pageWidth - margin * 2, 8, 'F'); // Add header text
         pdf.setTextColor(255, 255, 255);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Term', margin + 2, y);
-        pdf.text('Definition', margin + pageWidth * 0.3, y);
-        pdf.text('Language', margin + pageWidth * 0.7, y);
+        pdf.text('Term', margin + 2, y - 2);
+        pdf.text('Definition', margin + pageWidth * 0.3, y - 2);
+        pdf.text('Language', margin + pageWidth * 0.7, y - 2);
 
         // Reset text color for content
         pdf.setTextColor(0, 0, 0);
@@ -819,9 +819,9 @@ export const generatePDF = async (
             pdf.rect(margin, y - 6, pageWidth - margin * 2, 8, 'F');
             pdf.setTextColor(255, 255, 255);
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Term', margin + 2, y);
-            pdf.text('Definition', pageWidth / 3, y);
-            pdf.text('Language', (pageWidth * 2) / 3, y);
+            pdf.text('Term', margin + 2, y - 2);
+            pdf.text('Definition', pageWidth / 3, y - 2);
+            pdf.text('Language', (pageWidth * 2) / 3, y - 2);
             pdf.setTextColor(0, 0, 0);
             pdf.setFont('helvetica', 'normal');
             y += 10;
@@ -974,8 +974,8 @@ export const generatePDF = async (
         pdf.setTextColor(255, 255, 255); // White text for header
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(12);
-        pdf.text('Term', margin + 5, y);
-        pdf.text('Definition', pageWidth / 2, y);
+        pdf.text('Term', margin + 5, y - 2);
+        pdf.text('Definition', pageWidth / 2, y - 2);
         pdf.setTextColor(0, 0, 0); // Reset text color for content
         y += 10;
 
@@ -995,9 +995,9 @@ export const generatePDF = async (
 
             pdf.setTextColor(255, 255, 255); // White text for header
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Term', margin + 5, y);
-            pdf.text('Definition', margin + pageWidth * 0.3, y);
-            pdf.text('Language', margin + pageWidth * 0.7, y);
+            pdf.text('Term', margin + 5, y - 2);
+            pdf.text('Definition', margin + pageWidth * 0.3, y - 2);
+            pdf.text('Language', margin + pageWidth * 0.7, y - 2);
             pdf.setTextColor(0, 0, 0); // Reset text color for content
             y += 10;
             pdf.setFont('helvetica', 'normal');
@@ -1349,12 +1349,12 @@ export const downloadData = async (
           pdf.setTextColor(255, 255, 255); // White - matches th text color in HTML
           pdf.setFont('helvetica', 'bold');
           pdf.setFontSize(11);
-          pdf.text('TERM', margin + cellPadding, y + 6.5);
-          pdf.text('DEFINITION', margin + termColWidth + cellPadding, y + 6.5);
+          pdf.text('TERM', margin + cellPadding, y - 1);
+          pdf.text('DEFINITION', margin + termColWidth + cellPadding, y - 1);
           pdf.text(
             'LANGUAGE',
             margin + termColWidth + defColWidth + cellPadding,
-            y + 6.5,
+            y - 1,
           );
 
           // Move to first data row
@@ -1396,16 +1396,16 @@ export const downloadData = async (
 
               pdf.setTextColor(255, 255, 255);
               pdf.setFont('helvetica', 'bold');
-              pdf.text('TERM', margin + cellPadding, y + 6.5);
+              pdf.text('TERM', margin + cellPadding, y + 6);
               pdf.text(
                 'DEFINITION',
                 margin + termColWidth + cellPadding,
-                y + 6.5,
+                y + 6,
               );
               pdf.text(
                 'LANGUAGE',
                 margin + termColWidth + defColWidth + cellPadding,
-                y + 6.5,
+                y + 6,
               );
               y += 10;
             }

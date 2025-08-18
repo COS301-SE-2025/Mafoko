@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Dipeakanyo",
+    "subtitle": "Beakanya maitemogelo a gago a Marito",
+    "selectLanguage": "Kgetha polelo yeo o e ratago",
+    "profile": {
+      "title": "Profaele le Akhaonto",
+      "description": "Laola dipeakanyo tša profaele le dikgetho tša akhaonto"
+    },
+    "appLanguage": {
+      "title": "Polelo ya App",
+      "description": "Kgetha polelo yeo o e ratago"
+    },
+    "accessibility": {
+      "title": "Dikgetho tša go Fihlelela",
+      "textAndVisual": "Mongwalo le Ponagalo",
+      "textSize": "Bogolo bja Mongwalo",
+      "textSpacing": "Sekgala sa Mongwalo",
+      "colorAndContrast": "Mmala le Phapano",
+      "highContrastMode": "Mokgwa wa Phapano e Godimo",
+      "darkMode": "Mokgwa wo Moso"
+    }
+  },
+
   "navigation": {
     "home": "Gae",
     "dictionary": "Pukuntšu",
@@ -85,6 +108,7 @@
     "welcomeBack": "O boile gape",
     "userName": "Leina la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
+    "userEmail": "Imeile",
     "quickActions": "Ditiro tsa Potlako",
     "searchNow": "Nyaka Bjale",
     "searchDescription": "Nyaka mareo ka dipolelo tse mmalwa",
@@ -97,7 +121,21 @@
     "viewAll": "Bona Kamoka",
     "communityActivity": "Ditiro tša Setšhaba",
     "hideActivity": "Fihla Ditiro",
-    "viewAllActivity": "Bona Ditiro Kamoka"
+    "viewAllActivity": "Bona Ditiro Kamoka",
+    "title": "Kopaneneng ka Mantšu",
+    "loadingProfile": "E laolla profaele...",
+    "goToProfile": "Eya letlakaleng la profaele",
+    "discoverRandomTerms": "Hwetša Mantšu a se nang Thulaganyo",
+    "getNewTerms": "Hwetša mantšu a maswa a se nang thulaganyo",
+    "loadingTerms": "E laolla mantšu...",
+    "noTermsAvailable": "Ga go mantšu a a lego gona",
+    "browseCategoryGlossary": "Lebelela {{category}} lenaneo la mantšu",
+    "aboutMarito": {
+      "intro": "Lentšu 'Marito' le tšwa go Xitsonga, le ra 'mantšu' goba 'maina'. Ye ke taelo ya webu yeo e tšwelago pele yeo e kopanego sekgoba se gare ga bobedi bja dihlogo tša Afrika Borwa le phihlelelo ya sebjale ya dijithale. Barati ba dipolelo, banyakišiši ba NLP, le botswebi bja dipolelo ba ka dirišša Marito bjalo ka sethala se se kopantšwego go hwetšiša, go ka ba le seabe, le go boloka dikhungolose tše mmalwa tša dipolelo, dipukuntšu, le dipanka tša mareo go dipolelo tše 11 tša semmušo tša Afrika Borwa.",
+      "mission": "Marito e šoma gabotse ka bobedi inthaneteng le ntle ga inthanete, e fa matla setšhaba go hwetša didirišwa tša dipolelo tše tletšego, go fa maikutlo, le go šomišana go ageng di-lexicons tše tiilego bakeng sa dipolelo tše di nago le didirišwa tše nnyane. Sethala se ke karolo ya mošomo wo o tšwelago pele wo o dirwago ke DSFSI (Data Science for Social Impact) Yunibesithing ya Pretoria go dira gore didirišwa tša dipolelo di fihlelelege setšhabeng sohle le go tšwela pele dinyakišišo tša go šomana le polelo ya tlhago bakeng sa dipolelo tša Afrika.",
+      "teamCredit": "E agile ka bomotho ke Velox",
+      "learnMoreDSFSI": "Ithute mo go oketšegilego ka DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Lenaneontšu la Maleme a Mantši",
