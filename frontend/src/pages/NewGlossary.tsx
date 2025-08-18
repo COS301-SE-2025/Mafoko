@@ -37,7 +37,7 @@ const GlossaryApp = () => {
   const { category } = useParams<{ category?: string }>();
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [showLanguageFilter, setShowLanguageFilter] = useState(false);
   const [glossaries, setGlossaries] = useState<Glossary[]>([]);
   const [selectedGlossary, setSelectedGlossary] = useState<Glossary | null>(
@@ -275,8 +275,10 @@ const GlossaryApp = () => {
       searchParams.append('query', debouncedTermSearch.trim());
     }
 
-    if (selectedLanguage && selectedLanguage !== '') {
-      searchParams.append('language', selectedLanguage);
+    if (selectedLanguages.length > 0) {
+      selectedLanguages.forEach((lang) => {
+        searchParams.append('language', lang);
+      });
     }
 
     fetch(
@@ -289,7 +291,7 @@ const GlossaryApp = () => {
         body: JSON.stringify({
           domain: selectedGlossary.name,
           query: debouncedTermSearch.trim() || undefined,
-          language: selectedLanguage || undefined,
+          languages: selectedLanguages,
           page: currentPage,
           limit: termsPerPage,
         }),
@@ -337,9 +339,10 @@ const GlossaryApp = () => {
             );
 
             // Apply language filter if selected
-            if (selectedLanguage && selectedLanguage !== '') {
+            if (selectedLanguages.length > 0) {
               filteredTerms = filteredTerms.filter(
-                (term) => term.language === selectedLanguage,
+                (term) =>
+                  term.language && selectedLanguages.includes(term.language),
               );
             }
 
@@ -363,12 +366,12 @@ const GlossaryApp = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [selectedGlossary, currentPage, debouncedTermSearch, selectedLanguage]);
+  }, [selectedGlossary, currentPage, debouncedTermSearch, selectedLanguages]);
 
   // Reset page when glossary, search, or language filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedGlossary, debouncedTermSearch, selectedLanguage]);
+  }, [selectedGlossary, debouncedTermSearch, selectedLanguages]);
 
   // Check if selected glossary is bookmarked when it changes
   useEffect(() => {
@@ -681,8 +684,10 @@ const GlossaryApp = () => {
       });
 
       // Include language filter if selected, but not search query for export
-      if (selectedLanguage && selectedLanguage !== '') {
-        exportParams.append('language', selectedLanguage);
+      if (selectedLanguages.length > 0) {
+        selectedLanguages.forEach((lang) => {
+          exportParams.append('language', lang);
+        });
       }
 
       const response = await fetch(
@@ -694,7 +699,7 @@ const GlossaryApp = () => {
           },
           body: JSON.stringify({
             domain: selectedGlossary.name,
-            language: selectedLanguage || undefined,
+            languages: selectedLanguages,
             page: 1,
             limit: 10000,
           }),
@@ -718,9 +723,10 @@ const GlossaryApp = () => {
         const fallbackData = (await fallbackResponse.json()) as Term[];
 
         // Apply language filter if selected
-        if (selectedLanguage && selectedLanguage !== '') {
+        if (selectedLanguages.length > 0) {
           return fallbackData.filter(
-            (term) => term.language === selectedLanguage,
+            (term) =>
+              term.language && selectedLanguages.includes(term.language),
           );
         }
 
@@ -771,13 +777,13 @@ const GlossaryApp = () => {
               <GlossaryHeader
                 title={selectedGlossary.name}
                 description={selectedGlossary.description}
-                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})${selectedLanguage ? ` - Filtered by ${selectedLanguage}` : ''}`}
+                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})`}
                 onBack={() => {
                   setSelectedGlossary(null);
                   setCurrentPage(1);
                   setTermSearch('');
                   setDebouncedTermSearch('');
-                  setSelectedLanguage('');
+                  setSelectedLanguages([]);
                   setShowLanguageFilter(false);
                   // Navigate back to main glossary page and update URL
                   void navigate('/glossary');
@@ -790,7 +796,6 @@ const GlossaryApp = () => {
                   marginBottom: '2rem',
                   position: 'relative',
                   width: '100%',
-                  maxWidth: '1000px',
                   margin: '1.5rem auto 2.5rem auto',
                 }}
               >
@@ -835,7 +840,6 @@ const GlossaryApp = () => {
                 className="language-filter-container"
                 style={{
                   width: '100%',
-                  maxWidth: '1000px',
                   margin: '0 auto 2rem auto',
                   position: 'relative',
                 }}
@@ -899,19 +903,19 @@ const GlossaryApp = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        setSelectedLanguage('');
+                        setSelectedLanguages([]);
                       }}
-                      className={`language-filter-option ${selectedLanguage === '' ? 'active' : ''}`}
+                      className={`language-filter-option ${selectedLanguages.length === 0 ? 'active' : ''}`}
                       style={{
                         padding: '0.5rem 1rem',
                         border: '1px solid var(--glossary-border-color)',
                         borderRadius: '1.5rem',
                         background:
-                          selectedLanguage === ''
+                          selectedLanguages.length === 0
                             ? 'var(--accent-color)'
                             : 'var(--card-background)',
                         color:
-                          selectedLanguage === ''
+                          selectedLanguages.length === 0
                             ? 'white'
                             : 'var(--text-theme)',
                         cursor: 'pointer',
@@ -927,21 +931,23 @@ const GlossaryApp = () => {
                         key={language}
                         type="button"
                         onClick={() => {
-                          setSelectedLanguage(language);
+                          setSelectedLanguages((prev) =>
+                            prev.includes(language)
+                              ? prev.filter((l) => l !== language)
+                              : [...prev, language],
+                          );
                         }}
-                        className={`language-filter-option ${selectedLanguage === language ? 'active' : ''}`}
+                        className={`language-filter-option ${selectedLanguages.includes(language) ? 'active' : ''}`}
                         style={{
                           padding: '0.5rem 1rem',
                           border: '1px solid var(--glossary-border-color)',
                           borderRadius: '1.5rem',
-                          background:
-                            selectedLanguage === language
-                              ? 'var(--accent-color)'
-                              : 'var(--card-background)',
-                          color:
-                            selectedLanguage === language
-                              ? 'white'
-                              : 'var(--text-theme)',
+                          background: selectedLanguages.includes(language)
+                            ? 'var(--accent-color)'
+                            : 'var(--card-background)',
+                          color: selectedLanguages.includes(language)
+                            ? 'white'
+                            : 'var(--text-theme)',
                           cursor: 'pointer',
                           fontSize: '0.85rem',
                           fontWeight: 500,
@@ -955,7 +961,7 @@ const GlossaryApp = () => {
                 )}
 
                 {/* Active filter indicator */}
-                {selectedLanguage && (
+                {selectedLanguages.length > 0 && (
                   <div
                     style={{
                       marginTop: '0.75rem',
@@ -965,25 +971,29 @@ const GlossaryApp = () => {
                       fontSize: '0.85rem',
                       color: 'var(--text-theme)',
                       opacity: 0.8,
+                      flexWrap: 'wrap',
                     }}
                   >
                     <span>Active filter:</span>
-                    <span
-                      style={{
-                        background: 'var(--accent-color)',
-                        color: 'white',
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '1rem',
-                        fontSize: '0.8rem',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {selectedLanguage}
-                    </span>
+                    {selectedLanguages.map((lang) => (
+                      <span
+                        key={lang}
+                        style={{
+                          background: 'var(--accent-color)',
+                          color: 'white',
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '1rem',
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {lang}
+                      </span>
+                    ))}
                     <button
                       type="button"
                       onClick={() => {
-                        setSelectedLanguage('');
+                        setSelectedLanguages([]);
                       }}
                       style={{
                         background: 'none',
@@ -1146,7 +1156,7 @@ const GlossaryApp = () => {
                   bottom: 32,
                   right: 32,
                   display: 'flex',
-                  flexDirection: 'row',
+                  flexDirection: window.innerWidth <= 500 ? 'column' : 'row',
                   gap: '1.2rem',
                   zIndex: 1000,
                 }}
@@ -1219,7 +1229,6 @@ const GlossaryApp = () => {
                   marginBottom: '2rem',
                   position: 'relative',
                   width: '100%',
-                  maxWidth: '1000px',
                   margin: '1.5rem auto 2.5rem auto',
                 }}
               >
