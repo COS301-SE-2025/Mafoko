@@ -9,7 +9,7 @@ from mavito_common.schemas.feedback import (
     FeedbackUpdate,
     Feedback,
     FeedbackAdmin,
-    FeedbackStats
+    FeedbackStats,
 )
 from mavito_common.schemas.user import User as UserSchema
 from mavito_common.models.feedback import FeedbackType, FeedbackStatus
@@ -32,12 +32,10 @@ async def submit_feedback(
     If user is authenticated, feedback will be linked to their account.
     """
     user_id = current_user.id if current_user else None
-    
+
     # Create feedback entry
-    feedback = await crud_feedback.create(
-        db, obj_in=feedback_in, user_id=user_id
-    )
-    
+    feedback = await crud_feedback.create(db, obj_in=feedback_in, user_id=user_id)
+
     return feedback
 
 
@@ -60,9 +58,9 @@ async def get_my_feedback(
         limit=limit,
         status=status,
         feedback_type=feedback_type,
-        user_id=current_user.id
+        user_id=current_user.id,
     )
-    
+
     return feedback_list
 
 
@@ -80,18 +78,16 @@ async def get_feedback(
     feedback = await crud_feedback.get(db, id=feedback_id)
     if not feedback:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Feedback not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Feedback not found"
         )
-    
+
     # Check permissions - user can only see their own feedback unless they're admin
-    if (feedback.user_id != current_user.id and 
-        current_user.role.value != "admin"):
+    if feedback.user_id != current_user.id and current_user.role.value != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not authorized to access this feedback"
+            detail="Not authorized to access this feedback",
         )
-    
+
     return feedback
 
 
@@ -109,13 +105,9 @@ async def get_all_feedback(
     Get all feedback entries (admin only) with optional filters.
     """
     feedback_list = await crud_feedback.get_multi(
-        db,
-        skip=skip,
-        limit=limit,
-        status=status,
-        feedback_type=feedback_type
+        db, skip=skip, limit=limit, status=status, feedback_type=feedback_type
     )
-    
+
     # Convert to admin schema with additional user details
     admin_feedback = []
     for feedback in feedback_list:
@@ -125,7 +117,7 @@ async def get_all_feedback(
         if feedback.resolved_by:
             feedback_data.resolved_by_email = feedback.resolved_by.email
         admin_feedback.append(feedback_data)
-    
+
     return admin_feedback
 
 
@@ -143,17 +135,13 @@ async def update_feedback(
     feedback = await crud_feedback.get(db, id=feedback_id)
     if not feedback:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Feedback not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Feedback not found"
         )
-    
+
     updated_feedback = await crud_feedback.update(
-        db, 
-        db_obj=feedback, 
-        obj_in=feedback_update,
-        admin_user_id=admin_user.id
+        db, db_obj=feedback, obj_in=feedback_update, admin_user_id=admin_user.id
     )
-    
+
     return updated_feedback
 
 
@@ -170,10 +158,9 @@ async def delete_feedback(
     feedback = await crud_feedback.delete(db, id=feedback_id)
     if not feedback:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Feedback not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Feedback not found"
         )
-    
+
     return {"message": "Feedback deleted successfully"}
 
 
@@ -205,11 +192,11 @@ async def search_feedback(
     if len(q.strip()) < 3:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Search query must be at least 3 characters long"
+            detail="Search query must be at least 3 characters long",
         )
-    
+
     feedback_list = await crud_feedback.search(
         db, query=q.strip(), skip=skip, limit=limit
     )
-    
+
     return feedback_list

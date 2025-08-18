@@ -40,9 +40,9 @@ class Feedback(Base):
         UUID(as_uuid=True), ForeignKey("users.id"), nullable=True, index=True
     )
     status: Mapped[FeedbackStatus] = mapped_column(
-        SaEnum(FeedbackStatus, name="feedback_status_enum"), 
-        nullable=False, 
-        default=FeedbackStatus.open
+        SaEnum(FeedbackStatus, name="feedback_status_enum"),
+        nullable=False,
+        default=FeedbackStatus.open,
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

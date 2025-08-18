@@ -11,9 +11,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from mavito_common.core.config import settings
 from mavito_common.db.session import get_db  # Your DB session dependency
 from mavito_common.models.user import UserRole
-from mavito_common.models.user import User as UserModel  # SQLAlchemy model for DB operations
+from mavito_common.models.user import (
+    User as UserModel,
+)  # SQLAlchemy model for DB operations
 from mavito_common.schemas.token import TokenPayload  # Pydantic schema for token data
-from mavito_common.schemas.user import User as UserSchema  # Pydantic schema for API response
+from mavito_common.schemas.user import (
+    User as UserSchema,
+)  # Pydantic schema for API response
 from app.crud.crud_user import crud_user  # Your user CRUD operations
 
 logger = logging.getLogger(__name__)
@@ -107,10 +111,10 @@ async def get_current_active_admin(
 # Create optional OAuth2 scheme for anonymous access
 optional_oauth2_scheme = HTTPBearer(auto_error=False)
 
+
 # Optional dependency - returns user if authenticated, None if not
 async def get_current_user_optional(
-    db: AsyncSession = Depends(get_db), 
-    credentials = Depends(optional_oauth2_scheme)
+    db: AsyncSession = Depends(get_db), credentials=Depends(optional_oauth2_scheme)
 ) -> Optional[UserModel]:
     """
     Optional authentication - returns user if valid token provided, None otherwise.
@@ -118,9 +122,9 @@ async def get_current_user_optional(
     """
     if not credentials or not credentials.credentials:
         return None
-    
+
     token = credentials.credentials
-    
+
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
@@ -128,11 +132,11 @@ async def get_current_user_optional(
         user_identifier: Optional[str] = payload.get("sub")
         if user_identifier is None:
             return None
-            
+
         user = await crud_user.get_user_by_email(db, email=user_identifier)
         if user and await crud_user.is_user_active(user):
             return user
     except (jwt.PyJWTError, ValidationError):
         pass  # Invalid token, return None
-    
+
     return None

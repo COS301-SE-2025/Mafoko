@@ -10,12 +10,16 @@ class CRUDUser:
     def __init__(self, model: type[User]):
         self.model = model
 
-    async def get_user_by_email(self, db: AsyncSession, *, email: str) -> Optional[User]:
+    async def get_user_by_email(
+        self, db: AsyncSession, *, email: str
+    ) -> Optional[User]:
         """Get user by email."""
         result = await db.execute(select(self.model).where(self.model.email == email))
         return result.scalar_one_or_none()
 
-    async def get_user_by_uuid(self, db: AsyncSession, *, user_id: uuid.UUID) -> Optional[User]:
+    async def get_user_by_uuid(
+        self, db: AsyncSession, *, user_id: uuid.UUID
+    ) -> Optional[User]:
         """Get user by UUID."""
         result = await db.execute(select(self.model).where(self.model.id == user_id))
         return result.scalar_one_or_none()

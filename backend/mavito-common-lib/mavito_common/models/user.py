@@ -78,8 +78,13 @@ class User(Base):
 
     # Feedback relationships
     feedback_submitted: Mapped[List["Feedback"]] = relationship(
-        "Feedback", foreign_keys="[Feedback.user_id]", back_populates="user", cascade="all, delete-orphan"
+        "Feedback",
+        foreign_keys="[Feedback.user_id]",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
     feedback_resolved: Mapped[List["Feedback"]] = relationship(
-        "Feedback", foreign_keys="[Feedback.resolved_by_user_id]", back_populates="resolved_by"
+        "Feedback",
+        foreign_keys="[Feedback.resolved_by_user_id]",
+        back_populates="resolved_by",
     )

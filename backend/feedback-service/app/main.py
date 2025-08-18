@@ -8,7 +8,7 @@ app = FastAPI(
     title="Feedback Service",
     description="Feedback and complaint management service for Mavito",
     version="1.0.0",
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
 # Set up CORS

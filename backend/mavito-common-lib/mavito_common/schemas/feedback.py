@@ -12,16 +12,16 @@ class FeedbackBase(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
 
-    @field_validator('message')
+    @field_validator("message")
     @classmethod
     def validate_message(cls, v):
         if not v or not v.strip():
-            raise ValueError('Message cannot be empty')
+            raise ValueError("Message cannot be empty")
         if len(v.strip()) > 5000:
-            raise ValueError('Message cannot exceed 5000 characters')
+            raise ValueError("Message cannot exceed 5000 characters")
         return v.strip()
 
-    @field_validator('name')
+    @field_validator("name")
     @classmethod
     def validate_name(cls, v):
         if v is not None:
@@ -29,10 +29,10 @@ class FeedbackBase(BaseModel):
             if not v:
                 return None
             if len(v) > 100:
-                raise ValueError('Name cannot exceed 100 characters')
+                raise ValueError("Name cannot exceed 100 characters")
         return v
 
-    @field_validator('email')
+    @field_validator("email")
     @classmethod
     def validate_email(cls, v):
         if v is not None:
@@ -40,7 +40,7 @@ class FeedbackBase(BaseModel):
             if not v:
                 return None
             if len(v) > 100:
-                raise ValueError('Email cannot exceed 100 characters')
+                raise ValueError("Email cannot exceed 100 characters")
         return v
 
 
@@ -54,7 +54,7 @@ class FeedbackUpdate(BaseModel):
     status: Optional[FeedbackStatus] = None
     admin_response: Optional[str] = None
 
-    @field_validator('admin_response')
+    @field_validator("admin_response")
     @classmethod
     def validate_admin_response(cls, v):
         if v is not None:
@@ -62,7 +62,7 @@ class FeedbackUpdate(BaseModel):
             if not v:
                 return None
             if len(v) > 5000:
-                raise ValueError('Admin response cannot exceed 5000 characters')
+                raise ValueError("Admin response cannot exceed 5000 characters")
         return v
 
 
