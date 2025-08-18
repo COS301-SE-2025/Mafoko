@@ -292,11 +292,11 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
     font-size: 1.1rem;
     position: relative;
     cursor: pointer;
-    
+
     &:hover {
       color: var(--navbar-accent);
     }
-    
+
     &.active {
       color: var(--navbar-accent);
       font-weight: 600;
@@ -312,11 +312,11 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
     font-size: 1.1rem;
     position: relative;
     text-decoration: none;
-    
+
     &:hover {
       color: var(--navbar-accent);
     }
-    
+
     &.active {
       color: var(--navbar-accent);
       font-weight: 600;
