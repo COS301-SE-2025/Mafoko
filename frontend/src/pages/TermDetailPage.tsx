@@ -11,7 +11,7 @@ import { API_ENDPOINTS } from '../config';
 
 import { Term } from '../types/terms/types.ts';
 import '../styles/TermPage.scss';
-import { ArrowUp, ArrowDown, Share2, MoreVertical } from 'lucide-react';
+import { ArrowUp, ArrowDown, Share2 } from 'lucide-react';
 import { Badge } from '../components/ui/badge.tsx';
 import {
   Card,
@@ -125,9 +125,10 @@ export const TermDetailPage: React.FC = () => {
     });
     try {
       const resp = await fetch(`${API_ENDPOINTS.search}?${params.toString()}`);
-      if (!resp.ok) throw new Error('Failed to fetch search results');
+      if (!resp.ok) console.error('Failed to fetch search results');
       const data = (await resp.json()) as SearchResponseType;
       return data.items;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (ex) {
       const cached = await getAllTerms();
       return cached.filter((t) => t.domain === domain);
@@ -183,112 +184,6 @@ export const TermDetailPage: React.FC = () => {
     };
   }, [id, name, language, fetchTerm, fetchRelatedTerms]);
 
-  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const fetchTerm = async (): Promise<SearchResponseType> => {
-  //   const params = new URLSearchParams({
-  //     query: String(name),
-  //     language: String(language),
-  //     sort_by: 'name',
-  //     page: '1',
-  //     page_size: '100',
-  //     fuzzy: 'false',
-  //   });
-  //   const response = await fetch(
-  //       `${API_ENDPOINTS.search}?${params.toString()}`,
-  //   );
-  //   if (!response.ok) throw new Error('Failed to fetch search results');
-  //
-  //   return (await response.json()) as SearchResponseType;
-  // };
-
-    // // eslint-disable-next-line react-hooks/rules-of-hooks
-    // const handleSearch = useCallback(async () => {
-    //   setIsLoading(true);
-    //   try {
-    //     const res = await fetchTerm();
-    //     console.log("TERM",res.items[0])
-    //     setTerm(res.items[0]);
-    //   } catch (error: unknown) {
-    //     console.error('Falling back to cached data', error);
-    //     const cachedTerms = await getAllTerms();
-    //     const filtered = cachedTerms.filter(
-    //       (term) => term.term.toLowerCase() === name?.toLowerCase(),
-    //     );
-    //     setTerm(filtered[0]);
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // }, []);
-
-    // const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
-    //   try {
-    //     const params = new URLSearchParams({
-    //       domain: domain,
-    //       sort_by: 'name',
-    //       page: '1',
-    //       page_size: '3',
-    //       fuzzy: 'false',
-    //     });
-    //
-    //     const response = await fetch(
-    //       `${API_ENDPOINTS.search}?${params.toString()}`,
-    //     );
-    //     if (!response.ok) throw new Error('Failed to fetch search results');
-    //     const data = (await response.json()) as SearchResponseType;
-    //     const res = data.items;
-    //     return res;
-    //   } catch (ex) {
-    //     console.error('Falling back to cached data', ex);
-    //     const cachedTerms = await getAllTerms();
-    //     const filtered = cachedTerms.filter((t) => {
-    //       console.log('Looking for related domain:', term?.domain);
-    //       return t.domain === term?.domain && t.id !== term.id;
-    //     });
-    //     console.log('Cached', cachedTerms);
-    //     console.log('Cached Related', filtered);
-    //     setRelatedTerms(filtered);
-    //     return filtered;
-    //   }
-    // };
-
-    // /* eslint-disable react-hooks/exhaustive-deps */
-    // // eslint-disable-next-line react-hooks/rules-of-hooks
-    // useEffect(() => {
-    //   const run = async () => {
-    //     if (id) {
-    //       await handleSearch();
-    //       const related = await fetchRelatedTerms(String(term?.domain));
-    //       setRelatedTerms(related);
-    //     }
-    //   };
-    //   void run();
-    // }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
-
-    // // eslint-disable-next-line react-hooks/rules-of-hooks
-    // useEffect(() => {
-    //   if (!term) return;
-    //
-    //   const runSearch = async () => {
-    //     setIsLoading(true);
-    //     try {
-    //       const res = await fetchTerm();
-    //
-    //       setTerm(res.items[0]);
-    //
-    //       const related = await fetchRelatedTerms(term.domain);
-    //       setRelatedTerms(related);
-    //     } catch (error: unknown) {
-    //       console.error('Search fetch failed:', error);
-    //     } finally {
-    //       setIsLoading(false);
-    //     }
-    //   };
-    //
-    //   void runSearch();
-    // }, [term, language, fetchTerm, fetchRelatedTerms]);
-    /* eslint-enable react-hooks/exhaustive-deps */
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const handleResize = () => {
         setIsMobile(window.innerWidth <= 768);
@@ -299,7 +194,7 @@ export const TermDetailPage: React.FC = () => {
       };
     }, []);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+
     useEffect(() => {
       const token = localStorage.getItem('accessToken');
       setAuthToken(token);
@@ -387,7 +282,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
       const data = (await response.json()) as BackendComment[];
       setComments(data.map(mapBackendCommentToFrontend));
@@ -442,7 +337,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again to add comments.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
 
       await fetchComments();
@@ -492,7 +387,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again to vote.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
 
       await fetchComments();
@@ -536,7 +431,7 @@ export const TermDetailPage: React.FC = () => {
         } else if (response.status === 404) {
           setErrorComments('Comment not found.');
         } else {
-          throw new Error(`HTTP error! status: ${String(response.status)}`);
+          console.error(`HTTP error! status: ${String(response.status)}`);
         }
       }
       await fetchComments();
@@ -575,7 +470,7 @@ export const TermDetailPage: React.FC = () => {
         } else if (response.status === 404) {
           setErrorComments('Comment not found.');
         } else {
-          throw new Error(`HTTP error! status: ${String(response.status)}`);
+          console.error(`HTTP error! status: ${String(response.status)}`);
         }
       }
       await fetchComments();
