@@ -180,15 +180,14 @@ const TermCard: React.FC<TermCardProps> = ({
           >
             {term.length > 20 ? `${term.slice(0, 20)}...` : term}
           </h3>
-
         </div>
         <div className="pills">
-            <span className={`pill ${LanguageColorMap[language] || 'gray'}`}>
-              {language}
-            </span>
+          <span className={`pill ${LanguageColorMap[language] || 'gray'}`}>
+            {language}
+          </span>
           <span className="pill gray">
-              {domain.length > 11 ? `${domain.slice(0, 11)}...` : domain}
-            </span>
+            {domain.length > 11 ? `${domain.slice(0, 11)}...` : domain}
+          </span>
         </div>
         <div className="term-socials">
           <button

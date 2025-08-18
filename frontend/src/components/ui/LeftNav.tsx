@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import {Moon, Sun} from "lucide-react";
-import ToggleSwitch from "./ToggleSwtich.tsx";
+import { Moon, Sun } from 'lucide-react';
+import ToggleSwitch from './ToggleSwtich.tsx';
 // import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface LeftNavProps {

@@ -118,25 +118,30 @@ export const TermDetailPage: React.FC = () => {
     return (await resp.json()) as SearchResponseType;
   }, [name, language]);
 
-  const fetchRelatedTerms = useCallback(async (domain: string): Promise<Term[]> => {
-    const params = new URLSearchParams({
-      domain,
-      sort_by: 'name',
-      page: '1',
-      page_size: '3',
-      fuzzy: 'false',
-    });
-    try {
-      const resp = await fetch(`${API_ENDPOINTS.search}?${params.toString()}`);
-      if (!resp.ok) console.error('Failed to fetch search results');
-      const data = (await resp.json()) as SearchResponseType;
-      return data.items;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (ex) {
-      const cached = await getAllTerms();
-      return cached.filter((t) => t.domain === domain);
-    }
-  }, []);
+  const fetchRelatedTerms = useCallback(
+    async (domain: string): Promise<Term[]> => {
+      const params = new URLSearchParams({
+        domain,
+        sort_by: 'name',
+        page: '1',
+        page_size: '3',
+        fuzzy: 'false',
+      });
+      try {
+        const resp = await fetch(
+          `${API_ENDPOINTS.search}?${params.toString()}`,
+        );
+        if (!resp.ok) console.error('Failed to fetch search results');
+        const data = (await resp.json()) as SearchResponseType;
+        return data.items;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (ex) {
+        const cached = await getAllTerms();
+        return cached.filter((t) => t.domain === domain);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -153,9 +158,9 @@ export const TermDetailPage: React.FC = () => {
         } catch {
           const cached = await getAllTerms();
           picked =
-              cached.find(
-                  (t) => t.term.toLowerCase() === (name ?? "").toLowerCase(),
-              ) ?? null;
+            cached.find(
+              (t) => t.term.toLowerCase() === (name ?? '').toLowerCase(),
+            ) ?? null;
         }
         //eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!cancelled) {
@@ -178,12 +183,10 @@ export const TermDetailPage: React.FC = () => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!cancelled) {
           setIsLoading(false);
-          if(term && term.upvotes && term.downvotes)
-          {
-            setDownvotes(term.downvotes)
-            setUpvotes(term.upvotes)
+          if (term && term.upvotes && term.downvotes) {
+            setDownvotes(term.downvotes);
+            setUpvotes(term.upvotes);
           }
-
         }
       }
     })();
@@ -193,73 +196,70 @@ export const TermDetailPage: React.FC = () => {
     };
   }, [id, name, language, fetchTerm, fetchRelatedTerms]);
 
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth <= 768);
-      };
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setAuthToken(token);
 
-    useEffect(() => {
-      const token = localStorage.getItem('accessToken');
-      setAuthToken(token);
-
-      const storedUserDataString = localStorage.getItem('userData');
-      if (storedUserDataString) {
-        try {
-          const parsedData: unknown = JSON.parse(storedUserDataString);
-          if (
-            parsedData &&
-            typeof parsedData === 'object' &&
-            'uuid' in parsedData &&
-            typeof (parsedData as UserData).uuid === 'string'
-          ) {
-            setCurrentUserId((parsedData as UserData).uuid);
-          } else {
-            console.error(
-              'User data from localStorage is not in the expected format.',
-            );
-            localStorage.removeItem('userData');
-          }
-        } catch (error) {
-          console.error('Failed to parse user data from localStorage:', error);
+    const storedUserDataString = localStorage.getItem('userData');
+    if (storedUserDataString) {
+      try {
+        const parsedData: unknown = JSON.parse(storedUserDataString);
+        if (
+          parsedData &&
+          typeof parsedData === 'object' &&
+          'uuid' in parsedData &&
+          typeof (parsedData as UserData).uuid === 'string'
+        ) {
+          setCurrentUserId((parsedData as UserData).uuid);
+        } else {
+          console.error(
+            'User data from localStorage is not in the expected format.',
+          );
           localStorage.removeItem('userData');
         }
-      } else {
-        setCurrentUserId(null);
+      } catch (error) {
+        console.error('Failed to parse user data from localStorage:', error);
+        localStorage.removeItem('userData');
       }
+    } else {
+      setCurrentUserId(null);
+    }
 
-      const handleResize = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          commentInputRef.current &&
-          !commentInputRef.current.contains(event.target as Node)
-        ) {
-          setReplyingToCommentId(null);
-        }
-      };
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        commentInputRef.current &&
+        !commentInputRef.current.contains(event.target as Node)
+      ) {
+        setReplyingToCommentId(null);
+      }
+    };
 
-      window.addEventListener('resize', handleResize);
-      document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('mousedown', handleClickOutside);
 
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, []);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-    // const handleBack = () => {
-    //   void navigate(-1);
-    // };
-
-
+  // const handleBack = () => {
+  //   void navigate(-1);
+  // };
 
   const languageKey = term?.language
     ? term.language.charAt(0).toUpperCase() +
@@ -509,27 +509,27 @@ export const TermDetailPage: React.FC = () => {
     setIsUpvote(!isUpvote);
     if (isUpvote) {
       if (term && term.upvotes) {
-        setUpvotes(upvotes + 1)
+        setUpvotes(upvotes + 1);
       }
     } else {
       if (term && term.upvotes) {
-        setUpvotes(upvotes-1)
+        setUpvotes(upvotes - 1);
       }
     }
-  }
+  };
 
   const handleDownvote = () => {
     setIsDownvote(!isDownvote);
     if (isDownvote) {
       if (term && term.downvotes) {
-        setDownvotes(downvotes +1)
+        setDownvotes(downvotes + 1);
       }
     } else {
       if (term && term.downvotes) {
-        setDownvotes(downvotes-1)
+        setDownvotes(downvotes - 1);
       }
     }
-  }
+  };
 
   return (
     <div
@@ -562,11 +562,14 @@ export const TermDetailPage: React.FC = () => {
                     </button>
                     <div className="flex flex-row items-center gap-2">
                       <ArrowUp
-                          onClick={handleUpvote}
-                          className={`cursor-pointer hover:text-teal-500 ${isUpvote ? "text-teal-400" : ""}`}
+                        onClick={handleUpvote}
+                        className={`cursor-pointer hover:text-teal-500 ${isUpvote ? 'text-teal-400' : ''}`}
                       />
                       <span className="text-xs">{upvotes}</span>
-                      <ArrowDown onClick={handleDownvote} className={`cursor-pointer hover:text-teal-500 ${isDownvote ? "text-teal-400" : ""}`} />
+                      <ArrowDown
+                        onClick={handleDownvote}
+                        className={`cursor-pointer hover:text-teal-500 ${isDownvote ? 'text-teal-400' : ''}`}
+                      />
                       <span className="text-xs">{downvotes}</span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -593,8 +596,6 @@ export const TermDetailPage: React.FC = () => {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-
-
                     </div>
                   </div>
 

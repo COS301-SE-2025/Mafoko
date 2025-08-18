@@ -77,7 +77,6 @@ $cosmic-shadow: #2a2f3a;
   text-overflow: ellipsis;
   align-items: flex-start !important;
 
-
   .term-header {
     display: flex;
     flex-direction: column;
@@ -239,11 +238,9 @@ $cosmic-shadow: #2a2f3a;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
 
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 
     max-height: calc(1.4em * 1);
   }
