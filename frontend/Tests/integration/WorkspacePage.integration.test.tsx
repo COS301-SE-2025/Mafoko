@@ -137,6 +137,12 @@ describe('WorkspacePage Integration Tests', () => {
   });
 
   test('loads workspace data on mount with authentication', async () => {
+    // Mock user role API response (for LeftNav and Navbar)
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => ({ role: 'user' }),
+    });
+
     // Mock bookmarks API response
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -311,6 +317,12 @@ describe('WorkspacePage Integration Tests', () => {
   });
 
   test('add terms to group integration', async () => {
+    // Mock user role API response (for LeftNav and Navbar)
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => ({ role: 'user' }),
+    });
+
     // Mock bookmarks API call
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -409,6 +421,12 @@ describe('WorkspacePage Integration Tests', () => {
   });
 
   test('manage notes integration', async () => {
+    // Mock user role API response (for LeftNav and Navbar)
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => ({ role: 'user' }),
+    });
+
     // Mock bookmarks API call
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -540,6 +558,12 @@ describe('WorkspacePage Integration Tests', () => {
   });
 
   test('delete groups integration', async () => {
+    // Mock user role API response (for LeftNav and Navbar)
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => ({ role: 'user' }),
+    });
+
     // Mock bookmarks API call
     mockFetch.mockResolvedValueOnce({
       ok: true,
