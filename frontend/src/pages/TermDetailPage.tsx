@@ -50,7 +50,7 @@ interface BackendComment {
 }
 
 interface UserData {
-  uuid: string;
+  id: string;
 }
 
 const mapBackendCommentToFrontend = (
@@ -217,10 +217,9 @@ export const TermDetailPage: React.FC = () => {
         if (
           parsedData &&
           typeof parsedData === 'object' &&
-          'uuid' in parsedData &&
-          typeof (parsedData as UserData).uuid === 'string'
+          'id' in parsedData
         ) {
-          setCurrentUserId((parsedData as UserData).uuid);
+          setCurrentUserId((parsedData as UserData).id);
         } else {
           console.error(
             'User data from localStorage is not in the expected format.',
@@ -689,98 +688,84 @@ export const TermDetailPage: React.FC = () => {
                           )}
                         </section>
 
-                        <section>
-                          <h3 className="font-semibold mb-2 text-2xl">
-                            Comments
-                          </h3>
-                          <div className="border border-muted rounded-md p-4 min-h-[100px] bg-muted/30">
-                            <section className="comments-section">
-                              <div className="comments-header">
-                                <h3 className="section-title">Comments</h3>
-                                <span className="comment-count">
-                                  {comments.length}
-                                </span>
-                              </div>
+                        <section className="comments-section">
+                          <div className="comments-header">
+                            <h3 className="section-title">Comments</h3>
+                            <span className="comment-count">
+                              {comments.length}
+                            </span>
+                          </div>
 
-                              <div className="comments-list">
-                                {loadingComments && <p>Loading comments...</p>}
-                                {errorComments && (
-                                  <p className="error-message">
-                                    {errorComments}
-                                  </p>
-                                )}
-                                {!loadingComments && comments.length === 0 && (
-                                  <p>
-                                    No comments yet. Be the first to comment!
-                                  </p>
-                                )}
-                                {comments.map((comment) => (
-                                  <CommentItem
-                                    key={comment.id}
-                                    comment={comment}
-                                    onVote={handleVoteComment}
-                                    onReply={handleReplyClick}
-                                    onEdit={handleEditComment}
-                                    onDelete={handleDeleteComment}
-                                    currentUserId={currentUserId}
-                                  />
-                                ))}
-                              </div>
+                          <div className="comments-list">
+                            {loadingComments && <p>Loading comments...</p>}
+                            {errorComments && (
+                              <p className="error-message">{errorComments}</p>
+                            )}
+                            {!loadingComments && comments.length === 0 && (
+                              <p>No comments yet. Be the first to comment!</p>
+                            )}
+                            {comments.map((comment) => (
+                              <CommentItem
+                                key={comment.id}
+                                comment={comment}
+                                onVote={handleVoteComment}
+                                onReply={handleReplyClick}
+                                onEdit={handleEditComment}
+                                onDelete={handleDeleteComment}
+                                currentUserId={currentUserId}
+                              />
+                            ))}
+                          </div>
 
-                              <div
-                                className="add-comment"
-                                ref={commentInputRef}
-                              >
-                                {replyingToCommentId && (
-                                  <div className="replying-to-info">
-                                    Replying to:{' '}
-                                    {comments.find(
-                                      (c) => c.id === replyingToCommentId,
-                                    )?.user.name || 'comment'}
-                                  </div>
-                                )}
-                                <input
-                                  type="text"
-                                  value={newComment}
-                                  onChange={(e) => {
-                                    setNewComment(e.target.value);
-                                  }}
-                                  placeholder={
-                                    replyingToCommentId
-                                      ? 'Add a reply...'
-                                      : 'Add a comment....'
-                                  }
-                                  aria-label={
-                                    replyingToCommentId
-                                      ? 'Add a reply'
-                                      : 'Add a comment'
-                                  }
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    void handleAddComment(replyingToCommentId)
-                                  }
-                                  aria-label="Send comment"
-                                  className="send-comment-button bg-theme text-theme"
-                                >
-                                  <SendIcon />
-                                </button>
+                          <div className="add-comment" ref={commentInputRef}>
+                            {replyingToCommentId && (
+                              <div className="replying-to-info">
+                                Replying to:{' '}
+                                {comments.find(
+                                  (c) => c.id === replyingToCommentId,
+                                )?.user.name || 'comment'}
                               </div>
-                            </section>
-
-                            <footer className="page-footer">
-                              <button
-                                type="button"
-                                className="suggest-edit bg-theme text-theme"
-                                aria-label="Suggest an edit"
-                              >
-                                Suggest an edit
-                                <SuggestEditArrowIcon />
-                              </button>
-                            </footer>
+                            )}
+                            <input
+                              type="text"
+                              value={newComment}
+                              onChange={(e) => {
+                                setNewComment(e.target.value);
+                              }}
+                              placeholder={
+                                replyingToCommentId
+                                  ? 'Add a reply...'
+                                  : 'Add a comment....'
+                              }
+                              aria-label={
+                                replyingToCommentId
+                                  ? 'Add a reply'
+                                  : 'Add a comment'
+                              }
+                            />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void handleAddComment(replyingToCommentId)
+                              }
+                              aria-label="Send comment"
+                              className="send-comment-button"
+                            >
+                              <SendIcon />
+                            </button>
                           </div>
                         </section>
+
+                        <footer className="page-footer">
+                          <button
+                            type="button"
+                            className="suggest-edit"
+                            aria-label="Suggest an edit"
+                          >
+                            Suggest an edit
+                            <SuggestEditArrowIcon />
+                          </button>
+                        </footer>
                       </CardContent>
                     </Card>
                   </div>
