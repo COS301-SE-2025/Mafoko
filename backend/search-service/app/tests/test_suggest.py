@@ -1,6 +1,6 @@
 import pytest
 import pytest_asyncio  # noqa: F401
-from httpx import AsyncClient  # Use AsyncClient
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import uuid4
 from mavito_common.models.term import Term
@@ -15,6 +15,7 @@ async def test_suggest_endpoint(client: AsyncClient, db_session: AsyncSession):
         definition="SLA",
         language="English",
         domain="Business",
+        owner_id=uuid4(),
     )
     term2 = Term(
         id=uuid4(),
@@ -22,6 +23,7 @@ async def test_suggest_endpoint(client: AsyncClient, db_session: AsyncSession):
         definition="Maint",
         language="English",
         domain="Technology",
+        owner_id=uuid4(),
     )
     db_session.add_all([term1, term2])
     await db_session.commit()

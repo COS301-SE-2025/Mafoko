@@ -25,6 +25,7 @@ async def test_search_with_filters(client: AsyncClient, db_session: AsyncSession
         definition="A place for grain",
         language="English",
         domain="Agriculture",
+        owner_id=uuid4(),  # Added to satisfy NOT NULL constraint
     )
     db_session.add(term1)
     await db_session.commit()
@@ -45,6 +46,7 @@ async def test_search_with_filters(client: AsyncClient, db_session: AsyncSession
 async def test_search_empty_result(client: AsyncClient):
     # Act
     response = await client.get("/api/v1/search", params={"query": "nonexistentquery"})
+
     # Assert
     assert response.status_code == 200
     data = response.json()
