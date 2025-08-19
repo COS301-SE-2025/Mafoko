@@ -16,7 +16,6 @@ load_dotenv()
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Marito API Default"
     API_V1_STR: str = "/api/v1"
-
     SECRET_KEY: str = "!!!CONFIG_ERROR_SECRET_KEY_NOT_SET!!!"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7

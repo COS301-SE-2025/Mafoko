@@ -186,5 +186,24 @@ services:
              pip install --no-cache-dir -r /app/requirements.txt &&
              uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
 
+  term-addition-service:
+    build:
+      context: .
+      dockerfile: ./term-addition-service/Dockerfile
+    container_name: mavito_term_addition_service
+    env_file:
+      - ./.env
+    ports:
+      - "8010:8080"
+    volumes:
+      - ./term-addition-service:/app
+      - ./mavito-common-lib:/mavito-common-lib-src
+    depends_on:
+      - db
+    command: >
+      sh -c "pip install -e /mavito-common-lib-src &&
+             pip install --no-cache-dir -r /app/requirements.txt &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
+
 volumes:
   postgres_data:

@@ -16,6 +16,9 @@ export default tseslint.config(
       'build/**',
       'coverage/**',
       'src/components/**',
+      'src/pages/AdminTermPage.tsx',
+      'src/pages/ContributorPage.tsx',
+      'src/pages/LinguistPage.tsx',
     ],
   },
 

@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from mavito_common.models.bookmark import TermBookmark, GlossaryBookmark
     from mavito_common.models.workspace_group import WorkspaceGroup
     from mavito_common.models.workspace_note import WorkspaceNote
+    from mavito_common.models.term import Term
 
 
 class UserRole(str, enum.Enum):
@@ -80,3 +81,5 @@ class User(Base):
     workspace_notes: Mapped[List["WorkspaceNote"]] = relationship(
         "WorkspaceNote", back_populates="user", cascade="all, delete-orphan"
     )
+
+    owned_terms: Mapped[List["Term"]] = relationship("Term", back_populates="owner")

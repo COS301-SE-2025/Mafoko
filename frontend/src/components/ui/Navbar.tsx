@@ -14,24 +14,24 @@ interface UserProfileApiResponse {
   first_name: string;
   last_name: string;
   email?: string;
+  role: 'contributor' | 'linguist' | 'admin';
 }
 interface UserData {
   uuid: string;
   firstName: string;
   lastName: string;
+  role?: 'contributor' | 'linguist' | 'admin';
 }
 
 const Navbar = () => {
   const location = useLocation();
   const [isMainNavbarOpen, setIsMainNavbarOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [active, setActive] = useState('');
-  const [activeLinkColor, setActiveLinkColor] = useState(
-    'var(--navbar-accent-pink)',
-  );
+  const [activeLinkColor] = useState('var(--navbar-accent-pink)');
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { t } = useTranslation();
   const [avatarInitials, setAvatarInitials] = useState<string>('');
+  const [userRole, setUserRole] = useState<string>('contributor'); // Default to contributor
 
   const accentColors = useMemo(() => ['pink', 'yellow', 'teal'], []);
 
@@ -40,61 +40,75 @@ const Navbar = () => {
     return `var(--navbar-accent-${accentColors[randomIndex]})`;
   };
 
-  const navItems = useMemo(
+  const allNavItems = useMemo(
     () => [
-      t('navigation.home'),
-      t('navigation.dictionary'),
-      t('navigation.glossary'),
-      'Workspace',
-      t('navigation.dashboard'),
-      t('navigation.linguistApplication'),
-      'Feedback',
-      'Feedback Hub',
-      t('navigation.help'),
-      t('navigation.settings'),
+      {
+        name: t('navigation.home'),
+        path: '/dashboard',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.dictionary'),
+        path: '/search',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.glossary'),
+        path: '/glossary',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Workspace',
+        path: '/workspace',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.linguistApplication'),
+        path: '/linguist-application',
+        roles: ['contributor'],
+      },
+      {
+        name: 'Feedback',
+        path: '/feedback',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Feedback Hub',
+        path: '/feedbackhub',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.help'),
+        path: '/help',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.settings'),
+        path: '/settings',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Contributor Page',
+        path: '/contributor',
+        roles: ['contributor'],
+      },
+      { name: 'Linguist Page', path: '/linguist', roles: ['linguist'] },
+      { name: 'Admin Page', path: '/admin/terms', roles: ['admin'] },
+      { name: 'Analytics', path: '/analytics', roles: ['admin', 'linguist'] },
     ],
     [t],
   );
 
-  const getRouteForItem = (item: string): string => {
-    switch (item) {
-      case 'Home':
-        return '/dashboard';
-      case 'Dictionary':
-        return '/search';
-      case 'Glossary':
-        return '/glossary';
-      case 'Workspace':
-        return '/workspace';
-      case 'Dashboard':
-        return '/analytics';
-      case 'Feedback':
-        return '/feedback';
-      case 'Feedback Hub':
-        return '/feedbackhub';
-      case 'Settings':
-        return '/settings';
-      default:
-        return `/${item.toLowerCase().replace(/\s/g, '-')}`;
-    }
+  const getFilteredNavItems = (role: string) => {
+    return allNavItems.filter((item) => item.roles.includes(role));
   };
 
   useEffect(() => {
-    const currentPath = location.pathname.replace('/', '').replace(/-/g, ' ');
-    const match = navItems.find(
-      (item) => item.toLowerCase() === currentPath.toLowerCase(),
-    );
-    if (match) {
-      setActive(match);
-      setActiveLinkColor(getRandomAccentColor());
-    } else {
-      setActive('');
-    }
-
     const fetchAndSetUserData = async () => {
       const token = localStorage.getItem('accessToken');
       if (!token) {
         setAvatarInitials('');
+        setUserRole('contributor');
         return;
       }
       const storedUserDataString = localStorage.getItem('userData');
@@ -109,6 +123,9 @@ const Navbar = () => {
             setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
           } else {
             setAvatarInitials('U');
+          }
+          if (parsedData.role) {
+            setUserRole(parsedData.role);
           }
           return;
         } catch (error) {
@@ -134,11 +151,13 @@ const Navbar = () => {
             uuid: apiData.id,
             firstName: apiData.first_name,
             lastName: apiData.last_name,
+            role: apiData.role,
           };
           localStorage.setItem('userData', JSON.stringify(newUserData));
           setAvatarInitials(
             `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
           );
+          setUserRole(newUserData.role || 'contributor');
         } else {
           console.error(
             'Navbar: Failed to fetch user data from API:',
@@ -146,6 +165,7 @@ const Navbar = () => {
             await response.text(),
           );
           setAvatarInitials('');
+          setUserRole('contributor');
         }
       } catch (error) {
         console.error(
@@ -153,16 +173,18 @@ const Navbar = () => {
           error,
         );
         setAvatarInitials('');
+        setUserRole('contributor');
       }
     };
     void fetchAndSetUserData();
-  }, [location.pathname, navItems, accentColors]);
+  }, [location.pathname, accentColors]);
 
-  const handleLinkClick = (item: string) => {
-    setActive(item);
+  const handleLinkClick = () => {
     setIsMainNavbarOpen(false);
     setIsMobileMenuOpen(false);
   };
+
+  const navItemsToDisplay = getFilteredNavItems(userRole);
 
   return (
     <>
@@ -229,22 +251,22 @@ const Navbar = () => {
         <div
           className={`mobile-nav-dropdown md:hidden ${isMobileMenuOpen ? 'is-open' : 'is-closed'}`}
         >
-          {navItems.map((item) => (
+          {navItemsToDisplay.map((item) => (
             <NavLink
-              key={item}
-              to={getRouteForItem(item)}
+              key={item.name}
+              to={item.path}
               className={`mobile-nav-link ${
-                active === item ? 'font-semibold' : ''
+                location.pathname.startsWith(item.path) ? 'font-semibold' : ''
               }`}
               style={({ isActive }) => ({
                 color: isActive ? activeLinkColor : 'inherit',
                 '--hover-color': getRandomAccentColor(),
               })}
               onClick={() => {
-                handleLinkClick(item);
+                handleLinkClick();
               }}
             >
-              {item}
+              {item.name}
             </NavLink>
           ))}
         </div>
