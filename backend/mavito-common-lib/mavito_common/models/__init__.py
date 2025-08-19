@@ -11,3 +11,4 @@ from .group_term import GroupTerm  # noqa: F401
 from .workspace_note import WorkspaceNote  # noqa: F401
 from .term_application import TermApplication  # noqa: F401
 from .term_status import TermStatus  # noqa: F401
+from .feedback import Feedback  # noqa: F401

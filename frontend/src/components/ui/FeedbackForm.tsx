@@ -1,14 +1,15 @@
-import { Send } from 'lucide-react';
+import { Send, Loader, AlertCircle } from 'lucide-react';
+import { FeedbackType } from '../../types/feedback';
 
 interface FormData {
   name: string;
   email: string;
   message: string;
-  category: string;
+  type: FeedbackType;
 }
 
 interface Tab {
-  id: string;
+  id: FeedbackType;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
@@ -21,8 +22,10 @@ interface FeedbackFormProps {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   handleSubmit: (e: React.FormEvent) => void;
-  activeTab: string;
+  activeTab: FeedbackType;
   activeTabData: Tab;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
 const FeedbackForm = ({
@@ -31,6 +34,8 @@ const FeedbackForm = ({
   handleSubmit,
   activeTab,
   activeTabData,
+  isSubmitting = false,
+  submitError = null,
 }: FeedbackFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="feedback-form">
@@ -79,25 +84,41 @@ const FeedbackForm = ({
             onChange={handleInputChange}
             className="form-textarea"
             placeholder={
-              activeTab === 'suggestion'
+              activeTab === FeedbackType.SUGGESTION
                 ? 'Describe your suggestion in detail...'
-                : activeTab === 'complaint'
+                : activeTab === FeedbackType.COMPLAINT
                   ? 'Please describe the issue you experienced...'
                   : 'Tell us what made your experience great...'
             }
           />
         </div>
 
+        {submitError && (
+          <div className="error-message">
+            <AlertCircle className="error-icon" />
+            <span>{submitError}</span>
+          </div>
+        )}
+
         <div className="form-submit">
           <button
             type="submit"
-            disabled={!formData.message.trim()}
+            disabled={!formData.message.trim() || isSubmitting}
             className={`submit-button ${
-              formData.message.trim() ? 'enabled' : 'disabled'
+              formData.message.trim() && !isSubmitting ? 'enabled' : 'disabled'
             }`}
           >
-            <Send className="submit-icon" />
-            Submit {activeTabData.label}
+            {isSubmitting ? (
+              <>
+                <Loader className="submit-icon loading" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send className="submit-icon" />
+                Submit {activeTabData.label}
+              </>
+            )}
           </button>
         </div>
       </div>

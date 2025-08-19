@@ -1,19 +1,15 @@
 import { useMemo, useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import '../../styles/Navbar.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 import { API_ENDPOINTS } from '../../config.ts';
 
-// This should ideally be in a shared config file or environment variable
-const USER_API_ENDPOINT = API_ENDPOINTS.getMe;
-
 interface UserProfileApiResponse {
   id: string;
   first_name: string;
   last_name: string;
-  email?: string;
   role: 'contributor' | 'linguist' | 'admin';
 }
 interface UserData {
@@ -24,21 +20,14 @@ interface UserData {
 }
 
 const Navbar = () => {
-  const location = useLocation();
+  const { t } = useTranslation();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
   const [isMainNavbarOpen, setIsMainNavbarOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeLinkColor] = useState('var(--navbar-accent-pink)');
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const { t } = useTranslation();
-  const [avatarInitials, setAvatarInitials] = useState<string>('');
-  const [userRole, setUserRole] = useState<string>('contributor'); // Default to contributor
-
-  const accentColors = useMemo(() => ['pink', 'yellow', 'teal'], []);
-
-  const getRandomAccentColor = () => {
-    const randomIndex = Math.floor(Math.random() * accentColors.length);
-    return `var(--navbar-accent-${accentColors[randomIndex]})`;
-  };
+  const [avatarInitials, setAvatarInitials] = useState('');
+  const [userRole, setUserRole] = useState<string>('contributor');
+  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
 
   const allNavItems = useMemo(
     () => [
@@ -99,155 +88,120 @@ const Navbar = () => {
     [t],
   );
 
-  const getFilteredNavItems = (role: string) => {
-    return allNavItems.filter((item) => item.roles.includes(role));
-  };
+  const adminSubmenuItems = useMemo(
+    () => [
+      { id: 'admin', label: 'User Management', path: '/admin' },
+      { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
+    ],
+    [],
+  );
+
+  const navItemsToDisplay = useMemo(
+    () => allNavItems.filter((item) => item.roles.includes(userRole)),
+    [allNavItems, userRole],
+  );
 
   useEffect(() => {
-    const fetchAndSetUserData = async () => {
+    const fetchUserData = async () => {
       const token = localStorage.getItem('accessToken');
-      if (!token) {
-        setAvatarInitials('');
-        setUserRole('contributor');
-        return;
-      }
-      const storedUserDataString = localStorage.getItem('userData');
-      if (storedUserDataString) {
+      if (!token) return;
+
+      const stored = localStorage.getItem('userData');
+      if (stored) {
         try {
-          const parsedData = JSON.parse(storedUserDataString) as UserData;
-          if (parsedData.firstName && parsedData.lastName) {
-            setAvatarInitials(
-              `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
-            );
-          } else if (parsedData.firstName) {
-            setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
-          } else {
-            setAvatarInitials('U');
-          }
-          if (parsedData.role) {
-            setUserRole(parsedData.role);
-          }
-          return;
-        } catch (error) {
-          console.error(
-            'Navbar: Failed to parse user data from localStorage, fetching from API.',
-            error,
+          const parsed = JSON.parse(stored) as UserData;
+          setUserRole(parsed.role || 'contributor');
+          setAvatarInitials(
+            parsed.firstName && parsed.lastName
+              ? `${parsed.firstName[0]}${parsed.lastName[0]}`.toUpperCase()
+              : 'U',
           );
+          return;
+        } catch {
           localStorage.removeItem('userData');
         }
       }
 
       try {
-        const response = await fetch(USER_API_ENDPOINT, {
+        const res = await fetch(API_ENDPOINTS.getMe, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
             'ngrok-skip-browser-warning': 'true',
           },
         });
-        if (response.ok) {
-          const apiData = (await response.json()) as UserProfileApiResponse;
-          const newUserData: UserData = {
-            uuid: apiData.id,
-            firstName: apiData.first_name,
-            lastName: apiData.last_name,
-            role: apiData.role,
-          };
-          localStorage.setItem('userData', JSON.stringify(newUserData));
+        if (res.ok) {
+          const data: UserProfileApiResponse = await res.json();
+          setUserRole(data.role);
           setAvatarInitials(
-            `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
+            `${data.first_name[0]}${data.last_name[0]}`.toUpperCase(),
           );
-          setUserRole(newUserData.role || 'contributor');
-        } else {
-          console.error(
-            'Navbar: Failed to fetch user data from API:',
-            response.status,
-            await response.text(),
+          localStorage.setItem(
+            'userData',
+            JSON.stringify({
+              uuid: data.id,
+              firstName: data.first_name,
+              lastName: data.last_name,
+              role: data.role,
+            }),
           );
-          setAvatarInitials('');
-          setUserRole('contributor');
         }
-      } catch (error) {
-        console.error(
-          'Navbar: Network or other error fetching user data:',
-          error,
-        );
-        setAvatarInitials('');
-        setUserRole('contributor');
+      } catch (err) {
+        console.error('Navbar fetch error:', err);
       }
     };
-    void fetchAndSetUserData();
-  }, [location.pathname, accentColors]);
+
+    void fetchUserData();
+  }, []);
+
+  const toggleAdminDropdown = () => setIsAdminDropdownOpen((prev) => !prev);
+
+  const handleAdminItemClick = () => setIsAdminDropdownOpen(false);
 
   const handleLinkClick = () => {
     setIsMainNavbarOpen(false);
     setIsMobileMenuOpen(false);
   };
 
-  const navItemsToDisplay = getFilteredNavItems(userRole);
-
   return (
     <>
-      {/* Outer fixed hamburger button (always visible) */}
+      {/* Hamburger button */}
       <div
         className={`fixed-outer-navbar-toggle ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       >
         <button
-          className="outer-toggle-button"
-          onClick={() => {
-            setIsMainNavbarOpen(!isMainNavbarOpen);
-          }}
-          aria-label="Toggle main navigation"
+          onClick={() => setIsMainNavbarOpen(!isMainNavbarOpen)}
           type="button"
         >
           {isMainNavbarOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* The main navbar, which now slides in/out as a dropdown */}
+      {/* Main Navbar */}
       <nav
         className={`main-navbar-dropdown ${isMainNavbarOpen ? 'is-open' : 'is-closed'} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       >
         <div className="main-navbar-content">
-          <div className="navbar-left-content">
-            {/* Logo and Title */}
-            <div className="navbar-brand">
-              <img
-                src="public/DFSI_Logo.png"
-                alt="Marito Logo"
-                className="navbar-logo"
-              />
-              <span className="navbar-title">Marito</span>
-            </div>
-            {/* Inner Hamburger for mobile menu (only visible on small screens) */}
-            <button
-              className="mobile-menu-toggle md:hidden"
-              onClick={() => {
-                setIsMobileMenuOpen(!isMobileMenuOpen);
-              }}
-              aria-label="Toggle mobile menu"
-              type="button"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+          {/* Logo */}
+          <div className="navbar-brand">
+            <img
+              src="public/DFSI_Logo.png"
+              alt="Marito Logo"
+              className="navbar-logo"
+            />
+            <span className="navbar-title">Marito</span>
           </div>
 
-          <div className="navbar-right-content">
-            {/* User controls (Avatar, Theme Toggle) */}
-            <div className="navbar-user-controls">
-              <button
-                onClick={toggleDarkMode}
-                className="navbar-toggle-darkmode"
-                type="button"
-                aria-label="Toggle dark mode"
-              >
-                {t('navigation.darkMode')}
-              </button>
-              <div className="navbar-avatar">{avatarInitials || ''}</div>
-            </div>
+          {/* Dark Mode & Avatar */}
+          <div className="navbar-user-controls">
+            <button onClick={toggleDarkMode} type="button">
+              {t('navigation.darkMode')}
+            </button>
+            <div className="navbar-avatar">{avatarInitials}</div>
           </div>
         </div>
-        {/* Mobile navigation menu (slides down from inner hamburger) */}
+
+        {/* Mobile Menu */}
         <div
           className={`mobile-nav-dropdown md:hidden ${isMobileMenuOpen ? 'is-open' : 'is-closed'}`}
         >
@@ -255,20 +209,34 @@ const Navbar = () => {
             <NavLink
               key={item.name}
               to={item.path}
-              className={`mobile-nav-link ${
-                location.pathname.startsWith(item.path) ? 'font-semibold' : ''
-              }`}
-              style={({ isActive }) => ({
-                color: isActive ? activeLinkColor : 'inherit',
-                '--hover-color': getRandomAccentColor(),
-              })}
-              onClick={() => {
-                handleLinkClick();
-              }}
+              className="mobile-nav-link"
+              onClick={handleLinkClick}
             >
               {item.name}
             </NavLink>
           ))}
+
+          {userRole === 'admin' && (
+            <>
+              <div
+                className="mobile-admin-toggle"
+                onClick={toggleAdminDropdown}
+              >
+                Admin
+              </div>
+              {isAdminDropdownOpen &&
+                adminSubmenuItems.map((sub) => (
+                  <NavLink
+                    key={sub.id}
+                    to={sub.path}
+                    className="mobile-admin-submenu-item"
+                    onClick={handleAdminItemClick}
+                  >
+                    {sub.label}
+                  </NavLink>
+                ))}
+            </>
+          )}
         </div>
       </nav>
     </>

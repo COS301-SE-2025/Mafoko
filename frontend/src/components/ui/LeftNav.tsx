@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
+import { ChevronDown, Moon, Sun } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
-import { Sun, Moon } from 'lucide-react';
 
 interface LeftNavProps {
   activeItem: string;
@@ -22,9 +22,9 @@ interface UserProfileApiResponse {
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const { isDarkMode } = useDarkMode();
   const [userRole, setUserRole] = useState<string>('contributor');
+  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
 
   const allMenuItems = useMemo(
     () => [
@@ -71,12 +71,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         roles: ['admin', 'contributor', 'linguist'],
       },
       {
-        id: 'feedbackhub',
-        label: 'Feedback Hub',
-        path: '/feedbackhub',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
         id: 'help',
         label: t('navigation.help'),
         path: '/help',
@@ -110,6 +104,11 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     [t],
   );
 
+  const adminSubmenuItems = [
+    { id: 'admin', label: 'User Management', path: '/admin' },
+    { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
+  ];
+
   useEffect(() => {
     const fetchUserRole = async () => {
       const token = localStorage.getItem('accessToken');
@@ -117,37 +116,57 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         setUserRole('contributor');
         return;
       }
+
+      // Try localStorage first
+      const storedUserData = localStorage.getItem('userData');
+      if (storedUserData) {
+        try {
+          const parsed = JSON.parse(storedUserData);
+          if (parsed.role) {
+            setUserRole(parsed.role);
+            return;
+          }
+        } catch {
+          // fallback to API
+        }
+      }
+
       try {
         const response = await fetch(API_ENDPOINTS.getMe, {
           headers: {
             Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
             'ngrok-skip-browser-warning': 'true',
           },
         });
         if (response.ok) {
-          const apiData = (await response.json()) as UserProfileApiResponse;
-          setUserRole(apiData.role);
-          const currentPath = location.pathname;
-          const currentItem = allMenuItems.find(
-            (item) => item.path === currentPath,
-          );
-          if (currentItem) {
-            setActiveItem(currentItem.id);
-          }
+          const userData = (await response.json()) as UserProfileApiResponse;
+          setUserRole(userData.role);
+          localStorage.setItem('userData', JSON.stringify(userData));
         } else {
           setUserRole('contributor');
         }
       } catch (error) {
-        console.error('LeftNav: Failed to fetch user role.', error);
+        console.error('LeftNav fetch error:', error);
         setUserRole('contributor');
       }
     };
+
     void fetchUserRole();
-  }, [location.pathname, allMenuItems, setActiveItem]);
+  }, []);
 
   const handleItemClick = (itemId: string, path: string) => {
     setActiveItem(itemId);
     void navigate(path);
+  };
+
+  const toggleAdminDropdown = () =>
+    setIsAdminDropdownOpen(!isAdminDropdownOpen);
+
+  const handleAdminItemClick = (itemId: string, path: string) => {
+    setActiveItem(itemId);
+    void navigate(path);
+    setIsAdminDropdownOpen(false);
   };
 
   const menuItemsToDisplay = allMenuItems.filter((item) =>
@@ -178,24 +197,49 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           <div
             key={item.id}
             className={`left-nav-menu-item ${activeItem === item.id ? 'active' : ''}`}
-            onClick={() => {
-              handleItemClick(item.id, item.path);
-            }}
+            onClick={() => handleItemClick(item.id, item.path)}
           >
             <span className="left-nav-menu-label">{item.label}</span>
           </div>
         ))}
+
+        {/* Admin Dropdown */}
+        {userRole === 'admin' && (
+          <div className="left-nav-admin-section">
+            <div
+              className={`left-nav-menu-item admin-menu-item ${adminSubmenuItems.some((sub) => activeItem === sub.id) ? 'active' : ''}`}
+              onClick={toggleAdminDropdown}
+            >
+              <div className="admin-menu-content">
+                <span className="left-nav-menu-label">Admin</span>
+                <ChevronDown
+                  size={16}
+                  className={isAdminDropdownOpen ? 'rotated' : ''}
+                />
+              </div>
+            </div>
+            {isAdminDropdownOpen && (
+              <div className="admin-submenu">
+                {adminSubmenuItems.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className={`admin-submenu-item ${activeItem === sub.id ? 'active' : ''}`}
+                    onClick={() => handleAdminItemClick(sub.id, sub.path)}
+                  >
+                    <span className="submenu-label">{sub.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </nav>
 
-      {/* Dark Mode Toggle - Bottom of sidebar */}
+      {/* Dark Mode Toggle */}
       <div className="left-nav-footer">
         <div className="dark-mode-toggle">
           <div className="toggle-container">
-            {isDarkMode ? (
-              <Sun size={18} className="toggle-icon" />
-            ) : (
-              <Moon size={18} className="toggle-icon" />
-            )}
+            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
             <span className="toggle-label">
               {isDarkMode
                 ? t('navigation.lightMode')

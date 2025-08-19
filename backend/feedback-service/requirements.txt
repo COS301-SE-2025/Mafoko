@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic[email]
+pydantic-settings
+python-dotenv
+sqlalchemy[asyncio]
+asyncpg
+aiosqlite
+PyJWT
+python-jose[cryptography]
+pytest
+pytest-asyncio
+httpx
+mavito-common-lib==0.1.0

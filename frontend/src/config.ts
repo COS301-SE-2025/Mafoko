@@ -29,6 +29,9 @@ const COMMENT_SERVICE_URL =
 const WORKSPACE_SERVICE_URL =
   (import.meta.env.VITE_WORKSPACE_SERVICE_URL as string) ||
   'http://localhost:8009';
+const FEEDBACK_SERVICE_URL =
+  (import.meta.env.VITE_FEEDBACK_SERVICE_URL as string) ||
+  'http://localhost:8010';
 
 const TERM_ADDITION_SERVICE_URL =
   (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
@@ -42,10 +45,6 @@ interface APIEndpoints {
   login: string;
   register: string;
   loginWithGoogle: string;
-  forgotPassword: string;
-  resetPassword: string;
-  verifyEmail: string;
-  resendVerification: string;
   getMe: string;
   updateMe: string;
   updateProfile: string;
@@ -134,6 +133,15 @@ interface APIEndpoints {
   deleteNote: (noteId: string) => string;
   getNoteByTerm: (termId: string) => string;
   updateBookmarkNote: string;
+  // --- Feedback Service ---
+  submitFeedback: string;
+  getMyFeedback: string;
+  getFeedback: (feedbackId: string) => string;
+  getAllFeedback: string;
+  updateFeedback: (feedbackId: string) => string;
+  deleteFeedback: (feedbackId: string) => string;
+  getFeedbackStats: string;
+  searchFeedback: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -141,13 +149,6 @@ export const API_ENDPOINTS: APIEndpoints = {
   register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
   login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
   loginWithGoogle: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/google-login'),
-  forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
-  resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
-  verifyEmail: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/verify-email'),
-  resendVerification: endpoint(
-    AUTH_SERVICE_URL,
-    '/api/v1/auth/resend-verification',
-  ),
   getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
   updateMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
   updateProfile: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
@@ -469,4 +470,20 @@ export const API_ENDPOINTS: APIEndpoints = {
     WORKSPACE_SERVICE_URL,
     '/api/v1/workspace/notes/bookmark-note',
   ),
+
+  // --- Feedback Service ---
+  submitFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/'),
+  getMyFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/my-feedback'),
+  getFeedback: (feedbackId: string) =>
+    endpoint(FEEDBACK_SERVICE_URL, `/api/v1/feedback/${feedbackId}`),
+  getAllFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/'),
+  updateFeedback: (feedbackId: string) =>
+    endpoint(FEEDBACK_SERVICE_URL, `/api/v1/feedback/${feedbackId}`),
+  deleteFeedback: (feedbackId: string) =>
+    endpoint(FEEDBACK_SERVICE_URL, `/api/v1/feedback/${feedbackId}`),
+  getFeedbackStats: endpoint(
+    FEEDBACK_SERVICE_URL,
+    '/api/v1/feedback/admin/stats',
+  ),
+  searchFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/search/'),
 };

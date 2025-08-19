@@ -21,6 +21,8 @@ import LeftNav from '../components/ui/LeftNav.tsx';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import '../styles/AdminPage.scss';
 import { API_ENDPOINTS } from '../config';
+import { useAdminAuth } from '../hooks/useAdminAuth';
+import { AdminErrorBoundary } from '../components/AdminErrorBoundary';
 
 interface LinguistApplicationWithUserRead {
   google_scholar_url: string;
@@ -75,10 +77,6 @@ interface SystemUser {
 }
 
 // Add interface for user response
-interface UserResponse {
-  role: string;
-  // Add other properties as needed
-}
 
 const AdminPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -104,7 +102,7 @@ const AdminPage: React.FC = () => {
   >({});
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const { authError, isLoading } = useAdminAuth();
   const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
 
   const applyFiltersAndPagination = useCallback(() => {
@@ -236,8 +234,9 @@ const AdminPage: React.FC = () => {
 
             // Determine document type based on filename
             const getDocumentType = (
-              filename: string,
+              filename: string | undefined,
             ): 'cv' | 'certificate' | 'id' | 'research' => {
+              if (!filename) return 'research'; // default for undefined filenames
               const lower = filename.toLowerCase();
               if (lower.includes('cv') || lower.includes('resume')) return 'cv';
               if (lower.includes('cert') || lower.includes('certificate'))
@@ -388,39 +387,6 @@ const AdminPage: React.FC = () => {
     setSearchTerm('');
     setStatusFilter('all');
   }, [currentView]);
-
-  useEffect(() => {
-    const checkAdminRole = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        window.location.href = '/login';
-        return;
-      }
-
-      try {
-        const response = await fetch(API_ENDPOINTS.getMe, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) {
-          setAuthError(
-            `Error ${response.status.toString()}: ${response.statusText}`,
-          );
-          return;
-        }
-
-        const user = (await response.json()) as UserResponse;
-        if (user.role !== 'admin') {
-          setAuthError('Error 403: Forbidden - Admin access required');
-        }
-      } catch (err) {
-        console.error('Error checking admin role:', err);
-        setAuthError('Error 500: Unable to verify admin access');
-      }
-    };
-
-    void checkAdminRole();
-  }, []);
 
   const handleDocumentOpen = async (gcsKey: string) => {
     try {
@@ -692,36 +658,12 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   if (authError) {
-    return (
-      <div
-        className="error-container"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-          gap: '1rem',
-        }}
-      >
-        <h1 style={{ color: '#dc3545' }}>{authError}</h1>
-        <button
-          type="button"
-          onClick={() => (window.location.href = '/Marito/dashboard')}
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          Go to Dashboard
-        </button>
-      </div>
-    );
+    return <AdminErrorBoundary authError={authError} />;
   }
 
   return (

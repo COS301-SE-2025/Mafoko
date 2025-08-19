@@ -105,8 +105,10 @@
   },
   "dashboard": {
     "welcome": "Vho ṱanganedzwa kha Marito",
+    "welcomeBack": "Vho ṱanganedzwa hafhu",
     "userName": "Dzina ḽa Mushumisi",
     "userId": "Nomboro ya Mushumisi",
+    "userEmail": "Imeili",
     "quickActions": "Nyito dza Tshihaḓu",
     "searchNow": "Ṱoḓa Zwino",
     "searchDescription": "Ṱoḓa maipfi nga nyambo nnzhi",
@@ -119,7 +121,21 @@
     "viewAll": "Vhona Zwoṱhe",
     "communityActivity": "Mishumo ya Tshitshavha",
     "hideActivity": "Dzumba Mishumo",
-    "viewAllActivity": "Vhona Mishumo Yoṱhe"
+    "viewAllActivity": "Vhona Mishumo Yoṱhe",
+    "title": "Tanganani nga Maipfi",
+    "loadingProfile": "Yo louda phuroufaili...",
+    "goToProfile": "Ya kha siaṱari ḽa phuroufaili",
+    "discoverRandomTerms": "Wana Maipfi a sa Bveledzwi",
+    "getNewTerms": "Wana maipfi maswa a sa bveledzwi",
+    "loadingTerms": "Yo louda maipfi...",
+    "noTermsAvailable": "A huna maipfi o wanalalaho",
+    "browseCategoryGlossary": "Sedza {{category}} bulukuvhuka ḽa maipfi",
+    "aboutMarito": {
+      "intro": "Ipfi 'Marito' li bva kha Xitsonga, li vha li ri 'maipfi' kana 'madzina'. Iyi ndi apulitshoni ya webu ya u ita phanḓa i khou tanganisani tshipenyu tsha vhuḓifhindulali ha nyambo dza Afrika Tshipembe na u swika hwa zwino zwa didzitala. Vhane vha funa nyambo, vhaṱoḓisisi vha NLP, na vhaṱanzi vha nyambo vha nga shumisa Marito sa phulatifomo yo tanganisiwaho u todulusa, u dzhena, na u vhulaha zwinyorwa zwa maipfi zwa nyambo dzinzhi, mabugu a maipfi, na mbanga dza maipfi kha nyambo dza 11 dza ndeme dza Afrika Tshipembe.",
+      "mission": "Marito i shuma zwavhuḓi zwoṱhe kha inthanete na nnḓa ha inthanete, i nea tshitshavha mathalutshedzo u swika kha zwishumiswa zwa nyambo zwo fhelaho, u nea themendelo, na u tirisana u ita ma-lexicons matuku kha nyambo dzine dzi na zwishumiswa zwituku. Phulatifomo iyi ndi tshipiḓa tsha mushumo u ya phanḓa une wa itwa nga DSFSI (Data Science for Social Impact) kha Yunivesithi ya Pretoria u ita uri zwishumiswa zwa nyambo zwi swikelelehe tshitshavha tshoṱhe na u isa phanḓa ṱhoḓisiso ya u tirisana na nyambo ya vhubvo kha nyambo dza Afrika.",
+      "teamCredit": "Yo itiwa nga u ḓivhadzwa nga Velox",
+      "learnMoreDSFSI": "Guda zwinzhi nga DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Mutevhemaipfi wa Nyambo Nnzhi",

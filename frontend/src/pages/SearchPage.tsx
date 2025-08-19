@@ -285,7 +285,7 @@ const SearchPage: React.FC = () => {
                   )}
                 </nav>
 
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
+                <div className="flex w-full flex-col">
                   {isLoading ? (
                     <p className="text-theme opacity-80 text-center w-full">
                       {t('searchPage.loading')}

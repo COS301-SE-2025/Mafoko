@@ -11,7 +11,7 @@ import { API_ENDPOINTS } from '../config';
 
 import { Term } from '../types/terms/types.ts';
 import '../styles/TermPage.scss';
-import { ArrowUp, ArrowDown, Share2, MoreVertical } from 'lucide-react';
+import { ArrowUp, ArrowDown, Share2 } from 'lucide-react';
 import { Badge } from '../components/ui/badge.tsx';
 import {
   Card,
@@ -98,11 +98,13 @@ export const TermDetailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [relatedTerms, setRelatedTerms] = useState<Term[]>([]);
   const [term, setTerm] = useState<Term | null>(null);
-
+  const [isUpvote, setIsUpvote] = useState<boolean>(false);
+  const [isDownvote, setIsDownvote] = useState<boolean>(false);
+  const [downvotes, setDownvotes] = useState<number>(0);
+  const [upvotes, setUpvotes] = useState<number>(0);
   const commentInputRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fetchTerm = async (): Promise<SearchResponseType> => {
+  const fetchTerm = useCallback(async (): Promise<SearchResponseType> => {
     const params = new URLSearchParams({
       query: String(name),
       language: String(language),
@@ -111,166 +113,153 @@ export const TermDetailPage: React.FC = () => {
       page_size: '100',
       fuzzy: 'false',
     });
+    const resp = await fetch(`${API_ENDPOINTS.search}?${params.toString()}`);
+    if (!resp.ok) throw new Error('Failed to fetch search results');
+    return (await resp.json()) as SearchResponseType;
+  }, [name, language]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const handleSearch = useCallback(async () => {
-      setIsLoading(true);
+  const fetchRelatedTerms = useCallback(
+    async (domain: string): Promise<Term[]> => {
+      const params = new URLSearchParams({
+        domain,
+        sort_by: 'name',
+        page: '1',
+        page_size: '3',
+        fuzzy: 'false',
+      });
       try {
-        const res = await fetchTerm();
-        setTerm(res.results[0]);
-      } catch (error: unknown) {
-        console.error('Falling back to cached data', error);
-        const cachedTerms = await getAllTerms();
-        const filtered = cachedTerms.filter(
-          (term) => term.term.toLowerCase() === name?.toLowerCase(),
-        );
-        setTerm(filtered[0]);
-      } finally {
-        setIsLoading(false);
-      }
-    }, []);
-
-    const fetchRelatedTerms = async (domain: string): Promise<Term[]> => {
-      try {
-        const params = new URLSearchParams({
-          domain: domain,
-          sort_by: 'name',
-          page: '1',
-          page_size: '3',
-          fuzzy: 'false',
-        });
-
-        const response = await fetch(
+        const resp = await fetch(
           `${API_ENDPOINTS.search}?${params.toString()}`,
         );
-        if (!response.ok) throw new Error('Failed to fetch search results');
-        const data = (await response.json()) as SearchResponseType;
-        const res = data.results;
-        return res;
+        if (!resp.ok) console.error('Failed to fetch search results');
+        const data = (await resp.json()) as SearchResponseType;
+        return data.items;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (ex) {
-        console.error('Falling back to cached data', ex);
-        const cachedTerms = await getAllTerms();
-        const filtered = cachedTerms.filter((t) => {
-          console.log('Looking for related domain:', term?.domain);
-          return t.domain === term?.domain && t.id !== term.id;
-        });
-        console.log('Cached', cachedTerms);
-        console.log('Cached Related', filtered);
-        setRelatedTerms(filtered);
-        return filtered;
+        const cached = await getAllTerms();
+        return cached.filter((t) => t.domain === domain);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      setIsLoading(true);
+      try {
+        let picked: Term | null = null;
+
+        try {
+          const res = await fetchTerm();
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          picked = res.items?.[0] ?? null;
+        } catch {
+          const cached = await getAllTerms();
+          picked =
+            cached.find(
+              (t) => t.term.toLowerCase() === (name ?? '').toLowerCase(),
+            ) ?? null;
+        }
+        //eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setTerm(picked);
+        }
+
+        if (picked) {
+          const related = await fetchRelatedTerms(picked.domain);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (!cancelled) {
+            setRelatedTerms(related.filter((r) => r.id !== picked.id));
+          }
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (!cancelled) {
+            setRelatedTerms([]);
+          }
+        }
+      } finally {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setIsLoading(false);
+          if (term && term.upvotes && term.downvotes) {
+            setDownvotes(term.downvotes);
+            setUpvotes(term.upvotes);
+          }
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, name, language, fetchTerm, fetchRelatedTerms]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setAuthToken(token);
+
+    const storedUserDataString = localStorage.getItem('userData');
+    if (storedUserDataString) {
+      try {
+        const parsedData: unknown = JSON.parse(storedUserDataString);
+        if (
+          parsedData &&
+          typeof parsedData === 'object' &&
+          'uuid' in parsedData &&
+          typeof (parsedData as UserData).uuid === 'string'
+        ) {
+          setCurrentUserId((parsedData as UserData).uuid);
+        } else {
+          console.error(
+            'User data from localStorage is not in the expected format.',
+          );
+          localStorage.removeItem('userData');
+        }
+      } catch (error) {
+        console.error('Failed to parse user data from localStorage:', error);
+        localStorage.removeItem('userData');
+      }
+    } else {
+      setCurrentUserId(null);
+    }
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        commentInputRef.current &&
+        !commentInputRef.current.contains(event.target as Node)
+      ) {
+        setReplyingToCommentId(null);
       }
     };
 
-    /* eslint-disable react-hooks/exhaustive-deps */
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      const run = async () => {
-        if (id) {
-          await handleSearch();
-          const related = await fetchRelatedTerms(String(term?.domain));
-          setRelatedTerms(related);
-        }
-      };
-      void run();
-    }, [fetchRelatedTerms, handleSearch, id, term?.domain]);
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('mousedown', handleClickOutside);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      if (!term) return;
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-      const runSearch = async () => {
-        setIsLoading(true);
-        try {
-          const res = await fetchTerm();
-
-          setTerm(res.results[0]);
-
-          const related = await fetchRelatedTerms(term.domain);
-          setRelatedTerms(related);
-        } catch (error: unknown) {
-          console.error('Search fetch failed:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      void runSearch();
-    }, [term, language, fetchTerm, fetchRelatedTerms]);
-    /* eslint-enable react-hooks/exhaustive-deps */
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth <= 768);
-      };
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      const token = localStorage.getItem('accessToken');
-      setAuthToken(token);
-
-      const storedUserDataString = localStorage.getItem('userData');
-      if (storedUserDataString) {
-        try {
-          const parsedData: unknown = JSON.parse(storedUserDataString);
-          if (
-            parsedData &&
-            typeof parsedData === 'object' &&
-            'uuid' in parsedData &&
-            typeof (parsedData as UserData).uuid === 'string'
-          ) {
-            setCurrentUserId((parsedData as UserData).uuid);
-          } else {
-            console.error(
-              'User data from localStorage is not in the expected format.',
-            );
-            localStorage.removeItem('userData');
-          }
-        } catch (error) {
-          console.error('Failed to parse user data from localStorage:', error);
-          localStorage.removeItem('userData');
-        }
-      } else {
-        setCurrentUserId(null);
-      }
-
-      const handleResize = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          commentInputRef.current &&
-          !commentInputRef.current.contains(event.target as Node)
-        ) {
-          setReplyingToCommentId(null);
-        }
-      };
-
-      window.addEventListener('resize', handleResize);
-      document.addEventListener('mousedown', handleClickOutside);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, []);
-
-    // const handleBack = () => {
-    //   void navigate(-1);
-    // };
-
-    const response = await fetch(
-      `${API_ENDPOINTS.search}?${params.toString()}`,
-    );
-    if (!response.ok) throw new Error('Failed to fetch search results');
-    return (await response.json()) as SearchResponseType;
-  };
+  // const handleBack = () => {
+  //   void navigate(-1);
+  // };
 
   const languageKey = term?.language
     ? term.language.charAt(0).toUpperCase() +
@@ -302,7 +291,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
       const data = (await response.json()) as BackendComment[];
       setComments(data.map(mapBackendCommentToFrontend));
@@ -357,7 +346,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again to add comments.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
 
       await fetchComments();
@@ -407,7 +396,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again to vote.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
 
       await fetchComments();
@@ -451,7 +440,7 @@ export const TermDetailPage: React.FC = () => {
         } else if (response.status === 404) {
           setErrorComments('Comment not found.');
         } else {
-          throw new Error(`HTTP error! status: ${String(response.status)}`);
+          console.error(`HTTP error! status: ${String(response.status)}`);
         }
       }
       await fetchComments();
@@ -490,7 +479,7 @@ export const TermDetailPage: React.FC = () => {
         } else if (response.status === 404) {
           setErrorComments('Comment not found.');
         } else {
-          throw new Error(`HTTP error! status: ${String(response.status)}`);
+          console.error(`HTTP error! status: ${String(response.status)}`);
         }
       }
       await fetchComments();
@@ -515,6 +504,32 @@ export const TermDetailPage: React.FC = () => {
       (commentInput as HTMLInputElement).focus();
     }
   }, []);
+
+  const handleUpvote = () => {
+    setIsUpvote(!isUpvote);
+    if (isUpvote) {
+      if (term && term.upvotes) {
+        setUpvotes(upvotes + 1);
+      }
+    } else {
+      if (term && term.upvotes) {
+        setUpvotes(upvotes - 1);
+      }
+    }
+  };
+
+  const handleDownvote = () => {
+    setIsDownvote(!isDownvote);
+    if (isDownvote) {
+      if (term && term.downvotes) {
+        setDownvotes(downvotes + 1);
+      }
+    } else {
+      if (term && term.downvotes) {
+        setDownvotes(downvotes - 1);
+      }
+    }
+  };
 
   return (
     <div
@@ -546,10 +561,16 @@ export const TermDetailPage: React.FC = () => {
                       Back
                     </button>
                     <div className="flex flex-row items-center gap-2">
-                      <ArrowUp className="cursor-pointer hover:text-teal-500" />
-                      <span className="text-xs">{term?.upvotes}</span>
-                      <ArrowDown className="cursor-pointer hover:text-teal-500" />
-                      <span className="text-xs">{term?.downvotes}</span>
+                      <ArrowUp
+                        onClick={handleUpvote}
+                        className={`cursor-pointer hover:text-teal-500 ${isUpvote ? 'text-teal-400' : ''}`}
+                      />
+                      <span className="text-xs">{upvotes}</span>
+                      <ArrowDown
+                        onClick={handleDownvote}
+                        className={`cursor-pointer hover:text-teal-500 ${isDownvote ? 'text-teal-400' : ''}`}
+                      />
+                      <span className="text-xs">{downvotes}</span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Share2 className="cursor-pointer hover:text-rose-500" />
@@ -575,8 +596,6 @@ export const TermDetailPage: React.FC = () => {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-
-                      <MoreVertical className="cursor-pointer hover:text-yellow-400" />
                     </div>
                   </div>
 
@@ -598,7 +617,7 @@ export const TermDetailPage: React.FC = () => {
                           </Badge>
                         </div>
                         <CardTitle className="text-3xl md:text-4xl mt-4">
-                          {term?.term}
+                          <h1 className="term-title">{term?.term}</h1>
                         </CardTitle>
                         <div className="h-px bg-muted my-4 w-full" />
                       </CardHeader>
@@ -628,8 +647,9 @@ export const TermDetailPage: React.FC = () => {
                                     {
                                       <Link
                                         to={`/term/${relatedTerms[0].language}/${relatedTerms[0].term}/${relatedTerms[0].id}`}
+                                        className="!text-pink-600"
                                       >
-                                        ${relatedTerms[0].term}
+                                        {relatedTerms[0].term}
                                       </Link>
                                     }
                                   </Badge>
@@ -642,8 +662,9 @@ export const TermDetailPage: React.FC = () => {
                                     {
                                       <Link
                                         to={`/term/${relatedTerms[1].language}/${relatedTerms[1].term}/${relatedTerms[1].id}`}
+                                        className="!text-pink-600"
                                       >
-                                        ${relatedTerms[1].term}
+                                        {relatedTerms[1].term}
                                       </Link>
                                     }
                                   </Badge>
@@ -656,8 +677,9 @@ export const TermDetailPage: React.FC = () => {
                                     {
                                       <Link
                                         to={`/term/${relatedTerms[2].language}/${relatedTerms[2].term}/${relatedTerms[2].id}`}
+                                        className="!text-pink-600"
                                       >
-                                        ${relatedTerms[2].term}
+                                        {relatedTerms[2].term}
                                       </Link>
                                     }
                                   </Badge>
