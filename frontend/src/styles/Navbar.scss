@@ -282,4 +282,44 @@ $navbar-border-dark: rgba(255, 255, 255, 0.1);
     font-size: 1.1rem;
     position: relative;
   }
+
+  /* Mobile Admin Toggle - matches mobile-nav-link exactly */
+  .mobile-admin-toggle {
+    display: block;
+    padding: 0.75rem 0;
+    color: var(--navbar-text);
+    transition: color 0.2s ease;
+    font-size: 1.1rem;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--navbar-accent);
+    }
+
+    &.active {
+      color: var(--navbar-accent);
+      font-weight: 600;
+    }
+  }
+
+  /* Admin submenu items - match mobile-nav-link style */
+  .mobile-admin-submenu-item {
+    display: block;
+    padding: 0.75rem 0;
+    color: var(--navbar-text);
+    transition: color 0.2s ease;
+    font-size: 1.1rem;
+    position: relative;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--navbar-accent);
+    }
+
+    &.active {
+      color: var(--navbar-accent);
+      font-weight: 600;
+    }
+  }
 }

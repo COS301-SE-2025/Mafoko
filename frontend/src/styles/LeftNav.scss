@@ -104,6 +104,134 @@
   letter-spacing: 0.025em;
 }
 
+/* Admin Menu Styles */
+.left-nav-admin-section {
+  margin-top: 8px;
+}
+
+.admin-menu-item {
+  position: relative;
+
+  &:hover {
+    background-color: var(--left-nav-hover-bg);
+    border-left-color: var(--left-nav-hover-border);
+  }
+
+  &.active {
+    background-color: var(--left-nav-active-bg);
+    border-left-color: var(--left-nav-active-border);
+
+    .admin-menu-content {
+      color: white;
+    }
+  }
+}
+
+.admin-menu-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.admin-icon {
+  color: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.admin-chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+  color: var(--bg-secondary);
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+/* Admin Submenu Styles */
+.admin-submenu {
+  background-color: var(--left-nav-hover-bg);
+  border-left: 4px solid transparent;
+  margin-left: 0;
+  padding: 8px 0;
+  animation: slideDown 0.2s ease-out;
+}
+
+.admin-submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px 12px 48px; /* Extra left padding for indentation */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    background-color: var(--left-nav-hover-bg);
+    border-left-color: var(--left-nav-hover-border);
+  }
+
+  &.active {
+    background-color: var(--left-nav-active-bg);
+    border-left-color: var(--left-nav-active-border);
+    color: white;
+
+    .submenu-icon,
+    .submenu-label {
+      color: white;
+    }
+  }
+}
+
+.submenu-icon {
+  color: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.submenu-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bg-secondary);
+}
+
+/* Animation for submenu dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode specific adjustments */
+.left-nav.dark-mode {
+  .admin-icon,
+  .admin-chevron,
+  .submenu-icon,
+  .submenu-label {
+    color: var(--text-primary);
+  }
+
+  .admin-menu-item.active {
+    .admin-menu-content {
+      color: white;
+
+      .admin-icon,
+      .admin-chevron {
+        color: white;
+      }
+    }
+  }
+
+  .admin-submenu {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
 /* Dark Mode Toggle at bottom of sidebar */
 .left-nav-footer {
   position: absolute;
