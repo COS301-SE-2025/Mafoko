@@ -1,7 +1,7 @@
 # FeedbackHub User Stories
 
 ## User Story #12: Submit Feedback
-**ID:** US001 (FeedbackHub Project)  
+**ID:** US012 (FeedbackHub Project)  
 **Title:** Multi-Category Feedback Submission
 
 **As a:** Application user (customer, stakeholder, or end-user) who wants to communicate with the organization about their experience,
@@ -53,7 +53,7 @@
 ---
 
 ## User Story #13: Admin Dashboard Management
-**ID:** US002 (FeedbackHub Project)  
+**ID:** US013 (FeedbackHub Project)  
 **Title:** Comprehensive Feedback Administration
 
 **As a:** System administrator who needs to monitor and respond to user feedback,

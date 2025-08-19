@@ -1090,6 +1090,16 @@ const GlossaryApp = () => {
                     disabled={currentPage === 1}
                     onClick={() => {
                       setCurrentPage(currentPage - 1);
+                      setTimeout(() => {
+                        const glossaryList = document.querySelector(
+                          '.glossary-list, .terms-list',
+                        );
+                        if (glossaryList) {
+                          glossaryList.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }, 0);
                     }}
                     className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                     style={{
@@ -1121,6 +1131,16 @@ const GlossaryApp = () => {
                     }
                     onClick={() => {
                       setCurrentPage(currentPage + 1);
+                      setTimeout(() => {
+                        const glossaryList = document.querySelector(
+                          '.glossary-list, .terms-list',
+                        );
+                        if (glossaryList) {
+                          glossaryList.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }, 0);
                     }}
                     className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                     style={{

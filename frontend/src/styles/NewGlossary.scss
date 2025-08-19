@@ -555,6 +555,9 @@
   margin-bottom: 1rem;
   color: var(--text-theme) !important;
   font-size: 0.9rem;
+  word-break: break-word;
+  white-space: pre-line;
+  overflow: visible;
 }
 .term-card .term-definition .icon {
   margin-right: 0.5rem;
@@ -564,6 +567,20 @@
 .term-card .translations-section {
   border-top: 1px solid #e5e7eb;
   padding-top: 1rem;
+}
+
+.term-card .translation-bank-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+.term-card .translations-list {
+  word-break: break-word;
+  white-space: normal;
 }
 .term-card .translations-header {
   display: flex;
@@ -608,6 +625,9 @@
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-theme);
+  word-break: break-word;
+  white-space: pre-line;
+  overflow: visible;
 }
 
 .term-card .loading-translations,
