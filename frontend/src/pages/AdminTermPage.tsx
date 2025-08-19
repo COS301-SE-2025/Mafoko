@@ -368,8 +368,18 @@ const AdminTermPage: React.FC = () => {
                                     <ul>
                                       {translations.map((t, idx) => (
                                         <li key={t.id || idx}>
-                                          <strong>{t.language}:</strong>{' '}
-                                          {t.term} - {t.definition}
+                                          <strong>{t.language}</strong>
+                                          <div className="translation-term">
+                                            {t.term}
+                                          </div>
+                                          <div className="translation-definition">
+                                            {t.definition}
+                                          </div>
+                                          {t.example && (
+                                            <div className="translation-example">
+                                              <em>Example: {t.example}</em>
+                                            </div>
+                                          )}
                                         </li>
                                       ))}
                                     </ul>
