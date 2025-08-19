@@ -4,17 +4,19 @@ import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import FeedbackForm from '../components/ui/FeedbackForm';
+import { API_ENDPOINTS } from '../config';
+import { FeedbackCreate, FeedbackType, Feedback } from '../types/feedback';
 import '../styles/FeedbackPage.scss';
 
 interface FormData {
   name: string;
   email: string;
   message: string;
-  category: string;
+  type: FeedbackType;
 }
 
 interface Tab {
-  id: string;
+  id: FeedbackType;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
@@ -26,14 +28,18 @@ const FeedbackPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('feedback');
-  const [activeTab, setActiveTab] = useState('suggestion');
+  const [activeTab, setActiveTab] = useState<FeedbackType>(
+    FeedbackType.SUGGESTION,
+  );
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     message: '',
-    category: 'suggestion',
+    type: FeedbackType.SUGGESTION,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Handle window resize for mobile detection
   useEffect(() => {
@@ -56,34 +62,97 @@ const FeedbackPage = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Submitted:', { ...formData, category: activeTab });
-    setSubmitted(true);
+  const submitFeedback = async (
+    feedbackData: FeedbackCreate,
+  ): Promise<void> => {
+    const token = localStorage.getItem('accessToken');
 
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', message: '', category: activeTab });
-    }, 3000);
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+
+    // Add authorization header if user is logged in
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(API_ENDPOINTS.submitFeedback, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(feedbackData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(
+        `Failed to submit feedback: ${response.status.toString()} ${errorData}`,
+      );
+    }
+
+    return response.json() as Promise<Feedback>;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.message.trim()) {
+      setSubmitError('Message is required');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const feedbackData: FeedbackCreate = {
+        type: formData.type,
+        message: formData.message.trim(),
+        name: formData.name.trim() || null,
+        email: formData.email.trim() || null,
+      };
+
+      await submitFeedback(feedbackData);
+      setSubmitted(true);
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          message: '',
+          type: formData.type,
+        });
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to submit feedback. Please try again.',
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const tabs: Tab[] = [
     {
-      id: 'suggestion',
+      id: FeedbackType.SUGGESTION,
       label: 'Suggestion',
       icon: Lightbulb,
       color: '#FFD600',
       bg: '#FFFDE7',
     },
     {
-      id: 'complaint',
+      id: FeedbackType.COMPLAINT,
       label: 'Complaint',
       icon: AlertCircle,
       color: '#FF5252',
       bg: '#FFEBEE',
     },
     {
-      id: 'compliment',
+      id: FeedbackType.COMPLIMENT,
       label: 'Compliment',
       icon: Heart,
       color: '#43A047',
@@ -223,7 +292,10 @@ const FeedbackPage = () => {
                         type="button"
                         onClick={() => {
                           setActiveTab(tab.id);
-                          setFormData({ ...formData, category: tab.id });
+                          setFormData({
+                            ...formData,
+                            type: tab.id,
+                          });
                         }}
                         className={`tab-button ${
                           activeTab === tab.id ? `active ${tab.id}` : ''
@@ -246,11 +318,11 @@ const FeedbackPage = () => {
                     Submit a {activeTabData.label}
                   </h2>
                   <p className="form-description">
-                    {activeTab === 'suggestion' &&
+                    {activeTab === FeedbackType.SUGGESTION &&
                       'Share your ideas to help us improve our service.'}
-                    {activeTab === 'complaint' &&
+                    {activeTab === FeedbackType.COMPLAINT &&
                       'Let us know what went wrong so we can make it right.'}
-                    {activeTab === 'compliment' &&
+                    {activeTab === FeedbackType.COMPLIMENT &&
                       "We'd love to hear what we're doing well!"}
                   </p>
                 </div>
@@ -258,9 +330,11 @@ const FeedbackPage = () => {
                 <FeedbackForm
                   formData={formData}
                   handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
+                  handleSubmit={(e) => void handleSubmit(e)}
                   activeTab={activeTab}
                   activeTabData={activeTabData}
+                  isSubmitting={isSubmitting}
+                  submitError={submitError}
                 />
               </div>
             </div>

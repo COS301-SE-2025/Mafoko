@@ -32,6 +32,8 @@ const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { t } = useTranslation();
   const [avatarInitials, setAvatarInitials] = useState<string>('');
+  const [userRole, setUserRole] = useState<string>('');
+  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
 
   const accentColors = useMemo(() => ['pink', 'yellow', 'teal'], []);
 
@@ -49,11 +51,18 @@ const Navbar = () => {
       t('navigation.dashboard'),
       t('navigation.linguistApplication'),
       'Feedback',
-      'Feedback Hub',
       t('navigation.help'),
       t('navigation.settings'),
     ],
     [t],
+  );
+
+  const adminSubmenuItems = useMemo(
+    () => [
+      { id: 'admin', label: 'User Management', path: '/admin' },
+      { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
+    ],
+    [],
   );
 
   const getRouteForItem = (item: string): string => {
@@ -70,8 +79,6 @@ const Navbar = () => {
         return '/analytics';
       case 'Feedback':
         return '/feedback';
-      case 'Feedback Hub':
-        return '/feedbackhub';
       case 'Settings':
         return '/settings';
       default:
@@ -88,7 +95,15 @@ const Navbar = () => {
       setActive(match);
       setActiveLinkColor(getRandomAccentColor());
     } else {
-      setActive('');
+      // Check if current path matches admin submenu items
+      const adminMatch = adminSubmenuItems.find(
+        (item) => item.path === location.pathname,
+      );
+      if (adminMatch) {
+        setActive(adminMatch.id);
+      } else {
+        setActive('');
+      }
     }
 
     const fetchAndSetUserData = async () => {
@@ -100,7 +115,9 @@ const Navbar = () => {
       const storedUserDataString = localStorage.getItem('userData');
       if (storedUserDataString) {
         try {
-          const parsedData = JSON.parse(storedUserDataString) as UserData;
+          const parsedData = JSON.parse(storedUserDataString) as UserData & {
+            role?: string;
+          };
           if (parsedData.firstName && parsedData.lastName) {
             setAvatarInitials(
               `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
@@ -110,7 +127,11 @@ const Navbar = () => {
           } else {
             setAvatarInitials('U');
           }
-          return;
+          // Set user role if available
+          if (parsedData.role) {
+            setUserRole(parsedData.role);
+            return;
+          }
         } catch (error) {
           console.error(
             'Navbar: Failed to parse user data from localStorage, fetching from API.',
@@ -129,16 +150,20 @@ const Navbar = () => {
           },
         });
         if (response.ok) {
-          const apiData = (await response.json()) as UserProfileApiResponse;
-          const newUserData: UserData = {
+          const apiData = (await response.json()) as UserProfileApiResponse & {
+            role?: string;
+          };
+          const newUserData: UserData & { role?: string } = {
             uuid: apiData.id,
             firstName: apiData.first_name,
             lastName: apiData.last_name,
+            role: apiData.role || '',
           };
           localStorage.setItem('userData', JSON.stringify(newUserData));
           setAvatarInitials(
             `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
           );
+          setUserRole(apiData.role || '');
         } else {
           console.error(
             'Navbar: Failed to fetch user data from API:',
@@ -146,6 +171,7 @@ const Navbar = () => {
             await response.text(),
           );
           setAvatarInitials('');
+          setUserRole('');
         }
       } catch (error) {
         console.error(
@@ -153,15 +179,27 @@ const Navbar = () => {
           error,
         );
         setAvatarInitials('');
+        setUserRole('');
       }
     };
     void fetchAndSetUserData();
-  }, [location.pathname, navItems, accentColors]);
+  }, [location.pathname, navItems, accentColors, adminSubmenuItems]);
 
   const handleLinkClick = (item: string) => {
     setActive(item);
     setIsMainNavbarOpen(false);
     setIsMobileMenuOpen(false);
+  };
+
+  const toggleAdminDropdown = () => {
+    setIsAdminDropdownOpen(!isAdminDropdownOpen);
+  };
+
+  const handleAdminItemClick = (itemId: string) => {
+    setActive(itemId);
+    setIsMainNavbarOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsAdminDropdownOpen(false);
   };
 
   return (
@@ -229,24 +267,76 @@ const Navbar = () => {
         <div
           className={`mobile-nav-dropdown md:hidden ${isMobileMenuOpen ? 'is-open' : 'is-closed'}`}
         >
-          {navItems.map((item) => (
-            <NavLink
-              key={item}
-              to={getRouteForItem(item)}
-              className={`mobile-nav-link ${
-                active === item ? 'font-semibold' : ''
-              }`}
-              style={({ isActive }) => ({
-                color: isActive ? activeLinkColor : 'inherit',
-                '--hover-color': getRandomAccentColor(),
-              })}
-              onClick={() => {
-                handleLinkClick(item);
-              }}
-            >
-              {item}
-            </NavLink>
-          ))}
+          {!isAdminDropdownOpen && (
+            <>
+              {navItems
+                .filter((item) => {
+                  if (item === 'Feedback' && userRole === 'admin') {
+                    return false;
+                  }
+                  return true;
+                })
+                .map((item) => (
+                  <NavLink
+                    key={item}
+                    to={getRouteForItem(item)}
+                    className={`mobile-nav-link ${
+                      active === item ? 'font-semibold' : ''
+                    }`}
+                    style={({ isActive }) => ({
+                      color: isActive ? activeLinkColor : 'inherit',
+                      '--hover-color': getRandomAccentColor(),
+                    })}
+                    onClick={() => {
+                      handleLinkClick(item);
+                    }}
+                  >
+                    {item}
+                  </NavLink>
+                ))}
+
+              {/* Admin Toggle for Mobile */}
+              {userRole === 'admin' && (
+                <div
+                  className={`mobile-admin-toggle ${
+                    adminSubmenuItems.some((subItem) => active === subItem.id)
+                      ? 'active'
+                      : ''
+                  }`}
+                  onClick={toggleAdminDropdown}
+                >
+                  Admin
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Admin Menu Items (replaces main menu when admin is clicked) */}
+          {isAdminDropdownOpen && userRole === 'admin' && (
+            <>
+              <div
+                className="mobile-admin-toggle active"
+                onClick={toggleAdminDropdown}
+              >
+                ← Back to Menu
+              </div>
+
+              {adminSubmenuItems.map((subItem) => (
+                <NavLink
+                  key={subItem.id}
+                  to={subItem.path}
+                  className={`mobile-admin-submenu-item ${
+                    active === subItem.id ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    handleAdminItemClick(subItem.id);
+                  }}
+                >
+                  {subItem.label}
+                </NavLink>
+              ))}
+            </>
+          )}
         </div>
       </nav>
     </>
