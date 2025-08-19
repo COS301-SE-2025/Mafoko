@@ -133,26 +133,28 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({
         </div>
         {isExpanded && (
           <div className="translations-section">
-            <div className="translations-list">
-              {isLoadingTranslations ? (
-                <div className="loading-translations">
-                  Loading translations...
-                </div>
-              ) : term.translations &&
-                Object.keys(term.translations).length > 0 ? (
-                Object.entries(term.translations).map(
-                  ([language, translation]) => (
-                    <div key={language} className="translation-item">
-                      <div className="lang">{language}</div>
-                      <div className="translation">{String(translation)}</div>
-                    </div>
-                  ),
-                )
-              ) : (
-                <div className="no-translations">
-                  No translations found for this term.
-                </div>
-              )}
+            <div className="translation-bank-container">
+              <div className="translations-list">
+                {isLoadingTranslations ? (
+                  <div className="loading-translations">
+                    Loading translations...
+                  </div>
+                ) : term.translations &&
+                  Object.keys(term.translations).length > 0 ? (
+                  Object.entries(term.translations).map(
+                    ([language, translation]) => (
+                      <div key={language} className="translation-item">
+                        <div className="lang">{language}</div>
+                        <div className="translation">{String(translation)}</div>
+                      </div>
+                    ),
+                  )
+                ) : (
+                  <div className="no-translations">
+                    No translations found for this term.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
