@@ -18,7 +18,7 @@ async def create_test_user(db: AsyncSession) -> User:
     """Creates and commits a new test user to the database."""
     user = User(
         id=uuid4(),
-        email=f"test_{uuid4()}@example.com",  # Use a unique email
+        email=f"test_{uuid4()}@example.com",
         first_name="Test",
         last_name="User",
         password_hash="somehashedpassword",
@@ -32,14 +32,15 @@ async def create_test_user(db: AsyncSession) -> User:
 
 
 # Helper function to create a test term
-async def create_test_term(db: AsyncSession) -> Term:
-    """Creates and commits a new test term to the database."""
+async def create_test_term(db: AsyncSession, owner: User) -> Term:
+    """Creates and commits a new test term to the database with a valid owner."""
     term = Term(
         id=uuid4(),
         term=f"Test Term {uuid4()}",
         definition="A term for testing.",
         language="English",
         domain="Testing",
+        owner_id=owner.id,  # assign owner
     )
     db.add(term)
     await db.commit()
@@ -73,10 +74,9 @@ pytestmark = pytest.mark.asyncio
 async def test_vote_requires_authentication(
     client: AsyncClient, db_session: AsyncSession
 ):
-    """
-    Tests that unauthenticated requests to the term voting endpoint are rejected.
-    """
-    term = await create_test_term(db_session)
+    user = await create_test_user(db_session)
+    term = await create_test_term(db_session, owner=user)
+
     response = await client.post(
         "/api/v1/votes/terms",
         json={"term_id": str(term.id), "vote": "upvote"},
@@ -85,11 +85,8 @@ async def test_vote_requires_authentication(
 
 
 async def test_cast_new_upvote(client: AsyncClient, db_session: AsyncSession):
-    """
-    Tests casting a new upvote on a term.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     token = create_access_token(data={"sub": user.email})
 
     response = await client.post(
@@ -98,19 +95,14 @@ async def test_cast_new_upvote(client: AsyncClient, db_session: AsyncSession):
         headers={"Authorization": f"Bearer {token}"},
     )
 
-    # 1. Check API response
     assert response.status_code == 200
     data = response.json()
     assert data["upvotes"] == 1
     assert data["downvotes"] == 0
     assert data["user_vote"] == "upvote"
 
-    # 2. Check database state
     result = await db_session.execute(
-        select(TermVote).where(
-            TermVote.user_id == user.id,
-            TermVote.term_id == term.id,
-        )
+        select(TermVote).where(TermVote.user_id == user.id, TermVote.term_id == term.id)
     )
     vote_in_db = result.scalars().first()
     assert vote_in_db is not None
@@ -120,21 +112,16 @@ async def test_cast_new_upvote(client: AsyncClient, db_session: AsyncSession):
 async def test_change_vote_from_up_to_down(
     client: AsyncClient, db_session: AsyncSession
 ):
-    """
-    Tests changing an existing upvote to a downvote.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     token = create_access_token(data={"sub": user.email})
 
-    # First, cast an upvote
     await client.post(
         "/api/v1/votes/terms",
         json={"term_id": str(term.id), "vote": "upvote"},
         headers={"Authorization": f"Bearer {token}"},
     )
 
-    # Then, change to a downvote
     response = await client.post(
         "/api/v1/votes/terms",
         json={"term_id": str(term.id), "vote": "downvote"},
@@ -148,31 +135,23 @@ async def test_change_vote_from_up_to_down(
     assert data["user_vote"] == "downvote"
 
     result = await db_session.execute(
-        select(TermVote).where(
-            TermVote.user_id == user.id,
-            TermVote.term_id == term.id,
-        )
+        select(TermVote).where(TermVote.user_id == user.id, TermVote.term_id == term.id)
     )
     vote_in_db = result.scalars().first()
     assert vote_in_db is not None and vote_in_db.vote == VoteType.downvote
 
 
 async def test_unvote_an_existing_vote(client: AsyncClient, db_session: AsyncSession):
-    """
-    Tests removing a vote by casting the same vote again.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     token = create_access_token(data={"sub": user.email})
 
-    # First, cast an upvote
     await client.post(
         "/api/v1/votes/terms",
         json={"term_id": str(term.id), "vote": "upvote"},
         headers={"Authorization": f"Bearer {token}"},
     )
 
-    # Then, cast the same upvote again to un-vote
     response = await client.post(
         "/api/v1/votes/terms",
         json={"term_id": str(term.id), "vote": "upvote"},
@@ -186,10 +165,7 @@ async def test_unvote_an_existing_vote(client: AsyncClient, db_session: AsyncSes
     assert data["user_vote"] is None
 
     result = await db_session.execute(
-        select(TermVote).where(
-            TermVote.user_id == user.id,
-            TermVote.term_id == term.id,
-        )
+        select(TermVote).where(TermVote.user_id == user.id, TermVote.term_id == term.id)
     )
     vote_in_db = result.scalars().first()
     assert vote_in_db is None
@@ -199,11 +175,8 @@ async def test_unvote_an_existing_vote(client: AsyncClient, db_session: AsyncSes
 
 
 async def test_cast_new_comment_upvote(client: AsyncClient, db_session: AsyncSession):
-    """
-    Tests casting a new upvote on a comment.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     comment = await create_test_comment(db_session, user=user, term=term)
     token = create_access_token(data={"sub": user.email})
 
@@ -213,18 +186,15 @@ async def test_cast_new_comment_upvote(client: AsyncClient, db_session: AsyncSes
         headers={"Authorization": f"Bearer {token}"},
     )
 
-    # 1. Check API response
     assert response.status_code == 200
     data = response.json()
     assert data["upvotes"] == 1
     assert data["downvotes"] == 0
     assert data["user_vote"] == "upvote"
 
-    # 2. Check database state
     result = await db_session.execute(
         select(CommentVote).where(
-            CommentVote.user_id == user.id,
-            CommentVote.comment_id == comment.id,
+            CommentVote.user_id == user.id, CommentVote.comment_id == comment.id
         )
     )
     vote_in_db = result.scalars().first()
@@ -235,22 +205,17 @@ async def test_cast_new_comment_upvote(client: AsyncClient, db_session: AsyncSes
 async def test_change_comment_vote_from_up_to_down(
     client: AsyncClient, db_session: AsyncSession
 ):
-    """
-    Tests changing an existing upvote to a downvote for a comment.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     comment = await create_test_comment(db_session, user=user, term=term)
     token = create_access_token(data={"sub": user.email})
 
-    # First, cast an upvote
     await client.post(
         "/api/v1/votes/comments",
         json={"comment_id": str(comment.id), "vote": "upvote"},
         headers={"Authorization": f"Bearer {token}"},
     )
 
-    # Then, change to a downvote
     response = await client.post(
         "/api/v1/votes/comments",
         json={"comment_id": str(comment.id), "vote": "downvote"},
@@ -265,8 +230,7 @@ async def test_change_comment_vote_from_up_to_down(
 
     result = await db_session.execute(
         select(CommentVote).where(
-            CommentVote.user_id == user.id,
-            CommentVote.comment_id == comment.id,
+            CommentVote.user_id == user.id, CommentVote.comment_id == comment.id
         )
     )
     vote_in_db = result.scalars().first()
@@ -276,22 +240,17 @@ async def test_change_comment_vote_from_up_to_down(
 async def test_unvote_an_existing_comment_vote(
     client: AsyncClient, db_session: AsyncSession
 ):
-    """
-    Tests removing a comment vote by casting the same vote again.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     comment = await create_test_comment(db_session, user=user, term=term)
     token = create_access_token(data={"sub": user.email})
 
-    # First, cast an upvote
     await client.post(
         "/api/v1/votes/comments",
         json={"comment_id": str(comment.id), "vote": "upvote"},
         headers={"Authorization": f"Bearer {token}"},
     )
 
-    # Then, cast the same upvote again to un-vote
     response = await client.post(
         "/api/v1/votes/comments",
         json={"comment_id": str(comment.id), "vote": "upvote"},
@@ -306,8 +265,7 @@ async def test_unvote_an_existing_comment_vote(
 
     result = await db_session.execute(
         select(CommentVote).where(
-            CommentVote.user_id == user.id,
-            CommentVote.comment_id == comment.id,
+            CommentVote.user_id == user.id, CommentVote.comment_id == comment.id
         )
     )
     vote_in_db = result.scalars().first()
@@ -317,11 +275,8 @@ async def test_unvote_an_existing_comment_vote(
 async def test_vote_on_deleted_comment_raises_error(
     client: AsyncClient, db_session: AsyncSession
 ):
-    """
-    Tests that a vote on a soft-deleted comment returns a 404 error.
-    """
     user = await create_test_user(db_session)
-    term = await create_test_term(db_session)
+    term = await create_test_term(db_session, owner=user)
     comment = await create_test_comment(db_session, user=user, term=term)
     token = create_access_token(data={"sub": user.email})
 

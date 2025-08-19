@@ -4126,7 +4126,8 @@ $text-dark: #ffffff;
     border: 1px solid rgba(239, 68, 68, 0.2);
   }
 
-  &.status-crowd_verified, &.status-linguist_verified {
+  &.status-crowd_verified,
+  &.status-linguist_verified {
     background-color: rgba(59, 130, 246, 0.1);
     color: #2563eb;
     border: 1px solid rgba(59, 130, 246, 0.2);
@@ -4154,8 +4155,12 @@ $text-dark: #ffffff;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 // Notifications

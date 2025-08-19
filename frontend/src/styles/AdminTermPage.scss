@@ -105,7 +105,8 @@ $admin-text-dark: #ffffff;
         border-collapse: collapse;
         text-align: left;
 
-        th, td {
+        th,
+        td {
           border: 1px solid var(--admin-border-color);
           padding: 0.5rem 0.75rem;
           color: var(--admin-text-color);
@@ -335,7 +336,8 @@ $admin-text-dark: #ffffff;
   max-width: 100%;
   overflow: hidden;
 
-  .translations, .feedback {
+  .translations,
+  .feedback {
     margin-bottom: 1.5rem;
     max-width: 100%;
 
@@ -346,9 +348,9 @@ $admin-text-dark: #ffffff;
       font-weight: 600;
       display: flex;
       align-items: center;
-      
+
       &::before {
-        content: "•";
+        content: '•';
         margin-right: 0.5rem;
         color: $admin-accent-teal;
         font-size: 1.5rem;
@@ -370,21 +372,21 @@ $admin-text-dark: #ffffff;
         word-wrap: break-word;
         overflow-wrap: break-word;
         max-width: 100%;
-        
+
         strong {
           color: $admin-accent-teal;
           font-weight: 600;
           display: block;
           margin-bottom: 0.25rem;
         }
-        
+
         // Separate the term and definition for better readability
         .translation-term {
           font-weight: 600;
           color: var(--admin-text-color);
           margin-bottom: 0.25rem;
         }
-        
+
         .translation-definition {
           color: var(--admin-text-color);
           opacity: 0.9;
@@ -411,13 +413,14 @@ $admin-text-dark: #ffffff;
 .applications-table {
   table-layout: fixed;
   width: 100%;
-  
-  th, td {
+
+  th,
+  td {
     word-wrap: break-word;
     overflow-wrap: break-word;
     padding: 200px;
   }
-  
+
   .definition-text {
     white-space: pre-line;
     word-wrap: break-word;
@@ -431,7 +434,7 @@ tr:has(.expanded-details) {
   td {
     padding: 0 !important;
   }
-  
+
   .expanded-details {
     display: block;
     width: 100%;
@@ -469,7 +472,7 @@ tr:has(.expanded-details) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  
+
   &:hover {
     white-space: normal;
     overflow: visible;
@@ -484,25 +487,26 @@ tr:has(.expanded-details) {
 @media (max-width: 768px) {
   .applications-table {
     table-layout: auto;
-    
-    th, td {
+
+    th,
+    td {
       width: auto !important;
       max-width: 120px;
       font-size: 0.8rem;
       padding: 0.3rem 0.5rem;
     }
-    
+
     .expanded-details {
       padding: 0.8rem;
-      
+
       .translation-term {
         font-size: 0.9rem;
       }
-      
+
       .translation-definition {
         font-size: 0.85rem;
       }
-      
+
       .translation-example {
         font-size: 0.8rem;
       }
@@ -513,21 +517,21 @@ tr:has(.expanded-details) {
 .expanded-details .translations ul {
   max-height: 300px;
   overflow-y: auto;
-  
+
   &::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: var(--admin-bg-row-odd);
     border-radius: 3px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: $admin-accent-teal;
     border-radius: 3px;
   }
-  
+
   &::-webkit-scrollbar-thumb:hover {
     background: darken($admin-accent-teal, 10%);
   }

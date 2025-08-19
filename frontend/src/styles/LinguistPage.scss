@@ -81,7 +81,9 @@ $admin-text-dark: #ffffff;
           font-weight: 500;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
           width: 100%;
           padding: 0.5rem;
           border-radius: 0.25rem;
@@ -158,12 +160,12 @@ $admin-text-dark: #ffffff;
 
       .selected-translations {
         margin-top: 1rem;
-        
+
         h4 {
           margin-bottom: 0.5rem;
           color: var(--admin-text-color);
         }
-        
+
         .translation-item {
           display: flex;
           justify-content: space-between;
@@ -172,7 +174,7 @@ $admin-text-dark: #ffffff;
           background-color: var(--admin-bg-row-even);
           margin-bottom: 0.5rem;
           border-radius: 0.25rem;
-          
+
           .remove-btn {
             padding: 0.25rem 0.5rem;
             background-color: $admin-accent-pink;
@@ -218,7 +220,8 @@ $admin-text-dark: #ffffff;
         border-collapse: collapse;
         text-align: left;
 
-        th, td {
+        th,
+        td {
           border: 1px solid var(--admin-border-color);
           padding: 0.5rem 0.75rem;
           color: var(--admin-text-color);
@@ -278,7 +281,8 @@ $admin-text-dark: #ffffff;
           background-color: var(--admin-bg-row-odd);
           border-top: 1px solid var(--admin-border-color);
 
-          .translations, .feedback {
+          .translations,
+          .feedback {
             margin-bottom: 1rem;
 
             h4 {
@@ -514,7 +518,8 @@ $admin-text-dark: #ffffff;
   border-top: 2px solid var(--admin-border-color);
   border-radius: 0 0 0.5rem 0.5rem;
 
-  .translations, .feedback {
+  .translations,
+  .feedback {
     margin-bottom: 1.5rem;
 
     h4 {
@@ -524,9 +529,9 @@ $admin-text-dark: #ffffff;
       font-weight: 600;
       display: flex;
       align-items: center;
-      
+
       &::before {
-        content: "•";
+        content: '•';
         margin-right: 0.5rem;
         color: $admin-accent-teal;
         font-size: 1.5rem;
@@ -544,7 +549,7 @@ $admin-text-dark: #ffffff;
         background-color: var(--admin-bg-row-even);
         border-radius: 0.5rem;
         border-left: 3px solid $admin-accent-teal;
-        
+
         strong {
           color: $admin-accent-teal;
           font-weight: 600;
@@ -566,7 +571,7 @@ $admin-text-dark: #ffffff;
 // Smooth animation for expanded details
 tr {
   transition: all 0.3s ease;
-  
+
   &:has(+ tr .expanded-details) {
     border-bottom: 2px solid $admin-accent-teal;
   }
@@ -574,7 +579,7 @@ tr {
 
 .expanded-details {
   animation: slideDown 0.3s ease-out;
-  
+
   @keyframes slideDown {
     from {
       opacity: 0;
@@ -608,13 +613,15 @@ tr {
 
   .expanded-details {
     padding: 1rem;
-    
-    .translations, .feedback {
+
+    .translations,
+    .feedback {
       h4 {
         font-size: 1rem;
       }
-      
-      li, p {
+
+      li,
+      p {
         padding: 0.5rem;
         font-size: 0.9rem;
       }
