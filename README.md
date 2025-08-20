@@ -1,4 +1,4 @@
-# Marito: A PWA for Multilingual Lexicons, Term Banks, and| Palesa Thabane    | Services Engineer / Business Analyst           | 21540838       | I am a data science and cybersecurity enthusiast with hands-on experience in systems programming, particularly in distributed computing (e.g., actor models, inter-server communication), and backend development, including NoSQL database engineering and RESTful API design. My technical projects and coursework reflect a strong foundation in secure software practices, which I aim to apply at the intersection of fintech , data science and cybersecurity.     | [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/palesa-thabane-171ba9368/) |Glossaries
+# Marito: A PWA for Multilingual Lexicons, Term Banks, and Glossaries
 <p align="center">
     <img src="frontend/public/DFSI_Logo.png" alt="banner"/>
 </p>
@@ -18,11 +18,11 @@
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
 *  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
-*  [Figma Designs](https://www.figma.com/design/XUPY5uCBmWQULGmh3L0bqC/Marito_Designs?node-id=0-1&p=f&t=0je6YkOSQeV0tjmJ-0) 
 *  [Architectural requirements](https://9000) 
-*  [User Manual](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/User%20Manual/UserManual.pdf) 
+*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/User%20Manual/UserManual.pdf)
 *  [Technical Installation Manual](https://9000) 
-*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Coding%20Standards/Coding%20Standards.pdf) 
+*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/Coding%20Standards/Coding%20Standards.pdf)
+*  [Document Archieve](https://github.com/COS301-SE-2025/Marito/tree/doc/customization-and-workspace-docs/Documentation/Srs/Archive)
 
 ---
 
@@ -63,7 +63,7 @@ This structure ensures clean separation between environments, supports parallel 
 ## Demo Videos
 
 - 🎥 [Demo 1 Video](https://youtu.be/mwc1rmwkWEI)
-- 🎥 [Demo 2 Video](https://youtu.be/VLT3FmH0Ohk)
+- 🎥 [Demo 2 Video](https://youtu.be/92OJ90uNvXY)
 
 ---
 
@@ -89,5 +89,6 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>
   </a>
 </p>
+
 
 
