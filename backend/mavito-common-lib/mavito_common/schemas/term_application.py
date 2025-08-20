@@ -70,7 +70,7 @@ class TermApplicationRead(BaseModel):
     """
 
     id: UUID4
-    term_id: UUID4
+    term_id: Optional[UUID4] = None
     submitted_by_user_id: UUID4
     proposed_content: UserTermCreateSchema
     status: TermStatus
