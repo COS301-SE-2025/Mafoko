@@ -5,7 +5,6 @@ import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 import { ChevronDown, Moon, Sun } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
-
 interface LeftNavProps {
   activeItem: string;
   setActiveItem: (item: string) => void;
@@ -22,10 +21,9 @@ interface UserProfileApiResponse {
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isDarkMode } = useDarkMode();
   const [userRole, setUserRole] = useState<string>('contributor');
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
-
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const allMenuItems = useMemo(
     () => [
       {
@@ -237,7 +235,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
 
       {/* Dark Mode Toggle */}
       <div className="left-nav-footer">
-        <div className="dark-mode-toggle">
+        <div className="dark-mode-toggle" onClick={toggleDarkMode}>
           <div className="toggle-container">
             {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
             <span className="toggle-label">
