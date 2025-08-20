@@ -17,15 +17,12 @@
 ## Project Resources
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
-*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
-*  [Figma Designs](https://www.figma.com/design/XUPY5uCBmWQULGmh3L0bqC/Marito_Designs?node-id=0-1&p=f&t=0je6YkOSQeV0tjmJ-0) 
-*  [Architectural Specifications & Service Contract](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf) 
-*  [Deployment Diagram MD](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Architecture%20Diagrams/DeploymentDiagram.md)
-*  [Architecture Diagram MD](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Architecture%20Diagrams/ArchitectureDiagram.md)
-*  [Architecture Diagram & Deployment Diagram PDF](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Architecture%20Diagrams/Architecture_%26_deployment_V4.pdf) 
-*  [User Manual ](https://9000) 
+*  [SRS Document](https://9000)
+*  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf) 
+*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/User%20Manual/UserManual.pdf)
 *  [Technical Installation Manual](https://9000) 
-*  [Coding Standards Document](https://9000) 
+*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/Coding%20Standards/Coding%20Standards.pdf)
+*  [Document Archieve](https://github.com/COS301-SE-2025/Marito/tree/doc/customization-and-workspace-docs/Documentation/Srs/Archive)
 
 ---
 
@@ -92,7 +89,6 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>
   </a>
 </p>
-
 
 
 
