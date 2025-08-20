@@ -20,7 +20,7 @@
 *  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
 *  [Figma Designs](https://www.figma.com/design/XUPY5uCBmWQULGmh3L0bqC/Marito_Designs?node-id=0-1&p=f&t=0je6YkOSQeV0tjmJ-0) 
 *  [Architectural requirements](https://9000) 
-*  [User Manual ](https://9000) 
+*  [User Manual](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/User%20Manual/UserManual.pdf) 
 *  [Technical Installation Manual](https://9000) 
 *  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Coding%20Standards/Coding%20Standards.pdf) 
 
