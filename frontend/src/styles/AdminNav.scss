@@ -1,0 +1,169 @@
+// AdminNav.scss
+.admin-nav {
+  position: relative;
+  display: inline-block;
+
+  .admin-nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: 1px solid;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    .admin-nav-label {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: block;
+      }
+    }
+
+    .admin-nav-chevron {
+      transition: transform 0.2s ease;
+
+      &.rotated {
+        transform: rotate(180deg);
+      }
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  .admin-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    min-width: 180px;
+    background: var(--navbar-bg);
+    border: 1px solid;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow: hidden;
+
+    .admin-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--navbar-text);
+      text-decoration: none;
+      border-bottom: 1px solid;
+      transition: background-color 0.2s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover,
+      &.active {
+        background: var(--navbar-accent-pink);
+        color: white;
+      }
+
+      span {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // Theme-specific styles
+  &.theme-light {
+    .admin-nav-toggle {
+      border-color: #e2e8f0;
+      color: #374151;
+
+      &:hover {
+        border-color: #d1d5db;
+        background: #f9fafb;
+      }
+    }
+
+    .admin-dropdown {
+      background: white;
+      border-color: #e2e8f0;
+
+      .admin-dropdown-item {
+        color: #374151;
+        border-bottom-color: #f3f4f6;
+
+        &:hover {
+          background: var(--navbar-accent-pink);
+          color: white;
+        }
+      }
+    }
+  }
+
+  &.theme-dark {
+    .admin-nav-toggle {
+      border-color: #374151;
+      color: #d1d5db;
+
+      &:hover {
+        border-color: #4b5563;
+        background: #1f2937;
+      }
+    }
+
+    .admin-dropdown {
+      background: #1f2937;
+      border-color: #374151;
+
+      .admin-dropdown-item {
+        color: #d1d5db;
+        border-bottom-color: #374151;
+
+        &:hover {
+          background: var(--navbar-accent-pink);
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+// Mobile admin links in navbar
+.admin-mobile-link {
+  border-top: 1px solid var(--navbar-border-dark);
+
+  &:first-of-type {
+    margin-top: 0.5rem;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0.5rem;
+  }
+
+  // Light theme
+  .theme-light & {
+    border-top-color: #e2e8f0;
+    background: #f8fafc;
+
+    &:hover {
+      background: var(--navbar-accent-pink);
+      color: white;
+    }
+  }
+
+  // Dark theme
+  .theme-dark & {
+    border-top-color: #374151;
+    background: #111827;
+
+    &:hover {
+      background: var(--navbar-accent-pink);
+      color: white;
+    }
+  }
+}

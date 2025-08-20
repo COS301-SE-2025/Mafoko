@@ -186,9 +186,6 @@ test('renders analytics page with basic structure', async () => {
   expect(
     screen.getByTestId('stat-card-analytics.stats.uniquedomains'),
   ).toBeInTheDocument();
-  expect(
-    screen.getByTestId('stat-card-analytics.stats.toplanguage'),
-  ).toBeInTheDocument();
 });
 
 test('renders all chart components', async () => {

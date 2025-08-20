@@ -1,6 +1,9 @@
 # glossary-service/app/tests/conftest.py
 import asyncio
+import pytest
 import pytest_asyncio
+import warnings
+import uuid
 from typing import AsyncGenerator
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
@@ -8,29 +11,34 @@ from sqlalchemy.orm import sessionmaker  # noqa: F401
 from fastapi.testclient import TestClient  # noqa: F401
 import httpx
 from httpx import ASGITransport
+from unittest.mock import MagicMock
 
 # Import all models so Base.metadata knows about them
 from mavito_common.models.user import User  # noqa: F401
 from mavito_common.models.term import Term  # noqa: F401
 from mavito_common.models.term_vote import TermVote  # noqa: F401
-
 from mavito_common.db.base_class import Base
 from mavito_common.core.config import settings
 from app.main import app
-
-# This must point to the get_db your app actually uses
 from mavito_common.db.session import get_db
+
+# Suppress Pydantic warning about class-based config
+warnings.filterwarnings(
+    "ignore",
+    message="Support for class-based `config` is deprecated",
+    category=DeprecationWarning,
+)
 
 # --- Definitive Test Database Setup ---
 # Use the main DB URL from settings to connect to the 'postgres' DB
 # to be able to create/drop other databases.
-DEFAULT_DB_URL = str(settings.SQLALCHEMY_DATABASE_URL).replace(
-    str(settings.DB_NAME), "postgres", 1
-)
+# Replace 'db' with 'localhost' when running tests locally
+LOCAL_DB_URL = str(settings.SQLALCHEMY_DATABASE_URL).replace("db:", "localhost:")
+DEFAULT_DB_URL = LOCAL_DB_URL.replace(str(settings.DB_NAME), "postgres", 1)
 # The name for our temporary test database
 TEST_DB_NAME = str(settings.DB_NAME) + "_test"
 # The full URL for connecting to the temporary test database
-TEST_DATABASE_URL = str(settings.SQLALCHEMY_DATABASE_URL) + "_test"
+TEST_DATABASE_URL = LOCAL_DB_URL + "_test"
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -95,3 +103,52 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[httpx.AsyncClient, 
         yield client
 
     del app.dependency_overrides[get_db]
+
+
+@pytest.fixture
+def mock_db():
+    """Fixture to create a mock database session for unit tests."""
+    from unittest.mock import MagicMock, AsyncMock
+
+    # Create an AsyncMock for db.execute
+    execute_mock = AsyncMock()
+
+    # Create the main db mock
+    db = MagicMock()
+
+    # Replace the execute method with an AsyncMock
+    db.execute = execute_mock
+
+    # Setup common return patterns
+    scalar_mock = MagicMock()
+    scalar_mock.scalar_one_or_none.return_value = None
+
+    scalars_mock = MagicMock()
+    scalars_mock.all.return_value = []
+
+    # Configure the execute AsyncMock to return appropriate values
+    execute_mock.return_value = scalar_mock
+
+    # Setup a side effect that allows tests to override return values
+    def get_result(*args, **kwargs):
+        return scalar_mock
+
+    execute_mock.side_effect = get_result
+
+    # Add a commit method that can be awaited
+    db.commit = AsyncMock()
+
+    # Add a refresh method that can be awaited
+    db.refresh = AsyncMock()
+
+    return db
+
+
+@pytest.fixture
+def mock_user():
+    """Fixture to create a mock user for unit tests."""
+    user = MagicMock(spec=User)
+    user.id = uuid.uuid4()
+    user.username = "testuser"
+    user.email = "test@example.com"
+    return user

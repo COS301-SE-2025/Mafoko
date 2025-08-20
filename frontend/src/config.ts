@@ -25,10 +25,17 @@ const TERM_SERVICE_URL =
   (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
-  'http://localhost:8008'; // Changed to 8008
+  'http://localhost:8008';
 const WORKSPACE_SERVICE_URL =
   (import.meta.env.VITE_WORKSPACE_SERVICE_URL as string) ||
   'http://localhost:8009';
+const FEEDBACK_SERVICE_URL =
+  (import.meta.env.VITE_FEEDBACK_SERVICE_URL as string) ||
+  'http://localhost:8010';
+
+const TERM_ADDITION_SERVICE_URL =
+  (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
+  'http://localhost:8011';
 
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
@@ -37,22 +44,28 @@ const endpoint = (serviceUrl: string, path: string): string =>
 interface APIEndpoints {
   login: string;
   register: string;
-  forgotPassword: string;
-  resetPassword: string;
-  verifyEmail: string;
-  resendVerification: string;
+  loginWithGoogle: string;
   getMe: string;
+  updateMe: string;
+  updateProfile: string;
+  updateProfilePicture: string;
   generateSignedUrl: string;
+  generateProfilePictureUploadUrl: string;
+  getMyProfilePictureUrl: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
+  ApproveApplicationStatus: (applicationId: string) => string;
+  RejectApplicationStatus: (applicationId: string) => string;
   createApplication: string;
+  getAllApplications: string;
+  getLinguistApplication: string;
   getUserUploads: (userId: string) => string;
   getSignedDownloadUrl: (gcsKey: string) => string;
   getUsersWithUploads: () => string;
   search: string;
   suggest: string;
   descriptiveAnalytics: string;
-  categoryFrequency: string;
+  categoryFrequency: (language?: string) => string;
   languageCoverage: string;
   popularTerms: (limit?: number, domain?: string, language?: string) => string;
   totalStatistics: string;
@@ -71,6 +84,29 @@ interface APIEndpoints {
   glossaryRandom: string;
   getTermDetail: (termId: string) => string;
   getTermTranslations: (termId: string) => string;
+  // Term Addition Service
+  submitTerm: string;
+  submitTermWithTranslations: string;
+  getMySubmittedTerms: string;
+  getEditableTerms: string;
+  getPendingVerificationTerms: string;
+  voteForTerm: (termId: string) => string;
+  getAllTermApplications: string;
+  getTermReviews: (termId: string) => string;
+  getAttributes: string;
+  getTerm: (termId: string) => string;
+  getTermsByIds: string;
+  deleteTermApplication: (applicationId: string) => string;
+  // Linguist Endpoints
+  getLinguistReviewSubmissions: string;
+  linguistVerifyApplication: (applicationId: string) => string;
+  linguistRejectApplication: (applicationId: string) => string;
+  getAllAdminVerifiedTerms: string;
+  // Admin Endpoints
+  getAdminApplicationsForApproval: string;
+  adminApproveApplication: (applicationId: string) => string;
+  adminRejectApplication: (applicationId: string) => string;
+
   getComments: (termId: string) => string;
   postComment: string;
   editComment: (commentId: string) => string;
@@ -97,33 +133,71 @@ interface APIEndpoints {
   deleteNote: (noteId: string) => string;
   getNoteByTerm: (termId: string) => string;
   updateBookmarkNote: string;
+  // --- Feedback Service ---
+  submitFeedback: string;
+  getMyFeedback: string;
+  getFeedback: (feedbackId: string) => string;
+  getAllFeedback: string;
+  updateFeedback: (feedbackId: string) => string;
+  deleteFeedback: (feedbackId: string) => string;
+  getFeedbackStats: string;
+  searchFeedback: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
   // --- Auth Service ---
   register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
   login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
-  forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
-  resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
-  verifyEmail: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/verify-email'),
-  resendVerification: endpoint(
-    AUTH_SERVICE_URL,
-    '/api/v1/auth/resend-verification',
-  ),
+  loginWithGoogle: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/google-login'),
   getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  updateMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  updateProfile: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
+  updateProfilePicture: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/me/profile-picture',
+  ),
   generateSignedUrl: endpoint(
     AUTH_SERVICE_URL,
     '/api/v1/uploads/generate-signed-url',
+  ),
+  generateProfilePictureUploadUrl: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/profile-picture/upload-url',
+  ),
+  getMyProfilePictureUrl: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/auth/me/profile-picture',
   ),
   getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
 
   // --- Linguist Application Service ---
+  getAllApplications: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/all',
+  ),
   createApplication: endpoint(
     LINGUIST_APP_SERVICE_URL,
     '/api/v1/linguist-applications',
   ),
+  getLinguistApplication: endpoint(
+    LINGUIST_APP_SERVICE_URL,
+    '/api/v1/linguist-applications/me_application',
+  ),
+
+  ApproveApplicationStatus(applicationId) {
+    return endpoint(
+      LINGUIST_APP_SERVICE_URL,
+      `/api/v1/linguist-applications/${applicationId}/approve`,
+    );
+  },
+  RejectApplicationStatus(applicationId) {
+    return endpoint(
+      LINGUIST_APP_SERVICE_URL,
+      `/api/v1/linguist-applications/${applicationId}/reject`,
+    );
+  },
   getUserUploads: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/uploads`),
   getSignedDownloadUrl: (gcsKey: string) =>
@@ -143,10 +217,15 @@ export const API_ENDPOINTS: APIEndpoints = {
     ANALYTICS_SERVICE_URL,
     '/api/v1/analytics/descriptive',
   ),
-  categoryFrequency: endpoint(
-    ANALYTICS_SERVICE_URL,
-    '/api/v1/analytics/descriptive/category-frequency',
-  ),
+  categoryFrequency: (language?: string) => {
+    const params = new URLSearchParams();
+    if (language) params.append('language', language);
+    const queryString = params.toString();
+    return endpoint(
+      ANALYTICS_SERVICE_URL,
+      `/api/v1/analytics/descriptive/category-frequency${queryString ? `?${queryString}` : ''}`,
+    );
+  },
   languageCoverage: endpoint(
     ANALYTICS_SERVICE_URL,
     '/api/v1/analytics/descriptive/language-coverage',
@@ -213,6 +292,85 @@ export const API_ENDPOINTS: APIEndpoints = {
   getTermTranslations: (termId: string) =>
     endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}/translations`),
 
+  submitTerm: endpoint(TERM_ADDITION_SERVICE_URL, '/api/v1/terms/submit'),
+  submitTermWithTranslations: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/terms/submit-with-translations',
+  ),
+  getMySubmittedTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/terms/my-submitted',
+  ),
+  getEditableTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/terms/editable',
+  ),
+  getPendingVerificationTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/term-applications/pending-verification',
+  ),
+  getAllTermApplications: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/term-applications/all',
+  ),
+  getTermReviews: (termId: string) =>
+    endpoint(TERM_ADDITION_SERVICE_URL, `/api/v1/terms/${termId}/reviews`),
+  voteForTerm: (termId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/term-applications/${termId}/vote`,
+    ),
+  getAttributes: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    `/api/v1/terms/attributes`,
+  ),
+  getAllAdminVerifiedTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    `/api/v1/terms/admin-verified`,
+  ),
+  getTerm: (termId: string) =>
+    endpoint(TERM_ADDITION_SERVICE_URL, `/api/v1/terms/${termId}`),
+  getTermsByIds: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    `/api/v1/terms/terms-by-ids`,
+  ),
+  deleteTermApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/term-applications/${applicationId}`,
+    ),
+
+  // Linguist Endpoints
+  getLinguistReviewSubmissions: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/linguist/terms/applications-for-review',
+  ),
+  linguistVerifyApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/linguist/terms/${applicationId}/verify`,
+    ),
+  linguistRejectApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/linguist/terms/${applicationId}/reject`,
+    ),
+
+  // Admin Endpoints
+  getAdminApplicationsForApproval: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/admin/terms/applications-for-approval',
+  ),
+  adminApproveApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/admin/terms/${applicationId}/approve`,
+    ),
+  adminRejectApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/admin/terms/${applicationId}/reject`,
+    ),
   // --- Comment Service ---
   getComments: (termId: string) =>
     endpoint(
@@ -312,4 +470,20 @@ export const API_ENDPOINTS: APIEndpoints = {
     WORKSPACE_SERVICE_URL,
     '/api/v1/workspace/notes/bookmark-note',
   ),
+
+  // --- Feedback Service ---
+  submitFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/'),
+  getMyFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/my-feedback'),
+  getFeedback: (feedbackId: string) =>
+    endpoint(FEEDBACK_SERVICE_URL, `/api/v1/feedback/${feedbackId}`),
+  getAllFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/'),
+  updateFeedback: (feedbackId: string) =>
+    endpoint(FEEDBACK_SERVICE_URL, `/api/v1/feedback/${feedbackId}`),
+  deleteFeedback: (feedbackId: string) =>
+    endpoint(FEEDBACK_SERVICE_URL, `/api/v1/feedback/${feedbackId}`),
+  getFeedbackStats: endpoint(
+    FEEDBACK_SERVICE_URL,
+    '/api/v1/feedback/admin/stats',
+  ),
+  searchFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/search/'),
 };

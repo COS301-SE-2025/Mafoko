@@ -42,6 +42,15 @@ const LanguageSwitcher: React.FC = () => {
       await i18n.changeLanguage(languageCode);
       document.documentElement.lang = languageCode;
       localStorage.setItem('i18nextLng', languageCode);
+
+      // Update user settings with the new language
+      const savedSettings = localStorage.getItem('userSettings');
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        settings.selectedLanguage = languageCode;
+        localStorage.setItem('userSettings', JSON.stringify(settings));
+      }
+
       setIsOpen(false); // Close dropdown after selection
     } catch (err) {
       console.error('Error changing language:', err);

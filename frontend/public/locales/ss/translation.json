@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Tinhlelo",
+    "subtitle": "Lungisa indlela yakho yekusebentisa i-Marito",
+    "selectLanguage": "Khetsa lulwimi lolufunako",
+    "profile": {
+      "title": "Iphrofayili ne-Akhawunti",
+      "description": "Phatsa tinhlelo tephrofayili netintfo lotikhetsa ku-akhawunti"
+    },
+    "appLanguage": {
+      "title": "Lulwimi lwe-App",
+      "description": "Khetsa lulwimi lolufunako"
+    },
+    "accessibility": {
+      "title": "Tinketfo tekuFinyelela",
+      "textAndVisual": "Umbhalo nekuBonakala",
+      "textSize": "Busayizi beMbhalo",
+      "textSpacing": "Kukhushulwa kweMbhalo",
+      "colorAndContrast": "Umbala neMahluko",
+      "highContrastMode": "Indlela yeMahluko laPhakeme",
+      "darkMode": "Indlela leMnyama"
+    }
+  },
+
   "navigation": {
     "home": "Ekhaya",
     "dictionary": "Sichazamagama",
@@ -6,6 +29,7 @@
     "savedTerms": "Emagama Lacondziwe",
     "dashboard": "Ibhodi",
     "help": "Lusito",
+    "settings": "Tinhlelo",
     "darkMode": "Indlela lemnyama"
   },
 
@@ -202,5 +226,61 @@
     "previous": "Longendvulela",
     "next": "Lolandzelako",
     "pageInfo": "Likhasi {{current}} kwa-{{total}}"
+  },
+
+  "profile": {
+    "title": "Liphrofayela Lomsebentisi",
+    "settings": "Tilungiselelo",
+    "editProfile": "Hlela liphrofayela",
+    "editName": "Hlela Libito",
+    "editEmail": "Hlela I-imeyili",
+    "changePassword": "Shintsha Liphasiswedi",
+    "role": "Indima",
+    "loading": "Kuyalayisha...",
+    "logout": "Phuma",
+    "logoutButton": "Phuma",
+    "logoutConfirmation": "Phuma?",
+    "yes": "Yebo",
+    "no": "Hayi",
+    "forms": {
+      "editName": "Hlela Libito",
+      "editEmail": "Hlela I-imeyili",
+      "changePassword": "Shintsha Liphasiswedi",
+      "firstName": "Libito Lekucala",
+      "firstNamePlaceholder": "Faka libito lekucala",
+      "lastName": "Libito Lekugcina",
+      "lastNamePlaceholder": "Faka libito lekugcina",
+      "emailAddress": "Likheli Le-imeyili",
+      "emailAddressPlaceholder": "Faka likheli le-imeyili",
+      "currentPassword": "Liphasiswedi Lamanje",
+      "currentPasswordPlaceholder": "Faka liphasiswedi lamanje",
+      "newPassword": "Liphasiswedi Lesha",
+      "newPasswordPlaceholder": "Faka liphasiswedi lesha",
+      "confirmNewPassword": "Cinisekisa Liphasiswedi Lesha",
+      "confirmNewPasswordPlaceholder": "Cinisekisa liphasiswedi lesha",
+      "save": "Gcina",
+      "saving": "Kuyagcinwa...",
+      "cancel": "Khansela"
+    },
+    "errors": {
+      "noToken": "Akukho thokeni yekufinyelela letfolakele. Sicela ungene kuqala.",
+      "loadFailed": "Kwehlulekile ukufaka imininingo yeliphrofayela",
+      "loadError": "Liphutsa ekufakeni liphrofayela: {{message}}",
+      "invalidImage": "Sicela ukhetse lifayela lesithombe lesisebentako",
+      "fileTooLarge": "Bukhulu balifayela kufanele bube ngaphansi kwe-5MB",
+      "uploadError": "Kwehlulekile kubuyeketa sithombe seliphrofayela: {{message}}",
+      "nameRequired": "Libito lekucala nelekugcina kuyafuneka",
+      "passwordRequired": "Liphasiswedi lamanje liyafuneka",
+      "updateFailed": "Kwehlulekile kubuyeketa liphrofayela",
+      "updateError": "Kwehlulekile kubuyeketa liphrofayela: {{message}}",
+      "emailRequired": "I-imeyili iyafuneka",
+      "emailInvalid": "Sicela ufake likheli le-imeyili lelisebentako",
+      "emailUpdateFailed": "Kwehlulekile kubuyeketa i-imeyili",
+      "emailUpdateError": "Kwehlulekile kubuyeketa i-imeyili: {{message}}",
+      "newPasswordRequired": "Liphasiswedi lesha liyafuneka",
+      "passwordMismatch": "Emaphasiswedi lamasha awahambelani",
+      "passwordUpdateFailed": "Kwehlulekile kubuyeketa liphasiswedi",
+      "passwordUpdateError": "Kwehlulekile kubuyeketa liphasiswedi: {{message}}"
+    }
   }
 }

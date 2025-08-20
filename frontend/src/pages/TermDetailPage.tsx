@@ -1,22 +1,32 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { CommentItem } from '../components/TermDetail/CommentItem';
-import { Comment, TermDetail } from '../types/termDetailTypes';
+import { Comment } from '../types/termDetailTypes';
 import '../styles/TermDetailPage.scss';
-import {
-  BackArrowIcon,
-  BookmarkIcon,
-  DotsIcon,
-  SendIcon,
-  ShareIcon,
-  SuggestEditArrowIcon,
-  UpArrowIcon,
-  DownArrowIcon,
-} from '../components/Icons';
+import { SendIcon, SuggestEditArrowIcon } from '../components/Icons';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
+
+import { Term } from '../types/terms/types.ts';
+import '../styles/TermPage.scss';
+import { ArrowUp, ArrowDown, Share2 } from 'lucide-react';
+import { Badge } from '../components/ui/badge.tsx';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card.tsx';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../components/ui/dropdown-menu';
+import { LanguageClassMap, SearchResponseType } from '../types/search/types.ts';
+import { getAllTerms } from '../utils/indexedDB.ts';
 
 interface BackendComment {
   id: string;
@@ -40,7 +50,7 @@ interface BackendComment {
 }
 
 interface UserData {
-  uuid: string;
+  id: string;
 }
 
 const mapBackendCommentToFrontend = (
@@ -66,7 +76,12 @@ const mapBackendCommentToFrontend = (
 };
 
 export const TermDetailPage: React.FC = () => {
-  const { termId } = useParams<{ termId: string }>();
+  const { language, name, id } = useParams<{
+    language: string;
+    name: string;
+    id: string;
+  }>();
+  const termId = id;
   const navigate = useNavigate();
   const [newComment, setNewComment] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -80,8 +95,116 @@ export const TermDetailPage: React.FC = () => {
     null,
   );
   const [authToken, setAuthToken] = useState<string | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [relatedTerms, setRelatedTerms] = useState<Term[]>([]);
+  const [term, setTerm] = useState<Term | null>(null);
+  const [isUpvote, setIsUpvote] = useState<boolean>(false);
+  const [isDownvote, setIsDownvote] = useState<boolean>(false);
+  const [downvotes, setDownvotes] = useState<number>(0);
+  const [upvotes, setUpvotes] = useState<number>(0);
   const commentInputRef = useRef<HTMLDivElement>(null);
+
+  const fetchTerm = useCallback(async (): Promise<SearchResponseType> => {
+    const params = new URLSearchParams({
+      query: String(name),
+      language: String(language),
+      sort_by: 'name',
+      page: '1',
+      page_size: '100',
+      fuzzy: 'false',
+    });
+    const resp = await fetch(`${API_ENDPOINTS.search}?${params.toString()}`);
+    if (!resp.ok) throw new Error('Failed to fetch search results');
+    return (await resp.json()) as SearchResponseType;
+  }, [name, language]);
+
+  const fetchRelatedTerms = useCallback(
+    async (domain: string): Promise<Term[]> => {
+      const params = new URLSearchParams({
+        domain,
+        sort_by: 'name',
+        page: '1',
+        page_size: '3',
+        fuzzy: 'false',
+      });
+      try {
+        const resp = await fetch(
+          `${API_ENDPOINTS.search}?${params.toString()}`,
+        );
+        if (!resp.ok) console.error('Failed to fetch search results');
+        const data = (await resp.json()) as SearchResponseType;
+        return data.items;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (ex) {
+        const cached = await getAllTerms();
+        return cached.filter((t) => t.domain === domain);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      setIsLoading(true);
+      try {
+        let picked: Term | null = null;
+
+        try {
+          const res = await fetchTerm();
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          picked = res.items?.[0] ?? null;
+        } catch {
+          const cached = await getAllTerms();
+          picked =
+            cached.find(
+              (t) => t.term.toLowerCase() === (name ?? '').toLowerCase(),
+            ) ?? null;
+        }
+        //eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setTerm(picked);
+        }
+
+        if (picked) {
+          const related = await fetchRelatedTerms(picked.domain);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (!cancelled) {
+            setRelatedTerms(related.filter((r) => r.id !== picked.id));
+          }
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (!cancelled) {
+            setRelatedTerms([]);
+          }
+        }
+      } finally {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setIsLoading(false);
+          if (term && term.upvotes && term.downvotes) {
+            setDownvotes(term.downvotes);
+            setUpvotes(term.upvotes);
+          }
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, name, language, fetchTerm, fetchRelatedTerms]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -94,10 +217,9 @@ export const TermDetailPage: React.FC = () => {
         if (
           parsedData &&
           typeof parsedData === 'object' &&
-          'uuid' in parsedData &&
-          typeof (parsedData as UserData).uuid === 'string'
+          'id' in parsedData
         ) {
-          setCurrentUserId((parsedData as UserData).uuid);
+          setCurrentUserId((parsedData as UserData).id);
         } else {
           console.error(
             'User data from localStorage is not in the expected format.',
@@ -134,25 +256,15 @@ export const TermDetailPage: React.FC = () => {
     };
   }, []);
 
-  const handleBack = () => {
-    void navigate(-1);
-  };
+  // const handleBack = () => {
+  //   void navigate(-1);
+  // };
 
-  const [term] = useState<TermDetail>({
-    id: termId || '1',
-    term: 'Afsetpunt',
-    translation: 'Outlet',
-    definition:
-      'A place of business for retailing goods / services. Examples: shop, market, service establishment, or other place, where goods and / or services are sold.',
-    partOfSpeech: 'Noun',
-    source: 'AI generated',
-    example: 'Die ontwerperswinkel verkoop goedere teen afslagpryse.',
-    relatedTerms: [
-      { id: '2', term: 'Netto wins' },
-      { id: '3', term: 'Netto verlies' },
-      { id: '4', term: 'nyerheidsgebied' },
-    ],
-  });
+  const languageKey = term?.language
+    ? term.language.charAt(0).toUpperCase() +
+      term.language.slice(1).toLowerCase()
+    : 'Default';
+  const languageClass = LanguageClassMap[languageKey] ?? 'bg-rose-500';
 
   const fetchComments = useCallback(async () => {
     if (!termId) return;
@@ -178,7 +290,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
       const data = (await response.json()) as BackendComment[];
       setComments(data.map(mapBackendCommentToFrontend));
@@ -233,7 +345,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again to add comments.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
 
       await fetchComments();
@@ -283,7 +395,7 @@ export const TermDetailPage: React.FC = () => {
             'Session expired or unauthorized. Please log in again to vote.',
           );
         }
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
+        console.error(`HTTP error! status: ${String(response.status)}`);
       }
 
       await fetchComments();
@@ -327,7 +439,7 @@ export const TermDetailPage: React.FC = () => {
         } else if (response.status === 404) {
           setErrorComments('Comment not found.');
         } else {
-          throw new Error(`HTTP error! status: ${String(response.status)}`);
+          console.error(`HTTP error! status: ${String(response.status)}`);
         }
       }
       await fetchComments();
@@ -366,7 +478,7 @@ export const TermDetailPage: React.FC = () => {
         } else if (response.status === 404) {
           setErrorComments('Comment not found.');
         } else {
-          throw new Error(`HTTP error! status: ${String(response.status)}`);
+          console.error(`HTTP error! status: ${String(response.status)}`);
         }
       }
       await fetchComments();
@@ -392,6 +504,32 @@ export const TermDetailPage: React.FC = () => {
     }
   }, []);
 
+  const handleUpvote = () => {
+    setIsUpvote(!isUpvote);
+    if (isUpvote) {
+      if (term && term.upvotes) {
+        setUpvotes(upvotes + 1);
+      }
+    } else {
+      if (term && term.upvotes) {
+        setUpvotes(upvotes - 1);
+      }
+    }
+  };
+
+  const handleDownvote = () => {
+    setIsDownvote(!isDownvote);
+    if (isDownvote) {
+      if (term && term.downvotes) {
+        setDownvotes(downvotes + 1);
+      }
+    } else {
+      if (term && term.downvotes) {
+        setDownvotes(downvotes - 1);
+      }
+    }
+  };
+
   return (
     <div
       className={`term-page-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
@@ -406,187 +544,234 @@ export const TermDetailPage: React.FC = () => {
           <div
             className={`term-page ${isDarkMode ? 'term-page-dark' : 'term-page-light'}`}
           >
-            <div className="top-bar">
-              <button
-                type="button"
-                className="back-button"
-                onClick={handleBack}
-                aria-label="Go back"
-              >
-                <BackArrowIcon />
-              </button>
-
-              <div className="top-actions">
-                {!isMobile && (
-                  <div className="vote-actions">
+            <div className="term-main-content min-h-0 min-w-0">
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                <div className="min-h-screen term-page pt-16 w-full">
+                  <div className="flex justify-between items-center w-full mb-4">
                     <button
                       type="button"
-                      className="vote-button"
-                      aria-label="Upvote"
+                      className="bg-theme rounded-md text-sm mb-4 text-theme justify-start h-10 w-20"
+                      onClick={() => {
+                        void navigate(`/search`);
+                      }}
                     >
-                      <UpArrowIcon />
-                      <span className="vote-count">1.6k</span>
+                      Back
                     </button>
-                    <button
-                      type="button"
-                      className="vote-button"
-                      aria-label="Downvote"
-                    >
-                      <DownArrowIcon />
-                      <span className="vote-count">5k</span>
-                    </button>
-                  </div>
-                )}
-                <button
-                  type="button"
-                  className="action-button"
-                  aria-label="Share"
-                >
-                  <ShareIcon />
-                </button>
-                <button
-                  type="button"
-                  className="action-button"
-                  aria-label="More options"
-                >
-                  <DotsIcon />
-                </button>
-              </div>
-            </div>
-
-            <div className="term-header">
-              <span className="category-tag">Business Enterprises</span>
-              <h1 className="term-title">{term.term}</h1>
-              <h2 className="term-translation">{term.translation}</h2>
-            </div>
-
-            <div className="content-container">
-              <button
-                type="button"
-                className="bookmark-button"
-                aria-label="Bookmark"
-              >
-                <BookmarkIcon />
-              </button>
-
-              <section className="term-section">
-                <div className="term-meta">
-                  <span className="part-of-speech">{term.partOfSpeech}</span>
-                  <span className="source">{term.source}</span>
-                </div>
-                <p className="definition">{term.definition}</p>
-              </section>
-
-              <section className="term-section">
-                <h3 className="section-title">Example Usage</h3>
-                <p className="example">{term.example}</p>
-                <span className="source">{term.source}</span>
-              </section>
-
-              <section className="term-section">
-                <h3 className="section-title">Related Terms</h3>
-                <div className="related-terms">
-                  {term.relatedTerms.map((relatedTerm) => (
-                    <span key={relatedTerm.id} className="related-term">
-                      {relatedTerm.term}
-                    </span>
-                  ))}
-                </div>
-              </section>
-
-              <section className="comments-section">
-                <div className="comments-header">
-                  <h3 className="section-title">Comments</h3>
-                  <span className="comment-count">{comments.length}</span>
-                </div>
-
-                <div className="comments-list">
-                  {loadingComments && <p>Loading comments...</p>}
-                  {errorComments && (
-                    <p className="error-message">{errorComments}</p>
-                  )}
-                  {!loadingComments && comments.length === 0 && (
-                    <p>No comments yet. Be the first to comment!</p>
-                  )}
-                  {comments.map((comment) => (
-                    <CommentItem
-                      key={comment.id}
-                      comment={comment}
-                      onVote={handleVoteComment}
-                      onReply={handleReplyClick}
-                      onEdit={handleEditComment}
-                      onDelete={handleDeleteComment}
-                      currentUserId={currentUserId}
-                    />
-                  ))}
-                </div>
-
-                <div className="add-comment" ref={commentInputRef}>
-                  {replyingToCommentId && (
-                    <div className="replying-to-info">
-                      Replying to:{' '}
-                      {comments.find((c) => c.id === replyingToCommentId)?.user
-                        .name || 'comment'}
+                    <div className="flex flex-row items-center gap-2">
+                      <ArrowUp
+                        onClick={handleUpvote}
+                        className={`cursor-pointer hover:text-teal-500 ${isUpvote ? 'text-teal-400' : ''}`}
+                      />
+                      <span className="text-xs">{upvotes}</span>
+                      <ArrowDown
+                        onClick={handleDownvote}
+                        className={`cursor-pointer hover:text-teal-500 ${isDownvote ? 'text-teal-400' : ''}`}
+                      />
+                      <span className="text-xs">{downvotes}</span>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Share2 className="cursor-pointer hover:text-rose-500" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => {
+                              void navigator.clipboard.writeText(
+                                window.location.href,
+                              );
+                            }}
+                          >
+                            Copy URL
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              const subject = `Check out this term: ${term?.term ? term.term : ''}`;
+                              const body = `Hi,\n\nI wanted to share this term with you:\n\n${term?.term ? term.term : ''}\n\nDefinition: ${term?.definition ? term.definition : ''}\n\nLink: ${window.location.href}`;
+                              window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                            }}
+                          >
+                            Share via Email
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
-                  )}
-                  <input
-                    type="text"
-                    value={newComment}
-                    onChange={(e) => {
-                      setNewComment(e.target.value);
-                    }}
-                    placeholder={
-                      replyingToCommentId
-                        ? 'Add a reply...'
-                        : 'Add a comment....'
-                    }
-                    aria-label={
-                      replyingToCommentId ? 'Add a reply' : 'Add a comment'
-                    }
-                  />
-                  <button
-                    type="button"
-                    onClick={() => void handleAddComment(replyingToCommentId)}
-                    aria-label="Send comment"
-                    className="send-comment-button"
-                  >
-                    <SendIcon />
-                  </button>
+                  </div>
+
+                  <div className="term-conent w-full pb-3">
+                    <Card className="w-full max-w-screen mx-auto bg-theme text-theme text-left">
+                      <CardHeader className="">
+                        <div className="flex flex-row items-start gap-2">
+                          <Badge
+                            variant="secondary"
+                            className="bg-accent text-sm"
+                          >
+                            {term?.domain}
+                          </Badge>
+                          <Badge
+                            variant="destructive"
+                            className={`bg-accent text-sm ${languageClass} text-theme`}
+                          >
+                            {term?.language}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-3xl md:text-4xl mt-4">
+                          <h1 className="term-title">{term?.term}</h1>
+                        </CardTitle>
+                        <div className="h-px bg-muted my-4 w-full" />
+                      </CardHeader>
+
+                      <CardContent className="space-y-6">
+                        <section>
+                          <h3 className="font-semibold text-2xl mb-2">
+                            Description
+                          </h3>
+                          <p className="text-sm leading-relaxed">
+                            {term?.definition}
+                          </p>
+                        </section>
+
+                        <section className="text-theme">
+                          {relatedTerms.length === 0 ? null : (
+                            <div>
+                              <h3 className="font-semibold text-2xl mb-2">
+                                Related Terms
+                              </h3>
+                              <div className="flex flex-wrap gap-2 text-theme text-3xl">
+                                {relatedTerms[0] ? (
+                                  <Badge
+                                    variant="outline"
+                                    className="text-sm text-theme"
+                                  >
+                                    {
+                                      <Link
+                                        to={`/term/${relatedTerms[0].language}/${relatedTerms[0].term}/${relatedTerms[0].id}`}
+                                        className="!text-pink-600"
+                                      >
+                                        {relatedTerms[0].term}
+                                      </Link>
+                                    }
+                                  </Badge>
+                                ) : null}
+                                {relatedTerms[1] ? (
+                                  <Badge
+                                    variant="outline"
+                                    className="text-sm text-theme"
+                                  >
+                                    {
+                                      <Link
+                                        to={`/term/${relatedTerms[1].language}/${relatedTerms[1].term}/${relatedTerms[1].id}`}
+                                        className="!text-pink-600"
+                                      >
+                                        {relatedTerms[1].term}
+                                      </Link>
+                                    }
+                                  </Badge>
+                                ) : null}
+                                {relatedTerms[2] ? (
+                                  <Badge
+                                    variant="outline"
+                                    className="text-sm text-theme"
+                                  >
+                                    {
+                                      <Link
+                                        to={`/term/${relatedTerms[2].language}/${relatedTerms[2].term}/${relatedTerms[2].id}`}
+                                        className="!text-pink-600"
+                                      >
+                                        {relatedTerms[2].term}
+                                      </Link>
+                                    }
+                                  </Badge>
+                                ) : null}
+                              </div>
+                            </div>
+                          )}
+                        </section>
+
+                        <section className="comments-section">
+                          <div className="comments-header">
+                            <h3 className="section-title">Comments</h3>
+                            <span className="comment-count">
+                              {comments.length}
+                            </span>
+                          </div>
+
+                          <div className="comments-list">
+                            {loadingComments && <p>Loading comments...</p>}
+                            {errorComments && (
+                              <p className="error-message">{errorComments}</p>
+                            )}
+                            {!loadingComments && comments.length === 0 && (
+                              <p>No comments yet. Be the first to comment!</p>
+                            )}
+                            {comments.map((comment) => (
+                              <CommentItem
+                                key={comment.id}
+                                comment={comment}
+                                onVote={handleVoteComment}
+                                onReply={handleReplyClick}
+                                onEdit={handleEditComment}
+                                onDelete={handleDeleteComment}
+                                currentUserId={currentUserId}
+                              />
+                            ))}
+                          </div>
+
+                          <div className="add-comment" ref={commentInputRef}>
+                            {replyingToCommentId && (
+                              <div className="replying-to-info">
+                                Replying to:{' '}
+                                {comments.find(
+                                  (c) => c.id === replyingToCommentId,
+                                )?.user.name || 'comment'}
+                              </div>
+                            )}
+                            <input
+                              type="text"
+                              value={newComment}
+                              onChange={(e) => {
+                                setNewComment(e.target.value);
+                              }}
+                              placeholder={
+                                replyingToCommentId
+                                  ? 'Add a reply...'
+                                  : 'Add a comment....'
+                              }
+                              aria-label={
+                                replyingToCommentId
+                                  ? 'Add a reply'
+                                  : 'Add a comment'
+                              }
+                            />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void handleAddComment(replyingToCommentId)
+                              }
+                              aria-label="Send comment"
+                              className="send-comment-button"
+                            >
+                              <SendIcon />
+                            </button>
+                          </div>
+                        </section>
+
+                        <footer className="page-footer">
+                          <button
+                            type="button"
+                            className="suggest-edit"
+                            aria-label="Suggest an edit"
+                          >
+                            Suggest an edit
+                            <SuggestEditArrowIcon />
+                          </button>
+                        </footer>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
-              </section>
-
-              <footer className="page-footer">
-                <button
-                  type="button"
-                  className="suggest-edit"
-                  aria-label="Suggest an edit"
-                >
-                  Suggest an edit
-                  <SuggestEditArrowIcon />
-                </button>
-              </footer>
+              )}
             </div>
-
-            {isMobile && (
-              <div className="mobile-voting-section">
-                <button
-                  type="button"
-                  className="vote-button"
-                  aria-label="Upvote"
-                >
-                  <UpArrowIcon />
-                  <span className="vote-count">1.6k</span>
-                </button>
-                <button
-                  type="button"
-                  className="vote-button"
-                  aria-label="Downvote"
-                >
-                  <DownArrowIcon />
-                  <span className="vote-count">5k</span>
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

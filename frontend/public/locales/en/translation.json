@@ -2,6 +2,29 @@
   "appTitle": "Marito",
   "loading": "Loading...",
 
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your Marito experience",
+    "selectLanguage": "Select your preferred language",
+    "profile": {
+      "title": "Profile & Account",
+      "description": "Manage your profile settings and account preferences"
+    },
+    "appLanguage": {
+      "title": "App Language",
+      "description": "Choose your preferred language"
+    },
+    "accessibility": {
+      "title": "Accessibility Options",
+      "textAndVisual": "Text & Visual Presentation",
+      "textSize": "Text Size",
+      "textSpacing": "Text Spacing",
+      "colorAndContrast": "Colour & Contrast",
+      "highContrastMode": "High Contrast Mode",
+      "darkMode": "Dark Mode"
+    }
+  },
+
   "landingPage": {
     "greeting": "Welcome to Marito PWA!",
     "registerButton": "Register",
@@ -75,6 +98,49 @@
     "userTypeLabels": {
       "normalUser": "Normal User",
       "applyingLinguist": "Applying as a Linguist"
+    },
+    "errors": {
+      "passwordMismatch": "Passwords do not match.",
+      "mustAgreeToTerms": "You must agree to the terms and conditions.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "unexpectedError": "An unexpected error occurred.",
+      "googleLoginFailed": "Google login failed. Please try again.",
+      "passwordmustbe atleast8characterslong": "Password must be at least 8 characters long.",
+      "passwordmustcontainatleastonenumber": "Password must contain at least one number.",
+      "passwordmustcontainatleastoneuppercaseletter": "Password must contain at least one uppercase letter.",
+      "passwordmustbeprovidedfornewusers": "Password must be provided for new users."
+    }
+  },
+
+  "linguistApplicationPage": {
+    "title": "Linguist Application",
+    "description": "Please submit your application by providing a link to your Google Scholar profile and uploading your research papers. This information will be used for a PII-free assessment of your expertise.",
+    "googleScholarUrlLabel": "Google Scholar Profile URL",
+    "googleScholarUrlPlaceholder": "e.g., https://scholar.google.com/citations?user=...",
+    "researchPapersLabel": "Research Papers (PDF)",
+    "researchPapersHelpText": "Upload one or more of your peer-reviewed research papers in PDF format.",
+    "submitButton": "Submit Application",
+    "submittingButton": "Submitting...",
+    "successMessage": "Your application has been submitted successfully!",
+    "loadingStatus": "Checking application status...",
+    "heroTitle": "Become a Mavito Linguist",
+    "heroDescription": "Showcase your academic expertise and join our global linguist network.",
+    "status": {
+      "title": "Application Status",
+      "submitted": "Submitted",
+      "finalDecision": "Final Decision",
+      "underReview": "Under Review",
+      "pending": "Your application has been submitted and is currently under review. We will notify you once a decision has been made.",
+      "approved": "Congratulations! Your application has been approved. You are now a Mavito linguist.",
+      "rejected": "We regret to inform you that your application was not successful at this time. Thank you for your interest."
+    },
+    "errors": {
+      "missingFields": "Please provide your Google Scholar URL and at least one research paper.",
+      "notAuthenticated": "You must be logged in to submit an application. Please log in and try again.",
+      "uploadUrlFailed": "Failed to get a secure upload URL for your file: {{fileName}}.",
+      "uploadFailed": "Failed to upload your file: {{fileName}}.",
+      "submissionFailed": "Your application submission failed. Please try again.",
+      "unexpected": "An unexpected error occurred. Please try again later."
     }
   },
 
@@ -82,7 +148,9 @@
     "home": "Home",
     "dictionary": "Dictionary",
     "glossary": "Glossary",
+    "settings": "Settings",
     "savedTerms": "Saved Terms",
+    "linguistApplication": "Linguist Application",
     "dashboard": "Dashboard",
     "help": "Help",
     "darkMode": "Dark Mode",
@@ -94,6 +162,7 @@
     "welcomeBack": "Welcome back",
     "userName": "User Name",
     "userId": "User ID",
+    "userEmail": "Email",
     "quickActions": "Quick Actions",
     "searchNow": "Search Now",
     "searchDescription": "Search for terminology in multiple languages",
@@ -106,7 +175,21 @@
     "viewAll": "View All",
     "communityActivity": "Community Activity",
     "hideActivity": "Hide Activity",
-    "viewAllActivity": "View All Activity"
+    "viewAllActivity": "View All Activity",
+    "title": "Unite Through Words",
+    "loadingProfile": "Loading profile...",
+    "goToProfile": "Go to profile page",
+    "discoverRandomTerms": "Discover Random Terms",
+    "getNewTerms": "Get new random terms",
+    "loadingTerms": "Loading terms...",
+    "noTermsAvailable": "No terms available",
+    "browseCategoryGlossary": "Browse {{category}} glossary",
+    "aboutMarito": {
+      "intro": "The term 'Marito' originates from Xitsonga, translating to 'words' or 'names'. This is a progressive web application that bridges the gap between South Africa's rich linguistic heritage and modern digital accessibility. Language enthusiasts, NLP researchers, and linguists can use Marito as a unified platform to explore, contribute to, and preserve multilingual glossaries, dictionaries, and terminology banks across 11 of South Africa's official languages.",
+      "mission": "Marito works seamlessly both offline and online, empowering communities to access comprehensive language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the University of Pretoria to democratize linguistic resources and advance natural language processing research for African languages.",
+      "teamCredit": "Proudly developed by Velox",
+      "learnMoreDSFSI": "Learn more about DSFSI"
+    }
   },
 
   "glossaryPage": {
@@ -227,5 +310,88 @@
     "previous": "Previous",
     "next": "Next",
     "pageInfo": "Page {{current}} of {{total}}"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel"
+  },
+
+  "profile": {
+    "title": "User Profile",
+    "settings": "Settings",
+    "editProfile": "Edit profile",
+    "editName": "Edit Name",
+    "editEmail": "Edit Email",
+    "changePassword": "Change Password",
+    "role": "Role",
+    "loading": "Loading...",
+    "linguistApplication": "Linguist Application",
+    "logout": "Logout",
+    "logoutButton": "Sign Out",
+    "logoutConfirmation": "Sign out?",
+    "yes": "Yes",
+    "no": "No",
+    "apply": "Apply",
+    "applyAsLinguist": "Apply as Linguist",
+    "submitDocuments": "Submit your documents to apply for linguist status:",
+    "submitting": "Submitting...",
+    "submitApplication": "Submit Application",
+    "applicationSuccess": "Linguist application submitted successfully!",
+    "forms": {
+      "editName": "Edit Name",
+      "editEmail": "Edit Email",
+      "changePassword": "Change Password",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter last name",
+      "emailAddress": "Email Address",
+      "emailAddressPlaceholder": "Enter email address",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmNewPassword": "Confirm New Password",
+      "confirmNewPasswordPlaceholder": "Confirm new password",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "documents": {
+      "idDocument": "ID Document (PDF) *",
+      "cv": "CV (PDF) *",
+      "certifications": "Certifications (PDF, Optional)",
+      "researchPapers": "Research Papers (PDF, Optional)"
+    },
+    "application": {
+      "notApplied": "Not Applied",
+      "pending": "Pending Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "unknown": "Unknown"
+    },
+    "errors": {
+      "noToken": "No access token found. Please login first.",
+      "loadFailed": "Failed to load profile data",
+      "loadError": "Error loading profile: {{message}}",
+      "invalidImage": "Please select a valid image file",
+      "fileTooLarge": "File size must be less than 5MB",
+      "uploadError": "Failed to update profile picture: {{message}}",
+      "nameRequired": "First name and last name are required",
+      "passwordRequired": "Current password is required",
+      "updateFailed": "Failed to update profile",
+      "updateError": "Failed to update profile: {{message}}",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "emailUpdateFailed": "Failed to update email",
+      "emailUpdateError": "Failed to update email: {{message}}",
+      "newPasswordRequired": "New password is required",
+      "passwordMismatch": "New passwords do not match",
+      "passwordUpdateFailed": "Failed to update password",
+      "passwordUpdateError": "Failed to update password: {{message}}",
+      "documentsRequired": "ID Document and CV are required for linguist application",
+      "applicationError": "Failed to submit application: {{message}}"
+    }
   }
 }

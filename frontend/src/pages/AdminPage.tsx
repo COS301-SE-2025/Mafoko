@@ -14,23 +14,37 @@ import {
   Clock,
   Users,
   UserCheck,
+  ExternalLink,
 } from 'lucide-react';
 import Navbar from '../components/ui/Navbar.tsx';
 import LeftNav from '../components/ui/LeftNav.tsx';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import '../styles/AdminPage.scss';
 import { API_ENDPOINTS } from '../config';
+import { useAdminAuth } from '../hooks/useAdminAuth';
+import { AdminErrorBoundary } from '../components/AdminErrorBoundary';
 
-interface LinguistApplication {
+interface LinguistApplicationWithUserRead {
+  google_scholar_url: string;
+  research_papers_gcs_keys: string[];
   id: string;
-  applicantId: string; // Add this field
-  applicantName: string;
-  applicantEmail: string;
-  appliedAt: string;
+  user_id: string;
   status: 'pending' | 'approved' | 'rejected';
-  documents: ApplicationDocument[];
-  languages: string[];
-  role: string; // Add this to track current role
+  submitted_at: string;
+  reviewed_at: string | null;
+  user: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    role: string;
+    profile_pic_url: string;
+    id: string;
+    is_active: boolean;
+    is_verified: boolean;
+    account_locked: boolean;
+    created_at: string;
+    last_login: string | null;
+  };
 }
 
 interface ApplicationDocument {
@@ -63,18 +77,15 @@ interface SystemUser {
 }
 
 // Add interface for user response
-interface UserResponse {
-  role: string;
-  // Add other properties as needed
-}
 
 const AdminPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
-  const [allApplications, setAllApplications] = useState<LinguistApplication[]>(
-    [],
-  );
+  const [allApplications, setAllApplications] = useState<
+    LinguistApplicationWithUserRead[]
+  >([]);
+
   const [displayedApplications, setDisplayedApplications] = useState<
-    LinguistApplication[]
+    LinguistApplicationWithUserRead[]
   >([]);
   const [allUsers, setAllUsers] = useState<SystemUser[]>([]);
   const [displayedUsers, setDisplayedUsers] = useState<SystemUser[]>([]);
@@ -91,16 +102,17 @@ const AdminPage: React.FC = () => {
   >({});
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const { authError, isLoading } = useAdminAuth();
   const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
 
   const applyFiltersAndPagination = useCallback(() => {
     if (currentView === 'applications') {
       // Filter applications based on search and status
       const filteredApplications = allApplications.filter((app) => {
+        const applicantName = `${app.user.first_name} ${app.user.last_name}`;
         const matchesSearch =
-          app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          app.applicantEmail.toLowerCase().includes(searchTerm.toLowerCase());
+          applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.user.email.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus =
           statusFilter === 'all' || app.status === statusFilter;
         return matchesSearch && matchesStatus;
@@ -222,8 +234,9 @@ const AdminPage: React.FC = () => {
 
             // Determine document type based on filename
             const getDocumentType = (
-              filename: string,
+              filename: string | undefined,
             ): 'cv' | 'certificate' | 'id' | 'research' => {
+              if (!filename) return 'research'; // default for undefined filenames
               const lower = filename.toLowerCase();
               if (lower.includes('cv') || lower.includes('resume')) return 'cv';
               if (lower.includes('cert') || lower.includes('certificate'))
@@ -269,7 +282,7 @@ const AdminPage: React.FC = () => {
 
       setAllApplications((prev) =>
         prev.map((app) =>
-          app.applicantId === userId ? { ...app, documents } : app,
+          app.user_id === userId ? { ...app, documents } : app,
         ),
       );
 
@@ -293,7 +306,6 @@ const AdminPage: React.FC = () => {
           return;
         }
 
-        // Fetch both endpoints in parallel for basic data
         const [usersResponse, applicationsResponse] = await Promise.all([
           fetch(API_ENDPOINTS.getAll, {
             method: 'GET',
@@ -302,7 +314,8 @@ const AdminPage: React.FC = () => {
               'Content-Type': 'application/json',
             },
           }),
-          fetch(API_ENDPOINTS.getUsersWithUploads(), {
+          // Corrected line here
+          fetch(API_ENDPOINTS.getAllApplications, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
@@ -320,28 +333,8 @@ const AdminPage: React.FC = () => {
         }
 
         if (applicationsResponse.ok) {
-          const usersWithUploads =
-            (await applicationsResponse.json()) as SystemUser[];
-
-          const applications: LinguistApplication[] = usersWithUploads.map(
-            (user) => ({
-              id: `app-${user.id}`,
-              applicantId: user.id,
-              applicantName: `${user.first_name} ${user.last_name}`,
-              applicantEmail: user.email,
-              appliedAt: user.created_at,
-              status:
-                user.role === 'linguist'
-                  ? 'approved'
-                  : user.role === 'contributor'
-                    ? 'pending'
-                    : 'rejected',
-              documents: [],
-              languages: [],
-              role: user.role,
-            }),
-          );
-
+          const applications =
+            (await applicationsResponse.json()) as LinguistApplicationWithUserRead[];
           setAllApplications(applications);
         } else {
           console.error(
@@ -369,8 +362,11 @@ const AdminPage: React.FC = () => {
       !loading
     ) {
       displayedApplications.forEach((app) => {
-        if (app.documents.length === 0 && !documentsLoading[app.applicantId]) {
-          void fetchDocumentsForUser(app.applicantId);
+        if (
+          app.research_papers_gcs_keys.length === 0 &&
+          !documentsLoading[app.user_id]
+        ) {
+          void fetchDocumentsForUser(app.user_id);
         }
       });
     }
@@ -391,39 +387,6 @@ const AdminPage: React.FC = () => {
     setSearchTerm('');
     setStatusFilter('all');
   }, [currentView]);
-
-  useEffect(() => {
-    const checkAdminRole = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        window.location.href = '/login';
-        return;
-      }
-
-      try {
-        const response = await fetch(API_ENDPOINTS.getMe, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) {
-          setAuthError(
-            `Error ${response.status.toString()}: ${response.statusText}`,
-          );
-          return;
-        }
-
-        const user = (await response.json()) as UserResponse;
-        if (user.role !== 'admin') {
-          setAuthError('Error 403: Forbidden - Admin access required');
-        }
-      } catch (err) {
-        console.error('Error checking admin role:', err);
-        setAuthError('Error 500: Unable to verify admin access');
-      }
-    };
-
-    void checkAdminRole();
-  }, []);
 
   const handleDocumentOpen = async (gcsKey: string) => {
     try {
@@ -476,8 +439,83 @@ const AdminPage: React.FC = () => {
             return;
           }
 
+          // Update the application status to approved
+          const updateApplicationResponse = await fetch(
+            API_ENDPOINTS.ApproveApplicationStatus(applicationId),
+            {
+              method: 'PUT',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            },
+          );
+
+          if (updateApplicationResponse.ok) {
+            // Also update the user's role to linguist
+            const updateUserResponse = await fetch(
+              `${API_ENDPOINTS.updateUserRole(application.user_id)}?new_role=linguist`,
+              {
+                method: 'PUT',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              },
+            );
+
+            if (updateUserResponse.ok) {
+              const result = (await updateUserResponse.json()) as {
+                message: string;
+              };
+              console.log(
+                'User promoted to linguist successfully:',
+                result.message,
+              );
+
+              setAllApplications((prev) =>
+                prev.map((app) =>
+                  app.id === applicationId
+                    ? {
+                        ...app,
+                        status: 'approved' as const,
+                        reviewed_at: new Date().toISOString(),
+                      }
+                    : app,
+                ),
+              );
+
+              setAllUsers((prev) =>
+                prev.map((user) =>
+                  user.id === application.user_id
+                    ? { ...user, role: 'linguist' }
+                    : user,
+                ),
+              );
+            } else {
+              const errorData = (await updateUserResponse.json()) as {
+                message?: string;
+              };
+              console.error('Failed to promote user to linguist:', errorData);
+            }
+          } else {
+            console.error('Failed to update application status');
+          }
+        } catch (error) {
+          console.error('Failed to approve application:', error);
+        }
+        break;
+
+      case 'reject':
+        try {
+          const token = localStorage.getItem('accessToken');
+          if (!token) {
+            console.error('No access token found');
+            return;
+          }
+
           const response = await fetch(
-            `${API_ENDPOINTS.updateUserRole(application.applicantId)}?new_role=linguist`,
+            API_ENDPOINTS.RejectApplicationStatus(applicationId),
             {
               method: 'PUT',
               headers: {
@@ -488,54 +526,23 @@ const AdminPage: React.FC = () => {
           );
 
           if (response.ok) {
-            const result = (await response.json()) as { message: string };
-            console.log(
-              'User promoted to linguist successfully:',
-              result.message,
-            );
-
             setAllApplications((prev) =>
               prev.map((app) =>
                 app.id === applicationId
                   ? {
                       ...app,
-                      status: 'approved' as const,
-                      reviewedAt: new Date().toISOString(),
-                      reviewedBy: 'Current Admin',
+                      status: 'rejected' as const,
+                      reviewed_at: new Date().toISOString(),
                     }
                   : app,
               ),
             );
-
-            setAllUsers((prev) =>
-              prev.map((user) =>
-                user.email === application.applicantEmail
-                  ? { ...user, role: 'linguist' }
-                  : user,
-              ),
-            );
           } else {
-            const errorData = (await response.json()) as { message?: string };
-            console.error('Failed to promote user to linguist:', errorData);
+            console.error('Failed to reject application');
           }
         } catch (error) {
-          console.error('Failed to promote user to linguist:', error);
+          console.error('Failed to reject application:', error);
         }
-        break;
-
-      case 'reject':
-        setAllApplications((prev) =>
-          prev.map((app) =>
-            app.id === applicationId
-              ? {
-                  ...app,
-                  status: 'rejected' as const,
-                  reviewedAt: new Date().toISOString(),
-                  reviewedBy: 'Current Admin',
-                }
-              : app,
-          ),
-        );
         break;
 
       default:
@@ -599,10 +606,6 @@ const AdminPage: React.FC = () => {
     });
   };
 
-  const formatFileSize = (sizeInMB: number) => {
-    return `${sizeInMB.toFixed(1)} MB`;
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
@@ -636,9 +639,10 @@ const AdminPage: React.FC = () => {
   const getTotalFilteredCount = () => {
     if (currentView === 'applications') {
       return allApplications.filter((app) => {
+        const applicantName = `${app.user.first_name} ${app.user.last_name}`;
         const matchesSearch =
-          app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          app.applicantEmail.toLowerCase().includes(searchTerm.toLowerCase());
+          applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.user.email.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus =
           statusFilter === 'all' || app.status === statusFilter;
         return matchesSearch && matchesStatus;
@@ -654,36 +658,12 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   if (authError) {
-    return (
-      <div
-        className="error-container"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-          gap: '1rem',
-        }}
-      >
-        <h1 style={{ color: '#dc3545' }}>{authError}</h1>
-        <button
-          type="button"
-          onClick={() => (window.location.href = '/Marito/dashboard')}
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          Go to Dashboard
-        </button>
-      </div>
-    );
+    return <AdminErrorBoundary authError={authError} />;
   }
 
   return (
@@ -863,9 +843,9 @@ const AdminPage: React.FC = () => {
                         <tr>
                           <th>Applicant</th>
                           <th>Status</th>
-                          <th>Applied</th>
-                          <th>Languages</th>
-                          <th>Documents</th>
+                          <th>Submitted</th>
+                          <th>Google Scholar</th>
+                          <th>Research Papers</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -878,7 +858,8 @@ const AdminPage: React.FC = () => {
                               </div>
                               <div className="applicant-details">
                                 <div className="applicant-name">
-                                  {application.applicantName}
+                                  {application.user.first_name}{' '}
+                                  {application.user.last_name}
                                 </div>
                                 <div
                                   className="applicant-email"
@@ -892,7 +873,7 @@ const AdminPage: React.FC = () => {
                                     size={14}
                                     style={{ marginRight: '4px' }}
                                   />
-                                  {application.applicantEmail}
+                                  {application.user.email}
                                 </div>
                               </div>
                             </td>
@@ -906,53 +887,49 @@ const AdminPage: React.FC = () => {
                             </td>
                             <td className="date-cell">
                               <Calendar size={14} />
-                              {formatDate(application.appliedAt)}
+                              {formatDate(application.submitted_at)}
                             </td>
-                            <td className="languages-cell">
-                              <div className="languages-list">
-                                {application.languages
-                                  .slice(0, 3)
-                                  .map((lang) => (
-                                    <span key={lang} className="language-tag">
-                                      {lang}
-                                    </span>
-                                  ))}
-                                {application.languages.length > 3 && (
-                                  <span className="language-more">
-                                    +{application.languages.length - 3}
-                                  </span>
-                                )}
-                              </div>
+                            <td className="google-scholar-cell">
+                              <a
+                                href={application.google_scholar_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="google-scholar-link"
+                              >
+                                <ExternalLink size={14} />
+                                Google Scholar Profile
+                              </a>
                             </td>
                             <td className="documents-cell">
                               <div className="documents-list">
-                                {documentsLoading[application.applicantId] ? (
+                                {documentsLoading[application.user_id] ? (
                                   <div className="loading-documents">
                                     Loading...
                                   </div>
-                                ) : application.documents.length > 0 ? (
-                                  application.documents.map((doc) => (
-                                    <button
-                                      key={doc.id}
-                                      type="button"
-                                      className="document-item"
-                                      title={`Download ${doc.name} (${formatFileSize(doc.size)})`}
-                                      onClick={() => {
-                                        if (doc.gcsKey) {
-                                          void handleDocumentOpen(doc.gcsKey);
-                                        }
-                                      }}
-                                    >
-                                      {getDocumentTypeIcon()}
-                                      <span className="document-name">
-                                        {doc.name}
-                                      </span>
-                                      <Download size={12} />
-                                    </button>
-                                  ))
+                                ) : application.research_papers_gcs_keys
+                                    .length > 0 ? (
+                                  application.research_papers_gcs_keys.map(
+                                    (gcsKey, index) => (
+                                      <button
+                                        key={`research-${gcsKey}`}
+                                        type="button"
+                                        className="document-item"
+                                        title={`Download research paper ${String(index + 1)}`}
+                                        onClick={() => {
+                                          void handleDocumentOpen(gcsKey);
+                                        }}
+                                      >
+                                        {getDocumentTypeIcon()}
+                                        <span className="document-name">
+                                          Research Paper {index + 1}
+                                        </span>
+                                        <Download size={12} />
+                                      </button>
+                                    ),
+                                  )
                                 ) : (
                                   <span className="no-documents">
-                                    No documents
+                                    No research papers
                                   </span>
                                 )}
                               </div>
@@ -988,6 +965,16 @@ const AdminPage: React.FC = () => {
                                       <XCircle size={16} />
                                     </button>
                                   </>
+                                )}
+                                {application.status !== 'pending' && (
+                                  <span className="review-info">
+                                    {application.reviewed_at && (
+                                      <small>
+                                        Reviewed:{' '}
+                                        {formatDate(application.reviewed_at)}
+                                      </small>
+                                    )}
+                                  </span>
                                 )}
                               </div>
                             </td>

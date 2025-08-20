@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Dipeelo",
+    "subtitle": "Rulaganya maitemogelo a gago a Marito",
+    "selectLanguage": "Tlhopha puo e o e ratang",
+    "profile": {
+      "title": "Porofaele le Akhaonto",
+      "description": "Laola dipeelo tsa porofaele le ditlhopho tsa akhaonto"
+    },
+    "appLanguage": {
+      "title": "Puo ya App",
+      "description": "Tlhopha puo e o e ratang"
+    },
+    "accessibility": {
+      "title": "Ditlhopho tsa Phitlhelelo",
+      "textAndVisual": "Mokwalo le Pontsho",
+      "textSize": "Bogolo jwa Mokwalo",
+      "textSpacing": "Sekgala sa Mokwalo",
+      "colorAndContrast": "Mmala le Pharologano",
+      "highContrastMode": "Mokgwa wa Pharologano e Kgolo",
+      "darkMode": "Mokgwa o Montsho"
+    }
+  },
+
   "navigation": {
     "home": "Gae",
     "dictionary": "Thanodi",
@@ -6,7 +29,43 @@
     "savedTerms": "Mafoko a a Bolokilweng",
     "dashboard": "Bolaodi",
     "help": "Thuso",
+    "settings": "Dipeelo",
     "darkMode": "Mokgwa o montsho"
+  },
+
+  "dashboard": {
+    "welcome": "O amogelwa mo Marito",
+    "welcomeBack": "O amogetswe gape",
+    "userName": "Leina la Modirisi",
+    "userId": "Nomoro ya Modirisi",
+    "userEmail": "Imeile",
+    "quickActions": "Ditiro tsa Bonako",
+    "searchNow": "Batla Jaanong",
+    "searchDescription": "Batla mareo ka dipuo tse di farologaneng",
+    "downloadResources": "Gogela Didirisiwa",
+    "downloadDescription": "Bona le go gogela didirisiwa tsa mareo",
+    "contributeTerm": "Tsenya Lereo",
+    "contributeDescription": "Oketsa mareo a mantšhwa mo databeising ya rona",
+    "recentTerms": "Mareo a Gajaana",
+    "hideTerms": "Fitlha Mareo",
+    "viewAll": "Bona Tsotlhe",
+    "communityActivity": "Ditiro tsa Setšhaba",
+    "hideActivity": "Fitlha Ditiro",
+    "viewAllActivity": "Bona Ditiro Tsotlhe",
+    "title": "Kopanang ka Mafoko",
+    "loadingProfile": "E laeša profaele...",
+    "goToProfile": "Ya go letlakala la profaele",
+    "discoverRandomTerms": "Batla Mafoko a a sa Rulagangwang",
+    "getNewTerms": "Bona mafoko a mantšhwa a a sa rulagangwang",
+    "loadingTerms": "E laeša mafoko...",
+    "noTermsAvailable": "Ga go mafoko a a leng teng",
+    "browseCategoryGlossary": "Lebelela {{category}} lenane la mafoko",
+    "aboutMarito": {
+      "intro": "Lefoko 'Marito' le tswa mo Xitsonga, le kaya 'mafoko' kgotsa 'maina'. Seno ke thulaganyo ya webe e e tsweletseng pele e e kopanego sekgala se se fa gare ga thuto e e humileng ya dipuo tsa Aforika Borwa le phitlhelelo ya sejoalejoale ya dijitale. Barati ba dipuo, babatlisisi ba NLP, le baitseanape ba dipuo ba ka dirisa Marito jaaka sethala se se kopanego go sekaseka, go tseya karolo, le go boloka dikhungolose tsa dipuo tse di farologaneng, dipukuntsu, le dipanka tsa mareo mo dipuong tse 11 tsa semolao tsa Aforika Borwa.",
+      "mission": "Marito e dira sentle mo teng le kwa ntle ga inthanete, e kgontsha setšhaba go fitlhelela didirisiwa tse di feletseng tsa dipuo, go neela maikutlo, le go dirisana go aga di-lexicons tse di nonofileng tsa dipuo tse di nang le didirisiwa tse di kwa tlase. Sethala seno ke karolo ya tiragalo e e tswelelang ya DSFSI (Data Science for Social Impact) kwa Yunibesithing ya Pretoria go dira gore didirisiwa tsa dipuo di fitlhelelege setšhaba sotlhe le go tsweletsa dipatlisiso tsa thulaganyo ya puo ya tlhago ya dipuo tsa Aforika.",
+      "teamCredit": "E agetswe ka ikgogomoso ke Velox",
+      "learnMoreDSFSI": "Ithute go le gontsi ka DSFSI"
+    }
   },
 
   "landingPage": {
@@ -79,25 +138,6 @@
       "normalUser": "Modirisi wa Tlwaelo",
       "applyingLinguist": "Go Ikwadisa jaaka Mosekaseki wa Puo"
     }
-  },
-  "dashboard": {
-    "welcome": "O amogelwa mo Marito",
-    "welcomeBack": "O amogetswe gape",
-    "userName": "Leina la Modirisi",
-    "userId": "Nomoro ya Modirisi",
-    "quickActions": "Ditiro tsa Bonako",
-    "searchNow": "Batla Jaanong",
-    "searchDescription": "Batla mareo ka dipuo tse di farologaneng",
-    "downloadResources": "Gogela Didirisiwa",
-    "downloadDescription": "Bona le go gogela didirisiwa tsa mareo",
-    "contributeTerm": "Tsenya Lereo",
-    "contributeDescription": "Oketsa mareo a mantšhwa mo databeising ya rona",
-    "recentTerms": "Mareo a Gajaana",
-    "hideTerms": "Fitlha Mareo",
-    "viewAll": "Bona Tsotlhe",
-    "communityActivity": "Ditiro tsa Baagi",
-    "hideActivity": "Fitlha Ditiro",
-    "viewAllActivity": "Bona Ditiro Tsotlhe"
   },
   "glossaryPage": {
     "title": "Lenanetlhalosi la Dipuo tse Dintsi",
@@ -202,5 +242,61 @@
     "previous": "E fetileng",
     "next": "E latelang",
     "pageInfo": "Tsebe {{current}} ya {{total}}"
+  },
+
+  "profile": {
+    "title": "Profaele ya Modirisi",
+    "settings": "Dithulaganyo",
+    "editProfile": "Baakanya profaele",
+    "editName": "Baakanya Leina",
+    "editEmail": "Baakanya Imeile",
+    "changePassword": "Fetola Phasewete",
+    "role": "Karolo",
+    "loading": "E a laola...",
+    "logout": "Tswa",
+    "logoutButton": "Tswa",
+    "logoutConfirmation": "Tswa?",
+    "yes": "Ee",
+    "no": "Nnyaa",
+    "forms": {
+      "editName": "Baakanya Leina",
+      "editEmail": "Baakanya Imeile",
+      "changePassword": "Fetola Phasewete",
+      "firstName": "Leina la Ntlha",
+      "firstNamePlaceholder": "Tsenya leina la ntlha",
+      "lastName": "Leina la Bofelo",
+      "lastNamePlaceholder": "Tsenya leina la bofelo",
+      "emailAddress": "Aterese ya Imeile",
+      "emailAddressPlaceholder": "Tsenya aterese ya imeile",
+      "currentPassword": "Phasewete ya Gona Jaanong",
+      "currentPasswordPlaceholder": "Tsenya phasewete ya gona jaanong",
+      "newPassword": "Phasewete e Ntšha",
+      "newPasswordPlaceholder": "Tsenya phasewete e ntšha",
+      "confirmNewPassword": "Netefatsa Phasewete e Ntšha",
+      "confirmNewPasswordPlaceholder": "Netefatsa phasewete e ntšha",
+      "save": "Boloka",
+      "saving": "E a boloka...",
+      "cancel": "Khansela"
+    },
+    "errors": {
+      "noToken": "Ga go na toukene ya phitlhelelo e e bonweng. Ka kopo tsena pele.",
+      "loadFailed": "Go paletse go tsenya data ya profaele",
+      "loadError": "Phoso mo go tsenyeng profaele: {{message}}",
+      "invalidImage": "Ka kopo tlhopha faele ya setshwantsho e e siameng",
+      "fileTooLarge": "Bogolo jwa faele bo tshwanetse go nna ka fa tlase ga 5MB",
+      "uploadError": "Go paletse go ntšhafatsa setshwantsho sa profaele: {{message}}",
+      "nameRequired": "Leina la ntlha le la bofelo di a tlhokega",
+      "passwordRequired": "Phasewete ya gona jaanong e a tlhokega",
+      "updateFailed": "Go paletse go ntšhafatsa profaele",
+      "updateError": "Go paletse go ntšhafatsa profaele: {{message}}",
+      "emailRequired": "Imeile e a tlhokega",
+      "emailInvalid": "Ka kopo tsenya aterese ya imeile e e siameng",
+      "emailUpdateFailed": "Go paletse go ntšhafatsa imeile",
+      "emailUpdateError": "Go paletse go ntšhafatsa imeile: {{message}}",
+      "newPasswordRequired": "Phasewete e ntšha e a tlhokega",
+      "passwordMismatch": "Diphasewete tse dintšha ga di a tshwana",
+      "passwordUpdateFailed": "Go paletse go ntšhafatsa phasewete",
+      "passwordUpdateError": "Go paletse go ntšhafatsa phasewete: {{message}}"
+    }
   }
 }

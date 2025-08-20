@@ -16,7 +16,6 @@ load_dotenv()
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Marito API Default"
     API_V1_STR: str = "/api/v1"
-
     SECRET_KEY: str = "!!!CONFIG_ERROR_SECRET_KEY_NOT_SET!!!"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
@@ -33,6 +32,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: str = ""
     BACKEND_CORS_ORIGINS_LIST: List[str] = []
 
+    GOOGLE_CLIENT_ID: str = "!!!CONFIG_ERROR_GOOGLE_CLIENT_ID_NOT_SET!!!"
     # Give the field a placeholder default to satisfy mypy during static analysis.
     # The validator below will ALWAYS overwrite this at runtime.
     SQLALCHEMY_DATABASE_URL: str = "postgresql+asyncpg://user:pass@host/db"

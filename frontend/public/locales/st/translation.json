@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Ditlhophiso",
+    "subtitle": "Lokisa boiphihlelo ba hao ba Marito",
+    "selectLanguage": "Kgetha puo eo o e ratang",
+    "profile": {
+      "title": "Profaele le Akhaonto",
+      "description": "Laola ditlhophiso tsa profaele le dikgetho tsa akhaonto"
+    },
+    "appLanguage": {
+      "title": "Puo ya App",
+      "description": "Kgetha puo eo o e ratang"
+    },
+    "accessibility": {
+      "title": "Dikgetho tsa ho Fihlella",
+      "textAndVisual": "Mongolo le Pontsho",
+      "textSize": "Boholo ba Mongolo",
+      "textSpacing": "Sebaka sa Mongolo",
+      "colorAndContrast": "Mmala le ho Fapana",
+      "highContrastMode": "Mokgwa wa ho Fapana ho Hoholo",
+      "darkMode": "Mokgwa o Lefifi"
+    }
+  },
+
   "navigation": {
     "home": "Lehae",
     "dictionary": "Bukantswe",
@@ -6,6 +29,7 @@
     "savedTerms": "Mantswe a Bolokilweng",
     "dashboard": "Letlapa",
     "help": "Thuso",
+    "settings": "Ditlhophiso",
     "darkMode": "Mokgwa o lefifi"
   },
 
@@ -81,6 +105,7 @@
     "welcomeBack": "O kgutlile hape",
     "userName": "Lebitso la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
+    "userEmail": "Imeile",
     "quickActions": "Diketso tse Potlakileng",
     "searchNow": "Batla Hona Jwale",
     "searchDescription": "Batla mareo ka dipuo tse ngata",
@@ -93,7 +118,21 @@
     "viewAll": "Bona Kaofela",
     "communityActivity": "Mesebetsi ya Setjhaba",
     "hideActivity": "Pata Mesebetsi",
-    "viewAllActivity": "Bona Mesebetsi Kaofela"
+    "viewAllActivity": "Bona Mesebetsi Kaofela",
+    "title": "Kopaneng ka Mantswe",
+    "loadingProfile": "E laeta profaele...",
+    "goToProfile": "Eya lenaneo la profaele",
+    "discoverRandomTerms": "Fumana Mantswe a sa Hlophiswang",
+    "getNewTerms": "Fumana mantswe a matjha a sa hlophiswang",
+    "loadingTerms": "E laeta mantswe...",
+    "noTermsAvailable": "Ha ho mantswe a fumanehang",
+    "browseCategoryGlossary": "Sheba {{category}} lenane la mantswe",
+    "aboutMarito": {
+      "intro": "Lentswe 'Marito' le tswa ho Xitsonga, le bolela 'mantswe' kapa 'mabitso'. Ena ke sesebeliswa sa webu se tsoelang pele se kopanyang sekgeo se mahareng sa boholo ba puo ba Afrika Borwa le phihlello ya sejwale-jwale ya dijithale. Barati ba dipuo, bafuputsi ba NLP, le ditsebi tsa dipuo ba ka sebedisa Marito jwalo ka sethala se kopaneng ho fuputsa, ho kenya letsoho, le ho boloka dinane tsa mantswe a dipuo tse ngata, dipukuntsu, le mabaka a mantswe ho dipuo tse 11 tse semmuso tsa Afrika Borwa.",
+      "mission": "Marito e sebetsa hantle kokubili inthaneteng le kantle ho inthanete, e nolofalletsa setjhaba ho fumana disebediswa tse felletseng tsa dipuo, ho fana ka maikutlo, le ho sebedisana ho haheng di-lexicons tse tiileng bakeng sa dipuo tse nang le disebediswa tse fokolang. Sethala sena ke karolo ya mosebetsi o tswellang o etswang ke DSFSI (Data Science for Social Impact) Yunibesithing ya Pretoria ho etsa hore disebediswa tsa dipuo di fumanehe setjhabeng sohle le ho tsoela pele diphuputso tsa ho sebetsana le puo ya tlhaho bakeng sa dipuo tsa Afrika.",
+      "teamCredit": "E hahilwe ka motlotlo ke Velox",
+      "learnMoreDSFSI": "Ithute haholwanyane ka DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Lenane la Mantswe a Dipuo tse Ngata",
@@ -198,5 +237,61 @@
     "previous": "E fetileng",
     "next": "E latelang",
     "pageInfo": "Leqephe {{current}} ho {{total}}"
+  },
+
+  "profile": {
+    "title": "Profaele ya Mosebelisi",
+    "settings": "Litlhophiso",
+    "editProfile": "Fetola profaele",
+    "editName": "Fetola Lebitso",
+    "editEmail": "Fetola Imeile",
+    "changePassword": "Fetola Password",
+    "role": "Karolo",
+    "loading": "E a lahlela...",
+    "logout": "Tswa",
+    "logoutButton": "Tswa",
+    "logoutConfirmation": "Tswa?",
+    "yes": "Ee",
+    "no": "Che",
+    "forms": {
+      "editName": "Fetola Lebitso",
+      "editEmail": "Fetola Imeile",
+      "changePassword": "Fetola Password",
+      "firstName": "Lebitso la Pele",
+      "firstNamePlaceholder": "Kenya lebitso la pele",
+      "lastName": "Lebitso la ho Qetela",
+      "lastNamePlaceholder": "Kenya lebitso la ho qetela",
+      "emailAddress": "Aterese ya Imeile",
+      "emailAddressPlaceholder": "Kenya aterese ya imeile",
+      "currentPassword": "Password ya Hona Jwale",
+      "currentPasswordPlaceholder": "Kenya password ya hona jwale",
+      "newPassword": "Password e Ncha",
+      "newPasswordPlaceholder": "Kenya password e ncha",
+      "confirmNewPassword": "Tiisa Password e Ncha",
+      "confirmNewPasswordPlaceholder": "Tiisa password e ncha",
+      "save": "Boloka",
+      "saving": "E a boloka...",
+      "cancel": "Hlakola"
+    },
+    "errors": {
+      "noToken": "Ha ho na token ya phihlello e fumanweng. Ka kopo kena pele.",
+      "loadFailed": "Ho hlolehile ho jara data ya profaele",
+      "loadError": "Phoso ho jareng profaele: {{message}}",
+      "invalidImage": "Ka kopo khetha faele ya setshwantsho e sebetsang",
+      "fileTooLarge": "Boholo ba faele bo tlameha ho ba ka tlase ho 5MB",
+      "uploadError": "Ho hlolehile ho ntjhafatsa setshwantsho sa profaele: {{message}}",
+      "nameRequired": "Lebitso la pele le la ho qetela li a hlokahala",
+      "passwordRequired": "Password ya hona jwale e a hlokahala",
+      "updateFailed": "Ho hlolehile ho ntjhafatsa profaele",
+      "updateError": "Ho hlolehile ho ntjhafatsa profaele: {{message}}",
+      "emailRequired": "Imeile e a hlokahala",
+      "emailInvalid": "Ka kopo kenya aterese ya imeile e sebetsang",
+      "emailUpdateFailed": "Ho hlolehile ho ntjhafatsa imeile",
+      "emailUpdateError": "Ho hlolehile ho ntjhafatsa imeile: {{message}}",
+      "newPasswordRequired": "Password e ncha e a hlokahala",
+      "passwordMismatch": "Di-password tse ncha ha di tshwane",
+      "passwordUpdateFailed": "Ho hlolehile ho ntjhafatsa password",
+      "passwordUpdateError": "Ho hlolehile ho ntjhafatsa password: {{message}}"
+    }
   }
 }

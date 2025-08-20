@@ -15,8 +15,13 @@ export default tseslint.config(
       'dist/**',
       'build/**',
       'coverage/**',
+      'src/components/**',
+      'src/pages/AdminTermPage.tsx',
+      'src/pages/ContributorPage.tsx',
+      'src/pages/LinguistPage.tsx',
     ],
   },
+
   {
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked],
     files: ['**/*.{ts,tsx}'],

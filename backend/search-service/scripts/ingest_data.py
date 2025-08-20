@@ -56,6 +56,31 @@ def main():
     Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
+    DSFSI_USER_EMAIL = "dsfsi@example.com"
+    DSFSI_USER_FIRST_NAME = "DSFSI"
+    DSFSI_USER_LAST_NAME = "System"
+    DSFSI_USER_PASSWORD_HASH = (
+        "$2b$12$placeholderhash"  # Replace with actual hash if needed
+    )
+    # --- Ensure dsfsi user exists ---
+    from mavito_common.models.user import User  # import here to avoid circulars
+
+    dsfsi_user = db.query(User).filter(User.username == "dsfsi").first()
+    if not dsfsi_user:
+        print("Creating default dsfsi user...")
+        dsfsi_user = User(
+            id=uuid4(),
+            email=DSFSI_USER_EMAIL,
+            first_name=DSFSI_USER_FIRST_NAME,
+            last_name=DSFSI_USER_LAST_NAME,
+            hashed_password=DSFSI_USER_PASSWORD_HASH,
+        )
+        db.add(dsfsi_user)
+        db.commit()
+        db.refresh(dsfsi_user)
+
+    owner_id = dsfsi_user.id
+    print(f"Using dsfsi account with id={owner_id} as term owner")
 
     print(f"Loading data from {DATA_FILE}...")
     with open(DATA_FILE) as f:
@@ -66,7 +91,6 @@ def main():
     for i, item in enumerate(raw_data):
         print(f"Processing entry {i+1}/{len(raw_data)}...")
 
-        # Create all term objects for this entry first
         created_terms = []
         for lang_key, lang_name in LANGUAGE_KEYS.items():
             term_value = item.get(lang_key)
@@ -77,24 +101,19 @@ def main():
                     definition=item.get("eng definition ", "").strip(),
                     language=lang_name,
                     domain=item.get("category", "General"),
+                    owner_id=owner_id,  # 👈 assign dsfsi user as owner
                 )
                 created_terms.append(new_term)
 
-        # Now, establish the translation relationships
         if len(created_terms) > 1:
             for term_obj in created_terms:
                 term_obj.translations = [
                     t for t in created_terms if t.id != term_obj.id
                 ]
 
-        # Add to the session
         db.add_all(created_terms)
 
     print("Committing all new terms to the database...")
     db.commit()
     db.close()
     print("Data ingestion complete!")
-
-
-if __name__ == "__main__":
-    main()

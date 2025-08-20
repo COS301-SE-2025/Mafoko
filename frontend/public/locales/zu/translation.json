@@ -1,5 +1,40 @@
 {
   "navigation": {
+    "home": "Ekhaya",
+    "dictionary": "Isichazamazwi",
+    "glossary": "Uhlu Lwamagama",
+    "savedTerms": "Amagama Agciniwe",
+    "linguistApplication": "Isicelo Sokuba uSolwimi",
+    "dashboard": "Ibhodi",
+    "help": "Usizo",
+    "settings": "Izilungiselelo",
+    "darkMode": "Indlela Emnyama",
+    "lightMode": "Indlela Ekhanyayo"
+  },
+  "settings": {
+    "title": "Izilungiselelo",
+    "subtitle": "Lungiselela indlela yakho yokusebenzisa i-Marito",
+    "selectLanguage": "Khetha ulimi lwakho oluthandayo",
+    "profile": {
+      "title": "Iphrofayela nama-Akhawunti",
+      "description": "Phatha izilungiselelo zephrofayela yakho nezokuthandayo ze-akhawunti"
+    },
+    "appLanguage": {
+      "title": "Ulimi Lohlelo",
+      "description": "Khetha ulimi lwakho oluthandayo"
+    },
+    "accessibility": {
+      "title": "Izinketho Zokufinyeleleka",
+      "textAndVisual": "Umbhalo Nokubukeka",
+      "textSize": "Usayizi Wombhalo",
+      "textSpacing": "Ukubanga Kwemibhalo",
+      "colorAndContrast": "Umbala Nokuhluka",
+      "highContrastMode": "Indlela Yokuhluka Okuphakeme",
+      "darkMode": "Indlela Emnyama"
+    }
+  },
+
+  "navigation": {
     "home": "Ikhaya",
     "dictionary": "Isichazamazwi",
     "glossary": "Izihumusho",
@@ -88,6 +123,7 @@
     "welcomeBack": "Wamukelekile futhi",
     "userName": "Igama Lomsebenzisi",
     "userId": "Inombolo Yomsebenzisi",
+    "userEmail": "I-imeyili",
     "quickActions": "Izenzo Ezisheshayo",
     "searchNow": "Sesha Manje",
     "searchDescription": "Sesha amagama ezilimi eziningi",
@@ -100,7 +136,21 @@
     "viewAll": "Buka Konke",
     "communityActivity": "Imisebenzi Yomphakathi",
     "hideActivity": "Fihla Imisebenzi",
-    "viewAllActivity": "Buka Yonke Imisebenzi"
+    "viewAllActivity": "Buka Yonke Imisebenzi",
+    "title": "Hlanganani Ngamagama",
+    "loadingProfile": "Ilayisha iphrofayili...",
+    "goToProfile": "Iya ekhasini lephrofayili",
+    "discoverRandomTerms": "Thola Amagama Anganakekile",
+    "getNewTerms": "Thola amagama amasha anganakekile",
+    "loadingTerms": "Ilayisha amagama...",
+    "noTermsAvailable": "Awekho amagama atholakalayo",
+    "browseCategoryGlossary": "Bheka {{category}} uhlu lwamagama",
+    "aboutMarito": {
+      "intro": "Igama elithi 'Marito' livela ku-Xitsonga, elichaza 'amagama' noma 'amagama'. Lena iyinhlelo yokusebenza yewebhu ephambili ehlanganisa igebe eliphakathi kokutholakala kolimi olunobukhosi eNingizimu Afrika kanye nokufinyelela kudijithali kwesimanje. Abathandi bezilimi, abacwaningi be-NLP, nabazi bezilimi bangasebenzisa iMarito njengenkundla ehlanganisiwe ukuze bahlole, bafake isandla, futhi balondoloze izichazamazwi eziningi, izichazamazwi, nezitokofela zamagama ezilimini eziyishumi nanye ezisemthethweni zaseNingizimu Afrika.",
+      "mission": "IMarito isebenza kahle kokubili ku-intanethi nangaphandle kwe-intanethi, inikeza amandla imiphakathi ukuze ithhole izinsiza zolimi eziphelele, inikeze impendulo, futhi ibambisane ekwakheni ama-lexicons aqinile ezilimini ezinezinsiza ezincanyana. Le nkundla iyingxenye yomzamo oqhubekayo we-DSFSI (Data Science for Social Impact) eNyuvesi yase-Pretoria wokwenza izinsiza zolimi zifinyeleleke wonke umuntu kanye nokuthuthukisa ucwaningo lokucubungula ulimi lwemvelo lwezilimi zase-Afrika.",
+      "teamCredit": "Yakhelwe ngokuziqhenya yi-Velox",
+      "learnMoreDSFSI": "Funda kabanzi nge-DSFSI"
+    }
   },
 
   "glossaryPage": {
@@ -209,5 +259,61 @@
     "previous": "Okudlule",
     "next": "Okulandelayo",
     "pageInfo": "Ikhasi {{current}} kwi-{{total}}"
+  },
+
+  "profile": {
+    "title": "Iphrofayela Yomsebenzisi",
+    "settings": "Izilungiselelo",
+    "editProfile": "Hlela iphrofayela",
+    "editName": "Hlela Igama",
+    "editEmail": "Hlela I-imeyili",
+    "changePassword": "Shintsha Iphasiwedi",
+    "role": "Indima",
+    "loading": "Iyalayisha...",
+    "logout": "Phuma",
+    "logoutButton": "Phuma",
+    "logoutConfirmation": "Phuma?",
+    "yes": "Yebo",
+    "no": "Cha",
+    "forms": {
+      "editName": "Hlela Igama",
+      "editEmail": "Hlela I-imeyili",
+      "changePassword": "Shintsha Iphasiwedi",
+      "firstName": "Igama Lokuqala",
+      "firstNamePlaceholder": "Faka igama lokuqala",
+      "lastName": "Isibongo",
+      "lastNamePlaceholder": "Faka isibongo",
+      "emailAddress": "Ikheli Le-imeyili",
+      "emailAddressPlaceholder": "Faka ikheli le-imeyili",
+      "currentPassword": "Iphasiwedi Yamanje",
+      "currentPasswordPlaceholder": "Faka iphasiwedi yamanje",
+      "newPassword": "Iphasiwedi Entsha",
+      "newPasswordPlaceholder": "Faka iphasiwedi entsha",
+      "confirmNewPassword": "Qinisekisa Iphasiwedi Entsha",
+      "confirmNewPasswordPlaceholder": "Qinisekisa iphasiwedi entsha",
+      "save": "Gcina",
+      "saving": "Iyagcina...",
+      "cancel": "Khansela"
+    },
+    "errors": {
+      "noToken": "Akukho thokeni yokungena etholakalayo. Sicela ungene kuqala.",
+      "loadFailed": "Kwehluleke ukufaka idatha yephrofayela",
+      "loadError": "Iphutha ekufakeni iphrofayela: {{message}}",
+      "invalidImage": "Sicela ukhethe ifayela lesithombe esivumelekile",
+      "fileTooLarge": "Usayizi wefayela kufanele ube ngaphansi kwe-5MB",
+      "uploadError": "Kwehluleke ukubuyekeza isithombe sephrofayela: {{message}}",
+      "nameRequired": "Igama lokuqala nesibongo ziyadingeka",
+      "passwordRequired": "Iphasiwedi yamanje iyafuneka",
+      "updateFailed": "Kwehluleke ukubuyekeza iphrofayela",
+      "updateError": "Kwehluleke ukubuyekeza iphrofayela: {{message}}",
+      "emailRequired": "I-imeyili iyafuneka",
+      "emailInvalid": "Sicela ufake ikheli le-imeyili elivumelekile",
+      "emailUpdateFailed": "Kwehluleke ukubuyekeza i-imeyili",
+      "emailUpdateError": "Kwehluleke ukubuyekeza i-imeyili: {{message}}",
+      "newPasswordRequired": "Iphasiwedi entsha iyafuneka",
+      "passwordMismatch": "Amaphasiwedi amasha awahambelani",
+      "passwordUpdateFailed": "Kwehluleke ukubuyekeza iphasiwedi",
+      "passwordUpdateError": "Kwehluleke ukubuyekeza iphasiwedi: {{message}}"
+    }
   }
 }

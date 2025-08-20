@@ -17,6 +17,7 @@ from mavito_common.models.term_vote import TermVote  # noqa: F401
 from mavito_common.db.base_class import Base
 from mavito_common.core.config import settings
 from app.main import app
+from uuid import uuid4
 
 # This must point to the get_db your app actually uses
 from mavito_common.db.session import get_db
@@ -95,3 +96,17 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[httpx.AsyncClient, 
         yield client
 
     del app.dependency_overrides[get_db]
+
+
+@pytest_asyncio.fixture
+async def dummy_user(db_session: AsyncSession) -> User:
+    user = User(
+        id=uuid4(),
+        first_name="Test",
+        last_name="User",
+        email=f"test{uuid4().hex[:8]}@example.com",
+        password_hash="fakehash",
+    )
+    db_session.add(user)
+    await db_session.commit()
+    return user

@@ -4,17 +4,26 @@ import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
 import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
-import SavedTermsPage from './pages/SavedTermsPage';
+import WorkspacePage from './pages/WorkspacePage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import FeedbackPage from './pages/FeedbackPage';
 import HelpPage from './pages/help/HelpPage.tsx';
 import GettingStarted from './pages/help/GettingStarted';
 import CommunityHelpPage from './pages/help/CommunityHelp.tsx';
 import TermHelpPage from './pages/help/TermHelpPage.tsx';
 import FrequentlyAskedPage from './pages/help/FrequentlyAskedPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
+import UserProfilePage from './pages/UserProfilePage.tsx';
 import NewGlossary from './pages/NewGlossary';
+import LinguistApplicationPage from './pages/LinguistApplicationPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
+import FeedbackHub from './pages/FeedbackHub';
+import SettingsPage from './pages/SettingsPage';
+import ContributorPage from './pages/ContributorPage';
+import LinguistPage from './pages/LinguistPage';
+import AdminTermPage from './pages/AdminTermPage.tsx';
 import './App.css';
+import './styles/Global.scss';
 
 import {
   Chart as ChartJS,
@@ -54,8 +63,9 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/home" element={<DashboardPage />} />
-        <Route path="/saved-terms" element={<SavedTermsPage />} />
+        <Route path="/workspace" element={<WorkspacePage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
@@ -64,7 +74,18 @@ function App() {
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/glossary" element={<NewGlossary />} />
-        <Route path="/term/:termId" element={<TermDetailPage />} />
+        <Route path="/glossary/:category" element={<NewGlossary />} />
+        <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/term/:language/:name/:id" element={<TermDetailPage />} />
+        <Route
+          path="/linguist-application"
+          element={<LinguistApplicationPage />}
+        />
+        <Route path="/feedbackhub" element={<FeedbackHub />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/contributor" element={<ContributorPage />} />
+        <Route path="/linguist" element={<LinguistPage />} />
+        <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
     </div>
   );

@@ -3,6 +3,8 @@ import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config';
 import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
+import { Link } from 'react-router-dom';
+import { LanguageColorMap } from '../../types/search/types.ts';
 
 interface VoteApiResponse {
   term_id: string;
@@ -23,20 +25,6 @@ interface TermCardProps {
   onView?: () => void;
   onBookmarkChange?: (termId: string, isBookmarked: boolean) => void;
 }
-
-const langColorMap: Record<string, string> = {
-  Afrikaans: 'blue',
-  English: 'yellow',
-  isiNdebele: 'pink',
-  isiXhosa: 'green',
-  isiZulu: 'green',
-  Sesotho: 'yellow',
-  Setswana: 'orange',
-  siSwati: 'teal',
-  Tshivenda: 'indigo',
-  Xitsonga: 'lime',
-  Sepedi: 'cyan',
-};
 
 const TermCard: React.FC<TermCardProps> = ({
   id,
@@ -100,7 +88,7 @@ const TermCard: React.FC<TermCardProps> = ({
           },
           body: JSON.stringify({ term_id: id, vote: voteType }),
         });
-        if (!response.ok) throw new Error('Online vote submission failed');
+        if (!response.ok) console.error('Online vote submission failed');
         const result = (await response.json()) as VoteApiResponse;
         setUpvotes(result.upvotes);
         setDownvotes(result.downvotes);
@@ -157,7 +145,7 @@ const TermCard: React.FC<TermCardProps> = ({
             Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) throw new Error('Unbookmark action failed');
+        if (!response.ok) console.error('Unbookmark action failed');
         console.log(`Unbookmarked term: ${term}`);
       } else {
         // Bookmark the term
@@ -169,7 +157,7 @@ const TermCard: React.FC<TermCardProps> = ({
           },
           body: JSON.stringify({ term_id: id }),
         });
-        if (!response.ok) throw new Error('Bookmark action failed');
+        if (!response.ok) console.error('Bookmark action failed');
         console.log(`Bookmarked term: ${term}`);
       }
 
@@ -183,23 +171,23 @@ const TermCard: React.FC<TermCardProps> = ({
   };
 
   return (
-    <div className="term-card">
+    <div className="term-card !items-start">
       <div className="term-header">
         <div className="term-left">
           <h3
-            className="text-left font-bold text-lg truncate w-full term-title"
+            className="text-left font-bold text-lg truncate w-full"
             title={term}
           >
-            {term.length > 40 ? `${term.slice(0, 40)}...` : term}
+            {term.length > 20 ? `${term.slice(0, 20)}...` : term}
           </h3>
-          <div className="pills">
-            <span className={`pill ${langColorMap[language] || 'gray'}`}>
-              {language}
-            </span>
-            <span className="pill gray">
-              {domain.length > 11 ? `${domain.slice(0, 11)}...` : domain}
-            </span>
-          </div>
+        </div>
+        <div className="pills">
+          <span className={`pill ${LanguageColorMap[language] || 'gray'}`}>
+            {language}
+          </span>
+          <span className="pill gray">
+            {domain.length > 11 ? `${domain.slice(0, 11)}...` : domain}
+          </span>
         </div>
         <div className="term-socials">
           <button
@@ -239,10 +227,12 @@ const TermCard: React.FC<TermCardProps> = ({
         </div>
       </div>
       <p className="term-description" title={definition}>
-        {definition.length > 80 ? `${definition.slice(0, 80)}...` : definition}
+        {definition.length > 60 ? `${definition.slice(0, 60)}...` : definition}
       </p>
       <button className="view-button" onClick={() => onView?.()} type="button">
-        View
+        <Link className="!text-theme" to={`/term/${language}/${term}/${id}`}>
+          <span className="view-button">View</span>
+        </Link>
       </button>
     </div>
   );

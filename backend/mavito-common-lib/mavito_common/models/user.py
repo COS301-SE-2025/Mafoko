@@ -17,6 +17,8 @@ if TYPE_CHECKING:
     from mavito_common.models.bookmark import TermBookmark, GlossaryBookmark
     from mavito_common.models.workspace_group import WorkspaceGroup
     from mavito_common.models.workspace_note import WorkspaceNote
+    from mavito_common.models.term import Term  # noqa: F401
+    from mavito_common.models.feedback import Feedback  # noqa: F401
 
 
 class UserRole(str, enum.Enum):
@@ -46,12 +48,6 @@ class User(Base):
     )
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     profile_pic_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    password_reset_token: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True, index=True
-    )
-    verification_token: Mapped[Optional[str]] = mapped_column(
-        String(255), nullable=True, index=True
-    )
     account_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0)
@@ -79,4 +75,19 @@ class User(Base):
     )
     workspace_notes: Mapped[List["WorkspaceNote"]] = relationship(
         "WorkspaceNote", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    owned_terms: Mapped[List["Term"]] = relationship("Term", back_populates="owner")
+
+    # Feedback relationships
+    feedback_submitted: Mapped[List["Feedback"]] = relationship(
+        "Feedback",
+        foreign_keys="[Feedback.user_id]",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    feedback_resolved: Mapped[List["Feedback"]] = relationship(
+        "Feedback",
+        foreign_keys="[Feedback.resolved_by_user_id]",
+        back_populates="resolved_by",
     )

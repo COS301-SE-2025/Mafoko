@@ -76,9 +76,9 @@ $card-dark: rgba(33, 36, 49, 0.95);
 
 .stat-cards-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -204,6 +204,12 @@ $card-dark: rgba(33, 36, 49, 0.95);
 
 /* Mobile Layout - Single Column */
 @media (max-width: 768px) {
+  .stats-overview-section {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    padding: 0 16px;
+  }
+
   .stat-cards-grid {
     grid-template-columns: 1fr;
     gap: 12px;

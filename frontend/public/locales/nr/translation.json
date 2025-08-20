@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Amalungiselelo",
+    "subtitle": "Lungisa indlela yakho ye-Marito",
+    "selectLanguage": "Khetha ilimi lakho olithandako",
+    "profile": {
+      "title": "Iphrofayili ne-Akhawundi",
+      "description": "Phatha amalungiselelo wephrofayili nokhetho lwe-akhawundi"
+    },
+    "appLanguage": {
+      "title": "Ilimi le-App",
+      "description": "Khetha ilimi lakho olithandako"
+    },
+    "accessibility": {
+      "title": "Amakhetho wokuFikelela",
+      "textAndVisual": "Umbhalo nokuBonakala",
+      "textSize": "Ubungako boMbhalo",
+      "textSpacing": "Isikhala soMbhalo",
+      "colorAndContrast": "Umbala nokuHluka",
+      "highContrastMode": "Indlela yokuHluka okuPhezulu",
+      "darkMode": "Indlela emNyama"
+    }
+  },
+
   "navigation": {
     "home": "Ikhaya",
     "dictionary": "Isichazamazwi",
@@ -6,7 +29,43 @@
     "savedTerms": "Amagama Atlotjhiweko",
     "dashboard": "Ibhodi",
     "help": "Isizo",
+    "settings": "Amalungiselelo",
     "darkMode": "Indlela emnyama"
+  },
+
+  "dashboard": {
+    "welcome": "Siyakwamukela ku-Marito",
+    "welcomeBack": "Wamukelekile godu",
+    "userName": "Ibizo Lomsebenzisi",
+    "userId": "Inomboro Yomsebenzisi",
+    "userEmail": "I-imeyili",
+    "quickActions": "Izenzo Ezirhabako",
+    "searchNow": "Rhubhulula Khathesi",
+    "searchDescription": "Rhubhulula amagama ngeelimi ezinengi",
+    "downloadResources": "Thula Iinsetjenziswa",
+    "downloadDescription": "Thola begodu uthole iinsetjenziswa zamagama",
+    "contributeTerm": "Faka Igama",
+    "contributeDescription": "Nezela amagama amatjha ku-databekhu yethu",
+    "recentTerms": "Amagama Wamuva",
+    "hideTerms": "Fihla Amagama",
+    "viewAll": "Bona Konke",
+    "communityActivity": "Imisebenzi Yomphakatthi",
+    "hideActivity": "Fihla Imisebenzi",
+    "viewAllActivity": "Bona Yonke Imisebenzi",
+    "title": "Hilanganani Ngamagama",
+    "loadingProfile": "Ilayisha iphrofayili...",
+    "goToProfile": "Iya ekhasini lephrofayili",
+    "discoverRandomTerms": "Thola Amagama Angakenaki",
+    "getNewTerms": "Thola amagama amatjha angakenaki",
+    "loadingTerms": "Ilayisha amagama...",
+    "noTermsAvailable": "Awekho amagama atholakelako",
+    "browseCategoryGlossary": "Bheka {{category}} uhlu lwamagama",
+    "aboutMarito": {
+      "intro": "Igama 'Marito' livela ku-Xitsonga, lithethela 'amagama' namkha 'amagama'. Leli yiaplikheshini yewebhu ehamba phambili edibanisa isikhala esiphakathi komfuyo wabuciko bolimi baseNingizimu Afrika nokufinyelela kwamanje kwedijithali. Abancameli bolimi, abatjhejisisi be-NLP, kanye neengcali zeelimi zingasebenzisa i-Marito njengepulatfomo ehilanganisiweko ukurhubhulula, ukuthabatheka ingxenye, nokugcina amaglossary eelimi ezinengi, amadikshonari, namabhanki amagama eelimini ezili-11 ezisemthethweni zaseNingizimu Afrika.",
+      "mission": "I-Marito isebenza kahle kokubili ku-inthanethi nangemhlaba we-inthanethi, inikeza amandla imiphakathi ukufinyelela iinsetjenziswa zeelimi ezipelele, ukunikeza impendulo, nokusebenzisana ekwakheni ama-lexicons aqinako eelimini ezinayo iinsetjenziswa ezincinane. Lelipulatfomo liyingxenye yezinyatselo eziragelelako ezenziwa ngu-DSFSI (Data Science for Social Impact) eYunivesithi yasePretoria ukwenza iinsetjenziswa zeelimi zifikeleleke emiphakathini yonke nokurhagela phambili utjhejo lokusetjenziswa kolimi lwemvelo lweelimi zase-Afrika.",
+      "teamCredit": "Yakhiwe ngobuqotho ngu-Velox",
+      "learnMoreDSFSI": "Funda okungaphezulu nge-DSFSI"
+    }
   },
 
   "landingPage": {
@@ -79,25 +138,6 @@
       "normalUser": "Umsebenzisi Wajayelekileko",
       "applyingLinguist": "Ukubhalisela Ukuba Yisazi seLimi"
     }
-  },
-  "dashboard": {
-    "welcome": "Siyakwamukela ku-Marito",
-    "welcomeBack": "Wamukelekile godu",
-    "userName": "Ibizo Lomsebenzisi",
-    "userId": "Inomboro Yomsebenzisi",
-    "quickActions": "Izenzo Ezirhabako",
-    "searchNow": "Rhubhulula Khathesi",
-    "searchDescription": "Rhubhulula amagama ngeelimi ezinengi",
-    "downloadResources": "Thula Iinsetjenziswa",
-    "downloadDescription": "Thola begodu uthole iinsetjenziswa zamagama",
-    "contributeTerm": "Faka Igama",
-    "contributeDescription": "Nezela amagama amatjha ku-databekhu yethu",
-    "recentTerms": "Amagama Wamuva",
-    "hideTerms": "Fihla Amagama",
-    "viewAll": "Bona Koke",
-    "communityActivity": "Imisebenzi Yomphakathi",
-    "hideActivity": "Fihla Imisebenzi",
-    "viewAllActivity": "Bona Yoke Imisebenzi"
   },
   "glossaryPage": {
     "title": "Irhelo lamagama Ngezilimi Ezinengi",
@@ -202,5 +242,61 @@
     "previous": "Yangaphambili",
     "next": "Elandelako",
     "pageInfo": "Ikhasi {{current}} kwa-{{total}}"
+  },
+
+  "profile": {
+    "title": "Iphrofayili Yomsebenzisi",
+    "settings": "Amalungiselelo",
+    "editProfile": "Hlela iphrofayili",
+    "editName": "Hlela Ibizo",
+    "editEmail": "Hlela I-imeyili",
+    "changePassword": "Shintsha Iphasiwedi",
+    "role": "Indima",
+    "loading": "Kuyalayisha...",
+    "logout": "Phuma",
+    "logoutButton": "Phuma",
+    "logoutConfirmation": "Phuma?",
+    "yes": "Yebo",
+    "no": "Hayi",
+    "forms": {
+      "editName": "Hlela Ibizo",
+      "editEmail": "Hlela I-imeyili",
+      "changePassword": "Shintsha Iphasiwedi",
+      "firstName": "Ibizo Lokuqala",
+      "firstNamePlaceholder": "Faka ibizo lokuqala",
+      "lastName": "Isibongo",
+      "lastNamePlaceholder": "Faka isibongo",
+      "emailAddress": "Ikheli Le-imeyili",
+      "emailAddressPlaceholder": "Faka ikheli le-imeyili",
+      "currentPassword": "Iphasiwedi Yamanje",
+      "currentPasswordPlaceholder": "Faka iphasiwedi yamanje",
+      "newPassword": "Iphasiwedi Entsha",
+      "newPasswordPlaceholder": "Faka iphasiwedi entsha",
+      "confirmNewPassword": "Qinisekisa Iphasiwedi Entsha",
+      "confirmNewPasswordPlaceholder": "Qinisekisa iphasiwedi entsha",
+      "save": "Gcina",
+      "saving": "Kuyagcinwa...",
+      "cancel": "Khansela"
+    },
+    "errors": {
+      "noToken": "Akukho token yokufikelela efonjweko. Ake ungene kwasekuthomeni.",
+      "loadFailed": "Kwahluleka ukulayisha idatha yephrofayili",
+      "loadError": "Iphutha ekulayisheni iphrofayili: {{message}}",
+      "invalidImage": "Ake ukhethe ifayili yokubonakalisa okungokwasemthethweni",
+      "fileTooLarge": "Ubukhulu befayili kufanele bube ngaphansi kwe-5MB",
+      "uploadError": "Kwahluleka ukubuyekeza isithombe sephrofayili: {{message}}",
+      "nameRequired": "Igama lokuqala nesibongo ziafuneka",
+      "passwordRequired": "Iphasiwedi yamanje iafuneka",
+      "updateFailed": "Kwahluleka ukubuyekeza iphrofayili",
+      "updateError": "Kwahluleka ukubuyekeza iphrofayili: {{message}}",
+      "emailRequired": "I-email iafuneka",
+      "emailInvalid": "Ake ufake ikheli le-email elingokwasemthethweni",
+      "emailUpdateFailed": "Kwahluleka ukubuyekeza i-imeyili",
+      "emailUpdateError": "Kwahluleka ukubuyekeza i-imeyili: {{message}}",
+      "newPasswordRequired": "Iphasiwedi entsha iafuneka",
+      "passwordMismatch": "Amaphasiwedi amasha awahambelani",
+      "passwordUpdateFailed": "Kwahluleka ukubuyekeza iphasiwedi",
+      "passwordUpdateError": "Kwahluleka ukubuyekeza iphasiwedi: {{message}}"
+    }
   }
 }

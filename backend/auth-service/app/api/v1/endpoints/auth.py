@@ -2,9 +2,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import timedelta
+from datetime import timedelta, datetime
+import uuid
+from pydantic import BaseModel
+from google.cloud import storage
 
-from mavito_common.schemas.user import UserCreate, User as UserSchema
+from mavito_common.schemas.user import (
+    UserCreate,
+    User as UserSchema,
+    UserUpdate,
+    UserProfilePictureUpdate,
+    UserCreateGoogle,
+)
+
+from google.oauth2 import id_token
+from google.auth.transport import requests
 from mavito_common.schemas.token import Token
 from mavito_common.core.security import create_access_token
 from mavito_common.core.config import settings
@@ -16,6 +28,135 @@ from mavito_common.models.user import UserRole
 
 
 router = APIRouter()
+
+
+# Profile picture upload schemas
+class ProfilePictureUploadRequest(BaseModel):
+    content_type: str
+    filename: str
+
+
+class ProfilePictureUploadResponse(BaseModel):
+    upload_url: str
+    gcs_key: str
+
+
+class ProfilePictureViewResponse(BaseModel):
+    view_url: str
+    expires_at: str
+
+
+@router.post("/profile-picture/upload-url", response_model=ProfilePictureUploadResponse)
+def generate_profile_picture_upload_url(
+    request_body: ProfilePictureUploadRequest,
+    current_user: UserSchema = Depends(deps.get_current_active_user),
+):
+    """
+    Generate a signed URL for uploading profile pictures to GCS.
+    Only allows image content types and validates file extensions.
+    """
+    # Validate content type - only allow images
+    allowed_content_types = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/webp",
+        "image/gif",
+    ]
+
+    if request_body.content_type.lower() not in allowed_content_types:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid content type. Allowed types: {', '.join(allowed_content_types)}",
+        )
+
+    # Validate file extension
+    allowed_extensions = [".jpg", ".jpeg", ".png", ".webp", ".gif"]
+    filename_lower = request_body.filename.lower()
+
+    if not any(filename_lower.endswith(ext) for ext in allowed_extensions):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid file extension. Allowed extensions: {', '.join(allowed_extensions)}",
+        )
+
+    try:
+        storage_client = storage.Client()
+        bucket_name = settings.GCS_BUCKET_NAME
+        bucket = storage_client.bucket(bucket_name)
+
+        # Create unique profile picture path
+        unique_file_key = (
+            f"profile-pictures/{current_user.id}/{uuid.uuid4()}-{request_body.filename}"
+        )
+
+        blob = bucket.blob(unique_file_key)
+
+        # Generate signed URL with 15-minute expiration
+        url = blob.generate_signed_url(
+            version="v4",
+            method="PUT",
+            expiration=timedelta(minutes=15),
+            content_type=request_body.content_type,
+        )
+
+        return ProfilePictureUploadResponse(upload_url=url, gcs_key=unique_file_key)
+
+    except Exception as e:
+        print(f"Error generating profile picture upload URL: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not generate upload URL for profile picture.",
+        )
+
+
+@router.get("/me/profile-picture", response_model=ProfilePictureViewResponse)
+def get_my_profile_picture_view_url(
+    current_user: UserSchema = Depends(deps.get_current_active_user),
+):
+    """
+    Generate a signed URL to view/download the current user's profile picture.
+    Returns 404 if no profile picture is set.
+    """
+    if not current_user.profile_pic_url:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No profile picture set"
+        )
+
+    try:
+        storage_client = storage.Client()
+        bucket_name = settings.GCS_BUCKET_NAME
+        bucket = storage_client.bucket(bucket_name)
+
+        blob = bucket.blob(current_user.profile_pic_url)
+
+        # Check if the blob exists
+        if not blob.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Profile picture file not found in storage",
+            )
+
+        # Generate signed URL with 15-minute expiration for viewing
+        view_url = blob.generate_signed_url(
+            version="v4",
+            method="GET",
+            expiration=timedelta(minutes=15),
+        )
+
+        # Calculate expiration time
+        expires_at = (datetime.now() + timedelta(minutes=15)).isoformat() + "Z"
+
+        return ProfilePictureViewResponse(view_url=view_url, expires_at=expires_at)
+
+    except HTTPException:
+        raise  # Re-raise HTTP exceptions
+    except Exception as e:
+        print(f"Error generating profile picture view URL: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not generate view URL for profile picture.",
+        )
 
 
 @router.post(
@@ -94,6 +235,60 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+class GoogleToken(BaseModel):
+    id_token: str
+
+
+@router.post("/google-login", response_model=Token)
+async def google_login(google_token: GoogleToken, db: AsyncSession = Depends(get_db)):
+    """
+    Handle Google Login/Registration via ID token.
+    """
+    try:
+        idinfo = id_token.verify_oauth2_token(
+            google_token.id_token, requests.Request(), settings.GOOGLE_CLIENT_ID
+        )
+        email = idinfo["email"]
+        first_name = idinfo.get("given_name")
+        last_name = idinfo.get("family_name") or ""
+        profile_pic_url = idinfo.get("picture")
+
+        user = await crud_user.get_user_by_email(db, email=email)
+
+        if not user:
+            user_in = UserCreateGoogle(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                profile_pic_url=profile_pic_url,
+            )
+            user = await crud_user.create_user(db, obj_in=user_in)
+
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.email}, expires_delta=access_token_expires
+        )
+
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    except ValueError as e:
+        # The ValueError now has a message with the definitive cause
+        print(f"Error verifying Google token: {e}")
+        print(f"Received token: {google_token.id_token}")
+        print(f"Google Client ID: {settings.GOOGLE_CLIENT_ID}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Could not validate Google credentials: {e}",
+        )
+    except Exception as e:
+        # Catch any other unexpected errors
+        print(f"An unexpected error occurred during Google login: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An unexpected error occurred",
+        )
+
+
 @router.get("/me", response_model=UserSchema)
 async def read_users_me(
     # current_user will be the Pydantic UserSchema because get_current_active_user converts it
@@ -103,3 +298,91 @@ async def read_users_me(
     Get current logged-in user's details.
     """
     return current_user_response_schema
+
+
+@router.put("/me/profile-picture", response_model=UserSchema)
+async def update_user_profile_picture(
+    *,
+    db: AsyncSession = Depends(get_db),
+    profile_picture_update: UserProfilePictureUpdate,
+    current_user: UserSchema = Depends(deps.get_current_active_user),
+):
+    """
+    Update current user's profile picture URL.
+    Does not require password verification for security reasons - profile pictures are not sensitive.
+    """
+    # Get the actual user model from the database
+    user_model = await crud_user.get_user_by_email(db, email=current_user.email)
+    if not user_model:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    # Validate that the profile picture URL belongs to current user
+    expected_prefix = f"profile-pictures/{current_user.id}/"
+    if not profile_picture_update.profile_pic_url.startswith(expected_prefix):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid profile picture URL. Must be from your own uploads.",
+        )
+
+    # Update the user's profile picture
+    updated_user = await crud_user.update_user(
+        db,
+        db_obj=user_model,
+        obj_in={"profile_pic_url": profile_picture_update.profile_pic_url},
+    )
+
+    return updated_user
+
+
+@router.put("/me", response_model=UserSchema)
+async def update_user_profile(
+    *,
+    db: AsyncSession = Depends(get_db),
+    user_update: UserUpdate,
+    current_user: UserSchema = Depends(deps.get_current_active_user),
+):
+    """
+    Update current user's profile information.
+    Requires current password for security validation.
+    Allows updating first_name, last_name, email, and password.
+    For profile picture updates, use the separate /me/profile-picture endpoint.
+    """
+    # Get the actual user model from the database
+    user_model = await crud_user.get_user_by_email(db, email=current_user.email)
+    if not user_model:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    # Validate current password for security
+    authenticated_user = await crud_user.authenticate(
+        db, email=current_user.email, password=user_update.current_password
+    )
+    if not authenticated_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect current password",
+        )
+
+    # If updating email, check if the new email already exists
+    if user_update.email and user_update.email != current_user.email:
+        existing_user = await crud_user.get_user_by_email(db, email=user_update.email)
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered",
+            )
+
+    # Create update data without the current_password field
+    update_data = user_update.model_dump(
+        exclude={"current_password"}, exclude_unset=True
+    )
+
+    # Update the user
+    updated_user = await crud_user.update_user(
+        db, db_obj=user_model, obj_in=update_data
+    )
+
+    return updated_user

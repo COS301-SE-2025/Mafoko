@@ -671,7 +671,7 @@ This section outlines the high-level user goals and core system interactions tha
 
 
 
-\subsection{User Story \#9: Dictionary & Glossary}
+\subsection{User Story \#9: Dictionary and Glossary}
 \textbf{ID:} US009 (Marito Project) \\
 \textbf{Title:} Glossaries User Stories \\
 \textbf{As a:}  terminology researcher \\
@@ -780,6 +780,998 @@ This section outlines the high-level user goals and core system interactions tha
 \end{itemize}
 
 
+\subsection{User Story \#12: Submit Feedback}
+\textbf{ID:} US012 (FeedbackHub Project) \\
+\textbf{Title:} Multi-Category Feedback Submission \\
+\textbf{As a:} Application user (customer, stakeholder, or end-user) who wants to communicate with the organization about their experience, \\
+\textbf{I want:} to submit feedback through different categories (suggestions, complaints, or compliments) with optional contact information, \\
+\textbf{So that:} the organization can understand my needs, address issues, and improve their services based on user input.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Category Selection:}
+    \begin{itemize}
+        \item \textbf{Given} I am on the feedback submission page,
+        \item \textbf{Then} I can choose between three feedback types: Suggestion, Complaint, or Compliment.
+        \item \textbf{And} each category has distinct visual indicators (icons and colors).
+    \end{itemize}
+
+    \item \textbf{Form Completion:}
+    \begin{itemize}
+        \item \textbf{Given} I have selected a feedback category,
+        \item \textbf{When} I fill out the feedback form,
+        \item \textbf{Then} I can optionally provide my name and email address.
+        \item \textbf{And} I must provide a message describing my feedback (required field).
+    \end{itemize}
+
+    \item \textbf{Contextual Guidance:}
+    \begin{itemize}
+        \item \textbf{Given} I select a specific feedback type,
+        \item \textbf{Then} the form updates with appropriate placeholder text and messaging.
+        \item \textbf{And} the submit button reflects the selected category.
+    \end{itemize}
+
+    \item \textbf{Form Validation:}
+    \begin{itemize}
+        \item \textbf{Given} I attempt to submit feedback,
+        \item \textbf{When} the required message field is empty,
+        \item \textbf{Then} the submit button remains disabled.
+        \item \textbf{And} form validation prevents submission until requirements are met.
+    \end{itemize}
+
+    \item \textbf{Submission Confirmation:}
+    \begin{itemize}
+        \item \textbf{Given} I successfully submit feedback,
+        \item \textbf{Then} I receive immediate visual confirmation of submission.
+        \item \textbf{And} the form resets after a brief thank you message.
+    \end{itemize}
+
+    \item \textbf{Anonymous Submissions:}
+    \begin{itemize}
+        \item \textbf{Given} I choose not to provide contact information,
+        \item \textbf{Then} my feedback is still accepted and processed.
+        \item \textbf{And} my submission is marked as ``Anonymous'' in the system.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item All feedback types use the same form structure for consistency.
+    \item Contact information is optional to encourage participation.
+    \item System logs all submissions with timestamps.
+    \item Future enhancements could include file attachments.
+\end{itemize}
+
+
+\subsection{User Story \#13: Admin Dashboard Management}
+\textbf{ID:} US013 (FeedbackHub Project) \\
+\textbf{Title:} Comprehensive Feedback Administration \\
+\textbf{As a:} System administrator who needs to monitor and respond to user feedback, \\
+\textbf{I want:} to view, filter, search, and manage all submitted feedback through a centralized dashboard, \\
+\textbf{So that:} I can efficiently track feedback trends, prioritize responses, and ensure all user concerns are addressed appropriately.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Dashboard Overview:}
+    \begin{itemize}
+        \item \textbf{Given} I access the admin dashboard,
+        \item \textbf{Then} I see summary statistics for total feedback, pending items, in-progress items, and resolved items.
+        \item \textbf{And} statistics include trend indicators showing changes over time.
+    \end{itemize}
+
+    \item \textbf{Feedback Listing:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing the feedback list,
+        \item \textbf{Then} each item displays type, status, priority, user information, and submission date.
+        \item \textbf{And} items are color-coded by category and status for quick visual identification.
+    \end{itemize}
+
+    \item \textbf{Filtering Capabilities:}
+    \begin{itemize}
+        \item \textbf{Given} I want to focus on specific feedback,
+        \item \textbf{When} I use the filter controls,
+        \item \textbf{Then} I can filter by feedback type (all, suggestions, complaints, compliments).
+        \item \textbf{And} I can filter by status (all, pending, in-progress, resolved).
+    \end{itemize}
+
+    \item \textbf{Search Functionality:}
+    \begin{itemize}
+        \item \textbf{Given} I need to find specific feedback,
+        \item \textbf{When} I use the search bar,
+        \item \textbf{Then} the system searches across feedback content, user names, and email addresses.
+        \item \textbf{And} results update in real-time as I type.
+    \end{itemize}
+
+    \item \textbf{Detail Management:}
+    \begin{itemize}
+        \item \textbf{Given} I click on a feedback item,
+        \item \textbf{Then} I see full details in a dedicated panel.
+        \item \textbf{And} I can update the status using a dropdown menu.
+        \item \textbf{And} changes are immediately reflected in the system.
+    \end{itemize}
+
+    \item \textbf{Status Workflow:}
+    \begin{itemize}
+        \item \textbf{Given} I am managing feedback items,
+        \item \textbf{Then} I can move items through the workflow: Pending → In Progress → Resolved.
+        \item \textbf{And} status changes are tracked with timestamps.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Admin access requires authentication and appropriate permissions.
+    \item All actions are logged for audit purposes.
+    \item System supports real-time updates when multiple admins are working.
+    \item Future enhancements could include automated assignment.
+\end{itemize}
+
+
+\subsection{User Story \#14: Profile Management}
+\textbf{ID:} US014 (Marito) \\
+\textbf{Title:} User Profile Management \\
+\textbf{As a:} logged-in user of the application, \\
+\textbf{I want:} to be able to manage my profile information including picture, username, email address, and password, \\
+\textbf{So that:} I can maintain accurate personal information and secure access to my account.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Setting Profile Picture:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I am viewing my profile settings,
+        \item \textbf{Then} I should see an option to upload or change my profile picture,
+        \item \textbf{And} I should be able to select an image file and save it successfully.
+    \end{itemize}
+
+    \item \textbf{Changing Username:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I am viewing my profile settings,
+        \item \textbf{Then} I should see a field to update my username,
+        \item \textbf{And} I should receive confirmation when the username is successfully changed.
+    \end{itemize}
+
+    \item \textbf{Changing Email Address:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I want to update my email address,
+        \item \textbf{Then} I should be required to validate my existing password before making the change,
+        \item \textbf{And} I should receive a confirmation email at the new address to verify the change.
+    \end{itemize}
+
+    \item \textbf{Changing Password:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I want to change my password,
+        \item \textbf{Then} I should be required to validate my existing password,
+        \item \textbf{And} I should be able to enter and confirm a new password,
+        \item \textbf{And} I should receive confirmation when the password is successfully updated.
+    \end{itemize}
+
+    \item \textbf{Logging Out:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{When} I choose to log out,
+        \item \textbf{Then} I should be securely signed out of the application,
+        \item \textbf{And} I should be redirected to the login page or home page.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Users must be authenticated to access profile management features.
+    \item Password changes require validation of the current password for security.
+    \item Profile picture uploads should have file size and format restrictions.
+\end{itemize}
+
+
+\subsection{User Story \#15: View Saved Languages}
+\textbf{ID:} US015 (Marito) \\
+\textbf{Title:} Language Collection Management \\
+\textbf{As a:} User who wants to track my language learning progress, \\
+\textbf{I want:} to view all languages I have saved in my workspace, \\
+\textbf{So that:} I can easily access and manage my language learning collection and see my overall language portfolio.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Language Display:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into the workspace system,
+        \item \textbf{When} I navigate to the saved languages section,
+        \item \textbf{Then} I see a list of all languages I have previously saved.
+        \item \textbf{And} each language entry shows relevant details like name and date saved.
+    \end{itemize}
+
+    \item \textbf{Collection Overview:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing my saved languages,
+        \item \textbf{Then} I can see the total count of languages in my collection.
+        \item \textbf{And} languages are organized in a clear, readable format.
+    \end{itemize}
+
+    \item \textbf{Access Integration:}
+    \begin{itemize}
+        \item \textbf{Given} I have saved languages in my collection,
+        \item \textbf{Then} I can easily navigate to related saved terms and glossary items.
+        \item \textbf{And} the system provides seamless navigation between language components.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Languages are persistently stored in user's workspace.
+    \item System maintains relationship between languages and their associated content.
+    \item Future enhancements could include language categorization and sorting options.
+\end{itemize}
+
+
+\subsection{User Story \#16: View Saved Terms}
+\textbf{ID:} US016 (Marito) \\
+\textbf{Title:} Terminology Management and Review \\
+\textbf{As a:} User building vocabulary in multiple languages, \\
+\textbf{I want:} to view and manage all terms I have saved across different languages, \\
+\textbf{So that:} I can review my vocabulary progress and access saved terminology for study and reference.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Term Collection Display:}
+    \begin{itemize}
+        \item \textbf{Given} I access the saved terms section,
+        \item \textbf{Then} I see all terms I have previously saved.
+        \item \textbf{And} each term displays relevant information like definition, language, and date saved.
+    \end{itemize}
+
+    \item \textbf{Language Association:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing saved terms,
+        \item \textbf{Then} I can see which language each term belongs to.
+        \item \textbf{And} I can filter or group terms by their associated languages.
+    \end{itemize}
+
+    \item \textbf{Progress Tracking:}
+    \begin{itemize}
+        \item \textbf{Given} I have been saving terms over time,
+        \item \textbf{Then} I can track my vocabulary building progress.
+        \item \textbf{And} I can see submission progress for terms I'm working on.
+    \end{itemize}
+
+    \item \textbf{Search and Filter:}
+    \begin{itemize}
+        \item \textbf{Given} I have multiple saved terms,
+        \item \textbf{When} I use the search functionality,
+        \item \textbf{Then} I can quickly locate specific terms or filter by criteria.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Terms are linked to their source languages.
+    \item System tracks submission progress for learning workflows.
+    \item Integration with external systems for enhanced term management.
+\end{itemize}
+
+
+\subsection{User Story \#17: View Saved Glossary}
+\textbf{ID:} US017 (Marito) \\
+\textbf{Title:} Glossary Access and Management \\
+\textbf{As a:} User who needs quick access to specialized terminology and definitions, \\
+\textbf{I want:} to view and manage my saved glossary entries, \\
+\textbf{So that:} I can maintain a personal reference collection and quickly look up important terms and concepts.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Glossary Navigation:}
+    \begin{itemize}
+        \item \textbf{Given} I access the saved glossary section,
+        \item \textbf{Then} I see all glossary entries I have saved.
+        \item \textbf{And} entries are organized in a logical, searchable format.
+    \end{itemize}
+
+    \item \textbf{Content Display:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing the glossary,
+        \item \textbf{Then} each entry shows the term, definition, and relevant context.
+        \item \textbf{And} I can easily read and reference the content.
+    \end{itemize}
+
+    \item \textbf{Cross-Reference Integration:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the glossary,
+        \item \textbf{Then} I can navigate to related saved languages and terms.
+        \item \textbf{And} the system maintains connections between glossary entries and other workspace items.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Glossary entries can be linked to multiple languages.
+    \item System supports both user-created and imported glossary content.
+    \item Integration with search functionality across all saved items.
+\end{itemize}
+
+
+\subsection{User Story \#18: Track Submitted Term Progress}
+\textbf{ID:} US018 (Marito) \\
+\textbf{Title:} Term Submission Progress Monitoring \\
+\textbf{As a:} User who submits terms for review or processing, \\
+\textbf{I want:} to track the progress of my submitted terms through the system workflow, \\
+\textbf{So that:} I can monitor the status of my contributions and know when they have been processed or approved.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Progress Visualization:}
+    \begin{itemize}
+        \item \textbf{Given} I have submitted terms for processing,
+        \item \textbf{When} I access the progress tracking section,
+        \item \textbf{Then} I see the current status of each submitted term.
+        \item \textbf{And} progress is clearly indicated through status indicators or progress bars.
+    \end{itemize}
+
+    \item \textbf{Status Updates:}
+    \begin{itemize}
+        \item \textbf{Given} my terms are being processed,
+        \item \textbf{Then} I receive updates when status changes occur.
+        \item \textbf{And} I can see timestamp information for each status change.
+    \end{itemize}
+
+    \item \textbf{Submission History:}
+    \begin{itemize}
+        \item \textbf{Given} I have submitted multiple terms over time,
+        \item \textbf{Then} I can view a complete history of my submissions.
+        \item \textbf{And} I can filter by status, date, or other relevant criteria.
+    \end{itemize}
+
+    \item \textbf{Feedback Integration:}
+    \begin{itemize}
+        \item \textbf{Given} my submitted terms require revisions,
+        \item \textbf{Then} I can see any feedback or comments from reviewers.
+        \item \textbf{And} I can resubmit updated versions when needed.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item System maintains workflow states for submitted content.
+    \item External review processes may impact term progression.
+    \item Notifications may be implemented for status changes.
+\end{itemize}
+
+
+\subsection{User Story \#19: Organize Saved Items into Groups}
+\textbf{ID:} US019 (Marito) \\
+\textbf{Title:} Workspace Organization and Categorization \\
+\textbf{As a:} User with multiple saved languages, terms, and glossary entries, \\
+\textbf{I want:} to organize my saved items into custom groups and categories, \\
+\textbf{So that:} I can efficiently manage my workspace content and quickly find related items for specific projects or learning goals.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Group Creation:}
+    \begin{itemize}
+        \item \textbf{Given} I want to organize my saved items,
+        \item \textbf{When} I access the organization tools,
+        \item \textbf{Then} I can create custom groups with descriptive names.
+        \item \textbf{And} I can assign colors or icons to distinguish different groups.
+    \end{itemize}
+
+    \item \textbf{Item Assignment:}
+    \begin{itemize}
+        \item \textbf{Given} I have created groups,
+        \item \textbf{When} I view my saved languages, terms, or glossary entries,
+        \item \textbf{Then} I can assign items to one or more groups.
+        \item \textbf{And} I can move items between groups as needed.
+    \end{itemize}
+
+    \item \textbf{Group Management:}
+    \begin{itemize}
+        \item \textbf{Given} I have organized items into groups,
+        \item \textbf{Then} I can view items filtered by group membership.
+        \item \textbf{And} I can edit group properties like names and descriptions.
+        \item \textbf{And} I can delete groups while preserving the underlying saved items.
+    \end{itemize}
+
+    \item \textbf{Cross-Category Organization:}
+    \begin{itemize}
+        \item \textbf{Given} I want comprehensive organization,
+        \item \textbf{Then} I can create groups that span multiple item types.
+        \item \textbf{And} I can organize languages, terms, and glossary entries together based on themes or projects.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Groups are flexible containers that don't restrict item functionality.
+    \item Items can belong to multiple groups simultaneously.
+    \item Organization preferences are saved to user's workspace.
+    \item System maintains referential integrity when groups are modified.
+\end{itemize}
+
+
+\subsection{User Story \#20: Search and Filter Saved Items}
+\textbf{ID:} US020 (Marito) \\
+\textbf{Title:} Advanced Search and Filtering Capabilities \\
+\textbf{As a:} User with extensive saved content in my workspace, \\
+\textbf{I want:} to search and filter across all my saved items using various criteria, \\
+\textbf{So that:} I can quickly locate specific content regardless of volume and efficiently work with targeted subsets of my saved materials.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Universal Search:}
+    \begin{itemize}
+        \item \textbf{Given} I want to find specific content,
+        \item \textbf{When} I use the search functionality,
+        \item \textbf{Then} the system searches across all saved languages, terms, and glossary entries.
+        \item \textbf{And} search results highlight matching content and provide context.
+    \end{itemize}
+
+    \item \textbf{Advanced Filtering:}
+    \begin{itemize}
+        \item \textbf{Given} I need to narrow down my saved items,
+        \item \textbf{When} I apply filters,
+        \item \textbf{Then} I can filter by item type, language, date saved, or custom groups.
+        \item \textbf{And} multiple filters can be combined for precise results.
+    \end{itemize}
+
+    \item \textbf{Search Performance:}
+    \begin{itemize}
+        \item \textbf{Given} I perform searches on my saved content,
+        \item \textbf{Then} results appear quickly without significant delay.
+        \item \textbf{And} the search function works efficiently even with large collections.
+    \end{itemize}
+
+    \item \textbf{Filter Persistence:}
+    \begin{itemize}
+        \item \textbf{Given} I have applied specific filters,
+        \item \textbf{Then} my filter preferences are maintained during my session.
+        \item \textbf{And} I can easily clear or modify filters as needed.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Search functionality extends across all workspace components.
+    \item System provides relevant and ranked search results.
+    \item Extension points allow for enhanced search capabilities.
+    \item Integration with external systems may provide additional search features.
+\end{itemize}
+
+
+\subsection{User Story \#21: Multilingual Interface Support}
+\textbf{ID:} US021 (Marito) \\
+\textbf{Title:} Multilingual Interface Support \\
+\textbf{As a:} User who speaks a language other than English, \\
+\textbf{I want:} to access and use the Marito platform in my preferred language, \\
+\textbf{So that:} I can navigate and interact with the system more comfortably and efficiently without language barriers.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Language Selection:}
+    \begin{itemize}
+        \item \textbf{Given} I am a new or returning user,
+        \item \textbf{When} I access the application settings or profile,
+        \item \textbf{Then} I can select my preferred interface language from a list of supported languages.
+        \item \textbf{And} my language preference is saved for future sessions.
+    \end{itemize}
+
+    \item \textbf{Dynamic Language Switching:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{When} I change my language preference,
+        \item \textbf{Then} the interface language changes immediately without requiring a page reload.
+        \item \textbf{And} all interface elements adapt to the selected language.
+    \end{itemize}
+
+    \item \textbf{Localized Content Display:}
+    \begin{itemize}
+        \item \textbf{Given} I have selected my preferred language,
+        \item \textbf{When} I navigate through the application,
+        \item \textbf{Then} all UI elements, menus, buttons, and system messages are displayed in my chosen language.
+        \item \textbf{And} dates, numbers, and other locale-specific content follow my language's conventions.
+    \end{itemize}
+
+    \item \textbf{Fallback for Untranslated Content:}
+    \begin{itemize}
+        \item \textbf{Given} I am using a language that has partial translation coverage,
+        \item \textbf{When} I encounter content without translation in my selected language,
+        \item \textbf{Then} the system displays that content in the default language (English).
+        \item \textbf{And} the transition between translated and untranslated content is seamless.
+    \end{itemize}
+
+    \item \textbf{Offline Language Support:}
+    \begin{itemize}
+        \item \textbf{Given} I have set my language preference,
+        \item \textbf{When} I use the application offline,
+        \item \textbf{Then} my selected language continues to be applied.
+        \item \textbf{And} I don't need an internet connection to use the interface in my language.
+    \end{itemize}
+
+    \item \textbf{User Contribution to Translations (Optional Enhancement):}
+    \begin{itemize}
+        \item \textbf{Given} I notice missing or incorrect translations in my language,
+        \item \textbf{When} I use the translation contribution feature,
+        \item \textbf{Then} I can suggest improved translations for specific interface elements.
+        \item \textbf{And} my suggestions are reviewed by moderators before implementation.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Initial release supports at least 5 major languages (English, Spanish, French, Mandarin, Arabic).
+    \item Language selection does not affect user-generated content or terminology data.
+    \item The system uses internationalization (i18n) best practices for language implementation.
+    \item Right-to-left (RTL) languages like Arabic are properly supported with appropriate UI adjustments.
+\end{itemize}
+
+
+\subsection{User Story \#22: Accessibility and Customization}
+\textbf{ID:} US022 (Marito) \\
+\textbf{Title:} Accessibility and Visual Customization \\
+\textbf{As a:} User with accessibility needs or visual preferences, \\
+\textbf{I want:} to be able to customize the visual presentation of the application including text size, spacing, contrast, and color themes, \\
+\textbf{So that:} I can have a comfortable and accessible reading experience that meets my specific needs.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Adjusting Text Size:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to adjust text size,
+        \item \textbf{And} I should be able to increase or decrease the text size with real-time preview,
+        \item \textbf{And} I should see the current size displayed (e.g., 16px).
+    \end{itemize}
+
+    \item \textbf{Modifying Text Spacing:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to adjust text spacing,
+        \item \textbf{And} I should be able to change the spacing between lines and letters,
+        \item \textbf{And} I should see the current spacing multiplier displayed (e.g., 1x).
+    \end{itemize}
+
+    \item \textbf{Enabling High Contrast Mode:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to enable High Contrast Mode,
+        \item \textbf{And} I should be able to toggle it on or off,
+        \item \textbf{And} When enabled, all colors should have increased contrast for better visibility.
+    \end{itemize}
+
+    \item \textbf{Switching to Dark Mode:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to enable Dark Mode,
+        \item \textbf{And} I should be able to toggle it on or off,
+        \item \textbf{And} When enabled, the interface should display dark backgrounds with light text.
+    \end{itemize}
+
+    \item \textbf{Persistence of Settings:}
+    \begin{itemize}
+        \item \textbf{Given} I have customized my accessibility preferences,
+        \item \textbf{When} I log out and log back in,
+        \item \textbf{Then} all my accessibility settings should be preserved,
+        \item \textbf{And} The application should immediately apply my saved preferences.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Users must be authenticated to save accessibility preferences.
+    \item All accessibility changes should take effect immediately without page refresh.
+    \item Settings should work together without conflicting (e.g., dark mode + high contrast).
+    \item Visual customizations should maintain readability at all adjustment levels.
+\end{itemize}
+
+\subsection{User Story \#23: Term Submission}
+\textbf{ID:} US023 (Term Addition System) \
+\textbf{Title:} Submit New Terminology \
+\textbf{As a:} contributor, \
+\textbf{I want:} to submit new terms with definitions and metadata, \
+\textbf{So that:} I can contribute to the multilingual terminology database.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Required Fields:}
+\begin{itemize}
+\item \textbf{Given} I access the submission form,
+\item \textbf{When} I attempt to submit a term,
+\item \textbf{Then} the system should require term, definition, domain, and language fields.
+\end{itemize}
+
+\item \textbf{Optional Fields:}
+\begin{itemize}
+    \item \textbf{Given} I submit a term,
+    \item \textbf{When} I include example usage,
+    \item \textbf{Then} the system should accept and store it.
+\end{itemize}
+
+\item \textbf{Success Feedback:}
+\begin{itemize}
+    \item \textbf{Given} I submit a valid term,
+    \item \textbf{When} the submission is successful,
+    \item \textbf{Then} I should receive confirmation.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Users must be authenticated to submit terms.
+\item Duplicate term validation occurs during submission.
+\end{itemize}
+
+\subsection{User Story \#24: Translation Linking}
+\textbf{ID:} US024 (Term Addition System) \
+\textbf{Title:} Link Related Translations \
+\textbf{As a:} contributor, \
+\textbf{I want:} to link my new term to existing translations, \
+\textbf{So that:} terms with similar meanings across languages are connected.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Translation Search:}
+\begin{itemize}
+\item \textbf{Given} I am submitting a term,
+\item \textbf{When} I search for related terms,
+\item \textbf{Then} I should see admin-verified terms.
+\end{itemize}
+
+\item \textbf{Multiple Selection:}
+\begin{itemize}
+    \item \textbf{Given} I find relevant translations,
+    \item \textbf{When} I select multiple terms,
+    \item \textbf{Then} all should be linked to my submission.
+\end{itemize}
+
+\item \textbf{Visual Confirmation:}
+\begin{itemize}
+    \item \textbf{Given} I select translations,
+    \item \textbf{Then} I should see them listed before submission.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Only admin-approved terms can be linked as translations.
+\item Translation relationships are bidirectional.
+\end{itemize}
+
+\subsection{User Story \#25: Edit Suggestions}
+\textbf{ID:} US025 (Term Addition System) \
+\textbf{Title:} Suggest Term Edits \
+\textbf{As a:} contributor or linguist, \
+\textbf{I want:} to propose edits to existing terms, \
+\textbf{So that:} I can improve or correct terminology.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Term Selection:}
+\begin{itemize}
+\item \textbf{Given} I want to edit a term,
+\item \textbf{When} I search for editable terms,
+\item \textbf{Then} I should find terms I have permission to edit.
+\end{itemize}
+
+text
+\item \textbf{Edit Form:}
+\begin{itemize}
+    \item \textbf{Given} I select a term to edit,
+    \item \textbf{When} the form opens,
+    \item \textbf{Then} it should be pre-filled with current values.
+\end{itemize}
+
+\item \textbf{Submission Tracking:}
+\begin{itemize}
+    \item \textbf{Given} I submit an edit,
+    \item \textbf{Then} the system should track it as an edit suggestion.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Edit suggestions follow the same approval process as new terms.
+\item Original term remains unchanged until approval.
+\end{itemize}
+
+\subsection{User Story \#26: Submission Management}
+\textbf{ID:} US026 (Term Addition System) \
+\textbf{Title:} View My Submissions \
+\textbf{As a:} contributor, \
+\textbf{I want:} to see all my submitted terms and their status, \
+\textbf{So that:} I can track my contributions.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Submission List:}
+\begin{itemize}
+\item \textbf{Given} I access my submissions,
+\item \textbf{When} the page loads,
+\item \textbf{Then} I should see all my terms with current status.
+\end{itemize}
+
+\item \textbf{Status Visibility:}
+\begin{itemize}
+    \item \textbf{Given} I view my submissions,
+    \item \textbf{Then} I should see pending, approved, or rejected status.
+\end{itemize}
+
+\item \textbf{Translation Display:}
+\begin{itemize}
+    \item \textbf{Given} my term has linked translations,
+    \item \textbf{When} I expand the details,
+    \item \textbf{Then} I should see all connected terms.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Users can only see their own submissions.
+\item Status updates in real-time.
+\end{itemize}
+
+\subsection{User Story \#27: Crowd Voting}
+\textbf{ID:} US027 (Term Addition System) \
+\textbf{Title:} Vote on Term Submissions \
+\textbf{As a:} authenticated user, \
+\textbf{I want:} to vote on pending term submissions, \
+\textbf{So that:} I can help verify community-contributed terms.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Voting Access:}
+\begin{itemize}
+\item \textbf{Given} I am authenticated,
+\item \textbf{When} I view pending terms,
+\item \textbf{Then} I should see a vote button.
+\end{itemize}
+
+\item \textbf{Prevention of Self-Voting:}
+\begin{itemize}
+    \item \textbf{Given} I view my own submission,
+    \item \textbf{Then} I should not be able to vote on it.
+\end{itemize}
+
+\item \textbf{Single Vote Enforcement:}
+\begin{itemize}
+    \item \textbf{Given} I vote on a term,
+    \item \textbf{When} I try to vote again,
+    \item \textbf{Then} the system should prevent duplicate votes.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Voting requires authentication.
+\item Vote counts contribute to crowd verification threshold.
+\end{itemize}
+
+\subsection{User Story \#28: Linguist Verification}
+\textbf{ID:} US028 (Term Addition System) \
+\textbf{Title:} Verify Term Submissions \
+\textbf{As a:} linguist, \
+\textbf{I want:} to review and verify pending term submissions, \
+\textbf{So that:} I can ensure terminology accuracy.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Review Queue:}
+\begin{itemize}
+\item \textbf{Given} I am a linguist,
+\item \textbf{When} I access the review page,
+\item \textbf{Then} I should see submissions needing verification.
+\end{itemize}
+
+\item \textbf{Approval Action:}
+\begin{itemize}
+    \item \textbf{Given} I review a submission,
+    \item \textbf{When} I approve it,
+    \item \textbf{Then} it should move to admin approval queue.
+\end{itemize}
+
+\item \textbf{Rejection with Feedback:}
+\begin{itemize}
+    \item \textbf{Given} I reject a submission,
+    \item \textbf{When} I provide feedback,
+    \item \textbf{Then} the submitter should receive the feedback.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Linguist approval moves terms to admin queue.
+\item Rejection requires minimum 10-character feedback.
+\end{itemize}
+
+\subsection{User Story \#29: Admin Approval}
+\textbf{ID:} US029 (Term Addition System) \
+\textbf{Title:} Final Term Approval \
+\textbf{As a:} administrator, \
+\textbf{I want:} to give final approval to verified terms, \
+\textbf{So that:} they become part of the official terminology bank.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Approval Queue:}
+\begin{itemize}
+\item \textbf{Given} I am an admin,
+\item \textbf{When} I access admin panel,
+\item \textbf{Then} I should see crowd and linguist verified terms.
+\end{itemize}
+
+\item \textbf{Final Approval:}
+\begin{itemize}
+    \item \textbf{Given} I approve a term,
+    \item \textbf{When} I confirm approval,
+    \item \textbf{Then} it should become searchable in the term bank.
+\end{itemize}
+
+\item \textbf{Rejection Authority:}
+\begin{itemize}
+    \item \textbf{Given} I reject a term,
+    \item \textbf{When} I provide reasons,
+    \item \textbf{Then} it should be recorded with feedback.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Admin approval makes terms publicly available.
+\item Admin can reject at any verification stage.
+\end{itemize}
+
+\subsection{User Story \#30: Submission Deletion}
+\textbf{ID:} US030 (Term Addition System) \
+\textbf{Title:} Delete My Submissions \
+\textbf{As a:} contributor, \
+\textbf{I want:} to delete my own rejected submissions, \
+\textbf{So that:} I can manage my contribution history.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Deletion Access:}
+\begin{itemize}
+\item \textbf{Given} I view my rejected submissions,
+\item \textbf{When} I want to delete one,
+\item \textbf{Then} I should see a delete option.
+\end{itemize}
+
+\item \textbf{Confirmation:}
+\begin{itemize}
+    \item \textbf{Given} I attempt to delete,
+    \item \textbf{When} I confirm the action,
+    \item \textbf{Then} the submission should be removed.
+\end{itemize}
+
+\item \textbf{Restriction:}
+\begin{itemize}
+    \item \textbf{Given} I try to delete approved submissions,
+    \item \textbf{Then} the system should prevent deletion.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Only rejected submissions can be deleted by submitters.
+\item Admins can delete any submission.
+\end{itemize}
+
+\subsection{User Story \#31: Feedback Visibility}
+\textbf{ID:} US031 (Term Addition System) \
+\textbf{Title:} View Rejection Feedback \
+\textbf{As a:} contributor, \
+\textbf{I want:} to see feedback on my rejected submissions, \
+\textbf{So that:} I can understand why they were rejected.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Feedback Display:}
+\begin{itemize}
+\item \textbf{Given} I view my rejected submissions,
+\item \textbf{When} I check the details,
+\item \textbf{Then} I should see the rejection feedback.
+\end{itemize}
+
+\item \textbf{Complete History:}
+\begin{itemize}
+    \item \textbf{Given} a term has multiple rejections,
+    \item \textbf{When} I view its history,
+    \item \textbf{Then} I should see all feedback.
+\end{itemize}
+
+\item \textbf{Clear Formatting:}
+\begin{itemize}
+    \item \textbf{Given} I read feedback,
+    \item \textbf{Then} it should be clearly formatted and readable.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item Feedback is preserved even if submission is deleted.
+\item Feedback helps improve future submissions.
+\end{itemize}
+
+\subsection{User Story \#32: Multi-language Support}
+\textbf{ID:} US032 (Term Addition System) \
+\textbf{Title:} Submit Terms in Multiple Languages \
+\textbf{As a:} multilingual contributor, \
+\textbf{I want:} to submit terms in various languages, \
+\textbf{So that:} the terminology bank becomes truly multilingual.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+\item \textbf{Language Selection:}
+\begin{itemize}
+\item \textbf{Given} I submit a term,
+\item \textbf{When} I choose a language,
+\item \textbf{Then} I should see all supported languages.
+\end{itemize}
+
+\item \textbf{Unicode Support:}
+\begin{itemize}
+    \item \textbf{Given} I enter text in non-Latin scripts,
+    \item \textbf{When} I submit the term,
+    \item \textbf{Then} it should preserve all characters.
+\end{itemize}
+
+\item \textbf{Right-to-Left Support:}
+\begin{itemize}
+    \item \textbf{Given} I use RTL languages,
+    \item \textbf{Then} the interface should support proper display.
+\end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+\item System supports UTF-8 encoding.
+\item Language options match the term bank's supported languages.
+\end{itemize}
+
 \section{Use Case Diagrams}
 
 This section presents the key use case diagrams developed for the Marito application. Each diagram visualizes the interactions between user roles and the system, based on the user stories defined earlier in this document. These diagrams serve as a visual blueprint for understanding the system's expected behavior.
@@ -792,12 +1784,12 @@ This section presents the key use case diagrams developed for the Marito applica
   \label{fig:reg-log-use-case}
 \end{figure}
 
-\subsection{Interface Language Switching Use Case Diagram}
+\subsection{Accessibility and Customization Use Case Diagram}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{Interface Language Switching Subsystem.jpg}
-  \caption{Interface Language Switching Use Case Diagram for Marito}
-  \label{fig:interface-lang-switch-use-case}
+  \includegraphics[width=0.9\textwidth]{Accessibility and Customization System.jpg}
+  \caption{Accessibility and Customization Use Case Diagram for Marito}
+  \label{fig:accessibility-customization-use-case}
 \end{figure}
 
 \subsection{Search Term Use Case Diagram}
@@ -824,14 +1816,6 @@ This section presents the key use case diagrams developed for the Marito applica
   \label{fig:visualization-use-case}
 \end{figure}
 
-\subsection{Themes Use Case Diagram}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\textwidth]{Themes_UseCase.jpg}
-  \caption{Themes Use Case Diagram}
-  \label{fig:themes-use-case}
-\end{figure}
-
 \subsection{Contributions Use Case Diagram}
 \begin{figure}[H]
   \centering
@@ -844,39 +1828,65 @@ This section presents the key use case diagrams developed for the Marito applica
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Dictionary,Glossaies and Term Banl.jpg}
-  \caption{Contributions Use Case Diagram}
-  \label{fig:contributions-use-case}
+  \caption{Dictionary and Glossary Use Case Diagram}
+  \label{fig:dictionary-use-case}
 \end{figure}
 
 \subsection{Admin Use Case Diagram}
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Admin-User-Management.jpg}
-  \caption{Contributions Use Case Diagram}
-  \label{fig:contributions-use-case}
+  \caption{Admin User Management Use Case Diagram}
+  \label{fig:admin-use-case}
 \end{figure}
 
 \subsection{Export Use Case Diagram}
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Export System.jpg}
-  \caption{Contributions Use Case Diagram}
-  \label{fig:contributions-use-case}
+  \caption{Export System Use Case Diagram}
+  \label{fig:export-use-case}
+\end{figure}
+
+\subsection{Feedback System Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Feedaback system.jpg}
+  \caption{Feedback System Use Case Diagram}
+  \label{fig:feedback-system-use-case}
+\end{figure}
+
+\subsection{Workspace Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{workspace.jpg}
+  \caption{Workspace Management Use Case Diagram}
+  \label{fig:workspace-use-case}
+\end{figure}
+
+\subsection{Term Additions and Verification Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{TermAdditions.png}
+  \caption{Term Additions and Verification Use Case Diagram}
+  \label{fig:Term Additions and Verification}
 \end{figure}
 
 \subsection{Overview}
 The main use cases covered include:
 \begin{itemize}
   \item Browsing and searching multilingual terms
-  \item Interface language switching
+  \item Accessibility and customization
   \item Earning contribution points through gamified interactions
   \item Registration and login interactions
   \item User Contributions
-  \item User themes
   \item Data visualizations
   \item Dictionary Use Case
   \item Admin Use case
   \item Export Use Case
+  \item Term Additions and Verification
+  \item Feedback System Use Case
+  \item Workspace Management Use Case
 \end{itemize}
 
 \section{Functional Requirements}
@@ -892,11 +1902,62 @@ The main use cases covered include:
         \item FR1.5: The system shall highlight related terms and translations in the term view.
     \end{itemize}
 
-    \item \textbf{Multilingual Support}
+    \item \textbf{Accessibility and Customization}
     \begin{itemize}
-        \item FR2.1: The system shall support interface localization in multiple South African languages.
-        \item FR2.2: The system shall allow users to switch the UI language at any time.
-        \item FR2.3: The system shall correctly render special characters where applicable.
+        \item FR2.1: Profile \& Account Management
+        \begin{itemize}
+            \item FR2.1.1: The system shall allow users to upload and change profile pictures.
+            \item FR2.1.2: The system shall enable username updates with real-time validation for uniqueness.
+            \item FR2.1.3: The system shall require password validation before email changes and send verification emails.
+            \item FR2.1.4: The system shall enforce secure password changes requiring current password validation.
+            \item FR2.1.5: The system shall provide secure logout that terminates all sessions.
+        \end{itemize}
+        
+        \item FR2.2: Multilingual Support
+        \begin{itemize}
+            \item FR2.2.1: The system shall support interface localization in all eleven official South African languages including English, Afrikaans, isiZulu, isiXhosa, Sesotho, Setswana, Sepedi, isiSwati, Tshivenda, Xitsonga, and isiNdebele.
+            \item FR2.2.2: The system shall allow users to switch UI language anytime through settings.
+            \item FR2.2.3: The system shall correctly render special characters for all supported languages.
+            \item FR2.2.4: The system shall persist language preferences across sessions.
+            \item FR2.2.5: The system shall apply language changes immediately without page refresh.
+        \end{itemize}
+        
+        \item FR2.3: Text \& Visual Presentation
+        \begin{itemize}
+            \item FR2.3.1: The system shall allow users to adjust text size and display current size in pixels (e.g., 16px).
+            \item FR2.3.2: The system shall provide real-time text size adjustment.
+            \item FR2.3.3: The system shall show current text size value as users make changes.
+            \item FR2.3.4: The system shall maintain text size preferences across sessions.
+            \item FR2.3.5: The system shall ensure text scaling maintains proper layout.
+        \end{itemize}
+        
+        \item FR2.4: Text Spacing Control
+        \begin{itemize}
+            \item FR2.4.1: The system shall allow users to adjust text spacing and display current multiplier (e.g., 1x).
+            \item FR2.4.2: The system shall provide real-time spacing adjustment.
+            \item FR2.4.3: The system shall show current spacing value as users make changes.
+            \item FR2.4.4: The system shall apply spacing changes to all text elements consistently.
+            \item FR2.4.5: The system shall preserve spacing preferences across sessions.
+        \end{itemize}
+        
+        \item FR2.5: Colour \& Contrast Controls
+        \begin{itemize}
+            \item FR2.5.1: The system shall allow users to enable/disable High Contrast Mode.
+            \item FR2.5.2: The system shall show current mode state (on/off).
+            \item FR2.5.3: The system shall increase color contrast when high contrast mode is enabled.
+            \item FR2.5.4: The system shall maintain high contrast settings across sessions.
+            \item FR2.5.5: The system shall ensure interactive elements remain distinguishable in high contrast mode.
+        \end{itemize}
+        
+        \item FR2.6: Dark Mode
+        \begin{itemize}
+            \item FR2.6.1: The system shall allow users to enable/disable Dark Mode.
+            \item FR2.6.2: The system shall show current mode state (on/off).
+            \item FR2.6.3: The system shall apply dark backgrounds with light text when enabled.
+            \item FR2.6.4: The system shall maintain proper contrast in dark mode.
+            \item FR2.6.5: The system shall preserve dark mode preferences across sessions.
+            \item FR2.6.6: The system shall provide smooth transitions when switching modes.
+        \end{itemize}
     \end{itemize}
 
     \item \textbf{User Contributions and Feedback}
@@ -952,6 +2013,57 @@ The main use cases covered include:
         \item FR8.1: The system shall allow users to export glossary data in JSON format.
         \item FR8.2: The system shall allow users to export glossary data in CSV format.
         \item FR8.3: The system may allow authorized users to import glossaries in JSON or CSV format.
+    \end{itemize}
+
+    \item \textbf{Feedback System}
+    \begin{itemize}
+        \item FR9.1: \textbf{Feedback Submission}
+        \begin{itemize}
+            \item FR9.1.1: The system shall allow users to submit feedback through multiple categories: Suggestion, Complaint, and Compliment.
+            \item FR9.1.2: The system shall allow users to optionally provide their name and email address with feedback submissions.
+            \item FR9.1.3: The system shall require a descriptive message for all feedback submissions.
+            \item FR9.1.4: The system shall validate that required fields are completed before allowing submission.
+            \item FR9.1.5: The system shall provide appropriate guidance text based on the selected feedback category.
+            \item FR9.1.6: The system shall accept anonymous feedback submissions when contact information is not provided.
+        \end{itemize}
+        \item FR9.2: \textbf{Feedback Administration}
+        \begin{itemize}
+            \item FR9.2.1: The system shall provide administrators with a dashboard showing feedback statistics and trends.
+            \item FR9.2.2: The system shall display all feedback items with category, status, priority, user information, and submission date.
+            \item FR9.2.3: The system shall allow administrators to filter feedback by type (suggestions, complaints, compliments) and status (pending, in-progress, resolved).
+            \item FR9.2.4: The system shall provide search functionality across feedback content and user information.
+            \item FR9.2.5: The system shall allow administrators to update the status of feedback items through a defined workflow.
+            \item FR9.2.6: The system shall track all status changes with timestamps for audit purposes.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Workspace Management}
+    \begin{itemize}
+        \item FR10.1: The system shall provide a personalized workspace where users can organize, access, and manage their saved language resources and contributions.
+        \item FR10.2: \textbf{Saved Terms}
+        \begin{itemize}
+            \item FR10.2.1: The system shall allow users to bookmark individual terms from dictionaries/glossaries for quick access.
+            \item FR10.2.2: The system shall display saved terms in a searchable, filterable list (e.g., by language, tags, or date saved).
+            \item FR10.2.3: The system shall enable users to add custom notes or annotations to saved terms.
+            \item FR10.2.4: The system shall sync saved terms across devices when online and when offline.
+        \end{itemize}
+        \item FR10.3: \textbf{Saved Glossaries}
+        \begin{itemize}
+            \item FR10.3.1: The system shall allow users to download entire glossaries/dictionaries for offline access.
+            \item FR10.3.2: The system shall let users mark glossaries as "favorites" for quick filtering.
+            \item FR10.3.3: The system shall notify users when a saved glossary has updates (e.g., new terms or corrections).
+            \item FR10.3.4: The system shall provide storage management (e.g., "Delete Glossary" to free space).
+        \end{itemize}
+        \item FR10.4: \textbf{Contributed Terms}
+        \begin{itemize}
+            \item FR10.4.1: The system shall maintain a history of user-submitted terms, definitions, or edits.
+            \item FR10.4.2: The system shall display the moderation status of contributions (e.g., "Pending," "Approved," "Rejected").
+        \end{itemize}
+        \item FR10.5: \textbf{Workspace Organization}
+        \begin{itemize}
+            \item FR10.5.1: The system shall allow users to create folders/tags to group saved terms or glossaries (e.g., "Thesis Research").
+            \item FR10.5.2: The system shall support bulk actions (e.g., "Move 5 terms to Folder X").
+        \end{itemize}
     \end{itemize}
 
 \end{enumerate}
@@ -1123,240 +2235,9 @@ These constraints serve as the foundation for all architectural, design, and imp
 
 
 \section{Domain Model}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\textwidth]{domain_model_V1.1.0.jpg}
-  \caption{Domain Model}
-  \label{fig:domain-model}
-\end{figure}
+    \href{https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Domain%20Model/domain_model_V1.1.0.jpg}{Domain Model}
 
-\section{Architecture Patterns}
-The architectural foundation of Marito combines the Microkernel and Microservices patterns to address both extensibility and service independence. This hybrid approach is essential for building a maintainable, scalable, and community-driven multilingual terminology platform. Each pattern plays a distinct role in supporting the system’s goals, and their selection is justified below.
-
-\subsection{Microkernel Pattern}
-The Microkernel pattern is employed in the frontend and core backend logic to support feature modularity. The Marito PWA core includes only essential functionality: multilingual glossary viewing, search, and feedback submission. Additional services such as AI-enhanced semantic search, gamification metrics, or user-uploaded terms implemented as optional plugins that extend the core without modifying it.
-\newline
-\textbf{Motivation and Usage:}
-\begin{itemize}
-    \item Allows teams to add or disable features without affecting the base system.
-    \item Enables experimentation with novel features like gamified contribution scoring or data validation without bloating the core.
-    \item No personal data should be stored without explicit user consent.
-    \item Ideal for open-source collaboration where contributors might develop new plugins independently.
-\end{itemize}
-
-\subsection{Microservices Pattern}
-On the backend, the system uses a Microservices architecture. Each core function is encapsulated within an independently deployable service. These services communicate via well-defined APIs, often exposed through REST endpoints.
-\newline
-\textbf{Motivation and Usage:}
-\begin{itemize}
-    \item Services like term search, user contribution tracking, and feedback moderation are implemented and deployed independently.
-    \item Facilitates horizontal scaling where search and analytics services can scale independently of the glossary browser.
-    \item Increases fault isolation as a failure in one service does not compromise the rest of the application.
-    \item Supports technology diversity, enabling future services to be written in different languages.
-\end{itemize}
-
-\subsection{Benefits of the Combined Approach}
-\begin{itemize}
-    \item \textbf{Extensibility:} New features can be added as plugins without disrupting the rest of the system.
-    \item \textbf{Separation of Concerns:} Responsibilities are clearly delineated between base functionality and modular enhancements.
-    \item \textbf{Deployment Flexibility:} Dockerized services and a plugin-based UI allow different deployments to include only the relevant modules.
-\end{itemize}
-\newline
-This combination ensures that Marito remains agile, extensible, and robust, with clearly isolated responsibilities across its components. These are key traits for a system designed to support a growing multilingual terminology community.
-
-\section{Design Patterns}
-
-The Marito system employs several proven design patterns to promote modularity, clarity, and maintainability. These patterns are used across both frontend and backend components to ensure clean separation of concerns, extensibility, and testability.
-
-\subsection{Backend Design Patterns}
-
-\begin{itemize}
-    \item \textbf{Repository Pattern}: This pattern abstracts the data access layer, decoupling the application’s business logic from its persistence mechanisms. In Marito, this is used to isolate FastAPI routes from direct interaction with JSON files or potential databases. This makes it easier to substitute or refactor storage formats later.
-
-    \item \textbf{Service Layer Pattern}: This pattern encapsulates business logic in service classes rather than embedding it in route handlers. For example, the glossary service processes user input, validates term entries, and formats responses. This keeps the FastAPI route functions minimal and focused on HTTP handling.
-
-    \item \textbf{Proxy Pattern}: Used to control access to sensitive glossary data, this pattern allows features like lazy-loading or permission-based access control. For instance, the proxy layer can prevent unreviewed user-uploaded data from being merged directly into the main glossary.
-
-    \item \textbf{Adapter Pattern}: This is used to integrate external APIs, particularly AI/NLP tools for semantic search or text analytics into the system without modifying the core glossary services. Adapters provide a uniform interface so different NLP services can be swapped in or out easily.
-
-    \item \textbf{Builder Pattern}: Glossary term responses often contain complex nested structures (e.g., term, translations, part of speech, examples, contributor metadata). The builder pattern helps assemble these objects step-by-step, ensuring clarity and consistency in API responses.
-\end{itemize}
-
-\subsection{Frontend Design Patterns}
-
-\begin{itemize}
-    \item \textbf{Observer Pattern}: React’s reactive rendering model naturally supports this pattern. In Marito, UI components subscribe to state changes such as term updates, language switching, or sync status. This enables real-time UI updates without manual DOM manipulation.
-
-    \item \textbf{Model–View–Controller (MVC)}: Marito uses React components as Views, application state as the Model, and event handlers or hooks as Controllers. This separation ensures testable, reusable components and a clear flow of data and control.
-
-    \item \textbf{Model–View–ViewModel (MVVM)}: For more complex UI flows, especially those with async behavior or derived state (e.g., loading indicators, sync status), Marito uses custom React hooks as ViewModels to isolate logic from presentation. This allows clean and declarative UIs while keeping logic reusable across components.
-\end{itemize}
-\newline
-Together, these patterns ensure that both backend services and frontend components remain modular, understandable, and adaptable to future requirements. They also enable team members to work in parallel with minimal friction.
-
-
-\section{Technology Requirements}
-The Marito system is built using modern, open-source technologies selected for their performance, maintainability, and compatibility with offline-first web applications and modular architectures. These technologies are categorized below according to their role in the stack.
-\subsection{Frontend}
-\begin{itemize}
-  \item \textbf{Framework:} React (via Vite) for fast, modular UI development.
-  \item \textbf{Language:} TypeScript for type safety and developer productivity.
-  \item \textbf{Styling:} SCSS modules and Tailwind CSS for flexible and responsive design.
-  \item \textbf{Build Tool:} Vite for fast local development and optimized production builds.
-  \item \textbf{PWA Features:} Service workers and localStorage/IndexedDB for offline capabilities.
-  \item \textbf{Testing:} Vitest for unit testing; Cypress for end-to-end testing.
-  \item \textbf{Linting and Formatting:} ESLint and Prettier for code consistency.
-  \item \textbf{Pre-commit Hooks:} Husky for running ESLint and Prettier on staged files, and for enforcing commit message conventions.
-\end{itemize}
-
-\subsection{Backend}
-\begin{itemize}
-  \item \textbf{Framework:} FastAPI for high-performance, Pythonic web APIs.
-  \item \textbf{Language:} Python 3.11 with Pydantic for validation and typing.
-  \item \textbf{Service Model:} Microservices organized by function.
-  \item \textbf{Database:} PostgreSQL.
-  \item \textbf{API Documentation:} FastAPI automatically generates OpenAPI-compliant service contracts, which are accessible via a ReDoc interface. This provides structured, human-readable API documentation derived directly from the backend codebase and Pydantic models.
-  \item \textbf{Linting:} Ruff for fast, extensible linting.
-  \item \textbf{Static Type Checking:} Mypy to ensure type correctness.
-  \item \textbf{Formatting:} Black for consistent code formatting.
-  \item \textbf{Testing:} Pytest for integration and unit tests.
-  \item \textbf{Cloud Platform:} Google cloud for hosting.
-\end{itemize}
-
-\subsection{DevOps and Deployment}
-\begin{itemize}
-  \item \textbf{Containerization:} Docker for consistent development and deployment environments.
-  \item \textbf{Orchestration:} Docker Compose for local service management.
-  \item \textbf{CI/CD:} GitHub Actions for automated linting, testing, and deployment.
-  \item \textbf{Hosting:} GitHub Pages.
-\end{itemize}
-
-\section{Technology Choices}
-Our system is built using a modular microservices architecture, designed for scalability, isolation, and maintainability. We evaluated at least three technology options for each core component before selecting the final stack.
-
-\subsection*{Frontend Framework}
-
-\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
-\hline
-\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
-\hline
-React (Chosen) & Declarative JavaScript library for UIs & Large ecosystem, reusable components, PWA support & Requires setup, JSX learning curve \\
-\hline
-Angular & Full-featured frontend framework & Strong typing, built-in tools, opinionated structure & Heavy, complex, steep learning curve \\
-\hline
-Vue.js & Progressive framework & Lightweight, easy to learn, good docs & Smaller ecosystem for enterprise-scale systems \\
-\hline
-\end{tabular}
-\newline
-\textbf{Justification:} React provides modularity and performance while supporting Progressive Web App (PWA) functionality which is ideal for our offline-first goal. Its community and integration with modern tooling enhance maintainability.
-
-\subsection*{Backend Framework (API Layer)}
-
-\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
-\hline
-\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
-\hline
-FastAPI (Chosen) & Async Python framework for APIs & Very fast, OpenAPI docs, type hinting, async support & Newer, less mature than Django \\
-\hline
-Flask & Minimal WSGI Python web framework & Simple, flexible, lightweight & No async support, more boilerplate \\
-\hline
-Django & Full-stack Python web framework & ORM, admin panel, built-in features & Monolithic, less suitable for microservices \\
-\hline
-\end{tabular}
-\newline
-\textbf{Justification:} FastAPI is a performant async framework with native support for OpenAPI docs and type hinting. It aligns well with our modular design and Python-based data processing.
-
-\subsection*{Backend Language}
-
-\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
-\hline
-\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
-\hline
-Python (Chosen) & General-purpose scripting language & Rich ML/NLP libraries, fast prototyping & Slower runtime compared to compiled languages \\
-\hline
-Go & Compiled systems language & High performance, excellent concurrency support & Verbose, smaller ecosystem for data science \\
-\hline
-Node.js & JS runtime for backend & Unified stack, async by default & Callback complexity, fragmented tooling \\
-\hline
-\end{tabular}
-\newline
-\textbf{Justification:} Python enables rapid development and integrates well with NLP tools like spaCy. Since our AI search requires natural language features, Python is the most suitable choice.
-
-\subsection*{Containerization}
-
-\begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{4cm}|}
-\hline
-\textbf{Option} & \textbf{Overview} & \textbf{Pros} & \textbf{Cons} \\
-\hline
-Docker (Chosen) & OS-level virtualization platform & Portable, consistent dev/production environments & Requires setup and Docker knowledge \\
-\hline
-Vagrant & VM-based development tool & OS-level control & Heavyweight, slower than containers \\
-\hline
-Bare Metal & Manual installs & Full flexibility & Not reproducible, error-prone \\
-\hline
-\end{tabular}
-\newline
-\textbf{Justification:} Docker enables reproducible builds, isolates dependencies, and simplifies onboarding. It is essential for deploying and maintaining microservices efficiently.
-
-\subsection*{Summary}
-
-Our technology stack: React, FastAPI with Python, and Docker was chosen for its strong modularity, ease of maintenance, and developer productivity. React enables the creation of responsive, user-friendly interfaces that function seamlessly across all device types. FastAPI offers fast development with built-in validation and documentation, making it ideal for building clean and maintainable APIs. Docker ensures consistent environments across development and production, supporting a scalable microservices architecture. These choices align directly with our goals of building an offline-capable, user-centered platform that is simple to deploy, easy to extend, and reliable across a wide range of usage contexts.
-
-
-
-\section{Service Contracts}
-
-\subsection{API Information}
-\begin{itemize}
-    \item \textbf{OpenAPI Version:} 3.1.0
-    \item \textbf{Title:} Marito API Default
-    \item \textbf{Version:} 0.1.0
-\end{itemize}
-
-\subsection{Endpoints Overview}
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{9cm}|}
-\hline
-\textbf{Endpoint} & \textbf{Description} \\
-\hline
-\endhead
-
-\url{/api/v1/auth/register} (POST) & Register new user. Expects first\_name, last\_name, email, password, and optionally role. Returns user object on success. \\
-\hline
-
-\url{/api/v1/auth/login} (POST) & OAuth2-compatible login. Frontend sends email (username) and password. Returns access token for future requests. \\
-\hline
-
-\url{/api/v1/auth/me} (GET) & Get details of the current logged-in user. Requires OAuth2 bearer token. \\
-\hline
-
-\url{/api/v1/analytics/descriptive} (GET) & Retrieve descriptive analytics summary. \\
-\hline
-
-\url{/api/v1/search/} (GET) & Search endpoint for multilingual terms with optional filters: language, domain, part of speech, sorting, pagination. Returns list of terms and total count. \\
-\hline
-
-\url{/api/v1/suggest/} (GET) & Autocomplete suggestions based on partial search term. Returns up to 10 suggestion objects. \\
-\hline
-
-\url{/} (GET) & Root endpoint. Returns a welcome message and API documentation link. \\
-\hline
-\end{longtable}
-
-\subsection{Schemas Summary}
-\begin{itemize}
-    \item \textbf{User} — Email, first name, last name, role, profile picture, status, timestamps.
-    \item \textbf{UserCreate} — Email, first name, last name, password, optional role.
-    \item \textbf{Token} — Access token and token type.
-    \item \textbf{Suggestion} — ID and label for autocomplete.
-    \item \textbf{ValidationError} — Location, message, and error type.
-    \item \textbf{UserRole Enum} — \texttt{linguist}, \texttt{researcher}, \texttt{contributor}.
-\end{itemize}
-
-\subsection{Security Schemes}
-\begin{itemize}
-    \item \textbf{OAuth2PasswordBearer} — Password flow using \texttt{/api/v1/auth/login}.
-\end{itemize}
-
+\section{Architectural Specifications \& Service Contract}
+    \href{https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf}{Architectural Specifications \& Service Contract}
 
 \end{document}

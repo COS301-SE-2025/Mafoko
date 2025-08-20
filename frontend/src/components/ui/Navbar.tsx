@@ -1,252 +1,246 @@
 import { useMemo, useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import '../../styles/Navbar.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-
-// This should ideally be in a shared config file or environment variable
-const NGROK_BASE_URL = 'https://7ecc-197-185-168-28.ngrok-free.app'; // Ensure this is your correct NGROK URL
-const USER_API_ENDPOINT = `${NGROK_BASE_URL}/api/v1/auth/me`; // Or your correct /me endpoint
+import { API_ENDPOINTS } from '../../config.ts';
 
 interface UserProfileApiResponse {
-  // Based on the example: /api/v1/me response
-  id: string; // This will be our UUID
+  id: string;
   first_name: string;
   last_name: string;
-  email?: string;
+  role: 'contributor' | 'linguist' | 'admin';
 }
 interface UserData {
-  // For component state and localStorage
   uuid: string;
   firstName: string;
   lastName: string;
+  role?: 'contributor' | 'linguist' | 'admin';
 }
 
 const Navbar = () => {
-  const location = useLocation();
-  /*const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('theme') === 'dark';
-  });*/
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState('');
+  const { t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
-  const { t } = useTranslation();
+  const [isMainNavbarOpen, setIsMainNavbarOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [avatarInitials, setAvatarInitials] = useState('');
+  const [userRole, setUserRole] = useState<string>('contributor');
+  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
 
-  const navItems = useMemo(
+  const allNavItems = useMemo(
     () => [
-      t('navigation.home'),
-      t('navigation.dictionary'),
-      t('navigation.glossary'),
-      t('navigation.savedTerms'),
-      t('navigation.dashboard'),
-      t('navigation.help'),
+      {
+        name: t('navigation.home'),
+        path: '/dashboard',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.dictionary'),
+        path: '/search',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.glossary'),
+        path: '/glossary',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Workspace',
+        path: '/workspace',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.linguistApplication'),
+        path: '/linguist-application',
+        roles: ['contributor'],
+      },
+      {
+        name: 'Feedback',
+        path: '/feedback',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Feedback Hub',
+        path: '/feedbackhub',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.help'),
+        path: '/help',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: t('navigation.settings'),
+        path: '/settings',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Contributor Page',
+        path: '/contributor',
+        roles: ['contributor'],
+      },
+      { name: 'Linguist Page', path: '/linguist', roles: ['linguist'] },
+      { name: 'Admin Page', path: '/admin/terms', roles: ['admin'] },
+      { name: 'Analytics', path: '/analytics', roles: ['admin', 'linguist'] },
     ],
     [t],
   );
 
-  // Custom route mapping for navigation items
-  const getRouteForItem = (item: string): string => {
-    switch (item) {
-      case 'Home':
-        return '/dashboard';
-      case 'Dictionary':
-        return '/search';
-      case 'Glossary':
-        return '/glossary';
-      case 'Dashboard':
-        return '/analytics';
-      default:
-        return `/${item.toLowerCase().replace(/\s/g, '-')}`;
-    }
-  };
+  const adminSubmenuItems = useMemo(
+    () => [
+      { id: 'admin', label: 'User Management', path: '/admin' },
+      { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
+    ],
+    [],
+  );
 
-  // const [userData, setUserData] = useState<UserData | null>(null);
-  const [avatarInitials, setAvatarInitials] = useState<string>(''); // Default to empty or a placeholder
-  // const [isLoadingUserData, setIsLoadingUserData] = useState(true); // Optional: if you want a loading state for avatar
+  const navItemsToDisplay = useMemo(
+    () => allNavItems.filter((item) => item.roles.includes(userRole)),
+    [allNavItems, userRole],
+  );
 
   useEffect(() => {
-    const currentPath = location.pathname.replace('/', '').replace(/-/g, ' ');
-    const match = navItems.find(
-      (item) => item.toLowerCase() === currentPath.toLowerCase(),
-    );
-    if (match) setActive(match);
-    else setActive('');
-    // Fetch user data logic
-    const fetchAndSetUserData = async () => {
-      // setIsLoadingUserData(true); // Uncomment if using loading state
+    const fetchUserData = async () => {
       const token = localStorage.getItem('accessToken');
-      if (!token) {
-        // setIsLoadingUserData(false); // Uncomment if using loading state
-        setAvatarInitials(''); // Or a guest icon/initials
-        // setUserData(null);
-        return;
-      }
+      if (!token) return;
 
-      const storedUserDataString = localStorage.getItem('userData');
-      if (storedUserDataString) {
+      const stored = localStorage.getItem('userData');
+      if (stored) {
         try {
-          const parsedData = JSON.parse(storedUserDataString) as UserData;
-          // setUserData(parsedData);
-          if (parsedData.firstName && parsedData.lastName) {
-            setAvatarInitials(
-              `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
-            );
-          } else if (parsedData.firstName) {
-            setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
-          } else {
-            setAvatarInitials('U'); // Fallback
-          }
-          // setIsLoadingUserData(false); // Uncomment if using loading state
-          return;
-        } catch (error) {
-          console.error(
-            'Navbar: Failed to parse user data from localStorage, fetching from API.',
-            error,
+          const parsed = JSON.parse(stored) as UserData;
+          setUserRole(parsed.role || 'contributor');
+          setAvatarInitials(
+            parsed.firstName && parsed.lastName
+              ? `${parsed.firstName[0]}${parsed.lastName[0]}`.toUpperCase()
+              : 'U',
           );
+          return;
+        } catch {
           localStorage.removeItem('userData');
         }
       }
 
       try {
-        const response = await fetch(USER_API_ENDPOINT, {
+        const res = await fetch(API_ENDPOINTS.getMe, {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
             'ngrok-skip-browser-warning': 'true',
           },
         });
-        if (response.ok) {
-          const apiData = (await response.json()) as UserProfileApiResponse;
-          const newUserData: UserData = {
-            uuid: apiData.id,
-            firstName: apiData.first_name,
-            lastName: apiData.last_name,
-          };
-          // setUserData(newUserData);
-          localStorage.setItem('userData', JSON.stringify(newUserData));
+        if (res.ok) {
+          const data: UserProfileApiResponse = await res.json();
+          setUserRole(data.role);
           setAvatarInitials(
-            `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
+            `${data.first_name[0]}${data.last_name[0]}`.toUpperCase(),
           );
-        } else {
-          console.error(
-            'Navbar: Failed to fetch user data from API:',
-            response.status,
-            await response.text(),
+          localStorage.setItem(
+            'userData',
+            JSON.stringify({
+              uuid: data.id,
+              firstName: data.first_name,
+              lastName: data.last_name,
+              role: data.role,
+            }),
           );
-          setAvatarInitials(''); // Or guest icon
         }
-      } catch (error) {
-        console.error(
-          'Navbar: Network or other error fetching user data:',
-          error,
-        );
-        setAvatarInitials(''); // Or guest icon
-      } finally {
-        // setIsLoadingUserData(false); // Uncomment if using loading state
+      } catch (err) {
+        console.error('Navbar fetch error:', err);
       }
     };
 
-    void fetchAndSetUserData();
-  }, [/*darkMode, */ location.pathname, navItems]); // location.pathname ensures data might refetch if relevant
+    void fetchUserData();
+  }, []);
+
+  const toggleAdminDropdown = () => setIsAdminDropdownOpen((prev) => !prev);
+
+  const handleAdminItemClick = () => setIsAdminDropdownOpen(false);
+
+  const handleLinkClick = () => {
+    setIsMainNavbarOpen(false);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
-    <nav
-      className={`w-full fixed top-0 left-0 bg-theme text-theme px-6 py-3 shadow-md z-50 ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
-    >
-      <div className="max-w-screen-xl mx-auto flex items-center justify-between">
-        {/* Logo and Title */}
-        <div className="flex items-center space-x-3">
-          <img
-            src="public/DFSI_Logo.png"
-            alt="Marito Logo"
-            className="w-10 h-10 rounded-full"
-          />
-          <span className="text-xl font-semibold">Marito</span>
+    <>
+      {/* Hamburger button */}
+      <div
+        className={`fixed-outer-navbar-toggle ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      >
+        <button
+          onClick={() => setIsMainNavbarOpen(!isMainNavbarOpen)}
+          type="button"
+        >
+          {isMainNavbarOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
+
+      {/* Main Navbar */}
+      <nav
+        className={`main-navbar-dropdown ${isMainNavbarOpen ? 'is-open' : 'is-closed'} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      >
+        <div className="main-navbar-content">
+          {/* Logo */}
+          <div className="navbar-brand">
+            <img
+              src="public/DFSI_Logo.png"
+              alt="Marito Logo"
+              className="navbar-logo"
+            />
+            <span className="navbar-title">Marito</span>
+          </div>
+
+          {/* Dark Mode & Avatar */}
+          <div className="navbar-user-controls">
+            <button onClick={toggleDarkMode} type="button">
+              {t('navigation.darkMode')}
+            </button>
+            <div className="navbar-avatar">{avatarInitials}</div>
+          </div>
         </div>
 
-        {/* Nav Links (desktop) */}
-        <div className="hidden md:flex space-x-8 text-sm">
-          {navItems.map((item) => (
+        {/* Mobile Menu */}
+        <div
+          className={`mobile-nav-dropdown md:hidden ${isMobileMenuOpen ? 'is-open' : 'is-closed'}`}
+        >
+          {navItemsToDisplay.map((item) => (
             <NavLink
-              key={item}
-              to={getRouteForItem(item)}
-              className={`relative pb-1 ${
-                active === item
-                  ? 'font-medium text-white'
-                  : 'text-white/70 hover:text-white visited:text-white/70'
-              }`}
-              onClick={() => {
-                setActive(item);
-              }}
+              key={item.name}
+              to={item.path}
+              className="mobile-nav-link"
+              onClick={handleLinkClick}
             >
-              {item}
-              {active === item && (
-                <span className="absolute bottom-0 left-0 w-full h-[2px] rounded bg-[#F00A50] drop-shadow-[0_0_6px_#F00A50]" />
-              )}
+              {item.name}
             </NavLink>
           ))}
+
+          {userRole === 'admin' && (
+            <>
+              <div
+                className="mobile-admin-toggle"
+                onClick={toggleAdminDropdown}
+              >
+                Admin
+              </div>
+              {isAdminDropdownOpen &&
+                adminSubmenuItems.map((sub) => (
+                  <NavLink
+                    key={sub.id}
+                    to={sub.path}
+                    className="mobile-admin-submenu-item"
+                    onClick={handleAdminItemClick}
+                  >
+                    {sub.label}
+                  </NavLink>
+                ))}
+            </>
+          )}
         </div>
-
-        {/* Avatar, Theme Toggle & Hamburger */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={toggleDarkMode}
-            className="text-theme bg-theme hover:text-accent-pink transition outline-none focus:outline-none focus:ring-0 focus:border-none focus:shadow-none"
-            type="button"
-            aria-label="Toggle dark mode"
-          >
-            {/*{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}*/}
-            {t('navigation.darkMode')}
-          </button>
-
-          {/* Avatar Display */}
-          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-            {/* Optional: {isLoadingUserData ? '...' : avatarInitials || 'G'} */}
-            {
-              avatarInitials ||
-                '' /* Show initials or empty/guest icon if not loaded */
-            }
-          </div>
-          <button
-            className="md:hidden text-theme bg-theme hover:text-accent-pink transition"
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-            }}
-            aria-label="Toggle menu"
-            type="button"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div
-        className={`
-          md:hidden overflow-hidden transition-all duration-300 ease-in-out
-          px-6 bg-theme shadow-md
-          ${menuOpen ? 'max-h-64 opacity-100 pt-3 pb-2' : 'max-h-0 opacity-0 pt-0 pb-0'}
-        `}
-      >
-        {navItems.map((item) => (
-          <NavLink
-            key={item}
-            to={getRouteForItem(item)}
-            className={`block ${
-              active === item ? 'text-theme font-semibold' : 'text-gray-300'
-            }`}
-            onClick={() => {
-              setActive(item);
-              setMenuOpen(false);
-            }}
-          >
-            {item}
-          </NavLink>
-        ))}
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
+
 export default Navbar;

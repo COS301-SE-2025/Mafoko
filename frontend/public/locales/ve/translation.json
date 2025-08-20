@@ -1,4 +1,27 @@
 {
+  "settings": {
+    "title": "Mavhumbele",
+    "subtitle": "Dzudzanya tshenzhemo yau ya Marito",
+    "selectLanguage": "Khetha luambo lune wa lu takalela",
+    "profile": {
+      "title": "Phuroifaila na Akhauthu",
+      "description": "Langula mavhumbele a phuroifaila na zwithu zwine wa zwi takalela kha akhauthu"
+    },
+    "appLanguage": {
+      "title": "Luambo lwa App",
+      "description": "Khetha luambo lune wa lu takalela"
+    },
+    "accessibility": {
+      "title": "Zwikhetheo zwa u Swikelela",
+      "textAndVisual": "Maṅwalwa na Mbonalo",
+      "textSize": "Vhuhulwane ha Maṅwalwa",
+      "textSpacing": "Tshikhala tsha Maṅwalwa",
+      "colorAndContrast": "Muvhala na Phambano",
+      "highContrastMode": "Nḓila ya Phambano Khulwane",
+      "darkMode": "Nḓila Ntswu"
+    }
+  },
+
   "navigation": {
     "home": "Hayani",
     "dictionary": "Ṱhalusamaipfi",
@@ -6,6 +29,7 @@
     "savedTerms": "Maipfi o Vhulungwaho",
     "dashboard": "Bodo",
     "help": "Thuso",
+    "settings": "Mavhumbele",
     "darkMode": "Mutoli wo swifhalaho"
   },
   "landingPage": {
@@ -81,8 +105,10 @@
   },
   "dashboard": {
     "welcome": "Vho ṱanganedzwa kha Marito",
+    "welcomeBack": "Vho ṱanganedzwa hafhu",
     "userName": "Dzina ḽa Mushumisi",
     "userId": "Nomboro ya Mushumisi",
+    "userEmail": "Imeili",
     "quickActions": "Nyito dza Tshihaḓu",
     "searchNow": "Ṱoḓa Zwino",
     "searchDescription": "Ṱoḓa maipfi nga nyambo nnzhi",
@@ -95,7 +121,21 @@
     "viewAll": "Vhona Zwoṱhe",
     "communityActivity": "Mishumo ya Tshitshavha",
     "hideActivity": "Dzumba Mishumo",
-    "viewAllActivity": "Vhona Mishumo Yoṱhe"
+    "viewAllActivity": "Vhona Mishumo Yoṱhe",
+    "title": "Tanganani nga Maipfi",
+    "loadingProfile": "Yo louda phuroufaili...",
+    "goToProfile": "Ya kha siaṱari ḽa phuroufaili",
+    "discoverRandomTerms": "Wana Maipfi a sa Bveledzwi",
+    "getNewTerms": "Wana maipfi maswa a sa bveledzwi",
+    "loadingTerms": "Yo louda maipfi...",
+    "noTermsAvailable": "A huna maipfi o wanalalaho",
+    "browseCategoryGlossary": "Sedza {{category}} bulukuvhuka ḽa maipfi",
+    "aboutMarito": {
+      "intro": "Ipfi 'Marito' li bva kha Xitsonga, li vha li ri 'maipfi' kana 'madzina'. Iyi ndi apulitshoni ya webu ya u ita phanḓa i khou tanganisani tshipenyu tsha vhuḓifhindulali ha nyambo dza Afrika Tshipembe na u swika hwa zwino zwa didzitala. Vhane vha funa nyambo, vhaṱoḓisisi vha NLP, na vhaṱanzi vha nyambo vha nga shumisa Marito sa phulatifomo yo tanganisiwaho u todulusa, u dzhena, na u vhulaha zwinyorwa zwa maipfi zwa nyambo dzinzhi, mabugu a maipfi, na mbanga dza maipfi kha nyambo dza 11 dza ndeme dza Afrika Tshipembe.",
+      "mission": "Marito i shuma zwavhuḓi zwoṱhe kha inthanete na nnḓa ha inthanete, i nea tshitshavha mathalutshedzo u swika kha zwishumiswa zwa nyambo zwo fhelaho, u nea themendelo, na u tirisana u ita ma-lexicons matuku kha nyambo dzine dzi na zwishumiswa zwituku. Phulatifomo iyi ndi tshipiḓa tsha mushumo u ya phanḓa une wa itwa nga DSFSI (Data Science for Social Impact) kha Yunivesithi ya Pretoria u ita uri zwishumiswa zwa nyambo zwi swikelelehe tshitshavha tshoṱhe na u isa phanḓa ṱhoḓisiso ya u tirisana na nyambo ya vhubvo kha nyambo dza Afrika.",
+      "teamCredit": "Yo itiwa nga u ḓivhadzwa nga Velox",
+      "learnMoreDSFSI": "Guda zwinzhi nga DSFSI"
+    }
   },
   "glossaryPage": {
     "title": "Mutevhemaipfi wa Nyambo Nnzhi",
@@ -200,5 +240,61 @@
     "previous": "Yo fhiraho",
     "next": "I tevhelaho",
     "pageInfo": "Siaṱari {{current}} kha {{total}}"
+  },
+
+  "profile": {
+    "title": "Phuroifaile ya Mushumisi",
+    "settings": "Mavhumbelo",
+    "editProfile": "Luga phuroifaile",
+    "editName": "Luga Dzina",
+    "editEmail": "Luga Imeili",
+    "changePassword": "Shandukisa Phasiwede",
+    "role": "Musi",
+    "loading": "Kho u khou bika...",
+    "logout": "Bva",
+    "logoutButton": "Bva",
+    "logoutConfirmation": "Bva?",
+    "yes": "Ee",
+    "no": "Hai",
+    "forms": {
+      "editName": "Luga Dzina",
+      "editEmail": "Luga Imeili",
+      "changePassword": "Shandukisa Phasiwede",
+      "firstName": "Dzina ḽa u Thoma",
+      "firstNamePlaceholder": "Dzhenisani dzina ḽa u thoma",
+      "lastName": "Dzina ḽa u Fhela",
+      "lastNamePlaceholder": "Dzhenisani dzina ḽa u fhela",
+      "emailAddress": "Adirese ya Imeili",
+      "emailAddressPlaceholder": "Dzhenisani adirese ya imeili",
+      "currentPassword": "Phasiwede ya Zwino",
+      "currentPasswordPlaceholder": "Dzhenisani phasiwede ya zwino",
+      "newPassword": "Phasiwede Ntswa",
+      "newPasswordPlaceholder": "Dzhenisani phasiwede ntswa",
+      "confirmNewPassword": "Khongolosani Phasiwede Ntswa",
+      "confirmNewPasswordPlaceholder": "Khongolosani phasiwede ntswa",
+      "save": "Chengetedza",
+      "saving": "Kho u khou chengetedza...",
+      "cancel": "Khanselani"
+    },
+    "errors": {
+      "noToken": "A hu na tokheni ya u swikela yo wanwaho. Ri humbela uri ni kone u dzhenela u thoma.",
+      "loadFailed": "Zwo kondaho u bika datha ya phuroifaile",
+      "loadError": "Vhukhakhi kha u bika phuroifaile: {{message}}",
+      "invalidImage": "Ri humbela uri ni nange faela ya tshifanyiso tshi shumaho",
+      "fileTooLarge": "Saizi ya faela i tea u vha fhasi ha 5MB",
+      "uploadError": "Zwo kondaho u mpfuxetsha tshifanyiso tsha phuroifaile: {{message}}",
+      "nameRequired": "Dzina ḽa u thoma na ḽa u fhela zwo ḓifhiwa",
+      "passwordRequired": "Phasiwede ya zwino yo ḓifhiwa",
+      "updateFailed": "Zwo kondaho u mpfuxetsha phuroifaile",
+      "updateError": "Zwo kondaho u mpfuxetsha phuroifaile: {{message}}",
+      "emailRequired": "Imeili yo ḓifhiwa",
+      "emailInvalid": "Ri humbela uri ni dzhenise adirese ya imeili i shumaho",
+      "emailUpdateFailed": "Zwo kondaho u mpfuxetsha imeili",
+      "emailUpdateError": "Zwo kondaho u mpfuxetsha imeili: {{message}}",
+      "newPasswordRequired": "Phasiwede ntswa yo ḓifhiwa",
+      "passwordMismatch": "Phaisiwede ntswa a dzi tendi",
+      "passwordUpdateFailed": "Zwo kondaho u mpfuxetsha phasiwede",
+      "passwordUpdateError": "Zwo kondaho u mpfuxetsha phasiwede: {{message}}"
+    }
   }
 }
