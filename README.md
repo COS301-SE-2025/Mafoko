@@ -20,7 +20,7 @@
 *  [SRS Document](https://9000)
 *  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf) 
 *  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/User%20Manual/UserManual.pdf)
-*  [Technical Installation Manual](https://9000) 
+* [Technical Installation Manual](https://github.com/COS301-SE-2025/Marito/blob/docs/tech-manual/Documentation/Technical%20Installation%20Manual/Technical%20Installation%20Manual.pdf)
 *  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/Coding%20Standards/Coding%20Standards.pdf)
 *  [Document Archieve](https://github.com/COS301-SE-2025/Marito/tree/doc/customization-and-workspace-docs/Documentation/Srs/Archive)
 
