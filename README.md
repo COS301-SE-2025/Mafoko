@@ -22,7 +22,7 @@
 *  [Architectural requirements](https://9000) 
 *  [User Manual ](https://9000) 
 *  [Technical Installation Manual](https://9000) 
-*  [Coding Standards Document](https://9000) 
+*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Coding%20Standards/Coding%20Standards.pdf) 
 
 ---
 
