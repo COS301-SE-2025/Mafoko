@@ -88,6 +88,7 @@ $linguist-status-pending: #f59e0b; // Yellow
 .dashboard-container {
   display: flex;
   min-height: 100vh;
+  overflow-y: auto;
 }
 
 .application-page-content {

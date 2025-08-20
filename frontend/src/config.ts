@@ -33,6 +33,10 @@ const FEEDBACK_SERVICE_URL =
   (import.meta.env.VITE_FEEDBACK_SERVICE_URL as string) ||
   'http://localhost:8010';
 
+const TERM_ADDITION_SERVICE_URL =
+  (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
+  'http://localhost:8011';
+
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
   import.meta.env.PROD ? `${API_GATEWAY_URL}${path}` : `${serviceUrl}${path}`;
@@ -80,6 +84,29 @@ interface APIEndpoints {
   glossaryRandom: string;
   getTermDetail: (termId: string) => string;
   getTermTranslations: (termId: string) => string;
+  // Term Addition Service
+  submitTerm: string;
+  submitTermWithTranslations: string;
+  getMySubmittedTerms: string;
+  getEditableTerms: string;
+  getPendingVerificationTerms: string;
+  voteForTerm: (termId: string) => string;
+  getAllTermApplications: string;
+  getTermReviews: (termId: string) => string;
+  getAttributes: string;
+  getTerm: (termId: string) => string;
+  getTermsByIds: string;
+  deleteTermApplication: (applicationId: string) => string;
+  // Linguist Endpoints
+  getLinguistReviewSubmissions: string;
+  linguistVerifyApplication: (applicationId: string) => string;
+  linguistRejectApplication: (applicationId: string) => string;
+  getAllAdminVerifiedTerms: string;
+  // Admin Endpoints
+  getAdminApplicationsForApproval: string;
+  adminApproveApplication: (applicationId: string) => string;
+  adminRejectApplication: (applicationId: string) => string;
+
   getComments: (termId: string) => string;
   postComment: string;
   editComment: (commentId: string) => string;
@@ -265,6 +292,85 @@ export const API_ENDPOINTS: APIEndpoints = {
   getTermTranslations: (termId: string) =>
     endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}/translations`),
 
+  submitTerm: endpoint(TERM_ADDITION_SERVICE_URL, '/api/v1/terms/submit'),
+  submitTermWithTranslations: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/terms/submit-with-translations',
+  ),
+  getMySubmittedTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/terms/my-submitted',
+  ),
+  getEditableTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/terms/editable',
+  ),
+  getPendingVerificationTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/term-applications/pending-verification',
+  ),
+  getAllTermApplications: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/term-applications/all',
+  ),
+  getTermReviews: (termId: string) =>
+    endpoint(TERM_ADDITION_SERVICE_URL, `/api/v1/terms/${termId}/reviews`),
+  voteForTerm: (termId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/term-applications/${termId}/vote`,
+    ),
+  getAttributes: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    `/api/v1/terms/attributes`,
+  ),
+  getAllAdminVerifiedTerms: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    `/api/v1/terms/admin-verified`,
+  ),
+  getTerm: (termId: string) =>
+    endpoint(TERM_ADDITION_SERVICE_URL, `/api/v1/terms/${termId}`),
+  getTermsByIds: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    `/api/v1/terms/terms-by-ids`,
+  ),
+  deleteTermApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/term-applications/${applicationId}`,
+    ),
+
+  // Linguist Endpoints
+  getLinguistReviewSubmissions: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/linguist/terms/applications-for-review',
+  ),
+  linguistVerifyApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/linguist/terms/${applicationId}/verify`,
+    ),
+  linguistRejectApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/linguist/terms/${applicationId}/reject`,
+    ),
+
+  // Admin Endpoints
+  getAdminApplicationsForApproval: endpoint(
+    TERM_ADDITION_SERVICE_URL,
+    '/api/v1/admin/terms/applications-for-approval',
+  ),
+  adminApproveApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/admin/terms/${applicationId}/approve`,
+    ),
+  adminRejectApplication: (applicationId: string) =>
+    endpoint(
+      TERM_ADDITION_SERVICE_URL,
+      `/api/v1/admin/terms/${applicationId}/reject`,
+    ),
   // --- Comment Service ---
   getComments: (termId: string) =>
     endpoint(

@@ -41,6 +41,12 @@ class CommentUpdate(CommentBase):
     pass
 
 
+class CommentVoteStats(BaseModel):
+    upvotes: int = 0
+    downvotes: int = 0
+    user_vote: Optional[str] = None
+
+
 class CommentResponse(CommentBase):
     """
     Public-facing response schema for a comment.

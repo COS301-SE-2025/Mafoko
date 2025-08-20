@@ -19,6 +19,9 @@ import LinguistApplicationPage from './pages/LinguistApplicationPage.tsx';
 import { TermDetailPage } from './pages/TermDetailPage.tsx';
 import FeedbackHub from './pages/FeedbackHub';
 import SettingsPage from './pages/SettingsPage';
+import ContributorPage from './pages/ContributorPage';
+import LinguistPage from './pages/LinguistPage';
+import AdminTermPage from './pages/AdminTermPage.tsx';
 import './App.css';
 import './styles/Global.scss';
 
@@ -80,6 +83,9 @@ function App() {
         />
         <Route path="/feedbackhub" element={<FeedbackHub />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/contributor" element={<ContributorPage />} />
+        <Route path="/linguist" element={<LinguistPage />} />
+        <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
     </div>
   );
