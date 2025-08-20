@@ -35,7 +35,7 @@ const FEEDBACK_SERVICE_URL =
 
 const TERM_ADDITION_SERVICE_URL =
   (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
-  'http://localhost:8010';
+  'http://localhost:8011';
 
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
