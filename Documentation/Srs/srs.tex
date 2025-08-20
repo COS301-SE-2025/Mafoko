@@ -780,6 +780,615 @@ This section outlines the high-level user goals and core system interactions tha
 \end{itemize}
 
 
+\subsection{User Story \#12: Submit Feedback}
+\textbf{ID:} US012 (FeedbackHub Project) \\
+\textbf{Title:} Multi-Category Feedback Submission \\
+\textbf{As a:} Application user (customer, stakeholder, or end-user) who wants to communicate with the organization about their experience, \\
+\textbf{I want:} to submit feedback through different categories (suggestions, complaints, or compliments) with optional contact information, \\
+\textbf{So that:} the organization can understand my needs, address issues, and improve their services based on user input.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Category Selection:}
+    \begin{itemize}
+        \item \textbf{Given} I am on the feedback submission page,
+        \item \textbf{Then} I can choose between three feedback types: Suggestion, Complaint, or Compliment.
+        \item \textbf{And} each category has distinct visual indicators (icons and colors).
+    \end{itemize}
+
+    \item \textbf{Form Completion:}
+    \begin{itemize}
+        \item \textbf{Given} I have selected a feedback category,
+        \item \textbf{When} I fill out the feedback form,
+        \item \textbf{Then} I can optionally provide my name and email address.
+        \item \textbf{And} I must provide a message describing my feedback (required field).
+    \end{itemize}
+
+    \item \textbf{Contextual Guidance:}
+    \begin{itemize}
+        \item \textbf{Given} I select a specific feedback type,
+        \item \textbf{Then} the form updates with appropriate placeholder text and messaging.
+        \item \textbf{And} the submit button reflects the selected category.
+    \end{itemize}
+
+    \item \textbf{Form Validation:}
+    \begin{itemize}
+        \item \textbf{Given} I attempt to submit feedback,
+        \item \textbf{When} the required message field is empty,
+        \item \textbf{Then} the submit button remains disabled.
+        \item \textbf{And} form validation prevents submission until requirements are met.
+    \end{itemize}
+
+    \item \textbf{Submission Confirmation:}
+    \begin{itemize}
+        \item \textbf{Given} I successfully submit feedback,
+        \item \textbf{Then} I receive immediate visual confirmation of submission.
+        \item \textbf{And} the form resets after a brief thank you message.
+    \end{itemize}
+
+    \item \textbf{Anonymous Submissions:}
+    \begin{itemize}
+        \item \textbf{Given} I choose not to provide contact information,
+        \item \textbf{Then} my feedback is still accepted and processed.
+        \item \textbf{And} my submission is marked as ``Anonymous'' in the system.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item All feedback types use the same form structure for consistency.
+    \item Contact information is optional to encourage participation.
+    \item System logs all submissions with timestamps.
+    \item Future enhancements could include file attachments.
+\end{itemize}
+
+
+\subsection{User Story \#13: Admin Dashboard Management}
+\textbf{ID:} US013 (FeedbackHub Project) \\
+\textbf{Title:} Comprehensive Feedback Administration \\
+\textbf{As a:} System administrator who needs to monitor and respond to user feedback, \\
+\textbf{I want:} to view, filter, search, and manage all submitted feedback through a centralized dashboard, \\
+\textbf{So that:} I can efficiently track feedback trends, prioritize responses, and ensure all user concerns are addressed appropriately.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Dashboard Overview:}
+    \begin{itemize}
+        \item \textbf{Given} I access the admin dashboard,
+        \item \textbf{Then} I see summary statistics for total feedback, pending items, in-progress items, and resolved items.
+        \item \textbf{And} statistics include trend indicators showing changes over time.
+    \end{itemize}
+
+    \item \textbf{Feedback Listing:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing the feedback list,
+        \item \textbf{Then} each item displays type, status, priority, user information, and submission date.
+        \item \textbf{And} items are color-coded by category and status for quick visual identification.
+    \end{itemize}
+
+    \item \textbf{Filtering Capabilities:}
+    \begin{itemize}
+        \item \textbf{Given} I want to focus on specific feedback,
+        \item \textbf{When} I use the filter controls,
+        \item \textbf{Then} I can filter by feedback type (all, suggestions, complaints, compliments).
+        \item \textbf{And} I can filter by status (all, pending, in-progress, resolved).
+    \end{itemize}
+
+    \item \textbf{Search Functionality:}
+    \begin{itemize}
+        \item \textbf{Given} I need to find specific feedback,
+        \item \textbf{When} I use the search bar,
+        \item \textbf{Then} the system searches across feedback content, user names, and email addresses.
+        \item \textbf{And} results update in real-time as I type.
+    \end{itemize}
+
+    \item \textbf{Detail Management:}
+    \begin{itemize}
+        \item \textbf{Given} I click on a feedback item,
+        \item \textbf{Then} I see full details in a dedicated panel.
+        \item \textbf{And} I can update the status using a dropdown menu.
+        \item \textbf{And} changes are immediately reflected in the system.
+    \end{itemize}
+
+    \item \textbf{Status Workflow:}
+    \begin{itemize}
+        \item \textbf{Given} I am managing feedback items,
+        \item \textbf{Then} I can move items through the workflow: Pending → In Progress → Resolved.
+        \item \textbf{And} status changes are tracked with timestamps.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Admin access requires authentication and appropriate permissions.
+    \item All actions are logged for audit purposes.
+    \item System supports real-time updates when multiple admins are working.
+    \item Future enhancements could include automated assignment.
+\end{itemize}
+
+
+\subsection{User Story \#14: Profile Management}
+\textbf{ID:} US014 (Marito) \\
+\textbf{Title:} User Profile Management \\
+\textbf{As a:} logged-in user of the application, \\
+\textbf{I want:} to be able to manage my profile information including picture, username, email address, and password, \\
+\textbf{So that:} I can maintain accurate personal information and secure access to my account.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Setting Profile Picture:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I am viewing my profile settings,
+        \item \textbf{Then} I should see an option to upload or change my profile picture,
+        \item \textbf{And} I should be able to select an image file and save it successfully.
+    \end{itemize}
+
+    \item \textbf{Changing Username:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I am viewing my profile settings,
+        \item \textbf{Then} I should see a field to update my username,
+        \item \textbf{And} I should receive confirmation when the username is successfully changed.
+    \end{itemize}
+
+    \item \textbf{Changing Email Address:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I want to update my email address,
+        \item \textbf{Then} I should be required to validate my existing password before making the change,
+        \item \textbf{And} I should receive a confirmation email at the new address to verify the change.
+    \end{itemize}
+
+    \item \textbf{Changing Password:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{And} I want to change my password,
+        \item \textbf{Then} I should be required to validate my existing password,
+        \item \textbf{And} I should be able to enter and confirm a new password,
+        \item \textbf{And} I should receive confirmation when the password is successfully updated.
+    \end{itemize}
+
+    \item \textbf{Logging Out:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into my account,
+        \item \textbf{When} I choose to log out,
+        \item \textbf{Then} I should be securely signed out of the application,
+        \item \textbf{And} I should be redirected to the login page or home page.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Users must be authenticated to access profile management features.
+    \item Password changes require validation of the current password for security.
+    \item Profile picture uploads should have file size and format restrictions.
+\end{itemize}
+
+
+\subsection{User Story \#15: View Saved Languages}
+\textbf{ID:} US015 (Marito) \\
+\textbf{Title:} Language Collection Management \\
+\textbf{As a:} User who wants to track my language learning progress, \\
+\textbf{I want:} to view all languages I have saved in my workspace, \\
+\textbf{So that:} I can easily access and manage my language learning collection and see my overall language portfolio.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Language Display:}
+    \begin{itemize}
+        \item \textbf{Given} I am logged into the workspace system,
+        \item \textbf{When} I navigate to the saved languages section,
+        \item \textbf{Then} I see a list of all languages I have previously saved.
+        \item \textbf{And} each language entry shows relevant details like name and date saved.
+    \end{itemize}
+
+    \item \textbf{Collection Overview:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing my saved languages,
+        \item \textbf{Then} I can see the total count of languages in my collection.
+        \item \textbf{And} languages are organized in a clear, readable format.
+    \end{itemize}
+
+    \item \textbf{Access Integration:}
+    \begin{itemize}
+        \item \textbf{Given} I have saved languages in my collection,
+        \item \textbf{Then} I can easily navigate to related saved terms and glossary items.
+        \item \textbf{And} the system provides seamless navigation between language components.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Languages are persistently stored in user's workspace.
+    \item System maintains relationship between languages and their associated content.
+    \item Future enhancements could include language categorization and sorting options.
+\end{itemize}
+
+
+\subsection{User Story \#16: View Saved Terms}
+\textbf{ID:} US016 (Marito) \\
+\textbf{Title:} Terminology Management and Review \\
+\textbf{As a:} User building vocabulary in multiple languages, \\
+\textbf{I want:} to view and manage all terms I have saved across different languages, \\
+\textbf{So that:} I can review my vocabulary progress and access saved terminology for study and reference.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Term Collection Display:}
+    \begin{itemize}
+        \item \textbf{Given} I access the saved terms section,
+        \item \textbf{Then} I see all terms I have previously saved.
+        \item \textbf{And} each term displays relevant information like definition, language, and date saved.
+    \end{itemize}
+
+    \item \textbf{Language Association:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing saved terms,
+        \item \textbf{Then} I can see which language each term belongs to.
+        \item \textbf{And} I can filter or group terms by their associated languages.
+    \end{itemize}
+
+    \item \textbf{Progress Tracking:}
+    \begin{itemize}
+        \item \textbf{Given} I have been saving terms over time,
+        \item \textbf{Then} I can track my vocabulary building progress.
+        \item \textbf{And} I can see submission progress for terms I'm working on.
+    \end{itemize}
+
+    \item \textbf{Search and Filter:}
+    \begin{itemize}
+        \item \textbf{Given} I have multiple saved terms,
+        \item \textbf{When} I use the search functionality,
+        \item \textbf{Then} I can quickly locate specific terms or filter by criteria.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Terms are linked to their source languages.
+    \item System tracks submission progress for learning workflows.
+    \item Integration with external systems for enhanced term management.
+\end{itemize}
+
+
+\subsection{User Story \#17: View Saved Glossary}
+\textbf{ID:} US017 (Marito) \\
+\textbf{Title:} Glossary Access and Management \\
+\textbf{As a:} User who needs quick access to specialized terminology and definitions, \\
+\textbf{I want:} to view and manage my saved glossary entries, \\
+\textbf{So that:} I can maintain a personal reference collection and quickly look up important terms and concepts.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Glossary Navigation:}
+    \begin{itemize}
+        \item \textbf{Given} I access the saved glossary section,
+        \item \textbf{Then} I see all glossary entries I have saved.
+        \item \textbf{And} entries are organized in a logical, searchable format.
+    \end{itemize}
+
+    \item \textbf{Content Display:}
+    \begin{itemize}
+        \item \textbf{Given} I am viewing the glossary,
+        \item \textbf{Then} each entry shows the term, definition, and relevant context.
+        \item \textbf{And} I can easily read and reference the content.
+    \end{itemize}
+
+    \item \textbf{Cross-Reference Integration:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the glossary,
+        \item \textbf{Then} I can navigate to related saved languages and terms.
+        \item \textbf{And} the system maintains connections between glossary entries and other workspace items.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Glossary entries can be linked to multiple languages.
+    \item System supports both user-created and imported glossary content.
+    \item Integration with search functionality across all saved items.
+\end{itemize}
+
+
+\subsection{User Story \#18: Track Submitted Term Progress}
+\textbf{ID:} US018 (Marito) \\
+\textbf{Title:} Term Submission Progress Monitoring \\
+\textbf{As a:} User who submits terms for review or processing, \\
+\textbf{I want:} to track the progress of my submitted terms through the system workflow, \\
+\textbf{So that:} I can monitor the status of my contributions and know when they have been processed or approved.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Progress Visualization:}
+    \begin{itemize}
+        \item \textbf{Given} I have submitted terms for processing,
+        \item \textbf{When} I access the progress tracking section,
+        \item \textbf{Then} I see the current status of each submitted term.
+        \item \textbf{And} progress is clearly indicated through status indicators or progress bars.
+    \end{itemize}
+
+    \item \textbf{Status Updates:}
+    \begin{itemize}
+        \item \textbf{Given} my terms are being processed,
+        \item \textbf{Then} I receive updates when status changes occur.
+        \item \textbf{And} I can see timestamp information for each status change.
+    \end{itemize}
+
+    \item \textbf{Submission History:}
+    \begin{itemize}
+        \item \textbf{Given} I have submitted multiple terms over time,
+        \item \textbf{Then} I can view a complete history of my submissions.
+        \item \textbf{And} I can filter by status, date, or other relevant criteria.
+    \end{itemize}
+
+    \item \textbf{Feedback Integration:}
+    \begin{itemize}
+        \item \textbf{Given} my submitted terms require revisions,
+        \item \textbf{Then} I can see any feedback or comments from reviewers.
+        \item \textbf{And} I can resubmit updated versions when needed.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item System maintains workflow states for submitted content.
+    \item External review processes may impact term progression.
+    \item Notifications may be implemented for status changes.
+\end{itemize}
+
+
+\subsection{User Story \#19: Organize Saved Items into Groups}
+\textbf{ID:} US019 (Marito) \\
+\textbf{Title:} Workspace Organization and Categorization \\
+\textbf{As a:} User with multiple saved languages, terms, and glossary entries, \\
+\textbf{I want:} to organize my saved items into custom groups and categories, \\
+\textbf{So that:} I can efficiently manage my workspace content and quickly find related items for specific projects or learning goals.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Group Creation:}
+    \begin{itemize}
+        \item \textbf{Given} I want to organize my saved items,
+        \item \textbf{When} I access the organization tools,
+        \item \textbf{Then} I can create custom groups with descriptive names.
+        \item \textbf{And} I can assign colors or icons to distinguish different groups.
+    \end{itemize}
+
+    \item \textbf{Item Assignment:}
+    \begin{itemize}
+        \item \textbf{Given} I have created groups,
+        \item \textbf{When} I view my saved languages, terms, or glossary entries,
+        \item \textbf{Then} I can assign items to one or more groups.
+        \item \textbf{And} I can move items between groups as needed.
+    \end{itemize}
+
+    \item \textbf{Group Management:}
+    \begin{itemize}
+        \item \textbf{Given} I have organized items into groups,
+        \item \textbf{Then} I can view items filtered by group membership.
+        \item \textbf{And} I can edit group properties like names and descriptions.
+        \item \textbf{And} I can delete groups while preserving the underlying saved items.
+    \end{itemize}
+
+    \item \textbf{Cross-Category Organization:}
+    \begin{itemize}
+        \item \textbf{Given} I want comprehensive organization,
+        \item \textbf{Then} I can create groups that span multiple item types.
+        \item \textbf{And} I can organize languages, terms, and glossary entries together based on themes or projects.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Groups are flexible containers that don't restrict item functionality.
+    \item Items can belong to multiple groups simultaneously.
+    \item Organization preferences are saved to user's workspace.
+    \item System maintains referential integrity when groups are modified.
+\end{itemize}
+
+
+\subsection{User Story \#20: Search and Filter Saved Items}
+\textbf{ID:} US020 (Marito) \\
+\textbf{Title:} Advanced Search and Filtering Capabilities \\
+\textbf{As a:} User with extensive saved content in my workspace, \\
+\textbf{I want:} to search and filter across all my saved items using various criteria, \\
+\textbf{So that:} I can quickly locate specific content regardless of volume and efficiently work with targeted subsets of my saved materials.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Universal Search:}
+    \begin{itemize}
+        \item \textbf{Given} I want to find specific content,
+        \item \textbf{When} I use the search functionality,
+        \item \textbf{Then} the system searches across all saved languages, terms, and glossary entries.
+        \item \textbf{And} search results highlight matching content and provide context.
+    \end{itemize}
+
+    \item \textbf{Advanced Filtering:}
+    \begin{itemize}
+        \item \textbf{Given} I need to narrow down my saved items,
+        \item \textbf{When} I apply filters,
+        \item \textbf{Then} I can filter by item type, language, date saved, or custom groups.
+        \item \textbf{And} multiple filters can be combined for precise results.
+    \end{itemize}
+
+    \item \textbf{Search Performance:}
+    \begin{itemize}
+        \item \textbf{Given} I perform searches on my saved content,
+        \item \textbf{Then} results appear quickly without significant delay.
+        \item \textbf{And} the search function works efficiently even with large collections.
+    \end{itemize}
+
+    \item \textbf{Filter Persistence:}
+    \begin{itemize}
+        \item \textbf{Given} I have applied specific filters,
+        \item \textbf{Then} my filter preferences are maintained during my session.
+        \item \textbf{And} I can easily clear or modify filters as needed.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Search functionality extends across all workspace components.
+    \item System provides relevant and ranked search results.
+    \item Extension points allow for enhanced search capabilities.
+    \item Integration with external systems may provide additional search features.
+\end{itemize}
+
+
+\subsection{User Story \#21: Multilingual Interface Support}
+\textbf{ID:} US021 (Marito) \\
+\textbf{Title:} Multilingual Interface Support \\
+\textbf{As a:} User who speaks a language other than English, \\
+\textbf{I want:} to access and use the Marito platform in my preferred language, \\
+\textbf{So that:} I can navigate and interact with the system more comfortably and efficiently without language barriers.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Language Selection:}
+    \begin{itemize}
+        \item \textbf{Given} I am a new or returning user,
+        \item \textbf{When} I access the application settings or profile,
+        \item \textbf{Then} I can select my preferred interface language from a list of supported languages.
+        \item \textbf{And} my language preference is saved for future sessions.
+    \end{itemize}
+
+    \item \textbf{Dynamic Language Switching:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{When} I change my language preference,
+        \item \textbf{Then} the interface language changes immediately without requiring a page reload.
+        \item \textbf{And} all interface elements adapt to the selected language.
+    \end{itemize}
+
+    \item \textbf{Localized Content Display:}
+    \begin{itemize}
+        \item \textbf{Given} I have selected my preferred language,
+        \item \textbf{When} I navigate through the application,
+        \item \textbf{Then} all UI elements, menus, buttons, and system messages are displayed in my chosen language.
+        \item \textbf{And} dates, numbers, and other locale-specific content follow my language's conventions.
+    \end{itemize}
+
+    \item \textbf{Fallback for Untranslated Content:}
+    \begin{itemize}
+        \item \textbf{Given} I am using a language that has partial translation coverage,
+        \item \textbf{When} I encounter content without translation in my selected language,
+        \item \textbf{Then} the system displays that content in the default language (English).
+        \item \textbf{And} the transition between translated and untranslated content is seamless.
+    \end{itemize}
+
+    \item \textbf{Offline Language Support:}
+    \begin{itemize}
+        \item \textbf{Given} I have set my language preference,
+        \item \textbf{When} I use the application offline,
+        \item \textbf{Then} my selected language continues to be applied.
+        \item \textbf{And} I don't need an internet connection to use the interface in my language.
+    \end{itemize}
+
+    \item \textbf{User Contribution to Translations (Optional Enhancement):}
+    \begin{itemize}
+        \item \textbf{Given} I notice missing or incorrect translations in my language,
+        \item \textbf{When} I use the translation contribution feature,
+        \item \textbf{Then} I can suggest improved translations for specific interface elements.
+        \item \textbf{And} my suggestions are reviewed by moderators before implementation.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Initial release supports at least 5 major languages (English, Spanish, French, Mandarin, Arabic).
+    \item Language selection does not affect user-generated content or terminology data.
+    \item The system uses internationalization (i18n) best practices for language implementation.
+    \item Right-to-left (RTL) languages like Arabic are properly supported with appropriate UI adjustments.
+\end{itemize}
+
+
+\subsection{User Story \#22: Accessibility and Customization}
+\textbf{ID:} US022 (Marito) \\
+\textbf{Title:} Accessibility and Visual Customization \\
+\textbf{As a:} User with accessibility needs or visual preferences, \\
+\textbf{I want:} to be able to customize the visual presentation of the application including text size, spacing, contrast, and color themes, \\
+\textbf{So that:} I can have a comfortable and accessible reading experience that meets my specific needs.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Adjusting Text Size:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to adjust text size,
+        \item \textbf{And} I should be able to increase or decrease the text size with real-time preview,
+        \item \textbf{And} I should see the current size displayed (e.g., 16px).
+    \end{itemize}
+
+    \item \textbf{Modifying Text Spacing:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to adjust text spacing,
+        \item \textbf{And} I should be able to change the spacing between lines and letters,
+        \item \textbf{And} I should see the current spacing multiplier displayed (e.g., 1x).
+    \end{itemize}
+
+    \item \textbf{Enabling High Contrast Mode:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to enable High Contrast Mode,
+        \item \textbf{And} I should be able to toggle it on or off,
+        \item \textbf{And} When enabled, all colors should have increased contrast for better visibility.
+    \end{itemize}
+
+    \item \textbf{Switching to Dark Mode:}
+    \begin{itemize}
+        \item \textbf{Given} I am using the application,
+        \item \textbf{And} I am viewing the accessibility settings,
+        \item \textbf{Then} I should see an option to enable Dark Mode,
+        \item \textbf{And} I should be able to toggle it on or off,
+        \item \textbf{And} When enabled, the interface should display dark backgrounds with light text.
+    \end{itemize}
+
+    \item \textbf{Persistence of Settings:}
+    \begin{itemize}
+        \item \textbf{Given} I have customized my accessibility preferences,
+        \item \textbf{When} I log out and log back in,
+        \item \textbf{Then} all my accessibility settings should be preserved,
+        \item \textbf{And} The application should immediately apply my saved preferences.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Notes/Assumptions:}
+\begin{itemize}
+    \item Users must be authenticated to save accessibility preferences.
+    \item All accessibility changes should take effect immediately without page refresh.
+    \item Settings should work together without conflicting (e.g., dark mode + high contrast).
+    \item Visual customizations should maintain readability at all adjustment levels.
+\end{itemize}
+
+
 \section{Use Case Diagrams}
 
 This section presents the key use case diagrams developed for the Marito application. Each diagram visualizes the interactions between user roles and the system, based on the user stories defined earlier in this document. These diagrams serve as a visual blueprint for understanding the system's expected behavior.
@@ -792,12 +1401,12 @@ This section presents the key use case diagrams developed for the Marito applica
   \label{fig:reg-log-use-case}
 \end{figure}
 
-\subsection{Interface Language Switching Use Case Diagram}
+\subsection{Accessibility and Customization Use Case Diagram}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{Interface Language Switching Subsystem.jpg}
-  \caption{Interface Language Switching Use Case Diagram for Marito}
-  \label{fig:interface-lang-switch-use-case}
+  \includegraphics[width=0.9\textwidth]{Accessibility and Customization System.jpg}
+  \caption{Accessibility and Customization Use Case Diagram for Marito}
+  \label{fig:accessibility-customization-use-case}
 \end{figure}
 
 \subsection{Search Term Use Case Diagram}
@@ -824,14 +1433,6 @@ This section presents the key use case diagrams developed for the Marito applica
   \label{fig:visualization-use-case}
 \end{figure}
 
-\subsection{Themes Use Case Diagram}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\textwidth]{Themes_UseCase.jpg}
-  \caption{Themes Use Case Diagram}
-  \label{fig:themes-use-case}
-\end{figure}
-
 \subsection{Contributions Use Case Diagram}
 \begin{figure}[H]
   \centering
@@ -844,39 +1445,56 @@ This section presents the key use case diagrams developed for the Marito applica
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Dictionary,Glossaies and Term Banl.jpg}
-  \caption{Contributions Use Case Diagram}
-  \label{fig:contributions-use-case}
+  \caption{Dictionary and Glossary Use Case Diagram}
+  \label{fig:dictionary-use-case}
 \end{figure}
 
 \subsection{Admin Use Case Diagram}
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Admin-User-Management.jpg}
-  \caption{Contributions Use Case Diagram}
-  \label{fig:contributions-use-case}
+  \caption{Admin User Management Use Case Diagram}
+  \label{fig:admin-use-case}
 \end{figure}
 
 \subsection{Export Use Case Diagram}
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{Export System.jpg}
-  \caption{Contributions Use Case Diagram}
-  \label{fig:contributions-use-case}
+  \caption{Export System Use Case Diagram}
+  \label{fig:export-use-case}
+\end{figure}
+
+\subsection{Feedback System Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{Feedaback system.jpg}
+  \caption{Feedback System Use Case Diagram}
+  \label{fig:feedback-system-use-case}
+\end{figure}
+
+\subsection{Workspace Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{workspace.jpg}
+  \caption{Workspace Management Use Case Diagram}
+  \label{fig:workspace-use-case}
 \end{figure}
 
 \subsection{Overview}
 The main use cases covered include:
 \begin{itemize}
   \item Browsing and searching multilingual terms
-  \item Interface language switching
+  \item Accessibility and customization
   \item Earning contribution points through gamified interactions
   \item Registration and login interactions
   \item User Contributions
-  \item User themes
   \item Data visualizations
   \item Dictionary Use Case
   \item Admin Use case
   \item Export Use Case
+  \item Feedback System Use Case
+  \item Workspace Management Use Case
 \end{itemize}
 
 \section{Functional Requirements}
@@ -892,11 +1510,62 @@ The main use cases covered include:
         \item FR1.5: The system shall highlight related terms and translations in the term view.
     \end{itemize}
 
-    \item \textbf{Multilingual Support}
+    \item \textbf{Accessibility and Customization}
     \begin{itemize}
-        \item FR2.1: The system shall support interface localization in multiple South African languages.
-        \item FR2.2: The system shall allow users to switch the UI language at any time.
-        \item FR2.3: The system shall correctly render special characters where applicable.
+        \item FR2.1: Profile \& Account Management
+        \begin{itemize}
+            \item FR2.1.1: The system shall allow users to upload and change profile pictures.
+            \item FR2.1.2: The system shall enable username updates with real-time validation for uniqueness.
+            \item FR2.1.3: The system shall require password validation before email changes and send verification emails.
+            \item FR2.1.4: The system shall enforce secure password changes requiring current password validation.
+            \item FR2.1.5: The system shall provide secure logout that terminates all sessions.
+        \end{itemize}
+        
+        \item FR2.2: Multilingual Support
+        \begin{itemize}
+            \item FR2.2.1: The system shall support interface localization in all eleven official South African languages including English, Afrikaans, isiZulu, isiXhosa, Sesotho, Setswana, Sepedi, isiSwati, Tshivenda, Xitsonga, and isiNdebele.
+            \item FR2.2.2: The system shall allow users to switch UI language anytime through settings.
+            \item FR2.2.3: The system shall correctly render special characters for all supported languages.
+            \item FR2.2.4: The system shall persist language preferences across sessions.
+            \item FR2.2.5: The system shall apply language changes immediately without page refresh.
+        \end{itemize}
+        
+        \item FR2.3: Text \& Visual Presentation
+        \begin{itemize}
+            \item FR2.3.1: The system shall allow users to adjust text size and display current size in pixels (e.g., 16px).
+            \item FR2.3.2: The system shall provide real-time text size adjustment.
+            \item FR2.3.3: The system shall show current text size value as users make changes.
+            \item FR2.3.4: The system shall maintain text size preferences across sessions.
+            \item FR2.3.5: The system shall ensure text scaling maintains proper layout.
+        \end{itemize}
+        
+        \item FR2.4: Text Spacing Control
+        \begin{itemize}
+            \item FR2.4.1: The system shall allow users to adjust text spacing and display current multiplier (e.g., 1x).
+            \item FR2.4.2: The system shall provide real-time spacing adjustment.
+            \item FR2.4.3: The system shall show current spacing value as users make changes.
+            \item FR2.4.4: The system shall apply spacing changes to all text elements consistently.
+            \item FR2.4.5: The system shall preserve spacing preferences across sessions.
+        \end{itemize}
+        
+        \item FR2.5: Colour \& Contrast Controls
+        \begin{itemize}
+            \item FR2.5.1: The system shall allow users to enable/disable High Contrast Mode.
+            \item FR2.5.2: The system shall show current mode state (on/off).
+            \item FR2.5.3: The system shall increase color contrast when high contrast mode is enabled.
+            \item FR2.5.4: The system shall maintain high contrast settings across sessions.
+            \item FR2.5.5: The system shall ensure interactive elements remain distinguishable in high contrast mode.
+        \end{itemize}
+        
+        \item FR2.6: Dark Mode
+        \begin{itemize}
+            \item FR2.6.1: The system shall allow users to enable/disable Dark Mode.
+            \item FR2.6.2: The system shall show current mode state (on/off).
+            \item FR2.6.3: The system shall apply dark backgrounds with light text when enabled.
+            \item FR2.6.4: The system shall maintain proper contrast in dark mode.
+            \item FR2.6.5: The system shall preserve dark mode preferences across sessions.
+            \item FR2.6.6: The system shall provide smooth transitions when switching modes.
+        \end{itemize}
     \end{itemize}
 
     \item \textbf{User Contributions and Feedback}
@@ -952,6 +1621,35 @@ The main use cases covered include:
         \item FR8.1: The system shall allow users to export glossary data in JSON format.
         \item FR8.2: The system shall allow users to export glossary data in CSV format.
         \item FR8.3: The system may allow authorized users to import glossaries in JSON or CSV format.
+    \end{itemize}
+
+    \item \textbf{Workspace Management}
+    \begin{itemize}
+        \item FR9.1: The system shall provide a personalized workspace where users can organize, access, and manage their saved language resources and contributions.
+        \item FR9.2: \textbf{Saved Terms}
+        \begin{itemize}
+            \item FR9.2.1: The system shall allow users to bookmark individual terms from dictionaries/glossaries for quick access.
+            \item FR9.2.2: The system shall display saved terms in a searchable, filterable list (e.g., by language, tags, or date saved).
+            \item FR9.2.3: The system shall enable users to add custom notes or annotations to saved terms.
+            \item FR9.2.4: The system shall sync saved terms across devices when online and when offline.
+        \end{itemize}
+        \item FR9.3: \textbf{Saved Glossaries}
+        \begin{itemize}
+            \item FR9.3.1: The system shall allow users to download entire glossaries/dictionaries for offline access.
+            \item FR9.3.2: The system shall let users mark glossaries as "favorites" for quick filtering.
+            \item FR9.3.3: The system shall notify users when a saved glossary has updates (e.g., new terms or corrections).
+            \item FR9.3.4: The system shall provide storage management (e.g., "Delete Glossary" to free space).
+        \end{itemize}
+        \item FR9.4: \textbf{Contributed Terms}
+        \begin{itemize}
+            \item FR9.4.1: The system shall maintain a history of user-submitted terms, definitions, or edits.
+            \item FR9.4.2: The system shall display the moderation status of contributions (e.g., "Pending," "Approved," "Rejected").
+        \end{itemize}
+        \item FR9.5: \textbf{Workspace Organization}
+        \begin{itemize}
+            \item FR9.5.1: The system shall allow users to create folders/tags to group saved terms or glossaries (e.g., "Thesis Research").
+            \item FR9.5.2: The system shall support bulk actions (e.g., "Move 5 terms to Folder X").
+        \end{itemize}
     \end{itemize}
 
 \end{enumerate}

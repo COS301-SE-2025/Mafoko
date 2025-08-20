@@ -1,4 +1,4 @@
-# Marito: A PWA for Multilingual Lexicons, Term Banks, and Glossaries
+# Marito: A PWA for Multilingual Lexicons, Term Banks, and| Palesa Thabane    | Services Engineer / Business Analyst           | 21540838       | I am a data science and cybersecurity enthusiast with hands-on experience in systems programming, particularly in distributed computing (e.g., actor models, inter-server communication), and backend development, including NoSQL database engineering and RESTful API design. My technical projects and coursework reflect a strong foundation in secure software practices, which I aim to apply at the intersection of fintech , data science and cybersecurity.     | [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/palesa-thabane-171ba9368/) |Glossaries
 <p align="center">
     <img src="frontend/public/DFSI_Logo.png" alt="banner"/>
 </p>
@@ -63,7 +63,7 @@ This structure ensures clean separation between environments, supports parallel 
 ## Demo Videos
 
 - 🎥 [Demo 1 Video](https://youtu.be/mwc1rmwkWEI)
-- 🎥 [Demo 2 Video](https://youtu.be/92OJ90uNvXY)
+- 🎥 [Demo 2 Video](https://youtu.be/VLT3FmH0Ohk)
 
 ---
 
