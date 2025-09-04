@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { API_ENDPOINTS } from '../config';
@@ -14,6 +14,208 @@ interface TermSchema {
   language: string;
   example?: string;
 }
+
+interface AppRowProps {
+  app: TermApplicationRead;
+  isMobile: boolean;
+  i: number;
+  activeTab: 'submit' | 'my' | 'pending' | 'edit' | 'rejected';
+  expandedAppId: string | null;
+  fetchedTranslations: { [key: string]: TermSchema };
+  renderStatusBadge: (status: string) => JSX.Element;
+  toggleExpandedDetails: (id: string) => void;
+  handleVote: (id: string) => void;
+  handleDeleteApplication: (id: string) => void;
+}
+
+const ApplicationRowOrCard: React.FC<AppRowProps> = ({
+  app,
+  isMobile,
+  i,
+  activeTab,
+  expandedAppId,
+  fetchedTranslations,
+  renderStatusBadge,
+  toggleExpandedDetails,
+  handleVote,
+  handleDeleteApplication,
+}) => {
+  const translations =
+    app.proposed_content?.translations
+      ?.map((id) => fetchedTranslations[id])
+      .filter(Boolean) || [];
+  const termToDisplay =
+    app.status === 'ADMIN_APPROVED' && app.term_details
+      ? app.term_details
+      : app.proposed_content;
+  if (!termToDisplay) return null;
+
+  if (isMobile) {
+    return (
+      <li className="application-card">
+        <div className="card-header">
+          <span className="card-term">{termToDisplay.term}</span>
+          {renderStatusBadge(app.status)}
+        </div>
+        <div className="card-body">
+          <p className="card-definition">{termToDisplay.definition}</p>
+          <div className="card-meta">
+            <span>
+              <strong>Domain:</strong> {termToDisplay.domain}
+            </span>
+            <span>
+              <strong>Language:</strong> {termToDisplay.language}
+            </span>
+            <span>
+              <strong>Votes:</strong> {app.crowd_votes_count || 0}
+            </span>
+          </div>
+        </div>
+        <div className="card-footer">
+          <div className="card-actions">
+            {activeTab === 'pending' && (
+              <button
+                onClick={() => handleVote(app.term_id)}
+                className="vote-btn"
+              >
+                Vote
+              </button>
+            )}
+            {(activeTab === 'my' || activeTab === 'rejected') && (
+              <button
+                onClick={() => handleDeleteApplication(app.id)}
+                className="delete-btn"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+          {translations.length > 0 && (
+            <button
+              onClick={() => toggleExpandedDetails(app.id)}
+              className="translations-btn"
+            >
+              {expandedAppId === app.id
+                ? 'Hide Translations'
+                : `Show (${translations.length})`}
+            </button>
+          )}
+        </div>
+        {expandedAppId === app.id && (
+          <div className="expanded-details">
+            {translations.length > 0 && (
+              <div className="translations">
+                <h4>Translations:</h4>
+                <ul>
+                  {translations.map((t, idx) => (
+                    <li key={t.id || idx}>
+                      <strong>{t.language}:</strong> {t.term} - {t.definition}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {app.review && (
+              <div className="feedback">
+                <h4>Feedback:</h4>
+                <p>{app.review}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </li>
+    );
+  }
+
+  if (activeTab === 'rejected') {
+    return (
+      <tr className={i % 2 === 0 ? 'even-row' : 'odd-row'}>
+        <td>{termToDisplay.term}</td>
+        <td className="definition-text">{termToDisplay.definition}</td>
+        <td>{termToDisplay.domain}</td>
+        <td>{termToDisplay.language}</td>
+        <td>{app.review || 'No feedback provided'}</td>
+        <td className="actions">
+          <button
+            onClick={() => handleDeleteApplication(app.id)}
+            className="delete-btn"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    );
+  }
+
+  return (
+    <React.Fragment>
+      <tr className={i % 2 === 0 ? 'even-row' : 'odd-row'}>
+        <td>{termToDisplay.term}</td>
+        <td className="definition-text">{termToDisplay.definition}</td>
+        <td>{termToDisplay.domain}</td>
+        <td>{termToDisplay.language}</td>
+        <td>
+          {translations.length > 0 ? (
+            <button
+              onClick={() => toggleExpandedDetails(app.id)}
+              className="translations-btn"
+            >
+              {expandedAppId === app.id
+                ? 'Hide'
+                : `Show (${translations.length})`}
+            </button>
+          ) : (
+            '-'
+          )}
+        </td>
+        <td>{renderStatusBadge(app.status)}</td>
+        <td>{app.crowd_votes_count || 0}</td>
+        <td className="actions">
+          {activeTab === 'pending' && (
+            <button
+              onClick={() => handleVote(app.term_id)}
+              className="vote-btn"
+            >
+              Vote
+            </button>
+          )}
+          {activeTab === 'my' && (
+            <button
+              onClick={() => handleDeleteApplication(app.id)}
+              className="delete-btn"
+            >
+              Delete
+            </button>
+          )}
+        </td>
+      </tr>
+      {expandedAppId === app.id && translations.length > 0 && (
+        <tr>
+          <td colSpan={8}>
+            <div className="expanded-details">
+              <div className="translations">
+                <h4>Translations:</h4>
+                <ul>
+                  {translations.map((t, idx) => (
+                    <li key={t.id || idx}>
+                      <strong>{t.language}:</strong> {t.term} - {t.definition}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {app.review && (
+                <div className="feedback">
+                  <h4>Feedback:</h4>
+                  <p>{app.review}</p>
+                </div>
+              )}
+            </div>
+          </td>
+        </tr>
+      )}
+    </React.Fragment>
+  );
+};
 
 const ContributorPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -34,8 +236,6 @@ const ContributorPage: React.FC = () => {
   const [fetchedTranslations, setFetchedTranslations] = useState<{
     [key: string]: TermSchema;
   }>({});
-
-  // Form state
   const [newTerm, setNewTerm] = useState('');
   const [definition, setDefinition] = useState('');
   const [example, setExample] = useState('');
@@ -45,8 +245,6 @@ const ContributorPage: React.FC = () => {
     TermSchema[]
   >([]);
   const [termToEditId, setTermToEditId] = useState<string | null>(null);
-
-  // Search state for dropdowns
   const [translationSearchQuery, setTranslationSearchQuery] = useState('');
   const [editSearchQuery, setEditSearchQuery] = useState('');
 
@@ -110,9 +308,7 @@ const ContributorPage: React.FC = () => {
       });
       if (!res.ok) throw new Error('Failed to fetch all applications');
       const data: TermApplicationRead[] = await res.json();
-      // Filter for rejected applications submitted by current user
       const myRejected = data.filter((app) => app.status === 'rejected');
-      console.log('Fetched rejected terms:', data);
       setRejectedTerms(myRejected);
     } catch (err) {
       console.error(err);
@@ -169,9 +365,7 @@ const ContributorPage: React.FC = () => {
           );
         }
       });
-
       if (allTranslationIds.size === 0) return;
-
       try {
         const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
           method: 'POST',
@@ -181,7 +375,6 @@ const ContributorPage: React.FC = () => {
           },
           body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
         });
-
         if (!res.ok) throw new Error('Failed to fetch translations');
         const data: TermSchema[] = await res.json();
         const translationsMap = data.reduce(
@@ -196,7 +389,6 @@ const ContributorPage: React.FC = () => {
         console.error('Error fetching translations:', err);
       }
     };
-
     if ((mySubmissions.length > 0 || pendingTerms.length > 0) && token) {
       fetchAllTranslations();
     }
@@ -217,10 +409,8 @@ const ContributorPage: React.FC = () => {
   }, [termToEditId, editableTerms]);
 
   const handleSubmitTerm = async () => {
-    if (!newTerm || !definition || !selectedDomain || !selectedLanguage) {
+    if (!newTerm || !definition || !selectedDomain || !selectedLanguage)
       return alert('Please fill in all required fields');
-    }
-
     const translationsToSend = selectedTranslations.map((t) => t.id);
     const body: TermApplicationCreate = {
       term: newTerm,
@@ -231,7 +421,6 @@ const ContributorPage: React.FC = () => {
       translations: translationsToSend,
       ...(termToEditId && { original_term_id: termToEditId }),
     };
-
     try {
       const response = await fetch(API_ENDPOINTS.submitTerm, {
         method: 'POST',
@@ -241,13 +430,10 @@ const ContributorPage: React.FC = () => {
         },
         body: JSON.stringify(body),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Submission failed');
       }
-
-      // Reset form and refresh data
       setNewTerm('');
       setDefinition('');
       setExample('');
@@ -255,7 +441,6 @@ const ContributorPage: React.FC = () => {
       setSelectedLanguage('');
       setSelectedTranslations([]);
       setTermToEditId(null);
-
       fetchMySubmissions();
       fetchPendingTerms();
       fetchRejectedTerms();
@@ -285,26 +470,14 @@ const ContributorPage: React.FC = () => {
       !window.confirm(
         'Are you sure you want to delete this submission? This action cannot be undone.',
       )
-    ) {
+    )
       return;
-    }
-
     try {
       const response = await fetch(
         API_ENDPOINTS.deleteTermApplication(applicationId),
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to delete application');
-      }
-
-      // Refresh the data
+      if (!response.ok) throw new Error('Failed to delete application');
       fetchMySubmissions();
       fetchPendingTerms();
       fetchRejectedTerms();
@@ -316,53 +489,52 @@ const ContributorPage: React.FC = () => {
   };
 
   const handleSelectTranslation = (term: TermSchema) => {
-    if (!selectedTranslations.some((t) => t.id === term.id)) {
+    if (!selectedTranslations.some((t) => t.id === term.id))
       setSelectedTranslations([...selectedTranslations, term]);
-    }
     setTranslationSearchQuery('');
   };
-
-  const handleRemoveTranslation = (termId: string) => {
+  const handleRemoveTranslation = (termId: string) =>
     setSelectedTranslations(
       selectedTranslations.filter((t) => t.id !== termId),
     );
-  };
-
   const handleSelectTermToEdit = (term: TermSchema) => {
     setTermToEditId(term.id);
     setEditSearchQuery(`${term.term} (${term.language}) - ${term.domain}`);
   };
-
   const renderStatusBadge = (status: string) => {
+    // Ensure status is not null and convert to uppercase
+    const normalizedStatus = status ? status.toUpperCase() : '';
+
     const statusMap: Record<string, { class: string; text: string }> = {
-      PENDING_VERIFICATION: {
-        class: 'pending-verification',
-        text: 'Pending Verification',
-      },
+      PENDING_VERIFICATION: { class: 'pending_verification', text: 'Pending' },
       REJECTED: { class: 'rejected', text: 'Rejected' },
-      CROWD_VERIFIED: { class: 'crowd-verified', text: 'Crowd Verified' },
+      CROWD_VERIFIED: { class: 'crowd_verified', text: 'Crowd Verified' },
       LINGUIST_VERIFIED: {
-        class: 'linguist-verified',
+        class: 'linguist_verified',
         text: 'Linguist Verified',
       },
-      ADMIN_APPROVED: { class: 'admin-approved', text: 'Approved' },
+      ADMIN_APPROVED: { class: 'admin_approved', text: 'Approved' },
     };
 
-    const statusInfo = statusMap[status] || { class: '', text: status };
+    const statusInfo = statusMap[normalizedStatus] || {
+      class: 'unknown',
+      text: status,
+    };
+
     return (
       <span className={`status-badge ${statusInfo.class}`}>
         {statusInfo.text}
       </span>
     );
   };
-
-  const toggleExpandedDetails = (id: string) => {
+  const toggleExpandedDetails = (id: string) =>
     setExpandedAppId(expandedAppId === id ? null : id);
-  };
-
   const applicationsToDisplay =
-    activeTab === 'my' ? mySubmissions : pendingTerms;
-
+    activeTab === 'my'
+      ? mySubmissions
+      : activeTab === 'pending'
+        ? pendingTerms
+        : rejectedTerms;
   const filteredAdminTerms = adminTerms.filter(
     (term) =>
       term.term.toLowerCase().includes(translationSearchQuery.toLowerCase()) ||
@@ -371,12 +543,52 @@ const ContributorPage: React.FC = () => {
         .includes(translationSearchQuery.toLowerCase()) ||
       term.domain.toLowerCase().includes(translationSearchQuery.toLowerCase()),
   );
-
   const filteredEditableTerms = editableTerms.filter(
     (term) =>
       term.term.toLowerCase().includes(editSearchQuery.toLowerCase()) ||
       term.language.toLowerCase().includes(editSearchQuery.toLowerCase()) ||
       term.domain.toLowerCase().includes(editSearchQuery.toLowerCase()),
+  );
+
+  const tableContent = (
+    <>
+      {loading && (
+        <tr>
+          <td colSpan={8} style={{ textAlign: 'center' }}>
+            Loading...
+          </td>
+        </tr>
+      )}
+      {!loading && applicationsToDisplay.length === 0 && (
+        <tr>
+          <td colSpan={8} style={{ textAlign: 'center' }}>
+            No{' '}
+            {activeTab === 'my'
+              ? 'submissions'
+              : activeTab === 'pending'
+                ? 'pending terms'
+                : 'rejected terms'}{' '}
+            found
+          </td>
+        </tr>
+      )}
+      {!loading &&
+        applicationsToDisplay.map((app, i) => (
+          <ApplicationRowOrCard
+            key={app.id}
+            app={app}
+            isMobile={isMobile}
+            i={i}
+            activeTab={activeTab}
+            expandedAppId={expandedAppId}
+            fetchedTranslations={fetchedTranslations}
+            renderStatusBadge={renderStatusBadge}
+            toggleExpandedDetails={toggleExpandedDetails}
+            handleVote={handleVote}
+            handleDeleteApplication={handleDeleteApplication}
+          />
+        ))}
+    </>
   );
 
   return (
@@ -515,14 +727,11 @@ const ContributorPage: React.FC = () => {
                           <li
                             key={term.id}
                             onClick={() => handleSelectTranslation(term)}
-                          >
-                            {`${term.term} (${term.language}) - ${term.domain}`}
-                          </li>
+                          >{`${term.term} (${term.language}) - ${term.domain}`}</li>
                         ))}
                     </ul>
                   )}
                 </div>
-
                 {selectedTranslations.length > 0 && (
                   <div className="selected-translations">
                     <h4>Selected Translations:</h4>
@@ -556,7 +765,6 @@ const ContributorPage: React.FC = () => {
               </button>
             </div>
           )}
-
           {activeTab === 'edit' && (
             <div className="form-container">
               <div className="form-group">
@@ -576,9 +784,7 @@ const ContributorPage: React.FC = () => {
                       <li
                         key={term.id}
                         onClick={() => handleSelectTermToEdit(term)}
-                      >
-                        {`${term.term} (${term.language}) - ${term.domain}`}
-                      </li>
+                      >{`${term.term} (${term.language}) - ${term.domain}`}</li>
                     ))}
                   </ul>
                 )}
@@ -675,14 +881,11 @@ const ContributorPage: React.FC = () => {
                               <li
                                 key={term.id}
                                 onClick={() => handleSelectTranslation(term)}
-                              >
-                                {`${term.term} (${term.language}) - ${term.domain}`}
-                              </li>
+                              >{`${term.term} (${term.language}) - ${term.domain}`}</li>
                             ))}
                         </ul>
                       )}
                     </div>
-
                     {selectedTranslations.length > 0 && (
                       <div className="selected-translations">
                         <h4>Selected Translations:</h4>
@@ -722,199 +925,49 @@ const ContributorPage: React.FC = () => {
             </div>
           )}
 
-          {(activeTab === 'my' || activeTab === 'pending') && (
-            <div className="table-wrapper">
-              <table className="terms-table">
-                <thead>
-                  <tr>
-                    <th>Term</th>
-                    <th>Definition</th>
-                    <th>Domain</th>
-                    <th>Language</th>
-                    <th>Translations</th>
-                    <th>Status</th>
-                    <th>Votes</th>
-                    {activeTab === 'pending' && <th>Action</th>}
-                    {activeTab === 'my' && <th>Action</th>}
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading && (
+          {(activeTab === 'my' || activeTab === 'pending') &&
+            (isMobile ? (
+              <ul className="applications-list">{tableContent}</ul>
+            ) : (
+              <div className="table-wrapper">
+                <table className="terms-table">
+                  <thead>
                     <tr>
-                      <td
-                        colSpan={activeTab === 'pending' ? 8 : 8}
-                        style={{ textAlign: 'center' }}
-                      >
-                        Loading...
-                      </td>
+                      <th>Term</th>
+                      <th>Definition</th>
+                      <th>Domain</th>
+                      <th>Language</th>
+                      <th>Translations</th>
+                      <th>Status</th>
+                      <th>Votes</th>
+                      <th>Action</th>
                     </tr>
-                  )}
-                  {!loading && applicationsToDisplay.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={activeTab === 'pending' ? 8 : 8}
-                        style={{ textAlign: 'center' }}
-                      >
-                        No{' '}
-                        {activeTab === 'my' ? 'submissions' : 'pending terms'}{' '}
-                        found
-                      </td>
-                    </tr>
-                  )}
-                  {!loading &&
-                    applicationsToDisplay.map((app, i) => {
-                      const translations =
-                        app.proposed_content?.translations
-                          ?.map((id) => fetchedTranslations[id])
-                          .filter(Boolean) || [];
-                      const termToDisplay =
-                        app.status === 'ADMIN_APPROVED' && app.term_details
-                          ? app.term_details
-                          : app.proposed_content;
-                      if (!termToDisplay) return null;
-                      return (
-                        <React.Fragment key={app.id}>
-                          <tr className={i % 2 === 0 ? 'even-row' : 'odd-row'}>
-                            <td>{termToDisplay.term}</td>
-                            <td className="definition-text">
-                              {termToDisplay.definition}
-                            </td>
-                            <td>{termToDisplay.domain}</td>
-                            <td>{termToDisplay.language}</td>
-                            <td>
-                              {translations.length > 0 ? (
-                                <button
-                                  onClick={() => toggleExpandedDetails(app.id)}
-                                >
-                                  {expandedAppId === app.id
-                                    ? 'Hide'
-                                    : `Show (${translations.length})`}
-                                </button>
-                              ) : (
-                                '-'
-                              )}
-                            </td>
-                            <td>{renderStatusBadge(app.status)}</td>
-                            <td>{app.crowd_votes_count || 0}</td>
-                            {activeTab === 'pending' && (
-                              <td>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleVote(app.term_id);
-                                  }}
-                                  className="vote-btn"
-                                >
-                                  Vote
-                                </button>
-                              </td>
-                            )}
+                  </thead>
+                  <tbody>{tableContent}</tbody>
+                </table>
+              </div>
+            ))}
 
-                            {activeTab === 'my' && (
-                              <td>
-                                <button
-                                  onClick={() =>
-                                    handleDeleteApplication(app.id)
-                                  }
-                                  className="delete-btn"
-                                >
-                                  Delete
-                                </button>
-                              </td>
-                            )}
-                          </tr>
-                          {expandedAppId === app.id &&
-                            translations.length > 0 && (
-                              <tr>
-                                <td colSpan={activeTab === 'pending' ? 8 : 8}>
-                                  <div className="expanded-details">
-                                    <div className="translations">
-                                      <h4>Translations:</h4>
-                                      <ul>
-                                        {translations.map((t, idx) => (
-                                          <li key={t.id || idx}>
-                                            <strong>{t.language}:</strong>{' '}
-                                            {t.term} - {t.definition}
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                    {app.review && (
-                                      <div className="feedback">
-                                        <h4>Feedback:</h4>
-                                        <p>{app.review}</p>
-                                      </div>
-                                    )}
-                                  </div>
-                                </td>
-                              </tr>
-                            )}
-                        </React.Fragment>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {activeTab === 'rejected' && (
-            <div className="table-wrapper">
-              <table className="terms-table">
-                <thead>
-                  <tr>
-                    <th>Term</th>
-                    <th>Definition</th>
-                    <th>Domain</th>
-                    <th>Language</th>
-                    <th>Review Feedback</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading && (
+          {activeTab === 'rejected' &&
+            (isMobile ? (
+              <ul className="applications-list">{tableContent}</ul>
+            ) : (
+              <div className="table-wrapper">
+                <table className="terms-table">
+                  <thead>
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'center' }}>
-                        Loading...
-                      </td>
+                      <th>Term</th>
+                      <th>Definition</th>
+                      <th>Domain</th>
+                      <th>Language</th>
+                      <th>Review Feedback</th>
+                      <th>Action</th>
                     </tr>
-                  )}
-                  {!loading && rejectedTerms.length === 0 && (
-                    <tr>
-                      <td colSpan={6} style={{ textAlign: 'center' }}>
-                        No rejected terms found
-                      </td>
-                    </tr>
-                  )}
-                  {!loading &&
-                    rejectedTerms.map((app, i) => {
-                      const termToDisplay = app.proposed_content;
-                      return (
-                        <tr
-                          key={app.id}
-                          className={i % 2 === 0 ? 'even-row' : 'odd-row'}
-                        >
-                          <td>{termToDisplay.term}</td>
-                          <td className="definition-text">
-                            {termToDisplay.definition}
-                          </td>
-                          <td>{termToDisplay.domain}</td>
-                          <td>{termToDisplay.language}</td>
-                          <td>{app.review || 'No feedback provided'}</td>
-                          <td>
-                            <button
-                              onClick={() => handleDeleteApplication(app.id)}
-                              className="delete-btn"
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>{tableContent}</tbody>
+                </table>
+              </div>
+            ))}
         </div>
       </div>
     </div>

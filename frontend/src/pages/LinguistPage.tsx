@@ -1,5 +1,4 @@
-// frontend/src/pages/LinguistPage.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, JSX } from 'react';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { API_ENDPOINTS } from '../config';
@@ -44,6 +43,209 @@ interface TermSchema {
   example?: string;
 }
 
+interface AppRowProps {
+  app: TermApplication;
+  isMobile: boolean;
+  i: number;
+  activeTab: 'review' | 'my' | 'rejected' | 'submit' | 'edit';
+  expandedAppId: string | null;
+  fetchedTranslations: { [key: string]: TermSchema };
+  renderStatusBadge: (status: string) => JSX.Element;
+  toggleExpandedDetails: (id: string) => void;
+  handleVerify: (id: string) => void;
+  openReviewModal: (id: string) => void;
+  openDeleteModal: (id: string) => void;
+}
+
+const ApplicationRowOrCard: React.FC<AppRowProps> = ({
+  app,
+  isMobile,
+  i,
+  activeTab,
+  expandedAppId,
+  fetchedTranslations,
+  renderStatusBadge,
+  toggleExpandedDetails,
+  handleVerify,
+  openReviewModal,
+  openDeleteModal,
+}) => {
+  const translations =
+    app.proposed_content?.translations
+      ?.map((id) => fetchedTranslations[id])
+      .filter(Boolean) || [];
+  const termToDisplay =
+    app.status === 'ADMIN_APPROVED' && app.term_details
+      ? app.term_details
+      : app.proposed_content;
+  if (!termToDisplay) return null;
+
+  if (isMobile) {
+    return (
+      <li className="application-card">
+        <div className="card-header">
+          <span className="card-term">{termToDisplay.term}</span>
+          {renderStatusBadge(app.status)}
+        </div>
+        <div className="card-body">
+          <p className="card-definition">{termToDisplay.definition}</p>
+          <div className="card-meta">
+            <span>
+              <strong>Domain:</strong> {termToDisplay.domain}
+            </span>
+            <span>
+              <strong>Language:</strong> {termToDisplay.language}
+            </span>
+            <span>
+              <strong>Submitter:</strong>{' '}
+              {app.submitted_by_user?.name || 'Unknown'}
+            </span>
+            <span>
+              <strong>Votes:</strong> {app.crowd_votes_count || 0}
+            </span>
+          </div>
+        </div>
+        <div className="card-footer">
+          <div className="card-actions">
+            {activeTab === 'review' && app.status !== 'REJECTED' && (
+              <>
+                <button
+                  onClick={() => handleVerify(app.id)}
+                  className="approve-btn"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => openReviewModal(app.id)}
+                  className="reject-btn"
+                >
+                  Reject
+                </button>
+              </>
+            )}
+            {(activeTab === 'my' || activeTab === 'rejected') &&
+              app.status === 'REJECTED' && (
+                <button
+                  onClick={() => openDeleteModal(app.id)}
+                  className="delete-btn"
+                >
+                  Delete
+                </button>
+              )}
+          </div>
+          {translations.length > 0 && (
+            <button
+              onClick={() => toggleExpandedDetails(app.id)}
+              className="translations-btn"
+            >
+              {expandedAppId === app.id
+                ? 'Hide'
+                : `Show (${translations.length})`}
+            </button>
+          )}
+        </div>
+        {expandedAppId === app.id && (
+          <div className="expanded-details">
+            {translations.length > 0 && (
+              <div className="translations">
+                <h4>Translations:</h4>
+                <ul>
+                  {translations.map((t, idx) => (
+                    <li key={t.id || idx}>
+                      <strong>{t.language}:</strong> {t.term} - {t.definition}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {app.review && (
+              <div className="feedback">
+                <h4>Feedback:</h4>
+                <p>{app.review}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </li>
+    );
+  }
+
+  return (
+    <React.Fragment>
+      <tr className={i % 2 === 0 ? 'even-row' : 'odd-row'}>
+        <td>{termToDisplay.term}</td>
+        <td className="definition-text">{termToDisplay.definition}</td>
+        <td>{termToDisplay.domain}</td>
+        <td>{termToDisplay.language}</td>
+        <td>{app.submitted_by_user?.name || 'Unknown'}</td>
+        <td>{renderStatusBadge(app.status)}</td>
+        <td>{app.crowd_votes_count || 0}</td>
+        <td className="actions">
+          {activeTab === 'review' && app.status !== 'REJECTED' && (
+            <>
+              <button
+                onClick={() => handleVerify(app.id)}
+                className="approve-btn"
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => openReviewModal(app.id)}
+                className="reject-btn"
+              >
+                Reject
+              </button>
+            </>
+          )}
+          {(activeTab === 'my' || activeTab === 'rejected') &&
+            app.status === 'REJECTED' && (
+              <button
+                onClick={() => openDeleteModal(app.id)}
+                className="delete-btn"
+              >
+                Delete
+              </button>
+            )}
+          {translations.length > 0 && (
+            <button
+              onClick={() => toggleExpandedDetails(app.id)}
+              className="translations-btn"
+            >
+              {expandedAppId === app.id
+                ? 'Hide'
+                : `Show (${translations.length})`}
+            </button>
+          )}
+        </td>
+      </tr>
+      {expandedAppId === app.id && translations.length > 0 && (
+        <tr>
+          <td colSpan={8}>
+            <div className="expanded-details">
+              <div className="translations">
+                <h4>Translations:</h4>
+                <ul>
+                  {translations.map((t, idx) => (
+                    <li key={t.id || idx}>
+                      <strong>{t.language}:</strong> {t.term} - {t.definition}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {app.review && (
+                <div className="feedback">
+                  <h4>Feedback:</h4>
+                  <p>{app.review}</p>
+                </div>
+              )}
+            </div>
+          </td>
+        </tr>
+      )}
+    </React.Fragment>
+  );
+};
+
 const LinguistPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -67,8 +269,6 @@ const LinguistPage: React.FC = () => {
   const [currentAppId, setCurrentAppId] = useState<string | null>(null);
   const [reviewText, setReviewText] = useState('');
   const [activeMenuItem, setActiveMenuItem] = useState('linguist-application');
-
-  // Form state for submit/edit
   const [newTerm, setNewTerm] = useState('');
   const [definition, setDefinition] = useState('');
   const [example, setExample] = useState('');
@@ -202,9 +402,7 @@ const LinguistPage: React.FC = () => {
           );
         }
       });
-
       if (allTranslationIds.size === 0) return;
-
       try {
         const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
           method: 'POST',
@@ -214,7 +412,6 @@ const LinguistPage: React.FC = () => {
           },
           body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
         });
-
         if (!res.ok) throw new Error('Failed to fetch translations');
         const data: TermSchema[] = await res.json();
         const translationsMap = data.reduce(
@@ -229,7 +426,6 @@ const LinguistPage: React.FC = () => {
         console.error('Error fetching translations:', err);
       }
     };
-
     if ((mySubmissions.length > 0 || applications.length > 0) && token) {
       fetchAllTranslations();
     }
@@ -255,11 +451,19 @@ const LinguistPage: React.FC = () => {
     }
   };
 
-  const handleReject = async () => {
-    if (!currentAppId || !reviewText) {
-      return alert('Please provide review feedback');
-    }
+  const openReviewModal = (id: string) => {
+    setCurrentAppId(id);
+    setReviewModalOpen(true);
+  };
 
+  const openDeleteModal = (id: string) => {
+    setCurrentAppId(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleReject = async () => {
+    if (!currentAppId || !reviewText)
+      return alert('Please provide review feedback');
     try {
       const response = await fetch(
         API_ENDPOINTS.linguistRejectApplication(currentAppId),
@@ -273,7 +477,6 @@ const LinguistPage: React.FC = () => {
         },
       );
       if (!response.ok) throw new Error('Rejection failed');
-
       setReviewModalOpen(false);
       setReviewText('');
       fetchApplications();
@@ -287,22 +490,12 @@ const LinguistPage: React.FC = () => {
 
   const handleDeleteApplication = async () => {
     if (!currentAppId) return;
-
     try {
       const response = await fetch(
         API_ENDPOINTS.deleteTermApplication(currentAppId),
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to delete application');
-      }
-
+      if (!response.ok) throw new Error('Failed to delete application');
       fetchMySubmissions();
       fetchRejectedTerms();
       setDeleteModalOpen(false);
@@ -314,10 +507,8 @@ const LinguistPage: React.FC = () => {
   };
 
   const handleSubmitTerm = async () => {
-    if (!newTerm || !definition || !selectedDomain || !selectedLanguage) {
+    if (!newTerm || !definition || !selectedDomain || !selectedLanguage)
       return alert('Please fill in all required fields');
-    }
-
     const translationsToSend = selectedTranslations.map((t) => t.id);
     const body = {
       term: newTerm,
@@ -328,7 +519,6 @@ const LinguistPage: React.FC = () => {
       translations: translationsToSend,
       ...(termToEditId && { original_term_id: termToEditId }),
     };
-
     try {
       const response = await fetch(API_ENDPOINTS.submitTerm, {
         method: 'POST',
@@ -338,12 +528,10 @@ const LinguistPage: React.FC = () => {
         },
         body: JSON.stringify(body),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Submission failed');
       }
-
       setNewTerm('');
       setDefinition('');
       setExample('');
@@ -351,7 +539,6 @@ const LinguistPage: React.FC = () => {
       setSelectedLanguage('');
       setSelectedTranslations([]);
       setTermToEditId(null);
-
       fetchMySubmissions();
       fetchRejectedTerms();
       setActiveTab('my');
@@ -362,33 +549,26 @@ const LinguistPage: React.FC = () => {
   };
 
   const handleSelectTranslation = (term: TermSchema) => {
-    if (!selectedTranslations.some((t) => t.id === term.id)) {
+    if (!selectedTranslations.some((t) => t.id === term.id))
       setSelectedTranslations([...selectedTranslations, term]);
-    }
     setTranslationSearchQuery('');
   };
-
-  const handleRemoveTranslation = (termId: string) => {
+  const handleRemoveTranslation = (termId: string) =>
     setSelectedTranslations(
       selectedTranslations.filter((t) => t.id !== termId),
     );
-  };
-
   const handleSelectTermToEdit = (term: TermSchema) => {
     setTermToEditId(term.id);
     setEditSearchQuery(`${term.term} (${term.language}) - ${term.domain}`);
   };
-
-  const toggleExpandedDetails = (id: string) => {
+  const toggleExpandedDetails = (id: string) =>
     setExpandedAppId(expandedAppId === id ? null : id);
-  };
-
   const renderStatusBadge = (status: string) => {
+    // Ensure status is not null and convert to uppercase
+    const normalizedStatus = status ? status.toUpperCase() : '';
+
     const statusMap: Record<string, { class: string; text: string }> = {
-      PENDING_VERIFICATION: {
-        class: 'pending_verification',
-        text: 'Pending Verification',
-      },
+      PENDING_VERIFICATION: { class: 'pending_verification', text: 'Pending' },
       REJECTED: { class: 'rejected', text: 'Rejected' },
       CROWD_VERIFIED: { class: 'crowd_verified', text: 'Crowd Verified' },
       LINGUIST_VERIFIED: {
@@ -398,7 +578,11 @@ const LinguistPage: React.FC = () => {
       ADMIN_APPROVED: { class: 'admin_approved', text: 'Approved' },
     };
 
-    const statusInfo = statusMap[status] || { class: '', text: status };
+    const statusInfo = statusMap[normalizedStatus] || {
+      class: 'unknown',
+      text: status,
+    };
+
     return (
       <span className={`status-badge ${statusInfo.class}`}>
         {statusInfo.text}
@@ -414,20 +598,60 @@ const LinguistPage: React.FC = () => {
         .includes(translationSearchQuery.toLowerCase()) ||
       term.domain.toLowerCase().includes(translationSearchQuery.toLowerCase()),
   );
-
   const filteredEditableTerms = editableTerms.filter(
     (term) =>
       term.term.toLowerCase().includes(editSearchQuery.toLowerCase()) ||
       term.language.toLowerCase().includes(editSearchQuery.toLowerCase()) ||
       term.domain.toLowerCase().includes(editSearchQuery.toLowerCase()),
   );
-
   const applicationsToDisplay =
     activeTab === 'my'
       ? mySubmissions
       : activeTab === 'rejected'
         ? rejectedTerms
         : applications;
+
+  const tableContent = (
+    <>
+      {loading && (
+        <tr>
+          <td colSpan={8} style={{ textAlign: 'center' }}>
+            Loading...
+          </td>
+        </tr>
+      )}
+      {!loading && applicationsToDisplay.length === 0 && (
+        <tr>
+          <td colSpan={8} style={{ textAlign: 'center' }}>
+            No{' '}
+            {activeTab === 'review'
+              ? 'applications to review'
+              : activeTab === 'my'
+                ? 'submissions'
+                : 'rejected terms'}{' '}
+            found
+          </td>
+        </tr>
+      )}
+      {!loading &&
+        applicationsToDisplay.map((app, i) => (
+          <ApplicationRowOrCard
+            key={app.id}
+            app={app}
+            isMobile={isMobile}
+            i={i}
+            activeTab={activeTab}
+            expandedAppId={expandedAppId}
+            fetchedTranslations={fetchedTranslations}
+            renderStatusBadge={renderStatusBadge}
+            toggleExpandedDetails={toggleExpandedDetails}
+            handleVerify={handleVerify}
+            openReviewModal={() => openReviewModal(app.id)}
+            openDeleteModal={() => openDeleteModal(app.id)}
+          />
+        ))}
+    </>
+  );
 
   return (
     <div
@@ -441,11 +665,9 @@ const LinguistPage: React.FC = () => {
           setActiveItem={setActiveMenuItem}
         />
       )}
-
       <div className="linguist-page-container">
         <div className="linguist-page-content">
           <h1 className="page-title">Linguist Dashboard</h1>
-
           <div className="tabs">
             <button
               className={activeTab === 'review' ? 'active-tab' : ''}
@@ -503,9 +725,7 @@ const LinguistPage: React.FC = () => {
                         <li
                           key={term.id}
                           onClick={() => handleSelectTermToEdit(term)}
-                        >
-                          {`${term.term} (${term.language}) - ${term.domain}`}
-                        </li>
+                        >{`${term.term} (${term.language}) - ${term.domain}`}</li>
                       ))}
                     </ul>
                   )}
@@ -516,7 +736,6 @@ const LinguistPage: React.FC = () => {
                   )}
                 </div>
               )}
-
               {(activeTab === 'submit' || termToEditId) && (
                 <>
                   <div className="form-group">
@@ -604,14 +823,11 @@ const LinguistPage: React.FC = () => {
                               <li
                                 key={term.id}
                                 onClick={() => handleSelectTranslation(term)}
-                              >
-                                {`${term.term} (${term.language}) - ${term.domain}`}
-                              </li>
+                              >{`${term.term} (${term.language}) - ${term.domain}`}</li>
                             ))}
                         </ul>
                       )}
                     </div>
-
                     {selectedTranslations.length > 0 && (
                       <div className="selected-translations">
                         <h4>Selected Translations:</h4>
@@ -653,146 +869,28 @@ const LinguistPage: React.FC = () => {
 
           {(activeTab === 'review' ||
             activeTab === 'my' ||
-            activeTab === 'rejected') && (
-            <div className="table-wrapper">
-              <table className="applications-table">
-                <thead>
-                  <tr>
-                    <th>Term</th>
-                    <th>Definition</th>
-                    <th>Domain</th>
-                    <th>Language</th>
-                    <th>Submitted By</th>
-                    <th>Status</th>
-                    <th>Votes</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading && (
+            activeTab === 'rejected') &&
+            (isMobile ? (
+              <ul className="applications-list">{tableContent}</ul>
+            ) : (
+              <div className="table-wrapper">
+                <table className="applications-table">
+                  <thead>
                     <tr>
-                      <td colSpan={8} style={{ textAlign: 'center' }}>
-                        Loading...
-                      </td>
+                      <th>Term</th>
+                      <th>Definition</th>
+                      <th>Domain</th>
+                      <th>Language</th>
+                      <th>Submitted By</th>
+                      <th>Status</th>
+                      <th>Votes</th>
+                      <th>Actions</th>
                     </tr>
-                  )}
-
-                  {!loading && applicationsToDisplay.length === 0 && (
-                    <tr>
-                      <td colSpan={8} style={{ textAlign: 'center' }}>
-                        No{' '}
-                        {activeTab === 'review'
-                          ? 'applications to review'
-                          : activeTab === 'my'
-                            ? 'submissions'
-                            : 'rejected terms'}{' '}
-                        found
-                      </td>
-                    </tr>
-                  )}
-
-                  {!loading &&
-                    applicationsToDisplay.map((app, i) => {
-                      const translations =
-                        app.proposed_content?.translations
-                          ?.map((id) => fetchedTranslations[id])
-                          .filter(Boolean) || [];
-                      const termToDisplay =
-                        app.status === 'ADMIN_APPROVED' && app.term_details
-                          ? app.term_details
-                          : app.proposed_content;
-                      if (!termToDisplay) return null;
-
-                      return (
-                        <React.Fragment key={app.id}>
-                          <tr className={i % 2 === 0 ? 'even-row' : 'odd-row'}>
-                            <td>{termToDisplay.term}</td>
-                            <td className="definition-text">
-                              {termToDisplay.definition}
-                            </td>
-                            <td>{termToDisplay.domain}</td>
-                            <td>{termToDisplay.language}</td>
-                            <td>{app.submitted_by_user?.name || 'Unknown'}</td>
-                            <td>{renderStatusBadge(app.status)}</td>
-                            <td>{app.crowd_votes_count || 0}</td>
-                            <td className="actions">
-                              {activeTab === 'review' &&
-                                app.status !== 'REJECTED' && (
-                                  <>
-                                    <button
-                                      onClick={() => handleVerify(app.id)}
-                                      className="approve-btn"
-                                    >
-                                      Approve
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setCurrentAppId(app.id);
-                                        setReviewModalOpen(true);
-                                      }}
-                                      className="reject-btn"
-                                    >
-                                      Reject
-                                    </button>
-                                  </>
-                                )}
-                              {(activeTab === 'my' ||
-                                activeTab === 'rejected') &&
-                                app.status === 'REJECTED' && (
-                                  <button
-                                    onClick={() => {
-                                      setCurrentAppId(app.id);
-                                      setDeleteModalOpen(true);
-                                    }}
-                                    className="delete-btn"
-                                  >
-                                    Delete
-                                  </button>
-                                )}
-                              {translations.length > 0 && (
-                                <button
-                                  onClick={() => toggleExpandedDetails(app.id)}
-                                >
-                                  {expandedAppId === app.id
-                                    ? 'Hide'
-                                    : `Show (${translations.length})`}
-                                </button>
-                              )}
-                            </td>
-                          </tr>
-                          {expandedAppId === app.id &&
-                            translations.length > 0 && (
-                              <tr>
-                                <td colSpan={8}>
-                                  <div className="expanded-details">
-                                    <div className="translations">
-                                      <h4>Translations:</h4>
-                                      <ul>
-                                        {translations.map((t, idx) => (
-                                          <li key={t.id || idx}>
-                                            <strong>{t.language}:</strong>{' '}
-                                            {t.term} - {t.definition}
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                    {app.review && (
-                                      <div className="feedback">
-                                        <h4>Feedback:</h4>
-                                        <p>{app.review}</p>
-                                      </div>
-                                    )}
-                                  </div>
-                                </td>
-                              </tr>
-                            )}
-                        </React.Fragment>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>{tableContent}</tbody>
+                </table>
+              </div>
+            ))}
         </div>
       </div>
 
@@ -828,7 +926,6 @@ const LinguistPage: React.FC = () => {
           </div>
         </div>
       )}
-
       {deleteModalOpen && (
         <div className="review-modal-backdrop">
           <div className="review-modal">
