@@ -1012,7 +1012,32 @@ const GlossaryApp = () => {
 
               <div className="terms-list">
                 {loading ? (
-                  <div className="terms-list-message">Loading terms...</div>
+                  <div
+                    className="terms-list-spinner"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '180px',
+                    }}
+                  >
+                    <span
+                      className="spinner"
+                      style={{ width: 48, height: 48, display: 'inline-block' }}
+                    >
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: 48,
+                          height: 48,
+                          border: '6px solid #00ceaf',
+                          borderTop: '6px solid #00ceaf36',
+                          borderRadius: '50%',
+                          animation: 'spin 1s linear infinite',
+                        }}
+                      />
+                    </span>
+                  </div>
                 ) : terms.length === 0 ? (
                   <div className="terms-list-message">
                     No terms found for this glossary.
