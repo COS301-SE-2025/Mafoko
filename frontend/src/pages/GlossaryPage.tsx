@@ -531,17 +531,17 @@ const GlossaryPage = () => {
             >
               {/* Error Display */}
               {error && (
-                <div
-                  style={{
-                    background: '#553c2c',
-                    border: `1px solid #d69e2e`,
-                    color: '#fbb6ce',
-                    padding: '12px',
-                    borderRadius: '6px',
-                    marginBottom: '1rem',
-                    textAlign: 'center',
-                  }}
-                >
+                  <div
+                    style={{
+                      background: '#553c2c',
+                      border: `1px solid #d69e2e`,
+                      color: '#fbb6ce',
+                      padding: '12px',
+                      borderRadius: '6px',
+                      marginBottom: '1rem',
+                      textAlign: 'center',
+                    }}
+                  >
                   {error}
                 </div>
               )}
