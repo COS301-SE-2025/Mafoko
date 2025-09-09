@@ -287,7 +287,6 @@ const SearchPage: React.FC = () => {
 
                 <div className="flex w-full flex-col">
                   {isLoading ? (
-
                     <div
                       className="flex flex-col items-center justify-center py-8 text-center w-full"
                       role="status"
@@ -299,7 +298,6 @@ const SearchPage: React.FC = () => {
                       />
                       <span className="sr-only">{t('searchPage.loading')}</span>
                     </div>
-
                   ) : results.length > 0 ? (
                     <div className="dictionary-view">
                       {Object.keys(groupedTerms)
