@@ -50,6 +50,13 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         group: 'main-navigation',
       },
       {
+        id: 'analytics',
+        label: 'Dashboard',
+        path: '/analytics',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
+      },
+      {
         id: 'search',
         label: t('navigation.dictionary'),
         path: '/search',
@@ -111,13 +118,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         path: '/settings',
         roles: ['admin', 'contributor', 'linguist'],
         group: 'account',
-      },
-      {
-        id: 'analytics',
-        label: t('navigation.dashboard'),
-        path: '/analytics',
-        roles: ['admin', 'linguist'],
-        group: 'work-tools',
       },
       {
         id: 'admin-page',
