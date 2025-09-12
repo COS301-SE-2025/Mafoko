@@ -21,7 +21,7 @@
 
 .left-nav {
   width: 280px;
-  min-height: 100vh;
+  height: 100vh;
   background-color: var(--bg-tir) !important;
   color: var(--bg-secondary) !important;
   padding: 0;
@@ -30,6 +30,9 @@
   left: 0;
   top: 0;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Hide any overflow outside the container */
 }
 
 .left-nav-header {
@@ -72,6 +75,16 @@
 
 .left-nav-navigation-menu {
   padding: 20px 0;
+  flex: 1;
+  overflow-y: auto;
+  /* Hide scrollbar for all browsers while keeping functionality */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Navigation Group Styles */
@@ -287,11 +300,13 @@
 
 /* Dark Mode Toggle at bottom of sidebar */
 .left-nav-footer {
-  position: absolute;
-  bottom: 0;
+  position: relative;
   width: 100%;
   padding: 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  background-color: var(--bg-tir); /* Ensure footer has same background as nav */
+  z-index: 5; /* Ensure it appears above scrolling content */
 }
 
 .dark-mode-toggle {
