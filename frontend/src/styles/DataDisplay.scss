@@ -10,10 +10,10 @@
   overflow-x: auto; // This will now work correctly
   border: 1px solid var(--admin-border-color);
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
-
-
 
 .applications-table,
 .terms-table {
@@ -30,8 +30,6 @@
     word-wrap: break-word;
     vertical-align: middle;
   }
-
-
 }
 
 // ==============================================
@@ -57,7 +55,9 @@
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-left: 4px solid $admin-accent-teal;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
@@ -131,7 +131,11 @@
   align-items: center; // Prevents vertical alignment glitches
 }
 
-.approve-btn, .reject-btn, .delete-btn, .vote-btn, .translations-btn {
+.approve-btn,
+.reject-btn,
+.delete-btn,
+.vote-btn,
+.translations-btn {
   padding: 0.4rem 0.8rem;
   border: none;
   border-radius: 0.25rem;
@@ -142,7 +146,9 @@
   // Define base state for smooth transitions
   transform: translateY(0);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
@@ -155,7 +161,8 @@
   color: white;
 }
 
-.reject-btn, .delete-btn {
+.reject-btn,
+.delete-btn {
   background: linear-gradient(145deg, #f00a50, #d90946);
   color: white;
 }
@@ -175,17 +182,18 @@
 // =========================
 
 .status-badge {
-  display: inline-block;     
-  white-space: nowrap;       
-  box-sizing: border-box;   
+  display: inline-block;
+  white-space: nowrap;
+  box-sizing: border-box;
   font-weight: 600;
   font-size: 0.8rem;
-  padding: 0.3rem 0.8rem;    
-  border-radius: 999px;      
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
   border: 1px solid;
   line-height: 1.2;
 
-  &.pending_verification, &.pending-verification {
+  &.pending_verification,
+  &.pending-verification {
     color: $admin-accent-yellow;
     background-color: rgba($admin-accent-yellow, 0.1);
     border-color: $admin-accent-yellow;
@@ -197,19 +205,22 @@
     border-color: $admin-accent-pink;
     box-shadow: 0 1px 4px rgba($admin-accent-pink, 0.4);
   }
-  &.crowd_verified, &.crowd-verified {
+  &.crowd_verified,
+  &.crowd-verified {
     color: darken($admin-accent-teal, 15%);
     background-color: rgba($admin-accent-teal, 0.15);
     border-color: darken($admin-accent-teal, 15%);
     box-shadow: 0 1px 4px rgba($admin-accent-teal, 0.3);
   }
-  &.linguist_verified, &.linguist-verified {
+  &.linguist_verified,
+  &.linguist-verified {
     color: #fff;
     background-color: $admin-accent-teal;
     border-color: $admin-accent-teal;
     box-shadow: 0 1px 4px rgba($admin-accent-teal, 0.5);
   }
-  &.admin_approved, &.admin-approved {
+  &.admin_approved,
+  &.admin-approved {
     color: #fff;
     background-color: darken($admin-accent-teal, 10%);
     border-color: darken($admin-accent-teal, 10%);
@@ -264,20 +275,20 @@
     }
 
     .translation-term {
-        font-weight: 600;
-        margin-bottom: 0.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
     }
     .translation-definition {
-        opacity: 0.9;
-        line-height: 1.4;
+      opacity: 0.9;
+      line-height: 1.4;
     }
     .translation-example {
-        font-style: italic;
-        opacity: 0.8;
-        font-size: 0.9rem;
-        border-left: 2px solid $admin-accent-yellow;
-        padding-left: 0.5rem;
-        margin-top: 0.5rem;
+      font-style: italic;
+      opacity: 0.8;
+      font-size: 0.9rem;
+      border-left: 2px solid $admin-accent-yellow;
+      padding-left: 0.5rem;
+      margin-top: 0.5rem;
     }
   }
 }

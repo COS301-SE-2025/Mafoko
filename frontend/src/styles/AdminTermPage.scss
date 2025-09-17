@@ -84,7 +84,9 @@
         color: var(--admin-text-color);
         font-weight: 500;
         text-align: left;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
 
         &:hover {
           border-color: $admin-accent-teal;
@@ -133,9 +135,11 @@
         padding: 0.5rem 2.5rem 0.5rem 1rem;
         border-radius: 4px;
         color: var(--admin-text-color);
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
 
-        &[data-headlessui-state*="active"] {
+        &[data-headlessui-state*='active'] {
           background-color: $admin-accent-teal;
           color: #fff;
         }
@@ -175,7 +179,7 @@
       flex-direction: column;
       gap: 1rem;
       color: var(--admin-text-color);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       border-top: 3px solid $admin-accent-teal;
 
       h2 {

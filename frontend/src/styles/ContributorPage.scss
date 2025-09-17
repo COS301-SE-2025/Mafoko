@@ -78,7 +78,9 @@
           padding: 0.5rem;
           border-radius: 0.25rem;
           border: 1px solid var(--admin-border-color);
-          background-color: var(--admin-bg-row-odd); // This will now apply correctly
+          background-color: var(
+            --admin-bg-row-odd
+          ); // This will now apply correctly
           color: var(--admin-text-color);
           appearance: none; // Add this line
 
@@ -103,12 +105,12 @@
           flex: 1;
         }
 
-          @media (max-width: 768px) {
-            flex-direction: column;
-            gap: 1rem; // Use the gap for spacing instead of margin
-          }
+        @media (max-width: 768px) {
+          flex-direction: column;
+          gap: 1rem; // Use the gap for spacing instead of margin
+        }
       }
-      
+
       .translations-section {
         margin-top: 1.5rem;
         padding-top: 1.5rem;
