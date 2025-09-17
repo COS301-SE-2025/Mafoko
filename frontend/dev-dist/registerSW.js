@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) navigator.serviceWorker.register('/Marito/dev-sw.js?dev-sw', { scope: '/Marito/', type: 'classic' })
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/Marito/dev-sw.js?dev-sw', { scope: '/Marito/', type: 'module' })

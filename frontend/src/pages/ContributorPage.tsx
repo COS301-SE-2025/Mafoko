@@ -74,10 +74,7 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
         <div className="card-footer">
           <div className="card-actions">
             {activeTab === 'pending' && (
-              <button
-                onClick={() => handleVote(app.term_id)}
-                className="vote-btn"
-              >
+              <button onClick={() => handleVote(app.id)} className="vote-btn">
                 Vote
               </button>
             )}
@@ -172,10 +169,7 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
         <td>{app.crowd_votes_count || 0}</td>
         <td className="actions">
           {activeTab === 'pending' && (
-            <button
-              onClick={() => handleVote(app.term_id)}
-              className="vote-btn"
-            >
+            <button onClick={() => handleVote(app.id)} className="vote-btn">
               Vote
             </button>
           )}

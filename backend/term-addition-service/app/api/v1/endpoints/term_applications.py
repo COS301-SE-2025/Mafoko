@@ -13,13 +13,13 @@ router = APIRouter()
 
 
 @router.post(
-    "/{application_id}/vote",
+    "/{termId}/vote",
     response_model=TermApplicationRead,
     summary="Crowd vote for a term application",
     description="Allows users to vote for a term application.",
 )
 async def crowd_vote_term_application(
-    application_id: UUID,
+    termId: UUID,
     db: AsyncSession = Depends(deps.get_db),
     current_user: UserSchema = Depends(deps.get_current_active_user),
 ):
@@ -29,7 +29,7 @@ async def crowd_vote_term_application(
     try:
         updated_application = await crud_term_application.add_application_vote(
             db,
-            application_id=application_id,
+            application_id=termId,
             voter_id=current_user.id,
         )
     except ValueError as e:
@@ -77,7 +77,15 @@ async def get_pending_term_applications(
     Get all term applications that are pending verification.
     """
     applications = await crud_term_application.get_applications_pending_verification(db)
-    return applications
+    response_applications = []
+    for app in applications:
+        app_dict = TermApplicationRead.model_validate(app).model_dump()
+        app_dict["crowd_votes_count"] = (
+            await crud_term_application.get_application_vote_count(db, app.id)
+        )
+        response_applications.append(TermApplicationRead(**app_dict))
+
+    return response_applications
 
 
 @router.get(

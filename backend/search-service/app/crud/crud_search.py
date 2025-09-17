@@ -75,3 +75,32 @@ async def suggest_terms_in_db(db: AsyncSession, query: str) -> List[Term]:
     )
     result = await db.execute(stmt)
     return list(result.scalars().all())
+
+
+async def get_all_terms_for_offline(db: AsyncSession) -> List:
+    """
+    Fetches all terms with their vote counts, optimized for PWA bulk download.
+    This function is NOT paginated.
+    """
+    vote_counts = (
+        select(
+            TermVote.term_id,
+            func.count(case((TermVote.vote == VoteType.upvote, TermVote.id))).label(
+                "upvote_count"
+            ),
+            func.count(case((TermVote.vote == VoteType.downvote, TermVote.id))).label(
+                "downvote_count"
+            ),
+        )
+        .group_by(TermVote.term_id)
+        .subquery()
+    )
+
+    stmt = (
+        select(Term, vote_counts.c.upvote_count, vote_counts.c.downvote_count)
+        .outerjoin(vote_counts, Term.id == vote_counts.c.term_id)
+        .order_by(Term.term)
+    )
+
+    result = await db.execute(stmt)
+    return list(result.all())

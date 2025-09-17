@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
 import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
@@ -24,7 +25,7 @@ import LinguistPage from './pages/LinguistPage';
 import AdminTermPage from './pages/AdminTermPage.tsx';
 import './App.css';
 import './styles/Global.scss';
-
+import { orchestrateCommentSync } from './utils/syncManager';
 import {
   Chart as ChartJS,
   PieController,
@@ -54,6 +55,25 @@ ChartJS.register(
 );
 
 function App() {
+  useEffect(() => {
+    const handleSWMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'SYNC_REQUEST') {
+        console.log('Client: Received sync request from service worker.');
+        orchestrateCommentSync().then((syncedItems) => {
+          if (syncedItems) {
+            console.log('Sync complete. Reloading page to show updates.');
+            window.location.reload();
+          }
+        });
+      }
+    };
+    navigator.serviceWorker?.addEventListener('message', handleSWMessage);
+    console.log('App loaded. Checking for pending sync items.');
+    orchestrateCommentSync();
+    return () => {
+      navigator.serviceWorker?.removeEventListener('message', handleSWMessage);
+    };
+  }, []);
   return (
     <div className="MaritoApp">
       <Routes>
