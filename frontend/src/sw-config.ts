@@ -16,7 +16,7 @@ if (import.meta.env.PROD) {
 }
 
 export const SW_API_ENDPOINTS = {
-  VOTES: `${voteServiceUrl}/api/v1/votes/`,
+  VOTES: `${voteServiceUrl}/api/v1/votes/terms/`,
   COMMENTS: `${commentServiceUrl}/api/v1/comments`,
   VOTE_ON_COMMENT: `${voteServiceUrl}/api/v1/votes/comments`,
   MANAGE_COMMENT: (commentId: string) =>
