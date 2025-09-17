@@ -84,6 +84,7 @@ vi.mock('../src/components/ui/TermCard', () => ({
 vi.mock('../src/utils/indexedDB', () => ({
   storeTerms: vi.fn(),
   getAllTerms: vi.fn().mockResolvedValue([]),
+  queryTerms: vi.fn().mockResolvedValue([]),
 }));
 
 vi.mock('../src/config', () => ({
