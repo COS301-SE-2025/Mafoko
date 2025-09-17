@@ -19,6 +19,11 @@ export default tseslint.config(
       'src/pages/AdminTermPage.tsx',
       'src/pages/ContributorPage.tsx',
       'src/pages/LinguistPage.tsx',
+      'src/App.tsx',
+      'src/SearchPage.tsx',
+      'src/TermDetailPage.tsx',
+      'src/sw.ts',
+      'src/utils/syncManager.ts',
     ],
   },
 
