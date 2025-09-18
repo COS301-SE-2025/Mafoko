@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, BookOpen } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
 interface LeftNavProps {
   activeItem: string;
@@ -76,6 +76,14 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         path: '/workspace',
         roles: ['admin', 'contributor', 'linguist'],
         group: 'work-tools',
+      },
+      {
+        id: 'learning-path',
+        label: 'Learning Path',
+        path: '/learning-path',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'work-tools',
+        icon: BookOpen,
       },
       {
         id: 'linguist-application',
