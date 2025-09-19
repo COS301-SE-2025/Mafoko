@@ -99,6 +99,7 @@ async def get_all_terms_for_offline(db: AsyncSession) -> List:
     stmt = (
         select(Term, vote_counts.c.upvote_count, vote_counts.c.downvote_count)
         .outerjoin(vote_counts, Term.id == vote_counts.c.term_id)
+        .options(selectinload(Term.translations))
         .order_by(Term.term)
     )
 

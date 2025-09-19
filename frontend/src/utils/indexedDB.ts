@@ -1,6 +1,39 @@
 import { openDB, DBSchema } from 'idb';
 import { Term } from '../types/terms/types';
 import { Comment } from '../types/termDetailTypes';
+import { TermApplicationCreate } from '../types/term';
+export interface PendingTermSubmission {
+  id: string; // A temporary UUID for the submission itself
+  body: TermApplicationCreate; // The data for the new term or edit
+  token: string;
+}
+
+export interface PendingTermVote {
+  id: string; // A temporary UUID
+  applicationId: string;
+  token: string;
+}
+
+export interface PendingTermDelete {
+  id: string; // A temporary UUID
+  applicationId: string;
+  token: string;
+}
+
+export interface PendingTermApproval {
+  id: string; // A temporary UUID
+  applicationId: string;
+  role: 'linguist' | 'admin';
+  token: string;
+}
+
+export interface PendingTermRejection {
+  id: string; // A temporary UUID
+  applicationId: string;
+  role: 'linguist' | 'admin';
+  body: { review: string };
+  token: string;
+}
 
 export interface PendingVote {
   id: string;
@@ -66,6 +99,11 @@ interface MyDB extends DBSchema {
     key: string;
     value: PendingCommentDelete;
   };
+  'pending-term-submissions': { key: string; value: PendingTermSubmission };
+  'pending-term-votes': { key: string; value: PendingTermVote };
+  'pending-term-deletes': { key: string; value: PendingTermDelete };
+  'pending-term-approvals': { key: string; value: PendingTermApproval };
+  'pending-term-rejections': { key: string; value: PendingTermRejection };
 }
 
 const dbPromise = openDB<MyDB>('marito-db', 3, {
@@ -91,6 +129,24 @@ const dbPromise = openDB<MyDB>('marito-db', 3, {
       }
       if (!db.objectStoreNames.contains('pending-comment-deletes')) {
         db.createObjectStore('pending-comment-deletes', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 4) {
+      // Add the new stores in the new version
+      if (!db.objectStoreNames.contains('pending-term-submissions')) {
+        db.createObjectStore('pending-term-submissions', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pending-term-votes')) {
+        db.createObjectStore('pending-term-votes', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pending-term-deletes')) {
+        db.createObjectStore('pending-term-deletes', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pending-term-approvals')) {
+        db.createObjectStore('pending-term-approvals', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pending-term-rejections')) {
+        db.createObjectStore('pending-term-rejections', { keyPath: 'id' });
       }
     }
   },
@@ -261,4 +317,92 @@ export async function replaceAllTerms(terms: Term[]) {
   await tx.store.clear();
   await Promise.all(terms.map((term) => tx.store.put(term)));
   await tx.done;
+}
+
+export const addPendingTermSubmission = async (
+  submission: PendingTermSubmission,
+) => (await dbPromise).put('pending-term-submissions', submission);
+
+export async function getAndClearPendingTermSubmissions(): Promise<
+  PendingTermSubmission[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-term-submissions', 'readwrite');
+  const allSubmissions = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allSubmissions;
+}
+
+export const addPendingTermVote = async (vote: PendingTermVote) =>
+  (await dbPromise).put('pending-term-votes', vote);
+
+export async function getAndClearPendingTermVotes(): Promise<
+  PendingTermVote[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-term-votes', 'readwrite');
+  const allVotes = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allVotes;
+}
+
+export const addPendingTermDelete = async (del: PendingTermDelete) =>
+  (await dbPromise).put('pending-term-deletes', del);
+
+export async function getAndClearPendingTermDeletes(): Promise<
+  PendingTermDelete[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-term-deletes', 'readwrite');
+  const allDeletes = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allDeletes;
+}
+
+export const addPendingTermApproval = async (approval: PendingTermApproval) =>
+  (await dbPromise).put('pending-term-approvals', approval);
+
+export async function getAndClearPendingTermApprovals(): Promise<
+  PendingTermApproval[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-term-approvals', 'readwrite');
+  const allApprovals = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allApprovals;
+}
+
+export const addPendingTermRejection = async (
+  rejection: PendingTermRejection,
+) => (await dbPromise).put('pending-term-rejections', rejection);
+
+export async function getAndClearPendingTermRejections(): Promise<
+  PendingTermRejection[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-term-rejections', 'readwrite');
+  const allRejections = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allRejections;
+}
+
+export async function getTermsByIdsFromDB(termIds: string[]): Promise<Term[]> {
+  const db = await dbPromise;
+  const tx = db.transaction('terms', 'readonly');
+  const store = tx.store;
+  const terms: Term[] = [];
+
+  for (const id of termIds) {
+    const term = await store.get(id);
+    if (term) {
+      terms.push(term);
+    }
+  }
+  await tx.done;
+  return terms;
 }

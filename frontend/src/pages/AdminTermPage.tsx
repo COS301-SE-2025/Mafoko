@@ -1,4 +1,4 @@
-import React, { JSX, useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState, useCallback } from 'react';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { TermApplicationRead } from '../types/term';
@@ -8,6 +8,13 @@ import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { Listbox } from '@headlessui/react';
 import { CheckIcon } from 'lucide-react';
 import { ChevronsUpDownIcon } from 'lucide-react';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  addPendingTermApproval,
+  addPendingTermRejection,
+  getTermsByIdsFromDB,
+} from '../utils/indexedDB';
+import { updateCache } from '../utils/cacheUpdater';
 
 interface TermSchema {
   id: string;
@@ -102,25 +109,29 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
             </button>
           )}
         </div>
-        {expandedAppId === app.id && translations.length > 0 && (
+        {expandedAppId === app.id && (
           <div className="expanded-details">
-            <div className="translations">
-              <h4>Translations:</h4>
-              <ul>
-                {translations.map((t, idx) => (
-                  <li key={t.id || idx}>
-                    <strong>{t.language}</strong>
-                    <div className="translation-term">{t.term}</div>
-                    <div className="translation-definition">{t.definition}</div>
-                    {t.example && (
-                      <div className="translation-example">
-                        <em>Example: {t.example}</em>
+            {translations.length > 0 && (
+              <div className="translations">
+                <h4>Translations:</h4>
+                <ul>
+                  {translations.map((t, idx) => (
+                    <li key={t.id || idx}>
+                      <strong>{t.language}</strong>
+                      <div className="translation-term">{t.term}</div>
+                      <div className="translation-definition">
+                        {t.definition}
                       </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      {t.example && (
+                        <div className="translation-example">
+                          <em>Example: {t.example}</em>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {app.review && (
               <div className="feedback">
                 <h4>Feedback:</h4>
@@ -154,11 +165,7 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
             '-'
           )}
         </td>
-        <td>
-          {app.submitted_by_user?.first_name +
-            ' ' +
-            app.submitted_by_user?.last_name}
-        </td>
+        <td>{`${app.submitted_by_user?.first_name} ${app.submitted_by_user?.last_name}`}</td>
         <td>{new Date(app.submitted_at).toLocaleString()}</td>
         <td>
           {app.reviewed_at ? new Date(app.reviewed_at).toLocaleString() : '-'}
@@ -239,16 +246,25 @@ const AdminTermPage: React.FC = () => {
   const [reviewModalOpen, setReviewModalOpen] = useState<boolean>(false);
   const [currentReviewId, setCurrentReviewId] = useState<string | null>(null);
   const [reviewText, setReviewText] = useState<string>('');
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-  const fetchAttributes = async () => {
+  const fetchAttributes = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getAttributes, {
         headers: { Authorization: `Bearer ${token}` },
@@ -260,9 +276,10 @@ const AdminTermPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [token]);
 
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
+    if (!token) return;
     setLoading(true);
     try {
       const url =
@@ -279,12 +296,16 @@ const AdminTermPage: React.FC = () => {
       console.error(err);
     }
     setLoading(false);
-  };
+  }, [activeTab, token]);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     fetchAttributes();
     fetchApplications();
-  }, [activeTab]);
+  }, [fetchAttributes, fetchApplications]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     const fetchAllTranslations = async () => {
@@ -296,21 +317,24 @@ const AdminTermPage: React.FC = () => {
           );
         }
       });
-
       if (allTranslationIds.size === 0) return;
-
       try {
-        const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
-        });
-
-        if (!res.ok) throw new Error('Failed to fetch translations');
-        const data: TermSchema[] = await res.json();
+        let data: TermSchema[];
+        if (isOffline) {
+          data = await getTermsByIdsFromDB(Array.from(allTranslationIds));
+        } else {
+          const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
+          });
+          if (!res.ok)
+            throw new Error('Failed to fetch translations from network');
+          data = await res.json();
+        }
         const translationsMap = data.reduce(
           (acc: { [key: string]: TermSchema }, term: TermSchema) => {
             acc[term.id] = term;
@@ -323,11 +347,10 @@ const AdminTermPage: React.FC = () => {
         console.error('Error fetching translations:', err);
       }
     };
-
-    if (applications.length > 0 && token) {
+    if (applications.length > 0) {
       fetchAllTranslations();
     }
-  }, [applications, token]);
+  }, [applications, token, isOffline]);
 
   useEffect(() => {
     setFilteredApplications(
@@ -341,14 +364,37 @@ const AdminTermPage: React.FC = () => {
   }, [applications, selectedDomain, selectedLanguage]);
 
   const handleApprove = async (id: string) => {
+    if (!token) return alert('Authentication required.');
+    const url = API_ENDPOINTS.getAdminApplicationsForApproval;
+    const originalApplications = [...applications];
+
+    const updatedApplications = originalApplications.filter(
+      (app) => app.id !== id,
+    );
+    setApplications(updatedApplications);
+
+    if (isOffline) {
+      updateCache('api-term-actions-cache', url, updatedApplications);
+      await addPendingTermApproval({
+        id: uuidv4(),
+        applicationId: id,
+        role: 'admin',
+        token,
+      });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      return;
+    }
+
     try {
       await fetch(API_ENDPOINTS.adminApproveApplication(id), {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchApplications();
+      fetchData(); // Re-fetch all data to ensure consistency
     } catch (err) {
       console.error(err);
+      setApplications(originalApplications); // Revert on error
     }
   };
 
@@ -361,7 +407,31 @@ const AdminTermPage: React.FC = () => {
   const handleReject = async () => {
     if (!reviewText || reviewText.length < 10)
       return alert('Review must be at least 10 characters.');
-    if (!currentReviewId) return;
+    if (!currentReviewId || !token) return;
+
+    const url = API_ENDPOINTS.getAdminApplicationsForApproval;
+    const originalApplications = [...applications];
+
+    const updatedApplications = originalApplications.filter(
+      (app) => app.id !== currentReviewId,
+    );
+    setApplications(updatedApplications);
+    setReviewModalOpen(false);
+
+    if (isOffline) {
+      updateCache('api-term-actions-cache', url, updatedApplications);
+      await addPendingTermRejection({
+        id: uuidv4(),
+        applicationId: currentReviewId,
+        role: 'admin',
+        body: { review: reviewText },
+        token,
+      });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      return;
+    }
+
     try {
       await fetch(API_ENDPOINTS.adminRejectApplication(currentReviewId), {
         method: 'PUT',
@@ -371,10 +441,10 @@ const AdminTermPage: React.FC = () => {
         },
         body: JSON.stringify({ review: reviewText }),
       });
-      setReviewModalOpen(false);
-      fetchApplications();
+      fetchData(); // Re-fetch all data to ensure consistency
     } catch (err) {
       console.error(err);
+      setApplications(originalApplications); // Revert
     }
   };
 
@@ -383,9 +453,7 @@ const AdminTermPage: React.FC = () => {
   };
 
   const renderStatusBadge = (status: string) => {
-    // Ensure status is not null and convert to uppercase
     const normalizedStatus = status ? status.toUpperCase() : '';
-
     const statusMap: Record<string, { class: string; text: string }> = {
       PENDING_VERIFICATION: { class: 'pending_verification', text: 'Pending' },
       REJECTED: { class: 'rejected', text: 'Rejected' },
@@ -396,12 +464,10 @@ const AdminTermPage: React.FC = () => {
       },
       ADMIN_APPROVED: { class: 'admin_approved', text: 'Approved' },
     };
-
     const statusInfo = statusMap[normalizedStatus] || {
       class: 'unknown',
       text: status,
     };
-
     return (
       <span className={`status-badge ${statusInfo.class}`}>
         {statusInfo.text}

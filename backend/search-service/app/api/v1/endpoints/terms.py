@@ -23,8 +23,11 @@ async def get_all_terms_for_pwa(db: AsyncSession = Depends(get_db)):
                 "language": term.language,
                 "domain": term.domain,
                 "definition": term.definition,
+                "status": term.status,  # Add the status field
                 "upvotes": upvotes or 0,
                 "downvotes": downvotes or 0,
+                # Add a list of translation IDs
+                "translations": [str(t.id) for t in term.translations],
             }
         )
 

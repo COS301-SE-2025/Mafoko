@@ -270,7 +270,8 @@ class CRUDTermApplication:
                     db, db_obj=term_to_update, obj_in=update_fields
                 )
                 term_to_update.status = TermStatus.ADMIN_APPROVED
-
+                db.add(term_to_update)
+                await db.commit()
             elif (
                 new_status == TermStatus.REJECTED
                 and application.is_edit_for_term_id is None

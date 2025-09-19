@@ -25,7 +25,10 @@ import LinguistPage from './pages/LinguistPage';
 import AdminTermPage from './pages/AdminTermPage.tsx';
 import './App.css';
 import './styles/Global.scss';
-import { orchestrateCommentSync } from './utils/syncManager';
+import {
+  orchestrateCommentSync,
+  orchestrateTermSync,
+} from './utils/syncManager';
 import {
   Chart as ChartJS,
   PieController,
@@ -57,19 +60,29 @@ ChartJS.register(
 function App() {
   useEffect(() => {
     const handleSWMessage = (event: MessageEvent) => {
+      // Handle comment sync requests
       if (event.data?.type === 'SYNC_REQUEST') {
-        console.log('Client: Received sync request from service worker.');
-        orchestrateCommentSync().then((syncedItems) => {
-          if (syncedItems) {
-            console.log('Sync complete. Reloading page to show updates.');
-            window.location.reload();
-          }
+        console.log('Client: Received comment sync request.');
+        orchestrateCommentSync().then((synced) => {
+          if (synced) window.location.reload();
+        });
+      }
+
+      // Handle term action sync requests
+      if (event.data?.type === 'TERM_SYNC_REQUEST') {
+        console.log('Client: Received term action sync request.');
+        orchestrateTermSync().then((synced) => {
+          if (synced) window.location.reload();
         });
       }
     };
+
     navigator.serviceWorker?.addEventListener('message', handleSWMessage);
-    console.log('App loaded. Checking for pending sync items.');
+
+    // Run both sync checks when the app loads
     orchestrateCommentSync();
+    orchestrateTermSync();
+
     return () => {
       navigator.serviceWorker?.removeEventListener('message', handleSWMessage);
     };

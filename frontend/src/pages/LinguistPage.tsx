@@ -1,50 +1,28 @@
-import React, { useState, useEffect, JSX } from 'react';
+import React, { useState, useEffect, useCallback, JSX } from 'react';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { API_ENDPOINTS } from '../config';
 import '../styles/LinguistPage.scss';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
-
-interface TermApplication {
-  id: string;
-  term_id: string;
-  term: string;
-  definition: string;
-  language: string;
-  domain: string;
-  status: string;
-  submitted_at: string;
-  reviewed_at: string | null;
-  review?: string;
-  crowd_votes_count?: number;
-  translations: string[];
-  submitted_by_user?: { name: string };
-  proposed_content?: {
-    term: string;
-    definition: string;
-    language: string;
-    domain: string;
-    translations?: string[];
-  };
-  term_details?: {
-    term: string;
-    definition: string;
-    language: string;
-    domain: string;
-  };
-}
-
-interface TermSchema {
-  id: string;
-  term: string;
-  definition: string;
-  domain: string;
-  language: string;
-  example?: string;
-}
-
+import {
+  TermApplicationRead,
+  TermApplicationCreate,
+  TermSchema,
+} from '../types/term';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  addPendingTermApproval,
+  addPendingTermRejection,
+  addPendingTermSubmission,
+  addPendingTermDelete,
+  getTermsByIdsFromDB,
+} from '../utils/indexedDB';
+import { updateCache } from '../utils/cacheUpdater';
+import { Term } from '../types/terms/types';
+import { addTerm } from '../utils/indexedDB';
+import { refreshAllTermsCache } from '../utils/syncManager';
 interface AppRowProps {
-  app: TermApplication;
+  app: TermApplicationRead;
   isMobile: boolean;
   i: number;
   activeTab: 'review' | 'my' | 'rejected' | 'submit' | 'edit';
@@ -98,7 +76,9 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
             </span>
             <span>
               <strong>Submitter:</strong>{' '}
-              {app.submitted_by_user?.name || 'Unknown'}
+              {app.submitted_by_user?.first_name +
+                ' ' +
+                app.submitted_by_user?.last_name || 'Unknown'}
             </span>
             <span>
               <strong>Votes:</strong> {app.crowd_votes_count || 0}
@@ -177,7 +157,11 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
         <td className="definition-text">{termToDisplay.definition}</td>
         <td>{termToDisplay.domain}</td>
         <td>{termToDisplay.language}</td>
-        <td>{app.submitted_by_user?.name || 'Unknown'}</td>
+        <td>
+          {app.submitted_by_user?.first_name +
+            ' ' +
+            app.submitted_by_user?.last_name || 'Unknown'}
+        </td>
         <td>{renderStatusBadge(app.status)}</td>
         <td>{app.crowd_votes_count || 0}</td>
         <td className="actions">
@@ -252,9 +236,9 @@ const LinguistPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
     'review' | 'my' | 'rejected' | 'submit' | 'edit'
   >('review');
-  const [applications, setApplications] = useState<TermApplication[]>([]);
-  const [mySubmissions, setMySubmissions] = useState<TermApplication[]>([]);
-  const [rejectedTerms, setRejectedTerms] = useState<TermApplication[]>([]);
+  const [applications, setApplications] = useState<TermApplicationRead[]>([]);
+  const [mySubmissions, setMySubmissions] = useState<TermApplicationRead[]>([]);
+  const [rejectedTerms, setRejectedTerms] = useState<TermApplicationRead[]>([]);
   const [adminTerms, setAdminTerms] = useState<TermSchema[]>([]);
   const [editableTerms, setEditableTerms] = useState<TermSchema[]>([]);
   const [domains, setDomains] = useState<string[]>([]);
@@ -280,16 +264,25 @@ const LinguistPage: React.FC = () => {
   const [termToEditId, setTermToEditId] = useState<string | null>(null);
   const [translationSearchQuery, setTranslationSearchQuery] = useState('');
   const [editSearchQuery, setEditSearchQuery] = useState('');
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-  const fetchAttributes = async () => {
+  const fetchAttributes = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getAttributes, {
         headers: { Authorization: `Bearer ${token}` },
@@ -301,10 +294,9 @@ const LinguistPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [token]);
 
-  const fetchApplications = async () => {
-    setLoading(true);
+  const fetchApplications = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getLinguistReviewSubmissions, {
         headers: {
@@ -317,11 +309,9 @@ const LinguistPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchMySubmissions = async () => {
-    setLoading(true);
+  const fetchMySubmissions = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getMySubmittedTerms, {
         headers: {
@@ -334,27 +324,23 @@ const LinguistPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchRejectedTerms = async () => {
-    setLoading(true);
+  const fetchRejectedTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getAllTermApplications, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Failed to fetch all applications');
-      const data: TermApplication[] = await res.json();
+      const data: TermApplicationRead[] = await res.json();
       const myRejected = data.filter((app) => app.status === 'REJECTED');
       setRejectedTerms(myRejected);
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchAllAdminVerifiedTerms = async () => {
-    setLoading(true);
+  const fetchAllAdminVerifiedTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getAllAdminVerifiedTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -365,11 +351,9 @@ const LinguistPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchEditableTerms = async () => {
-    setLoading(true);
+  const fetchEditableTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getEditableTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -380,17 +364,30 @@ const LinguistPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
+
+  const fetchData = useCallback(() => {
+    setLoading(true);
+    Promise.all([
+      fetchAttributes(),
+      fetchApplications(),
+      fetchMySubmissions(),
+      fetchRejectedTerms(),
+      fetchAllAdminVerifiedTerms(),
+      fetchEditableTerms(),
+    ]).finally(() => setLoading(false));
+  }, [
+    fetchAttributes,
+    fetchApplications,
+    fetchMySubmissions,
+    fetchRejectedTerms,
+    fetchAllAdminVerifiedTerms,
+    fetchEditableTerms,
+  ]);
 
   useEffect(() => {
-    fetchAttributes();
-    fetchApplications();
-    fetchMySubmissions();
-    fetchRejectedTerms();
-    fetchAllAdminVerifiedTerms();
-    fetchEditableTerms();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     const fetchAllTranslations = async () => {
@@ -404,16 +401,21 @@ const LinguistPage: React.FC = () => {
       });
       if (allTranslationIds.size === 0) return;
       try {
-        const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
-        });
-        if (!res.ok) throw new Error('Failed to fetch translations');
-        const data: TermSchema[] = await res.json();
+        let data: TermSchema[];
+        if (isOffline) {
+          data = await getTermsByIdsFromDB(Array.from(allTranslationIds));
+        } else {
+          const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
+          });
+          if (!res.ok) throw new Error('Failed to fetch translations');
+          data = await res.json();
+        }
         const translationsMap = data.reduce(
           (acc: { [key: string]: TermSchema }, term: TermSchema) => {
             acc[term.id] = term;
@@ -426,28 +428,50 @@ const LinguistPage: React.FC = () => {
         console.error('Error fetching translations:', err);
       }
     };
-    if ((mySubmissions.length > 0 || applications.length > 0) && token) {
+    if (mySubmissions.length > 0 || applications.length > 0) {
       fetchAllTranslations();
     }
-  }, [mySubmissions, applications, token]);
+  }, [mySubmissions, applications, token, isOffline]);
 
   const handleVerify = async (id: string) => {
+    if (!token) return;
+    const url = API_ENDPOINTS.getLinguistReviewSubmissions;
+    const originalApplications = [...applications];
+
+    const updatedApplications = originalApplications.filter(
+      (app) => app.id !== id,
+    );
+    setApplications(updatedApplications);
+
+    if (isOffline) {
+      updateCache('api-term-actions-cache', url, updatedApplications);
+      await addPendingTermApproval({
+        id: uuidv4(),
+        applicationId: id,
+        role: 'linguist',
+        token,
+      });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      return;
+    }
+
     try {
       const response = await fetch(
         API_ENDPOINTS.linguistVerifyApplication(id),
         {
           method: 'PUT',
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
       if (!response.ok) throw new Error('Verification failed');
-      fetchApplications();
-      fetchMySubmissions();
+      fetchData();
     } catch (err) {
       console.error(err);
       alert('Failed to verify term');
+      setApplications(originalApplications);
     }
   };
 
@@ -462,8 +486,33 @@ const LinguistPage: React.FC = () => {
   };
 
   const handleReject = async () => {
-    if (!currentAppId || !reviewText)
+    if (!currentAppId || !reviewText || !token)
       return alert('Please provide review feedback');
+
+    const url = API_ENDPOINTS.getLinguistReviewSubmissions;
+    const originalApplications = [...applications];
+
+    const updatedApplications = originalApplications.filter(
+      (app) => app.id !== currentAppId,
+    );
+    setApplications(updatedApplications);
+    setReviewModalOpen(false);
+    setReviewText('');
+
+    if (isOffline) {
+      updateCache('api-term-actions-cache', url, updatedApplications);
+      await addPendingTermRejection({
+        id: uuidv4(),
+        applicationId: currentAppId,
+        role: 'linguist',
+        body: { review: reviewText },
+        token,
+      });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      return;
+    }
+
     try {
       const response = await fetch(
         API_ENDPOINTS.linguistRejectApplication(currentAppId),
@@ -471,46 +520,77 @@ const LinguistPage: React.FC = () => {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ review: reviewText }),
         },
       );
       if (!response.ok) throw new Error('Rejection failed');
-      setReviewModalOpen(false);
-      setReviewText('');
-      fetchApplications();
-      fetchMySubmissions();
-      fetchRejectedTerms();
+      fetchData();
     } catch (err) {
       console.error(err);
       alert('Failed to reject term');
+      setApplications(originalApplications);
     }
   };
 
   const handleDeleteApplication = async () => {
-    if (!currentAppId) return;
+    if (!currentAppId || !token) return;
+
+    const originalMySubmissions = [...mySubmissions];
+    const originalRejectedTerms = [...rejectedTerms];
+    const mySubsUrl = API_ENDPOINTS.getMySubmittedTerms;
+
+    const updatedMySubmissions = mySubmissions.filter(
+      (app) => app.id !== currentAppId,
+    );
+    const updatedRejectedTerms = rejectedTerms.filter(
+      (app) => app.id !== currentAppId,
+    );
+    setMySubmissions(updatedMySubmissions);
+    setRejectedTerms(updatedRejectedTerms);
+    setDeleteModalOpen(false);
+    setCurrentAppId(null);
+
+    if (isOffline) {
+      updateCache('api-term-actions-cache', mySubsUrl, updatedMySubmissions);
+      await addPendingTermDelete({
+        id: uuidv4(),
+        applicationId: currentAppId,
+        token,
+      });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      return;
+    }
+
     try {
       const response = await fetch(
         API_ENDPOINTS.deleteTermApplication(currentAppId),
         { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
       );
       if (!response.ok) throw new Error('Failed to delete application');
-      fetchMySubmissions();
-      fetchRejectedTerms();
-      setDeleteModalOpen(false);
-      setCurrentAppId(null);
+      fetchData();
     } catch (err: any) {
       console.error(err);
       alert('Failed to delete application: ' + err.message);
+      setMySubmissions(originalMySubmissions);
+      setRejectedTerms(originalRejectedTerms);
     }
   };
 
   const handleSubmitTerm = async () => {
-    if (!newTerm || !definition || !selectedDomain || !selectedLanguage)
+    if (
+      !newTerm ||
+      !definition ||
+      !selectedDomain ||
+      !selectedLanguage ||
+      !token
+    )
       return alert('Please fill in all required fields');
+
     const translationsToSend = selectedTranslations.map((t) => t.id);
-    const body = {
+    const body: TermApplicationCreate = {
       term: newTerm,
       definition,
       example,
@@ -519,12 +599,54 @@ const LinguistPage: React.FC = () => {
       translations: translationsToSend,
       ...(termToEditId && { original_term_id: termToEditId }),
     };
+
+    if (isOffline) {
+      const tempId = uuidv4();
+
+      // 1. Create a temporary Term object for the main 'terms' store
+      const optimisticTerm: Term = {
+        id: tempId,
+        term: newTerm,
+        definition,
+        language: selectedLanguage,
+        domain: selectedDomain,
+        status: 'DRAFT',
+        upvotes: 0,
+        downvotes: 0,
+        user_vote: null,
+      };
+      // Save it to IndexedDB to make it searchable immediately
+      await addTerm(optimisticTerm);
+
+      // 2. Create a TermApplication object for the "My Submissions" list
+      const optimisticSubmission: TermApplicationRead = {
+        id: tempId,
+        term_id: tempId,
+        submitted_by_user_id: '', // This will be filled by the server later
+        proposed_content: body,
+        status: 'DRAFT',
+        submitted_at: new Date().toISOString(),
+        crowd_votes_count: 0,
+      };
+      // Update the UI state so it appears in "My Submissions"
+      setMySubmissions((prev) => [optimisticSubmission, ...prev]);
+
+      // 3. Queue the action for the service worker
+      await addPendingTermSubmission({ id: tempId, body, token });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+
+      // Reset form and switch to the submissions tab
+      setActiveTab('my');
+      return;
+    }
+
     try {
       const response = await fetch(API_ENDPOINTS.submitTerm, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
       });
@@ -532,15 +654,11 @@ const LinguistPage: React.FC = () => {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Submission failed');
       }
-      setNewTerm('');
-      setDefinition('');
-      setExample('');
-      setSelectedDomain('');
-      setSelectedLanguage('');
-      setSelectedTranslations([]);
-      setTermToEditId(null);
-      fetchMySubmissions();
-      fetchRejectedTerms();
+
+      // After a successful online submission, refresh the main terms list
+      await refreshAllTermsCache();
+
+      fetchData(); // This re-fetches the component's own lists
       setActiveTab('my');
     } catch (err: any) {
       console.error(err);
@@ -563,10 +681,9 @@ const LinguistPage: React.FC = () => {
   };
   const toggleExpandedDetails = (id: string) =>
     setExpandedAppId(expandedAppId === id ? null : id);
-  const renderStatusBadge = (status: string) => {
-    // Ensure status is not null and convert to uppercase
-    const normalizedStatus = status ? status.toUpperCase() : '';
 
+  const renderStatusBadge = (status: string) => {
+    const normalizedStatus = status ? status.toUpperCase() : '';
     const statusMap: Record<string, { class: string; text: string }> = {
       PENDING_VERIFICATION: { class: 'pending_verification', text: 'Pending' },
       REJECTED: { class: 'rejected', text: 'Rejected' },
@@ -577,12 +694,10 @@ const LinguistPage: React.FC = () => {
       },
       ADMIN_APPROVED: { class: 'admin_approved', text: 'Approved' },
     };
-
     const statusInfo = statusMap[normalizedStatus] || {
       class: 'unknown',
       text: status,
     };
-
     return (
       <span className={`status-badge ${statusInfo.class}`}>
         {statusInfo.text}

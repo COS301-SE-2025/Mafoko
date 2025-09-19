@@ -1,11 +1,22 @@
-import React, { JSX, useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState, useCallback } from 'react';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { API_ENDPOINTS } from '../config';
 import '../styles/ContributorPage.scss';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { TermApplicationRead, TermApplicationCreate } from '../types/term';
-
+import { v4 as uuidv4 } from 'uuid';
+import {
+  addPendingTermSubmission,
+  addPendingTermVote,
+  addPendingTermDelete,
+  getTermsByIdsFromDB,
+} from '../utils/indexedDB';
+import { updateCache } from '../utils/cacheUpdater';
+import { UserData } from '../types/glossaryTypes';
+import { Term } from '../types/terms/types';
+import { addTerm } from '../utils/indexedDB';
+import { refreshAllTermsCache } from '../utils/syncManager';
 interface TermSchema {
   id: string;
   term: string;
@@ -27,7 +38,6 @@ interface AppRowProps {
   handleVote: (id: string) => void;
   handleDeleteApplication: (id: string) => void;
 }
-
 const ApplicationRowOrCard: React.FC<AppRowProps> = ({
   app,
   isMobile,
@@ -241,16 +251,40 @@ const ContributorPage: React.FC = () => {
   const [termToEditId, setTermToEditId] = useState<string | null>(null);
   const [translationSearchQuery, setTranslationSearchQuery] = useState('');
   const [editSearchQuery, setEditSearchQuery] = useState('');
-
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [currentUser, setCurrentUser] = useState<UserData | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [currentAppId, setCurrentAppId] = useState<string | null>(null);
   const token = localStorage.getItem('accessToken');
-
   useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
+  useEffect(() => {
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      try {
+        setCurrentUser(JSON.parse(userDataString));
+      } catch (e) {
+        console.error('Failed to parse user data from localStorage', e);
+      }
+    }
+  }, []);
+  const openDeleteModal = (id: string) => {
+    setCurrentAppId(id);
+    setDeleteModalOpen(true);
+  };
 
-  const fetchAttributes = async () => {
+  const fetchAttributes = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getAttributes, {
         headers: { Authorization: `Bearer ${token}` },
@@ -262,10 +296,9 @@ const ContributorPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [token]);
 
-  const fetchMySubmissions = async () => {
-    setLoading(true);
+  const fetchMySubmissions = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getMySubmittedTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -276,11 +309,9 @@ const ContributorPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchPendingTerms = async () => {
-    setLoading(true);
+  const fetchPendingTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getPendingVerificationTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -291,11 +322,9 @@ const ContributorPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchRejectedTerms = async () => {
-    setLoading(true);
+  const fetchRejectedTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getMySubmittedTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -307,11 +336,9 @@ const ContributorPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchAllAdminVerifiedTerms = async () => {
-    setLoading(true);
+  const fetchAllAdminVerifiedTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getAllAdminVerifiedTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -322,11 +349,9 @@ const ContributorPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
 
-  const fetchEditableTerms = async () => {
-    setLoading(true);
+  const fetchEditableTerms = useCallback(async () => {
     try {
       const res = await fetch(API_ENDPOINTS.getEditableTerms, {
         headers: { Authorization: `Bearer ${token}` },
@@ -337,17 +362,30 @@ const ContributorPage: React.FC = () => {
     } catch (err) {
       console.error(err);
     }
-    setLoading(false);
-  };
+  }, [token]);
+
+  const fetchData = useCallback(() => {
+    setLoading(true);
+    Promise.all([
+      fetchAttributes(),
+      fetchMySubmissions(),
+      fetchPendingTerms(),
+      fetchRejectedTerms(),
+      fetchAllAdminVerifiedTerms(),
+      fetchEditableTerms(),
+    ]).finally(() => setLoading(false));
+  }, [
+    fetchAttributes,
+    fetchMySubmissions,
+    fetchPendingTerms,
+    fetchRejectedTerms,
+    fetchAllAdminVerifiedTerms,
+    fetchEditableTerms,
+  ]);
 
   useEffect(() => {
-    fetchAttributes();
-    fetchMySubmissions();
-    fetchPendingTerms();
-    fetchRejectedTerms();
-    fetchAllAdminVerifiedTerms();
-    fetchEditableTerms();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     const fetchAllTranslations = async () => {
@@ -361,16 +399,22 @@ const ContributorPage: React.FC = () => {
       });
       if (allTranslationIds.size === 0) return;
       try {
-        const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
-        });
-        if (!res.ok) throw new Error('Failed to fetch translations');
-        const data: TermSchema[] = await res.json();
+        let data: TermSchema[];
+        if (isOffline) {
+          data = await getTermsByIdsFromDB(Array.from(allTranslationIds));
+        } else {
+          const res = await fetch(`${API_ENDPOINTS.getTermsByIds}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ term_ids: Array.from(allTranslationIds) }),
+          });
+          if (!res.ok)
+            throw new Error('Failed to fetch translations from network');
+          data = await res.json();
+        }
         const translationsMap = data.reduce(
           (acc: { [key: string]: TermSchema }, term: TermSchema) => {
             acc[term.id] = term;
@@ -383,10 +427,10 @@ const ContributorPage: React.FC = () => {
         console.error('Error fetching translations:', err);
       }
     };
-    if ((mySubmissions.length > 0 || pendingTerms.length > 0) && token) {
+    if (mySubmissions.length > 0 || pendingTerms.length > 0) {
       fetchAllTranslations();
     }
-  }, [mySubmissions, pendingTerms, token]);
+  }, [mySubmissions, pendingTerms, token, isOffline]);
 
   useEffect(() => {
     if (termToEditId) {
@@ -403,8 +447,15 @@ const ContributorPage: React.FC = () => {
   }, [termToEditId, editableTerms]);
 
   const handleSubmitTerm = async () => {
-    if (!newTerm || !definition || !selectedDomain || !selectedLanguage)
+    if (
+      !newTerm ||
+      !definition ||
+      !selectedDomain ||
+      !selectedLanguage ||
+      !token
+    )
       return alert('Please fill in all required fields');
+
     const translationsToSend = selectedTranslations.map((t) => t.id);
     const body: TermApplicationCreate = {
       term: newTerm,
@@ -415,12 +466,54 @@ const ContributorPage: React.FC = () => {
       translations: translationsToSend,
       ...(termToEditId && { original_term_id: termToEditId }),
     };
+
+    if (isOffline) {
+      const tempId = uuidv4();
+
+      // 1. Create a temporary Term object for the main 'terms' store
+      const optimisticTerm: Term = {
+        id: tempId,
+        term: newTerm,
+        definition,
+        language: selectedLanguage,
+        domain: selectedDomain,
+        status: 'DRAFT',
+        upvotes: 0,
+        downvotes: 0,
+        user_vote: null,
+      };
+      // Save it to IndexedDB to make it searchable immediately
+      await addTerm(optimisticTerm);
+
+      // 2. Create a TermApplication object for the "My Submissions" list
+      const optimisticSubmission: TermApplicationRead = {
+        id: tempId,
+        term_id: tempId,
+        submitted_by_user_id: '', // This will be filled by the server later
+        proposed_content: body,
+        status: 'DRAFT',
+        submitted_at: new Date().toISOString(),
+        crowd_votes_count: 0,
+      };
+      // Update the UI state so it appears in "My Submissions"
+      setMySubmissions((prev) => [optimisticSubmission, ...prev]);
+
+      // 3. Queue the action for the service worker
+      await addPendingTermSubmission({ id: tempId, body, token });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+
+      // Reset form and switch to the submissions tab
+      setActiveTab('my');
+      return;
+    }
+
     try {
       const response = await fetch(API_ENDPOINTS.submitTerm, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
       });
@@ -428,16 +521,11 @@ const ContributorPage: React.FC = () => {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Submission failed');
       }
-      setNewTerm('');
-      setDefinition('');
-      setExample('');
-      setSelectedDomain('');
-      setSelectedLanguage('');
-      setSelectedTranslations([]);
-      setTermToEditId(null);
-      fetchMySubmissions();
-      fetchPendingTerms();
-      fetchRejectedTerms();
+
+      // After a successful online submission, refresh the main terms list
+      await refreshAllTermsCache();
+
+      fetchData(); // This re-fetches the component's own lists
       setActiveTab('my');
     } catch (err: any) {
       console.error(err);
@@ -446,6 +534,17 @@ const ContributorPage: React.FC = () => {
   };
 
   const handleVote = async (id: string) => {
+    if (!token) return;
+    if (isOffline) {
+      await addPendingTermVote({ id: uuidv4(), applicationId: id, token });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      alert(
+        'Your vote has been queued and will be submitted when you are back online.',
+      );
+      return;
+    }
+
     try {
       const response = await fetch(API_ENDPOINTS.voteForTerm(id), {
         method: 'POST',
@@ -453,32 +552,59 @@ const ContributorPage: React.FC = () => {
       });
       if (!response.ok)
         throw new Error('Vote failed: ' + (await response.json()).detail);
-      fetchPendingTerms();
+      fetchData();
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleDeleteApplication = async (applicationId: string) => {
-    if (
-      !window.confirm(
-        'Are you sure you want to delete this submission? This action cannot be undone.',
-      )
-    )
+  // Replace the existing handleDeleteApplication function
+  const handleDeleteApplication = async () => {
+    if (!token || !currentAppId) return;
+
+    const originalMySubmissions = [...mySubmissions];
+    const originalRejectedTerms = [...rejectedTerms];
+    const mySubsUrl = API_ENDPOINTS.getMySubmittedTerms;
+
+    const updatedMySubmissions = originalMySubmissions.filter(
+      (app) => app.id !== currentAppId,
+    );
+    const updatedRejectedTerms = originalRejectedTerms.filter(
+      (app) => app.id !== currentAppId,
+    );
+    setMySubmissions(updatedMySubmissions);
+    setRejectedTerms(updatedRejectedTerms);
+    setDeleteModalOpen(false); // Close the modal
+
+    if (isOffline) {
+      updateCache('api-term-actions-cache', mySubsUrl, updatedMySubmissions);
+      await addPendingTermDelete({
+        id: uuidv4(),
+        applicationId: currentAppId,
+        token,
+      });
+      const reg = await navigator.serviceWorker.ready;
+      await reg.sync.register('sync-term-actions');
+      alert('Application queued for deletion.');
+      setCurrentAppId(null); // Reset the ID
       return;
+    }
+
     try {
       const response = await fetch(
-        API_ENDPOINTS.deleteTermApplication(applicationId),
+        API_ENDPOINTS.deleteTermApplication(currentAppId),
         { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
       );
       if (!response.ok) throw new Error('Failed to delete application');
-      fetchMySubmissions();
-      fetchPendingTerms();
-      fetchRejectedTerms();
+      fetchData();
       alert('Application deleted successfully');
     } catch (err: any) {
       console.error(err);
       alert('Failed to delete application: ' + err.message);
+      setMySubmissions(originalMySubmissions);
+      setRejectedTerms(originalRejectedTerms);
+    } finally {
+      setCurrentAppId(null); // Reset the ID
     }
   };
 
@@ -487,18 +613,19 @@ const ContributorPage: React.FC = () => {
       setSelectedTranslations([...selectedTranslations, term]);
     setTranslationSearchQuery('');
   };
+
   const handleRemoveTranslation = (termId: string) =>
     setSelectedTranslations(
       selectedTranslations.filter((t) => t.id !== termId),
     );
+
   const handleSelectTermToEdit = (term: TermSchema) => {
     setTermToEditId(term.id);
     setEditSearchQuery(`${term.term} (${term.language}) - ${term.domain}`);
   };
-  const renderStatusBadge = (status: string) => {
-    // Ensure status is not null and convert to uppercase
-    const normalizedStatus = status ? status.toUpperCase() : '';
 
+  const renderStatusBadge = (status: string) => {
+    const normalizedStatus = status ? status.toUpperCase() : '';
     const statusMap: Record<string, { class: string; text: string }> = {
       PENDING_VERIFICATION: { class: 'pending_verification', text: 'Pending' },
       REJECTED: { class: 'rejected', text: 'Rejected' },
@@ -509,26 +636,27 @@ const ContributorPage: React.FC = () => {
       },
       ADMIN_APPROVED: { class: 'admin_approved', text: 'Approved' },
     };
-
     const statusInfo = statusMap[normalizedStatus] || {
       class: 'unknown',
       text: status,
     };
-
     return (
       <span className={`status-badge ${statusInfo.class}`}>
         {statusInfo.text}
       </span>
     );
   };
+
   const toggleExpandedDetails = (id: string) =>
     setExpandedAppId(expandedAppId === id ? null : id);
+
   const applicationsToDisplay =
     activeTab === 'my'
       ? mySubmissions
       : activeTab === 'pending'
         ? pendingTerms
         : rejectedTerms;
+
   const filteredAdminTerms = adminTerms.filter(
     (term) =>
       term.term.toLowerCase().includes(translationSearchQuery.toLowerCase()) ||
@@ -537,6 +665,7 @@ const ContributorPage: React.FC = () => {
         .includes(translationSearchQuery.toLowerCase()) ||
       term.domain.toLowerCase().includes(translationSearchQuery.toLowerCase()),
   );
+
   const filteredEditableTerms = editableTerms.filter(
     (term) =>
       term.term.toLowerCase().includes(editSearchQuery.toLowerCase()) ||
@@ -544,44 +673,31 @@ const ContributorPage: React.FC = () => {
       term.domain.toLowerCase().includes(editSearchQuery.toLowerCase()),
   );
 
+  // FIX: This 'tableContent' block was missing. Re-adding it fixes all the "unused variable" and "cannot find name" errors.
   const tableContent = (
     <>
-      {loading && (
-        <tr>
-          <td colSpan={8} style={{ textAlign: 'center' }}>
-            Loading...
-          </td>
-        </tr>
-      )}
       {!loading && applicationsToDisplay.length === 0 && (
         <tr>
           <td colSpan={8} style={{ textAlign: 'center' }}>
-            No{' '}
-            {activeTab === 'my'
-              ? 'submissions'
-              : activeTab === 'pending'
-                ? 'pending terms'
-                : 'rejected terms'}{' '}
-            found
+            No items found.
           </td>
         </tr>
       )}
-      {!loading &&
-        applicationsToDisplay.map((app, i) => (
-          <ApplicationRowOrCard
-            key={app.id}
-            app={app}
-            isMobile={isMobile}
-            i={i}
-            activeTab={activeTab}
-            expandedAppId={expandedAppId}
-            fetchedTranslations={fetchedTranslations}
-            renderStatusBadge={renderStatusBadge}
-            toggleExpandedDetails={toggleExpandedDetails}
-            handleVote={handleVote}
-            handleDeleteApplication={handleDeleteApplication}
-          />
-        ))}
+      {applicationsToDisplay.map((app, i) => (
+        <ApplicationRowOrCard
+          key={app.id}
+          app={app}
+          isMobile={isMobile}
+          i={i}
+          activeTab={activeTab}
+          expandedAppId={expandedAppId}
+          fetchedTranslations={fetchedTranslations}
+          renderStatusBadge={renderStatusBadge}
+          toggleExpandedDetails={toggleExpandedDetails}
+          handleVote={handleVote}
+          handleDeleteApplication={openDeleteModal}
+        />
+      ))}
     </>
   );
 
@@ -964,6 +1080,31 @@ const ContributorPage: React.FC = () => {
             ))}
         </div>
       </div>
+      {deleteModalOpen && (
+        <div className="review-modal-backdrop">
+          <div className="review-modal">
+            <h2>Delete Application</h2>
+            <p>
+              Are you sure you want to delete this submission? This action
+              cannot be undone.
+            </p>
+            <div className="modal-actions">
+              <button
+                onClick={() => {
+                  setDeleteModalOpen(false);
+                  setCurrentAppId(null);
+                }}
+                className="cancel-btn"
+              >
+                Cancel
+              </button>
+              <button onClick={handleDeleteApplication} className="delete-btn">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

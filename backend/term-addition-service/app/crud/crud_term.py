@@ -155,16 +155,12 @@ class CRUDTerm:
         await db.commit()
         await db.refresh(db_obj)
 
-        db_obj = (
-            await db.execute(
-                select(TermModel)
-                .filter(TermModel.id == db_obj.id)
-                .options(selectinload(TermModel.translations))
-            )
-            .scalars()
-            .first()
+        result = await db.execute(
+            select(TermModel)
+            .filter(TermModel.id == db_obj.id)
+            .options(selectinload(TermModel.translations))
         )
-
+        db_obj = result.scalars().first()
         return db_obj
 
     async def read_all_editable_terms(

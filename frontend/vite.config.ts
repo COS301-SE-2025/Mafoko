@@ -24,6 +24,9 @@ export default defineConfig({
         enabled: true,
         type: 'module',
       },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+      },
       manifest: {
         name: 'Marito - Multilingual Lexicons',
         short_name: 'Marito',

@@ -3,6 +3,7 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
 import {
   addTerm,
   addCommentsForTerm,
@@ -17,7 +18,7 @@ declare const self: ServiceWorkerGlobalScope;
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
-// KEPT: Your caching strategies remain unchanged.
+// Caching for search results
 registerRoute(
   ({ url }) => url.pathname.includes('/api/v1/search'),
   new StaleWhileRevalidate({
@@ -44,6 +45,8 @@ registerRoute(
     ],
   }),
 );
+
+// Caching for comments
 registerRoute(
   ({ url }) => url.pathname.includes('/api/v1/comments/by_term/'),
   new StaleWhileRevalidate({
@@ -72,25 +75,63 @@ registerRoute(
   }),
 );
 
+registerRoute(
+  ({ url, request }) =>
+    request.method === 'GET' &&
+    (url.pathname.startsWith('/api/v1/term-applications') ||
+      url.pathname.startsWith('/api/v1/terms') ||
+      url.pathname.startsWith('/api/v1/linguist') ||
+      url.pathname.startsWith('/api/v1/admin')),
+  new StaleWhileRevalidate({
+    cacheName: 'api-term-actions-cache',
+    plugins: [
+      new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 24 * 60 * 60 }),
+    ],
+  }),
+);
+
+registerRoute(
+  ({ url, request }) =>
+    url.pathname === '/api/v1/terms/terms-by-ids' && request.method === 'POST',
+  new StaleWhileRevalidate({
+    cacheName: 'api-term-actions-cache',
+    plugins: [
+      new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 }),
+    ],
+  }),
+);
+
 self.addEventListener('sync', (event: SyncEvent) => {
+  // For comments, notify the client
   if (event.tag === 'sync-comment-actions') {
     console.log('SW: Sync event for comments received. Notifying client.');
     self.clients
-      .matchAll({
-        includeUncontrolled: true,
-        type: 'window',
-      })
+      .matchAll({ includeUncontrolled: true, type: 'window' })
       .then((clients) => {
         clients.forEach((client) =>
           client.postMessage({ type: 'SYNC_REQUEST' }),
         );
       });
-  } else if (event.tag === 'sync-votes') {
+  }
+  // For TERM ACTIONS, ALSO notify the client
+  else if (event.tag === 'sync-term-actions') {
+    console.log('SW: Sync event for term actions received. Notifying client.');
+    self.clients
+      .matchAll({ includeUncontrolled: true, type: 'window' })
+      .then((clients) => {
+        clients.forEach((client) =>
+          client.postMessage({ type: 'TERM_SYNC_REQUEST' }),
+        );
+      });
+  }
+  // Simple term votes are still handled here
+  else if (event.tag === 'sync-votes') {
     console.log('SW: Sync event for term votes received. Handling in SW.');
     event.waitUntil(syncPendingVotes());
   }
 });
 
+// This is for term votes (like on the search page), not comment votes.
 async function syncPendingVotes() {
   try {
     const pendingVotes = await getAndClearPendingVotes();
@@ -117,5 +158,16 @@ async function syncPendingVotes() {
 self.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data?.type === 'SKIP_WAITING') {
     void self.skipWaiting();
+  }
+
+  if (event.data?.type === 'UPDATE_CACHE') {
+    const { cacheName, url, data } = event.data.payload;
+    const response = new Response(JSON.stringify(data), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    event.waitUntil(
+      caches.open(cacheName).then((cache) => cache.put(url, response)),
+    );
   }
 });

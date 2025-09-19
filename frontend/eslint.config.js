@@ -24,6 +24,7 @@ export default tseslint.config(
       'src/pages/TermDetailPage.tsx',
       'src/sw.ts',
       'src/utils/syncManager.ts',
+      'src/utils/cacheUpdater.ts',
     ],
   },
 
