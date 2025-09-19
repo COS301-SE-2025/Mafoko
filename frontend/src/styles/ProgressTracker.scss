@@ -93,7 +93,7 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
   background-color: var(--progress-status-accepted);
   color: white;
 
-  .status-badge {
+  .status-badge-progress {
     background-color: white;
     color: var(--progress-status-accepted);
     border-color: transparent;
@@ -104,7 +104,7 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
   background-color: var(--progress-status-rejected);
   color: white;
 
-  .status-badge {
+  .status-badge-progress {
     background-color: white;
     color: var(--progress-status-rejected);
     border-color: transparent;
@@ -115,14 +115,14 @@ $linguist-status-pending-color: #{$linguist-accent-blue};
   background-color: var(--progress-status-pending-color);
   color: white;
 
-  .status-badge {
+  .status-badge-progress {
     background-color: white;
     color: var(--progress-status-pending-color);
     border-color: transparent;
   }
 }
 
-.status-badge {
+.status-badge-progress {
   display: inline-flex;
   align-items: center;
   justify-content: center;

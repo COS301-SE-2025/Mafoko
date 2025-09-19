@@ -60,3 +60,12 @@ export interface TermApplicationRead {
 export interface TermApplicationReject {
   review: string; // required feedback when rejecting
 }
+
+export interface TermSchema {
+  id: string;
+  term: string;
+  definition: string;
+  domain: string;
+  language: string;
+  example?: string;
+}

@@ -6,6 +6,8 @@ import { DarkModeProvider } from './components/ui/DarkModeComponent.tsx';
 import App from './App.tsx';
 import './i18n';
 import './index.css';
+import { registerSW } from 'virtual:pwa-register';
+registerSW({ immediate: true });
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 const rootElement = document.getElementById('root');

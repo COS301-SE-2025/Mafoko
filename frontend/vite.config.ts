@@ -17,30 +17,15 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate', // Automatically update the PWA when a new version is available
-      injectRegister: 'auto', // Injects the service worker registration script
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      devOptions: {
+        enabled: true,
+        type: 'module',
+      },
       workbox: {
-        globPatterns: [
-          '**/*.{js,css,html,ico,png,svg,jpg,jpeg,woff,woff2,ttf,eot}',
-        ], // Files to precache
-        // Runtime caching for API calls - Commented out as APIs are not yet implemented
-        /*
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/your-api-domain\.com\/api\//, // Replace with actual API domain when ready
-            handler: 'NetworkFirst', // Or 'CacheFirst', 'StaleWhileRevalidate'
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-        ],
-        */
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
       },
       manifest: {
         name: 'Marito - Multilingual Lexicons',
@@ -71,15 +56,14 @@ export default defineConfig({
           },
         ],
       },
-      // Enable service worker and PWA features during development
-      devOptions: {
-        enabled: true,
-        type: 'module',
-        /* when using certificate based on `mkcert` for development */
-        // navigateFallbackAllowlist: [/^\/$/], // Example: only allow root path for SPA fallback
-      },
     }),
   ],
+  define: {
+    __PROD__: process.env.NODE_ENV === 'production',
+    __API_GATEWAY_URL__: JSON.stringify(
+      'https://default-service-885391982107.us-central1.run.app',
+    ),
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
