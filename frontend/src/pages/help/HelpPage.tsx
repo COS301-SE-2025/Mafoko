@@ -78,7 +78,6 @@ const HelpPage: React.FC = () => {
     [],
   );
 
-  // Determines if the side nav or top av should be used.
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -126,7 +125,6 @@ const HelpPage: React.FC = () => {
       });
     });
 
-    // Return top 5 suggestions max
     return Array.from(keywordSet).slice(0, 5);
   };
 
@@ -141,7 +139,6 @@ const HelpPage: React.FC = () => {
       className={`help-page-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       <div className={`help-page-container`}>
-        {/* Top bar for mobile only */}
         {isMobile ? (
           <Navbar />
         ) : (

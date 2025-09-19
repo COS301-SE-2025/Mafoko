@@ -56,7 +56,7 @@ const HelpSearch: FC<HelpSearchProps> = ({
       sx={{
         input: {
           color: 'var(--text-theme)',
-          backgroundColor: 'var(--text-secondary)',
+          backgroundColor: 'var(--background-accent)',
           border: 'none',
           focus: 'none',
           focusHighlight: 'none',
@@ -79,9 +79,10 @@ const HelpSearch: FC<HelpSearchProps> = ({
           placeholder={placeholder}
           variant="outlined"
           fullWidth
+          className="bg-white"
           sx={{
             '& .MuiOutlinedInput-root': {
-              backgroundColor: 'rgba(255, 255, 255, 0.9)', // or use var(--bg-tir)
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
               borderRadius: '0.5rem',
             },
             '& .MuiOutlinedInput-notchedOutline': {
