@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from mavito_common.models.workspace_note import WorkspaceNote
     from mavito_common.models.term import Term  # noqa: F401
     from mavito_common.models.feedback import Feedback  # noqa: F401
+    from mavito_common.models.user_xp import UserXP  # noqa: F401
 
 
 class UserRole(str, enum.Enum):
@@ -90,4 +91,9 @@ class User(Base):
         "Feedback",
         foreign_keys="[Feedback.resolved_by_user_id]",
         back_populates="resolved_by",
+    )
+
+    # XP relationships
+    xp_records: Mapped[List["UserXP"]] = relationship(
+        "UserXP", back_populates="user", cascade="all, delete-orphan"
     )

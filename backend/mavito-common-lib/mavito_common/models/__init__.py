@@ -12,3 +12,4 @@ from .workspace_note import WorkspaceNote  # noqa: F401
 from .term_application import TermApplication  # noqa: F401
 from .term_status import TermStatus  # noqa: F401
 from .feedback import Feedback  # noqa: F401
+from .user_xp import UserXP  # noqa: F401
