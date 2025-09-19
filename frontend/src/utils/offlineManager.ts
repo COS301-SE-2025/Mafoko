@@ -266,8 +266,15 @@ const processTranslationAction = async (
         translations?: Record<string, string>;
       };
       // Cache the translations
-      const { cacheTermTranslations } = await import('./glossaryCache');
-      await cacheTermTranslations(
+      const { offlineStorage } = (await import('./offlineStorage')) as {
+        offlineStorage: {
+          saveTermTranslations: (
+            termId: string,
+            translations: Record<string, string>,
+          ) => Promise<void>;
+        };
+      };
+      await offlineStorage.saveTermTranslations(
         termIdStr,
         translationData.translations || {},
       );

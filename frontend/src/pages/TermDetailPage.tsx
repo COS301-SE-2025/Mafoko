@@ -194,7 +194,7 @@ export const TermDetailPage: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [id, name, language, fetchTerm, fetchRelatedTerms]);
+  }, [id, name, language, fetchTerm, fetchRelatedTerms, term]);
 
   useEffect(() => {
     const handleResize = () => {
