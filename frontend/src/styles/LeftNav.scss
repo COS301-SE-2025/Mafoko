@@ -78,9 +78,9 @@
   flex: 1;
   overflow-y: auto;
   /* Hide scrollbar for all browsers while keeping functionality */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-  
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
@@ -305,7 +305,9 @@
   padding: 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   flex-shrink: 0; /* Prevent footer from shrinking */
-  background-color: var(--bg-tir); /* Ensure footer has same background as nav */
+  background-color: var(
+    --bg-tir
+  ); /* Ensure footer has same background as nav */
   z-index: 5; /* Ensure it appears above scrolling content */
 }
 

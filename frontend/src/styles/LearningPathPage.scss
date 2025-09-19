@@ -4,54 +4,54 @@
   min-height: calc(100vh - 64px); // Adjust based on your header/footer height
   background-color: var(--bg-color-secondary);
   margin-left: -277px; /* Move the container 50px to the left */
-   width: 1155px;
-  
+  width: 1155px;
+
   &.dark-mode {
     background-color: var(--bg-color-dark);
     color: var(--text-color-dark);
-    
+
     .path-card {
       background-color: var(--card-bg-dark);
       border-color: var(--border-color-dark);
     }
-    
+
     .heading-text {
       color: var(--text-color-dark);
     }
-    
+
     .subheading-text {
       color: var(--text-color-secondary-dark);
     }
   }
-  
+
   .path-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
     border-bottom: 1px solid var(--border-color);
-    
+
     .path-title {
       font-size: 1.5rem;
       font-weight: 700;
     }
-    
+
     .path-actions {
       display: flex;
       gap: 0.75rem;
     }
   }
-  
+
   .path-content {
     padding: 1.5rem;
     flex: 1;
-    
+
     .languages-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 1.5rem;
     }
-    
+
     .path-card {
       background-color: var(--card-bg);
       border-radius: 0.75rem;
@@ -59,12 +59,12 @@
       border: 1px solid var(--border-color);
       transition: all 0.2s ease;
       cursor: pointer;
-      
+
       &:hover {
         transform: translateY(-4px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
-      
+
       .language-avatar {
         width: 60px;
         height: 60px;
@@ -77,82 +77,82 @@
         font-weight: 700;
         font-size: 1.25rem;
       }
-      
+
       .language-name {
         font-size: 1.125rem;
         font-weight: 600;
         margin-bottom: 0.25rem;
       }
-      
+
       .language-stats {
         font-size: 0.875rem;
         color: var(--text-color-secondary);
       }
-      
+
       .progress-bar {
         margin-top: 1rem;
         height: 6px;
         background-color: var(--bg-color-secondary);
         border-radius: 3px;
         overflow: hidden;
-        
+
         .progress-fill {
           height: 100%;
           transition: width 0.3s ease;
         }
       }
     }
-    
+
     .word-list {
       background-color: var(--card-bg);
       border-radius: 0.75rem;
       border: 1px solid var(--border-color);
       overflow: hidden;
-      
+
       .word-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
         border-bottom: 1px solid var(--border-color);
-        
+
         &:last-child {
           border-bottom: none;
         }
-        
+
         &:hover {
           background-color: var(--hover-bg);
         }
-        
+
         .word-content {
           .word-text {
             font-size: 1.125rem;
             font-weight: 500;
             margin-bottom: 0.25rem;
           }
-          
+
           .word-translation {
             font-size: 0.875rem;
             color: var(--text-color-secondary);
           }
         }
-        
+
         .word-difficulty {
           padding: 0.25rem 0.5rem;
           border-radius: 1rem;
           font-size: 0.75rem;
           font-weight: 500;
-          
+
           &.beginner {
             background-color: rgba(16, 185, 129, 0.1);
             color: #10b981;
           }
-          
+
           &.intermediate {
             background-color: rgba(245, 158, 11, 0.1);
             color: #f59e0b;
           }
-          
+
           &.advanced {
             background-color: rgba(239, 68, 68, 0.1);
             color: #ef4444;
@@ -160,18 +160,18 @@
         }
       }
     }
-    
+
     // Flashcard mode
     .flashcard-container {
       max-width: 600px;
       margin: 0 auto;
-      
+
       .progress-indicator {
         height: 6px;
         background-color: var(--bg-color-secondary);
         border-radius: 3px;
         margin-bottom: 2rem;
-        
+
         .progress-fill {
           height: 100%;
           background-color: #3b82f6;
@@ -179,7 +179,7 @@
           transition: width 0.3s ease;
         }
       }
-      
+
       .flashcard {
         background-color: var(--card-bg);
         border-radius: 1rem;
@@ -188,26 +188,26 @@
         border: 1px solid var(--border-color);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         margin-bottom: 1.5rem;
-        
+
         .card-prompt {
           font-size: 0.875rem;
           color: var(--text-color-secondary);
           margin-bottom: 0.5rem;
         }
-        
+
         .card-word {
           font-size: 2rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
         }
       }
-      
+
       .answer-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
         margin-bottom: 1.5rem;
-        
+
         .answer-option {
           padding: 1rem;
           border-radius: 0.75rem;
@@ -217,52 +217,52 @@
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
-          
+
           &:hover {
             border-color: #3b82f6;
             background-color: rgba(59, 130, 246, 0.05);
           }
-          
+
           &.correct {
             border-color: #10b981;
             background-color: rgba(16, 185, 129, 0.1);
           }
-          
+
           &.incorrect {
             border-color: #ef4444;
             background-color: rgba(239, 68, 68, 0.1);
           }
         }
       }
-      
+
       .result-summary {
         text-align: center;
         padding: 2rem;
         background-color: var(--card-bg);
         border-radius: 1rem;
         border: 1px solid var(--border-color);
-        
+
         .result-emoji {
           font-size: 3rem;
           margin-bottom: 1rem;
         }
-        
+
         .result-title {
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: 1rem;
         }
-        
+
         .result-score {
           font-size: 1.125rem;
           margin-bottom: 1.5rem;
-          
+
           .score-number {
             font-weight: 700;
             color: #3b82f6;
           }
         }
-        
+
         .result-actions {
           display: flex;
           justify-content: center;
@@ -271,7 +271,7 @@
       }
     }
   }
-  
+
   // Buttons
   .btn {
     display: inline-flex;
@@ -282,82 +282,82 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &.btn-primary {
       background-color: var(--primary-color);
       color: white;
-      
+
       &:hover {
         background-color: var(--primary-color-dark);
       }
     }
-    
+
     &.btn-secondary {
       background-color: var(--bg-color-secondary);
       color: var(--text-color);
-      
+
       &:hover {
         background-color: var(--hover-bg);
       }
     }
-    
+
     &.btn-success {
       background-color: #10b981;
       color: white;
-      
+
       &:hover {
         background-color: #059669;
       }
     }
   }
-  
+
   // Utility classes
   .mb-4 {
     margin-bottom: 1rem;
   }
-  
+
   .mb-6 {
     margin-bottom: 1.5rem;
   }
-  
+
   .mb-8 {
     margin-bottom: 2rem;
   }
-  
+
   .mt-2 {
     margin-top: 0.5rem;
   }
-  
+
   .mt-4 {
     margin-top: 1rem;
   }
-  
+
   .flex {
     display: flex;
   }
-  
+
   .flex-center {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
+
   .justify-between {
     justify-content: space-between;
   }
-  
+
   .items-center {
     align-items: center;
   }
-  
+
   .gap-2 {
     gap: 0.5rem;
   }
-  
+
   .gap-4 {
     gap: 1rem;
   }
-  
+
   .words-panel {
     margin-top: 520px; /* Moved the words panel 10px further down */
   }
@@ -384,11 +384,13 @@
   border: 1px solid var(--border-color);
   padding: 0.75rem;
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   opacity: 0;
   pointer-events: none;
   transform-origin: top center;
-  transition: opacity 120ms ease, transform 120ms ease;
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
   z-index: 12000;
 }
 
@@ -500,7 +502,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -515,7 +517,7 @@
   color: var(--text-color, #111827);
   border-radius: 12px;
   padding: 1.25rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-color);
 }
 
@@ -596,5 +598,5 @@
 .dark-mode .learning-path-modal {
   background-color: var(--card-bg-dark-solid, #0f1724);
   color: var(--text-color-dark, #ffffff);
-  border-color: rgba(255,255,255,0.06);
+  border-color: rgba(255, 255, 255, 0.06);
 }
