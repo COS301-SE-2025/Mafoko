@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mavito_common.core.config import settings
+from app.api.v1.api import api_router
 
 app = FastAPI(title="Mavito Gamification Service", redirect_slashes=False)
 
@@ -13,6 +14,8 @@ if settings.BACKEND_CORS_ORIGINS_LIST:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/", tags=["Health Check"])

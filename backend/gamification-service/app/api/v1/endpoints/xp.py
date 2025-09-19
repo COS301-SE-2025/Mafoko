@@ -1,0 +1,60 @@
+from typing import List
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from mavito_common.db.session import get_db
+from mavito_common.schemas.user import User as UserSchema
+from mavito_common.schemas.user_xp import (
+    UserXPCreate,
+    UserXPResponse,
+    AddXPRequest,
+)
+from app.api.deps import get_current_active_user
+from app.crud.crud_user_xp import crud_user_xp
+
+router = APIRouter()
+
+
+@router.post("/add-xp", response_model=UserXPResponse)
+async def add_xp_to_user(
+    *,
+    db: AsyncSession = Depends(get_db),
+    xp_request: AddXPRequest,
+    current_user: UserSchema = Depends(get_current_active_user),
+) -> UserXPResponse:
+    """
+    Add XP to a user.
+    """
+    xp_create = UserXPCreate(
+        user_id=xp_request.user_id,
+        xp_amount=xp_request.xp_amount,
+        xp_source=xp_request.xp_source,
+        source_reference_id=xp_request.source_reference_id,
+        description=xp_request.description,
+    )
+
+    xp_record = await crud_user_xp.create_xp_record(db=db, obj_in=xp_create)
+    return UserXPResponse.model_validate(xp_record)
+
+
+@router.get("/user/{user_id}/xp-records", response_model=List[UserXPResponse])
+async def get_user_xp_records(
+    *,
+    db: AsyncSession = Depends(get_db),
+    user_id: str,
+    current_user: UserSchema = Depends(get_current_active_user),
+) -> List[UserXPResponse]:
+    """
+    Get XP records for a specific user.
+    """
+    try:
+        import uuid
+
+        user_uuid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID format"
+        )
+
+    xp_records = await crud_user_xp.get_user_xp_records(db=db, user_id=user_uuid)
+    return [UserXPResponse.model_validate(record) for record in xp_records]
