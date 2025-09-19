@@ -25,7 +25,6 @@ export default defineConfig({
         type: 'module',
       },
       workbox: {
-     fix/new-terms
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,jpg,jpeg,woff,woff2,ttf,eot}',
         ], // Files to precache

@@ -2,13 +2,17 @@
 
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
+import {
+  CacheFirst,
+  NetworkFirst,
+  StaleWhileRevalidate,
+} from 'workbox-strategies';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { 
-  getAndClearPendingVotes, 
-  addTerm, 
-  addCommentsForTerm 
+import {
+  getAndClearPendingVotes,
+  addTerm,
+  addCommentsForTerm,
 } from './utils/indexedDB';
 import { SW_API_ENDPOINTS } from './sw-config';
 import { Comment } from './types/termDetailTypes';
@@ -293,7 +297,9 @@ async function syncPendingBookmarks() {
     }
 
     const queue = JSON.parse(queueData) as Array<BookmarkAction>;
-    const bookmarkActions = queue.filter(action => action.type === 'bookmark');
+    const bookmarkActions = queue.filter(
+      (action) => action.type === 'bookmark',
+    );
 
     if (bookmarkActions.length === 0) {
       console.log('Service Worker: No bookmark actions to sync.');
@@ -358,15 +364,12 @@ async function syncPendingBookmarks() {
     }
     console.log('Service Worker: Bookmark sync finished.');
   } catch (error) {
-    console.error(
-      'Service Worker: Failed to sync pending bookmarks:',
-      error,
-    );
+    console.error('Service Worker: Failed to sync pending bookmarks:', error);
   }
 }
 
 self.addEventListener('message', ((event: ExtendableMessageEvent) => {
-  const messageData = event.data as { type?: string };
+  const messageData = event.data as { type?: string; payload?: any };
 
   if (messageData.type === 'SKIP_WAITING') {
     void self.skipWaiting();
