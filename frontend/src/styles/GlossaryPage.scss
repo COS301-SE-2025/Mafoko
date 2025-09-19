@@ -1377,6 +1377,114 @@ body {
   }
 }
 
+/* Notification styles for offline functionality */
+.notification {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  z-index: 10000;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideInRight 0.3s ease;
+  transition: all 0.3s ease;
+
+  &.notification-success {
+    background-color: #10b981;
+    color: white;
+  }
+
+  &.notification-error {
+    background-color: #ef4444;
+    color: white;
+  }
+
+  &.notification-info {
+    background-color: #3b82f6;
+    color: white;
+  }
+}
+
+/* Offline indicator animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Offline action badge styles */
+.offline-action-badge {
+  position: relative;
+  display: inline-block;
+}
+
+.offline-action-badge::after {
+  content: '📱';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #f59e0b;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Cache status indicator */
+.cache-status-indicator {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+
+  &.cache-active {
+    background-color: #10b981;
+  }
+
+  &.cache-offline {
+    background-color: #f59e0b;
+  }
+
+  &.cache-error {
+    background-color: #ef4444;
+  }
+}
+
 /* Mobile layout improvements */
 @media (max-width: 767px) {
   /* Fix position of elements in the mobile layout */
@@ -1399,5 +1507,21 @@ body {
   /* Ensure content has space below the profile section */
   .glossary-header {
     margin-top: 5px;
+  }
+
+  /* Adjust notification position on mobile */
+  .notification {
+    top: 60px;
+    right: 8px;
+    left: 8px;
+    max-width: none;
+  }
+
+  /* Offline indicator adjustments for mobile */
+  .offline-indicator {
+    top: 8px;
+    right: 8px;
+    left: 8px;
+    max-width: none;
   }
 }
