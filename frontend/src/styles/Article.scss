@@ -125,6 +125,7 @@ $text-dark: #ffffff;
     .article-section-sidebar {
       width: 220px;
       flex-shrink: 0;
+      justify-content: left;
 
       h2 {
         font-size: 1rem;

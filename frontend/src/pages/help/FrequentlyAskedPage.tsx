@@ -31,7 +31,7 @@ const FrequentlyAskedPage: React.FC = () => {
             <div className="article-section-inner">
               <aside className="article-section-sidebar">
                 <h2 className="article-h2">FAQs</h2>
-                <ul>
+                <ul className="text-left">
                   <li>
                     <a href="#multiple-download">
                       Can I download multiple dictionaries at once?

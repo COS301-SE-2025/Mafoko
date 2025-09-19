@@ -31,7 +31,7 @@ const GettingStarted: React.FC = () => {
             <div className="article-section-inner">
               <aside className="article-section-sidebar">
                 <h2 className="article-h2">On this page</h2>
-                <ul>
+                <ul className="text-left">
                   <li>
                     <a href="#intro">Getting Started</a>
                   </li>
