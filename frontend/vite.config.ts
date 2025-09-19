@@ -22,16 +22,17 @@ export default defineConfig({
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,jpg,jpeg,woff,woff2,ttf,eot}',
         ], // Files to precache
-        // Runtime caching for API calls - Commented out as APIs are not yet implemented
-        /*
+        // Runtime caching for API calls
         runtimeCaching: [
+          // Glossary service endpoints - Cache first for stable data
           {
-            urlPattern: /^https:\/\/your-api-domain\.com\/api\//, // Replace with actual API domain when ready
-            handler: 'NetworkFirst', // Or 'CacheFirst', 'StaleWhileRevalidate'
+            urlPattern:
+              /^https?:\/\/.*\/api\/v1\/glossary\/(categories|languages)$/,
+            handler: 'CacheFirst',
             options: {
-              cacheName: 'api-cache',
+              cacheName: 'glossary-static-cache',
               expiration: {
-                maxEntries: 10,
+                maxEntries: 20,
                 maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
               },
               cacheableResponse: {
@@ -39,8 +40,72 @@ export default defineConfig({
               },
             },
           },
+          // Glossary terms - Network first for fresh data, fallback to cache
+          {
+            urlPattern:
+              /^https?:\/\/.*\/api\/v1\/glossary\/(search|terms|categories\/.*\/terms)/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'glossary-terms-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 3, // 3 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              networkTimeoutSeconds: 3,
+            },
+          },
+          // Term translations - Cache first for stable translations
+          {
+            urlPattern:
+              /^https?:\/\/.*\/api\/v1\/glossary\/terms\/.*\/translations$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'translations-cache',
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Workspace bookmarks - Network first for user data
+          {
+            urlPattern: /^https?:\/\/.*\/api\/v1\/workspace\/bookmarks/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'workspace-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 1 day
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              networkTimeoutSeconds: 3,
+            },
+          },
+          // General API fallback
+          {
+            urlPattern: /^https?:\/\/.*\/api\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 1 day
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              networkTimeoutSeconds: 5,
+            },
+          },
         ],
-        */
       },
       manifest: {
         name: 'Marito - Multilingual Lexicons',

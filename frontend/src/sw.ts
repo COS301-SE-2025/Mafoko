@@ -2,12 +2,9 @@
 
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import {
-  StaleWhileRevalidate,
-  CacheFirst,
-  NetworkFirst,
-} from 'workbox-strategies';
-import type { CacheKeyWillBeUsedCallback } from 'workbox-core';
+import { CacheFirst, NetworkFirst } from 'workbox-strategies';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { ExpirationPlugin } from 'workbox-expiration';
 import { getAndClearPendingVotes } from './utils/indexedDB';
 
 import type { PrecacheEntry } from 'workbox-precaching';
@@ -54,17 +51,29 @@ precacheAndRoute(self.__WB_MANIFEST);
 
 // Cache API responses with different strategies
 registerRoute(
+  // Match GET requests for workspace endpoints and glossary stats
+  ({ url, request }) =>
+    request.method === 'GET' &&
+    (url.pathname.startsWith('/api/v1/workspace') ||
+      url.pathname === '/api/v1/glossary/categories/stats'),
+  new NetworkFirst({
+    cacheName: 'workspace-api-cache',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 7 }),
+    ],
+  }),
+);
+
+registerRoute(
   ({ url }: { url: URL }) =>
     url.pathname.includes('/api/v1/glossary-categories'),
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: 'glossary-categories',
+    networkTimeoutSeconds: 5,
     plugins: [
-      {
-        cacheKeyWillBeUsed: (async ({ request }: { request: Request }) => {
-          await Promise.resolve(); // Make it truly async
-          return request.url + '-' + new Date().toDateString();
-        }) as CacheKeyWillBeUsedCallback,
-      },
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 7 }),
     ],
   }),
 );
@@ -75,12 +84,26 @@ registerRoute(
     cacheName: 'glossary-terms',
     networkTimeoutSeconds: 5,
     plugins: [
-      {
-        cacheKeyWillBeUsed: (async ({ request }: { request: Request }) => {
-          await Promise.resolve(); // Make it truly async
-          return request.url + '-' + new Date().getHours().toString();
-        }) as CacheKeyWillBeUsedCallback,
-      },
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 60 * 60 * 24 * 3,
+      }),
+    ],
+  }),
+);
+
+registerRoute(
+  ({ url, request }) =>
+    request.method === 'GET' &&
+    (url.pathname === '/api/v1/glossary/random' ||
+      url.pathname === '/api/v1/auth/me/profile-picture'),
+  new NetworkFirst({
+    cacheName: 'api-misc',
+    networkTimeoutSeconds: 5,
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 7 }),
     ],
   }),
 );
@@ -88,8 +111,16 @@ registerRoute(
 registerRoute(
   ({ url }: { url: URL }) =>
     url.pathname.includes('/api/v1/glossary-term-translations'),
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: 'glossary-translations',
+    networkTimeoutSeconds: 5,
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({
+        maxEntries: 200,
+        maxAgeSeconds: 60 * 60 * 24 * 7,
+      }),
+    ],
   }),
 );
 
@@ -99,12 +130,11 @@ registerRoute(
   new CacheFirst({
     cacheName: 'images',
     plugins: [
-      {
-        cacheKeyWillBeUsed: (async ({ request }: { request: Request }) => {
-          await Promise.resolve(); // Make it truly async
-          return request.url;
-        }) as CacheKeyWillBeUsedCallback,
-      },
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 60 * 60 * 24 * 30,
+      }),
     ],
   }),
 );
