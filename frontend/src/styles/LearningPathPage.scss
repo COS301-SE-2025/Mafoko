@@ -359,6 +359,242 @@
   }
   
   .words-panel {
-    margin-top: 480px; /* Move the words panel 300px downward */
+    margin-top: 520px; /* Moved the words panel 10px further down */
   }
+}
+
+/* Level badge tooltip */
+.level-badge-wrapper {
+  display: inline-block;
+}
+
+.level-badge {
+  cursor: default;
+}
+
+.level-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  max-width: 320px;
+  background-color: var(--card-bg-solid, #ffffff);
+  color: var(--text-color, #111827);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: top center;
+  transition: opacity 120ms ease, transform 120ms ease;
+  z-index: 12000;
+}
+
+.level-tooltip .tooltip-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.level-tooltip .tooltip-progress {
+  height: 8px;
+  background: var(--bg-color-secondary, #eef2f7);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.level-tooltip .tooltip-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  width: 0%;
+  transition: width 200ms ease;
+}
+
+.level-tooltip .tooltip-text {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.level-badge-wrapper:hover .level-tooltip,
+.level-badge-wrapper:focus-within .level-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .level-tooltip {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    min-width: 180px;
+  }
+}
+
+/* Glossary action buttons */
+.glossary-card-actions {
+  margin-top: 0.5rem;
+}
+
+.glossary-card-actions .study-btn,
+.glossary-card-actions .flashcard-btn {
+  border: none;
+  padding: 0.4rem 0.75rem; /* smaller padding */
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem; /* slightly smaller text */
+  gap: 0.5rem;
+}
+
+.glossary-card-actions .study-btn {
+  background: #00ceaf; /* requested study color */
+  color: white;
+}
+
+.glossary-card-actions .study-btn:hover,
+.glossary-card-actions .study-btn:focus {
+  background: #00b99b;
+}
+
+.glossary-card-actions .flashcard-btn {
+  background: #f00a50; /* requested flashcard color */
+  color: white;
+}
+
+.glossary-card-actions .flashcard-btn:hover,
+.glossary-card-actions .flashcard-btn:focus {
+  background: #d10946;
+}
+
+.glossary-card-actions .study-btn svg,
+.glossary-card-actions .flashcard-btn svg {
+  opacity: 0.95;
+  width: 16px;
+  height: 16px;
+}
+
+.glossary-card-progress {
+  margin-top: 0.75rem;
+}
+
+.glossary-card-progress .progress-bar {
+  background: var(--bg-color-secondary, #eef2f7);
+}
+
+.glossary-card-progress .progress-fill {
+  transition: width 220ms ease;
+}
+
+.glossary-card-actions {
+  align-items: center;
+}
+
+/* New Path Modal Styles */
+.learning-path-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.learning-path-modal {
+  width: 100%;
+  max-width: 680px;
+  /* Force an opaque solid background to avoid transparency from theme variables */
+  background-color: var(--card-bg-solid, #ffffff);
+  color: var(--text-color, #111827);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+}
+
+.learning-path-modal .modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.learning-path-modal .modal-label {
+  display: block;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.learning-path-modal .modal-select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+}
+
+.learning-path-modal .modal-glossaries {
+  margin-top: 0.5rem;
+}
+
+.learning-path-modal .modal-glossary-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.learning-path-modal .modal-glossary-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.learning-path-modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.learning-path-modal .modal-btn {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.learning-path-modal .modal-create {
+  background: #f00a50;
+  color: white;
+}
+
+.learning-path-modal .modal-cancel {
+  background: transparent;
+  border: 1px solid var(--border-color);
+}
+
+.learning-path-modal .modal-hint {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Dark mode fallback: if parent sets dark-mode, ensure modal has appropriate opaque background */
+.dark-mode .learning-path-modal {
+  background-color: var(--card-bg-dark-solid, #0f1724);
+  color: var(--text-color-dark, #ffffff);
+  border-color: rgba(255,255,255,0.06);
 }
