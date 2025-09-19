@@ -1,4 +1,4 @@
-import type { FC, InputHTMLAttributes } from 'react';
+import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../../styles/SearchBar.scss';
@@ -9,8 +9,8 @@ interface Suggestion {
   label: string;
 }
 
-interface SearchBarProps extends InputHTMLAttributes<HTMLInputElement> {
-  onSearch: (value: string) => Promise<void>;
+interface SearchBarProps {
+  onSearch: (value: string) => void;
   fetchSuggestions: (term: string) => Promise<Suggestion[]>;
   minChars?: number;
   debounceMs?: number;
@@ -24,26 +24,16 @@ const SearchBar: FC<SearchBarProps> = ({
 }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState('');
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<Suggestion[]>([]);
 
-  useEffect(() => {
-    void onSearch('');
-  }, [onSearch]);
-
-  // Fetch suggestions
   useEffect(() => {
     const handler = setTimeout(() => {
       if (value.length >= minChars) {
         fetchSuggestions(value)
           .then((results) => {
-            setOptions(results.map((s) => s.label));
+            setOptions(results);
           })
-          .catch((err: unknown) => {
-            if (err instanceof Error) {
-              console.error('Failed to fetch suggestions:', err.message);
-            } else {
-              console.error('Unknown error while fetching suggestions:', err);
-            }
+          .catch(() => {
             setOptions([]);
           });
       } else {
@@ -60,29 +50,37 @@ const SearchBar: FC<SearchBarProps> = ({
     <Autocomplete
       freeSolo
       options={options}
+      getOptionLabel={(option) =>
+        typeof option === 'string' ? option : option.label
+      }
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       inputValue={value}
       onInputChange={(_, newInputValue) => {
         setValue(newInputValue);
       }}
       onChange={(_, selectedValue) => {
-        if (typeof selectedValue === 'string') {
-          void onSearch(selectedValue);
-        }
+        const finalValue =
+          typeof selectedValue === 'string'
+            ? selectedValue
+            : selectedValue?.label || '';
+        onSearch(finalValue);
       }}
+      // Add the renderOption prop to explicitly set a unique key for each item
+      renderOption={(props, option) => (
+        <li {...props} key={option.id}>
+          {option.label}
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}
           placeholder={t('searchPage.searchPlaceholder')}
           variant="outlined"
           fullWidth
-          sx={{
-            input: {
-              color: 'var(--text-theme)',
-            },
-          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              void onSearch(value);
+              e.preventDefault();
+              onSearch(value);
             }
           }}
         />

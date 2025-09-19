@@ -13,6 +13,10 @@ on:
       - 'backend/vote-service/**'
       - 'backend/comment-service/**'
       - 'backend/workspace-service/**'
+      - 'backend/term-addition-service/**'
+      - 'backend/feedback-service/**'
+      
+      
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -56,6 +60,8 @@ jobs:
             "vote-service"
             "comment-service"
             "workspace-service"
+            "term-addition-service"
+            "feedback-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
@@ -75,6 +81,8 @@ jobs:
             "vote-service"
             "comment-service"
             "workspace-service"
+            "term-addition-service"
+            "feedback-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do

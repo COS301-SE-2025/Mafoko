@@ -1,16 +1,17 @@
+# Use a slim Python image as the base for a smaller final image size.
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy requirements
-COPY requirements.txt /app/requirements.txt
+COPY ./mavito-common-lib /app/mavito-common-lib
+RUN pip install --no-cache-dir -e /app/mavito-common-lib
 
-# Install Python dependencies
+
+COPY ./feedback-service/requirements.txt /app/requirements.txt
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application
-COPY . /app
 
-EXPOSE 8080
+COPY ./feedback-service/app /app/app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]

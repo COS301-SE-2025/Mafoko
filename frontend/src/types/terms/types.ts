@@ -16,4 +16,6 @@ export type Term = {
   definition: string;
   upvotes: number;
   downvotes: number;
+  status: string;
+  user_vote: 'upvote' | 'downvote' | null;
 };

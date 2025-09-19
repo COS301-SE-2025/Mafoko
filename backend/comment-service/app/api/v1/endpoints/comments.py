@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
 from typing import List, Optional
-
+from pydantic import BaseModel
 from mavito_common.db.session import get_db
 from mavito_common.models.user import (
     User as UserModel,
@@ -16,7 +16,14 @@ from mavito_common.schemas.comment import CommentCreate, CommentResponse, Commen
 router = APIRouter(redirect_slashes=False)
 
 
-@router.post("", response_model=CommentResponse, status_code=status.HTTP_201_CREATED)
+class CommentCreateResponse(BaseModel):
+    newComment: CommentResponse
+    tempId: Optional[str] = None
+
+
+@router.post(
+    "", response_model=CommentCreateResponse, status_code=status.HTTP_201_CREATED
+)
 async def create_comment(
     *,
     db: AsyncSession = Depends(get_db),
@@ -25,15 +32,17 @@ async def create_comment(
 ):
     """
     Create a new comment on a term.
-    - Requires authentication.
-    - The `user_id` for the comment is taken from the authenticated user.
     """
-
     comment_orm = await crud_comment.create_comment(
         db, obj_in=comment_in, user_id=current_user.id
     )
 
-    return await crud_comment._build_comment_response(db, comment_orm, current_user.id)
+    comment_response = await crud_comment._build_comment_response(
+        db, comment_orm, current_user.id
+    )
+
+    # 3. Return the new response structure, including the tempId
+    return CommentCreateResponse(newComment=comment_response, tempId=comment_in.tempId)
 
 
 @router.get("/{comment_id}", response_model=CommentResponse)
