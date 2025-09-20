@@ -13,6 +13,9 @@ from .term_application import TermApplication  # noqa: F401
 from .term_status import TermStatus  # noqa: F401
 from .feedback import Feedback  # noqa: F401
 from .user_xp import UserXP  # noqa: F401
+from .user_level import UserLevel  # noqa: F401
+from .achievement import Achievement  # noqa: F401
+from .user_achievement import UserAchievement  # noqa: F401
 from .user_learning_progress import UserLearningProgress  # noqa: F401
 from .learning_path import LearningPath, LearningPathGlossary  # noqa: F401
 from .user_glossary_progress import UserGlossaryProgress  # noqa: F401
