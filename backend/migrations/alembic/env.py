@@ -22,6 +22,10 @@ import mavito_common.models.workspace_group  # noqa: F401
 import mavito_common.models.group_term  # noqa: F401
 import mavito_common.models.workspace_note  # noqa: F401
 import mavito_common.models.feedback  # noqa: F401
+import mavito_common.models.user_xp  # noqa: F401
+import mavito_common.models.user_level  # noqa: F401
+import mavito_common.models.achievement  # noqa: F401
+import mavito_common.models.user_achievement  # noqa: F401
 
 config = context.config
 
