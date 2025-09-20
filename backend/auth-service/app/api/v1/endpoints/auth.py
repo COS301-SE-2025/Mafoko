@@ -2,10 +2,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 import uuid
 from pydantic import BaseModel
 from google.cloud import storage
+from sqlalchemy import select, func
 
 from mavito_common.schemas.user import (
     UserCreate,
@@ -25,9 +26,43 @@ from app.api import deps
 from mavito_common.models.user import User as UserModel  # noqa: F401
 from app.crud.crud_user import crud_user
 from mavito_common.models.user import UserRole
+from mavito_common.models.user_xp import UserXP, XPSource
 
 
 router = APIRouter()
+
+
+async def award_daily_login_xp(db: AsyncSession, user: UserModel) -> None:
+    """Award daily login XP if user hasn't received it today."""
+    today = date.today()
+
+    stmt = select(UserXP).where(
+        UserXP.user_id == user.id,
+        UserXP.xp_source == XPSource.LOGIN_STREAK,
+        func.date(UserXP.created_at) == today,
+    )
+    result = await db.execute(stmt)
+    existing_xp = result.scalars().first()
+
+    if existing_xp:
+        return  # Already awarded LOGIN_STREAK XP today
+
+    try:
+        login_xp = UserXP(
+            user_id=user.id,
+            xp_amount=5,
+            xp_source=XPSource.LOGIN_STREAK,
+            source_reference_id=None,
+            description="Daily login bonus",
+        )
+
+        db.add(login_xp)
+        await db.commit()
+        await db.refresh(login_xp)
+    except Exception as e:
+        await db.rollback()
+        print(f"Error awarding daily login XP: {e}")
+        # Don't fail the login if XP fails
 
 
 # Profile picture upload schemas
@@ -225,6 +260,9 @@ async def login_for_access_token(
     # Update last_login timestamp
     await crud_user.set_last_login(db, user=user)
 
+    # Award daily login XP
+    await award_daily_login_xp(db, user=user)
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={
@@ -263,6 +301,9 @@ async def google_login(google_token: GoogleToken, db: AsyncSession = Depends(get
                 profile_pic_url=profile_pic_url,
             )
             user = await crud_user.create_user(db, obj_in=user_in)
+
+        # Award daily login XP for Google login
+        await award_daily_login_xp(db, user=user)
 
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
