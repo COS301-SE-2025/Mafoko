@@ -19,7 +19,7 @@ class UserLevel(Base):
     )
     user_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        ForeignKey("user.id"),
+        ForeignKey("users.id"),
         nullable=False,
         index=True,
         unique=True,
