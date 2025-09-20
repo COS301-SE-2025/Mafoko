@@ -5,6 +5,20 @@ export type FAQ = {
   category: 'Account' | 'Customization' | 'Data & Exports' | 'Feedback & Support';
 }
 
+export type HelpSectionProps = {
+  id: string;
+  title: string;
+  content: string;
+  assetLocation?: string;
+}
+
+export type GettingStartedContentType = {
+  id: string;
+  title: string;
+  content: string;
+  assetLocation?: string;
+}
+
 export const faqs: FAQ[] = [
   {
     id: 'languages',
