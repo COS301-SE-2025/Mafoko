@@ -28,7 +28,7 @@ const HelpPage: React.FC = () => {
     () => [
       {
         title: 'Getting Started',
-        desc: 'Learn how to quickly get the most out of the platform.',
+        desc: 'Step-by-step guide for creating an account, signing in, and navigating the platform for the first time.',
         link: '/help/getting-started',
         keywords: [
           'introduction',
@@ -42,14 +42,14 @@ const HelpPage: React.FC = () => {
         ],
       },
       {
-        title: 'Community Feature',
-        desc: 'Get to know the basics of using the community feature.',
+        title: 'Community Interaction',
+        desc: 'Learn how to post, comment, and engage with others using the community tools like upvotes and discussions.',
         link: '/help/community-feature',
         keywords: ['comment', 'upvote', 'downvote', 'community'],
       },
       {
         title: 'Dictionary',
-        desc: 'Languages, AI, and your term settings.',
+        desc: 'Search for terms across multiple languages, enable fuzzy search, and adjust your dictionary settings.',
         link: '/help/terms',
         keywords: [
           'fuzzy',
@@ -63,7 +63,7 @@ const HelpPage: React.FC = () => {
       },
       {
         title: 'Glossary',
-        desc: 'Languages, AI, and your term settings.',
+        desc: 'Organize, filter, and export glossaries by category, domain, or translation bank.',
         link: '/help/glossary',
         keywords: [
           'glossary',
@@ -78,14 +78,8 @@ const HelpPage: React.FC = () => {
         ],
       },
       {
-        title: 'Glossary',
-        desc: 'Languages, AI, and your term settings.',
-        link: '/help/glossary',
-        keywords: ['glossary', 'category', 'domain', 'translation bank'],
-      },
-      {
         title: 'Workspace',
-        desc: 'Languages, AI, and your term settings.',
+        desc: 'Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.',
         link: '/help/workspace',
         keywords: [
           'workspace',
@@ -100,7 +94,7 @@ const HelpPage: React.FC = () => {
       },
       {
         title: 'Settings and Customization',
-        desc: 'Get to know the basics of using the community feature.',
+        desc: 'Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.',
         link: '/help/settings',
         keywords: [
           'settings',
@@ -119,7 +113,7 @@ const HelpPage: React.FC = () => {
       },
       {
         title: 'Home Page',
-        desc: 'Languages, AI, and your term settings.',
+        desc: 'Explore the interactive South African map, discover random terms, and get an overview of featured content.',
         link: '/help/home-page',
         keywords: [
           'home',
@@ -132,13 +126,13 @@ const HelpPage: React.FC = () => {
       },
       {
         title: 'Dashboard',
-        desc: 'Languages, AI, and your term settings.',
+        desc: 'Track application activity with graphs, view platform data, and analyze your contributions in one place.',
         link: '/help/dashboard',
         keywords: ['dashboard', 'graph', 'app activity', 'data information'],
       },
       {
         title: 'Feedback',
-        desc: 'Languages, AI, and your term settings.',
+        desc: 'Send suggestions, compliments, or complaints directly to the team to help improve the platform.',
         link: '/help/feedback',
         keywords: [
           'feedback',
