@@ -13,3 +13,6 @@ from .term_application import TermApplication  # noqa: F401
 from .term_status import TermStatus  # noqa: F401
 from .feedback import Feedback  # noqa: F401
 from .user_xp import UserXP  # noqa: F401
+from .user_level import UserLevel  # noqa: F401
+from .achievement import Achievement  # noqa: F401
+from .user_achievement import UserAchievement  # noqa: F401
