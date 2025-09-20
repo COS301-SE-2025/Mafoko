@@ -1,6 +1,8 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import BaseModel
+from datetime import date
 
 from mavito_common.db.session import get_db
 from mavito_common.schemas.user import User as UserSchema
@@ -11,6 +13,13 @@ from mavito_common.schemas.user_xp import (
 )
 from app.api.deps import get_current_active_user
 from app.crud.crud_user_xp import crud_user_xp
+
+
+class LoginStreakResponse(BaseModel):
+    current_streak: int
+    longest_streak: int
+    last_login_date: Optional[date]
+
 
 router = APIRouter()
 
@@ -58,3 +67,26 @@ async def get_user_xp_records(
 
     xp_records = await crud_user_xp.get_user_xp_records(db=db, user_id=user_uuid)
     return [UserXPResponse.model_validate(record) for record in xp_records]
+
+
+@router.get("/user/{user_id}/login-streak", response_model=LoginStreakResponse)
+async def get_user_login_streak(
+    *,
+    db: AsyncSession = Depends(get_db),
+    user_id: str,
+    current_user: UserSchema = Depends(get_current_active_user),
+) -> LoginStreakResponse:
+    """
+    Get user's login streak calculated from LOGIN_STREAK XP records.
+    """
+    try:
+        import uuid
+
+        user_uuid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID format"
+        )
+
+    streak_data = await crud_user_xp.get_user_login_streak(db=db, user_id=user_uuid)
+    return LoginStreakResponse(**streak_data)
