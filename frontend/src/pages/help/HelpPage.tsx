@@ -64,7 +64,7 @@ const HelpPage: React.FC = () => {
       {
         title: 'Glossary',
         desc: 'Organize, filter, and export glossaries by category, domain, or translation bank.',
-        link: '/help/glossary',
+        link: '/help/glossary-help',
         keywords: [
           'glossary',
           'category',

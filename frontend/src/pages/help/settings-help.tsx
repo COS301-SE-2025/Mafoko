@@ -37,9 +37,9 @@ export const SettingsHelp: React.FC = () => {
                   <li>
                     <a href="#intro">Settings & Customization</a>
                   </li>
-                  {SettingsContent.map((obj, index) => {
+                  {SettingsContent.map((obj) => {
                     return (
-                      <li key={index}>
+                      <li key={`${obj.title}-${obj.id}`}>
                         <a href={`#${obj.id}`}>{obj.title}</a>
                       </li>
                     );
@@ -58,10 +58,10 @@ export const SettingsHelp: React.FC = () => {
                     </div>
                   </section>
 
-                  {SettingsContent.map((obj, index) => {
+                  {SettingsContent.map((obj) => {
                     return (
                       <HelpNodeSection
-                        key={index}
+                        key={`${obj.title}-${obj.id}`}
                         id={obj.id}
                         title={obj.title}
                         content={obj.content}

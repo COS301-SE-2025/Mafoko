@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
-import { HelpSection } from './HelpSection.tsx';
-import { GettingStartedContent } from './utils/GettingStartedUtils.ts';
+import { HelpNodeSection } from './HelpSection.tsx';
+import { GlossaryContent } from './utils/GlossaryUtils.tsx';
 
-const GettingStarted: React.FC = () => {
+export const GlossaryHelp: React.FC = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
 
@@ -35,9 +35,9 @@ const GettingStarted: React.FC = () => {
                 <h2 className="article-h2">On this page</h2>
                 <ul className="text-left">
                   <li>
-                    <a href="#intro">Getting Started</a>
+                    <a href="#intro">Understanding Glossaries</a>
                   </li>
-                  {GettingStartedContent.map((obj) => {
+                  {GlossaryContent.map((obj) => {
                     return (
                       <li key={`${obj.title}-${obj.id}`}>
                         <a href={`#${obj.id}`}>{obj.title}</a>
@@ -51,22 +51,23 @@ const GettingStarted: React.FC = () => {
                 <div className="p-6 max-w-4xl mx-auto space-y-12 text-base leading-relaxed text-left">
                   <section id="intro">
                     <h1 className="text-3xl font-bold text-theme mb-4">
-                      Getting Started
+                      Understanding Glossaries
                     </h1>
                     <div className="text-left space-y-6 leading-relaxed text-base">
                       <p>
-                        Welcome to <b>Marito</b>, your gateway to South Africa’s
-                        multilingual digital lexicon. This guide will walk you
-                        through the basics. Whether you're a linguist,
-                        contributor, or researcher, these steps will help you
-                        get up and running quickly.
+                        Glossaries in Marito are organized into{' '}
+                        <strong>categories</strong>. Selecting a category will
+                        show you all related terms with their definitions and
+                        multilingual equivalents. This makes it easier to
+                        explore vocabulary in a specific context or focus on
+                        domain-specific translations.
                       </p>
                     </div>
                   </section>
 
-                  {GettingStartedContent.map((obj) => {
+                  {GlossaryContent.map((obj) => {
                     return (
-                      <HelpSection
+                      <HelpNodeSection
                         key={`${obj.title}-${obj.id}`}
                         id={obj.id}
                         title={obj.title}
@@ -85,4 +86,4 @@ const GettingStarted: React.FC = () => {
   );
 };
 
-export default GettingStarted;
+export default GlossaryHelp;
