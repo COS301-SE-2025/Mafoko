@@ -123,17 +123,13 @@ const TermHelpPage: React.FC = () => {
                         'Tshivenda',
                         'Xitsonga',
                       ].map((lang) => (
-                        <div
-                          key={lang}
-                          className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700"
-                        >
+                        <div key={lang} className="px-3 py-1 rounded bg-theme">
                           {lang}
                         </div>
                       ))}
                     </div>
                   </section>
 
-                  {/* SEARCHING */}
                   <section id="how-search-works">
                     <h2 className="text-2xl font-semibold text-theme mb-3">
                       How Searching Works
