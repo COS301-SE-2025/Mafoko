@@ -44,7 +44,9 @@ const FrequentlyAskedPage: React.FC = () => {
                     <h2 className="article-h2">{category}</h2>
                     {items.map((faq) => (
                       <section id={faq.id} key={faq.id} className="mb-10">
-                        <a className="!text-black" href={`#${faq.id}`}>{faq.question}</a>
+                        <a className="!text-black" href={`#${faq.id}`}>
+                          {faq.question}
+                        </a>
                       </section>
                     ))}
                   </div>
