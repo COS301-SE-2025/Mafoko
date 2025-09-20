@@ -27,6 +27,13 @@ export const faqs: FAQ[] = [
     category: 'Account'
   },
   {
+    id: 'password',
+    question: 'I forgot my password — how do I reset it?',
+    answer: `Click the Forgot Password option on the login page and follow the prompts to reset your password.  
+  If you’re still unable to access your account, contact our Support Team for assistance with account recovery.`,
+    category: 'Account'
+  },
+  {
     id: 'profile',
     question: 'How can I change my profile information?',
     answer: `Open the Settings page and select User Profile.  
@@ -38,6 +45,13 @@ export const faqs: FAQ[] = [
     question: 'How can I change the accessibility settings?',
     answer: `Go to the Settings page and open the Accessibility section.  
   There, you can adjust options such as text size, spacing, high-contrast mode, and interface language to match your preferences.`,
+    category: 'Customization'
+  },
+  {
+    id: 'mode-change',
+    question: 'How do I switch between light and dark mode?',
+    answer: `Click the theme icon in the bottom-left corner of any page.  
+  This will instantly toggle between Light Mode and Dark Mode, so you can choose the look that suits you best.`,
     category: 'Customization'
   },
   {
@@ -59,13 +73,7 @@ export const faqs: FAQ[] = [
   You can also visit your Workspace to monitor the status and progress of your individual term submissions.`,
     category: 'Data & Exports'
   },
-  {
-    id: 'mode-change',
-    question: 'How do I switch between light and dark mode?',
-    answer: `Click the theme icon in the bottom-left corner of any page.  
-  This will instantly toggle between Light Mode and Dark Mode, so you can choose the look that suits you best.`,
-    category: 'Customization'
-  },
+
   {
     id: 'search-terms',
     question: 'How can I search for a specific term?',
@@ -87,13 +95,7 @@ export const faqs: FAQ[] = [
   You can choose to include your details or submit your feedback anonymously.`,
     category: 'Feedback & Support'
   },
-  {
-    id: 'password',
-    question: 'I forgot my password — how do I reset it?',
-    answer: `Click the Forgot Password option on the login page and follow the prompts to reset your password.  
-  If you’re still unable to access your account, contact our Support Team for assistance with account recovery.`,
-    category: 'Account'
-  },
+
   {
     id: 'bugs',
     question: 'How do I report technical issues or bugs?',
