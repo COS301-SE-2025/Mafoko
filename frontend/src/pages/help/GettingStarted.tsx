@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
 import { HelpSection } from './HelpSection.tsx';
-import { GettingStartedContent } from './GettingStartedUtils.ts';
+import { GettingStartedContent } from './utils/GettingStartedUtils.ts';
 
 const GettingStarted: React.FC = () => {
   const navigate = useNavigate();
@@ -38,23 +38,16 @@ const GettingStarted: React.FC = () => {
                     <a href="#intro">Getting Started</a>
                   </li>
                   {GettingStartedContent.map((obj, index) => {
-                    return(
+                    return (
                       <li key={index}>
                         <a href={`#${obj.id}`}>{obj.title}</a>
                       </li>
-                    )})
-                  }
-                  <li>
-                    <a href="#video">Video Walkthrough</a>
-                  </li>
-                  <li>
-                    <a href="#workflow">Typical Workflow</a>
-                  </li>
+                    );
+                  })}
                 </ul>
               </aside>
 
               <div className="article-content article-scrollable-content">
-
                 <div className="p-6 max-w-4xl mx-auto space-y-12 text-base leading-relaxed text-left">
                   <section id="intro">
                     <h1 className="text-3xl font-bold text-theme mb-4">
@@ -62,16 +55,26 @@ const GettingStarted: React.FC = () => {
                     </h1>
                     <div className="text-left space-y-6 leading-relaxed text-base">
                       <p>
-                        Welcome to <b>Marito</b>, your gateway to South Africa’s multilingual digital lexicon.
-                        This guide will walk you through the basics. Whether you're a linguist, contributor, or researcher, these steps will help you get up and running quickly.
+                        Welcome to <b>Marito</b>, your gateway to South Africa’s
+                        multilingual digital lexicon. This guide will walk you
+                        through the basics. Whether you're a linguist,
+                        contributor, or researcher, these steps will help you
+                        get up and running quickly.
                       </p>
                     </div>
                   </section>
 
                   {GettingStartedContent.map((obj, index) => {
-                    return (<HelpSection key={index} id={obj.id} title={obj.title} content={obj.content} assetLocation={obj.assetLocation} />);
+                    return (
+                      <HelpSection
+                        key={index}
+                        id={obj.id}
+                        title={obj.title}
+                        content={obj.content}
+                        assetLocation={obj.assetLocation}
+                      />
+                    );
                   })}
-
                 </div>
               </div>
             </div>
