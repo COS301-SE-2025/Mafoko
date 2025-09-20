@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type FAQ = {
   id: string;
   question: string;
@@ -13,6 +15,13 @@ export type HelpSectionProps = {
   id: string;
   title: string;
   content: string;
+  assetLocation?: string;
+};
+
+export type SectionProps = {
+  id: string;
+  title: string;
+  content: ReactNode;
   assetLocation?: string;
 };
 

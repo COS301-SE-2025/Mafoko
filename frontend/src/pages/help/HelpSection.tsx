@@ -29,3 +29,37 @@ export const HelpSection = ({
     </section>
   );
 };
+
+import { SectionProps } from './types.ts';
+
+export const HelpNodeSection = ({
+  id,
+  title,
+  content,
+  assetLocation,
+}: SectionProps) => {
+  return (
+    <section id={id}>
+      <h2 className="text-3xl font-bold text-theme mb-4">{title}</h2>
+
+      {content}
+
+      {assetLocation && (
+        <div className="video-container">
+          <video
+            controls
+            width="100%"
+            style={{
+              maxWidth: '800px',
+              marginTop: '2rem',
+              borderRadius: '0.75rem',
+            }}
+          >
+            <source src={assetLocation} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
+    </section>
+  );
+};

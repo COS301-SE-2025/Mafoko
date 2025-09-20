@@ -44,6 +44,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import SettingsHelp from './pages/help/settings-help.tsx';
 
 // Register all Chart.js components once at the application entry point
 ChartJS.register(
@@ -104,6 +105,7 @@ function App() {
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
+        <Route path="/help/settings-help" element={<SettingsHelp />} />
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />

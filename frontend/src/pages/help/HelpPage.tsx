@@ -95,7 +95,7 @@ const HelpPage: React.FC = () => {
       {
         title: 'Settings and Customization',
         desc: 'Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.',
-        link: '/help/settings',
+        link: '/help/settings-help',
         keywords: [
           'settings',
           'user settings',
