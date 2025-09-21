@@ -46,6 +46,7 @@ import {
 } from 'chart.js';
 import SettingsHelp from './pages/help/settings-help.tsx';
 import GlossaryHelp from './pages/help/GlossaryHelp.tsx';
+import WorkspaceHelp from './pages/help/WorkspaceHelp.tsx';
 
 // Register all Chart.js components once at the application entry point
 ChartJS.register(
@@ -108,6 +109,7 @@ function App() {
         <Route path="/help/getting-started" element={<GettingStarted />} />
         <Route path="/help/settings-help" element={<SettingsHelp />} />
         <Route path="/help/glossary-help" element={<GlossaryHelp />} />
+        <Route path="/help/workspace-help" element={<WorkspaceHelp />} />
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />

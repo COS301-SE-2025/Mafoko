@@ -80,7 +80,7 @@ const HelpPage: React.FC = () => {
       {
         title: 'Workspace',
         desc: 'Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.',
-        link: '/help/workspace',
+        link: '/help/workspace-help',
         keywords: [
           'workspace',
           'save',
