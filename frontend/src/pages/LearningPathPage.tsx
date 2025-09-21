@@ -227,7 +227,7 @@ const LearningPathPage: React.FC = () => {
       const [sessionData, randomTerms] = await Promise.all([
         learningService.getStudySession(
           selectedPath.language_name,
-          glossary.name,
+          glossary.name.trim(),
         ),
         learningService.getRandomTerms(selectedPath.language_name),
       ]);

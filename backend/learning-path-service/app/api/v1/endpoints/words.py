@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/languages/{language_name}/glossaries/{glossary_name}/words",
+    "/languages/{language_name}/glossaries/{glossary_name:path}/words",
     response_model=StudySession,
 )
 async def get_words_for_study_session(

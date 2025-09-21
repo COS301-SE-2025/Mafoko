@@ -176,15 +176,43 @@ class CRUDLearning:
     async def get_words_for_glossary(
         self, db: AsyncSession, *, user_id: UUID, language_name: str, glossary_name: str
     ) -> Dict[str, Any]:
+        """
+        Gets all terms for a glossary and their English translations, with robust cleaning.
+        """
+        # Clean the input from the URL to be safe
+        clean_glossary_name = glossary_name.strip().lower()
+
         terms_query = (
             select(Term)
-            .where(Term.language == language_name, Term.domain == glossary_name)
+            .where(
+                Term.language == language_name,
+                # Clean the database column value before comparing
+                func.lower(func.trim(Term.domain)) == clean_glossary_name,
+            )
             .options(selectinload(Term.translations))
             .order_by(Term.term)
             .distinct()
         )
+
         terms_result = await db.execute(terms_query)
         all_terms = terms_result.scalars().all()
+
+        if not all_terms:
+            # If still not found, try replacing non-breaking spaces as a fallback
+            terms_query_fallback = (
+                select(Term)
+                .where(
+                    Term.language == language_name,
+                    func.lower(func.trim(func.replace(Term.domain, "\xa0", " ")))
+                    == clean_glossary_name,
+                )
+                .options(selectinload(Term.translations))
+                .order_by(Term.term)
+                .distinct()
+            )
+            terms_result = await db.execute(terms_query_fallback)
+            all_terms = terms_result.scalars().all()
+
         if not all_terms:
             return {"words": [], "knownWordIds": [], "lastCardIndex": 0}
 
