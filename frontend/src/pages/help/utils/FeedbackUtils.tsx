@@ -1,4 +1,5 @@
 import { SectionProps } from '../types.ts';
+import React from 'react';
 
 export const DictionaryContent: SectionProps[] = [
   {
@@ -23,9 +24,9 @@ export const DictionaryContent: SectionProps[] = [
       <div>
         <p>Each term in Marito includes the following details:</p>
         <ul className="list-disc list-inside ml-4 space-y-1">
-          <li><strong>Term:</strong> The word or phrase itself (e.g., Ubuntu).</li>
+          <li><strong>Term:</strong> The word or phrase.</li>
           <li><strong>Language:</strong> One of South Africa’s 11 official languages.</li>
-          <li><strong>Domain:</strong> The subject area (e.g., Law, Technology, Education).</li>
+          <li><strong>Domain:</strong> The subject area.</li>
           <li><strong>Definition:</strong> A clear explanation of the term’s meaning.</li>
           <li><strong>Related Terms:</strong> Links to terms with similar or connected meanings.</li>
         </ul>
@@ -70,15 +71,77 @@ export const DictionaryContent: SectionProps[] = [
     title: "Searching for Terms",
     content: (
       <div>
+        <h2 className="text-2xl font-semibold text-theme mb-3">
+          How Searching Works
+        </h2>
         <p>
-          Use the <strong>search bar</strong> at the top of the page to enter keywords.
-          Marito updates results in real-time as you type, making it easy to find the
-          exact term or explore spelling variants.
+          The search functionality in Marito is designed to help you
+          explore glossary terms quickly and efficiently across all
+          11 official South African languages. Whether you're
+          looking for a specific translation, trying to understand a
+          domain-specific term, or exploring linguistic
+          relationships, the search engine adapts to your needs.
         </p>
-        <h3 className="text-lg font-medium mt-4">Suggestions</h3>
+
         <p>
-          As you type, Marito may show suggestions based on common queries or related terms.
+          You’ll find the search bar prominently at the top of the
+          page. As you type, Marito performs a live search, updating
+          results in real-time based on your input. This makes it
+          easy to experiment with different keywords, spelling
+          variants, or even partial matches.
         </p>
+
+        <ul className="list-disc list-inside ml-4 space-y-2">
+          <li>
+            <strong>Term:</strong> The primary label or phrase
+            representing a concept.
+          </li>
+          <li>
+            <strong>Definition:</strong> Terms whose explanations
+            contain your search keywords will also appear.
+          </li>
+          <li>
+            <strong>Filters:</strong> If you use filters, only terms
+            in the selected language or domain will be returned.
+          </li>
+        </ul>
+        <h3 className="text-lg font-medium mt-4 font-semibold">
+          Live Suggestions
+        </h3>
+        <p>
+          As you type, Marito may suggest possible completions or
+          closely related terms based on common queries. These
+          suggestions speed up the process and help you discover
+          terms even if you’re unsure of the exact wording.
+        </p>
+
+        <h3 className="text-lg font-medium mt-4 font-semibold">
+          Search Sensitivity
+        </h3>
+        <p>
+          By default, Marito performs{' '}
+          <strong>exact or near-exact matching</strong>. However,
+          you can expand the search behavior by enabling <strong>fuzzy search</strong> which finds results even if
+          there are typos or minor differences between your input
+          and the actual term.
+        </p>
+        <h3 className="text-lg font-medium mt-4 font-semibold">
+          Result Cards
+        </h3>
+        <p>
+          The terms are shown in cards that display the term name,
+          language, domain, definition, and voting buttons. Each
+          card also includes a “View” link where you can explore the
+          term in more detail, comment on it, or suggest changes.
+        </p>
+
+        <p>
+          You can combine search with filters and sorting to refine
+          your experience (see the sections below). For offline use,
+          remember to download the relevant dictionaries from the
+          dictionary page.
+        </p>
+
       </div>
     ),
     assetLocation: ""
@@ -95,7 +158,6 @@ export const DictionaryContent: SectionProps[] = [
           <li><strong>Language:</strong> Restrict results to a single language.</li>
           <li><strong>Domain:</strong> Focus on subject areas like Education, Health, or Technology.</li>
           <li><strong>Fuzzy Search:</strong> Find terms even if there are typos or spelling differences.</li>
-          <li><strong>AI Semantic Search:</strong> Get results based on meaning, not just exact words.</li>
         </ul>
       </div>
     ),
@@ -118,17 +180,17 @@ export const DictionaryContent: SectionProps[] = [
     content: (
       <div>
         <p>
-          Marito can be used offline by downloading dictionaries in advance. Once downloaded,
+          Marito can be used offline by downloading glossaries in advance. Once downloaded,
           search and filters continue to work without an internet connection.
         </p>
         <h3 className="text-lg font-medium mt-3">How to Download</h3>
         <ol className="list-decimal list-inside ml-4 space-y-1">
-          <li>Go to the <strong>Dictionary</strong> page.</li>
-          <li>Select the dictionaries you want to download.</li>
+          <li>Go to the <strong>Glossaries</strong> page.</li>
+          <li>Select the glossaries you want to download.</li>
           <li>Click <strong>Download</strong> to save them locally.</li>
         </ol>
         <p className="mt-2">
-          After downloading, terms in that dictionary remain available even offline.
+          After downloading, terms in that glossary remain available even offline.
         </p>
       </div>
     ),
