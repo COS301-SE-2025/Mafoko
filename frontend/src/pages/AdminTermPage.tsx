@@ -15,6 +15,7 @@ import {
   getTermsByIdsFromDB,
 } from '../utils/indexedDB';
 import { updateCache } from '../utils/cacheUpdater';
+import { GamificationService } from '../utils/gamification';
 
 interface TermSchema {
   id: string;
@@ -368,6 +369,8 @@ const AdminTermPage: React.FC = () => {
     const url = API_ENDPOINTS.getAdminApplicationsForApproval;
     const originalApplications = [...applications];
 
+    const application = originalApplications.find((app) => app.id === id);
+
     const updatedApplications = originalApplications.filter(
       (app) => app.id !== id,
     );
@@ -391,6 +394,19 @@ const AdminTermPage: React.FC = () => {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (application?.submitted_by_user_id) {
+        try {
+          await GamificationService.awardAdminVerificationXP(
+            application.submitted_by_user_id,
+            id,
+          );
+        } catch (xpError) {
+          console.warn('Failed to award XP for admin approval:', xpError);
+          // Don't fail the approval if XP fails
+        }
+      }
+
       fetchData(); // Re-fetch all data to ensure consistency
     } catch (err) {
       console.error(err);

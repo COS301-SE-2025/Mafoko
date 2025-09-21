@@ -13,6 +13,7 @@ import {
   getTermsByIdsFromDB,
 } from '../utils/indexedDB';
 import { updateCache } from '../utils/cacheUpdater';
+import { GamificationService } from '../utils/gamification';
 import { UserData } from '../types/glossaryTypes';
 import { Term } from '../types/terms/types';
 import { addTerm } from '../utils/indexedDB';
@@ -552,6 +553,25 @@ const ContributorPage: React.FC = () => {
       });
       if (!response.ok)
         throw new Error('Vote failed: ' + (await response.json()).detail);
+
+      const votedApplication = pendingTerms.find((app) => app.id === id);
+      if (votedApplication?.submitted_by_user_id) {
+        try {
+          await GamificationService.awardCrowdVoteXP(
+            votedApplication.submitted_by_user_id,
+            id,
+          );
+        } catch (xpError) {
+          console.warn('Failed to award XP for crowd vote:', xpError);
+          // Don't fail the vote if XP fails
+        }
+      } else {
+        console.warn(
+          ' No XP awarded - submitted_by_user_id not available for application:',
+          id,
+        );
+      }
+
       fetchData();
     } catch (err) {
       console.error(err);
