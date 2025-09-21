@@ -1,50 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, Trash2 } from 'lucide-react';
 import Flashcard from '../components/learning/Flashcard';
 import GlossaryCard from '../components/learning/GlossaryCard';
 import LanguageCard from '../components/learning/LanguageCard';
+import ConfirmationModal from '../components/ui/ConfirmationModal';
 import '../styles/LearningPathPage.scss';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 
-// Define interfaces
-interface Language {
-  code: string;
-  name: string;
-  totalWords: number;
-  color: string;
-  completedPercentage: number;
-}
-
-interface Glossary {
-  id: number;
-  name: string;
-  words: number;
-  description: string;
-}
-
-interface Word {
-  id: number;
-  word: string;
-  translation: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-}
-
-// Interface declarations for LearningPathPage
+import * as learningService from '../services/learningService';
+import {
+  LearningPath,
+  GlossaryProgress,
+  StudySession,
+  Word,
+  LanguageProgress,
+} from '../types/learning';
 
 const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
+  const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState<
-    'languages' | 'glossaries' | 'words'
-  >('languages');
-  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(
-    null,
+    'paths' | 'glossaries' | 'words'
+  >('paths');
+
+  const [selectedPath, setSelectedPath] = useState<LearningPath | null>(null);
+  const [selectedGlossary, setSelectedGlossary] =
+    useState<GlossaryProgress | null>(null);
+  const [studySession, setStudySession] = useState<StudySession | null>(null);
+  const [distractorTerms, setDistractorTerms] = useState<Word[]>([]);
+  const [glossaryWordCounts, setGlossaryWordCounts] = useState<
+    Record<string, number>
+  >({});
+
+  const [showNewPathModal, setShowNewPathModal] = useState(false);
+  const [modalPathName, setModalPathName] = useState('');
+  const [modalLanguage, setModalLanguage] = useState('');
+  const [modalGlossaries, setModalGlossaries] = useState<GlossaryProgress[]>(
+    [],
   );
-  const [selectedGlossary, setSelectedGlossary] = useState<Glossary | null>(
-    null,
-  );
-  const [knownWords, setKnownWords] = useState<Set<number>>(new Set());
+  const [modalSelectedGlossaries, setModalSelectedGlossaries] = useState<
+    Set<string>
+  >(new Set());
+  const [availableLanguages, setAvailableLanguages] = useState<
+    LanguageProgress[]
+  >([]);
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [pathToDelete, setPathToDelete] = useState<string | null>(null);
+
+  const [knownWords, setKnownWords] = useState<Set<string>>(new Set());
   const [flashcardMode, setFlashcardMode] = useState<boolean>(false);
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -53,21 +60,28 @@ const LearningPathPage: React.FC = () => {
     correct: 0,
     total: 0,
   });
+  const [retryPile, setRetryPile] = useState<Word[]>([]);
 
-  // UI state for navigation
   const [activeMenuItem, setActiveMenuItem] = useState('learning-path');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  // Modal state for creating a new learning path
-  const [showNewPathModal, setShowNewPathModal] = useState(false);
-  const [modalLanguageCode, setModalLanguageCode] = useState<string | null>(
-    null,
-  );
-  const [modalSelectedGlossaryIds, setModalSelectedGlossaryIds] = useState<
-    number[]
-  >([]);
 
-  // Handle responsive behavior
+  const fetchUserPaths = async () => {
+    setIsLoading(true);
+    try {
+      const paths = await learningService.getLearningPaths();
+      setLearningPaths(paths);
+    } catch (error) {
+      console.error('Failed to load learning paths.', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void fetchUserPaths();
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -82,305 +96,279 @@ const LearningPathPage: React.FC = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Mock data
-  const languages: Language[] = [
-    {
-      code: 'ES',
-      name: 'Spanish',
-      totalWords: 2500,
-      color: '#f00a50',
-      completedPercentage: 65,
-    },
-    {
-      code: 'FR',
-      name: 'French',
-      totalWords: 2200,
-      color: '#212431',
-      completedPercentage: 32,
-    },
-    {
-      code: 'DE',
-      name: 'German',
-      totalWords: 1800,
-      color: '#f2d001',
-      completedPercentage: 18,
-    },
-    {
-      code: 'IT',
-      name: 'Italian',
-      totalWords: 2100,
-      color: '#00ceaf',
-      completedPercentage: 45,
-    },
-  ];
-
-  const glossaries: Record<string, Glossary[]> = {
-    ES: [
-      {
-        id: 1,
-        name: 'Basic Vocabulary',
-        words: 200,
-        description: 'Essential everyday words',
-      },
-      {
-        id: 2,
-        name: 'Food & Dining',
-        words: 150,
-        description: 'Restaurant and cooking terms',
-      },
-      {
-        id: 3,
-        name: 'Travel & Transportation',
-        words: 180,
-        description: 'Getting around and exploring',
-      },
-      {
-        id: 4,
-        name: 'Business Spanish',
-        words: 220,
-        description: 'Professional vocabulary',
-      },
-      {
-        id: 5,
-        name: 'Family & Relationships',
-        words: 120,
-        description: 'Personal connections',
-      },
-    ],
-    FR: [
-      {
-        id: 1,
-        name: 'Basic Vocabulary',
-        words: 180,
-        description: 'Essential everyday words',
-      },
-      {
-        id: 2,
-        name: 'Culture & Arts',
-        words: 160,
-        description: 'French culture and artistic terms',
-      },
-      {
-        id: 3,
-        name: 'Fashion & Style',
-        words: 140,
-        description: 'Fashion and beauty vocabulary',
-      },
-      {
-        id: 4,
-        name: 'Cuisine & Gastronomy',
-        words: 200,
-        description: 'French cooking and dining',
-      },
-    ],
-    DE: [
-      {
-        id: 1,
-        name: 'Basic Vocabulary',
-        words: 150,
-        description: 'Essential everyday words',
-      },
-      {
-        id: 2,
-        name: 'Technology & Innovation',
-        words: 170,
-        description: 'Tech and engineering terms',
-      },
-      {
-        id: 3,
-        name: 'Music & Entertainment',
-        words: 130,
-        description: 'Arts and entertainment',
-      },
-      {
-        id: 4,
-        name: 'Science & Research',
-        words: 190,
-        description: 'Academic and scientific vocabulary',
-      },
-    ],
-    IT: [
-      {
-        id: 1,
-        name: 'Basic Vocabulary',
-        words: 160,
-        description: 'Essential everyday words',
-      },
-      {
-        id: 2,
-        name: 'Art & Architecture',
-        words: 180,
-        description: 'Italian art and design terms',
-      },
-      {
-        id: 3,
-        name: 'Food & Wine',
-        words: 200,
-        description: 'Culinary vocabulary',
-      },
-      {
-        id: 4,
-        name: 'History & Culture',
-        words: 150,
-        description: 'Cultural and historical terms',
-      },
-    ],
+  const getProficiencyLevel = (percentage: number): string => {
+    if (percentage >= 80) return 'Advanced';
+    if (percentage >= 40) return 'Intermediate';
+    return 'Beginner';
   };
 
-  const sampleWords: Word[] = [
-    { id: 1, word: 'hola', translation: 'hello', difficulty: 'beginner' },
-    {
-      id: 2,
-      word: 'gracias',
-      translation: 'thank you',
-      difficulty: 'beginner',
-    },
-    {
-      id: 3,
-      word: 'restaurante',
-      translation: 'restaurant',
-      difficulty: 'intermediate',
-    },
-    {
-      id: 4,
-      word: 'conversación',
-      translation: 'conversation',
-      difficulty: 'intermediate',
-    },
-    {
-      id: 5,
-      word: 'extraordinario',
-      translation: 'extraordinary',
-      difficulty: 'advanced',
-    },
-    { id: 6, word: 'por favor', translation: 'please', difficulty: 'beginner' },
-    {
-      id: 7,
-      word: 'bienvenido',
-      translation: 'welcome',
-      difficulty: 'intermediate',
-    },
-    {
-      id: 8,
-      word: 'comprensión',
-      translation: 'understanding',
-      difficulty: 'advanced',
-    },
-    { id: 9, word: 'agua', translation: 'water', difficulty: 'beginner' },
-    {
-      id: 10,
-      word: 'aventura',
-      translation: 'adventure',
-      difficulty: 'intermediate',
-    },
-  ];
-
-  // Additional words for creating wrong answers
-  const allTranslations = [
-    'hello',
-    'thank you',
-    'restaurant',
-    'conversation',
-    'extraordinary',
-    'please',
-    'welcome',
-    'understanding',
-    'water',
-    'adventure',
-    'goodbye',
-    'house',
-    'friend',
-    'family',
-    'book',
-    'school',
-    'car',
-    'music',
-    'love',
-    'time',
-    'world',
-    'life',
-    'work',
-    'food',
-    'money',
-  ];
-
-  // Known-word marking is handled by flashcard correctness; remove manual toggle to prevent user clicks.
-
-  // Compute an overall progress percentage (simple average of languages) for the level tooltip
   const overallProgressPercentage = Math.round(
-    languages.reduce((sum, l) => sum + (l.completedPercentage || 0), 0) /
-      languages.length,
+    learningPaths.reduce((sum, p) => sum + (p.completedPercentage || 0), 0) /
+      (learningPaths.length || 1),
   );
 
   const getProgressPercentage = (): number => {
-    if (!selectedGlossary) return 0;
-    return Math.round((knownWords.size / sampleWords.length) * 100);
+    if (!studySession || studySession.words.length === 0) return 0;
+    const knownCount = studySession.words.filter((word) =>
+      knownWords.has(word.id),
+    ).length;
+    return Math.round((knownCount / studySession.words.length) * 100);
   };
 
-  // Flashcard functions
-  const generateWrongAnswers = (correctAnswer: string): string[] => {
-    const wrongAnswers = allTranslations
-      .filter((t) => t !== correctAnswer)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
-    return wrongAnswers;
+  const handleOpenCreateModal = async () => {
+    try {
+      const dashboardData = await learningService.getDashboard();
+      setAvailableLanguages(dashboardData);
+      setModalPathName('');
+      setModalLanguage('');
+      setModalGlossaries([]);
+      setModalSelectedGlossaries(new Set());
+      setShowNewPathModal(true);
+    } catch (error) {
+      console.error('Failed to get data for modal.', error);
+    }
+  };
+
+  const handleModalLanguageChange = async (langName: string) => {
+    setModalLanguage(langName);
+    setModalSelectedGlossaries(new Set());
+    if (langName) {
+      try {
+        const glossariesForLang =
+          await learningService.getGlossariesForLanguage(langName);
+        setModalGlossaries(glossariesForLang);
+      } catch (error) {
+        setModalGlossaries([]);
+        console.error('Failed to get glossaries for language.', error);
+      }
+    } else {
+      setModalGlossaries([]);
+    }
+  };
+
+  const handleGlossaryToggle = (glossaryName: string) => {
+    setModalSelectedGlossaries((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(glossaryName)) newSet.delete(glossaryName);
+      else newSet.add(glossaryName);
+      return newSet;
+    });
+  };
+
+  const handleCreatePath = async () => {
+    if (
+      !modalPathName ||
+      !modalLanguage ||
+      modalSelectedGlossaries.size === 0
+    ) {
+      alert('Please fill out all fields and select at least one glossary.');
+      return;
+    }
+    try {
+      await learningService.createLearningPath({
+        path_name: modalPathName,
+        language_name: modalLanguage,
+        glossary_names: Array.from(modalSelectedGlossaries),
+      });
+      setShowNewPathModal(false);
+      void fetchUserPaths();
+    } catch (error) {
+      console.error('Failed to create learning path', error);
+    }
+  };
+
+  const handleDeletePath = (pathId: string) => {
+    setPathToDelete(pathId);
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (pathToDelete) {
+      try {
+        await learningService.deleteLearningPath(pathToDelete);
+        void fetchUserPaths();
+      } catch (error) {
+        console.error(`Failed to delete path ${pathToDelete}`, error);
+      } finally {
+        setIsConfirmModalOpen(false);
+        setPathToDelete(null);
+      }
+    }
+  };
+
+  const handleSelectPath = async (path: LearningPath) => {
+    setSelectedPath(path);
+    setCurrentView('glossaries');
+    try {
+      const glossaryNames = path.selected_glossaries.map(
+        (g) => g.glossary_name,
+      );
+      if (glossaryNames.length > 0) {
+        const counts = await learningService.getWordCounts(
+          path.language_name,
+          glossaryNames,
+        );
+        setGlossaryWordCounts(counts);
+      }
+    } catch (error) {
+      console.error('Failed to fetch word counts', error);
+      setGlossaryWordCounts({});
+    }
+  };
+
+  const handleGlossarySelect = async (
+    glossary: GlossaryProgress,
+    startWithFlashcards: boolean,
+  ) => {
+    if (!selectedPath) return;
+    setSelectedGlossary(glossary);
+    setCurrentView('words');
+    try {
+      const [sessionData, randomTerms] = await Promise.all([
+        learningService.getStudySession(
+          selectedPath.language_name,
+          glossary.name,
+        ),
+        learningService.getRandomTerms(selectedPath.language_name),
+      ]);
+      setStudySession(sessionData);
+      setDistractorTerms(randomTerms);
+      setKnownWords(new Set(sessionData.knownWordIds));
+
+      const initialRetryPile = sessionData.words.filter((w) =>
+        // eslint-disable-next-line
+        (sessionData.retryPileIds || []).includes(w.id),
+      );
+
+      if (startWithFlashcards) {
+        startFlashcards(
+          sessionData.words,
+          sessionData.lastCardIndex || 0,
+          initialRetryPile,
+        );
+      }
+    } catch (error) {
+      console.error(
+        `Failed to load study session for ${glossary.name}.`,
+        error,
+      );
+    }
+  };
+
+  const handleFlashcardCorrect = async (termId: string) => {
+    try {
+      await learningService.updateProgress(termId);
+      setKnownWords((prev) => new Set([...prev, termId]));
+    } catch (error) {
+      console.error(`Failed to update progress for term ${termId}.`, error);
+    }
   };
 
   const getCurrentCard = (): Word | null => {
-    if (!flashcardMode || currentCardIndex >= sampleWords.length) return null;
-    return sampleWords[currentCardIndex];
+    if (
+      !flashcardMode ||
+      !studySession ||
+      currentCardIndex >= studySession.words.length
+    )
+      return null;
+    return studySession.words[currentCardIndex];
+  };
+
+  const generateWrongAnswers = (correctAnswer: string): string[] => {
+    const pool = distractorTerms
+      .map((t) => t.english_translation || t.definition)
+      .filter(Boolean);
+    return pool
+      .filter((t) => t !== correctAnswer)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
   };
 
   const getAnswerOptions = (): string[] => {
     const currentCard = getCurrentCard();
     if (!currentCard) return [];
-
-    const wrongAnswers = generateWrongAnswers(currentCard.translation);
-    const allOptions = [currentCard.translation, ...wrongAnswers];
-    return allOptions.sort(() => Math.random() - 0.5);
+    const correctAnswer =
+      currentCard.english_translation || currentCard.definition;
+    const wrongAnswers = generateWrongAnswers(correctAnswer);
+    return [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
   };
 
-  const handleAnswerSelect = (answer: string): void => {
+  const handleAnswerSelect = (answer: string) => {
     const currentCard = getCurrentCard();
     if (!currentCard || showResult) return;
-
+    const correctAnswer =
+      currentCard.english_translation || currentCard.definition;
+    const isCorrect = answer === correctAnswer;
     setSelectedAnswer(answer);
     setShowResult(true);
-
-    const isCorrect = answer === currentCard.translation;
     setScore((prev) => ({
       correct: prev.correct + (isCorrect ? 1 : 0),
       total: prev.total + 1,
     }));
-
-    // If correct, mark word as known
     if (isCorrect) {
-      setKnownWords((prev) => new Set([...prev, currentCard.id]));
+      void handleFlashcardCorrect(currentCard.id);
+    } else {
+      setRetryPile((prev) => [...prev, currentCard]);
     }
   };
 
-  const nextCard = (): void => {
+  const nextCard = () => {
+    const newIndex = currentCardIndex + 1;
+    if (studySession && newIndex >= studySession.words.length) {
+      if (retryPile.length > 0) {
+        const reviewSession = { ...studySession, words: retryPile };
+        setStudySession(reviewSession);
+        setRetryPile([]);
+        setCurrentCardIndex(0);
+        setSelectedAnswer(null);
+        setShowResult(false);
+        return;
+      } else {
+        if (selectedPath && selectedGlossary) {
+          void learningService.updateSessionProgress(
+            selectedPath.language_name,
+            selectedGlossary.name,
+            0,
+            [],
+          );
+        }
+      }
+    }
     setSelectedAnswer(null);
     setShowResult(false);
-    setCurrentCardIndex((prev) => prev + 1);
+    setCurrentCardIndex(newIndex);
   };
 
-  const startFlashcards = (): void => {
+  const startFlashcards = (
+    words: Word[],
+    startIndex: number = 0,
+    initialRetry: Word[] = [],
+  ) => {
+    if (words.length === 0) return;
+    setRetryPile(initialRetry);
     setFlashcardMode(true);
-    setCurrentCardIndex(0);
+    setCurrentCardIndex(startIndex);
     setSelectedAnswer(null);
     setShowResult(false);
     setScore({ correct: 0, total: 0 });
   };
 
-  const exitFlashcards = (): void => {
+  const exitFlashcards = () => {
+    if (selectedPath && selectedGlossary) {
+      const isFinished =
+        currentCardIndex >= (studySession?.words.length || 0) &&
+        retryPile.length === 0;
+      const indexToSave = isFinished ? 0 : currentCardIndex;
+      const retryIdsToSave = isFinished ? [] : retryPile.map((w) => w.id);
+      void learningService.updateSessionProgress(
+        selectedPath.language_name,
+        selectedGlossary.name,
+        indexToSave,
+        retryIdsToSave,
+      );
+    }
     setFlashcardMode(false);
-    setCurrentCardIndex(0);
-    setSelectedAnswer(null);
-    setShowResult(false);
   };
-
-  // Navigation items are now handled by the main app layout
 
   return (
     <div
@@ -391,16 +379,13 @@ const LearningPathPage: React.FC = () => {
           className="mobile-menu-overlay"
           onClick={toggleMobileMenu}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              toggleMobileMenu();
-            }
+            if (e.key === 'Enter') toggleMobileMenu();
           }}
           role="button"
           tabIndex={0}
           aria-label="Close menu"
         />
       )}
-
       {isMobile ? (
         <Navbar />
       ) : (
@@ -409,7 +394,6 @@ const LearningPathPage: React.FC = () => {
           setActiveItem={setActiveMenuItem}
         />
       )}
-
       <div className="main-content">
         {!isMobile && (
           <div className="top-bar learning-path-top-bar">
@@ -424,42 +408,42 @@ const LearningPathPage: React.FC = () => {
             </button>
           </div>
         )}
-
         <div className={`learning-path-content${isMobile ? ' pt-16' : ''}`}>
-          {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                {currentView === 'languages'}
+                {currentView === 'paths' && 'My Learning Paths'}
                 {currentView === 'glossaries' &&
-                  `${selectedLanguage?.name || ''} Glossaries`}
+                  (selectedPath?.path_name || '')}
                 {currentView === 'words' &&
                   !flashcardMode &&
-                  (selectedGlossary?.name || '')}
+                  (selectedGlossary?.name || 'Study Session')}
                 {currentView === 'words' &&
                   flashcardMode &&
                   `${selectedGlossary?.name || ''} - Flashcards`}
               </h1>
               <p className="text-gray-600 mt-1">
-                {currentView === 'languages'}
-                {currentView === 'glossaries'}
-                {currentView === 'words' && !flashcardMode}
-                {currentView === 'words' && flashcardMode}
+                {currentView === 'paths' &&
+                  'Create and manage your custom learning paths.'}
+                {currentView === 'glossaries' &&
+                  'Select a glossary to begin studying.'}
+                {currentView === 'words' &&
+                  !flashcardMode &&
+                  'Review the terms and definitions below.'}
               </p>
             </div>
 
-            {currentView === 'languages' && (
+            {currentView === 'paths' && (
               <div className="flex items-center gap-4">
                 <div
                   className="level-badge-wrapper"
                   style={{ position: 'relative' }}
                 >
                   <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm font-medium level-badge">
-                    Level: Intermediate
+                    Level: {getProficiencyLevel(overallProgressPercentage)}
                   </span>
-                  {/* Tooltip shown on hover via CSS */}
-                  <div className="level-tooltip" role="status" aria-hidden>
-                    <div className="tooltip-title">Progress to next level</div>
+                  <div className="level-tooltip">
+                    <div className="tooltip-title">Overall Progress</div>
                     <div className="tooltip-progress">
                       <div
                         className="tooltip-progress-fill"
@@ -469,216 +453,208 @@ const LearningPathPage: React.FC = () => {
                       />
                     </div>
                     <div className="tooltip-text">
-                      You are at {overallProgressPercentage.toString()}% —{' '}
-                      {(100 - overallProgressPercentage).toString()}% to next
-                      level
+                      {100 - overallProgressPercentage}% to next level
                     </div>
                   </div>
                 </div>
                 <button
-                  className="px-4 py-2"
-                  style={{ backgroundColor: '#f00a50', color: 'white' }}
+                  className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
                   onClick={() => {
-                    setShowNewPathModal(true);
-                    setModalLanguageCode(null);
-                    setModalSelectedGlossaryIds([]);
+                    void handleOpenCreateModal();
                   }}
                   type="button"
-                  aria-haspopup="dialog"
-                  aria-expanded={showNewPathModal}
                 >
                   + New Path
                 </button>
               </div>
             )}
 
-            {currentView === 'words' && !flashcardMode && (
+            {currentView === 'words' && !flashcardMode && studySession ? (
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900">
                   {getProgressPercentage()}%
                 </div>
                 <div className="text-sm text-gray-600">Completed</div>
               </div>
-            )}
+            ) : null}
 
-            {currentView === 'words' && flashcardMode && (
+            {currentView === 'words' && flashcardMode && studySession && (
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900">
                   Card {currentCardIndex + 1}
                 </div>
                 <div className="text-sm text-gray-600">
-                  of {sampleWords.length}
+                  of {studySession.words.length.toString()}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Languages View */}
-          {currentView === 'languages' && (
+          {currentView === 'paths' && (
             <div className="languages-panel bg-transparent">
-              <>
+              {isLoading ? (
+                <p>Loading paths...</p>
+              ) : learningPaths.length === 0 ? (
+                <p>
+                  You haven't created any learning paths yet. Click "+ New Path"
+                  to get started!
+                </p>
+              ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {languages.map((language) => (
-                    <LanguageCard
-                      key={language.code}
-                      code={language.code}
-                      name={language.name}
-                      totalWords={language.totalWords}
-                      color={language.color}
-                      completedPercentage={language.completedPercentage}
-                      onClick={() => {
-                        setSelectedLanguage(language);
-                        setCurrentView('glossaries');
-                      }}
-                    />
+                  {learningPaths.map((path) => (
+                    <div key={path.id} className="relative">
+                      <LanguageCard
+                        code={path.language_name.substring(0, 2).toUpperCase()}
+                        name={path.path_name}
+                        totalWords={path.selected_glossaries.length}
+                        color={'#212431'}
+                        completedPercentage={path.completedPercentage || 0}
+                        onClick={() => {
+                          void handleSelectPath(path);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeletePath(path.id);
+                        }}
+                        className="absolute top-4 right-4 p-1 text-gray-400 hover:text-red-500 rounded-full hover:bg-gray-100"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   ))}
                 </div>
-              </>
+              )}
             </div>
           )}
 
-          {/* Glossaries View */}
-          {currentView === 'glossaries' && selectedLanguage && (
+          {currentView === 'glossaries' && selectedPath && (
             <>
               <div className="flex items-center mb-6">
                 <button
                   type="button"
                   onClick={() => {
-                    setCurrentView('languages');
+                    setCurrentView('paths');
                   }}
                   className="text-gray-600 hover:text-gray-900 mr-4"
                 >
-                  ← Back to Languages
+                  ← Back to Paths
                 </button>
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3"
-                  style={{ backgroundColor: selectedLanguage.color }}
-                >
-                  {selectedLanguage.code}
-                </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {glossaries[selectedLanguage.code].map((glossary) => (
-                  <GlossaryCard
-                    key={glossary.id}
-                    glossary={glossary}
-                    onClick={() => {
-                      setSelectedGlossary(glossary);
-                      setCurrentView('words');
-                    }}
-                    onStudy={() => {
-                      setSelectedGlossary(glossary);
-                      setCurrentView('words');
-                      setFlashcardMode(false);
-                    }}
-                    onFlashcards={() => {
-                      setSelectedGlossary(glossary);
-                      setCurrentView('words');
-                      startFlashcards();
-                    }}
-                    completedPercentage={Math.round(
-                      (knownWords.size / sampleWords.length) * 100,
-                    )}
-                  />
-                ))}
+                {selectedPath.selected_glossaries.map((g) => {
+                  const glossaryInfo = {
+                    id: g.glossary_name,
+                    name: g.glossary_name,
+                    words: glossaryWordCounts[g.glossary_name] || 0,
+                    completedPercentage: 0,
+                  };
+                  return (
+                    <GlossaryCard
+                      key={g.glossary_name}
+                      glossary={glossaryInfo}
+                      onStudy={() => {
+                        void handleGlossarySelect(glossaryInfo, false);
+                      }}
+                      onFlashcards={() => {
+                        void handleGlossarySelect(glossaryInfo, true);
+                      }}
+                      completedPercentage={
+                        selectedPath.completedPercentage || 0
+                      }
+                    />
+                  );
+                })}
               </div>
             </>
           )}
 
-          {/* Words View */}
-          {currentView === 'words' && selectedGlossary && !flashcardMode && (
+          {currentView === 'words' && !flashcardMode && studySession ? (
             <div className="words-panel bg-transparent">
-              <>
-                <div className="flex items-center justify-between mb-6">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCurrentView('glossaries');
-                    }}
-                    className="text-gray-600 hover:text-gray-900"
-                  >
-                    ← Back to Glossaries
-                  </button>
-
-                  <div className="flex items-center gap-4">
-                    <div className="text-sm text-gray-600">
-                      {knownWords.size} of {sampleWords.length} words completed
-                    </div>
-                    <div className="w-32 bg-gray-200 rounded-full h-2">
-                      <div
-                        className="h-2 rounded-full bg-teal-500 transition-all duration-300"
-                        style={{
-                          width: `${getProgressPercentage().toString()}%`,
-                        }}
-                      ></div>
-                    </div>
+              <div className="flex items-center justify-between mb-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentView('glossaries');
+                  }}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  ← Back to Glossaries
+                </button>
+                <div className="flex items-center gap-4">
+                  <div className="text-sm text-gray-600">
+                    {knownWords.size} of {studySession.words.length} words
+                    completed
+                  </div>
+                  <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div
+                      className="h-2 rounded-full bg-teal-500"
+                      style={{
+                        width: `${getProgressPercentage().toString()}%`,
+                      }}
+                    ></div>
                   </div>
                 </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                  <div className="grid grid-cols-1 gap-4">
-                    {sampleWords.map((word) => (
-                      <div
-                        key={word.id}
-                        className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3">
-                            <h4 className="text-lg font-semibold text-gray-900">
-                              {word.word}
-                            </h4>
-                          </div>
-                          <p className="text-gray-600 mt-1">
-                            {word.translation}
-                          </p>
-                        </div>
-
-                        {/* Non-interactive known indicator: terms are marked by the system via flashcards only */}
-                        <div
-                          className="ml-4"
-                          aria-hidden={false}
-                          aria-label={
-                            knownWords.has(word.id)
-                              ? 'Known word'
-                              : 'Unknown word'
-                          }
-                        >
-                          {knownWords.has(word.id) ? (
-                            <CheckCircle2 className="w-6 h-6 text-teal-500" />
-                          ) : (
-                            <Circle className="w-6 h-6 text-gray-400" />
-                          )}
-                        </div>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div className="grid grid-cols-1 gap-4">
+                  {studySession.words.map((word) => (
+                    <div
+                      key={word.id}
+                      className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
+                    >
+                      <div className="flex-1">
+                        <h4 className="text-lg font-semibold text-gray-900">
+                          {word.term}
+                        </h4>
+                        <p className="text-gray-600 mt-1">
+                          {word.english_translation || word.definition}
+                        </p>
                       </div>
-                    ))}
-                  </div>
+                      <div className="ml-4">
+                        {knownWords.has(word.id) ? (
+                          <CheckCircle2 className="w-6 h-6 text-teal-500" />
+                        ) : (
+                          <Circle className="w-6 h-6 text-gray-400" />
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </>
+              </div>
             </div>
-          )}
+          ) : null}
 
-          {/* Flashcard Mode (extracted into component) */}
-          {flashcardMode && currentView === 'words' && (
+          {flashcardMode && currentView === 'words' && studySession ? (
             <Flashcard
               currentCard={getCurrentCard()}
               answerOptions={getAnswerOptions()}
               selectedAnswer={selectedAnswer}
               showResult={showResult}
               currentCardIndex={currentCardIndex}
-              totalCards={sampleWords.length}
+              totalCards={studySession.words.length}
               score={score}
               progressPercent={
-                ((currentCardIndex + 1) / sampleWords.length) * 100
+                // eslint-disable-next-line
+                studySession
+                  ? ((currentCardIndex + 1) / studySession.words.length) * 100
+                  : 0
               }
               onExit={exitFlashcards}
               onSelectAnswer={handleAnswerSelect}
               onNext={nextCard}
-              onRetry={startFlashcards}
+              onRetry={() => {
+                // eslint-disable-next-line
+                if (studySession) {
+                  startFlashcards(studySession.words);
+                }
+              }}
             />
-          )}
+          ) : null}
         </div>
-        {/* New Path Modal */}
+
         {showNewPathModal && (
           <div
             className="learning-path-modal-overlay"
@@ -687,46 +663,46 @@ const LearningPathPage: React.FC = () => {
           >
             <div className="learning-path-modal">
               <h2 className="modal-title">Create a New Learning Path</h2>
-
-              <label className="modal-label">Choose a language</label>
+              <input
+                type="text"
+                placeholder="Path Name (e.g., Spanish for Business)"
+                className="modal-input"
+                value={modalPathName}
+                onChange={(e) => {
+                  setModalPathName(e.target.value);
+                }}
+              />
               <select
                 className="modal-select"
-                value={modalLanguageCode ?? ''}
+                value={modalLanguage}
                 onChange={(e) => {
-                  const code = e.target.value || null;
-                  setModalLanguageCode(code);
-                  setModalSelectedGlossaryIds([]);
+                  void handleModalLanguageChange(e.target.value);
                 }}
                 aria-label="Select language"
               >
                 <option value="">-- Select language --</option>
-                {languages.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
+                {availableLanguages.map((lang) => (
+                  <option key={lang.name} value={lang.name}>
                     {lang.name}
                   </option>
                 ))}
               </select>
-
               <div className="modal-glossaries">
                 <label className="modal-label">Choose glossaries</label>
-                {!modalLanguageCode && (
+                {!modalLanguage && (
                   <div className="modal-hint">
                     Select a language first to see available glossaries.
                   </div>
                 )}
-                {modalLanguageCode && (
+                {modalLanguage && (
                   <div className="modal-glossary-list">
-                    {glossaries[modalLanguageCode].map((g) => (
+                    {modalGlossaries.map((g) => (
                       <label key={g.id} className="modal-glossary-item">
                         <input
                           type="checkbox"
-                          checked={modalSelectedGlossaryIds.includes(g.id)}
+                          checked={modalSelectedGlossaries.has(g.name)}
                           onChange={() => {
-                            setModalSelectedGlossaryIds((prev) =>
-                              prev.includes(g.id)
-                                ? prev.filter((id) => id !== g.id)
-                                : [...prev, g.id],
-                            );
+                            handleGlossaryToggle(g.name);
                           }}
                         />
                         <span className="glossary-name">{g.name}</span>
@@ -736,7 +712,6 @@ const LearningPathPage: React.FC = () => {
                   </div>
                 )}
               </div>
-
               <div className="modal-actions">
                 <button
                   type="button"
@@ -751,29 +726,7 @@ const LearningPathPage: React.FC = () => {
                   type="button"
                   className="modal-btn modal-create"
                   onClick={() => {
-                    if (!modalLanguageCode) {
-                      alert('Please select a language');
-                      return;
-                    }
-                    if (modalSelectedGlossaryIds.length === 0) {
-                      alert('Please select at least one glossary');
-                      return;
-                    }
-
-                    // Here you'd normally call an API or dispatch an action to create the path
-                    console.log('Create learning path', {
-                      language: modalLanguageCode,
-                      glossaries: modalSelectedGlossaryIds,
-                    });
-
-                    // Optional: update UI to switch to glossaries view for the chosen language
-                    const chosenLang =
-                      languages.find((l) => l.code === modalLanguageCode) ||
-                      null;
-                    setSelectedLanguage(chosenLang);
-                    setCurrentView('glossaries');
-
-                    setShowNewPathModal(false);
+                    void handleCreatePath();
                   }}
                 >
                   Create Path
@@ -782,6 +735,19 @@ const LearningPathPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        <ConfirmationModal
+          isOpen={isConfirmModalOpen}
+          onClose={() => {
+            setIsConfirmModalOpen(false);
+          }}
+          onConfirm={() => {
+            void handleConfirmDelete();
+          }}
+          title="Delete Learning Path"
+        >
+          <p>Are you sure you want to permanently delete this learning path?</p>
+        </ConfirmationModal>
       </div>
     </div>
   );

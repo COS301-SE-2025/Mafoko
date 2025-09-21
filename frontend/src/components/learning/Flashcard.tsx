@@ -1,12 +1,6 @@
 import React from 'react';
 import { CheckCircle2, RotateCcw } from 'lucide-react';
-
-interface Word {
-  id: number;
-  word: string;
-  translation: string;
-  difficulty?: string;
-}
+import { Word } from '../../types/learning'; // 1. Import the shared Word type
 
 interface FlashcardProps {
   currentCard: Word | null;
@@ -22,6 +16,8 @@ interface FlashcardProps {
   onNext: () => void;
   onRetry: () => void;
 }
+
+// 2. The local, conflicting Word interface has been removed.
 
 const Flashcard: React.FC<FlashcardProps> = ({
   currentCard,
@@ -43,7 +39,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
         <button onClick={onExit} className="text-gray-600 hover:text-gray-900">
           ← Exit Flashcards
         </button>
-
         <div className="flex items-center gap-4">
           <div className="text-sm text-gray-600">
             Card {currentCardIndex + 1} of {totalCards}
@@ -56,7 +51,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
 
       {currentCardIndex < totalCards ? (
         <div className="max-w-2xl mx-auto">
-          {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
             <div
               className="h-2 rounded-full transition-all duration-300"
@@ -67,23 +61,24 @@ const Flashcard: React.FC<FlashcardProps> = ({
             />
           </div>
 
-          {/* Flashcard */}
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 mb-6">
             <div className="text-center">
               <div className="text-sm text-gray-500 mb-2">
                 Translate this word:
               </div>
               <h2 className="text-4xl font-bold text-gray-900 mb-2">
-                {currentCard?.word}
+                {currentCard?.term} {/* 3. Use .term from the shared type */}
               </h2>
             </div>
           </div>
 
-          {/* Answer Options */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {answerOptions.map((option, index) => {
               const isSelected = selectedAnswer === option;
-              const isCorrect = option === currentCard?.translation;
+              // 4. Check against english_translation OR definition for the correct answer
+              const isCorrect =
+                option ===
+                (currentCard?.english_translation || currentCard?.definition);
               let buttonClass =
                 'w-full p-4 text-left rounded-xl border-2 transition-all ';
 
@@ -114,29 +109,13 @@ const Flashcard: React.FC<FlashcardProps> = ({
             })}
           </div>
 
-          {/* Next Button */}
           {showResult && (
             <div className="text-center">
               <button
                 type="button"
                 onClick={onNext}
                 className="px-6 py-3 text-white rounded-xl transition-colors"
-                style={{
-                  backgroundColor: '#f00a50',
-                  color: '#ffffff',
-                  border: 'none',
-                  opacity: 1,
-                  cursor: 'pointer',
-                  pointerEvents: 'auto',
-                  boxShadow: '0 6px 18px rgba(240,10,80,0.12)',
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = '#d10946')
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = '#f00a50')
-                }
-                aria-disabled={false}
+                style={{ backgroundColor: '#f00a50', color: '#ffffff' }}
               >
                 {currentCardIndex === totalCards - 1 ? 'Finish' : 'Next Card'}
               </button>
@@ -155,20 +134,16 @@ const Flashcard: React.FC<FlashcardProps> = ({
               <span className="font-bold text-blue-600">{score.correct}</span>{' '}
               out of <span className="font-bold">{score.total}</span> correct
             </div>
-            <div className="text-sm text-gray-500 mb-8">
-              {score.correct} words have been marked as known
-            </div>
             <div className="flex gap-4 justify-center">
               <button
                 onClick={onRetry}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
               >
-                <RotateCcw className="w-4 h-4" />
-                Try Again
+                <RotateCcw className="w-4 h-4" /> Try Again
               </button>
               <button
                 onClick={onExit}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
               >
                 Back to Words
               </button>
