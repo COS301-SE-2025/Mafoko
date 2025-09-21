@@ -8,6 +8,7 @@ import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
+import { GamificationService } from '../utils/gamification';
 
 import { Term } from '../types/terms/types.ts';
 import '../styles/TermPage.scss';
@@ -194,7 +195,7 @@ export const TermDetailPage: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [id, name, language, fetchTerm, fetchRelatedTerms]);
+  }, [id, name, language, fetchTerm, fetchRelatedTerms, term]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -346,6 +347,21 @@ export const TermDetailPage: React.FC = () => {
           );
         }
         console.error(`HTTP error! status: ${String(response.status)}`);
+        return;
+      }
+
+      const createdComment = (await response.json()) as { id: string };
+
+      if (currentUserId && createdComment.id) {
+        try {
+          await GamificationService.awardCommentXP(
+            currentUserId,
+            createdComment.id,
+          );
+        } catch (xpError) {
+          console.warn('Failed to award XP for comment:', xpError);
+          // Don't fail comment creation if XP fails
+        }
       }
 
       await fetchComments();
@@ -396,6 +412,16 @@ export const TermDetailPage: React.FC = () => {
           );
         }
         console.error(`HTTP error! status: ${String(response.status)}`);
+      } else if (voteType === 'upvote') {
+        const comment = comments.find((c) => c.id === commentId);
+        if (comment && comment.user.id) {
+          try {
+            await GamificationService.awardUpvoteXP(comment.user.id, commentId);
+          } catch (xpError) {
+            console.warn('Failed to award XP for upvote:', xpError);
+            // Don't fail the vote if XP fails
+          }
+        }
       }
 
       await fetchComments();

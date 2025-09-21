@@ -37,6 +37,10 @@ const TERM_ADDITION_SERVICE_URL =
   (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
   'http://localhost:8011';
 
+const GAMIFICATION_SERVICE_URL =
+  (import.meta.env.VITE_GAMIFICATION_SERVICE_URL as string) ||
+  'http://localhost:8012';
+
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
   import.meta.env.PROD ? `${API_GATEWAY_URL}${path}` : `${serviceUrl}${path}`;
@@ -142,6 +146,15 @@ interface APIEndpoints {
   deleteFeedback: (feedbackId: string) => string;
   getFeedbackStats: string;
   searchFeedback: string;
+  // --- Gamification Service ---
+  addXP: string;
+  getUserXPRecords: (userId: string) => string;
+  getUserLoginStreak: (userId: string) => string;
+  getUserLevel: (userId: string) => string;
+  recalculateUserLevel: (userId: string) => string;
+  getAllAchievements: string;
+  getUserAchievements: (userId: string) => string;
+  checkUserAchievements: (userId: string) => string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -486,4 +499,41 @@ export const API_ENDPOINTS: APIEndpoints = {
     '/api/v1/feedback/admin/stats',
   ),
   searchFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/search/'),
+
+  // --- Gamification Service ---
+  addXP: endpoint(GAMIFICATION_SERVICE_URL, '/api/v1/xp/add-xp'),
+  getUserXPRecords: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/xp/user/${encodeURIComponent(userId)}/xp-records`,
+    ),
+  getUserLoginStreak: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/xp/user/${encodeURIComponent(userId)}/login-streak`,
+    ),
+  getUserLevel: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/levels/user/${encodeURIComponent(userId)}/level`,
+    ),
+  recalculateUserLevel: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/levels/user/${encodeURIComponent(userId)}/recalculate-level`,
+    ),
+  getAllAchievements: endpoint(
+    GAMIFICATION_SERVICE_URL,
+    '/api/v1/achievements/',
+  ),
+  getUserAchievements: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/achievements/user/${encodeURIComponent(userId)}`,
+    ),
+  checkUserAchievements: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/achievements/user/${encodeURIComponent(userId)}/check`,
+    ),
 };
