@@ -276,6 +276,9 @@ const SearchPage: React.FC = () => {
                                 upvotes={t.upvotes}
                                 downvotes={t.downvotes}
                                 definition={t.definition}
+                                owner_id={
+                                  (t as Term & { owner_id?: string }).owner_id
+                                }
                                 onView={() =>
                                   navigate(
                                     `/term/${encodeURIComponent(t.language)}/${encodeURIComponent(t.term)}/${t.id}`,

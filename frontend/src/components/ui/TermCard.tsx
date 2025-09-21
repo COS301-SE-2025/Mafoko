@@ -5,6 +5,7 @@ import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
 import { Link } from 'react-router-dom';
 import { LanguageColorMap } from '../../types/search/types.ts';
+import { GamificationService } from '../../utils/gamification';
 
 interface VoteApiResponse {
   term_id: string;
@@ -21,6 +22,7 @@ interface TermCardProps {
   upvotes: number;
   downvotes: number;
   definition: string | null;
+  owner_id?: string;
   isBookmarked?: boolean;
   onView?: () => void;
   onBookmarkChange?: (termId: string, isBookmarked: boolean) => void;
@@ -34,6 +36,7 @@ const TermCard: React.FC<TermCardProps> = ({
   upvotes: initialUpvotes,
   downvotes: initialDownvotes,
   definition,
+  owner_id,
   isBookmarked: initialIsBookmarked = false,
   onView,
   onBookmarkChange,
@@ -87,6 +90,17 @@ const TermCard: React.FC<TermCardProps> = ({
         setUpvotes(result.upvotes);
         setDownvotes(result.downvotes);
         setUserVote(result.user_vote);
+
+        if (voteType === 'up' && owner_id && result.user_vote === 'up') {
+          try {
+            await GamificationService.awardTermUpvoteXP(owner_id, id);
+          } catch (xpError) {
+            console.warn(
+              'Failed to award XP for term upvote on search page:',
+              xpError,
+            );
+          }
+        }
       } catch (error) {
         console.error('Error casting vote online, reverting:', error);
         setUserVote(previousVote);

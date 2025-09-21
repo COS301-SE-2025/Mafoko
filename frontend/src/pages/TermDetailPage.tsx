@@ -565,6 +565,23 @@ export const TermDetailPage: React.FC = () => {
       // The response is just the vote update, not the full term
       const voteUpdate = await response.json();
 
+      const termWithOwner = term as Term & { owner_id?: string };
+      if (
+        voteType === 'upvote' &&
+        termWithOwner.owner_id &&
+        voteUpdate.user_vote === 'upvote'
+      ) {
+        try {
+          await GamificationService.awardTermUpvoteXP(
+            termWithOwner.owner_id,
+            termId,
+          );
+        } catch (xpError) {
+          console.warn('Failed to award XP for term upvote:', xpError);
+          // Don't fail the vote if XP fails
+        }
+      }
+
       // Create a new, complete term object by merging the update
       const newFinalTerm = {
         ...term,

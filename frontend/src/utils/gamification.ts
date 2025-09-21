@@ -75,7 +75,7 @@ async function awardCommentXP(
 }
 
 /**
- * Award XP for receiving an upvote
+ * Award XP for receiving an upvote on comments
  */
 async function awardUpvoteXP(userId: string, voteId: string): Promise<void> {
   await awardXP({
@@ -83,7 +83,23 @@ async function awardUpvoteXP(userId: string, voteId: string): Promise<void> {
     xp_amount: 5,
     xp_source: 'upvote_received',
     source_reference_id: voteId,
-    description: 'Received an upvote',
+    description: 'Received an upvote on comment',
+  });
+}
+
+/**
+ * Award XP for receiving an upvote on published terms
+ */
+async function awardTermUpvoteXP(
+  userId: string,
+  termId: string,
+): Promise<void> {
+  await awardXP({
+    user_id: userId,
+    xp_amount: 5,
+    xp_source: 'upvote_received',
+    source_reference_id: termId,
+    description: 'Received an upvote on published term',
   });
 }
 
@@ -119,10 +135,62 @@ async function awardFeedbackXP(
   });
 }
 
+/**
+ * Award XP for receiving crowd verification votes
+ */
+async function awardCrowdVoteXP(
+  userId: string,
+  applicationId: string,
+): Promise<void> {
+  await awardXP({
+    user_id: userId,
+    xp_amount: 5,
+    xp_source: 'term_upvote',
+    source_reference_id: applicationId,
+    description: 'Term application received crowd vote',
+  });
+}
+
+/**
+ * Award XP for linguist verification of term application
+ */
+async function awardLinguistVerificationXP(
+  userId: string,
+  applicationId: string,
+): Promise<void> {
+  await awardXP({
+    user_id: userId,
+    xp_amount: 25,
+    xp_source: 'term_addition',
+    source_reference_id: applicationId,
+    description: 'Term application verified by linguist',
+  });
+}
+
+/**
+ * Award XP for admin verification of term application
+ */
+async function awardAdminVerificationXP(
+  userId: string,
+  applicationId: string,
+): Promise<void> {
+  await awardXP({
+    user_id: userId,
+    xp_amount: 100,
+    xp_source: 'term_addition',
+    source_reference_id: applicationId,
+    description: 'Term application approved by admin',
+  });
+}
+
 export const GamificationService = {
   awardXP,
   awardCommentXP,
   awardUpvoteXP,
+  awardTermUpvoteXP,
   awardTermAdditionXP,
   awardFeedbackXP,
+  awardCrowdVoteXP,
+  awardLinguistVerificationXP,
+  awardAdminVerificationXP,
 } as const;
