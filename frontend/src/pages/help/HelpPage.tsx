@@ -114,7 +114,7 @@ const HelpPage: React.FC = () => {
       {
         title: 'Home Page',
         desc: 'Explore the interactive South African map, discover random terms, and get an overview of featured content.',
-        link: '/help/home-page',
+        link: '/help/home-help',
         keywords: [
           'home',
           'home page',
@@ -127,13 +127,13 @@ const HelpPage: React.FC = () => {
       {
         title: 'Dashboard',
         desc: 'Track application activity with graphs, view platform data, and analyze your contributions in one place.',
-        link: '/help/dashboard',
+        link: '/help/dashboard-help',
         keywords: ['dashboard', 'graph', 'app activity', 'data information'],
       },
       {
         title: 'Feedback',
         desc: 'Send suggestions, compliments, or complaints directly to the team to help improve the platform.',
-        link: '/help/feedback',
+        link: '/help/feedback-help',
         keywords: [
           'feedback',
           'complaint',
