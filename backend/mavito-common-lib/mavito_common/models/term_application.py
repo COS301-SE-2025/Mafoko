@@ -55,7 +55,7 @@ class TermApplication(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     term_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("terms.id", ondelete="SET NULL"), index=True, nullable=True
+        ForeignKey("terms.id", ondelete="CASCADE"), index=True, nullable=True
     )
     submitted_by_user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("users.id"), index=True, nullable=False
@@ -85,7 +85,7 @@ class TermApplication(Base):
     )
 
     is_edit_for_term_id: Mapped[Optional[uuid.UUID]] = mapped_column(
-        ForeignKey("terms.id"), nullable=True, index=True
+        ForeignKey("terms.id", ondelete="CASCADE"), nullable=True, index=True
     )
 
     if TYPE_CHECKING:

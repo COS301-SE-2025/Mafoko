@@ -2080,7 +2080,7 @@ $text-dark: #ffffff;
           }
         }
 
-        .status-badge {
+        .status-badge-workspace {
           display: flex;
           align-items: center;
           gap: 0.5rem;
@@ -2893,7 +2893,7 @@ $text-dark: #ffffff;
             font-size: 1rem;
           }
 
-          .status-badge {
+          .status-badge-workspace {
             font-size: 0.75rem;
             padding: 0.125rem 0.5rem;
           }
@@ -4101,7 +4101,7 @@ $text-dark: #ffffff;
   }
 }
 
-.status-badge {
+.status-badge-workspace {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

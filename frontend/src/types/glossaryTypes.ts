@@ -23,6 +23,7 @@ export interface SearchResponse {
 
 export interface UserData {
   uuid: string;
+  email: string;
   firstName: string;
   lastName: string;
 }

@@ -1,0 +1,31 @@
+$admin-accent-pink: #f00a50;
+$admin-accent-yellow: #f2d001;
+$admin-accent-teal: #00ceaf;
+$admin-accent-blue: #212431;
+$admin-bg-light: #f5f5f5;
+$admin-bg-dark: #363b4d;
+$admin-secondary-light: #ffffff;
+$admin-secondary-dark: #212431;
+$admin-tertiary-light: #212431;
+$admin-tertiary-dark: #ffffff;
+$admin-text-light: #212431;
+$admin-text-dark: #ffffff;
+
+// Theme Classes
+.theme-light {
+  --admin-bg-card: #{$admin-secondary-light}; // Corrected: Use the light variable
+  --admin-bg-row-even: #{$admin-bg-light};
+  --admin-bg-row-odd: #{$admin-secondary-light};
+  --admin-text-color: #{$admin-text-light};
+  --admin-border-color: #d1d5db;
+  --admin-bg-hover: #f3f4f6;
+}
+
+.theme-dark {
+  --admin-bg-card: #{$admin-secondary-dark};
+  --admin-bg-row-even: #{$admin-bg-dark};
+  --admin-bg-row-odd: #{$admin-secondary-dark};
+  --admin-text-color: #{$admin-text-dark};
+  --admin-border-color: #4a5568;
+  --admin-bg-hover: #4a5061;
+}

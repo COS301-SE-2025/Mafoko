@@ -21,8 +21,6 @@ const GLOSSARY_SERVICE_URL: string =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
 
-const TERM_SERVICE_URL =
-  (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
   'http://localhost:8008';
@@ -68,6 +66,7 @@ interface APIEndpoints {
   getUsersWithUploads: () => string;
   search: string;
   suggest: string;
+  getAllTermsForOffline: string;
   descriptiveAnalytics: string;
   categoryFrequency: (language?: string) => string;
   languageCoverage: string;
@@ -86,8 +85,6 @@ interface APIEndpoints {
   glossaryAdvancedSearch: string;
   glossaryLanguages: string;
   glossaryRandom: string;
-  getTermDetail: (termId: string) => string;
-  getTermTranslations: (termId: string) => string;
   // Term Addition Service
   submitTerm: string;
   submitTermWithTranslations: string;
@@ -224,7 +221,10 @@ export const API_ENDPOINTS: APIEndpoints = {
   // --- Search Service ---
   search: endpoint(SEARCH_SERVICE_URL, '/api/v1/search'),
   suggest: endpoint(SEARCH_SERVICE_URL, '/api/v1/suggest'),
-
+  getAllTermsForOffline: endpoint(
+    SEARCH_SERVICE_URL,
+    '/api/v1/terms/all-for-offline',
+  ),
   // --- Analytics Service ---
   descriptiveAnalytics: endpoint(
     ANALYTICS_SERVICE_URL,
@@ -300,10 +300,6 @@ export const API_ENDPOINTS: APIEndpoints = {
   glossaryRandom: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/random'),
 
   // --- Term Service ---
-  getTermDetail: (termId: string) =>
-    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}`),
-  getTermTranslations: (termId: string) =>
-    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}/translations`),
 
   submitTerm: endpoint(TERM_ADDITION_SERVICE_URL, '/api/v1/terms/submit'),
   submitTermWithTranslations: endpoint(

@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
 import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
@@ -22,9 +23,13 @@ import SettingsPage from './pages/SettingsPage';
 import ContributorPage from './pages/ContributorPage';
 import LinguistPage from './pages/LinguistPage';
 import AdminTermPage from './pages/AdminTermPage.tsx';
+import LearningPathPage from './pages/LearningPathPage.tsx';
 import './App.css';
 import './styles/Global.scss';
-
+import {
+  orchestrateCommentSync,
+  orchestrateTermSync,
+} from './utils/syncManager';
 import {
   Chart as ChartJS,
   PieController,
@@ -54,6 +59,35 @@ ChartJS.register(
 );
 
 function App() {
+  useEffect(() => {
+    const handleSWMessage = (event: MessageEvent) => {
+      // Handle comment sync requests
+      if (event.data?.type === 'SYNC_REQUEST') {
+        console.log('Client: Received comment sync request.');
+        orchestrateCommentSync().then((synced) => {
+          if (synced) window.location.reload();
+        });
+      }
+
+      // Handle term action sync requests
+      if (event.data?.type === 'TERM_SYNC_REQUEST') {
+        console.log('Client: Received term action sync request.');
+        orchestrateTermSync().then((synced) => {
+          if (synced) window.location.reload();
+        });
+      }
+    };
+
+    navigator.serviceWorker?.addEventListener('message', handleSWMessage);
+
+    // Run both sync checks when the app loads
+    orchestrateCommentSync();
+    orchestrateTermSync();
+
+    return () => {
+      navigator.serviceWorker?.removeEventListener('message', handleSWMessage);
+    };
+  }, []);
   return (
     <div className="MaritoApp">
       <Routes>
@@ -85,6 +119,7 @@ function App() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/contributor" element={<ContributorPage />} />
         <Route path="/linguist" element={<LinguistPage />} />
+        <Route path="/learning-path" element={<LearningPathPage />} />
         <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
     </div>
