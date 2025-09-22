@@ -39,7 +39,7 @@ const LanguageCard: React.FC<LanguageCardProps> = ({
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-1">{name}</h3>
         <p className="text-sm text-gray-600 mb-4">
-          {totalWords.toLocaleString()} words
+          {totalWords.toLocaleString()} Categories
         </p>
 
         <div className="w-full bg-gray-200 rounded-full h-2 mb-2">

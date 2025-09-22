@@ -2,10 +2,10 @@ import React from 'react';
 import { BookOpen, Play } from 'lucide-react';
 
 interface Glossary {
-  id: number;
+  id: string;
   name: string;
   words: number;
-  description: string;
+  description?: string;
 }
 
 interface GlossaryCardProps {

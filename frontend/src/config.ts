@@ -35,6 +35,10 @@ const TERM_ADDITION_SERVICE_URL =
   (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
   'http://localhost:8011';
 
+const LEARNING_SERVICE_URL =
+  (import.meta.env.VITE_LEARNING_SERVICE_URL as string) ||
+  'http://localhost:8012';
+
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
   import.meta.env.PROD ? `${API_GATEWAY_URL}${path}` : `${serviceUrl}${path}`;
@@ -139,6 +143,17 @@ interface APIEndpoints {
   deleteFeedback: (feedbackId: string) => string;
   getFeedbackStats: string;
   searchFeedback: string;
+
+  //-- LEARNING PATH SERVICE ---
+  getLearningDashboard: string;
+  updateLearningProgress: string;
+  getGlossaryProgress: (languageCode: string) => string;
+  getStudySessionWords: (languageCode: string, glossaryName: string) => string;
+  learningPaths: string;
+  learningPathDetail: (pathId: string) => string;
+  getRandomTerms: (languageCode: string) => string;
+  getWordCounts: string;
+  updateSessionProgress: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -482,4 +497,42 @@ export const API_ENDPOINTS: APIEndpoints = {
     '/api/v1/feedback/admin/stats',
   ),
   searchFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/search/'),
+  // --- Learning Service ---
+  getLearningDashboard: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/dashboard',
+  ),
+  updateLearningProgress: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/progress',
+  ),
+  learningPaths: endpoint(LEARNING_SERVICE_URL, '/api/v1/learning/paths'),
+  // UPDATE and DELETE a specific learning path
+  learningPathDetail: (pathId: string) =>
+    endpoint(LEARNING_SERVICE_URL, `/api/v1/learning/paths/${pathId}`),
+  // Kept for the "Create Path" modal
+  getGlossaryProgress: (languageCode: string) =>
+    endpoint(
+      LEARNING_SERVICE_URL,
+      `/api/v1/learning/languages/${languageCode}/glossaries`,
+    ),
+  // Kept for study sessions
+  getStudySessionWords: (languageCode: string, glossaryName: string) =>
+    endpoint(
+      LEARNING_SERVICE_URL,
+      `/api/v1/learning/languages/${encodeURIComponent(languageCode)}/glossaries/${encodeURIComponent(glossaryName)}/words`,
+    ),
+  getRandomTerms: (languageCode: string) =>
+    endpoint(
+      LEARNING_SERVICE_URL,
+      `/api/v1/learning/languages/${encodeURIComponent(languageCode)}/random-terms`,
+    ),
+  getWordCounts: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/glossaries/word-counts',
+  ),
+  updateSessionProgress: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/session-progress',
+  ),
 };
