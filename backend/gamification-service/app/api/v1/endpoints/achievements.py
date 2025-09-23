@@ -93,14 +93,13 @@ async def get_user_weekly_goals(
     *,
     db: AsyncSession = Depends(get_db),
     user_id: str,
-    week_id: Optional[str] = None,
     current_user: UserSchema = Depends(get_current_active_user),
 ) -> List[dict]:
     """
     Get current week's goals for a user with lazy generation.
 
     This endpoint will automatically generate weekly goals if they don't exist
-    for the current week when first accessed.
+    for the current week when first accessed. Always returns current week's goals.
     """
     try:
         import uuid
@@ -113,10 +112,11 @@ async def get_user_weekly_goals(
 
     from app.services.weekly_goal_generator import ensure_weekly_goals_exist
 
-    await ensure_weekly_goals_exist(db, week_id)
+    # Always use current week, don't allow accessing previous weeks
+    await ensure_weekly_goals_exist(db, week_id=None)
 
     weekly_goals = await crud_achievement.get_user_weekly_goals(
-        db=db, user_id=user_uuid, week_id=week_id
+        db=db, user_id=user_uuid, week_id=None
     )
 
     return weekly_goals

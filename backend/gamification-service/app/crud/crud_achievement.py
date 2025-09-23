@@ -154,14 +154,16 @@ class CRUDAchievement:
     async def get_user_achievement_progress(
         self, db: AsyncSession, *, user_id: uuid.UUID
     ) -> List[dict]:
-        """Get progress for all achievements for a user."""
+        """Get progress for regular achievements for a user."""
         achievements = await self.get_achievements(db=db)
+        # Filter out weekly goals - only return regular achievements
+        regular_achievements = [a for a in achievements if not self._is_weekly_goal(a)]
         user_achievements = await self.get_user_achievements(db=db, user_id=user_id)
         earned_achievement_ids = {ua.achievement_id for ua in user_achievements}
 
         progress_list = []
 
-        for achievement in achievements:
+        for achievement in regular_achievements:
             is_earned = achievement.id in earned_achievement_ids
             current_progress = 0
 
@@ -169,6 +171,24 @@ class CRUDAchievement:
                 current_progress = await self._get_achievement_progress(
                     db=db, user_id=user_id, achievement=achievement
                 )
+
+                if (
+                    not self._is_weekly_goal(achievement)
+                    and current_progress >= achievement.target_value
+                ):
+                    try:
+                        await self.grant_achievement(
+                            db=db, user_id=user_id, achievement_id=achievement.id
+                        )
+                        is_earned = True
+                        earned_achievement_ids.add(achievement.id)
+                    except Exception as e:
+                        import logging
+
+                        logger = logging.getLogger(__name__)
+                        logger.warning(
+                            f"Failed to auto-grant achievement {achievement.id}: {e}"
+                        )
 
             progress_list.append(
                 {
@@ -239,7 +259,8 @@ class CRUDAchievement:
             elif achievement.name == "Language Guardian":
                 stmt = select(func.count(UserXP.id)).where(
                     UserXP.user_id == user_id,
-                    UserXP.description == "Term application approved by admin",
+                    UserXP.xp_source == XPSource.TERM_ADDITION,
+                    UserXP.description == "Added a new term",
                 )
                 result = await db.execute(stmt)
                 return result.scalar() or 0
@@ -318,7 +339,8 @@ class CRUDAchievement:
             elif achievement.name == "Language Guardian":
                 stmt = select(func.count(UserXP.id)).where(
                     UserXP.user_id == user_id,
-                    UserXP.description == "Term application approved by admin",
+                    UserXP.xp_source == XPSource.TERM_ADDITION,
+                    UserXP.description == "Added a new term",
                 )
                 result = await db.execute(stmt)
                 validated_count = result.scalar() or 0
@@ -328,6 +350,7 @@ class CRUDAchievement:
                 stmt = select(func.count(UserXP.id)).where(
                     UserXP.user_id == user_id,
                     UserXP.xp_source == XPSource.TERM_ADDITION,
+                    UserXP.description == "Added a new term",
                 )
                 result = await db.execute(stmt)
                 term_count = result.scalar() or 0
