@@ -112,7 +112,7 @@ async function awardTermAdditionXP(
 ): Promise<void> {
   await awardXP({
     user_id: userId,
-    xp_amount: 25,
+    xp_amount: 100,
     xp_source: 'term_addition',
     source_reference_id: termId,
     description: 'Added a new term',
@@ -176,7 +176,7 @@ async function awardAdminVerificationXP(
 ): Promise<void> {
   await awardXP({
     user_id: userId,
-    xp_amount: 100,
+    xp_amount: 25,
     xp_source: 'term_addition',
     source_reference_id: applicationId,
     description: 'Term application approved by admin',
