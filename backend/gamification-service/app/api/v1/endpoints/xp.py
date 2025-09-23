@@ -32,7 +32,7 @@ async def add_xp_to_user(
     current_user: UserSchema = Depends(get_current_active_user),
 ) -> UserXPResponse:
     """
-    Add XP to a user.
+    Add XP to a user and automatically check for weekly goal completions.
     """
     xp_create = UserXPCreate(
         user_id=xp_request.user_id,
@@ -43,6 +43,35 @@ async def add_xp_to_user(
     )
 
     xp_record = await crud_user_xp.create_xp_record(db=db, obj_in=xp_create)
+
+    # Automatically check and complete weekly goals after awarding XP
+    try:
+        from app.services.weekly_goal_generator import ensure_weekly_goals_exist
+        from app.crud.crud_achievement import crud_achievement
+
+        await ensure_weekly_goals_exist(db)
+
+        newly_earned = await crud_achievement.check_and_grant_weekly_achievements(
+            db=db, user_id=xp_request.user_id
+        )
+
+        if newly_earned:
+            import logging
+
+            logger = logging.getLogger(__name__)
+            goal_names = [ua.achievement.name for ua in newly_earned if ua.achievement]
+            logger.info(
+                f"User {xp_request.user_id} completed weekly goals: {goal_names}"
+            )
+
+    except Exception as e:
+        import logging
+
+        logger = logging.getLogger(__name__)
+        logger.warning(
+            f"Failed to check weekly achievements for user {xp_request.user_id}: {e}"
+        )
+
     return UserXPResponse.model_validate(xp_record)
 
 
