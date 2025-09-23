@@ -1,18 +1,74 @@
+$accent-pink: #f00a50;
+$accent-yellow: #f2d001;
+$accent-teal: #00ceaf;
+$accent-blue: #212431;
+$accent-white: #ffffff;
+$background-light: #f5f5f5;
+$background-dark: #363b4d;
+$secondary-light: #ffffff;
+$secondary-dark: #212431;
+$tertiary-light: #212431;
+$tertiary-dark: #ffffff;
+$text-light: #212431;
+$text-dark: #ffffff;
+
+
+/* Theme Class Definitions for Dark Mode Support */
+.theme-light {
+  --bg-theme: #{$tertiary-light};
+  --text-theme: #{$text-dark};
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-dark};
+  --bg-first: #{$background-light};
+  --bg-tir: #{$secondary-light};
+  --glossary-border-color: #e5e7eb;
+  --card-background: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.06);
+  --button-background: #f9fafb;
+  --loading-color: #{$accent-pink};
+  --no-translation-color: #6b7280;
+  --header-background: #ffffff;
+  --header-text: #111827;
+  --return-button-bg: #ffffff;
+  --return-button-icon: #6b7280;
+}
+
+.theme-dark {
+  --bg-theme: #{$tertiary-dark};
+  --text-theme: #fff;
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-light};
+  --bg-first: #{$background-dark};
+  --bg-tir: #{$secondary-dark};
+  --glossary-border-color: #374151;
+  --card-background: #1e2433;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --button-background: #374151;
+  --loading-color: #60a5fa;
+  --no-translation-color: #9ca3af;
+  --header-background: #1e2433;
+  --header-text: #fff;
+  --return-button-bg: #1e2433;
+  --return-button-icon: #cccccc;
+}
+
 .learning-path-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 64px); // Adjust based on your header/footer height
-  background-color: var(--bg-color-secondary);
-  margin-left: -285px; /* Move the container 50px to the left */
+  min-height: calc(100vh - 64px);
+  background-color: var(--bg-first);
+  margin-left: -285px;
   width: 1155px;
+  color: var(--text-theme);
 
-  &.dark-mode {
-    background-color: var(--bg-color-dark);
-    color: var(--text-color-dark);
+  &.theme-dark {
+    background-color: var(--bg-first);
+    color: var(--text-theme);
 
     .path-card {
-      background-color: var(--card-bg-dark);
-      border-color: var(--border-color-dark);
+      background-color: var(--card-background);
+      border-color: var(--glossary-border-color);
+      box-shadow: 0 1px 3px var(--card-shadow);
     }
 
 .heading-text {
@@ -74,15 +130,16 @@
     }
 
     .path-card {
-      background-color: var(--card-bg);
+      background-color: var(--card-background);
       border-radius: 1rem;
       padding: 2.5rem;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--glossary-border-color);
       transition: all 0.2s ease;
       cursor: pointer;
       min-height: 280px;
       display: flex;
       flex-direction: column;
+      color: var(--text-theme);
 
       &:hover {
         transform: translateY(-4px);
@@ -135,11 +192,12 @@
     }
 
     .word-list {
-      background-color: var(--card-bg);
+      background-color: var(--card-background);
       border-radius: 0.75rem;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--glossary-border-color);
       overflow: hidden;
-      
+      color: var(--text-theme);
+      box-shadow: 0 1px 3px var(--card-shadow);
 
       .word-item {
         display: flex;

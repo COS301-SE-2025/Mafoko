@@ -372,7 +372,7 @@ const LearningPathPage: React.FC = () => {
 
   return (
     <div
-      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'dark-mode' : ''}`}
+      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobileMenuOpen && (
         <div
