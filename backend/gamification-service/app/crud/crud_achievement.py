@@ -231,7 +231,9 @@ class CRUDAchievement:
 
         elif achievement.achievement_type == AchievementType.UPVOTE_COUNT:
             stmt = select(func.count(UserXP.id)).where(
-                UserXP.user_id == user_id, UserXP.xp_source == XPSource.UPVOTE_RECEIVED
+                UserXP.user_id == user_id,
+                UserXP.xp_source == XPSource.UPVOTE_RECEIVED,
+                UserXP.description == "Received an upvote on published term",
             )
             result = await db.execute(stmt)
             return result.scalar() or 0
@@ -260,7 +262,7 @@ class CRUDAchievement:
                 stmt = select(func.count(UserXP.id)).where(
                     UserXP.user_id == user_id,
                     UserXP.xp_source == XPSource.TERM_ADDITION,
-                    UserXP.description == "Added a new term",
+                    UserXP.description == "Term application verified by linguist",
                 )
                 result = await db.execute(stmt)
                 return result.scalar() or 0
@@ -269,6 +271,7 @@ class CRUDAchievement:
                 stmt = select(func.count(UserXP.id)).where(
                     UserXP.user_id == user_id,
                     UserXP.xp_source == XPSource.TERM_ADDITION,
+                    UserXP.description == "Added a new term",
                 )
                 result = await db.execute(stmt)
                 return result.scalar() or 0
@@ -309,7 +312,9 @@ class CRUDAchievement:
 
         elif achievement.achievement_type == AchievementType.UPVOTE_COUNT:
             stmt = select(func.count(UserXP.id)).where(
-                UserXP.user_id == user_id, UserXP.xp_source == XPSource.UPVOTE_RECEIVED
+                UserXP.user_id == user_id,
+                UserXP.xp_source == XPSource.UPVOTE_RECEIVED,
+                UserXP.description == "Received an upvote on published term",
             )
             result = await db.execute(stmt)
             upvote_count = result.scalar() or 0
@@ -340,7 +345,7 @@ class CRUDAchievement:
                 stmt = select(func.count(UserXP.id)).where(
                     UserXP.user_id == user_id,
                     UserXP.xp_source == XPSource.TERM_ADDITION,
-                    UserXP.description == "Added a new term",
+                    UserXP.description == "Term application verified by linguist",
                 )
                 result = await db.execute(stmt)
                 validated_count = result.scalar() or 0
@@ -431,6 +436,7 @@ class CRUDAchievement:
             stmt = select(func.count(UserXP.id)).where(
                 UserXP.user_id == user_id,
                 UserXP.xp_source == XPSource.TERM_ADDITION,
+                UserXP.description == "Added a new term",
                 func.date(UserXP.created_at) >= week_start,
                 func.date(UserXP.created_at) <= week_end,
             )
@@ -438,6 +444,7 @@ class CRUDAchievement:
             stmt = select(func.count(UserXP.id)).where(
                 UserXP.user_id == user_id,
                 UserXP.xp_source == XPSource.UPVOTE_RECEIVED,
+                UserXP.description == "Received an upvote on published term",
                 func.date(UserXP.created_at) >= week_start,
                 func.date(UserXP.created_at) <= week_end,
             )
