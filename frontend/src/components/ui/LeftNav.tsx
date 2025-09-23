@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
@@ -67,6 +67,13 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         id: 'glossary',
         label: t('navigation.glossary'),
         path: '/glossary',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
+      },
+      {
+        id: 'achievements',
+        label: 'Achievements',
+        path: '/achievements',
         roles: ['admin', 'contributor', 'linguist'],
         group: 'main-navigation',
       },

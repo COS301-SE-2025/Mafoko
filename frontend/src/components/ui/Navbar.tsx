@@ -47,6 +47,11 @@ const Navbar = () => {
         roles: ['admin', 'contributor', 'linguist'],
       },
       {
+        name: 'Achievements',
+        path: '/achievements',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
         name: 'Workspace',
         path: '/workspace',
         roles: ['admin', 'contributor', 'linguist'],
