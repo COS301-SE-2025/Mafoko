@@ -24,6 +24,7 @@ import ContributorPage from './pages/ContributorPage';
 import LinguistPage from './pages/LinguistPage';
 import AdminTermPage from './pages/AdminTermPage.tsx';
 import LearningPathPage from './pages/LearningPathPage.tsx';
+import GamificationPage from './pages/GamificationPage';
 import './App.css';
 import './styles/Global.scss';
 import {
@@ -120,6 +121,7 @@ function App() {
         <Route path="/contributor" element={<ContributorPage />} />
         <Route path="/linguist" element={<LinguistPage />} />
         <Route path="/learning-path" element={<LearningPathPage />} />
+        <Route path="/achievements" element={<GamificationPage />} />
         <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
     </div>
