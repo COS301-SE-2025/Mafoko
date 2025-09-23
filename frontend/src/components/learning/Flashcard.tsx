@@ -109,6 +109,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
             })}
           </div>
 
+          {/* Next Button */}
           {showResult && (
             <div className="text-center">
               <button

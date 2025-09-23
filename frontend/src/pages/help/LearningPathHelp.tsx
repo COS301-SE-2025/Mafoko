@@ -65,6 +65,21 @@ const LearningPathPage: React.FC = () => {
                       and progress tracking to help you stay motivated and
                       consistent.
                     </p>
+
+                    <div className="video-container">
+                      <video
+                        controls
+                        width="100%"
+                        style={{
+                          maxWidth: '800px',
+                          marginTop: '2rem',
+                          borderRadius: '0.75rem',
+                        }}
+                      >
+                        <source src="/Marito/videos/learning-path/learning-path-overview.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
                   </section>
 
                   {LearningPathContent.map((obj) => {
