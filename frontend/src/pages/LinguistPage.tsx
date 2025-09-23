@@ -472,18 +472,20 @@ const LinguistPage: React.FC = () => {
       if (!response.ok) throw new Error('Verification failed');
 
       if (application?.submitted_by_user_id) {
-        try {
-          await GamificationService.awardLinguistVerificationXP(
-            application.submitted_by_user_id,
-            id,
-          );
-        } catch (xpError) {
-          console.warn(
-            'Failed to award XP for linguist verification:',
-            xpError,
-          );
-          // Don't fail the verification if XP fails
-        }
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardLinguistVerificationXP(
+              application.submitted_by_user_id,
+              id,
+            );
+          } catch (xpError) {
+            console.warn(
+              'Failed to award XP for linguist verification:',
+              xpError,
+            );
+            // XP failure doesn't affect the verification success
+          }
+        });
       }
 
       fetchData();

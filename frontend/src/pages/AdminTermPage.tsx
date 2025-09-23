@@ -396,15 +396,17 @@ const AdminTermPage: React.FC = () => {
       });
 
       if (application?.submitted_by_user_id) {
-        try {
-          await GamificationService.awardAdminVerificationXP(
-            application.submitted_by_user_id,
-            id,
-          );
-        } catch (xpError) {
-          console.warn('Failed to award XP for admin approval:', xpError);
-          // Don't fail the approval if XP fails
-        }
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardAdminVerificationXP(
+              application.submitted_by_user_id,
+              id,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for admin approval:', xpError);
+            // XP failure doesn't affect the approval success
+          }
+        });
       }
 
       fetchData(); // Re-fetch all data to ensure consistency

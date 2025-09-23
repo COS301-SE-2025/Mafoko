@@ -92,14 +92,17 @@ const TermCard: React.FC<TermCardProps> = ({
         setUserVote(result.user_vote);
 
         if (voteType === 'up' && owner_id && result.user_vote === 'up') {
-          try {
-            await GamificationService.awardTermUpvoteXP(owner_id, id);
-          } catch (xpError) {
-            console.warn(
-              'Failed to award XP for term upvote on search page:',
-              xpError,
-            );
-          }
+          Promise.resolve().then(async () => {
+            try {
+              await GamificationService.awardTermUpvoteXP(owner_id, id);
+            } catch (xpError) {
+              console.warn(
+                'Failed to award XP for term upvote on search page:',
+                xpError,
+              );
+              // XP failure doesn't affect the vote success
+            }
+          });
         }
       } catch (error) {
         console.error('Error casting vote online, reverting:', error);

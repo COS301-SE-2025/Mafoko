@@ -318,16 +318,19 @@ export const TermDetailPage: React.FC = () => {
       if (!response.ok) throw new Error('Failed to post comment');
       const { newComment: savedComment } = await response.json();
 
+      // Award XP in background - don't block the UI refresh
       if (currentUserId && savedComment.id) {
-        try {
-          await GamificationService.awardCommentXP(
-            currentUserId,
-            savedComment.id,
-          );
-        } catch (xpError) {
-          console.warn('Failed to award XP for comment:', xpError);
-          // Don't fail comment creation if XP fails
-        }
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardCommentXP(
+              currentUserId,
+              savedComment.id,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for comment:', xpError);
+            // XP failure doesn't affect the comment creation success
+          }
+        });
       }
 
       const finalComments = updatedComments.map((c) =>
@@ -407,15 +410,21 @@ export const TermDetailPage: React.FC = () => {
       if (!response.ok) throw new Error('Vote failed');
       const serverUpdatedComment: BackendComment = await response.json();
 
+      // Award XP in background - don't block the UI refresh
       if (voteType === 'upvote') {
         const comment = comments.find((c) => c.id === commentId);
         if (comment && comment.user.id) {
-          try {
-            await GamificationService.awardUpvoteXP(comment.user.id, commentId);
-          } catch (xpError) {
-            console.warn('Failed to award XP for upvote:', xpError);
-            // Don't fail the vote if XP fails
-          }
+          Promise.resolve().then(async () => {
+            try {
+              await GamificationService.awardUpvoteXP(
+                comment.user.id,
+                commentId,
+              );
+            } catch (xpError) {
+              console.warn('Failed to award XP for upvote:', xpError);
+              // XP failure doesn't affect the vote success
+            }
+          });
         }
       }
 
@@ -571,15 +580,17 @@ export const TermDetailPage: React.FC = () => {
         termWithOwner.owner_id &&
         voteUpdate.user_vote === 'upvote'
       ) {
-        try {
-          await GamificationService.awardTermUpvoteXP(
-            termWithOwner.owner_id,
-            termId,
-          );
-        } catch (xpError) {
-          console.warn('Failed to award XP for term upvote:', xpError);
-          // Don't fail the vote if XP fails
-        }
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardTermUpvoteXP(
+              termWithOwner.owner_id!,
+              termId,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for term upvote:', xpError);
+            // XP failure doesn't affect the vote success
+          }
+        });
       }
 
       // Create a new, complete term object by merging the update
