@@ -5,6 +5,16 @@ import { useDarkMode } from '../components/ui/DarkModeComponent';
 import '../styles/Global.scss';
 import "../styles/GamificationPage.scss";
 
+interface UserData {
+  uuid?: string;
+  id?: string;
+  firstName?: string;
+  first_name?: string;
+  lastName?: string;
+  last_name?: string;
+  email?: string;
+}
+
 const ACHIEVEMENT_DEFINITIONS = [
   { id: 1, title: 'Term Pioneer', description: 'Add your first 10 terms to the dictionary', category: 'achievement-1' },
   { id: 2, title: 'Community Contributor', description: 'Make 25 comments on terms', category: 'achievement-2' },
@@ -39,18 +49,8 @@ const MOCK_GAMIFICATION_DATA = {
   ]
 };
 
-const fetchGamificationData = async (userId: string) => {
-  
+const fetchGamificationData = () => {
   return MOCK_GAMIFICATION_DATA;
-};
-
-const fetchContributionData = async (userId: string) => {
-  
-  return Array.from({ length: 371 }, (_, i) => ({
-    date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    level: i < 50 ? Math.floor(Math.random() * 5) : 0,
-    xpEarned: i < 50 ? Math.floor(Math.random() * 100) : 0
-  }));
 };
 
 const GamificationPage: React.FC = () => {
@@ -59,13 +59,12 @@ const GamificationPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   
   const [gamificationData, setGamificationData] = useState(MOCK_GAMIFICATION_DATA);
-  const [loading, setLoading] = useState(false);
 
   const getCurrentUser = () => {
     try {
       const storedUserData = localStorage.getItem('userData');
       if (storedUserData) {
-        const parsed = JSON.parse(storedUserData);
+        const parsed = JSON.parse(storedUserData) as UserData;
         const firstName = parsed.firstName || parsed.first_name || 'John';
         const lastName = parsed.lastName || parsed.last_name || 'Mavito';
         
@@ -99,20 +98,14 @@ const GamificationPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const loadGamificationData = async () => {
-      setLoading(true);
+    const loadGamificationData = () => {
       try {
-        const [gamificationResponse, contributionResponse] = await Promise.all([
-          fetchGamificationData(currentUser.userId),
-          fetchContributionData(currentUser.userId)
-        ]);
+        const gamificationResponse = fetchGamificationData();
         
         setGamificationData(gamificationResponse);
         
       } catch (error) {
         console.error('Error loading gamification data:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -148,14 +141,14 @@ const GamificationPage: React.FC = () => {
         clearTimeout(t);
         html.style.overflow = prevHtmlOverflow;
         body.style.overflow = prevBodyOverflow;
-        if (injectedStyle && injectedStyle.parentElement) {
+        if (injectedStyle.parentElement) {
           injectedStyle.parentElement.removeChild(injectedStyle);
         }
       };
     }, []);
 
   return (
-    <div className={`${isDarkMode ? 'theme-dark' : 'theme-light'}`} style={{ display: 'flex', minHeight: '100vh', width: '100vw' }}>
+    <div className={isDarkMode ? 'theme-dark' : 'theme-light'} style={{ display: 'flex', minHeight: '100vh', width: '100vw' }}>
       {isMobile ? (
         <Navbar />
       ) : (
@@ -174,7 +167,7 @@ const GamificationPage: React.FC = () => {
 
           <div className="xp-progress">
             <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${(gamificationData.xpData.currentXP / (gamificationData.xpData.currentXP + gamificationData.xpData.nextLevelXP)) * 100}%` }}></div>
+              <div className="progress-fill" style={{ width: `${String((gamificationData.xpData.currentXP / (gamificationData.xpData.currentXP + gamificationData.xpData.nextLevelXP)) * 100)}%` }}></div>
             </div>
             <div className="progress-text">
               <span>{gamificationData.xpData.currentXP.toLocaleString()} XP</span>
@@ -349,7 +342,7 @@ const GamificationPage: React.FC = () => {
                       <div className="achievement-progress-bar">
                         <div 
                           className="achievement-progress-fill" 
-                          style={{ width: `${(progress.progress.current / progress.progress.target) * 100}%` }}
+                          style={{ width: `${String((progress.progress.current / progress.progress.target) * 100)}%` }}
                         ></div>
                       </div>
                       <div className="achievement-status">
