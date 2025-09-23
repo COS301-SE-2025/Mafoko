@@ -33,7 +33,7 @@ body {
   background-color: var(--light-gray);
 }
 
-  .container {
+.container {
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
@@ -45,160 +45,165 @@ body {
   min-height: auto;
 }
 
-  .gamification-page .profile-section {
+.gamification-page .profile-section {
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: 18px 22px 26px 22px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+  border-top: 6px solid var(--teal);
+  position: relative;
+  display: block !important;
+  width: 100% !important;
+}
+
+.gamification-page .profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  margin-bottom: 12px;
+}
+
+.gamification-page .avatar {
+  width: 72px;
+  height: 72px;
+  background-color: var(--teal);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  flex: 0 0 72px;
+  min-width: 72px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 0 1 auto;
+  margin-left: 8px;
+}
+
+.username {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: var(--dark-blue);
+}
+
+.level-badge {
+  background-color: var(--pink);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  display: inline-block;
+  font-weight: 600;
+  width: max-content;
+  margin-top: 2px;
+}
+
+.xp-progress {
+  margin-top: 18px;
+  margin-left: 0 !important;
+  width: 100% !important;
+  display: block !important;
+  box-sizing: border-box;
+  padding-left: 0;
+}
+
+.gamification-page .profile-section > .profile-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+  width: 100% !important;
+}
+
+.gamification-page .profile-section > .xp-progress {
+  display: block !important;
+  width: 100% !important;
+}
+
+.gamification-page .profile-section > .stats-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: space-between !important;
+  gap: 24px !important;
+  width: 100% !important;
+  margin-top: 18px !important;
+}
+
+.progress-bar {
+  height: 18px;
+  background-color: #e8e8e8;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--teal) 0%,
+    #7b7b8a 50%,
+    var(--pink) 100%
+  );
+  border-radius: 18px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #222;
+  margin-bottom: 22px;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 28px;
+  margin-top: 22px;
+  margin-bottom: 18px;
+  justify-content: space-between;
+  align-items: stretch;
+
+  .stat-card {
+    flex: 0 1 calc((100% - 56px) / 3);
+    max-width: 380px;
+    min-width: 220px;
     background-color: var(--white);
-    border-radius: 10px;
-    padding: 18px 22px 26px 22px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-    border-top: 6px solid var(--teal);
-    position: relative;
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .gamification-page .profile-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start !important;
-    gap: 10px !important;
-    margin-bottom: 12px;
-  }
-
-  .gamification-page .avatar {
-    width: 72px;
-    height: 72px;
-    background-color: var(--teal);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 28px;
-    font-weight: 700;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-    flex: 0 0 72px;
-    min-width: 72px;
-  }
-
-  .user-info {
+    border-radius: 12px;
+    padding: 28px 22px;
+    text-align: center;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    flex: 0 1 auto;
-    margin-left: 8px;
   }
 
-  .username {
-    font-size: 22px;
-    font-weight: 700;
-    margin: 0 0 4px 0;
-    color: var(--dark-blue);
+  .stat-value {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--pink);
+    margin-bottom: 10px;
+    line-height: 1;
   }
 
-  .level-badge {
-    background-color: var(--pink);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    display: inline-block;
-    font-weight: 600;
-    width: max-content;
-    margin-top: 2px;
+  .stat-label {
+    font-size: 15px;
+    color: #666;
   }
-
-  .xp-progress {
-    margin-top: 18px;
-    margin-left: 0 !important;
-    width: 100% !important;
-    display: block !important;
-    box-sizing: border-box;
-    padding-left: 0;
-  }
-
-  .gamification-page .profile-section > .profile-header {
-    display: flex !important;
-    align-items: center !important;
-    gap: 18px !important;
-    width: 100% !important;
-  }
-
-  .gamification-page .profile-section > .xp-progress {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .gamification-page .profile-section > .stats-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    justify-content: space-between !important;
-    gap: 24px !important;
-    width: 100% !important;
-    margin-top: 18px !important;
-  }
-
-  .progress-bar {
-    height: 18px;
-    background-color: #e8e8e8;
-    border-radius: 18px;
-    overflow: hidden;
-    margin-bottom: 8px;
-    width: 100%;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--teal) 0%, #7b7b8a 50%, var(--pink) 100%);
-    border-radius: 18px;
-    transition: width 0.5s ease;
-  }
-
-  .progress-text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: #222;
-    margin-bottom: 22px;
-  }
-
-  .stats-grid {
-    display: flex;
-    gap: 28px;
-    margin-top: 22px;
-    margin-bottom: 18px;
-    justify-content: space-between;
-    align-items: stretch;
-
-    .stat-card {
-      flex: 0 1 calc((100% - 56px) / 3);
-      max-width: 380px;
-      min-width: 220px;
-      background-color: var(--white);
-      border-radius: 12px;
-      padding: 28px 22px;
-      text-align: center;
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.04);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .stat-value {
-      font-size: 42px;
-      font-weight: 800;
-      color: var(--pink);
-      margin-bottom: 10px;
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 15px;
-      color: #666;
-    }
-  }
+}
 
 .goals-section {
   background-color: var(--white);
@@ -290,7 +295,9 @@ body {
   border-radius: 10px;
   padding: 20px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .achievement-card:hover {
@@ -359,93 +366,93 @@ body {
   border-radius: 10px;
 }
 
-  .achievement-status {
-    font-size: 12px;
-    color: #666;
+.achievement-status {
+  font-size: 12px;
+  color: #666;
+}
+
+.achievement-badge {
+  background-color: var(--pink);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.locked {
+  opacity: 0.6;
+}
+
+.locked .achievement-icon {
+  background-color: #e0e0e0 !important;
+  color: #999 !important;
+}
+
+.xp-guide-section {
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.xp-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.xp-guide-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(245, 245, 245, 0.5);
+}
+
+.xp-guide-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.xp-guide-info {
+  flex-grow: 1;
+}
+
+.xp-guide-action {
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.xp-guide-value {
+  color: var(--pink);
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .achievement-badge {
-    background-color: var(--pink);
-    color: white;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
-    margin-top: 10px;
+  .goals-grid {
+    grid-template-columns: 1fr;
   }
 
-  .locked {
-    opacity: 0.6;
-  }
-
-  .locked .achievement-icon {
-    background-color: #e0e0e0 !important;
-    color: #999 !important;
-  }
-
-  .xp-guide-section {
-    background-color: var(--white);
-    border-radius: 10px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
+  .achievements-grid {
+    grid-template-columns: 1fr;
   }
 
   .xp-guide-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+    grid-template-columns: 1fr;
   }
-
-  .xp-guide-item {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: rgba(245, 245, 245, 0.5);
-  }
-
-  .xp-guide-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    flex-shrink: 0;
-  }
-
-  .xp-guide-info {
-    flex-grow: 1;
-  }
-
-  .xp-guide-action {
-    font-weight: 600;
-    margin-bottom: 3px;
-  }
-
-  .xp-guide-value {
-    color: var(--pink);
-    font-weight: bold;
-  }
-
-  @media (max-width: 768px) {
-    .stats-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .goals-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .achievements-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .xp-guide-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+}

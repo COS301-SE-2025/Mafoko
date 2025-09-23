@@ -121,7 +121,7 @@ function App() {
         <Route path="/contributor" element={<ContributorPage />} />
         <Route path="/linguist" element={<LinguistPage />} />
         <Route path="/learning-path" element={<LearningPathPage />} />
-  <Route path="/achievements" element={<GamificationPage />} />
+        <Route path="/achievements" element={<GamificationPage />} />
         <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
     </div>

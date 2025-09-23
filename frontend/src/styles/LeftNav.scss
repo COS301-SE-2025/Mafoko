@@ -304,7 +304,9 @@
   padding: 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   flex-shrink: 0; /* Prevent footer from shrinking */
-  background-color: var(--bg-tir); /* Ensure footer has same background as nav */
+  background-color: var(
+    --bg-tir
+  ); /* Ensure footer has same background as nav */
   z-index: 5; /* Ensure it appears above scrolling content */
 }
 
