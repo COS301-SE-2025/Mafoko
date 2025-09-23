@@ -1,10 +1,12 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from pydantic import BaseModel
 from datetime import date
 
 from mavito_common.db.session import get_db
+from mavito_common.models.user_xp import UserXP
 from mavito_common.schemas.user import User as UserSchema
 from mavito_common.schemas.user_xp import (
     UserXPCreate,
@@ -34,6 +36,34 @@ async def add_xp_to_user(
     """
     Add XP to a user and automatically check for weekly goal completions.
     """
+    if xp_request.source_reference_id:
+        from datetime import datetime, timedelta, timezone
+        from sqlalchemy import and_
+
+        recent_cutoff = datetime.now(timezone.utc) - timedelta(seconds=10)
+
+        duplicate_check = await db.execute(
+            select(UserXP).where(
+                and_(
+                    UserXP.user_id == xp_request.user_id,
+                    UserXP.description == xp_request.description,
+                    UserXP.source_reference_id == xp_request.source_reference_id,
+                    UserXP.created_at >= recent_cutoff,
+                )
+            )
+        )
+
+        existing_record = duplicate_check.scalars().first()
+        if existing_record:
+            import logging
+
+            logger = logging.getLogger(__name__)
+            logger.info(
+                f"Prevented duplicate XP award for user {xp_request.user_id}, "
+                f"source {xp_request.xp_source}, reference {xp_request.source_reference_id}"
+            )
+            return UserXPResponse.model_validate(existing_record)
+
     xp_create = UserXPCreate(
         user_id=xp_request.user_id,
         xp_amount=xp_request.xp_amount,
