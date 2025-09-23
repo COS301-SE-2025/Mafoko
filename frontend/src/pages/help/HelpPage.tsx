@@ -131,6 +131,14 @@ const HelpPage: React.FC = () => {
         keywords: ['dashboard', 'graph', 'app activity', 'data information'],
       },
       {
+        title: 'Learning Paths',
+        desc:
+          'Design a guided journey for learning one of South Africa’s' +
+          ' official languages.',
+        link: '/help/learning-path-help',
+        keywords: ['learn', 'test', 'que cards', 'learn languages'],
+      },
+      {
         title: 'Feedback',
         desc: 'Send suggestions, compliments, or complaints directly to the team to help improve the platform.',
         link: '/help/feedback-help',

@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
-import { DictionaryContent } from './utils/FeedbackUtils.tsx';
+import { LearningPathContent } from './utils/FeedbackUtils.tsx';
 import { HelpNodeSection } from './HelpSection.tsx';
 
-const TermHelpPage: React.FC = () => {
+const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
 
@@ -35,9 +35,9 @@ const TermHelpPage: React.FC = () => {
                 <h2 className="article-h2">On this page</h2>
                 <ul className="text-left">
                   <li>
-                    <a href="#intro">Understanding Terms in Marito</a>
+                    <a href="#intro">Understanding Learning Paths</a>
                   </li>
-                  {DictionaryContent.map((obj) => {
+                  {LearningPathContent.map((obj) => {
                     return (
                       <li key={`${obj.title}-${obj.id}`}>
                         <a href={`#${obj.id}`}>{obj.title}</a>
@@ -51,18 +51,23 @@ const TermHelpPage: React.FC = () => {
                 <div className="p-6 max-w-4xl mx-auto space-y-12 text-base leading-relaxed text-left">
                   <section id="intro">
                     <h1 className="text-3xl font-bold text-theme mb-4">
-                      Understanding the Dictionary
+                      Understanding Learning Paths
                     </h1>
                     <p>
-                      The <strong>Dictionary</strong> is where you can look up
-                      multilingual term definitions across all of South Africa’s
-                      11 official languages. It supports fast searching,
-                      filtering by language or domain, and offline access once
-                      dictionaries are downloaded.
+                      The <strong>Learning Path</strong> feature lets you design
+                      a guided journey for learning one of South Africa’s
+                      official languages. By selecting a language and choosing
+                      the resources you want to study, you can follow a
+                      structured path rather than exploring at random.
+                    </p>
+                    <p>
+                      Each learning path combines glossaries, practice tools,
+                      and progress tracking to help you stay motivated and
+                      consistent.
                     </p>
                   </section>
 
-                  {DictionaryContent.map((obj) => {
+                  {LearningPathContent.map((obj) => {
                     return (
                       <HelpNodeSection
                         key={`${obj.title}-${obj.id}`}
@@ -83,4 +88,4 @@ const TermHelpPage: React.FC = () => {
   );
 };
 
-export default TermHelpPage;
+export default LearningPathPage;

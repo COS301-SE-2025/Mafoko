@@ -50,6 +50,7 @@ import WorkspaceHelp from './pages/help/WorkspaceHelp.tsx';
 import FeedbackHelp from './pages/help/FeedbackHelp.tsx';
 import DashboardHelp from './pages/help/DashboardHelp.tsx';
 import HomeHelp from './pages/help/HomeHelp.tsx';
+import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
 
 // Register all Chart.js components once at the application entry point
 ChartJS.register(
@@ -117,6 +118,7 @@ function App() {
         <Route path="/help/dashboard-help" element={<DashboardHelp />} />
         <Route path="/help/home-help" element={<HomeHelp />} />
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
+        <Route path="/help/learning-path-help" element={<LearningPathHelp />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />

@@ -270,7 +270,8 @@
 }
 
 .register-link-prompt a {
-  color: #00ceaf;
+  color: #00ceaf !important;
+  font-size: 13px;
   text-decoration: none;
   font-weight: 500;
 }
