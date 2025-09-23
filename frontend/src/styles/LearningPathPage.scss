@@ -3,7 +3,7 @@
   flex-direction: column;
   min-height: calc(100vh - 64px); // Adjust based on your header/footer height
   background-color: var(--bg-color-secondary);
-  margin-left: -277px; /* Move the container 50px to the left */
+  margin-left: -285px; /* Move the container 50px to the left */
   width: 1155px;
 
   &.dark-mode {
@@ -15,9 +15,30 @@
       border-color: var(--border-color-dark);
     }
 
-    .heading-text {
-      color: var(--text-color-dark);
-    }
+.heading-text {
+  color: var(--text-color-dark);
+}
+
+.learning-path-modal .modal-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  
+  &::placeholder {
+    color: var(--text-color-secondary);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #f00a50;
+    box-shadow: 0 0 0 2px rgba(240, 10, 80, 0.1);
+  }
+}
 
     .subheading-text {
       color: var(--text-color-secondary-dark);
@@ -48,17 +69,20 @@
 
     .languages-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
     }
 
     .path-card {
       background-color: var(--card-bg);
-      border-radius: 0.75rem;
-      padding: 1.25rem;
+      border-radius: 1rem;
+      padding: 2.5rem;
       border: 1px solid var(--border-color);
       transition: all 0.2s ease;
       cursor: pointer;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
 
       &:hover {
         transform: translateY(-4px);
@@ -72,34 +96,41 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         color: white;
         font-weight: 700;
         font-size: 1.25rem;
       }
 
       .language-name {
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         font-weight: 600;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.75rem;
       }
 
       .language-stats {
         font-size: 0.875rem;
         color: var(--text-color-secondary);
+        margin-bottom: 1.5rem;
       }
 
       .progress-bar {
-        margin-top: 1rem;
-        height: 6px;
+        margin: 1.5rem 0 0.75rem;
+        height: 4px;
         background-color: var(--bg-color-secondary);
-        border-radius: 3px;
+        border-radius: 2px;
         overflow: hidden;
 
         .progress-fill {
           height: 100%;
           transition: width 0.3s ease;
         }
+      }
+
+      .completion-text {
+        font-size: 0.875rem;
+        color: var(--text-color-secondary);
+        margin-top: 0.5rem;
       }
     }
 
@@ -108,6 +139,7 @@
       border-radius: 0.75rem;
       border: 1px solid var(--border-color);
       overflow: hidden;
+      
 
       .word-item {
         display: flex;
@@ -165,11 +197,14 @@
     .flashcard-container {
       max-width: 600px;
       margin: 0 auto;
+      perspective: 1500px;
+      min-height: 400px;
+      min-height: 400px;
 
       .progress-indicator {
-        height: 6px;
+        height: 4px;
         background-color: var(--bg-color-secondary);
-        border-radius: 3px;
+        border-radius: 2px;
         margin-bottom: 2rem;
 
         .progress-fill {
@@ -181,24 +216,98 @@
       }
 
       .flashcard {
-        background-color: var(--card-bg);
-        border-radius: 1rem;
-        padding: 2rem;
-        text-align: center;
-        border: 1px solid var(--border-color);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        position: relative;
+        width: 100%;
+        min-height: 300px;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 1.5rem;
-
-        .card-prompt {
-          font-size: 0.875rem;
-          color: var(--text-color-secondary);
-          margin-bottom: 0.5rem;
+        
+        &.is-flipped {
+          transform: rotateY(180deg);
         }
 
-        .card-word {
-          font-size: 2rem;
-          font-weight: 700;
-          margin-bottom: 0.5rem;
+        .card-front,
+        .card-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+          transform-style: preserve-3d;
+          background-color: var(--card-bg);
+          border-radius: 1rem;
+          border: 1px solid var(--border-color);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+          overflow: hidden;
+        }
+
+        .card-front {
+          z-index: 2;
+          transform: rotateY(0deg);
+          
+          .card-content {
+            height: 100%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+
+            .card-prompt {
+              font-size: 0.875rem;
+              color: var(--text-color-secondary);
+              margin-bottom: 0.5rem;
+            }
+
+            .card-word {
+              font-size: 2rem;
+              font-weight: 700;
+              margin-bottom: 1.5rem;
+              color: var(--text-color);
+            }
+          }
+        }
+
+        .card-back {
+          transform: rotateY(180deg);
+          
+          .card-content {
+            height: 100%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1rem;
+
+            &.correct {
+              background-color: rgba(16, 185, 129, 0.1);
+              border-color: #10b981;
+            }
+
+            &.incorrect {
+              background-color: rgba(239, 68, 68, 0.1);
+              border-color: #ef4444;
+            }
+
+            .result-label {
+              font-size: 0.875rem;
+              color: var(--text-color-secondary);
+            }
+
+            .result-text {
+              font-size: 1.25rem;
+              font-weight: 600;
+              color: var(--text-color);
+            }
+
+            .correct-answer {
+              color: #10b981;
+            }
+
+            .incorrect-answer {
+              color: #ef4444;
+            }
+          }
         }
       }
 
@@ -217,10 +326,11 @@
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
+          background-color: var(--card-bg);
 
           &:hover {
-            border-color: #3b82f6;
-            background-color: rgba(59, 130, 246, 0.05);
+            border-color: #f00a50;
+            background-color: rgba(240, 10, 80, 0.05);
           }
 
           &.correct {
@@ -241,6 +351,7 @@
         background-color: var(--card-bg);
         border-radius: 1rem;
         border: 1px solid var(--border-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
         .result-emoji {
           font-size: 3rem;
@@ -251,6 +362,7 @@
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: 1rem;
+          color: var(--text-color);
         }
 
         .result-score {
@@ -259,7 +371,7 @@
 
           .score-number {
             font-weight: 700;
-            color: #3b82f6;
+            color: #f00a50;
           }
         }
 
@@ -359,7 +471,7 @@
   }
 
   .words-panel {
-    margin-top: 520px; /* Moved the words panel 10px further down */
+    margin-top: 23300px; /* Moved the words panel 10px further down */
   }
 }
 
@@ -438,18 +550,25 @@
 
 /* Glossary action buttons */
 .glossary-card-actions {
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  padding: 0 0.5rem;
 }
 
 .glossary-card-actions .study-btn,
 .glossary-card-actions .flashcard-btn {
   border: none;
-  padding: 0.4rem 0.75rem; /* smaller padding */
+  padding: 0.6rem 1rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 0.9rem; /* slightly smaller text */
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
+  flex: 1;
+  justify-content: center;
 }
 
 .glossary-card-actions .study-btn {
@@ -472,6 +591,14 @@
   background: #d10946;
 }
 
+.new-path-button {
+  background: #f00a50;
+}
+
+.new-path-button:hover {
+  background: #d10946;
+}
+
 .glossary-card-actions .study-btn svg,
 .glossary-card-actions .flashcard-btn svg {
   opacity: 0.95;
@@ -480,15 +607,23 @@
 }
 
 .glossary-card-progress {
-  margin-top: 0.75rem;
+  margin: 1.5rem 0 1rem;
+  padding: 0 0.5rem;
 }
 
 .glossary-card-progress .progress-bar {
   background: var(--bg-color-secondary, #eef2f7);
+  margin-bottom: 0.5rem;
 }
 
 .glossary-card-progress .progress-fill {
   transition: width 220ms ease;
+}
+
+.glossary-card-progress .progress-text {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-top: 0.5rem;
 }
 
 .glossary-card-actions {
@@ -512,6 +647,8 @@
 .learning-path-modal {
   width: 100%;
   max-width: 680px;
+  max-height: 85vh;
+  overflow-y: auto;
   /* Force an opaque solid background to avoid transparency from theme variables */
   background-color: var(--card-bg-solid, #ffffff);
   color: var(--text-color, #111827);
@@ -519,12 +656,32 @@
   padding: 1.25rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-color);
+  
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--bg-color-secondary, #f1f5f9);
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+    
+    &:hover {
+      background: #94a3b8;
+    }
+  }
 }
 
 .learning-path-modal .modal-title {
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
 }
 
 .learning-path-modal .modal-label {

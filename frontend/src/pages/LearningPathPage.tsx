@@ -387,7 +387,9 @@ const LearningPathPage: React.FC = () => {
         />
       )}
       {isMobile ? (
-        <Navbar />
+        <div className="workspace-navbar-mobile bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50">
+          <Navbar />
+        </div>
       ) : (
         <LeftNav
           activeItem={activeMenuItem}
@@ -412,7 +414,7 @@ const LearningPathPage: React.FC = () => {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                {currentView === 'paths' && 'My Learning Paths'}
+                {currentView === 'paths'}
                 {currentView === 'glossaries' &&
                   (selectedPath?.path_name || '')}
                 {currentView === 'words' &&
@@ -423,10 +425,8 @@ const LearningPathPage: React.FC = () => {
                   `${selectedGlossary?.name || ''} - Flashcards`}
               </h1>
               <p className="text-gray-600 mt-1">
-                {currentView === 'paths' &&
-                  'Create and manage your custom learning paths.'}
-                {currentView === 'glossaries' &&
-                  'Select a glossary to begin studying.'}
+                {currentView === 'paths'}
+                {currentView === 'glossaries'}
                 {currentView === 'words' &&
                   !flashcardMode &&
                   'Review the terms and definitions below.'}
@@ -458,7 +458,7 @@ const LearningPathPage: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                  className="px-4 py-2 text-white rounded-lg new-path-button"
                   onClick={() => {
                     void handleOpenCreateModal();
                   }}
@@ -500,14 +500,14 @@ const LearningPathPage: React.FC = () => {
                   to get started!
                 </p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {learningPaths.map((path) => (
                     <div key={path.id} className="relative">
                       <LanguageCard
                         code={path.language_name.substring(0, 2).toUpperCase()}
                         name={path.path_name}
                         totalWords={path.selected_glossaries.length}
-                        color={'#212431'}
+                        color={'#00ceaf'}
                         completedPercentage={path.completedPercentage || 0}
                         onClick={() => {
                           void handleSelectPath(path);
@@ -543,7 +543,7 @@ const LearningPathPage: React.FC = () => {
                   ← Back to Paths
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
                 {selectedPath.selected_glossaries.map((g) => {
                   const glossaryInfo = {
                     id: g.glossary_name,
