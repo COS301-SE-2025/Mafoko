@@ -1,12 +1,13 @@
 .learning-path-container {
   display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 64px); // Adjust based on your header/footer height
+  min-height: calc(100vh - 60px);
   background-color: var(--bg-color-secondary);
-  margin-left: -289px; /* Move the container 50px to the left */
-  width: 1180px;
-  margin-top: 10px;
-
+  width: 1000%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem;
+  margin-left:-600px; /* Move the container 50px to the left */
+margin-right: 105px;
   &.dark-mode {
     background-color: var(--bg-color-dark);
     color: var(--text-color-dark);
@@ -521,7 +522,22 @@
   }
 
   .words-panel {
-    margin-top: 0px; /* Moved the words panel 10px further down */
+     //margin: 0 auto;
+     width: 100%;
+    //margin-left:-600px; /* Move the container 50px to the left */
+margin-right: -370px;
+     max-width: 1400px;
+    
+    .bg-white {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .grid {
+      padding: 1.5rem;
+    }
   }
 }
 
