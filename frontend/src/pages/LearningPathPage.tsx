@@ -661,7 +661,9 @@ const LearningPathPage: React.FC = () => {
             role="dialog"
             aria-modal="true"
           >
-            <div className="learning-path-modal">
+            <div
+              className={`learning-path-modal ${isDarkMode ? 'dark-mode' : ''}`}
+            >
               <h2 className="modal-title">Create a New Learning Path</h2>
               <input
                 type="text"

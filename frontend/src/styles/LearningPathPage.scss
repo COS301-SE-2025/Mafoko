@@ -650,13 +650,17 @@
   max-width: 680px;
   max-height: 85vh;
   overflow-y: auto;
-  /* Force an opaque solid background to avoid transparency from theme variables */
   background-color: var(--card-bg-solid, #ffffff);
   color: var(--text-color, #111827);
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-color);
+  
+  &.dark-mode {
+    background-color: #363b4d;
+    color: var(--text-color-dark, #ffffff);
+  }
   
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
@@ -698,6 +702,12 @@
   border-radius: 8px;
   border: 1px solid var(--border-color);
   background: transparent;
+}
+
+.dark-mode .learning-path-modal .modal-select {
+  background-color: #363b4d;
+  color: var(--text-color-dark, #ffffff);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .learning-path-modal .modal-glossaries {
@@ -754,7 +764,9 @@
 
 /* Dark mode fallback: if parent sets dark-mode, ensure modal has appropriate opaque background */
 .dark-mode .learning-path-modal {
-  background-color: var(--card-bg-dark-solid, #0f1724);
+  background-color: #363b4d;
   color: var(--text-color-dark, #ffffff);
   border-color: rgba(255, 255, 255, 0.06);
 }
+
+
