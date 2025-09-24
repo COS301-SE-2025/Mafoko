@@ -243,5 +243,14 @@ services:
              pip install --no-cache-dir -r /app/requirements.txt &&
              uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload"
 
+  redis:
+    image: redis:alpine
+    container_name: mavito_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
 volumes:
   postgres_data:
+  redis_data:
