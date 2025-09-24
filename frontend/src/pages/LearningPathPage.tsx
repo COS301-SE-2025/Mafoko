@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Circle, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import Flashcard from '../components/learning/Flashcard';
+import WordsPanel from '../components/learning/WordsPanel';
 import GlossaryCard from '../components/learning/GlossaryCard';
 import LanguageCard from '../components/learning/LanguageCard';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
@@ -572,65 +573,13 @@ const LearningPathPage: React.FC = () => {
           )}
 
           {currentView === 'words' && !flashcardMode && studySession ? (
-            <div className="words-panel bg-transparent">
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentView('glossaries');
-                  }}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  ← Back to Glossaries
-                </button>
-                <div className="flex items-center gap-4">
-                  <div className="text-sm text-gray-600">
-                    {knownWords.size} of {studySession.words.length} words
-                    completed
-                  </div>
-                  <div className="w-32 bg-gray-200 rounded-full h-2">
-                    <div
-                      className="h-2 rounded-full bg-teal-500"
-                      style={{
-                        width: `${getProgressPercentage().toString()}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                {studySession.words.length === 0 ? (
-                  <div className="text-center text-gray-500 py-8">
-                    No terms found in this glossary.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-4">
-                    {studySession.words.map((word) => (
-                      <div
-                        key={word.id}
-                        className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
-                      >
-                        <div className="flex-1">
-                          <h4 className="text-lg font-semibold text-gray-900">
-                            {word.term}
-                          </h4>
-                          <p className="text-gray-600 mt-1">
-                            {word.english_translation || word.definition}
-                          </p>
-                        </div>
-                        <div className="ml-4">
-                          {knownWords.has(word.id) ? (
-                            <CheckCircle2 className="w-6 h-6 text-teal-500" />
-                          ) : (
-                            <Circle className="w-6 h-6 text-gray-400" />
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+            <WordsPanel
+              studySession={studySession}
+              knownWords={knownWords}
+              onBackClick={() => {
+                setCurrentView('glossaries');
+              }}
+            />
           ) : null}
 
           {flashcardMode && currentView === 'words' && studySession ? (
