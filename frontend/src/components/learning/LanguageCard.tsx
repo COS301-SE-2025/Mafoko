@@ -20,7 +20,7 @@ const LanguageCard: React.FC<LanguageCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1"
+      className="language-card bg-white rounded-xl p-6 shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1"
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={(e) => {

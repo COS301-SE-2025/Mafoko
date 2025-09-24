@@ -599,30 +599,36 @@ const LearningPathPage: React.FC = () => {
                 </div>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                <div className="grid grid-cols-1 gap-4">
-                  {studySession.words.map((word) => (
-                    <div
-                      key={word.id}
-                      className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
-                    >
-                      <div className="flex-1">
-                        <h4 className="text-lg font-semibold text-gray-900">
-                          {word.term}
-                        </h4>
-                        <p className="text-gray-600 mt-1">
-                          {word.english_translation || word.definition}
-                        </p>
+                {studySession.words.length === 0 ? (
+                  <div className="text-center text-gray-500 py-8">
+                    No terms found in this glossary.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-4">
+                    {studySession.words.map((word) => (
+                      <div
+                        key={word.id}
+                        className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
+                      >
+                        <div className="flex-1">
+                          <h4 className="text-lg font-semibold text-gray-900">
+                            {word.term}
+                          </h4>
+                          <p className="text-gray-600 mt-1">
+                            {word.english_translation || word.definition}
+                          </p>
+                        </div>
+                        <div className="ml-4">
+                          {knownWords.has(word.id) ? (
+                            <CheckCircle2 className="w-6 h-6 text-teal-500" />
+                          ) : (
+                            <Circle className="w-6 h-6 text-gray-400" />
+                          )}
+                        </div>
                       </div>
-                      <div className="ml-4">
-                        {knownWords.has(word.id) ? (
-                          <CheckCircle2 className="w-6 h-6 text-teal-500" />
-                        ) : (
-                          <Circle className="w-6 h-6 text-gray-400" />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ) : null}
@@ -675,7 +681,7 @@ const LearningPathPage: React.FC = () => {
                 }}
               />
               <select
-                className="modal-select"
+                className={`modal-select ${isDarkMode ? 'dark-mode' : ''}`}
                 value={modalLanguage}
                 onChange={(e) => {
                   void handleModalLanguageChange(e.target.value);

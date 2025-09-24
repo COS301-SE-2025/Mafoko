@@ -74,6 +74,55 @@
       gap: 2rem;
     }
 
+    /* Dark mode theme for language cards when page is in theme-dark */
+    /* dark overrides applied via selectors below */
+
+    .theme-dark .language-card,
+    .learning-path-container.theme-dark .language-card {
+      background-color: #363b4d; /* requested dark card bg */
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.06);
+      box-shadow: none;
+    }
+
+    .theme-dark .language-card .text-gray-900,
+    .learning-path-container.theme-dark .language-card .text-gray-900 {
+      color: #ffffff; /* force headings to white */
+    }
+
+    .theme-dark .language-card .text-gray-600,
+    .learning-path-container.theme-dark .language-card .text-gray-600 {
+      color: rgba(255,255,255,0.75); /* muted white */
+    }
+
+    /* Additional overrides to beat Tailwind utility classes when theme-dark is active */
+    .theme-dark .language-card .text-gray-500,
+    .learning-path-container.theme-dark .language-card .text-gray-500 {
+      color: rgba(255,255,255,0.7) !important;
+    }
+
+    .theme-dark .language-card .bg-white,
+    .learning-path-container.theme-dark .language-card .bg-white {
+      background-color: transparent !important;
+    }
+
+    /* Progress track (outer) should be faint on dark backgrounds */
+    .theme-dark .language-card .bg-gray-200,
+    .learning-path-container.theme-dark .language-card .bg-gray-200 {
+      background-color: rgba(255,255,255,0.06) !important;
+    }
+
+    /* Ensure borders from utility classes are adjusted */
+    .theme-dark .language-card .border-gray-200,
+    .learning-path-container.theme-dark .language-card .border-gray-200 {
+      border-color: rgba(255,255,255,0.06) !important;
+    }
+
+    .theme-dark .language-card .w-16,
+    .learning-path-container.theme-dark .language-card .w-16 {
+      box-shadow: none;
+    }
+
     .path-card {
       background-color: var(--card-bg);
       border-radius: 1rem;
@@ -472,7 +521,7 @@
   }
 
   .words-panel {
-    margin-top: 23300px; /* Moved the words panel 10px further down */
+    margin-top: 21200px; /* Moved the words panel 10px further down */
   }
 }
 
@@ -702,13 +751,43 @@
   border-radius: 8px;
   border: 1px solid var(--border-color);
   background: transparent;
+  color: var(--text-color, #111827);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
 }
 
+/* Light mode option defaults (explicit so dark-mode override works reliably) */
+.learning-path-modal .modal-select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* Dark mode select + option styling */
 .dark-mode .learning-path-modal .modal-select {
   background-color: #363b4d;
   color: var(--text-color-dark, #ffffff);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
 }
+
+.dark-mode .learning-path-modal .modal-select option {
+  /* Many browsers render native option lists using OS widgets and ignore some styles,
+     but setting option background and color here helps in browsers that support it. */
+  background-color: #363b4d;
+  color: #ffffff;
+}
+
+/* Vendor-specific: ensure select arrow remains visible on dark background */
+.learning-path-modal .modal-select::-ms-expand {
+  display: block;
+  filter: invert(1) opacity(0.9);
+}
+
+/* Optional: when browsers don't style option background in the native popup, we
+   fallback to a custom-styled list control in a future iteration. */
 
 .learning-path-modal .modal-glossaries {
   margin-top: 0.5rem;
@@ -760,6 +839,75 @@
   font-size: 0.875rem;
   color: var(--text-color-secondary);
   margin-bottom: 0.5rem;
+}
+
+/* Custom select styles (used for modal dropdown replacement) */
+.custom-select {
+  position: relative;
+  width: 100%;
+  outline: none;
+}
+
+.custom-select__control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg-solid, #ffffff);
+  color: var(--text-color, #111827);
+  cursor: pointer;
+}
+
+.custom-select__value.placeholder {
+  color: var(--text-color-secondary);
+}
+
+.custom-select__menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-top: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  z-index: 12001;
+  background-color: #ffffff;
+}
+
+.custom-select__option {
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  color: #111827;
+}
+
+.custom-select__option.highlight,
+.custom-select__option:hover {
+  background-color: rgba(59, 130, 246, 0.12);
+}
+
+/* Dark mode versions */
+.dark-mode .custom-select__control {
+  background-color: #363b4d;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark-mode .custom-select__menu {
+  background-color: #363b4d;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dark-mode .custom-select__option {
+  color: #ffffff;
+}
+
+.dark-mode .custom-select__option.highlight,
+.dark-mode .custom-select__option:hover {
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 /* Dark mode fallback: if parent sets dark-mode, ensure modal has appropriate opaque background */
