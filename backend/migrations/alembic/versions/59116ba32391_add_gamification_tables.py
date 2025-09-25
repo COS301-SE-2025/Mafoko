@@ -1,7 +1,7 @@
 """add gamification tables
 
 Revision ID: 59116ba32391
-Revises: bd4e1862768f
+Revises: ead6a3b65cd2
 Create Date: 2025-09-21 02:25:30.191806
 
 """
@@ -14,7 +14,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "59116ba32391"
-down_revision: Union[str, Sequence[str], None] = "bd4e1862768f"
+down_revision: Union[str, Sequence[str], None] = "ead6a3b65cd2"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
