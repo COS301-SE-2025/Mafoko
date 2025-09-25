@@ -70,6 +70,16 @@ export interface PendingCommentDelete {
   token: string;
 }
 
+export interface PendingProfilePictureUpload {
+  id: string;
+  userId: string;
+  file: File;
+  fileName: string;
+  contentType: string;
+  token: string;
+  timestamp: number;
+}
+
 interface MyDB extends DBSchema {
   terms: {
     key: string;
@@ -104,9 +114,13 @@ interface MyDB extends DBSchema {
   'pending-term-deletes': { key: string; value: PendingTermDelete };
   'pending-term-approvals': { key: string; value: PendingTermApproval };
   'pending-term-rejections': { key: string; value: PendingTermRejection };
+  'pending-profile-pictures': {
+    key: string;
+    value: PendingProfilePictureUpload;
+  };
 }
 
-const dbPromise = openDB<MyDB>('marito-db', 3, {
+const dbPromise = openDB<MyDB>('marito-db', 5, {
   upgrade(db, oldVersion) {
     if (oldVersion < 3) {
       if (!db.objectStoreNames.contains('terms')) {
@@ -147,6 +161,12 @@ const dbPromise = openDB<MyDB>('marito-db', 3, {
       }
       if (!db.objectStoreNames.contains('pending-term-rejections')) {
         db.createObjectStore('pending-term-rejections', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 5) {
+      // Add profile picture uploads store
+      if (!db.objectStoreNames.contains('pending-profile-pictures')) {
+        db.createObjectStore('pending-profile-pictures', { keyPath: 'id' });
       }
     }
   },
@@ -405,4 +425,28 @@ export async function getTermsByIdsFromDB(termIds: string[]): Promise<Term[]> {
   }
   await tx.done;
   return terms;
+}
+
+export async function addPendingProfilePictureUpload(
+  upload: PendingProfilePictureUpload,
+) {
+  const db = await dbPromise;
+  await db.put('pending-profile-pictures', upload);
+}
+
+export async function getAndClearPendingProfilePictureUploads(): Promise<
+  PendingProfilePictureUpload[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-profile-pictures', 'readwrite');
+  const allUploads = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allUploads;
+}
+
+export async function getPendingProfilePictureUploadCount(): Promise<number> {
+  const db = await dbPromise;
+  const allUploads = await db.getAll('pending-profile-pictures');
+  return allUploads.length;
 }

@@ -5,6 +5,10 @@ import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
 import { ChevronDown, BookOpen } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
+import {
+  useProfilePicture,
+  handleProfilePictureError,
+} from '../../hooks/useProfilePicture';
 interface LeftNavProps {
   activeItem: string;
   setActiveItem: (item: string) => void;
@@ -35,10 +39,14 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     new Set(['main-navigation']),
   );
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
-    null,
-  );
   const [avatarInitials, setAvatarInitials] = useState('');
+
+  const {
+    profilePictureUrl,
+    loadingProfilePicture,
+    clearProfilePictureCache,
+    loadProfilePicture,
+  } = useProfilePicture(userData?.uuid);
   const { isDarkMode } = useDarkMode();
   const allMenuItems = useMemo(
     () => [
@@ -364,12 +372,20 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           <div className="profile-section">
             <div className="profile-info">
               <div className="profile-avatar">
-                {profilePictureUrl ? (
+                {loadingProfilePicture ? (
+                  <div className="avatar-loading">Loading...</div>
+                ) : profilePictureUrl ? (
                   <img
                     src={profilePictureUrl}
                     alt="Profile Picture"
                     onError={() => {
-                      setProfilePictureUrl(null);
+                      if (userData?.uuid) {
+                        handleProfilePictureError(
+                          userData.uuid,
+                          clearProfilePictureCache,
+                          loadProfilePicture,
+                        );
+                      }
                     }}
                   />
                 ) : (

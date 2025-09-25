@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LogOut } from 'lucide-react';
@@ -10,6 +10,10 @@ import ProfilePicture from '../components/profile/ProfilePicture';
 import ProfileEditDropdown from '../components/profile/ProfileEditDropdown';
 import ProfileEditForms from '../components/profile/ProfileEditForms';
 import ProfileSuccessMessages from '../components/profile/ProfileSuccessMessages';
+import {
+  useProfilePicture,
+  handleProfilePictureError,
+} from '../hooks/useProfilePicture';
 import '../styles/UserProfilePage.scss';
 
 interface ProfileData {
@@ -31,10 +35,15 @@ const UserProfilePage: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
-    null,
-  );
-  const [loadingProfilePicture, setLoadingProfilePicture] = useState(false);
+
+  const {
+    profilePictureUrl,
+    loadingProfilePicture,
+    clearProfilePictureCache,
+    loadProfilePicture,
+    uploadProfilePicture,
+    getPendingUploadCount,
+  } = useProfilePicture(profile?.id);
   const [error, setError] = useState('');
   const [activeMenuItem, setActiveMenuItem] = useState('profile');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -66,76 +75,6 @@ const UserProfilePage: React.FC = () => {
   const [updateEmailSuccess, setUpdateEmailSuccess] = useState(false);
   const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
-
-  const loadProfilePicture = useCallback(async () => {
-    if (!profile?.profile_pic_url) {
-      setProfilePictureUrl(null);
-      return;
-    }
-
-    // Check if we have a cached URL in sessionStorage (lasts for browser session)
-    const cachedData = sessionStorage.getItem(`profilePic_${profile.id}`);
-    if (cachedData) {
-      try {
-        const { url, timestamp } = JSON.parse(cachedData) as {
-          url: string;
-          timestamp: number;
-        };
-        // Cache expires after 1 hour (3600000 ms)
-        const isExpired = Date.now() - timestamp > 3600000;
-        if (!isExpired) {
-          setProfilePictureUrl(url);
-          return;
-        } else {
-          // Remove expired cache
-          sessionStorage.removeItem(`profilePic_${profile.id}`);
-        }
-      } catch {
-        // Invalid cache format, remove it
-        sessionStorage.removeItem(`profilePic_${profile.id}`);
-      }
-    }
-
-    setLoadingProfilePicture(true);
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      const response = await fetch(API_ENDPOINTS.getMyProfilePictureUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = (await response.json()) as { view_url: string };
-
-        setProfilePictureUrl(data.view_url);
-
-        // Cache in sessionStorage for the browser session with timestamp
-        const cacheData = {
-          url: data.view_url,
-          timestamp: Date.now(),
-        };
-        sessionStorage.setItem(
-          `profilePic_${profile.id}`,
-          JSON.stringify(cacheData),
-        );
-      } else {
-        console.log(
-          'Profile picture API returned non-OK status:',
-          response.status,
-        );
-        setProfilePictureUrl(null);
-      }
-    } catch (err) {
-      console.error('Error loading profile picture:', err);
-      setProfilePictureUrl(null);
-    } finally {
-      setLoadingProfilePicture(false);
-    }
-  }, [profile?.profile_pic_url, profile?.id]);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -189,12 +128,6 @@ const UserProfilePage: React.FC = () => {
   }, [t]);
 
   useEffect(() => {
-    if (profile) {
-      void loadProfilePicture();
-    }
-  }, [profile, loadProfilePicture]);
-
-  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -203,6 +136,35 @@ const UserProfilePage: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const handleOnline = async () => {
+      try {
+        const pendingCount = await getPendingUploadCount();
+
+        if (pendingCount > 0) {
+          setError(
+            t(
+              'profile.syncingUploads',
+              'Back online! Syncing queued profile picture uploads...',
+            ),
+          );
+
+          setTimeout(() => {
+            setError('');
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Error checking pending uploads:', error);
+      }
+    };
+
+    const handleOnlineWrapper = () => void handleOnline();
+    window.addEventListener('online', handleOnlineWrapper);
+    return () => {
+      window.removeEventListener('online', handleOnlineWrapper);
+    };
+  }, [getPendingUploadCount, t]);
 
   const handleBackClick = () => {
     void navigate(-1);
@@ -259,121 +221,42 @@ const UserProfilePage: React.FC = () => {
     setError('');
 
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        setError('No access token found. Please login first.');
-        return;
-      }
+      const result = await uploadProfilePicture(file);
 
-      // Get upload URL
-      const uploadPayload = {
-        content_type: file.type,
-        filename: file.name,
-      };
+      if (result.success) {
+        if (result.wasQueued) {
+          // File was queued for offline upload
+          setError(
+            t(
+              'profile.offlineUpload',
+              "You are offline. Your profile picture upload has been queued and will sync when you're back online.",
+            ),
+          );
+        } else {
+          // Refresh profile data
+          const token = localStorage.getItem('accessToken');
+          if (token) {
+            const profileResponse = await fetch(API_ENDPOINTS.getMe, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+              },
+            });
 
-      console.log('Upload URL request payload:', uploadPayload);
-      console.log('File details:', {
-        type: file.type,
-        name: file.name,
-        size: file.size,
-      });
-
-      const uploadUrlResponse = await fetch(
-        API_ENDPOINTS.generateProfilePictureUploadUrl,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(uploadPayload),
-        },
-      );
-
-      if (!uploadUrlResponse.ok) {
-        const errorText = await uploadUrlResponse.text();
-        console.error('Upload URL error response:', errorText);
-        console.error('Response status:', uploadUrlResponse.status);
-        throw new Error(`Failed to get upload URL: ${errorText}`);
-      }
-
-      const { upload_url, gcs_key } = (await uploadUrlResponse.json()) as {
-        upload_url: string;
-        gcs_key: string;
-      };
-
-      // Upload file to signed URL
-      const uploadResponse = await fetch(upload_url, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload file');
-      }
-
-      // Update profile with new picture key
-      const updateProfileResponse = await fetch(
-        API_ENDPOINTS.updateProfilePicture,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            profile_pic_url: gcs_key,
-          }),
-        },
-      );
-
-      if (!updateProfileResponse.ok) {
-        throw new Error('Failed to update profile picture');
-      }
-
-      // Refresh profile data and picture
-      const profileResponse = await fetch(API_ENDPOINTS.getMe, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-        },
-      });
-
-      if (profileResponse.ok) {
-        const updatedProfile = (await profileResponse.json()) as ProfileData;
-        setProfile(updatedProfile);
-
-        // Clear cached profile picture from sessionStorage
-        sessionStorage.removeItem(`profilePic_${updatedProfile.id}`);
-
-        // Clear cached profile picture URL to force reload on dashboard
-        const storedUserDataString = localStorage.getItem('userData');
-        if (storedUserDataString) {
-          try {
-            const existingUserData = JSON.parse(storedUserDataString) as {
-              uuid: string;
-              firstName: string;
-              lastName: string;
-              profilePictureUrl?: string;
-            };
-            const updatedUserData = {
-              ...existingUserData,
-              profilePictureUrl: undefined, // Clear cached URL
-            };
-            localStorage.setItem('userData', JSON.stringify(updatedUserData));
-          } catch (error) {
-            console.error('Failed to clear cached profile picture URL:', error);
+            if (profileResponse.ok) {
+              const updatedProfile =
+                (await profileResponse.json()) as ProfileData;
+              setProfile(updatedProfile);
+            }
           }
-        }
 
-        setUploadSuccess(true);
-        setTimeout(() => {
-          setUploadSuccess(false);
-        }, 3000);
-        // loadProfilePicture will be called via useEffect
+          setUploadSuccess(true);
+          setTimeout(() => {
+            setUploadSuccess(false);
+          }, 3000);
+        }
+      } else {
+        setError(result.error || 'Failed to upload profile picture');
       }
     } catch (err) {
       console.error('Error uploading profile picture:', err);
@@ -729,11 +612,13 @@ const UserProfilePage: React.FC = () => {
                 handleProfilePictureUpload(e).catch(console.error);
               }}
               onProfilePictureError={() => {
-                // Clear cached URL and reload profile picture when image fails to load
+                // Use the hook's error handling method
                 if (profile?.id) {
-                  sessionStorage.removeItem(`profilePic_${profile.id}`);
-                  setProfilePictureUrl(null);
-                  void loadProfilePicture();
+                  handleProfilePictureError(
+                    profile.id,
+                    clearProfilePictureCache,
+                    loadProfilePicture,
+                  );
                 }
               }}
             />
