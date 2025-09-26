@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2 } from 'lucide-react';
 import Flashcard from '../components/learning/Flashcard';
 import WordsPanel from '../components/learning/WordsPanel';
 import GlossaryCard from '../components/learning/GlossaryCard';
-import LanguageCard from '../components/learning/LanguageCard';
+import LearningPathList from '../components/learning/LearningPathList';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import '../styles/LearningPathPage.scss';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
@@ -412,123 +411,101 @@ const LearningPathPage: React.FC = () => {
           </div>
         )}
         <div className={`learning-path-content${isMobile ? ' pt-16' : ''}`}>
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {currentView === 'paths'}
-                {currentView === 'glossaries' &&
-                  (selectedPath?.path_name || '')}
-                {currentView === 'words' &&
-                  !flashcardMode &&
-                  (selectedGlossary?.name || 'Study Session')}
-                {currentView === 'words' &&
-                  flashcardMode &&
-                  `${selectedGlossary?.name || ''} - Flashcards`}
-              </h1>
-              <p className="text-gray-600 mt-1">
-                {currentView === 'paths'}
-                {currentView === 'glossaries'}
-                {currentView === 'words' &&
-                  !flashcardMode &&
-                  'Review the terms and definitions below.'}
-              </p>
-            </div>
+          <div className="learning-path-header">
+            <div className="learning-path-header-content">
+              <div className="learning-path-title-section">
+                <h1 className="learning-path-main-title">
+                  {currentView === 'paths' && 'Learning Paths'}
+                  {currentView === 'glossaries' &&
+                    (selectedPath?.path_name || '')}
+                  {currentView === 'words' &&
+                    !flashcardMode &&
+                    (selectedGlossary?.name || 'Study Session')}
+                  {currentView === 'words' &&
+                    flashcardMode &&
+                    `${selectedGlossary?.name || ''} - Flashcards`}
+                </h1>
+                <p className="learning-path-subtitle">
+                  {currentView === 'paths' &&
+                    'Create and manage your language learning paths'}
+                  {currentView === 'glossaries' && 'Select a glossary to study'}
+                  {currentView === 'words' &&
+                    !flashcardMode &&
+                    'Review the terms and definitions below.'}
+                </p>
+              </div>
 
-            {currentView === 'paths' && (
-              <div className="flex items-center gap-4">
-                <div
-                  className="level-badge-wrapper"
-                  style={{ position: 'relative' }}
-                >
-                  <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm font-medium level-badge">
-                    Level: {getProficiencyLevel(overallProgressPercentage)}
-                  </span>
-                  <div className="level-tooltip">
-                    <div className="tooltip-title">Overall Progress</div>
-                    <div className="tooltip-progress">
-                      <div
-                        className="tooltip-progress-fill"
-                        style={{
-                          width: `${overallProgressPercentage.toString()}%`,
-                        }}
-                      />
+              <div className="learning-path-header-actions">
+                {currentView === 'paths' && (
+                  <>
+                    <div
+                      className="level-badge-wrapper"
+                      style={{ position: 'relative' }}
+                    >
+                      <span className="level-badge">
+                        Level: {getProficiencyLevel(overallProgressPercentage)}
+                      </span>
+                      <div className="level-tooltip">
+                        <div className="tooltip-title">Overall Progress</div>
+                        <div className="tooltip-progress">
+                          <div
+                            className="tooltip-progress-fill"
+                            style={{
+                              width: `${overallProgressPercentage.toString()}%`,
+                            }}
+                          />
+                        </div>
+                        <div className="tooltip-text">
+                          {100 - overallProgressPercentage}% to next level
+                        </div>
+                      </div>
                     </div>
-                    <div className="tooltip-text">
-                      {100 - overallProgressPercentage}% to next level
+                    <button
+                      className="new-path-button"
+                      onClick={() => {
+                        void handleOpenCreateModal();
+                      }}
+                      type="button"
+                    >
+                      <span className="new-path-button-text">+ New Path</span>
+                    </button>
+                  </>
+                )}
+
+                {currentView === 'words' && !flashcardMode && studySession ? (
+                  <div className="learning-path-progress-display">
+                    <div className="learning-path-progress-percentage">
+                      {getProgressPercentage()}%
+                    </div>
+                    <div className="learning-path-progress-label">
+                      Completed
                     </div>
                   </div>
-                </div>
-                <button
-                  className="px-4 py-2 text-white rounded-lg new-path-button"
-                  onClick={() => {
-                    void handleOpenCreateModal();
-                  }}
-                  type="button"
-                >
-                  + New Path
-                </button>
-              </div>
-            )}
+                ) : null}
 
-            {currentView === 'words' && !flashcardMode && studySession ? (
-              <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900">
-                  {getProgressPercentage()}%
-                </div>
-                <div className="text-sm text-gray-600">Completed</div>
+                {currentView === 'words' && flashcardMode && studySession && (
+                  <div className="learning-path-progress-display">
+                    <div className="learning-path-progress-percentage">
+                      Card {currentCardIndex + 1}
+                    </div>
+                    <div className="learning-path-progress-label">
+                      of {studySession.words.length.toString()}
+                    </div>
+                  </div>
+                )}
               </div>
-            ) : null}
-
-            {currentView === 'words' && flashcardMode && studySession && (
-              <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900">
-                  Card {currentCardIndex + 1}
-                </div>
-                <div className="text-sm text-gray-600">
-                  of {studySession.words.length.toString()}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
 
           {currentView === 'paths' && (
-            <div className="languages-panel bg-transparent">
-              {isLoading ? (
-                <p>Loading paths...</p>
-              ) : learningPaths.length === 0 ? (
-                <p>
-                  You haven't created any learning paths yet. Click "+ New Path"
-                  to get started!
-                </p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {learningPaths.map((path) => (
-                    <div key={path.id} className="relative">
-                      <LanguageCard
-                        code={path.language_name.substring(0, 2).toUpperCase()}
-                        name={path.path_name}
-                        totalWords={path.selected_glossaries.length}
-                        color={'#00ceaf'}
-                        completedPercentage={path.completedPercentage || 0}
-                        onClick={() => {
-                          void handleSelectPath(path);
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeletePath(path.id);
-                        }}
-                        className="absolute top-4 right-4 p-1 text-gray-400 hover:text-red-500 rounded-full hover:bg-gray-100"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <LearningPathList
+              paths={learningPaths}
+              onPathSelect={(p) => {
+                void handleSelectPath(p);
+              }}
+              onPathDelete={handleDeletePath}
+              isLoading={isLoading}
+            />
           )}
 
           {currentView === 'glossaries' && selectedPath && (

@@ -47,55 +47,65 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
   };
 
   return (
-    <div className="words-panel bg-transparent">
-      <div className="flex items-center justify-between mb-6">
-        <button
-          type="button"
-          onClick={onBackClick}
-          className="text-gray-600 hover:text-gray-900"
-        >
-          ← Back to Glossaries
-        </button>
-        <div className="flex items-center gap-4">
-          <div className="text-sm text-gray-600">
-            {knownWords.size} of {studySession.words.length} words completed
-          </div>
-          <div className="w-32 bg-gray-200 rounded-full h-2">
-            <div
-              className="h-2 rounded-full bg-teal-500"
-              style={{
-                width: `${getProgressPercentage().toString()}%`,
-              }}
-            ></div>
+    <div className="component-container words-panel">
+      <div className="content-wrapper">
+        <div className="flex items-center justify-between mb-8">
+          <button
+            type="button"
+            onClick={onBackClick}
+            className="text-gray-600 hover:text-gray-900 flex items-center gap-2 font-medium"
+          >
+            ← Back to Glossaries
+          </button>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-600">
+              {knownWords.size} of {studySession.words.length} words completed
+            </div>
+            <div className="w-32 bg-gray-200 rounded-full h-2">
+              <div
+                className="h-2 rounded-full bg-teal-500 transition-all duration-300"
+                style={{
+                  width: `${getProgressPercentage().toString()}%`,
+                }}
+              ></div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+
         {studySession.words.length === 0 ? (
-          <div className="text-center text-gray-500 py-8">
-            No terms found in this glossary.
+          <div className="text-center text-gray-500 py-12">
+            <div className="text-lg font-medium mb-2">No terms found</div>
+            <div className="text-sm">
+              This glossary doesn't contain any terms yet.
+            </div>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
               {currentWords.map((word) => (
                 <div
                   key={word.id}
-                  className="flex flex-col p-3 rounded-lg border border-gray-200 hover:bg-gray-50 h-[120px] justify-between"
+                  className="word-card bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200 min-h-[140px] flex flex-col justify-between"
                 >
-                  <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-1 line-clamp-1">
+                  <div className="flex-1">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
                       {word.term}
                     </h4>
-                    <p className="text-sm text-gray-600 line-clamp-2">
+                    <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
                       {word.english_translation || word.definition}
                     </p>
                   </div>
-                  <div className="flex justify-end">
+                  <div className="flex justify-end mt-4">
                     {knownWords.has(word.id) ? (
-                      <CheckCircle2 className="w-5 h-5 text-teal-500" />
+                      <div className="flex items-center gap-2 text-teal-600">
+                        <CheckCircle2 className="w-5 h-5" />
+                        <span className="text-xs font-medium">Completed</span>
+                      </div>
                     ) : (
-                      <Circle className="w-5 h-5 text-gray-400" />
+                      <div className="flex items-center gap-2 text-gray-400">
+                        <Circle className="w-5 h-5" />
+                        <span className="text-xs">Not completed</span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -103,45 +113,54 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-              <div className="flex items-center gap-1 text-sm text-gray-600">
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <span className="mx-2">·</span>
-                <span>
+            {totalPages > 1 && (
+              <div className="pagination-controls">
+                <div className="pagination-info">
                   Showing {startIndex + 1}-
                   {Math.min(endIndex, studySession.words.length)} of{' '}
                   {studySession.words.length} terms
-                </span>
+                </div>
+                <div className="pagination-buttons">
+                  <button
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                    className="pagination-button"
+                    aria-label="First page"
+                  >
+                    <ChevronLeft size={16} />
+                    <ChevronLeft size={16} style={{ marginLeft: '-12px' }} />
+                  </button>
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="pagination-button"
+                    aria-label="Previous page"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span className="pagination-current">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="pagination-button"
+                    aria-label="Next page"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                  <button
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                    className="pagination-button"
+                    aria-label="Last page"
+                  >
+                    <ChevronRight size={16} />
+                    <ChevronRight size={16} style={{ marginLeft: '-12px' }} />
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`p-2 rounded-lg ${
-                    currentPage === 1
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
-                  aria-label="Previous page"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`p-2 rounded-lg ${
-                    currentPage === totalPages
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
-                  aria-label="Next page"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            </div>
+            )}
           </>
         )}
       </div>
