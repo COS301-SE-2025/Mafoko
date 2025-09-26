@@ -119,6 +119,11 @@ const TermCard: React.FC<TermCardProps> = ({
           vote: `${voteType}vote` as 'upvote' | 'downvote',
           token,
         });
+
+        if (voteType === 'up' && owner_id) {
+          await GamificationService.awardTermUpvoteXP(owner_id, id);
+        }
+
         const swRegistration = await navigator.serviceWorker.ready;
         await swRegistration.sync.register('sync-votes');
       } catch (dbError) {

@@ -263,6 +263,15 @@ self.addEventListener('sync', ((event: SyncEvent) => {
           client.postMessage({ type: 'TERM_SYNC_REQUEST' }),
         );
       });
+  } else if (event.tag === 'sync-xp-awards') {
+    console.log('SW: Sync event for XP awards received. Notifying client.');
+    self.clients
+      .matchAll({ includeUncontrolled: true, type: 'window' })
+      .then((clients) => {
+        clients.forEach((client) =>
+          client.postMessage({ type: 'XP_SYNC_REQUEST' }),
+        );
+      });
   }
 }) as EventListener);
 

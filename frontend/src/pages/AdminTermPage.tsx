@@ -384,6 +384,14 @@ const AdminTermPage: React.FC = () => {
         role: 'admin',
         token,
       });
+
+      if (application?.submitted_by_user_id) {
+        await GamificationService.awardAdminVerificationXP(
+          application.submitted_by_user_id,
+          id,
+        );
+      }
+
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
       return;

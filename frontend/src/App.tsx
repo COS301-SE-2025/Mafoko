@@ -30,6 +30,7 @@ import './styles/Global.scss';
 import {
   orchestrateCommentSync,
   orchestrateTermSync,
+  orchestrateXPSync,
 } from './utils/syncManager';
 import {
   Chart as ChartJS,
@@ -77,13 +78,24 @@ function App() {
           if (synced) window.location.reload();
         });
       }
+
+      // Handle XP sync requests
+      if (event.data?.type === 'XP_SYNC_REQUEST') {
+        console.log('Client: Received XP sync request.');
+        orchestrateXPSync().then((synced) => {
+          if (synced) {
+            console.log('Client: XP awards synced successfully.');
+          }
+        });
+      }
     };
 
     navigator.serviceWorker?.addEventListener('message', handleSWMessage);
 
-    // Run both sync checks when the app loads
+    // Run sync checks when the app loads
     orchestrateCommentSync();
     orchestrateTermSync();
+    orchestrateXPSync();
 
     return () => {
       navigator.serviceWorker?.removeEventListener('message', handleSWMessage);

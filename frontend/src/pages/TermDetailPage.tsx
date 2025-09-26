@@ -296,6 +296,14 @@ export const TermDetailPage: React.FC = () => {
         token: authToken,
       };
       await addPendingComment(pendingComment);
+
+      if (currentUserId) {
+        await GamificationService.awardCommentXP(
+          currentUserId,
+          optimisticComment.id,
+        );
+      }
+
       const swRegistration = await navigator.serviceWorker.ready;
       await swRegistration.sync.register('sync-comment-actions');
       return;
@@ -393,6 +401,14 @@ export const TermDetailPage: React.FC = () => {
         token: authToken,
       };
       await addPendingCommentVote(pendingVote);
+
+      if (voteType === 'upvote') {
+        const comment = comments.find((c) => c.id === commentId);
+        if (comment && comment.user.id) {
+          await GamificationService.awardUpvoteXP(comment.user.id, commentId);
+        }
+      }
+
       const swRegistration = await navigator.serviceWorker.ready;
       await swRegistration.sync.register('sync-comment-actions');
       return;
@@ -556,6 +572,15 @@ export const TermDetailPage: React.FC = () => {
         token: authToken,
       };
       await addPendingVote(pendingVote);
+
+      const termWithOwner = term as Term & { owner_id?: string };
+      if (voteType === 'upvote' && termWithOwner.owner_id) {
+        await GamificationService.awardTermUpvoteXP(
+          termWithOwner.owner_id,
+          termId,
+        );
+      }
+
       const swRegistration = await navigator.serviceWorker.ready;
       await swRegistration.sync.register('sync-votes');
       return;

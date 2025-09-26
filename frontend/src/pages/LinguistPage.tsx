@@ -454,6 +454,15 @@ const LinguistPage: React.FC = () => {
         role: 'linguist',
         token,
       });
+
+      const application = applications.find((app) => app.id === id);
+      if (application?.submitted_by_user_id) {
+        await GamificationService.awardLinguistVerificationXP(
+          application.submitted_by_user_id,
+          id,
+        );
+      }
+
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
       return;

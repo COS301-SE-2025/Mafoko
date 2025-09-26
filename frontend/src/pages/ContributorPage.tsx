@@ -501,6 +501,12 @@ const ContributorPage: React.FC = () => {
 
       // 3. Queue the action for the service worker
       await addPendingTermSubmission({ id: tempId, body, token });
+
+      // 4. Queue XP award for term addition when offline
+      if (currentUser?.uuid) {
+        await GamificationService.awardTermAdditionXP(currentUser.uuid, tempId);
+      }
+
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
 
@@ -552,6 +558,15 @@ const ContributorPage: React.FC = () => {
     if (!token) return;
     if (isOffline) {
       await addPendingTermVote({ id: uuidv4(), applicationId: id, token });
+
+      const votedApplication = pendingTerms.find((app) => app.id === id);
+      if (votedApplication?.submitted_by_user_id) {
+        await GamificationService.awardCrowdVoteXP(
+          votedApplication.submitted_by_user_id,
+          id,
+        );
+      }
+
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
       alert(

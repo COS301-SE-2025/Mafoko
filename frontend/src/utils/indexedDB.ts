@@ -80,6 +80,17 @@ export interface PendingProfilePictureUpload {
   timestamp: number;
 }
 
+export interface PendingXPAward {
+  id: string;
+  user_id: string;
+  xp_amount: number;
+  xp_source: string;
+  source_reference_id: string;
+  description?: string;
+  token: string;
+  timestamp: number;
+}
+
 interface MyDB extends DBSchema {
   terms: {
     key: string;
@@ -118,9 +129,13 @@ interface MyDB extends DBSchema {
     key: string;
     value: PendingProfilePictureUpload;
   };
+  'pending-xp-awards': {
+    key: string;
+    value: PendingXPAward;
+  };
 }
 
-const dbPromise = openDB<MyDB>('marito-db', 5, {
+const dbPromise = openDB<MyDB>('marito-db', 6, {
   upgrade(db, oldVersion) {
     if (oldVersion < 3) {
       if (!db.objectStoreNames.contains('terms')) {
@@ -167,6 +182,12 @@ const dbPromise = openDB<MyDB>('marito-db', 5, {
       // Add profile picture uploads store
       if (!db.objectStoreNames.contains('pending-profile-pictures')) {
         db.createObjectStore('pending-profile-pictures', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 6) {
+      // Add XP awards store
+      if (!db.objectStoreNames.contains('pending-xp-awards')) {
+        db.createObjectStore('pending-xp-awards', { keyPath: 'id' });
       }
     }
   },
@@ -449,4 +470,24 @@ export async function getPendingProfilePictureUploadCount(): Promise<number> {
   const db = await dbPromise;
   const allUploads = await db.getAll('pending-profile-pictures');
   return allUploads.length;
+}
+
+export async function addPendingXPAward(award: PendingXPAward) {
+  const db = await dbPromise;
+  await db.put('pending-xp-awards', award);
+}
+
+export async function getAndClearPendingXPAwards(): Promise<PendingXPAward[]> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-xp-awards', 'readwrite');
+  const allAwards = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allAwards;
+}
+
+export async function getPendingXPAwardCount(): Promise<number> {
+  const db = await dbPromise;
+  const allAwards = await db.getAll('pending-xp-awards');
+  return allAwards.length;
 }

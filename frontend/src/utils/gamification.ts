@@ -1,4 +1,5 @@
 import { API_ENDPOINTS } from '../config';
+import { addPendingXPAward, PendingXPAward } from './indexedDB';
 
 export interface XPAwardRequest {
   user_id: string;
@@ -23,9 +24,16 @@ function getAuthToken(): string | null {
 }
 
 /**
- * Award XP to a user for a specific action
+ * Check if the user is currently offline
  */
-async function awardXP(
+function isOffline(): boolean {
+  return !navigator.onLine;
+}
+
+/**
+ * Award XP with offline support - queues for later sync if offline
+ */
+async function awardXPWithOfflineSupport(
   request: XPAwardRequest,
 ): Promise<XPAwardResponse | null> {
   const authToken = getAuthToken();
@@ -34,6 +42,40 @@ async function awardXP(
     return null;
   }
 
+  // If offline, queue the XP award for later sync
+  if (isOffline()) {
+    try {
+      const pendingXP: PendingXPAward = {
+        id: `xp-${String(Date.now())}-${Math.random().toString(36).substring(2, 11)}`,
+        user_id: request.user_id,
+        xp_amount: request.xp_amount,
+        xp_source: request.xp_source,
+        source_reference_id: request.source_reference_id || '',
+        description: request.description,
+        token: authToken,
+        timestamp: Date.now(),
+      };
+
+      await addPendingXPAward(pendingXP);
+      console.log(
+        `XP award queued for offline sync: ${String(request.xp_amount)} XP`,
+      );
+
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        const swRegistration = await navigator.serviceWorker.ready;
+        if ('sync' in swRegistration) {
+          await swRegistration.sync.register('sync-xp-awards');
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.warn('Failed to queue XP award for offline sync:', error);
+      return null;
+    }
+  }
+
+  // If online, award XP immediately
   try {
     const response = await fetch(API_ENDPOINTS.addXP, {
       method: 'POST',
@@ -56,6 +98,12 @@ async function awardXP(
     console.warn('Error awarding XP:', error);
     return null;
   }
+}
+
+async function awardXP(
+  request: XPAwardRequest,
+): Promise<XPAwardResponse | null> {
+  return awardXPWithOfflineSupport(request);
 }
 
 /**
