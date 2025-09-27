@@ -76,7 +76,10 @@ const LearningPathPage: React.FC = () => {
                           borderRadius: '0.75rem',
                         }}
                       >
-                        <source src="/Marito/videos/learning-path/learning-path-overview.mp4" type="video/mp4" />
+                        <source
+                          src="/Marito/videos/learning-path/learning-path-overview.mp4"
+                          type="video/mp4"
+                        />
                         Your browser does not support the video tag.
                       </video>
                     </div>
