@@ -28,7 +28,7 @@ const HelpPage: React.FC = () => {
     () => [
       {
         title: 'Getting Started',
-        desc: 'Learn how to quickly get the most out of the platform.',
+        desc: 'Step-by-step guide for creating an account, signing in, and navigating the platform for the first time.',
         link: '/help/getting-started',
         keywords: [
           'introduction',
@@ -37,28 +37,117 @@ const HelpPage: React.FC = () => {
           'navigation',
           'login',
           'register',
+          'registration',
+          'sign up',
         ],
       },
       {
-        title: 'Community Feature',
-        desc: 'Get to know the basics of using the community feature.',
+        title: 'Community Interaction',
+        desc: 'Learn how to post, comment, and engage with others using the community tools like upvotes and discussions.',
         link: '/help/community-feature',
         keywords: ['comment', 'upvote', 'downvote', 'community'],
       },
       {
-        title: 'Terms',
-        desc: 'Languages, AI, and your term settings.',
+        title: 'Dictionary',
+        desc: 'Search for terms across multiple languages, enable fuzzy search, and adjust your dictionary settings.',
         link: '/help/terms',
         keywords: [
-          'ai',
           'fuzzy',
           'dictionary',
           'language',
           'search',
-          'offline',
           'dictionary',
           'term',
           'language',
+        ],
+      },
+      {
+        title: 'Glossary',
+        desc: 'Organize, filter, and export glossaries by category, domain, or translation bank.',
+        link: '/help/glossary-help',
+        keywords: [
+          'glossary',
+          'category',
+          'domain',
+          'translation bank',
+          'export',
+          'csv export',
+          'pdf export',
+          'json export',
+          'data export',
+        ],
+      },
+      {
+        title: 'Workspace',
+        desc: 'Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.',
+        link: '/help/workspace-help',
+        keywords: [
+          'workspace',
+          'save',
+          'save term',
+          'save glossary',
+          'groups',
+          'term submission',
+          'track term submission',
+          'notes',
+        ],
+      },
+      {
+        title: 'Settings and Customization',
+        desc: 'Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.',
+        link: '/help/settings-help',
+        keywords: [
+          'settings',
+          'user settings',
+          'mode',
+          'light mode',
+          'dark mode',
+          'accessibility',
+          'accessibility options',
+          'options',
+          'profile',
+          'profile picture',
+          'contrast',
+          'colour',
+        ],
+      },
+      {
+        title: 'Home Page',
+        desc: 'Explore the interactive South African map, discover random terms, and get an overview of featured content.',
+        link: '/help/home-help',
+        keywords: [
+          'home',
+          'home page',
+          'map',
+          'South African map',
+          'interactive map',
+          'random terms',
+        ],
+      },
+      {
+        title: 'Dashboard',
+        desc: 'Track application activity with graphs, view platform data, and analyze your contributions in one place.',
+        link: '/help/dashboard-help',
+        keywords: ['dashboard', 'graph', 'app activity', 'data information'],
+      },
+      {
+        title: 'Learning Paths',
+        desc:
+          'Design a guided journey for learning one of South Africa’s' +
+          ' official languages.',
+        link: '/help/learning-path-help',
+        keywords: ['learn', 'test', 'que cards', 'learn languages'],
+      },
+      {
+        title: 'Feedback',
+        desc: 'Send suggestions, compliments, or complaints directly to the team to help improve the platform.',
+        link: '/help/feedback-help',
+        keywords: [
+          'feedback',
+          'complaint',
+          'compliment',
+          'suggest',
+          'suggestion',
         ],
       },
       {
@@ -78,7 +167,6 @@ const HelpPage: React.FC = () => {
     [],
   );
 
-  // Determines if the side nav or top av should be used.
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -126,7 +214,6 @@ const HelpPage: React.FC = () => {
       });
     });
 
-    // Return top 5 suggestions max
     return Array.from(keywordSet).slice(0, 5);
   };
 
@@ -141,7 +228,6 @@ const HelpPage: React.FC = () => {
       className={`help-page-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       <div className={`help-page-container`}>
-        {/* Top bar for mobile only */}
         {isMobile ? (
           <Navbar />
         ) : (

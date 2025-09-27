@@ -447,7 +447,6 @@ async function getUserWeeklyGoals(
     return null;
   }
 }
-
 export const GamificationService = {
   awardXP,
   awardCommentXP,
