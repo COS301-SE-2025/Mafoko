@@ -63,7 +63,8 @@ def main():
         "$2b$12$placeholderhash"  # Replace with actual hash if needed
     )
     # --- Ensure dsfsi user exists ---
-    from mavito_common.models.user import User  
+    from mavito_common.models.user import User
+
     dsfsi_user = db.query(User).filter(User.email == DSFSI_USER_EMAIL).first()
     if not dsfsi_user:
         print("Creating default dsfsi user...")
@@ -118,6 +119,6 @@ def main():
     db.close()
     print("Data ingestion complete!")
 
+
 if __name__ == "__main__":
     main()
-
