@@ -1337,9 +1337,9 @@ const WorkspacePage: React.FC = () => {
             {error && (
               <div
                 style={{
-                  background: '#553c2c',
-                  border: '1px solid #d69e2e',
-                  color: '#fbb6ce',
+                  background: '#d91748',
+                  border: '1px solid #d91748',
+                  color: '#ffffff',
                   padding: '12px',
                   borderRadius: '6px',
                   marginBottom: '1rem',
@@ -1352,7 +1352,7 @@ const WorkspacePage: React.FC = () => {
                     <a
                       href="/login"
                       style={{
-                        color: '#ffd700',
+                        color: '#ffffff',
                         textDecoration: 'underline',
                         fontWeight: 'bold',
                       }}

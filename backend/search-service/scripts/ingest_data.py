@@ -35,14 +35,14 @@ LANGUAGE_KEYS = {
     "eng term": "English",
     "afr term": "Afrikaans",
     "nde term": "isiNdebele",
-    "xho term ": "isiXhosa",
+    "xho term": "isiXhosa",
     "zul term": "isiZulu",
     "nso term": "Sepedi",
     "sot term": "Sesotho",
-    "tsn term ": "Setswana",
+    "tsn term": "Setswana",
     "ssw term": "siSwati",
     "ven term": "Tshivenda",
-    "tso term ": "Xitsonga",
+    "tso term": "Xitsonga",
 }
 
 
@@ -63,9 +63,9 @@ def main():
         "$2b$12$placeholderhash"  # Replace with actual hash if needed
     )
     # --- Ensure dsfsi user exists ---
-    from mavito_common.models.user import User  # import here to avoid circulars
+    from mavito_common.models.user import User
 
-    dsfsi_user = db.query(User).filter(User.username == "dsfsi").first()
+    dsfsi_user = db.query(User).filter(User.email == DSFSI_USER_EMAIL).first()
     if not dsfsi_user:
         print("Creating default dsfsi user...")
         dsfsi_user = User(
@@ -78,7 +78,6 @@ def main():
         db.add(dsfsi_user)
         db.commit()
         db.refresh(dsfsi_user)
-
     owner_id = dsfsi_user.id
     print(f"Using dsfsi account with id={owner_id} as term owner")
 
@@ -88,9 +87,9 @@ def main():
 
     print(f"Found {len(raw_data)} multilingual entries to process.")
 
+    total_created = 0
     for i, item in enumerate(raw_data):
         print(f"Processing entry {i+1}/{len(raw_data)}...")
-
         created_terms = []
         for lang_key, lang_name in LANGUAGE_KEYS.items():
             term_value = item.get(lang_key)
@@ -98,10 +97,11 @@ def main():
                 new_term = Term(
                     id=uuid4(),
                     term=term_value.strip(),
-                    definition=item.get("eng definition ", "").strip(),
+                    definition=item.get("eng definition", "").strip(),
                     language=lang_name,
                     domain=item.get("category", "General"),
-                    owner_id=owner_id,  # 👈 assign dsfsi user as owner
+                    owner_id=owner_id,
+                    status="DRAFT",
                 )
                 created_terms.append(new_term)
 
@@ -112,8 +112,13 @@ def main():
                 ]
 
         db.add_all(created_terms)
+        total_created += len(created_terms)
 
-    print("Committing all new terms to the database...")
+    print(f"Committing {total_created} terms to the database...")
     db.commit()
     db.close()
     print("Data ingestion complete!")
+
+
+if __name__ == "__main__":
+    main()
