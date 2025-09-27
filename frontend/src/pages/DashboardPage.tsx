@@ -629,7 +629,7 @@ const DashboardPage: React.FC = () => {
                     title={t('dashboard.goToProfile')}
                   >
                     {userData
-                      ? `${userData.firstName} ${userData.lastName}`
+                      ? `${userData.first_name} ${userData.last_name}`
                       : t('dashboard.userName')}
                   </h3>
                   <p>

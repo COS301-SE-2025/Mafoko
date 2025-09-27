@@ -389,7 +389,7 @@ export const HomeContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/homepage/home_page_overview.mp4',
   },
   {
     id: 'random-terms',
@@ -416,7 +416,7 @@ export const HomeContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/homepage/home-page-profile-access.mp4',
   },
   {
     id: 'dsfsi-info',
@@ -429,7 +429,7 @@ export const HomeContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/homepage/view_dfsi.mp4',
   },
 ];
 

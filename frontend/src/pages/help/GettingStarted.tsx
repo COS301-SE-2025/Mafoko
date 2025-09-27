@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
@@ -66,13 +66,15 @@ const GettingStarted: React.FC = () => {
 
                   {GettingStartedContent.map((obj) => {
                     return (
-                      <HelpSection
-                        key={`${obj.title}-${obj.id}`}
-                        id={obj.id}
-                        title={obj.title}
-                        content={obj.content}
-                        assetLocation={obj.assetLocation}
-                      />
+                      <Fragment key={`${obj.title}-${obj.id}`}>
+                        <HelpSection
+                          id={obj.id}
+                          title={obj.title}
+                          content={obj.content}
+                          assetLocation={obj.assetLocation}
+                        />
+                        <br />
+                      </Fragment>
                     );
                   })}
                 </div>
