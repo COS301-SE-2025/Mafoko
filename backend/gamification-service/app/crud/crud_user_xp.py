@@ -1,6 +1,6 @@
 import uuid
-from typing import List
-from datetime import date, timedelta
+from typing import List, Dict
+from datetime import date, timedelta, datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
 
@@ -80,6 +80,39 @@ class CRUDUserXP:
             "longest_streak": longest_streak,
             "last_login_date": login_dates[0] if login_dates else None,
         }
+
+    async def get_user_daily_xp(
+        self, db: AsyncSession, *, user_id: uuid.UUID, days: int = 365
+    ) -> List[Dict]:
+        """Get daily XP totals for a user over the last 365 days."""
+        start_date = datetime.now(timezone.utc) - timedelta(days=days)
+
+        stmt = (
+            select(
+                func.date(UserXP.created_at).label("date"),
+                func.sum(UserXP.xp_amount).label("total_xp"),
+            )
+            .where(UserXP.user_id == user_id, UserXP.created_at >= start_date)
+            .group_by(func.date(UserXP.created_at))
+            .order_by(func.date(UserXP.created_at))
+        )
+
+        result = await db.execute(stmt)
+        daily_data = [{"date": row[0], "xp": int(row[1])} for row in result.fetchall()]
+
+        data_dict = {item["date"]: item["xp"] for item in daily_data}
+        complete_data = []
+
+        current_date = start_date.date()
+        end_date = datetime.now(timezone.utc).date()
+
+        while current_date <= end_date:
+            complete_data.append(
+                {"date": current_date.isoformat(), "xp": data_dict.get(current_date, 0)}
+            )
+            current_date += timedelta(days=1)
+
+        return complete_data
 
 
 crud_user_xp = CRUDUserXP()
