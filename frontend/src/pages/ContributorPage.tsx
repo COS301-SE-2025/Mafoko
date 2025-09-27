@@ -13,6 +13,7 @@ import {
   getTermsByIdsFromDB,
 } from '../utils/indexedDB';
 import { updateCache } from '../utils/cacheUpdater';
+import { GamificationService } from '../utils/gamification';
 import { UserData } from '../types/glossaryTypes';
 import { Term } from '../types/terms/types';
 import { addTerm } from '../utils/indexedDB';
@@ -522,6 +523,20 @@ const ContributorPage: React.FC = () => {
         throw new Error(errorData.detail || 'Submission failed');
       }
 
+      const submissionData = await response.json();
+
+      Promise.resolve().then(async () => {
+        try {
+          await GamificationService.awardTermAdditionXP(
+            submissionData.submitted_by_user_id,
+            submissionData.id,
+          );
+        } catch (xpError) {
+          console.warn('Failed to award XP for term submission:', xpError);
+          // XP failure doesn't affect the submission success
+        }
+      });
+
       // After a successful online submission, refresh the main terms list
       await refreshAllTermsCache();
 
@@ -552,6 +567,28 @@ const ContributorPage: React.FC = () => {
       });
       if (!response.ok)
         throw new Error('Vote failed: ' + (await response.json()).detail);
+
+      // Award XP in background - don't block the UI refresh
+      const votedApplication = pendingTerms.find((app) => app.id === id);
+      if (votedApplication?.submitted_by_user_id) {
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardCrowdVoteXP(
+              votedApplication.submitted_by_user_id,
+              id,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for crowd vote:', xpError);
+            // XP failure doesn't affect the vote success
+          }
+        });
+      } else {
+        console.warn(
+          ' No XP awarded - submitted_by_user_id not available for application:',
+          id,
+        );
+      }
+
       fetchData();
     } catch (err) {
       console.error(err);

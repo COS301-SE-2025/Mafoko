@@ -21,6 +21,7 @@ import { updateCache } from '../utils/cacheUpdater';
 import { Term } from '../types/terms/types';
 import { addTerm } from '../utils/indexedDB';
 import { refreshAllTermsCache } from '../utils/syncManager';
+import { GamificationService } from '../utils/gamification';
 interface AppRowProps {
   app: TermApplicationRead;
   isMobile: boolean;
@@ -438,6 +439,8 @@ const LinguistPage: React.FC = () => {
     const url = API_ENDPOINTS.getLinguistReviewSubmissions;
     const originalApplications = [...applications];
 
+    const application = originalApplications.find((app) => app.id === id);
+
     const updatedApplications = originalApplications.filter(
       (app) => app.id !== id,
     );
@@ -467,6 +470,24 @@ const LinguistPage: React.FC = () => {
         },
       );
       if (!response.ok) throw new Error('Verification failed');
+
+      if (application?.submitted_by_user_id) {
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardLinguistVerificationXP(
+              application.submitted_by_user_id,
+              id,
+            );
+          } catch (xpError) {
+            console.warn(
+              'Failed to award XP for linguist verification:',
+              xpError,
+            );
+            // XP failure doesn't affect the verification success
+          }
+        });
+      }
+
       fetchData();
     } catch (err) {
       console.error(err);

@@ -19,6 +19,9 @@ if TYPE_CHECKING:
     from mavito_common.models.workspace_note import WorkspaceNote
     from mavito_common.models.term import Term  # noqa: F401
     from mavito_common.models.feedback import Feedback  # noqa: F401
+    from mavito_common.models.user_xp import UserXP  # noqa: F401
+    from mavito_common.models.user_level import UserLevel  # noqa: F401
+    from mavito_common.models.user_achievement import UserAchievement  # noqa: F401
 
 
 class UserRole(str, enum.Enum):
@@ -90,4 +93,15 @@ class User(Base):
         "Feedback",
         foreign_keys="[Feedback.resolved_by_user_id]",
         back_populates="resolved_by",
+    )
+
+    # Gamification relationships
+    xp_records: Mapped[List["UserXP"]] = relationship(
+        "UserXP", back_populates="user", cascade="all, delete-orphan"
+    )
+    level: Mapped[Optional["UserLevel"]] = relationship(
+        "UserLevel", back_populates="user", uselist=False, cascade="all, delete-orphan"
+    )
+    achievements: Mapped[List["UserAchievement"]] = relationship(
+        "UserAchievement", back_populates="user", cascade="all, delete-orphan"
     )
