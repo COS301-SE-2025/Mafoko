@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
@@ -67,13 +67,15 @@ export const GlossaryHelp: React.FC = () => {
 
                   {GlossaryContent.map((obj) => {
                     return (
-                      <HelpNodeSection
-                        key={`${obj.title}-${obj.id}`}
-                        id={obj.id}
-                        title={obj.title}
-                        content={obj.content}
-                        assetLocation={obj.assetLocation}
-                      />
+                      <Fragment key={`${obj.title}-${obj.id}`}>
+                        <HelpNodeSection
+                          id={obj.id}
+                          title={obj.title}
+                          content={obj.content}
+                          assetLocation={obj.assetLocation}
+                        />
+                        <br />
+                      </Fragment>
                     );
                   })}
                 </div>

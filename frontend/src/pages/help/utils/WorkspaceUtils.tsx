@@ -29,7 +29,7 @@ export const WorkspaceContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/workspace.mp4',
   },
   {
     id: 'move-terms',

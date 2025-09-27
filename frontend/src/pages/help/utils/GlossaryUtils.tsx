@@ -13,7 +13,7 @@ export const GlossaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/glossary/glossary-search.mp4',
   },
   {
     id: 'view',
@@ -26,21 +26,7 @@ export const GlossaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
-  },
-  {
-    id: 'filter',
-    title: 'Filtering Glossaries',
-    content: (
-      <div className="space-y-6 leading-relaxed text-base">
-        <p>
-          Use the <strong>Filter</strong> option to limit results to specific
-          languages. This is helpful if you only want to see terms in certain
-          languages.
-        </p>
-      </div>
-    ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/glossary/glossary-view.mp4',
   },
   {
     id: 'translation-bank',
@@ -53,7 +39,7 @@ export const GlossaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/glossary/glossary-translations.mp4',
   },
   {
     id: 'exporting',
@@ -96,6 +82,6 @@ export const GlossaryContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/glossary/glossary-export.mp4',
   },
 ];

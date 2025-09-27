@@ -25,7 +25,7 @@ export const SettingsContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/settings/mode-change.mp4',
   },
   {
     id: 'profile-update',
@@ -60,7 +60,7 @@ export const SettingsContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/settings/update-name.mp4',
   },
   {
     id: 'accessibility',
@@ -91,6 +91,6 @@ export const SettingsContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/settings/accessibility.mp4',
   },
 ];

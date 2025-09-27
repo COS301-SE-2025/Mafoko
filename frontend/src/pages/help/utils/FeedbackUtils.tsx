@@ -98,7 +98,7 @@ export const DictionaryContent: SectionProps[] = [
         </ul>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/search/search-overview.mp4',
   },
   {
     id: 'languages',
@@ -205,7 +205,7 @@ export const DictionaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/search/search-live.mp4',
   },
   {
     id: 'filters',
@@ -231,7 +231,7 @@ export const DictionaryContent: SectionProps[] = [
         </ul>
       </div>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/search/search-filter.mp4',
   },
   {
     id: 'view',
@@ -242,7 +242,7 @@ export const DictionaryContent: SectionProps[] = [
         definition, see related terms, and explore more detail about its usage.
       </p>
     ),
-    assetLocation: '',
+    assetLocation: '/Marito/videos/search/search-view-card.mp4',
   },
   {
     id: 'offline-use',
