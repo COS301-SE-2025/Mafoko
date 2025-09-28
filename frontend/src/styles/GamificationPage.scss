@@ -98,7 +98,6 @@ body {
   z-index: 1;
   overflow: auto;
   display: flex;
-
 }
 
 .container {
@@ -236,10 +235,10 @@ body {
 .progress-fill {
   height: 100%;
   background: linear-gradient(
-                  90deg,
-                  var(--teal) 0%,
-                  #7b7b8a 50%,
-                  var(--pink) 100%
+    90deg,
+    var(--teal) 0%,
+    #7b7b8a 50%,
+    var(--pink) 100%
   );
   border-radius: 18px;
   transition: width 0.5s ease;
@@ -380,8 +379,8 @@ body {
   padding: 20px;
   text-align: center;
   transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease;
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .achievement-card:hover {

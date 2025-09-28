@@ -138,7 +138,9 @@ const GamificationPage: React.FC = () => {
         return JSON.parse(storedUserData) as UserData;
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_error) { /* empty */ }
+    } catch (_error) {
+      /* empty */
+    }
 
     return {
       userId: 'mock-user-id',
@@ -163,7 +165,6 @@ const GamificationPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-
   const [gamificationState, setGamificationState] = useState<GamificationState>(
     {
       userLevel: null,
@@ -180,9 +181,7 @@ const GamificationPage: React.FC = () => {
     loadingProfilePicture,
     clearProfilePictureCache,
     loadProfilePicture,
-  } = useProfilePicture(
-    user.id !== 'mock-user-id' ? user.id : undefined,
-  );
+  } = useProfilePicture(user.id !== 'mock-user-id' ? user.id : undefined);
 
   const getUserInitials = (firstName: string, lastName: string) => {
     return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
@@ -205,10 +204,10 @@ const GamificationPage: React.FC = () => {
       try {
         const [userLevel, achievements, loginStreak, weeklyGoals] =
           await Promise.all([
-            GamificationService.getUserLevel(user.id || ""),
-            GamificationService.getUserAchievements(user.id || ""),
-            GamificationService.getUserLoginStreak(user.id || ""),
-            GamificationService.getUserWeeklyGoals(user.id || ""),
+            GamificationService.getUserLevel(user.id || ''),
+            GamificationService.getUserAchievements(user.id || ''),
+            GamificationService.getUserLoginStreak(user.id || ''),
+            GamificationService.getUserWeeklyGoals(user.id || ''),
           ]);
 
         setGamificationState({
@@ -304,7 +303,7 @@ const GamificationPage: React.FC = () => {
                     onError={() => {
                       if (user.id !== 'mock-user-id') {
                         handleProfilePictureError(
-                          user.id || "",
+                          user.id || '',
                           clearProfilePictureCache,
                           loadProfilePicture,
                         );
@@ -312,7 +311,7 @@ const GamificationPage: React.FC = () => {
                     }}
                   />
                 ) : (
-                  getUserInitials(user.firstName || "", user.lastName || "")
+                  getUserInitials(user.firstName || '', user.lastName || '')
                 )}
               </div>
               <div className="user-info">

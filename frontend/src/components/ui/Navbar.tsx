@@ -218,7 +218,10 @@ const Navbar = () => {
 
           {userRole === 'admin' && (
             <>
-              <div className="mobile-admin-toggle" onClick={toggleAdminDropdown}>
+              <div
+                className="mobile-admin-toggle"
+                onClick={toggleAdminDropdown}
+              >
                 Admin
               </div>
               {isAdminDropdownOpen &&

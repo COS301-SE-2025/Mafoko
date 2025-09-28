@@ -30,7 +30,7 @@ interface UserData {
   email?: string;
 }
 
-export const ContributionGraph = ({ user }: { user: UserData}) => {
+export const ContributionGraph = ({ user }: { user: UserData }) => {
   const [records, setRecords] = useState<XPRecord[] | null>([]);
 
   useEffect(() => {
@@ -39,9 +39,9 @@ export const ContributionGraph = ({ user }: { user: UserData}) => {
         if (!user.id) return;
         const data = await GamificationService.getUserXPRecords(user.id);
         setRecords(data);
-        console.log("Set data", data)
+        console.log('Set data', data);
       } catch (err) {
-        console.error("Failed to load XP records:", err);
+        console.error('Failed to load XP records:', err);
       }
     };
 
