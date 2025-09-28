@@ -41,7 +41,7 @@ global.URL.revokeObjectURL = vi.fn();
 Object.defineProperty(global, 'crypto', {
   value: {
     randomUUID: vi.fn(() => '12345678-1234-1234-1234-123456789012'),
-    getRandomValues: vi.fn((arr) => {
+    getRandomValues: vi.fn((arr: Uint8Array) => {
       for (let i = 0; i < arr.length; i++) {
         arr[i] = Math.floor(Math.random() * 256);
       }

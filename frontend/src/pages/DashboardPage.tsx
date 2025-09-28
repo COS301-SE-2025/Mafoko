@@ -22,12 +22,11 @@ const AnimatedLanguageCounter: React.FC = () => {
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
     let interval: NodeJS.Timeout;
     let textTimer: NodeJS.Timeout;
 
     // Start counting animation after a short delay
-    timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       let currentCount = 1;
       interval = setInterval(() => {
         setCount(currentCount);

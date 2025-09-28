@@ -444,8 +444,6 @@ describe('DashboardPage', () => {
       const refreshButton = screen.getByTitle('Get New Terms');
       expect(refreshButton).toBeInTheDocument();
     });
-
-
   });
 
   describe('API Integration', () => {
@@ -523,9 +521,12 @@ describe('DashboardPage', () => {
       });
 
       await act(async () => {
-        await waitFor(() => {
-          expect(mockNavigate).toHaveBeenCalledWith('/login');
-        }, { timeout: 8000 });
+        await waitFor(
+          () => {
+            expect(mockNavigate).toHaveBeenCalledWith('/login');
+          },
+          { timeout: 8000 },
+        );
       });
 
       vi.useFakeTimers(); // Switch back to fake timers
@@ -664,7 +665,5 @@ describe('DashboardPage', () => {
 
       vi.useFakeTimers(); // Switch back to fake timers
     });
-
-
   });
 });
