@@ -9,10 +9,6 @@ import {
   LoginStreak,
   WeeklyGoal,
 } from '../utils/gamification';
-import {
-  useProfilePicture,
-  handleProfilePictureError,
-} from '../hooks/useProfilePicture';
 import '../styles/Global.scss';
 import '../styles/GamificationPage.scss';
 import { Star } from 'lucide-react';
@@ -176,12 +172,7 @@ const GamificationPage: React.FC = () => {
     },
   );
 
-  const {
-    profilePictureUrl,
-    loadingProfilePicture,
-    clearProfilePictureCache,
-    loadProfilePicture,
-  } = useProfilePicture(user.id !== 'mock-user-id' ? user.id : undefined);
+  // Profile picture hook removed - always showing initials now
 
   const getUserInitials = (firstName: string, lastName: string) => {
     return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
@@ -294,29 +285,17 @@ const GamificationPage: React.FC = () => {
           <div className="profile-section bg-theme text-theme">
             <div className="profile-header">
               <div className="avatar">
-                {loadingProfilePicture ? (
-                  <div className="avatar-loading">Loading...</div>
-                ) : profilePictureUrl ? (
-                  <img
-                    src={profilePictureUrl}
-                    alt="Profile Picture"
-                    onError={() => {
-                      if (user.id !== 'mock-user-id') {
-                        handleProfilePictureError(
-                          user.id || '',
-                          clearProfilePictureCache,
-                          loadProfilePicture,
-                        );
-                      }
-                    }}
-                  />
-                ) : (
-                  getUserInitials(user.firstName || '', user.lastName || '')
+                {getUserInitials(
+                  user.firstName || user.first_name || '', 
+                  user.lastName || user.last_name || ''
                 )}
               </div>
               <div className="user-info">
                 <div className="username">
-                  {getFullName(user.firstName || '', user.lastName || '')}
+                  {getFullName(
+                    user.firstName || user.first_name || '', 
+                    user.lastName || user.last_name || ''
+                  )}
                 </div>
                 <div className="level-badge">
                   {gamificationState.loading
