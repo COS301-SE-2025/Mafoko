@@ -138,7 +138,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
         }}
       >
         {!comment?.user?.avatar &&
-          (comment?.user?.name?.charAt(0) ?? '?').toUpperCase()}
+          (comment?.user?.name?.charAt(20) ?? '?').toUpperCase()}
       </div>
       <div className="comment-main">
         <div className="comment-main-header">
