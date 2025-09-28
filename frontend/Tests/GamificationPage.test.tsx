@@ -208,7 +208,7 @@ describe('GamificationPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Level 5')).toBeInTheDocument();
-      expect(screen.getByText('2,500')).toBeInTheDocument(); // Total XP value with comma
+      expect(screen.getByText('2 500')).toBeInTheDocument(); // Total XP value with comma
     });
   });
 
