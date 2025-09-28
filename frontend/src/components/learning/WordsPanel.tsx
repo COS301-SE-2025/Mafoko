@@ -49,7 +49,7 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
   return (
     <div className="component-container words-panel">
       <div className="content-wrapper">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
           <button
             type="button"
             onClick={onBackClick}
@@ -57,11 +57,11 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
           >
             ← Back to Glossaries
           </button>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="text-sm text-gray-600">
               {knownWords.size} of {studySession.words.length} words completed
             </div>
-            <div className="w-32 bg-gray-200 rounded-full h-2">
+            <div className="w-full sm:w-32 bg-gray-200 rounded-full h-2">
               <div
                 className="h-2 rounded-full bg-teal-500 transition-all duration-300"
                 style={{

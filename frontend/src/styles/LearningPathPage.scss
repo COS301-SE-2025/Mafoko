@@ -30,6 +30,128 @@ $text-dark: #ffffff;
   --tab-hover-bg: rgba(0, 206, 175, 0.1);
 }
 
+/* Language card (moved from inline styles in LanguageCard.tsx) */
+.language-card {
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border-color: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  border-color: #e6e6e6;
+  &.dark {
+    background-color: var(--card-bg-dark, #292e41);
+    color: #ffffff!important; /* explicit white text in dark mode */
+    border: 1px solid #292e41; /* explicit border color in dark mode */
+  }
+
+  /* Ensure text elements inside dark language cards use white for readability */
+  &.dark .language-name,
+  &.dark .language-stats,
+  &.dark .progress-label {
+    color: #ffffff;
+  }
+
+  /* Stronger rule to ensure the stats text is white in dark mode (overrides utilities/global rules) */
+  &.dark .language-stats {
+    color: #ffffff !important;
+  }
+
+  /* Even higher-specificity rule scoped to the learning path grid to beat cascade/order issues */
+  .learning-path-container .languages-grid .language-card.dark .language-stats {
+    color: #ffffff !important;
+  }
+
+  .language-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #fff;
+    background-color: var(--brand-accent, #00ceaf);
+    
+    @media (max-width: 768px) {
+      width: 56px;
+      height: 56px;
+      font-size: 1.125rem;
+      margin-bottom: 0.875rem;
+    }
+    
+    @media (max-width: 480px) {
+      width: 48px;
+      height: 48px;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .language-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
+  }
+
+  
+  .language-stats {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary, rgba(0,0,0,0.6));
+    
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Dark-mode overrides: ensure stats text is white in several dark-mode flavors */
+  .theme-dark .language-stats,
+  .dark-mode .language-stats,
+  .language-card.dark .language-stats {
+    color: #ffffff !important;
+  }
+  
+
+  .progress-track {
+    background-color: var(--card-bg-dark, #eeeeee);
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 0.75rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: var(--brand-accent, #00ceaf);
+    border-radius: 999px;
+    transition: width 300ms ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-color-secondary, rgba(0,0,0,0.6));
+  }
+}
+
+/* Note: progress width is set inline via style attribute for dynamic percentages */
+
 .theme-dark {
   --bg-theme: #{$tertiary-dark};
   --text-theme: #{$text-dark};
@@ -52,12 +174,42 @@ $text-dark: #ffffff;
 .learning-path-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 64px); // Adjust based on your header/footer height
+  min-height: calc(100vh - 64px);
   background-color: var(--bg-color-secondary);
-  margin-left: -280px; /* Move the container 50px to the left */
-  width: 1160px;
-  height: 500px;
-  margin-top: -63px;
+  width: 100%;
+  height: auto;
+  
+
+  margin: 0;
+  
+  @media (min-width: 769px) {
+    /* Reduce the expansion on large screens so content doesn't get cut off */
+    margin-left: -210px;
+    width: calc(100vw + 240px);
+
+    /* Slightly lower max-width to keep layout within common large viewports */
+    max-width: 1280px;
+    //transform: translateX(-15px);
+    //-webkit-transform: translateX(-15px);
+  }
+  
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+    left: 0;
+    right: 0;
+  }
+  
+  @media (max-width: 480px) {
+    min-height: 100vh;
+    width: 100vw;
+    /* Nudge the whole learning path container 10px to the left on very small screens */
+    transform: translateX(-31px);
+    -webkit-transform: translateX(-31px);
+  }
   &.dark-mode {
     background-color: var(--bg-color-dark);
     color: var(--text-color-dark);
@@ -99,8 +251,23 @@ $text-dark: #ffffff;
 
     .languages-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
+      
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.25rem;
+      }
+      
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+      
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
     }
 
     .path-card {
@@ -152,6 +319,52 @@ $text-dark: #ffffff;
           transition: width 0.3s ease;
         }
       }
+    }
+
+    /* Center glossary/action buttons inside learning-path cards */
+    .languages-grid .glossary-card-actions,
+    .languages-grid .path-card .glossary-card-actions,
+    .languages-grid .language-card .glossary-card-actions {
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100%;
+    }
+
+    /* Make glossary cards inside learning-path black with white text in dark mode */
+    /* Target the actual card wrappers used on this page: .path-card and .language-card */
+    .theme-dark .learning-path-container .languages-grid .path-card,
+    .dark-mode .learning-path-container .languages-grid .path-card,
+    .learning-path-container.dark-mode .languages-grid .path-card,
+    .theme-dark .learning-path-container .languages-grid .language-card,
+    .dark-mode .learning-path-container .languages-grid .language-card,
+    .learning-path-container.dark-mode .languages-grid .language-card {
+      background: #000 !important;
+      color: #ffffff !important;
+      border-color: #000 !important;
+      box-shadow: none !important;
+    }
+
+    /* Ensure key child text elements are white */
+    .theme-dark .learning-path-container .languages-grid .path-card .language-name,
+    .dark-mode .learning-path-container .languages-grid .path-card .language-name,
+    .theme-dark .learning-path-container .languages-grid .path-card .language-stats,
+    .dark-mode .learning-path-container .languages-grid .path-card .language-stats,
+    .theme-dark .learning-path-container .languages-grid .language-card .language-name,
+    .dark-mode .learning-path-container .languages-grid .language-card .language-name,
+    .theme-dark .learning-path-container .languages-grid .language-card .language-stats,
+    .dark-mode .learning-path-container .languages-grid .language-card .language-stats,
+    .theme-dark .learning-path-container .languages-grid .path-card .progress-label,
+    .dark-mode .learning-path-container .languages-grid .path-card .progress-label {
+      color: #ffffff !important;
+    }
+
+    /* Avatar/icon adjustments */
+    .theme-dark .learning-path-container .languages-grid .path-card .language-avatar,
+    .dark-mode .learning-path-container .languages-grid .path-card .language-avatar,
+    .theme-dark .learning-path-container .languages-grid .language-card .language-avatar,
+    .dark-mode .learning-path-container .languages-grid .language-card .language-avatar {
+      background: transparent !important;
+      color: #ffffff !important;
     }
 
     .word-list {
@@ -410,7 +623,173 @@ $text-dark: #ffffff;
   }
 
   .words-panel {
-    margin-top: 0px; /* Moved the words panel 10px further down */
+    margin-top: 1200px; /* Moved the words panel 10px further down */
+    max-width: 80vw;
+  }
+}
+
+/* Word Card Responsive Styles */
+.word-card {
+  @media (max-width: 768px) {
+    padding: 1rem !important;
+    min-height: 120px !important;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.875rem !important;
+    min-height: 110px !important;
+  }
+  
+  h4 {
+    @media (max-width: 768px) {
+      font-size: 1rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.9rem !important;
+    }
+  }
+  
+  p {
+    @media (max-width: 768px) {
+      font-size: 0.8rem !important;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.75rem !important;
+    }
+  }
+  
+  .flex.items-center.gap-2 {
+    @media (max-width: 480px) {
+      gap: 0.375rem !important;
+      
+      span {
+        font-size: 0.7rem !important;
+      }
+    }
+  }
+}
+
+/* Pagination Controls Responsive Styles */
+.pagination-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  @media (max-width: 480px) {
+    gap: 0.25rem;
+  }
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--hover-bg);
+    border-color: var(--accent-color);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 768px) {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  
+  @media (max-width: 480px) {
+    width: 2rem;
+    height: 2rem;
+    
+    svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+  }
+}
+
+.pagination-current {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+  
+  @media (max-width: 768px) {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Component Container Responsive Styles */
+.component-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.content-wrapper {
+  padding: 1rem;
+  
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.5rem;
   }
 }
 
@@ -503,6 +882,19 @@ $text-dark: #ffffff;
   cursor: pointer;
   font-size: 0.9rem; /* slightly smaller text */
   gap: 0.5rem;
+  flex: 1;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.85rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    gap: 0.375rem;
+  }
 }
 
 .glossary-card-actions .study-btn {
@@ -565,6 +957,7 @@ $text-dark: #ffffff;
 .learning-path-modal {
   width: 100%;
   max-width: 680px;
+  margin: 1rem;
   /* Force an opaque solid background to avoid transparency from theme variables */
   background-color: var(--card-bg-solid, #ffffff);
   color: var(--text-color, #111827);
@@ -572,6 +965,22 @@ $text-dark: #ffffff;
   padding: 1.25rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-color);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  
+  @media (max-width: 768px) {
+    max-width: calc(100vw - 2rem);
+    padding: 1rem;
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
+  }
+  
+  @media (max-width: 480px) {
+    max-width: calc(100vw - 1rem);
+    padding: 0.75rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+  }
 }
 .learning-path-modal.dark-mode {
   background-color: var(--card-bg-dark-solid, #292e41);
@@ -625,6 +1034,11 @@ $text-dark: #ffffff;
   max-height: 220px;
   overflow-y: auto;
   padding-right: 0.25rem;
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    max-height: 180px;
+  }
 }
 
 .learning-path-modal .modal-glossary-item {
@@ -929,15 +1343,28 @@ $text-dark: #ffffff;
 .learning-path-container {
   @media (max-width: 768px) {
     margin-left: 0;
-    width: 100%;
+    width: 100vw;
     height: auto;
     margin-top: 0;
+    overflow-x: hidden;
   }
 }
 
 .main-content {
   @media (max-width: 768px) {
     padding-top: 0;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* Ensure body and html don't have horizontal scroll on mobile */
+@media (max-width: 768px) {
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 }
 
@@ -976,4 +1403,34 @@ $text-dark: #ffffff;
   .gap-8 {
     gap: 1rem;
   }
+}
+
+/* Ensure the delete button on learning path cards is red with white icon */
+.path-delete-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  /* Force the red background and white icon so other styles (utilities) don't override it. */
+  background-color: #ef4444 !important; /* red-500 */
+  color: #ffffff !important; /* white icon */
+  padding: 0.5rem !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.path-delete-button:hover {
+  background-color: #dc2626; /* red-600 */
+}
+
+/* Ensure svg icons inherit the button color (lucide-react uses stroke by default) */
+.path-delete-button svg {
+  color: inherit !important;
+ // fill: currentColor !important;
+  stroke: currentColor !important;
 }

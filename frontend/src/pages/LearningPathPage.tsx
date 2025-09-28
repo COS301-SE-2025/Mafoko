@@ -415,7 +415,7 @@ const LearningPathPage: React.FC = () => {
             <div className="learning-path-header-content">
               <div className="learning-path-title-section">
                 <h1 className="learning-path-main-title">
-                  {currentView === 'paths' && 'Learning Paths'}
+                  {currentView === 'paths'}
                   {currentView === 'glossaries' &&
                     (selectedPath?.path_name || '')}
                   {currentView === 'words' &&
@@ -426,12 +426,9 @@ const LearningPathPage: React.FC = () => {
                     `${selectedGlossary?.name || ''} - Flashcards`}
                 </h1>
                 <p className="learning-path-subtitle">
-                  {currentView === 'paths' &&
-                    'Create and manage your language learning paths'}
-                  {currentView === 'glossaries' && 'Select a glossary to study'}
-                  {currentView === 'words' &&
-                    !flashcardMode &&
-                    'Review the terms and definitions below.'}
+                  {currentView === 'paths'}
+                  {currentView === 'glossaries'}
+                  {currentView === 'words' && !flashcardMode}
                 </p>
               </div>
 

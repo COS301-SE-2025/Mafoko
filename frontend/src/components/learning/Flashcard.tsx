@@ -40,11 +40,14 @@ const Flashcard: React.FC<FlashcardProps> = ({
 
   return (
     <>
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={onExit} className="text-gray-600 hover:text-gray-900">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
+        <button
+          onClick={onExit}
+          className="text-gray-600 hover:text-gray-900 text-sm sm:text-base"
+        >
           ← Exit Flashcards
         </button>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <div className="text-sm text-gray-600">
             Card {currentCardIndex + 1} of {totalCards}
           </div>
@@ -122,27 +125,29 @@ const Flashcard: React.FC<FlashcardProps> = ({
           </div>
         </div>
       ) : (
-        <div className="max-w-lg mx-auto text-center">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
-            <div className="text-6xl mb-4">🎉</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className="max-w-lg mx-auto text-center px-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg border border-gray-200">
+            <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">
+              🎉
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
               Flashcards Complete!
             </h2>
-            <div className="text-lg text-gray-600 mb-6">
+            <div className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
               You got{' '}
               <span className="font-bold text-blue-600">{score.correct}</span>{' '}
               out of <span className="font-bold">{score.total}</span> correct
             </div>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button
                 onClick={onRetry}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm sm:text-base"
               >
                 <RotateCcw className="w-4 h-4" /> Try Again
               </button>
               <button
                 onClick={onExit}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-sm sm:text-base"
               >
                 Back to Words
               </button>

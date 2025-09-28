@@ -50,7 +50,6 @@ const LearningPathList: FC<LearningPathListProps> = ({
                     code={code}
                     name={path.path_name}
                     totalWords={path.selected_glossaries.length}
-                    color={ACCENT_COLOR}
                     completedPercentage={path.completedPercentage ?? 0}
                     onClick={() => onPathSelect(path)}
                   />
@@ -68,7 +67,7 @@ const LearningPathList: FC<LearningPathListProps> = ({
                         onPathDelete(path.id);
                       }
                     }}
-                    className="absolute top-4 right-4 p-1 text-red-600 bg-red-50 hover:text-white hover:bg-red-600 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                    className="path-delete-button"
                   >
                     <Trash2 size={18} />
                   </button>
