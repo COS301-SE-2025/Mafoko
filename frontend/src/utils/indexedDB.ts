@@ -828,12 +828,16 @@ export async function getCachedGlossaryStats(): Promise<GlossaryStatsCache | nul
   return null;
 }
 
-export async function addPendingWorkspaceUpdate(update: PendingWorkspaceUpdate) {
+export async function addPendingWorkspaceUpdate(
+  update: PendingWorkspaceUpdate,
+) {
   const db = await dbPromise;
   await db.put('pending-workspace-updates', update);
 }
 
-export async function getAndClearPendingWorkspaceUpdates(): Promise<PendingWorkspaceUpdate[]> {
+export async function getAndClearPendingWorkspaceUpdates(): Promise<
+  PendingWorkspaceUpdate[]
+> {
   const db = await dbPromise;
   const tx = db.transaction('pending-workspace-updates', 'readwrite');
   const allUpdates = await tx.store.getAll();
@@ -863,7 +867,9 @@ export async function addPendingSettingsUpdate(update: PendingSettingsUpdate) {
   await db.put('pending-settings-updates', update);
 }
 
-export async function getAndClearPendingSettingsUpdates(): Promise<PendingSettingsUpdate[]> {
+export async function getAndClearPendingSettingsUpdates(): Promise<
+  PendingSettingsUpdate[]
+> {
   const db = await dbPromise;
   const tx = db.transaction('pending-settings-updates', 'readwrite');
   const allUpdates = await tx.store.getAll();

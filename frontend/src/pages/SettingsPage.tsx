@@ -177,11 +177,15 @@ const SettingsPage: React.FC = () => {
               darkMode: cachedPrefs.preferences.darkMode,
               selectedLanguage: cachedPrefs.preferences.selectedLanguage,
             });
-            
-            if (cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage) {
-              await i18n.changeLanguage(cachedPrefs.preferences.selectedLanguage);
+
+            if (
+              cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage
+            ) {
+              await i18n.changeLanguage(
+                cachedPrefs.preferences.selectedLanguage,
+              );
             }
-            
+
             setError('You are offline. Showing cached settings.');
             // setLoading(false);
             return;
@@ -202,7 +206,7 @@ const SettingsPage: React.FC = () => {
           darkMode: false, // darkMode is handled separately by the DarkModeComponent
           selectedLanguage: serverPreferences.ui_language,
         };
-        
+
         setSettings(newSettings);
 
         // Cache the fresh preferences
@@ -219,7 +223,7 @@ const SettingsPage: React.FC = () => {
         }
       } catch (err) {
         console.error('Failed to load user preferences:', err);
-        
+
         // Try to load cached preferences as fallback
         const cachedPrefs = await getCachedUserPreferences();
         if (cachedPrefs) {
@@ -231,11 +235,13 @@ const SettingsPage: React.FC = () => {
             darkMode: cachedPrefs.preferences.darkMode,
             selectedLanguage: cachedPrefs.preferences.selectedLanguage,
           });
-          
-          if (cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage) {
+
+          if (
+            cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage
+          ) {
             await i18n.changeLanguage(cachedPrefs.preferences.selectedLanguage);
           }
-          
+
           setError('Network error. Showing cached settings.');
         } else {
           setError('Failed to load settings from server');
@@ -265,7 +271,7 @@ const SettingsPage: React.FC = () => {
       };
 
       await updateUserPreferences(updateData);
-      
+
       // Update cache with successful save
       const cacheData: UserPreferencesCache = {
         id: 'latest',
@@ -273,12 +279,12 @@ const SettingsPage: React.FC = () => {
         timestamp: Date.now(),
       };
       await cacheUserPreferences(cacheData);
-      
     } catch (err) {
       console.error('Failed to save preferences to server:', err);
-      
+
       // Check if this is a network error (offline)
-      const errorMessage = err instanceof Error ? err.message : 'Failed to save settings';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to save settings';
       if (
         errorMessage.includes('Failed to fetch') ||
         errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
@@ -297,7 +303,7 @@ const SettingsPage: React.FC = () => {
           token,
           timestamp: Date.now(),
         };
-        
+
         await addPendingSettingsUpdate(pendingUpdate);
 
         // Update cache optimistically
@@ -324,7 +330,9 @@ const SettingsPage: React.FC = () => {
           }
         }
 
-        setError('You are offline. Your settings have been saved and will sync when you\'re back online.');
+        setError(
+          "You are offline. Your settings have been saved and will sync when you're back online.",
+        );
       } else {
         setError('Failed to save settings to server');
       }
@@ -413,13 +421,13 @@ const SettingsPage: React.FC = () => {
         </header>
 
         <div className="settings-content">
-            <div
-              className="settings-section"
-              onClick={() => {
-                void navigate('/profile');
-              }}
-            >
-              <div className="section-header">
+          <div
+            className="settings-section"
+            onClick={() => {
+              void navigate('/profile');
+            }}
+          >
+            <div className="section-header">
               <div className="section-title">
                 <User className="section-icon" />
                 <h2>{t('settings.profile.title')}</h2>

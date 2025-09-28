@@ -539,7 +539,7 @@ const WorkspacePage: React.FC = () => {
       localStorage.setItem('workspaceLastLoaded', Date.now().toString());
     } catch (error) {
       console.error('Failed to load workspace data:', error);
-      
+
       // Try to load cached data as fallback
       try {
         const cachedBookmarks = await getCachedBookmarks();
@@ -708,9 +708,10 @@ const WorkspacePage: React.FC = () => {
       console.log('Notes saved successfully');
     } catch (error) {
       console.error('Failed to save notes:', error);
-      
+
       // Check if this is a network error (offline)
-      const errorMessage = error instanceof Error ? error.message : 'Failed to save notes';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to save notes';
       if (
         errorMessage.includes('Failed to fetch') ||
         errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
@@ -729,7 +730,7 @@ const WorkspacePage: React.FC = () => {
           token,
           timestamp: Date.now(),
         };
-        
+
         await addPendingWorkspaceUpdate(pendingUpdate);
 
         // Update local state optimistically
@@ -760,7 +761,9 @@ const WorkspacePage: React.FC = () => {
           }
         }
 
-        setError('You are offline. Your note has been saved and will sync when you\'re back online.');
+        setError(
+          "You are offline. Your note has been saved and will sync when you're back online.",
+        );
       } else {
         setError('Failed to save notes. Please try again.');
       }

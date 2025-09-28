@@ -241,7 +241,7 @@ const DashboardPage: React.FC = () => {
       await cacheRandomTerms(cacheData);
     } catch (error) {
       console.error('Error fetching random terms:', error);
-      
+
       // Try cached data first if available
       const cachedTerms = await getCachedRandomTerms();
       if (cachedTerms) {
@@ -284,7 +284,7 @@ const DashboardPage: React.FC = () => {
 
     const fetchAndSetUserData = async () => {
       setIsLoadingUserData(true);
-      
+
       // Try to get cached data first if offline
       if (!navigator.onLine) {
         const cachedProfile = await getCachedUserProfile();
@@ -404,7 +404,7 @@ const DashboardPage: React.FC = () => {
           console.error('Failed to fetch user data from API:', response.status);
           const errorText = await response.text();
           console.error('Error response body:', errorText);
-          
+
           // Try cached data as fallback before navigating to login
           const cachedProfile = await getCachedUserProfile();
           if (cachedProfile) {
@@ -428,7 +428,7 @@ const DashboardPage: React.FC = () => {
         }
       } catch (error) {
         console.error('Network or other error fetching user data:', error);
-        
+
         // Try cached data as fallback before navigating to login
         const cachedProfile = await getCachedUserProfile();
         if (cachedProfile) {

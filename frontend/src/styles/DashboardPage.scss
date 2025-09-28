@@ -101,7 +101,7 @@ $card-dark: #3a4050;
     padding: 0 !important;
     overflow-x: hidden !important;
   }
-  
+
   html {
     margin: 0 !important;
     padding: 0 !important;
@@ -153,7 +153,7 @@ $card-dark: #3a4050;
     margin: 0;
     margin-bottom: 0.5rem;
     top: 0;
-    
+
     .profile-section {
       position: fixed;
       top: 10px;
@@ -236,7 +236,7 @@ $card-dark: #3a4050;
   .main-content-body {
     min-height: calc(100vh - 120px);
     padding-top: 1rem;
-    
+
     @media (max-width: 768px) {
       min-height: calc(100vh - 80px);
       padding-top: 0.5rem;
@@ -245,7 +245,7 @@ $card-dark: #3a4050;
 
   .main-content-body {
     padding-top: 1rem;
-    
+
     @media (max-width: 768px) {
       padding-top: 0.5rem;
     }
@@ -291,7 +291,7 @@ $card-dark: #3a4050;
           align-items: center;
           flex-wrap: wrap;
           justify-content: center;
-          
+
           @media (max-width: 768px) {
             font-size: 2.2rem;
             margin-top: 0;
@@ -305,7 +305,7 @@ $card-dark: #3a4050;
             width: 100%;
             min-height: auto;
           }
-          
+
           @media (max-width: 480px) {
             font-size: 1.8rem;
             margin-top: 0;
@@ -394,12 +394,12 @@ $card-dark: #3a4050;
           justify-content: center;
           align-items: center;
           overflow: hidden;
-          
+
           @media (max-width: 768px) {
             margin: 1.5rem 0;
             min-height: 250px;
             border-radius: 8px;
-            
+
             svg {
               width: 100% !important;
               height: auto !important;
@@ -407,11 +407,11 @@ $card-dark: #3a4050;
               max-height: 300px;
             }
           }
-          
+
           @media (max-width: 480px) {
             margin: 1rem 0;
             min-height: 200px;
-            
+
             svg {
               max-height: 250px;
             }
@@ -437,36 +437,36 @@ $card-dark: #3a4050;
             color: var(--text-muted);
             font-style: italic;
           }
-          
+
           @media (max-width: 768px) {
             font-size: 1rem;
             line-height: 1.6;
             margin-bottom: 2rem;
             padding: 0 0.5rem;
             text-align: left;
-            
+
             p {
               margin-bottom: 1.25rem;
               word-break: break-word;
               hyphens: auto;
             }
-            
+
             .team-credit {
               margin-top: 1.5rem;
               font-size: 0.9rem;
             }
           }
-          
+
           @media (max-width: 480px) {
             font-size: 0.95rem;
             line-height: 1.5;
             margin-bottom: 1.5rem;
             padding: 0 0.25rem;
-            
+
             p {
               margin-bottom: 1rem;
             }
-            
+
             .team-credit {
               margin-top: 1rem;
               font-size: 0.85rem;
@@ -555,12 +555,12 @@ $card-dark: #3a4050;
           padding-right: 0;
           padding-left: 0;
           margin-left: 0;
-          
+
           .title {
             font-size: 2rem;
             margin-top: 0;
           }
-          
+
           .map-container {
             margin: 1rem 0;
             margin-left: -80px;
@@ -570,7 +570,7 @@ $card-dark: #3a4050;
             max-width: calc(100% + 160px);
             text-align: left;
             display: block;
-            
+
             svg {
               width: 100%;
               height: auto;
@@ -588,14 +588,14 @@ $card-dark: #3a4050;
             text-align: left;
             word-break: break-word;
             hyphens: auto;
-            
+
             p {
               margin-bottom: 1rem;
               margin-left: 0;
               padding-left: 0;
               max-width: 100%;
               word-wrap: break-word;
-              
+
               // Force line breaks after every 3rd word for mobile readability
               &:first-child {
                 word-spacing: 0.4em;
@@ -603,7 +603,7 @@ $card-dark: #3a4050;
                 line-height: 1.8;
                 max-width: 280px;
               }
-              
+
               // Apply same formatting to second paragraph (Marito works...)
               &:nth-child(2) {
                 word-spacing: 0.4em;
@@ -613,11 +613,11 @@ $card-dark: #3a4050;
               }
             }
           }
-          
+
           .cta-section {
             margin-top: 2rem;
             text-align: left;
-            
+
             .cta-button {
               padding: 0.75rem 1.5rem;
               font-size: 0.9rem;
@@ -636,14 +636,14 @@ $card-dark: #3a4050;
       }
     }
   }
-  
+
   @media (max-width: 480px) {
     padding: 8px 4px 80px 4px;
     padding-top: 55px;
-    
+
     .content-wrapper .content-layout {
       gap: 1rem;
-      
+
       .content-side {
         .intro-text {
           font-size: 0.85rem;
@@ -653,13 +653,13 @@ $card-dark: #3a4050;
           padding-left: 0;
           word-break: break-word;
           hyphens: auto;
-          
+
           p {
             margin-left: 0;
             padding-left: 0;
             margin-bottom: 1rem;
             word-wrap: break-word;
-            
+
             // Enhanced line breaking for very small screens - 3 words per line
             &:first-child {
               word-spacing: 0.5em;
@@ -667,7 +667,7 @@ $card-dark: #3a4050;
               line-height: 1.9;
               max-width: 240px;
             }
-            
+
             // Apply same formatting to second paragraph (Marito works...)
             &:nth-child(2) {
               word-spacing: 0.5em;
@@ -677,17 +677,17 @@ $card-dark: #3a4050;
             }
           }
         }
-        
+
         .map-container {
           margin: 0.75rem 0;
           margin-left: -60px;
           padding: 0;
           max-width: calc(100% + 120px);
         }
-        
+
         .cta-section {
           text-align: left;
-          
+
           .cta-button {
             padding: 0.7rem 1.3rem;
             font-size: 0.85rem;
@@ -704,7 +704,7 @@ $card-dark: #3a4050;
     text-align: left !important;
     justify-content: flex-start !important;
   }
-  
+
   .map-container {
     text-align: left !important;
     display: block !important;
@@ -713,7 +713,7 @@ $card-dark: #3a4050;
     padding-left: 0 !important;
     justify-content: flex-start !important;
     max-width: calc(100% + 120px) !important;
-    
+
     svg {
       margin-left: 0 !important;
       padding-left: 0 !important;
@@ -745,23 +745,23 @@ $card-dark: #3a4050;
   .profile-details p {
     font-size: 12px;
   }
-  
+
   // Ensure proper touch targets for mobile
   .refresh-terms-btn {
     min-width: 44px;
     min-height: 44px;
   }
-  
+
   .term-category {
     min-height: 44px;
   }
-  
+
   // Mobile alignment overrides with !important
   .animated-title {
     text-align: left !important;
     justify-content: flex-start !important;
   }
-  
+
   .map-container {
     text-align: left !important;
     display: block !important;
@@ -770,7 +770,7 @@ $card-dark: #3a4050;
     padding-left: 0 !important;
     justify-content: flex-start !important;
     max-width: calc(100% + 160px) !important;
-    
+
     svg {
       margin-left: 0 !important;
       padding-left: 0 !important;
@@ -950,23 +950,23 @@ $card-dark: #3a4050;
         flex-shrink: 0;
       }
     }
-    
+
     .terms-grid {
       gap: 0.8rem;
     }
   }
-  
+
   @media (max-width: 480px) {
     margin: 1rem 0 0 0;
     padding: 1rem;
-    
+
     .section-header {
       margin-bottom: 1rem;
-      
+
       h2 {
         font-size: 1.1rem;
       }
-      
+
       .refresh-terms-btn {
         width: 36px;
         height: 36px;
@@ -993,7 +993,7 @@ $card-dark: #3a4050;
         &:hover {
           transform: translateY(-2px);
         }
-        
+
         &:active {
           transform: translateY(0);
         }
@@ -1033,30 +1033,30 @@ $card-dark: #3a4050;
           text-align: center;
         }
       }
-      
+
       @media (max-width: 480px) {
         .term-card {
           padding: 0.875rem;
-          
+
           .term-header {
             gap: 0.5rem;
             margin-bottom: 0.5rem;
-            
+
             .term-title {
               font-size: 1rem;
             }
-            
+
             .term-language {
               font-size: 0.7rem;
               padding: 0.15em 0.6em;
             }
           }
-          
+
           .term-definition {
             font-size: 0.85rem;
             margin-bottom: 0.5rem;
           }
-          
+
           .term-category {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
