@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowBigLeft, ArrowBigRight, Wand2 } from 'lucide-react';
+import { Wand2 } from 'lucide-react';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import SearchBar from '../components/ui/SearchBar';
@@ -62,11 +62,6 @@ const SearchPage: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage]);
-
   useEffect(() => {
     const initialLoad = async () => {
       setIsLoading(true);
@@ -110,49 +105,15 @@ const SearchPage: React.FC = () => {
 
     const runFilterQuery = async () => {
       const filters = {
-        query: debouncedTerm,
-        language: debouncedLanguage || '',
-        domain: debouncedDomain || '',
-        sort_by: 'name',
-        page: currentPage,
-        page_size: pageSize,
+        term: debouncedTerm,
+        language: debouncedLanguage,
+        domain: debouncedDomain,
+        letter: activeLetter,
         fuzzy: debouncedFuzzy,
       };
-
-      try {
-        const params = new URLSearchParams();
-        if (filters.query) params.append('query', filters.query);
-        if (filters.language) params.append('language', filters.language);
-        if (filters.domain) params.append('domain', filters.domain);
-        params.append('sort_by', filters.sort_by);
-        params.append('page', filters.page.toString());
-        params.append('page_size', filters.page_size.toString());
-        params.append('fuzzy', String(filters.fuzzy));
-
-        const response = await fetch(
-          `${API_ENDPOINTS.search}?${params.toString()}`,
-          { headers: { Accept: 'application/json' } },
-        );
-
-        if (response.ok) {
-          const data: SearchResponse = await response.json();
-          setResults(data.items);
-          setTotalPages(Math.ceil(data.total / pageSize));
-          return;
-        }
-      } catch (error) {
-        console.error('Backend search failed, falling back to local:', error);
-      }
-
-      const localResults = await queryTerms({
-        term: filters.query,
-        language: filters.language,
-        domain: filters.domain,
-        letter: activeLetter,
-        fuzzy: filters.fuzzy,
-      });
-      setResults(localResults);
-      setTotalPages(Math.ceil(localResults.length / pageSize));
+      const filteredResults = await queryTerms(filters);
+      setResults(filteredResults);
+      setTotalPages(Math.ceil(filteredResults.length / pageSize));
     };
 
     void runFilterQuery();
@@ -163,7 +124,6 @@ const SearchPage: React.FC = () => {
     debouncedFuzzy,
     activeLetter,
     initialLoadComplete,
-    currentPage,
   ]);
 
   useEffect(() => {
@@ -207,8 +167,12 @@ const SearchPage: React.FC = () => {
       return [];
     }
   };
+  const paginatedResults = results.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
 
-  const groupedTerms = results.reduce<Record<string, Term[]>>(
+  const groupedTerms = paginatedResults.reduce<Record<string, Term[]>>(
     (acc, currentTerm) => {
       if (currentTerm.term) {
         const firstLetter = currentTerm.term[0].toUpperCase();
@@ -242,35 +206,31 @@ const SearchPage: React.FC = () => {
         <div className="search-main-content">
           <div className="min-h-screen search-page pt-16">
             <div className="search-conent">
-              <section className="p-6 space-y-4 w-full max-w-4xl mx-auto flex flex-col gap-5">
+              <section className="p-6 space-y-4 w-full max-w-4xl mx-auto">
                 <SearchBar
                   onSearch={handleSearchInput}
                   fetchSuggestions={fetchSuggestions}
                 />
-                <div className="">
-                  <div className="flex flex-wrap gap-4 items-center justify-between mt-3">
-                    <div className="flex flex-wrap gap-4 items-center">
-                      <DropdownFilter
-                        label={t('searchPage.language')}
-                        options={LANGUAGES}
-                        selected={language}
-                        onSelect={setLanguage}
-                      />
-                      <DropdownFilter
-                        label={t('searchPage.domain')}
-                        options={domainOptions}
-                        selected={domain}
-                        onSelect={setDomain}
-                      />
-                    </div>
-                    <div className="mt-3">
-                      <ToggleSwitch
-                        label={t('searchPage.fuzzySearch')}
-                        icon={<Wand2 size={16} />}
-                        checked={fuzzySearch}
-                        onChange={setFuzzySearch}
-                      />
-                    </div>
+                <div className="flex flex-wrap gap-4 items-center justify-between">
+                  <div className="flex flex-wrap gap-4 items-center">
+                    <DropdownFilter
+                      label={t('searchPage.language')}
+                      options={LANGUAGES}
+                      selected={language}
+                      onSelect={setLanguage}
+                    />
+                    <DropdownFilter
+                      label={t('searchPage.domain')}
+                      options={domainOptions}
+                      selected={domain}
+                      onSelect={setDomain}
+                    />
+                    <ToggleSwitch
+                      label={t('searchPage.fuzzySearch')}
+                      icon={<Wand2 size={16} />}
+                      checked={fuzzySearch}
+                      onChange={setFuzzySearch}
+                    />
                   </div>
                 </div>
               </section>
@@ -316,9 +276,6 @@ const SearchPage: React.FC = () => {
                                 upvotes={t.upvotes}
                                 downvotes={t.downvotes}
                                 definition={t.definition}
-                                owner_id={
-                                  (t as Term & { owner_id?: string }).owner_id
-                                }
                                 onView={() =>
                                   navigate(
                                     `/term/${encodeURIComponent(t.language)}/${encodeURIComponent(t.term)}/${t.id}`,
@@ -331,17 +288,14 @@ const SearchPage: React.FC = () => {
                       ))}
                   </div>
                   {totalPages > 1 && (
-                    <div className=" flex justify-center items-center gap-6 p-4">
+                    <div className="pagination-controls flex justify-center items-center space-x-4 p-4">
                       <button
                         type="button"
                         disabled={currentPage === 1}
                         onClick={() => setCurrentPage((c) => c - 1)}
-                        className="flex items-center gap-2 text-theme disabled:opacity-50"
+                        className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                       >
-                        <ArrowBigLeft size={18} />
-                        <span className="sr-only">
-                          {t('searchPage.pagination.previous')}
-                        </span>
+                        {t('searchPage.pagination.previous')}
                       </button>
                       <span>
                         {t('searchPage.pagination.pageInfo', {
@@ -353,12 +307,9 @@ const SearchPage: React.FC = () => {
                         type="button"
                         disabled={currentPage === totalPages}
                         onClick={() => setCurrentPage((c) => c + 1)}
-                        className="flex items-center gap-2 text-theme disabled:opacity-50"
+                        className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                       >
-                        <ArrowBigRight size={18} />
-                        <span className="sr-only">
-                          {t('searchPage.pagination.next')}
-                        </span>
+                        {t('searchPage.pagination.next')}
                       </button>
                     </div>
                   )}
