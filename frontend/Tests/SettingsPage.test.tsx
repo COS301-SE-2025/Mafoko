@@ -14,7 +14,7 @@ import * as settingsService from '../src/services/settingsService';
 // Mock dependencies
 const mockNavigate = vi.fn();
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router-dom', async (): Promise<typeof import('react-router-dom')> => {
   const actual =
     await vi.importActual<typeof import('react-router-dom')>(
       'react-router-dom',
@@ -161,8 +161,7 @@ describe('SettingsPage', () => {
       expect(
         screen.getByText('settings.accessibility.textSize'),
       ).toBeInTheDocument();
-      const slider =
-        screen.getByDisplayValue('16') || screen.getByRole('slider');
+      const slider = screen.getByRole('slider');
       expect(slider).toBeInTheDocument();
     });
   });
@@ -229,10 +228,7 @@ describe('SettingsPage', () => {
       expect(
         screen.getByText('settings.appLanguage.title'),
       ).toBeInTheDocument();
-      const select =
-        screen.getByDisplayValue('English') ||
-        screen.getByRole('combobox') ||
-        document.querySelector('select');
+      const select = screen.getByRole('combobox');
       expect(select).toBeInTheDocument();
     });
   });
@@ -314,16 +310,13 @@ describe('SettingsPage', () => {
     );
 
     await waitFor(() => {
-      const select =
-        screen.getByRole('combobox') || document.querySelector('select');
-      if (select) {
-        fireEvent.change(select, { target: { value: 'zu' } });
-        expect(select).toBeInTheDocument();
-      }
+      const select = screen.getByRole('combobox');
+      fireEvent.change(select, { target: { value: 'zu' } });
+      expect(select).toBeInTheDocument();
     });
   });
 
-  test('has settings service available', async () => {
+  test('has settings service available', () => {
     render(
       <Router>
         <SettingsPage />

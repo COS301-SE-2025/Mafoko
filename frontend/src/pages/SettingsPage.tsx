@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, User, Globe, Eye, Palette } from 'lucide-react';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
@@ -251,11 +251,11 @@ const SettingsPage: React.FC = () => {
       }
     };
 
-    loadUserPreferences();
+    void loadUserPreferences();
   }, [i18n]);
 
   // Save preferences to server when settings change with offline support
-  const savePreferencesToServer = async (newSettings: SettingsState) => {
+  const savePreferencesToServer = useCallback(async (newSettings: SettingsState) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       setError('Please log in to save settings');
@@ -337,7 +337,7 @@ const SettingsPage: React.FC = () => {
         setError('Failed to save settings to server');
       }
     }
-  };
+  }, []);
 
   // Apply CSS variables when settings change
   useEffect(() => {
@@ -362,15 +362,7 @@ const SettingsPage: React.FC = () => {
     }
   }, [settings]);
 
-  // Sync settings with current language
-  useEffect(() => {
-    const currentLang = i18n.resolvedLanguage;
-    if (currentLang && currentLang !== settings.selectedLanguage) {
-      handleSettingChange('selectedLanguage', currentLang);
-    }
-  }, [i18n.resolvedLanguage, settings.selectedLanguage]);
-
-  const handleSettingChange = (
+  const handleSettingChange = useCallback((
     key: keyof SettingsState,
     value: string | number | boolean,
   ) => {
@@ -382,8 +374,16 @@ const SettingsPage: React.FC = () => {
     setSettings(newSettings);
 
     // Save to server asynchronously
-    savePreferencesToServer(newSettings);
-  };
+    void savePreferencesToServer(newSettings);
+  }, [settings, savePreferencesToServer]);
+
+  // Sync settings with current language
+  useEffect(() => {
+    const currentLang = i18n.resolvedLanguage;
+    if (currentLang && currentLang !== settings.selectedLanguage) {
+      handleSettingChange('selectedLanguage', currentLang);
+    }
+  }, [i18n.resolvedLanguage, settings.selectedLanguage, handleSettingChange]);
 
   // Remove duplicate declarations - they're already defined above
 

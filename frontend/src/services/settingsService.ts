@@ -17,7 +17,7 @@ settingsApiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(new Error(String(error))),
 );
 
 // Settings API functions

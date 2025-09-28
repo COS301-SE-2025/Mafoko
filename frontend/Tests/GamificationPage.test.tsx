@@ -316,7 +316,11 @@ describe('GamificationPage', () => {
 
   test('handles mock user data when no real user data available', () => {
     // Mock localStorage to return null
-    vi.mocked(localStorage.getItem).mockReturnValue(null);
+    const mockedGetItem = vi.fn().mockReturnValue(null);
+    Object.defineProperty(window, 'localStorage', {
+      value: { getItem: mockedGetItem },
+      writable: true,
+    });
 
     render(
       <Router>

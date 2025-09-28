@@ -215,7 +215,7 @@ const DashboardPage: React.FC = () => {
     try {
       // First, try to get cached data
       const cachedTerms = await getCachedRandomTerms();
-      if (cachedTerms && navigator.onLine === false) {
+      if (cachedTerms && !navigator.onLine) {
         console.log('Using cached random terms (offline)');
         setRandomTerms(cachedTerms.terms);
         setIsLoadingTerms(false);
