@@ -130,6 +130,9 @@ export default defineConfig({
           },
         ],
       },
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4 MB - ADD THIS SECTION
+      },
       manifest: {
         name: 'Marito - Multilingual Lexicons',
         short_name: 'Marito',
