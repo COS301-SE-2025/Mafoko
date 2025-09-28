@@ -130,35 +130,24 @@ const SettingsPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [settings, setSettings] = useState<SettingsState>(() => {
-    const savedSettings = localStorage.getItem('userSettings');
-    const defaultSettings: SettingsState = {
-      textSize: 16,
-      textSpacing: 1,
-      highContrastMode: false,
-      darkMode: false,
-      selectedLanguage: i18n.resolvedLanguage || 'en',
-    };
-
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings) as Partial<SettingsState>;
-        return { ...defaultSettings, ...parsed };
-      } catch (e) {
-        console.error('Failed to parse saved settings:', e);
-        return defaultSettings;
-      }
-    }
-
-    return defaultSettings;
+  const [settings, setSettings] = useState<SettingsState>({
+    textSize: 16,
+    textSpacing: 1,
+    highContrastMode: false,
+    darkMode: false,
+    selectedLanguage: i18n.resolvedLanguage || 'en',
   });
 
   // Load user preferences from server on component mount
   useEffect(() => {
     const loadUserPreferences = async () => {
+      // Clear any existing localStorage settings to ensure backend-only mode
+      localStorage.removeItem('userSettings');
+      
       const token = localStorage.getItem('accessToken');
       if (!token) {
-        // User not logged in, just use local settings
+        // User not logged in, redirect to login or show error
+        setError('Please log in to access settings');
         return;
       }
 
@@ -169,14 +158,13 @@ const SettingsPage: React.FC = () => {
         const serverPreferences = await getUserPreferences();
         
         // Update local state with server preferences
-        setSettings(prev => ({
-          ...prev,
+        setSettings({
           textSize: serverPreferences.text_size,
           textSpacing: serverPreferences.text_spacing,
           highContrastMode: serverPreferences.high_contrast_mode,
+          darkMode: false, // darkMode is handled separately by the DarkModeComponent
           selectedLanguage: serverPreferences.ui_language,
-          // darkMode is handled separately by the DarkModeComponent
-        }));
+        });
 
         // Update language if different
         if (serverPreferences.ui_language !== i18n.resolvedLanguage) {
@@ -186,7 +174,6 @@ const SettingsPage: React.FC = () => {
       } catch (err) {
         console.error('Failed to load user preferences:', err);
         setError('Failed to load settings from server');
-        // Continue with local settings
       } finally {
         setLoading(false);
       }
@@ -199,7 +186,7 @@ const SettingsPage: React.FC = () => {
   const savePreferencesToServer = async (newSettings: SettingsState) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      // User not logged in, just save locally
+      setError('Please log in to save settings');
       return;
     }
 
@@ -218,6 +205,7 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  // Apply CSS variables when settings change
   useEffect(() => {
     document.documentElement.style.setProperty(
       '--base-text-size',
@@ -238,9 +226,6 @@ const SettingsPage: React.FC = () => {
     } else {
       document.documentElement.removeAttribute('data-high-contrast-mode');
     }
-
-    // Keep localStorage as backup
-    localStorage.setItem('userSettings', JSON.stringify(settings));
   }, [settings]);
 
   // Sync settings with current language
@@ -334,26 +319,6 @@ const SettingsPage: React.FC = () => {
                       document.documentElement.lang = languageCode;
                       localStorage.setItem('i18nextLng', languageCode);
                       handleSettingChange('selectedLanguage', languageCode);
-                      // Update the settings in localStorage to keep everything in sync
-                      const savedSettings =
-                        localStorage.getItem('userSettings');
-                      if (savedSettings) {
-                        try {
-                          const settings = JSON.parse(
-                            savedSettings,
-                          ) as Partial<SettingsState>;
-                          const updatedSettings = {
-                            ...settings,
-                            selectedLanguage: languageCode,
-                          };
-                          localStorage.setItem(
-                            'userSettings',
-                            JSON.stringify(updatedSettings),
-                          );
-                        } catch (parseError) {
-                          console.error('Error parsing settings:', parseError);
-                        }
-                      }
                     } catch (err) {
                       console.error('Error changing language:', err);
                     }
