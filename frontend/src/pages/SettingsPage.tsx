@@ -255,89 +255,92 @@ const SettingsPage: React.FC = () => {
   }, [i18n]);
 
   // Save preferences to server when settings change with offline support
-  const savePreferencesToServer = useCallback(async (newSettings: SettingsState) => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      setError('Please log in to save settings');
-      return;
-    }
+  const savePreferencesToServer = useCallback(
+    async (newSettings: SettingsState) => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('Please log in to save settings');
+        return;
+      }
 
-    try {
-      const updateData: UserPreferencesUpdate = {
-        text_size: newSettings.textSize,
-        text_spacing: newSettings.textSpacing,
-        high_contrast_mode: newSettings.highContrastMode,
-        ui_language: newSettings.selectedLanguage,
-      };
-
-      await updateUserPreferences(updateData);
-
-      // Update cache with successful save
-      const cacheData: UserPreferencesCache = {
-        id: 'latest',
-        preferences: newSettings,
-        timestamp: Date.now(),
-      };
-      await cacheUserPreferences(cacheData);
-    } catch (err) {
-      console.error('Failed to save preferences to server:', err);
-
-      // Check if this is a network error (offline)
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to save settings';
-      if (
-        errorMessage.includes('Failed to fetch') ||
-        errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
-        errorMessage.includes('ERR_NETWORK') ||
-        !navigator.onLine
-      ) {
-        // Queue the update for offline sync
-        const pendingUpdate: PendingSettingsUpdate = {
-          id: crypto.randomUUID(),
-          preferences: {
-            textSize: newSettings.textSize,
-            textSpacing: newSettings.textSpacing,
-            highContrastMode: newSettings.highContrastMode,
-            selectedLanguage: newSettings.selectedLanguage,
-          },
-          token,
-          timestamp: Date.now(),
+      try {
+        const updateData: UserPreferencesUpdate = {
+          text_size: newSettings.textSize,
+          text_spacing: newSettings.textSpacing,
+          high_contrast_mode: newSettings.highContrastMode,
+          ui_language: newSettings.selectedLanguage,
         };
 
-        await addPendingSettingsUpdate(pendingUpdate);
+        await updateUserPreferences(updateData);
 
-        // Update cache optimistically
+        // Update cache with successful save
         const cacheData: UserPreferencesCache = {
           id: 'latest',
           preferences: newSettings,
           timestamp: Date.now(),
         };
         await cacheUserPreferences(cacheData);
+      } catch (err) {
+        console.error('Failed to save preferences to server:', err);
 
-        // Register background sync
+        // Check if this is a network error (offline)
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to save settings';
         if (
-          'serviceWorker' in navigator &&
-          'sync' in window.ServiceWorkerRegistration.prototype
+          errorMessage.includes('Failed to fetch') ||
+          errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+          errorMessage.includes('ERR_NETWORK') ||
+          !navigator.onLine
         ) {
-          try {
-            const registration = await navigator.serviceWorker.ready;
-            await registration.sync.register('sync-settings-updates');
-          } catch (syncError) {
-            console.error(
-              'Failed to register background sync for settings updates:',
-              syncError,
-            );
-          }
-        }
+          // Queue the update for offline sync
+          const pendingUpdate: PendingSettingsUpdate = {
+            id: crypto.randomUUID(),
+            preferences: {
+              textSize: newSettings.textSize,
+              textSpacing: newSettings.textSpacing,
+              highContrastMode: newSettings.highContrastMode,
+              selectedLanguage: newSettings.selectedLanguage,
+            },
+            token,
+            timestamp: Date.now(),
+          };
 
-        setError(
-          "You are offline. Your settings have been saved and will sync when you're back online.",
-        );
-      } else {
-        setError('Failed to save settings to server');
+          await addPendingSettingsUpdate(pendingUpdate);
+
+          // Update cache optimistically
+          const cacheData: UserPreferencesCache = {
+            id: 'latest',
+            preferences: newSettings,
+            timestamp: Date.now(),
+          };
+          await cacheUserPreferences(cacheData);
+
+          // Register background sync
+          if (
+            'serviceWorker' in navigator &&
+            'sync' in window.ServiceWorkerRegistration.prototype
+          ) {
+            try {
+              const registration = await navigator.serviceWorker.ready;
+              await registration.sync.register('sync-settings-updates');
+            } catch (syncError) {
+              console.error(
+                'Failed to register background sync for settings updates:',
+                syncError,
+              );
+            }
+          }
+
+          setError(
+            "You are offline. Your settings have been saved and will sync when you're back online.",
+          );
+        } else {
+          setError('Failed to save settings to server');
+        }
       }
-    }
-  }, []);
+    },
+    [],
+  );
 
   // Apply CSS variables when settings change
   useEffect(() => {
@@ -362,20 +365,20 @@ const SettingsPage: React.FC = () => {
     }
   }, [settings]);
 
-  const handleSettingChange = useCallback((
-    key: keyof SettingsState,
-    value: string | number | boolean,
-  ) => {
-    const newSettings = {
-      ...settings,
-      [key]: value,
-    };
+  const handleSettingChange = useCallback(
+    (key: keyof SettingsState, value: string | number | boolean) => {
+      const newSettings = {
+        ...settings,
+        [key]: value,
+      };
 
-    setSettings(newSettings);
+      setSettings(newSettings);
 
-    // Save to server asynchronously
-    void savePreferencesToServer(newSettings);
-  }, [settings, savePreferencesToServer]);
+      // Save to server asynchronously
+      void savePreferencesToServer(newSettings);
+    },
+    [settings, savePreferencesToServer],
+  );
 
   // Sync settings with current language
   useEffect(() => {

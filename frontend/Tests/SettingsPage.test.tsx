@@ -14,16 +14,19 @@ import * as settingsService from '../src/services/settingsService';
 // Mock dependencies
 const mockNavigate = vi.fn();
 
-vi.mock('react-router-dom', async (): Promise<typeof import('react-router-dom')> => {
-  const actual =
-    await vi.importActual<typeof import('react-router-dom')>(
-      'react-router-dom',
-    );
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
+vi.mock(
+  'react-router-dom',
+  async (): Promise<typeof import('react-router-dom')> => {
+    const actual =
+      await vi.importActual<typeof import('react-router-dom')>(
+        'react-router-dom',
+      );
+    return {
+      ...actual,
+      useNavigate: () => mockNavigate,
+    };
+  },
+);
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
