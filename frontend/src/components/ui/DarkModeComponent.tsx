@@ -1,4 +1,8 @@
 import React, { createContext, use, useState, useEffect } from 'react';
+import {
+  getUserPreferences,
+  updateUserPreferences,
+} from '../../services/settingsService';
 
 interface DarkModeContextType {
   isDarkMode: boolean;
@@ -14,19 +18,68 @@ export const DarkModeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Load dark mode setting from backend on component mount
   useEffect(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) {
-      setIsDarkMode(stored === 'true');
-    }
+    const loadDarkModeSetting = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        // User not logged in, use default
+        return;
+      }
+
+      try {
+        const preferences = await getUserPreferences();
+        const darkModeValue = preferences.dark_mode;
+        setIsDarkMode(darkModeValue);
+
+        // Apply both dark mode classes to document for compatibility
+        if (darkModeValue) {
+          document.documentElement.classList.add('theme-dark');
+          document.documentElement.classList.add('dark-mode');
+          document.documentElement.classList.remove('theme-light');
+        } else {
+          document.documentElement.classList.add('theme-light');
+          document.documentElement.classList.remove('theme-dark');
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch (err) {
+        console.error('Failed to load dark mode setting:', err);
+        // Continue with default (false) and apply light theme
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+        document.documentElement.classList.remove('dark-mode');
+      }
+    };
+
+    loadDarkModeSetting();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(isDarkMode));
-  }, [isDarkMode]);
+  const toggleDarkMode = async () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode((prev) => !prev);
+    // Apply both dark mode classes to document immediately for compatibility
+    if (newDarkMode) {
+      document.documentElement.classList.add('theme-dark');
+      document.documentElement.classList.add('dark-mode');
+      document.documentElement.classList.remove('theme-light');
+    } else {
+      document.documentElement.classList.add('theme-light');
+      document.documentElement.classList.remove('theme-dark');
+      document.documentElement.classList.remove('dark-mode');
+    }
+
+    // Save to backend
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      try {
+        await updateUserPreferences({
+          dark_mode: newDarkMode,
+        });
+      } catch (err) {
+        console.error('Failed to save dark mode setting:', err);
+      }
+    }
   };
 
   return (

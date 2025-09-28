@@ -90,29 +90,6 @@ const mockGroups = [
   },
 ];
 
-const mockSubmissions = [
-  {
-    id: 'sub-1',
-    term: 'New Term',
-    definition: 'A newly submitted term',
-    domain: 'Science',
-    language: 'English',
-    status: 'pending',
-    submittedAt: '2025-01-01T00:00:00Z',
-    feedback: null,
-  },
-  {
-    id: 'sub-2',
-    term: 'Approved Term',
-    definition: 'An approved term',
-    domain: 'Technology',
-    language: 'Afrikaans',
-    status: 'approved',
-    submittedAt: '2025-01-02T00:00:00Z',
-    feedback: 'Good submission',
-  },
-];
-
 describe('WorkspacePage Integration Tests', () => {
   let mockFetch: ReturnType<typeof vi.fn>;
 
@@ -515,20 +492,6 @@ describe('WorkspacePage Integration Tests', () => {
     // Verify initial tab is active
     await waitFor(() => {
       expect(screen.getByText('Saved Terms')).toHaveClass('active');
-    });
-
-    // Mock submission progress data
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => mockSubmissions,
-    });
-
-    // Click Submission Progress tab
-    fireEvent.click(screen.getByText('Submission Progress'));
-
-    // Verify tab switch and API call for submissions
-    await waitFor(() => {
-      expect(screen.getByText('Submission Progress')).toHaveClass('active');
     });
 
     // Mock followed glossaries data

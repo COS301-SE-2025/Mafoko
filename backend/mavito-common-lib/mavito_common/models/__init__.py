@@ -19,3 +19,4 @@ from .user_achievement import UserAchievement  # noqa: F401
 from .user_learning_progress import UserLearningProgress  # noqa: F401
 from .learning_path import LearningPath, LearningPathGlossary  # noqa: F401
 from .user_glossary_progress import UserGlossaryProgress  # noqa: F401
+from .user_preferences import UserPreferences  # noqa: F401

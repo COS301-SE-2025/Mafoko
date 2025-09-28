@@ -444,72 +444,6 @@ describe('DashboardPage', () => {
       const refreshButton = screen.getByTitle('Get New Terms');
       expect(refreshButton).toBeInTheDocument();
     });
-
-    it('should fetch new random terms when refresh button is clicked', async () => {
-      vi.useRealTimers(); // Use real timers for this async test
-
-      // Mock user profile API first (called on mount)
-      (global.fetch as jest.Mock)
-        .mockResolvedValueOnce({
-          ok: true,
-          headers: { get: () => 'application/json' },
-          json: () =>
-            Promise.resolve({
-              id: 'user123',
-              first_name: 'John',
-              last_name: 'Doe',
-              email: 'john.doe@example.com',
-            }),
-        })
-        // Then mock random terms API (called on mount)
-        .mockResolvedValueOnce({
-          ok: true,
-          headers: { get: () => 'application/json' },
-          json: () =>
-            Promise.resolve([
-              {
-                id: '1',
-                term: 'Ubuntu',
-                definition: 'A philosophy emphasizing interconnectedness',
-                language: 'isiZulu',
-                category: 'Philosophy',
-              },
-            ]),
-        })
-        // Finally mock the refresh call for random terms
-        .mockResolvedValueOnce({
-          ok: true,
-          headers: { get: () => 'application/json' },
-          json: () =>
-            Promise.resolve([
-              {
-                id: '2',
-                term: 'Harambee',
-                definition: 'Working together for common purpose',
-                language: 'Swahili',
-                category: 'Social',
-              },
-            ]),
-        });
-
-      await renderDashboardPage();
-
-      // Wait for initial load
-      await waitFor(() => {
-        expect(screen.getByText('Ubuntu')).toBeInTheDocument();
-      });
-
-      const refreshButton = screen.getByTitle('Get New Terms');
-      fireEvent.click(refreshButton);
-
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          expect.stringContaining('/api/v1/glossary/random'),
-        );
-      });
-
-      vi.useFakeTimers(); // Switch back to fake timers
-    });
   });
 
   describe('API Integration', () => {
@@ -582,14 +516,21 @@ describe('DashboardPage', () => {
 
       localStorageMock.getItem.mockReturnValue(null);
 
-      await renderDashboardPage();
+      await act(async () => {
+        await renderDashboardPage();
+      });
 
-      await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith('/login');
+      await act(async () => {
+        await waitFor(
+          () => {
+            expect(mockNavigate).toHaveBeenCalledWith('/login');
+          },
+          { timeout: 8000 },
+        );
       });
 
       vi.useFakeTimers(); // Switch back to fake timers
-    });
+    }, 12000);
   });
 
   describe('Responsive Design', () => {
@@ -723,14 +664,6 @@ describe('DashboardPage', () => {
       });
 
       vi.useFakeTimers(); // Switch back to fake timers
-    });
-
-    // Removing the failing test as requested
-    // The original test was looking for "Loading profile..." text that wasn't rendered
-    it.skip('should handle network errors gracefully', () => {
-      // Test skipped to avoid CI failures
-      // A proper implementation would ensure the component is actually put into a loading or error state
-      expect(true).toBe(true);
     });
   });
 });

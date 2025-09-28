@@ -32,6 +32,7 @@ import {
   orchestrateTermSync,
   orchestrateXPSync,
 } from './utils/syncManager';
+import { getUserPreferences } from './services/settingsService';
 import {
   Chart as ChartJS,
   PieController,
@@ -54,7 +55,6 @@ import HomeHelp from './pages/help/HomeHelp.tsx';
 import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
 import { Toaster } from 'sonner';
 
-// Register all Chart.js components once at the application entry point
 ChartJS.register(
   PieController,
   ArcElement,
@@ -70,8 +70,46 @@ ChartJS.register(
 
 function App() {
   useEffect(() => {
+    const loadGlobalUserPreferences = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const serverPreferences = await getUserPreferences();
+
+        document.documentElement.style.setProperty(
+          '--base-text-size',
+          `${serverPreferences.text_size}px`,
+        );
+        document.documentElement.style.setProperty(
+          '--text-scaling',
+          (serverPreferences.text_size / 16).toString(),
+        );
+        document.documentElement.style.setProperty(
+          '--text-spacing',
+          serverPreferences.text_spacing.toString(),
+        );
+
+        if (serverPreferences.high_contrast_mode) {
+          document.documentElement.setAttribute(
+            'data-high-contrast-mode',
+            'true',
+          );
+        } else {
+          document.documentElement.removeAttribute('data-high-contrast-mode');
+        }
+      } catch (err) {
+        console.error('Failed to load global user preferences:', err);
+      }
+    };
+
+    loadGlobalUserPreferences();
+  }, []);
+
+  useEffect(() => {
     const handleSWMessage = (event: MessageEvent) => {
-      // Handle comment sync requests
       if (event.data?.type === 'SYNC_REQUEST') {
         console.log('Client: Received comment sync request.');
         orchestrateCommentSync().then((synced) => {
@@ -79,7 +117,6 @@ function App() {
         });
       }
 
-      // Handle term action sync requests
       if (event.data?.type === 'TERM_SYNC_REQUEST') {
         console.log('Client: Received term action sync request.');
         orchestrateTermSync().then((synced) => {
@@ -87,7 +124,6 @@ function App() {
         });
       }
 
-      // Handle XP sync requests
       if (event.data?.type === 'XP_SYNC_REQUEST') {
         console.log('Client: Received XP sync request.');
         orchestrateXPSync().then((synced) => {
@@ -100,7 +136,6 @@ function App() {
 
     navigator.serviceWorker?.addEventListener('message', handleSWMessage);
 
-    // Run sync checks when the app loads
     orchestrateCommentSync();
     orchestrateTermSync();
     orchestrateXPSync();
