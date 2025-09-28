@@ -37,6 +37,24 @@ vi.mock('../src/config', () => ({
   },
 }));
 
+// Mock IndexedDB utilities to prevent indexedDB access
+vi.mock('../src/utils/indexedDB.ts', () => ({
+  openDB: vi.fn(),
+  getAllRecords: vi.fn(() => Promise.resolve([])),
+  addRecord: vi.fn(() => Promise.resolve()),
+  updateRecord: vi.fn(() => Promise.resolve()),
+  deleteRecord: vi.fn(() => Promise.resolve()),
+  clearStore: vi.fn(() => Promise.resolve()),
+  default: {
+    openDB: vi.fn(),
+    getAllRecords: vi.fn(() => Promise.resolve([])),
+    addRecord: vi.fn(() => Promise.resolve()),
+    updateRecord: vi.fn(() => Promise.resolve()),
+    deleteRecord: vi.fn(() => Promise.resolve()),
+    clearStore: vi.fn(() => Promise.resolve()),
+  },
+}));
+
 // Mock fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
