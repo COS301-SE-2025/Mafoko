@@ -25,7 +25,8 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
 }) => {
   return (
     <div
-      className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 cursor-default hover:shadow-md transition-all"
+      className="bg-theme rounded-xl p-6 shadow-sm border border-secondary cursor-default hover:shadow-md transition-all flex flex-col gap-3"
+      style={{ padding: '10px' }}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={(e) => {
@@ -42,9 +43,8 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
         {glossary.name}
       </h3>
 
-      {/* Progress bar above the action buttons */}
       <div className="glossary-card-progress mb-4">
-        <div className="progress-row flex items-center justify-between">
+        <div className="progress-row flex items-center justify-between gap-3">
           <div className="progress-bar w-full bg-gray-200 rounded-full h-2 mr-3 overflow-hidden">
             <div
               className="progress-fill h-2 rounded-full"
