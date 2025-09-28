@@ -5,6 +5,8 @@ import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useTranslation } from 'react-i18next';
+import { getUserPreferences, updateUserPreferences } from '../services/settingsService';
+import { UserPreferencesUpdate } from '../types/userPreferences';
 import '../styles/DashboardPage.scss';
 import '../styles/SettingsPage.scss';
 
@@ -122,6 +124,11 @@ const SliderControl: React.FC<SliderControlProps> = ({
 
 const SettingsPage: React.FC = () => {
   const { i18n, t } = useTranslation();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const navigate = useNavigate();
+  const [isMobile] = useState(window.innerWidth <= 768);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [settings, setSettings] = useState<SettingsState>(() => {
     const savedSettings = localStorage.getItem('userSettings');
@@ -146,6 +153,71 @@ const SettingsPage: React.FC = () => {
     return defaultSettings;
   });
 
+  // Load user preferences from server on component mount
+  useEffect(() => {
+    const loadUserPreferences = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        // User not logged in, just use local settings
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const serverPreferences = await getUserPreferences();
+        
+        // Update local state with server preferences
+        setSettings(prev => ({
+          ...prev,
+          textSize: serverPreferences.text_size,
+          textSpacing: serverPreferences.text_spacing,
+          highContrastMode: serverPreferences.high_contrast_mode,
+          selectedLanguage: serverPreferences.ui_language,
+          // darkMode is handled separately by the DarkModeComponent
+        }));
+
+        // Update language if different
+        if (serverPreferences.ui_language !== i18n.resolvedLanguage) {
+          await i18n.changeLanguage(serverPreferences.ui_language);
+        }
+        
+      } catch (err) {
+        console.error('Failed to load user preferences:', err);
+        setError('Failed to load settings from server');
+        // Continue with local settings
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserPreferences();
+  }, [i18n]);
+
+  // Save preferences to server when settings change
+  const savePreferencesToServer = async (newSettings: SettingsState) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      // User not logged in, just save locally
+      return;
+    }
+
+    try {
+      const updateData: UserPreferencesUpdate = {
+        text_size: newSettings.textSize,
+        text_spacing: newSettings.textSpacing,
+        high_contrast_mode: newSettings.highContrastMode,
+        ui_language: newSettings.selectedLanguage,
+      };
+
+      await updateUserPreferences(updateData);
+    } catch (err) {
+      console.error('Failed to save preferences to server:', err);
+      setError('Failed to save settings to server');
+    }
+  };
+
   useEffect(() => {
     document.documentElement.style.setProperty(
       '--base-text-size',
@@ -167,6 +239,7 @@ const SettingsPage: React.FC = () => {
       document.documentElement.removeAttribute('data-high-contrast-mode');
     }
 
+    // Keep localStorage as backup
     localStorage.setItem('userSettings', JSON.stringify(settings));
   }, [settings]);
 
@@ -182,87 +255,20 @@ const SettingsPage: React.FC = () => {
     key: keyof SettingsState,
     value: string | number | boolean,
   ) => {
-    setSettings((prev) => ({
-      ...prev,
+    const newSettings = {
+      ...settings,
       [key]: value,
-    }));
+    };
+    
+    setSettings(newSettings);
+    
+    // Save to server asynchronously
+    savePreferencesToServer(newSettings);
   };
 
-  const [isMobile] = useState(window.innerWidth <= 768);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const navigate = useNavigate();
+  // Remove duplicate declarations - they're already defined above
 
-  useEffect(() => {
-    if (settings.highContrastMode) {
-      document.documentElement.setAttribute('data-high-contrast-mode', 'true');
-    }
-  }, [settings.highContrastMode]);
-
-  React.useEffect(() => {
-    const savedSettings = localStorage.getItem('accessibilitySettings');
-    const savedUserSettings = localStorage.getItem('userSettings');
-
-    if (savedUserSettings) {
-      try {
-        const parsedUserSettings = JSON.parse(
-          savedUserSettings,
-        ) as Partial<SettingsState>;
-        setSettings((prev) => ({
-          ...prev,
-          textSize: parsedUserSettings.textSize ?? 16,
-          textSpacing: parsedUserSettings.textSpacing ?? 1,
-          highContrastMode: parsedUserSettings.highContrastMode ?? false,
-          darkMode: isDarkMode,
-        }));
-      } catch (e) {
-        console.error('Failed to parse user settings:', e);
-      }
-    } else if (savedSettings) {
-      try {
-        const parsedSettings = JSON.parse(
-          savedSettings,
-        ) as Partial<SettingsState>;
-        setSettings((prev) => ({
-          ...prev,
-          textSize: parsedSettings.textSize ?? 16,
-          textSpacing: parsedSettings.textSpacing ?? 1,
-          darkMode: isDarkMode,
-        }));
-      } catch (e) {
-        console.error('Failed to parse accessibility settings:', e);
-      }
-    }
-  }, [isDarkMode]);
-
-  // Save settings to localStorage and apply them
-  React.useEffect(() => {
-    // Save to localStorage
-    const settingsToSave = {
-      textSize: settings.textSize,
-      textSpacing: settings.textSpacing,
-      highContrastMode: settings.highContrastMode,
-    };
-    localStorage.setItem(
-      'accessibilitySettings',
-      JSON.stringify(settingsToSave),
-    );
-
-    document.documentElement.style.setProperty(
-      '--base-text-size',
-      `${settings.textSize.toString()}px`,
-    );
-    document.documentElement.style.setProperty(
-      '--text-spacing',
-      settings.textSpacing.toString(),
-    );
-
-    // Apply high contrast mode
-    if (settings.highContrastMode) {
-      document.documentElement.setAttribute('data-high-contrast-mode', 'true');
-    } else {
-      document.documentElement.removeAttribute('data-high-contrast-mode');
-    }
-  }, [settings.textSize, settings.textSpacing, settings.highContrastMode]);
+  // Remove duplicate useEffect blocks - already handled above
 
   return (
     <div
@@ -278,6 +284,18 @@ const SettingsPage: React.FC = () => {
           <h1>{t('settings.title')}</h1>
           <br />
           <p>{t('settings.subtitle')}</p>
+          {error && (
+            <div className="error-message" style={{ 
+              color: '#dc3545', 
+              backgroundColor: '#f8d7da', 
+              border: '1px solid #f5c6cb', 
+              padding: '0.75rem 1rem', 
+              borderRadius: '0.375rem', 
+              marginTop: '1rem' 
+            }}>
+              {error}
+            </div>
+          )}
         </header>
 
         <div className="settings-content">
