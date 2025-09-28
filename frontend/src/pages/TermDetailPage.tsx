@@ -3,11 +3,12 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { CommentItem } from '../components/TermDetail/CommentItem';
 import { Comment } from '../types/termDetailTypes';
 import '../styles/TermDetailPage.scss';
-import { SendIcon, SuggestEditArrowIcon } from '../components/Icons';
+import { SendIcon } from '../components/Icons';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
+import { GamificationService } from '../utils/gamification';
 import { Term } from '../types/terms/types.ts';
 import '../styles/TermPage.scss';
 import { ArrowUp, ArrowDown, Share2 } from 'lucide-react';
@@ -295,6 +296,14 @@ export const TermDetailPage: React.FC = () => {
         token: authToken,
       };
       await addPendingComment(pendingComment);
+
+      if (currentUserId) {
+        await GamificationService.awardCommentXP(
+          currentUserId,
+          optimisticComment.id,
+        );
+      }
+
       const swRegistration = await navigator.serviceWorker.ready;
       await swRegistration.sync.register('sync-comment-actions');
       return;
@@ -313,8 +322,25 @@ export const TermDetailPage: React.FC = () => {
           tempId: optimisticComment.id,
         }),
       });
+
       if (!response.ok) throw new Error('Failed to post comment');
       const { newComment: savedComment } = await response.json();
+
+      // Award XP in background - don't block the UI refresh
+      if (currentUserId && savedComment.id) {
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardCommentXP(
+              currentUserId,
+              savedComment.id,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for comment:', xpError);
+            // XP failure doesn't affect the comment creation success
+          }
+        });
+      }
+
       const finalComments = updatedComments.map((c) =>
         c.id === optimisticComment.id
           ? mapBackendCommentToFrontend(savedComment)
@@ -375,6 +401,14 @@ export const TermDetailPage: React.FC = () => {
         token: authToken,
       };
       await addPendingCommentVote(pendingVote);
+
+      if (voteType === 'upvote') {
+        const comment = comments.find((c) => c.id === commentId);
+        if (comment && comment.user.id) {
+          await GamificationService.awardUpvoteXP(comment.user.id, commentId);
+        }
+      }
+
       const swRegistration = await navigator.serviceWorker.ready;
       await swRegistration.sync.register('sync-comment-actions');
       return;
@@ -388,8 +422,28 @@ export const TermDetailPage: React.FC = () => {
         },
         body: JSON.stringify({ comment_id: commentId, vote: voteType }),
       });
+
       if (!response.ok) throw new Error('Vote failed');
       const serverUpdatedComment: BackendComment = await response.json();
+
+      // Award XP in background - don't block the UI refresh
+      if (voteType === 'upvote') {
+        const comment = comments.find((c) => c.id === commentId);
+        if (comment && comment.user.id) {
+          Promise.resolve().then(async () => {
+            try {
+              await GamificationService.awardUpvoteXP(
+                comment.user.id,
+                commentId,
+              );
+            } catch (xpError) {
+              console.warn('Failed to award XP for upvote:', xpError);
+              // XP failure doesn't affect the vote success
+            }
+          });
+        }
+      }
+
       const finalComments = optimisticComments.map((c) =>
         c.id === commentId
           ? {
@@ -518,6 +572,15 @@ export const TermDetailPage: React.FC = () => {
         token: authToken,
       };
       await addPendingVote(pendingVote);
+
+      const termWithOwner = term as Term & { owner_id?: string };
+      if (voteType === 'upvote' && termWithOwner.owner_id) {
+        await GamificationService.awardTermUpvoteXP(
+          termWithOwner.owner_id,
+          termId,
+        );
+      }
+
       const swRegistration = await navigator.serviceWorker.ready;
       await swRegistration.sync.register('sync-votes');
       return;
@@ -535,6 +598,25 @@ export const TermDetailPage: React.FC = () => {
 
       // The response is just the vote update, not the full term
       const voteUpdate = await response.json();
+
+      const termWithOwner = term as Term & { owner_id?: string };
+      if (
+        voteType === 'upvote' &&
+        termWithOwner.owner_id &&
+        voteUpdate.user_vote === 'upvote'
+      ) {
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardTermUpvoteXP(
+              termWithOwner.owner_id!,
+              termId,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for term upvote:', xpError);
+            // XP failure doesn't affect the vote success
+          }
+        });
+      }
 
       // Create a new, complete term object by merging the update
       const newFinalTerm = {
@@ -637,25 +719,46 @@ export const TermDetailPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="term-conent w-full pb-3">
-                    <Card className="w-full max-w-screen mx-auto bg-theme text-theme text-left">
+                    <Card
+                      className="w-full max-w-screen mx-auto bg-theme text-theme text-left "
+                      style={{ padding: '1rem' }}
+                    >
                       <CardHeader>
-                        <div className="flex flex-row items-start gap-2">
+                        <div
+                          className="flex flex-row items-start gap-2 rounded-2xl"
+                          style={{ marginBottom: '0.4rem' }}
+                        >
                           <Badge
                             variant="secondary"
-                            className="bg-accent text-sm"
+                            className="bg-accent text-sm rounded-2xl"
+                            style={{
+                              padding: '0.2rem',
+                              paddingRight: '0.6rem',
+                              paddingLeft: '0.6rem',
+                            }}
                           >
                             {term.domain}
                           </Badge>
                           <Badge
                             variant="destructive"
-                            className={`bg-accent text-sm ${languageClass} text-theme`}
+                            className={`bg-accent text-sm ${languageClass} text-theme rounded-2xl`}
+                            style={{
+                              padding: '0.2rem',
+                              paddingRight: '0.6rem',
+                              paddingLeft: '0.6rem',
+                            }}
                           >
                             {term.language}
                           </Badge>
                           {term.status && (
                             <Badge
                               variant="default"
-                              className={`text-sm ${statusClassMap[term.status] || 'bg-gray-500 text-white'}`}
+                              className={`text-sm rounded-2xl ${statusClassMap[term.status] || 'bg-gray-500 text-white'}`}
+                              style={{
+                                padding: '0.2rem',
+                                paddingRight: '0.6rem',
+                                paddingLeft: '0.6rem',
+                              }}
                             >
                               {formatStatus(term.status)}
                             </Badge>
@@ -672,7 +775,7 @@ export const TermDetailPage: React.FC = () => {
                             Description
                           </h3>
                           <p className="text-sm leading-relaxed">
-                            {term.definition}
+                            {term.definition || 'No description provided'}
                           </p>
                         </section>
                         <section>
@@ -686,11 +789,16 @@ export const TermDetailPage: React.FC = () => {
                                   <Badge
                                     key={relatedTerm.id}
                                     variant="outline"
-                                    className="text-sm text-theme"
+                                    className="text-sm text-theme rounded-2xl text-center flex justify-center items-center"
+                                    style={{
+                                      padding: '0.2rem',
+                                      paddingRight: '0.6rem',
+                                      paddingLeft: '0.6rem',
+                                    }}
                                   >
                                     <Link
                                       to={`/term/${relatedTerm.language}/${relatedTerm.term}/${relatedTerm.id}`}
-                                      className="!text-pink-600"
+                                      className="!text-pink-600 text-center"
                                     >
                                       {relatedTerm.term}
                                     </Link>
@@ -757,16 +865,7 @@ export const TermDetailPage: React.FC = () => {
                             </button>
                           </div>
                         </section>
-                        <footer className="page-footer">
-                          <button
-                            type="button"
-                            className="suggest-edit"
-                            aria-label="Suggest an edit"
-                          >
-                            Suggest an edit
-                            <SuggestEditArrowIcon />
-                          </button>
-                        </footer>
+                        <footer className="page-footer"></footer>
                       </CardContent>
                     </Card>
                   </div>

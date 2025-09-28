@@ -35,3 +35,16 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
 // Mock URL constructor
 global.URL.createObjectURL = vi.fn();
 global.URL.revokeObjectURL = vi.fn();
+
+// Mock useProfilePicture hook
+vi.mock('../src/hooks/useProfilePicture', () => ({
+  useProfilePicture: vi.fn(() => ({
+    profilePictureUrl: null,
+    loadingProfilePicture: false,
+    loadProfilePicture: vi.fn(),
+    clearProfilePictureCache: vi.fn(),
+    uploadProfilePicture: vi.fn(),
+    getPendingUploadCount: vi.fn(() => Promise.resolve(0)),
+  })),
+  handleProfilePictureError: vi.fn(),
+}));

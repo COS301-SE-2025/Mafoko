@@ -5,6 +5,22 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  --accent-pink: #f00a50;
+  --accent-yellow: #f2d001;
+  --accent-teal: #00ceaf;
+  --accent-blue: #212431;
+  --accent-white: #ffffff;
+  --background-light: #f5f5f5;
+  --background-dark: #363b4d;
+  --secondary-light: #ffffff;
+  --secondary-dark: #212431;
+  --tertiary-light: #212431;
+  --tertiary-dark: #ffffff;
+  --text-light: #212431;
+  --text-dark: #ffffff;
+}
+
+:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -80,21 +96,14 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
@@ -235,4 +244,25 @@ button:focus-visible {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+
+  overflow-y: scroll;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: var(--bg-theme);
+  border-radius: 9999px;
 }

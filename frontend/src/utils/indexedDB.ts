@@ -70,6 +70,50 @@ export interface PendingCommentDelete {
   token: string;
 }
 
+export interface PendingProfilePictureUpload {
+  id: string;
+  userId: string;
+  file: File;
+  fileName: string;
+  contentType: string;
+  token: string;
+  timestamp: number;
+}
+
+export interface PendingXPAward {
+  id: string;
+  user_id: string;
+  xp_amount: number;
+  xp_source: string;
+  source_reference_id: string;
+  description?: string;
+  token: string;
+  timestamp: number;
+}
+
+export interface PendingFeedback {
+  id: string;
+  type: string;
+  message: string;
+  name?: string | null;
+  email?: string | null;
+  priority?: string;
+  token?: string;
+  timestamp: number;
+}
+
+export interface PendingFeedbackUpdate {
+  id: string;
+  feedbackId: string;
+  updates: {
+    status?: string;
+    priority?: string;
+    admin_response?: string | null;
+  };
+  token: string;
+  timestamp: number;
+}
+
 interface MyDB extends DBSchema {
   terms: {
     key: string;
@@ -104,9 +148,25 @@ interface MyDB extends DBSchema {
   'pending-term-deletes': { key: string; value: PendingTermDelete };
   'pending-term-approvals': { key: string; value: PendingTermApproval };
   'pending-term-rejections': { key: string; value: PendingTermRejection };
+  'pending-profile-pictures': {
+    key: string;
+    value: PendingProfilePictureUpload;
+  };
+  'pending-xp-awards': {
+    key: string;
+    value: PendingXPAward;
+  };
+  'pending-feedback': {
+    key: string;
+    value: PendingFeedback;
+  };
+  'pending-feedback-updates': {
+    key: string;
+    value: PendingFeedbackUpdate;
+  };
 }
 
-const dbPromise = openDB<MyDB>('marito-db', 3, {
+const dbPromise = openDB<MyDB>('marito-db', 8, {
   upgrade(db, oldVersion) {
     if (oldVersion < 3) {
       if (!db.objectStoreNames.contains('terms')) {
@@ -147,6 +207,30 @@ const dbPromise = openDB<MyDB>('marito-db', 3, {
       }
       if (!db.objectStoreNames.contains('pending-term-rejections')) {
         db.createObjectStore('pending-term-rejections', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 5) {
+      // Add profile picture uploads store
+      if (!db.objectStoreNames.contains('pending-profile-pictures')) {
+        db.createObjectStore('pending-profile-pictures', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 6) {
+      // Add XP awards store
+      if (!db.objectStoreNames.contains('pending-xp-awards')) {
+        db.createObjectStore('pending-xp-awards', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 7) {
+      // Add feedback store
+      if (!db.objectStoreNames.contains('pending-feedback')) {
+        db.createObjectStore('pending-feedback', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 8) {
+      // Add feedback updates store
+      if (!db.objectStoreNames.contains('pending-feedback-updates')) {
+        db.createObjectStore('pending-feedback-updates', { keyPath: 'id' });
       }
     }
   },
@@ -405,4 +489,90 @@ export async function getTermsByIdsFromDB(termIds: string[]): Promise<Term[]> {
   }
   await tx.done;
   return terms;
+}
+
+export async function addPendingProfilePictureUpload(
+  upload: PendingProfilePictureUpload,
+) {
+  const db = await dbPromise;
+  await db.put('pending-profile-pictures', upload);
+}
+
+export async function getAndClearPendingProfilePictureUploads(): Promise<
+  PendingProfilePictureUpload[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-profile-pictures', 'readwrite');
+  const allUploads = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allUploads;
+}
+
+export async function getPendingProfilePictureUploadCount(): Promise<number> {
+  const db = await dbPromise;
+  const allUploads = await db.getAll('pending-profile-pictures');
+  return allUploads.length;
+}
+
+export async function addPendingXPAward(award: PendingXPAward) {
+  const db = await dbPromise;
+  await db.put('pending-xp-awards', award);
+}
+
+export async function getAndClearPendingXPAwards(): Promise<PendingXPAward[]> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-xp-awards', 'readwrite');
+  const allAwards = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allAwards;
+}
+
+export async function getPendingXPAwardCount(): Promise<number> {
+  const db = await dbPromise;
+  const allAwards = await db.getAll('pending-xp-awards');
+  return allAwards.length;
+}
+
+export async function addPendingFeedback(feedback: PendingFeedback) {
+  const db = await dbPromise;
+  await db.put('pending-feedback', feedback);
+}
+
+export async function getAndClearPendingFeedback(): Promise<PendingFeedback[]> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-feedback', 'readwrite');
+  const allFeedback = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allFeedback;
+}
+
+export async function getPendingFeedbackCount(): Promise<number> {
+  const db = await dbPromise;
+  const allFeedback = await db.getAll('pending-feedback');
+  return allFeedback.length;
+}
+
+export async function addPendingFeedbackUpdate(update: PendingFeedbackUpdate) {
+  const db = await dbPromise;
+  await db.put('pending-feedback-updates', update);
+}
+
+export async function getAndClearPendingFeedbackUpdates(): Promise<
+  PendingFeedbackUpdate[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-feedback-updates', 'readwrite');
+  const allUpdates = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allUpdates;
+}
+
+export async function getPendingFeedbackUpdateCount(): Promise<number> {
+  const db = await dbPromise;
+  const allUpdates = await db.getAll('pending-feedback-updates');
+  return allUpdates.length;
 }

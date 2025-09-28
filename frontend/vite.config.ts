@@ -95,6 +95,22 @@ export default defineConfig({
               networkTimeoutSeconds: 3,
             },
           },
+          // Gamification service - Network first for user data
+          {
+            urlPattern: /^https?:\/\/.*\/api\/v1\/(xp|levels|achievements)\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'gamification-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24, // 1 day
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              networkTimeoutSeconds: 3,
+            },
+          },
           // General API fallback
           {
             urlPattern: /^https?:\/\/.*\/api\//,

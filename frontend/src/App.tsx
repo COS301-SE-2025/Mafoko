@@ -30,6 +30,7 @@ import './styles/Global.scss';
 import {
   orchestrateCommentSync,
   orchestrateTermSync,
+  orchestrateXPSync,
 } from './utils/syncManager';
 import {
   Chart as ChartJS,
@@ -44,6 +45,14 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import SettingsHelp from './pages/help/settings-help.tsx';
+import GlossaryHelp from './pages/help/GlossaryHelp.tsx';
+import WorkspaceHelp from './pages/help/WorkspaceHelp.tsx';
+import FeedbackHelp from './pages/help/FeedbackHelp.tsx';
+import DashboardHelp from './pages/help/DashboardHelp.tsx';
+import HomeHelp from './pages/help/HomeHelp.tsx';
+import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
+import { Toaster } from 'sonner';
 
 // Register all Chart.js components once at the application entry point
 ChartJS.register(
@@ -77,13 +86,24 @@ function App() {
           if (synced) window.location.reload();
         });
       }
+
+      // Handle XP sync requests
+      if (event.data?.type === 'XP_SYNC_REQUEST') {
+        console.log('Client: Received XP sync request.');
+        orchestrateXPSync().then((synced) => {
+          if (synced) {
+            console.log('Client: XP awards synced successfully.');
+          }
+        });
+      }
     };
 
     navigator.serviceWorker?.addEventListener('message', handleSWMessage);
 
-    // Run both sync checks when the app loads
+    // Run sync checks when the app loads
     orchestrateCommentSync();
     orchestrateTermSync();
+    orchestrateXPSync();
 
     return () => {
       navigator.serviceWorker?.removeEventListener('message', handleSWMessage);
@@ -104,7 +124,14 @@ function App() {
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
+        <Route path="/help/settings-help" element={<SettingsHelp />} />
+        <Route path="/help/glossary-help" element={<GlossaryHelp />} />
+        <Route path="/help/workspace-help" element={<WorkspaceHelp />} />
+        <Route path="/help/feedback-help" element={<FeedbackHelp />} />
+        <Route path="/help/dashboard-help" element={<DashboardHelp />} />
+        <Route path="/help/home-help" element={<HomeHelp />} />
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
+        <Route path="/help/learning-path-help" element={<LearningPathHelp />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
@@ -124,6 +151,7 @@ function App() {
         <Route path="/achievements" element={<GamificationPage />} />
         <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
+      <Toaster />
     </div>
   );
 }

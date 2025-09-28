@@ -13,10 +13,13 @@ import {
   getTermsByIdsFromDB,
 } from '../utils/indexedDB';
 import { updateCache } from '../utils/cacheUpdater';
+import { GamificationService } from '../utils/gamification';
 import { UserData } from '../types/glossaryTypes';
 import { Term } from '../types/terms/types';
 import { addTerm } from '../utils/indexedDB';
 import { refreshAllTermsCache } from '../utils/syncManager';
+import { toast } from 'sonner';
+
 interface TermSchema {
   id: string;
   term: string;
@@ -453,8 +456,12 @@ const ContributorPage: React.FC = () => {
       !selectedDomain ||
       !selectedLanguage ||
       !token
-    )
-      return alert('Please fill in all required fields');
+    ) {
+      toast('Submission Failed', {
+        description: 'Please fill in all required fields.',
+      });
+      return;
+    }
 
     const translationsToSend = selectedTranslations.map((t) => t.id);
     const body: TermApplicationCreate = {
@@ -500,6 +507,12 @@ const ContributorPage: React.FC = () => {
 
       // 3. Queue the action for the service worker
       await addPendingTermSubmission({ id: tempId, body, token });
+
+      // 4. Queue XP award for term addition when offline
+      if (currentUser?.uuid) {
+        await GamificationService.awardTermAdditionXP(currentUser.uuid, tempId);
+      }
+
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
 
@@ -522,14 +535,29 @@ const ContributorPage: React.FC = () => {
         throw new Error(errorData.detail || 'Submission failed');
       }
 
+      const submissionData = await response.json();
+
+      Promise.resolve().then(async () => {
+        try {
+          await GamificationService.awardTermAdditionXP(
+            submissionData.submitted_by_user_id,
+            submissionData.id,
+          );
+        } catch (xpError) {
+          console.warn('Failed to award XP for term submission:', xpError);
+          // XP failure doesn't affect the submission success
+        }
+      });
+
       // After a successful online submission, refresh the main terms list
       await refreshAllTermsCache();
 
-      fetchData(); // This re-fetches the component's own lists
+      fetchData();
       setActiveTab('my');
     } catch (err: any) {
-      console.error(err);
-      alert('Failed to submit term: ' + err.message);
+      toast('Failed to submit term', {
+        description: err.message,
+      });
     }
   };
 
@@ -537,11 +565,21 @@ const ContributorPage: React.FC = () => {
     if (!token) return;
     if (isOffline) {
       await addPendingTermVote({ id: uuidv4(), applicationId: id, token });
+
+      const votedApplication = pendingTerms.find((app) => app.id === id);
+      if (votedApplication?.submitted_by_user_id) {
+        await GamificationService.awardCrowdVoteXP(
+          votedApplication.submitted_by_user_id,
+          id,
+        );
+      }
+
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
-      alert(
-        'Your vote has been queued and will be submitted when you are back online.',
-      );
+      toast('Submission Failed', {
+        description:
+          'Your vote has been queued and will be submitted when you are back online.',
+      });
       return;
     }
 
@@ -552,6 +590,28 @@ const ContributorPage: React.FC = () => {
       });
       if (!response.ok)
         throw new Error('Vote failed: ' + (await response.json()).detail);
+
+      // Award XP in background - don't block the UI refresh
+      const votedApplication = pendingTerms.find((app) => app.id === id);
+      if (votedApplication?.submitted_by_user_id) {
+        Promise.resolve().then(async () => {
+          try {
+            await GamificationService.awardCrowdVoteXP(
+              votedApplication.submitted_by_user_id,
+              id,
+            );
+          } catch (xpError) {
+            console.warn('Failed to award XP for crowd vote:', xpError);
+            // XP failure doesn't affect the vote success
+          }
+        });
+      } else {
+        console.warn(
+          ' No XP awarded - submitted_by_user_id not available for application:',
+          id,
+        );
+      }
+
       fetchData();
     } catch (err) {
       console.error(err);
@@ -585,8 +645,10 @@ const ContributorPage: React.FC = () => {
       });
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
-      alert('Application queued for deletion.');
-      setCurrentAppId(null); // Reset the ID
+      toast('Application queued for deletion', {
+        description: '',
+      });
+      setCurrentAppId(null);
       return;
     }
 
@@ -597,10 +659,13 @@ const ContributorPage: React.FC = () => {
       );
       if (!response.ok) throw new Error('Failed to delete application');
       fetchData();
-      alert('Application deleted successfully');
+      toast('Delete Success', {
+        description: 'Application deleted successfully',
+      });
     } catch (err: any) {
-      console.error(err);
-      alert('Failed to delete application: ' + err.message);
+      toast('Failed to delete application', {
+        description: err.message,
+      });
       setMySubmissions(originalMySubmissions);
       setRejectedTerms(originalRejectedTerms);
     } finally {
@@ -863,7 +928,7 @@ const ContributorPage: React.FC = () => {
               </div>
               <button
                 onClick={handleSubmitTerm}
-                className="submit-btn"
+                className="submit-btn !bg-teal-500"
                 disabled={
                   !newTerm ||
                   !definition ||
