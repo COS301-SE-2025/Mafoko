@@ -42,7 +42,7 @@ $text-dark: #ffffff;
   border-color: #e6e6e6;
   &.dark {
     background-color: var(--card-bg-dark, #292e41);
-    color: #ffffff!important; /* explicit white text in dark mode */
+    color: #ffffff !important; /* explicit white text in dark mode */
     border: 1px solid #292e41; /* explicit border color in dark mode */
   }
 
@@ -75,14 +75,14 @@ $text-dark: #ffffff;
     font-size: 1.25rem;
     color: #fff;
     background-color: var(--brand-accent, #00ceaf);
-    
+
     @media (max-width: 768px) {
       width: 56px;
       height: 56px;
       font-size: 1.125rem;
       margin-bottom: 0.875rem;
     }
-    
+
     @media (max-width: 480px) {
       width: 48px;
       height: 48px;
@@ -95,25 +95,24 @@ $text-dark: #ffffff;
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
-    
+
     @media (max-width: 768px) {
       font-size: 1rem;
     }
-    
+
     @media (max-width: 480px) {
       font-size: 0.9rem;
     }
   }
 
-  
   .language-stats {
     font-size: 0.875rem;
-    color: var(--text-color-secondary, rgba(0,0,0,0.6));
-    
+    color: var(--text-color-secondary, rgba(0, 0, 0, 0.6));
+
     @media (max-width: 768px) {
       font-size: 0.8rem;
     }
-    
+
     @media (max-width: 480px) {
       font-size: 0.75rem;
     }
@@ -125,7 +124,6 @@ $text-dark: #ffffff;
   .language-card.dark .language-stats {
     color: #ffffff !important;
   }
-  
 
   .progress-track {
     background-color: var(--card-bg-dark, #eeeeee);
@@ -146,7 +144,7 @@ $text-dark: #ffffff;
   .progress-label {
     display: block;
     margin-top: 0.5rem;
-    color: var(--text-color-secondary, rgba(0,0,0,0.6));
+    color: var(--text-color-secondary, rgba(0, 0, 0, 0.6));
   }
 }
 
@@ -178,10 +176,9 @@ $text-dark: #ffffff;
   background-color: var(--bg-color-secondary);
   width: 100%;
   height: auto;
-  
 
   margin: 0;
-  
+
   @media (min-width: 769px) {
     /* Reduce the expansion on large screens so content doesn't get cut off */
     margin-left: -210px;
@@ -192,7 +189,7 @@ $text-dark: #ffffff;
     //transform: translateX(-15px);
     //-webkit-transform: translateX(-15px);
   }
-  
+
   @media (max-width: 768px) {
     margin-left: 0;
     width: 100vw;
@@ -202,7 +199,7 @@ $text-dark: #ffffff;
     left: 0;
     right: 0;
   }
-  
+
   @media (max-width: 480px) {
     min-height: 100vh;
     width: 100vw;
@@ -213,10 +210,6 @@ $text-dark: #ffffff;
   &.dark-mode {
     background-color: var(--bg-color-dark);
     color: var(--text-color-dark);
-
-   
-    
-
 
     .heading-text {
       color: var(--text-color-dark);
@@ -253,17 +246,17 @@ $text-dark: #ffffff;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
-      
+
       @media (max-width: 1200px) {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1.25rem;
       }
-      
+
       @media (max-width: 768px) {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 1rem;
       }
-      
+
       @media (max-width: 480px) {
         grid-template-columns: 1fr;
         gap: 0.75rem;
@@ -274,7 +267,7 @@ $text-dark: #ffffff;
       background-color: var(--card-bg);
       border-radius: 0.75rem;
       padding: 1.25rem;
-    
+
       transition: all 0.2s ease;
       cursor: pointer;
 
@@ -345,24 +338,80 @@ $text-dark: #ffffff;
     }
 
     /* Ensure key child text elements are white */
-    .theme-dark .learning-path-container .languages-grid .path-card .language-name,
-    .dark-mode .learning-path-container .languages-grid .path-card .language-name,
-    .theme-dark .learning-path-container .languages-grid .path-card .language-stats,
-    .dark-mode .learning-path-container .languages-grid .path-card .language-stats,
-    .theme-dark .learning-path-container .languages-grid .language-card .language-name,
-    .dark-mode .learning-path-container .languages-grid .language-card .language-name,
-    .theme-dark .learning-path-container .languages-grid .language-card .language-stats,
-    .dark-mode .learning-path-container .languages-grid .language-card .language-stats,
-    .theme-dark .learning-path-container .languages-grid .path-card .progress-label,
-    .dark-mode .learning-path-container .languages-grid .path-card .progress-label {
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-name,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-name,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-stats,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-stats,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-name,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-name,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-stats,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-stats,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .progress-label,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .progress-label {
       color: #ffffff !important;
     }
 
     /* Avatar/icon adjustments */
-    .theme-dark .learning-path-container .languages-grid .path-card .language-avatar,
-    .dark-mode .learning-path-container .languages-grid .path-card .language-avatar,
-    .theme-dark .learning-path-container .languages-grid .language-card .language-avatar,
-    .dark-mode .learning-path-container .languages-grid .language-card .language-avatar {
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-avatar,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-avatar,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-avatar,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-avatar {
       background: transparent !important;
       color: #ffffff !important;
     }
@@ -634,37 +683,37 @@ $text-dark: #ffffff;
     padding: 1rem !important;
     min-height: 120px !important;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.875rem !important;
     min-height: 110px !important;
   }
-  
+
   h4 {
     @media (max-width: 768px) {
       font-size: 1rem !important;
       margin-bottom: 0.5rem !important;
     }
-    
+
     @media (max-width: 480px) {
       font-size: 0.9rem !important;
     }
   }
-  
+
   p {
     @media (max-width: 768px) {
       font-size: 0.8rem !important;
     }
-    
+
     @media (max-width: 480px) {
       font-size: 0.75rem !important;
     }
   }
-  
+
   .flex.items-center.gap-2 {
     @media (max-width: 480px) {
       gap: 0.375rem !important;
-      
+
       span {
         font-size: 0.7rem !important;
       }
@@ -679,12 +728,12 @@ $text-dark: #ffffff;
   align-items: center;
   gap: 1rem;
   margin-top: 2rem;
-  
+
   @media (max-width: 768px) {
     gap: 0.75rem;
     margin-top: 1.5rem;
   }
-  
+
   @media (max-width: 480px) {
     gap: 0.5rem;
     margin-top: 1rem;
@@ -695,11 +744,11 @@ $text-dark: #ffffff;
   font-size: 0.875rem;
   color: var(--text-color-secondary);
   text-align: center;
-  
+
   @media (max-width: 768px) {
     font-size: 0.8rem;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 0.75rem;
   }
@@ -709,7 +758,7 @@ $text-dark: #ffffff;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   @media (max-width: 480px) {
     gap: 0.25rem;
   }
@@ -726,26 +775,26 @@ $text-dark: #ffffff;
   border-radius: 0.375rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover:not(:disabled) {
     background-color: var(--hover-bg);
     border-color: var(--accent-color);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   @media (max-width: 768px) {
     width: 2.25rem;
     height: 2.25rem;
   }
-  
+
   @media (max-width: 480px) {
     width: 2rem;
     height: 2rem;
-    
+
     svg {
       width: 14px !important;
       height: 14px !important;
@@ -758,12 +807,12 @@ $text-dark: #ffffff;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-color);
-  
+
   @media (max-width: 768px) {
     padding: 0.375rem 0.75rem;
     font-size: 0.8rem;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
@@ -775,7 +824,7 @@ $text-dark: #ffffff;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  
+
   @media (max-width: 768px) {
     max-width: 100%;
   }
@@ -783,11 +832,11 @@ $text-dark: #ffffff;
 
 .content-wrapper {
   padding: 1rem;
-  
+
   @media (max-width: 768px) {
     padding: 0.75rem;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.5rem;
   }
@@ -884,12 +933,12 @@ $text-dark: #ffffff;
   gap: 0.5rem;
   flex: 1;
   justify-content: center;
-  
+
   @media (max-width: 768px) {
     padding: 0.375rem 0.625rem;
     font-size: 0.85rem;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.35rem 0.5rem;
     font-size: 0.8rem;
@@ -967,14 +1016,14 @@ $text-dark: #ffffff;
   border: 1px solid var(--border-color);
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
-  
+
   @media (max-width: 768px) {
     max-width: calc(100vw - 2rem);
     padding: 1rem;
     margin: 0.5rem;
     max-height: calc(100vh - 1rem);
   }
-  
+
   @media (max-width: 480px) {
     max-width: calc(100vw - 1rem);
     padding: 0.75rem;
@@ -992,7 +1041,6 @@ $text-dark: #ffffff;
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
-  ;
 }
 
 .learning-path-modal .modal-label {
@@ -1018,7 +1066,7 @@ $text-dark: #ffffff;
   background: transparent;
 }
 .learning-path-modal .modal-select.dark-mode {
-  background-color: var(--card-bg-dark-solid,#292e41);
+  background-color: var(--card-bg-dark-solid, #292e41);
   color: var(--text-color-dark, #ffffff);
   border-color: rgba(255, 255, 255, 0.06);
 }
@@ -1034,7 +1082,7 @@ $text-dark: #ffffff;
   max-height: 220px;
   overflow-y: auto;
   padding-right: 0.25rem;
-  
+
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
     max-height: 180px;
@@ -1100,7 +1148,7 @@ $text-dark: #ffffff;
 /* Responsive Header Styles */
 .learning-path-header {
   margin-bottom: 2rem;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 1.5rem;
   }
@@ -1111,7 +1159,7 @@ $text-dark: #ffffff;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
@@ -1130,11 +1178,11 @@ $text-dark: #ffffff;
   color: var(--text-theme);
   margin: 0 0 0.5rem 0;
   line-height: 1.2;
-  
+
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 1.25rem;
   }
@@ -1146,7 +1194,7 @@ $text-dark: #ffffff;
   margin: 0;
   font-size: 1rem;
   line-height: 1.4;
-  
+
   @media (max-width: 768px) {
     font-size: 0.9rem;
   }
@@ -1157,14 +1205,14 @@ $text-dark: #ffffff;
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
     width: 100%;
   }
-  
+
   @media (max-width: 480px) {
     gap: 0.75rem;
   }
@@ -1181,7 +1229,7 @@ $text-dark: #ffffff;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: default;
-  
+
   @media (max-width: 768px) {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
@@ -1206,18 +1254,18 @@ $text-dark: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.9rem;
-  
+
   &:hover {
     background-color: #d10946;
     transform: translateY(-1px);
   }
-  
+
   @media (max-width: 768px) {
     width: 100%;
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
@@ -1233,7 +1281,7 @@ $text-dark: #ffffff;
 /* Progress Display Responsive Styles */
 .learning-path-progress-display {
   text-align: right;
-  
+
   @media (max-width: 768px) {
     text-align: center;
     padding: 1rem;
@@ -1248,11 +1296,11 @@ $text-dark: #ffffff;
   font-weight: 700;
   color: var(--text-theme) !important;
   margin-bottom: 0.25rem;
-  
+
   @media (max-width: 768px) {
     font-size: 1.25rem;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 1.125rem;
   }
@@ -1262,7 +1310,7 @@ $text-dark: #ffffff;
   font-size: 0.875rem;
   color: var(--text-theme) !important;
   opacity: 0.7;
-  
+
   @media (max-width: 768px) {
     font-size: 0.8rem;
   }
@@ -1271,11 +1319,11 @@ $text-dark: #ffffff;
 /* Content Area Responsive Styles */
 .learning-path-content {
   padding: 0 1rem;
-  
+
   @media (max-width: 768px) {
     padding: 0 0.75rem;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0 0.5rem;
   }
@@ -1285,27 +1333,27 @@ $text-dark: #ffffff;
 .grid {
   display: grid;
   gap: 2rem;
-  
+
   &.grid-cols-1 {
     grid-template-columns: 1fr;
   }
-  
+
   @media (min-width: 768px) {
     &.md\:grid-cols-2 {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  
+
   @media (min-width: 1024px) {
     &.lg\:grid-cols-2 {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  
+
   @media (max-width: 768px) {
     gap: 1.5rem;
   }
-  
+
   @media (max-width: 480px) {
     gap: 1rem;
   }
@@ -1320,11 +1368,11 @@ $text-dark: #ffffff;
     cursor: pointer;
     font-weight: 500;
     transition: color 0.2s ease;
-    
+
     &:hover {
       color: var(--text-theme) !important;
     }
-    
+
     @media (max-width: 768px) {
       padding: 0.5rem 0;
       font-size: 0.9rem;
@@ -1361,7 +1409,8 @@ $text-dark: #ffffff;
 
 /* Ensure body and html don't have horizontal scroll on mobile */
 @media (max-width: 768px) {
-  body, html {
+  body,
+  html {
     overflow-x: hidden;
     width: 100%;
     max-width: 100vw;
@@ -1373,15 +1422,15 @@ $text-dark: #ffffff;
   .pt-16 {
     padding-top: 4rem;
   }
-  
+
   .mb-6 {
     margin-bottom: 1rem;
   }
-  
+
   .mb-8 {
     margin-bottom: 1.5rem;
   }
-  
+
   .gap-8 {
     gap: 1.5rem;
   }
@@ -1391,15 +1440,15 @@ $text-dark: #ffffff;
   .pt-16 {
     padding-top: 3.5rem;
   }
-  
+
   .mb-6 {
     margin-bottom: 0.75rem;
   }
-  
+
   .mb-8 {
     margin-bottom: 1rem;
   }
-  
+
   .gap-8 {
     gap: 1rem;
   }
@@ -1431,6 +1480,6 @@ $text-dark: #ffffff;
 /* Ensure svg icons inherit the button color (lucide-react uses stroke by default) */
 .path-delete-button svg {
   color: inherit !important;
- // fill: currentColor !important;
+  // fill: currentColor !important;
   stroke: currentColor !important;
 }
