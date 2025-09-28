@@ -10,17 +10,17 @@ import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 
 // Animated Language Counter Component
 const AnimatedLanguageCounter: React.FC = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
     // Start counting animation after a short delay
     const timer = setTimeout(() => {
-      let currentCount = 0;
+      let currentCount = 1;
       const interval = setInterval(() => {
-        currentCount += 1;
         setCount(currentCount);
-        if (currentCount >= 11) {
+        currentCount += 1;
+        if (currentCount > 11) {
           clearInterval(interval);
           // Show the rest of the text after counting is done
           const textTimer = setTimeout(() => {
