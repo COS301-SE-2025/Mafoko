@@ -67,3 +67,24 @@ class User(UserBase):
 # This schema is useful if you need a Pydantic model that includes password_hash.
 class UserInDB(User):  # Inherits fields from User
     password_hash: str  # Matches your SQL column name
+
+
+# Password reset request schema
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+# Password reset schema
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
+# Response for forgot password
+class ForgotPasswordResponse(BaseModel):
+    message: str
+
+
+# Response for reset password
+class ResetPasswordResponse(BaseModel):
+    message: str

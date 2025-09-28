@@ -641,15 +641,20 @@ self.addEventListener('fetch', ((event: FetchEvent) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(async () => {
-        // Return cached page or a custom offline page
-        const cachedResponse = await caches.match('/');
-        return (
-          cachedResponse ||
-          new Response('Offline - Please check your connection', {
+        // Return cached main app for all navigation requests
+        const cachedResponse =
+          (await caches.match('/')) || (await caches.match('/index.html'));
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        try {
+          return await fetch('/');
+        } catch {
+          return new Response('Offline - Please check your connection', {
             status: 200,
             headers: { 'Content-Type': 'text/html' },
-          })
-        );
+          });
+        }
       }),
     );
   }

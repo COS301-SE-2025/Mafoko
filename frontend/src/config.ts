@@ -58,6 +58,8 @@ interface APIEndpoints {
   generateSignedUrl: string;
   generateProfilePictureUploadUrl: string;
   getMyProfilePictureUrl: string;
+  forgotPassword: string;
+  resetPassword: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
   ApproveApplicationStatus: (applicationId: string) => string;
@@ -193,6 +195,8 @@ export const API_ENDPOINTS: APIEndpoints = {
     AUTH_SERVICE_URL,
     '/api/v1/auth/me/profile-picture',
   ),
+  forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
+  resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
   getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
