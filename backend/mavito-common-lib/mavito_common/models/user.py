@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from mavito_common.models.user_xp import UserXP  # noqa: F401
     from mavito_common.models.user_level import UserLevel  # noqa: F401
     from mavito_common.models.user_achievement import UserAchievement  # noqa: F401
+    from mavito_common.models.user_preferences import UserPreferences  # noqa: F401
 
 
 class UserRole(str, enum.Enum):
@@ -55,6 +56,12 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0)
     deleted_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    password_reset_token: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, index=True
+    )
+    password_reset_expires: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
 
@@ -104,4 +111,10 @@ class User(Base):
     )
     achievements: Mapped[List["UserAchievement"]] = relationship(
         "UserAchievement", back_populates="user", cascade="all, delete-orphan"
+    )
+    preferences: Mapped[Optional["UserPreferences"]] = relationship(
+        "UserPreferences",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
     )

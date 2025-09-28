@@ -94,6 +94,20 @@ $card-dark: #3a4050;
   --border-color: rgba(0, 0, 0, 0.1);
 }
 
+/* ===== MOBILE BODY RESET ===== */
+@media (max-width: 768px) {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
 /* ===== DASHBOARD CONTAINER ===== */
 .dashboard-container {
   display: flex;
@@ -108,6 +122,48 @@ $card-dark: #3a4050;
   color: var(--text-color);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+
+  @media (max-width: 768px) {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    top: 0 !important;
+    left: 0 !important;
+  }
+}
+
+/* ===== TOP BAR STYLES ===== */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 10;
+
+  .welcome-section {
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0 1rem 0;
+    margin: 0;
+    margin-bottom: 0.5rem;
+    top: 0;
+
+    .profile-section {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      padding: 6px 10px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
 }
 
 /* ===== PROFILE SECTION STYLES ===== */
@@ -177,6 +233,24 @@ $card-dark: #3a4050;
   z-index: 1;
   background: transparent;
 
+  .main-content-body {
+    min-height: calc(100vh - 120px);
+    padding-top: 1rem;
+
+    @media (max-width: 768px) {
+      min-height: calc(100vh - 80px);
+      padding-top: 0.5rem;
+    }
+  }
+
+  .main-content-body {
+    padding-top: 1rem;
+
+    @media (max-width: 768px) {
+      padding-top: 0.5rem;
+    }
+  }
+
   .content-wrapper {
     max-width: 1400px;
     margin: 0 auto;
@@ -206,7 +280,7 @@ $card-dark: #3a4050;
         .animated-title {
           font-size: 3.3rem;
           font-weight: 800;
-          margin-bottom: 0;
+          margin-bottom: 1rem;
           margin-top: -60px;
           letter-spacing: -0.02em;
           color: var(--text-color);
@@ -217,6 +291,34 @@ $card-dark: #3a4050;
           align-items: center;
           flex-wrap: wrap;
           justify-content: center;
+
+          @media (max-width: 768px) {
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            top: 0;
+            padding: 0;
+            margin-left: 0;
+            line-height: 1.2;
+            text-align: left !important;
+            justify-content: flex-start !important;
+            width: 100%;
+            min-height: auto;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            margin-left: 0;
+            padding: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            text-align: left !important;
+            justify-content: flex-start !important;
+            line-height: 1.2;
+          }
 
           .connecting-text {
             color: var(--text-color);
@@ -288,6 +390,32 @@ $card-dark: #3a4050;
           min-height: 300px;
           margin: 2rem 0;
           border-radius: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+
+          @media (max-width: 768px) {
+            margin: 1.5rem 0;
+            min-height: 250px;
+            border-radius: 8px;
+
+            svg {
+              width: 100% !important;
+              height: auto !important;
+              max-width: 100%;
+              max-height: 300px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            margin: 1rem 0;
+            min-height: 200px;
+
+            svg {
+              max-height: 250px;
+            }
+          }
         }
 
         .intro-text {
@@ -299,6 +427,8 @@ $card-dark: #3a4050;
 
           p {
             margin-bottom: 1.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
           }
 
           .team-credit {
@@ -306,6 +436,41 @@ $card-dark: #3a4050;
             font-size: 0.95rem;
             color: var(--text-muted);
             font-style: italic;
+          }
+
+          @media (max-width: 768px) {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            padding: 0 0.5rem;
+            text-align: left;
+
+            p {
+              margin-bottom: 1.25rem;
+              word-break: break-word;
+              hyphens: auto;
+            }
+
+            .team-credit {
+              margin-top: 1.5rem;
+              font-size: 0.9rem;
+            }
+          }
+
+          @media (max-width: 480px) {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            padding: 0 0.25rem;
+
+            p {
+              margin-bottom: 1rem;
+            }
+
+            .team-credit {
+              margin-top: 1rem;
+              font-size: 0.85rem;
+            }
           }
         }
 
@@ -367,56 +532,203 @@ $card-dark: #3a4050;
   }
 
   @media (max-width: 768px) {
-    padding: 16px;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    padding: 8px 8px 80px 8px;
     overflow-x: hidden;
+    padding-top: 60px; // Space for fixed profile
+    top: 0 !important;
+    left: 0 !important;
+    position: relative !important;
 
     .content-wrapper {
       max-width: none;
       margin: 0;
 
       .content-layout {
-        gap: 2rem;
+        gap: 1.5rem;
+        padding-top: 0;
 
         .content-side {
+          padding-right: 0;
+          padding-left: 0;
+          margin-left: 0;
+
           .title {
             font-size: 2rem;
+            margin-top: 0;
+          }
+
+          .map-container {
+            margin: 1rem 0;
+            margin-left: -80px;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            max-width: calc(100% + 160px);
+            text-align: left;
+            display: block;
+
+            svg {
+              width: 100%;
+              height: auto;
+              max-width: 100%;
+              margin-left: 0;
+            }
           }
 
           .intro-text {
-            font-size: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            margin-left: 0;
+            padding-left: 0;
+            text-align: left;
+            word-break: break-word;
+            hyphens: auto;
+
+            p {
+              margin-bottom: 1rem;
+              margin-left: 0;
+              padding-left: 0;
+              max-width: 100%;
+              word-wrap: break-word;
+
+              // Force line breaks after every 3rd word for mobile readability
+              &:first-child {
+                word-spacing: 0.4em;
+                text-align: left;
+                line-height: 1.8;
+                max-width: 280px;
+              }
+
+              // Apply same formatting to second paragraph (Marito works...)
+              &:nth-child(2) {
+                word-spacing: 0.4em;
+                text-align: left;
+                line-height: 1.8;
+                max-width: 280px;
+              }
+            }
+          }
+
+          .cta-section {
+            margin-top: 2rem;
+            text-align: left;
+
+            .cta-button {
+              padding: 0.75rem 1.5rem;
+              font-size: 0.9rem;
+              display: inline-block;
+              width: auto;
+              max-width: 280px;
+            }
           }
         }
 
         .sidebar-content {
           width: 100%;
+          position: static;
+          top: auto;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 4px 80px 4px;
+    padding-top: 55px;
+
+    .content-wrapper .content-layout {
+      gap: 1rem;
+
+      .content-side {
+        .intro-text {
+          font-size: 0.85rem;
+          line-height: 1.5;
+          text-align: left;
+          margin-left: 0;
+          padding-left: 0;
+          word-break: break-word;
+          hyphens: auto;
+
+          p {
+            margin-left: 0;
+            padding-left: 0;
+            margin-bottom: 1rem;
+            word-wrap: break-word;
+
+            // Enhanced line breaking for very small screens - 3 words per line
+            &:first-child {
+              word-spacing: 0.5em;
+              text-align: left;
+              line-height: 1.9;
+              max-width: 240px;
+            }
+
+            // Apply same formatting to second paragraph (Marito works...)
+            &:nth-child(2) {
+              word-spacing: 0.5em;
+              text-align: left;
+              line-height: 1.9;
+              max-width: 240px;
+            }
+          }
+        }
+
+        .map-container {
+          margin: 0.75rem 0;
+          margin-left: -60px;
+          padding: 0;
+          max-width: calc(100% + 120px);
+        }
+
+        .cta-section {
+          text-align: left;
+
+          .cta-button {
+            padding: 0.7rem 1.3rem;
+            font-size: 0.85rem;
+          }
         }
       }
     }
   }
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== MOBILE ALIGNMENT OVERRIDES FOR SMALLER SCREENS ===== */
+@media (max-width: 480px) {
+  .animated-title {
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  .map-container {
+    text-align: left !important;
+    display: block !important;
+    margin: 0.75rem 0 !important;
+    margin-left: -60px !important;
+    padding-left: 0 !important;
+    justify-content: flex-start !important;
+    max-width: calc(100% + 120px) !important;
+
+    svg {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+    }
+  }
+}
+
+/* ===== ADDITIONAL MOBILE OVERRIDES ===== */
 @media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-    padding: 16px;
-  }
-
-  .profile-container {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-  }
-
-  .profile-section {
-    padding: 8px 12px;
-  }
-
+  // Force left alignment for mobile\n  .animated-title {\n    text-align: left !important;\n    justify-content: flex-start !important;\n    align-items: flex-start !important;\n  }\n  \n  .map-container {\n    justify-content: flex-start !important;\n    align-items: flex-start !important;\n    text-align: left !important;\n    margin-left: 0 !important;\n    padding-left: 0 !important;\n    \n    svg {\n      margin-left: 0 !important;\n      text-align: left !important;\n    }\n  }\n  \n  // Additional mobile profile overrides
   .profile-avatar {
     width: 40px;
     height: 40px;
     font-size: 16px;
+    margin-right: 12px;
 
     img {
       width: 100%;
@@ -433,11 +745,43 @@ $card-dark: #3a4050;
   .profile-details p {
     font-size: 12px;
   }
+
+  // Ensure proper touch targets for mobile
+  .refresh-terms-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .term-category {
+    min-height: 44px;
+  }
+
+  // Mobile alignment overrides with !important
+  .animated-title {
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  .map-container {
+    text-align: left !important;
+    display: block !important;
+    margin: 1rem 0 !important;
+    margin-left: -80px !important;
+    padding-left: 0 !important;
+    justify-content: flex-start !important;
+    max-width: calc(100% + 160px) !important;
+
+    svg {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      display: block !important;
+    }
+  }
 }
 
 /* ===== RANDOM TERMS SECTION ===== */
 .random-terms-section {
-  margin: 0;
+  margin: 3rem 0 0 0;
   padding: 2rem;
   background: var(--bg-card);
   border-radius: 12px;
@@ -583,24 +927,50 @@ $card-dark: #3a4050;
   }
 
   @media (max-width: 768px) {
-    margin: 1rem 0;
-    padding: 1rem;
+    margin: 1.5rem 0 0 0;
+    padding: 1.25rem;
+    border-radius: 10px;
 
     .section-header {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
 
       h2 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        margin: 0;
+        flex: 1;
       }
 
       .refresh-terms-btn {
-        align-self: flex-end;
         width: 40px;
         height: 40px;
         font-size: 1rem;
+        flex-shrink: 0;
+      }
+    }
+
+    .terms-grid {
+      gap: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    margin: 1rem 0 0 0;
+    padding: 1rem;
+
+    .section-header {
+      margin-bottom: 1rem;
+
+      h2 {
+        font-size: 1.1rem;
+      }
+
+      .refresh-terms-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
       }
     }
 
@@ -617,9 +987,15 @@ $card-dark: #3a4050;
 
       .term-card {
         padding: 1rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
 
         &:hover {
           transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(0);
         }
 
         .term-header {
@@ -631,6 +1007,7 @@ $card-dark: #3a4050;
           .term-title {
             margin-right: 0;
             font-size: 1.1rem;
+            line-height: 1.3;
           }
 
           .term-language {
@@ -643,11 +1020,48 @@ $card-dark: #3a4050;
         .term-definition {
           font-size: 0.9rem;
           margin-bottom: 0.75rem;
+          line-height: 1.4;
         }
 
         .term-category {
           font-size: 0.8rem;
           padding: 0.3rem 0.6rem;
+          min-height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .term-card {
+          padding: 0.875rem;
+
+          .term-header {
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+
+            .term-title {
+              font-size: 1rem;
+            }
+
+            .term-language {
+              font-size: 0.7rem;
+              padding: 0.15em 0.6em;
+            }
+          }
+
+          .term-definition {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .term-category {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            min-height: 32px;
+          }
         }
       }
     }

@@ -13,26 +13,26 @@ import {
   Save,
   X,
   BookOpen,
-  Clock,
-  Check,
-  AlertCircle,
 } from 'lucide-react';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
+import {
+  cacheBookmarks,
+  getCachedBookmarks,
+  cacheWorkspaceGroups,
+  getCachedWorkspaceGroups,
+  cacheGlossaryStats,
+  getCachedGlossaryStats,
+  addPendingWorkspaceUpdate,
+  BookmarksCache,
+  WorkspaceGroupsCache,
+  GlossaryStatsCache,
+  PendingWorkspaceUpdate,
+} from '../utils/indexedDB';
 
 import '../styles/WorkspacePage.scss';
-
-// Legacy interfaces for submitted terms (keeping until we have submission API)
-interface SubmittedTerm {
-  id: number;
-  term: string;
-  status: 'approved' | 'pending' | 'rejected' | 'under_review';
-  submittedDate: string;
-  reviewedDate: string | null;
-  feedback?: string;
-}
 
 // Type definitions for workspace components
 interface BookmarkedTerm {
@@ -162,81 +162,6 @@ const WorkspacePage: React.FC = () => {
 
   // Initialize groups (will be populated from workspace groups)
   const [groups, setGroups] = useState<string[]>(['all', 'All Terms']);
-
-  const submittedTerms: SubmittedTerm[] = [
-    {
-      id: 1,
-      term: 'Sustainable Agriculture',
-      status: 'approved',
-      submittedDate: '2024-07-10',
-      reviewedDate: '2024-07-14',
-    },
-    {
-      id: 2,
-      term: 'Irrigation Methods',
-      status: 'pending',
-      submittedDate: '2024-07-16',
-      reviewedDate: null,
-    },
-    {
-      id: 3,
-      term: 'Soil Composition',
-      status: 'rejected',
-      submittedDate: '2024-07-08',
-      reviewedDate: '2024-07-12',
-      feedback: 'Definition needs more detail',
-    },
-    {
-      id: 4,
-      term: 'Climate Change Impact',
-      status: 'under_review',
-      submittedDate: '2024-07-17',
-      reviewedDate: null,
-    },
-    {
-      id: 5,
-      term: 'Organic Farming Practices',
-      status: 'approved',
-      submittedDate: '2024-07-12',
-      reviewedDate: '2024-07-16',
-    },
-    {
-      id: 6,
-      term: 'Water Conservation',
-      status: 'pending',
-      submittedDate: '2024-07-18',
-      reviewedDate: null,
-    },
-    {
-      id: 7,
-      term: 'Crop Rotation Benefits',
-      status: 'rejected',
-      submittedDate: '2024-07-11',
-      reviewedDate: '2024-07-15',
-      feedback: 'Please provide more scientific references',
-    },
-    {
-      id: 8,
-      term: 'Biodiversity Conservation',
-      status: 'under_review',
-      submittedDate: '2024-07-19',
-      reviewedDate: null,
-    },
-    {
-      id: 9,
-      term: 'Integrated Pest Management',
-      status: 'approved',
-      submittedDate: '2024-07-13',
-      reviewedDate: '2024-07-17',
-    },
-    {
-      id: 10,
-      term: 'Soil Health Assessment',
-      status: 'pending',
-      submittedDate: '2024-07-20',
-      reviewedDate: null,
-    },
-  ];
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -439,7 +364,7 @@ const WorkspacePage: React.FC = () => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Function to load all workspace data
+  // Function to load all workspace data with offline support
   const loadWorkspaceData = useCallback(async (): Promise<void> => {
     console.log('🔄 [NUCLEAR WORKSPACE DEBUG] loadWorkspaceData() CALLED!');
     console.log(
@@ -458,6 +383,51 @@ const WorkspacePage: React.FC = () => {
       setError('Please log in to access your workspace.');
       setLoading(false);
       return;
+    }
+
+    // If offline, try to load cached data
+    if (!navigator.onLine) {
+      console.log('📱 [WORKSPACE DEBUG] Offline mode - loading cached data');
+      try {
+        const cachedBookmarks = await getCachedBookmarks();
+        const cachedGroups = await getCachedWorkspaceGroups();
+        const cachedStats = await getCachedGlossaryStats();
+
+        if (cachedBookmarks) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached bookmarks');
+          setSavedTerms(cachedBookmarks.bookmarkedTerms);
+          setBookmarkedGlossaries(cachedBookmarks.bookmarkedGlossaries);
+        }
+
+        if (cachedGroups) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached groups');
+          setWorkspaceGroups(cachedGroups.groups);
+          const groupNames = [
+            'all',
+            'All Terms',
+            ...cachedGroups.groups.map((group) => group.name),
+          ];
+          setGroups(groupNames);
+        }
+
+        if (cachedStats) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached stats');
+          setGlossaryStats(cachedStats.stats);
+        }
+
+        if (cachedBookmarks || cachedGroups) {
+          setError('You are offline. Showing cached data.');
+        } else {
+          setError('No cached data available offline.');
+        }
+        setLoading(false);
+        return;
+      } catch (cacheError) {
+        console.error('Failed to load cached workspace data:', cacheError);
+        setError('Failed to load offline data.');
+        setLoading(false);
+        return;
+      }
     }
 
     try {
@@ -544,6 +514,22 @@ const WorkspacePage: React.FC = () => {
       ];
       setGroups(groupNames);
 
+      // Cache the fresh data
+      const bookmarksCache: BookmarksCache = {
+        id: 'latest',
+        bookmarkedTerms: bookmarksData.terms || [],
+        bookmarkedGlossaries: bookmarksData.glossaries || [],
+        timestamp: Date.now(),
+      };
+      await cacheBookmarks(bookmarksCache);
+
+      const groupsCache: WorkspaceGroupsCache = {
+        id: 'latest',
+        groups: groupsData,
+        timestamp: Date.now(),
+      };
+      await cacheWorkspaceGroups(groupsCache);
+
       // Fetch glossary stats (don't block on failure)
       await fetchGlossaryStats();
 
@@ -553,19 +539,72 @@ const WorkspacePage: React.FC = () => {
       localStorage.setItem('workspaceLastLoaded', Date.now().toString());
     } catch (error) {
       console.error('Failed to load workspace data:', error);
-      setError('Failed to load workspace data. Please try again.');
+
+      // Try to load cached data as fallback
+      try {
+        const cachedBookmarks = await getCachedBookmarks();
+        const cachedGroups = await getCachedWorkspaceGroups();
+        const cachedStats = await getCachedGlossaryStats();
+
+        if (cachedBookmarks) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached bookmarks (fallback)');
+          setSavedTerms(cachedBookmarks.bookmarkedTerms);
+          setBookmarkedGlossaries(cachedBookmarks.bookmarkedGlossaries);
+        }
+
+        if (cachedGroups) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached groups (fallback)');
+          setWorkspaceGroups(cachedGroups.groups);
+          const groupNames = [
+            'all',
+            'All Terms',
+            ...cachedGroups.groups.map((group) => group.name),
+          ];
+          setGroups(groupNames);
+        }
+
+        if (cachedStats) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached stats (fallback)');
+          setGlossaryStats(cachedStats.stats);
+        }
+
+        if (cachedBookmarks || cachedGroups) {
+          setError('Network error. Showing cached data.');
+        } else {
+          setError('Failed to load workspace data. Please try again.');
+        }
+      } catch (cacheError) {
+        console.error('Failed to load cached data as fallback:', cacheError);
+        setError('Failed to load workspace data. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Function to fetch glossary stats
+  // Function to fetch glossary stats with offline support
   const fetchGlossaryStats = async (): Promise<void> => {
     try {
+      // If offline, try cached data first
+      if (!navigator.onLine) {
+        const cachedStats = await getCachedGlossaryStats();
+        if (cachedStats) {
+          console.log('✅ Using cached glossary stats (offline)');
+          setGlossaryStats(cachedStats.stats);
+          return;
+        }
+      }
+
       const response = await fetch(API_ENDPOINTS.glossaryCategoriesStats);
 
       if (!response.ok) {
         console.warn('Failed to fetch glossary stats:', response.status);
+        // Try cached data as fallback
+        const cachedStats = await getCachedGlossaryStats();
+        if (cachedStats) {
+          console.log('✅ Using cached glossary stats (fallback)');
+          setGlossaryStats(cachedStats.stats);
+        }
         return;
       }
 
@@ -586,6 +625,14 @@ const WorkspacePage: React.FC = () => {
 
       setGlossaryStats(statsMap);
       console.log('✅ Glossary stats loaded successfully:', statsMap);
+
+      // Cache the fresh data
+      const statsCache: GlossaryStatsCache = {
+        id: 'latest',
+        stats: statsMap,
+        timestamp: Date.now(),
+      };
+      await cacheGlossaryStats(statsCache);
     } catch (error) {
       console.warn('Failed to fetch glossary stats:', error);
     }
@@ -661,7 +708,65 @@ const WorkspacePage: React.FC = () => {
       console.log('Notes saved successfully');
     } catch (error) {
       console.error('Failed to save notes:', error);
-      setError('Failed to save notes. Please try again.');
+
+      // Check if this is a network error (offline)
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to save notes';
+      if (
+        errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+        errorMessage.includes('ERR_NETWORK') ||
+        !navigator.onLine
+      ) {
+        // Queue the update for offline sync
+        const pendingUpdate: PendingWorkspaceUpdate = {
+          id: crypto.randomUUID(),
+          type: 'bookmark_note',
+          data: {
+            bookmark_id: bookmarkId,
+            notes: noteText.trim(),
+            bookmark_type: 'term',
+          },
+          token,
+          timestamp: Date.now(),
+        };
+
+        await addPendingWorkspaceUpdate(pendingUpdate);
+
+        // Update local state optimistically
+        setSavedTerms((prevTerms) =>
+          prevTerms.map((term) =>
+            term.id === bookmarkId
+              ? { ...term, notes: noteText.trim() || undefined }
+              : term,
+          ),
+        );
+
+        setEditingNotes(null);
+        setNoteText('');
+
+        // Register background sync
+        if (
+          'serviceWorker' in navigator &&
+          'sync' in window.ServiceWorkerRegistration.prototype
+        ) {
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            await registration.sync.register('sync-workspace-updates');
+          } catch (syncError) {
+            console.error(
+              'Failed to register background sync for workspace updates:',
+              syncError,
+            );
+          }
+        }
+
+        setError(
+          "You are offline. Your note has been saved and will sync when you're back online.",
+        );
+      } else {
+        setError('Failed to save notes. Please try again.');
+      }
     }
   };
 
@@ -1405,15 +1510,6 @@ const WorkspacePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setActiveTab('progress');
-                  }}
-                  className={`tab-button ${activeTab === 'progress' ? 'active' : ''}`}
-                >
-                  Submission Progress
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
                     setActiveTab('glossaries');
                   }}
                   className={`tab-button ${activeTab === 'glossaries' ? 'active' : ''}`}
@@ -1796,124 +1892,6 @@ const WorkspacePage: React.FC = () => {
                             )}
                           </div>
                         ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Progress Tab */}
-            {activeTab === 'progress' && (
-              <div
-                className={`space-y-6 ${isDarkMode ? 'bg-[#1e2433] min-h-screen' : 'bg-[#f5f5f5] min-h-screen'}`}
-              >
-                <div
-                  className={`${isDarkMode ? 'bg-[#292e41] border-gray-600' : 'bg-white border-gray-200'} rounded-lg shadow-sm border`}
-                >
-                  <div className="p-6">
-                    <h3
-                      className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                    >
-                      {/* Submission Progress */}
-                    </h3>
-                    <div
-                      className="space-y-4 max-h-[414px] overflow-y-auto pr-2"
-                      style={{ scrollbarWidth: 'thin' }}
-                    >
-                      <style>{`
-                        .submission-scrollbar::-webkit-scrollbar {
-                          width: 6px;
-                        }
-                        .submission-scrollbar::-webkit-scrollbar-track {
-                          background: ${isDarkMode ? '#374151' : '#f1f5f9'};
-                          border-radius: 3px;
-                        }
-                        .submission-scrollbar::-webkit-scrollbar-thumb {
-                          background: ${isDarkMode ? '#6b7280' : '#cbd5e1'};
-                          border-radius: 3px;
-                        }
-                        .submission-scrollbar::-webkit-scrollbar-thumb:hover {
-                          background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
-                        }
-                      `}</style>
-                      {submittedTerms.map((term) => (
-                        <div
-                          key={term.id}
-                          className={`submission-scrollbar border rounded-lg p-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
-                          style={{
-                            backgroundColor: isDarkMode ? '#23273a' : '#f5f5f5',
-                          }}
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <h4
-                              className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                            >
-                              {term.term}
-                            </h4>
-                            <div
-                              className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${(() => {
-                                const baseColors = {
-                                  approved: isDarkMode
-                                    ? 'bg-green-900/30 text-green-400 border border-green-700/50'
-                                    : 'bg-green-100 text-green-700',
-                                  pending: isDarkMode
-                                    ? 'bg-yellow-900/30 text-yellow-400 border border-yellow-700/50'
-                                    : 'bg-yellow-100 text-yellow-700',
-                                  rejected: isDarkMode
-                                    ? 'bg-red-900/30 text-red-400 border border-red-700/50'
-                                    : 'bg-red-100 text-red-700',
-                                  under_review: isDarkMode
-                                    ? 'bg-blue-900/30 text-blue-400 border border-blue-700/50'
-                                    : 'bg-blue-100 text-blue-700',
-                                };
-                                return (
-                                  baseColors[term.status] ||
-                                  (isDarkMode
-                                    ? 'bg-gray-800 text-gray-300 border border-gray-600'
-                                    : 'bg-gray-100 text-gray-700')
-                                );
-                              })()}`}
-                            >
-                              {(() => {
-                                switch (term.status) {
-                                  case 'approved':
-                                    return <Check className="w-4 h-4" />;
-                                  case 'pending':
-                                    return <Clock className="w-4 h-4" />;
-                                  case 'rejected':
-                                    return <AlertCircle className="w-4 h-4" />;
-                                  case 'under_review':
-                                    return <Clock className="w-4 h-4" />;
-                                  default:
-                                    return null;
-                                }
-                              })()}
-                              <span className="capitalize">
-                                {term.status.replace('_', ' ')}
-                              </span>
-                            </div>
-                          </div>
-                          <div
-                            className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
-                          >
-                            <span>Submitted: {term.submittedDate}</span>
-                            {term.reviewedDate && (
-                              <span>Reviewed: {term.reviewedDate}</span>
-                            )}
-                          </div>
-                          {term.feedback && (
-                            <div
-                              className={`mt-3 p-3 rounded-md ${
-                                isDarkMode
-                                  ? 'bg-red-900/20 border border-red-800/50 text-red-400'
-                                  : 'bg-red-50 border border-red-200 text-red-700'
-                              }`}
-                            >
-                              <p className="text-sm">{term.feedback}</p>
-                            </div>
-                          )}
-                        </div>
-                      ))}
                     </div>
                   </div>
                 </div>
