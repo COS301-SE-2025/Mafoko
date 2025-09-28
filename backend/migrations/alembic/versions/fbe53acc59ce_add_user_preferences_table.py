@@ -1,7 +1,7 @@
 """add user preferences table
 
 Revision ID: fbe53acc59ce
-Revises: 879249f67430
+Revises: de172491dbc4
 Create Date: 2025-09-28 07:36:36.653789
 
 """
@@ -14,7 +14,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "fbe53acc59ce"
-down_revision: Union[str, Sequence[str], None] = "879249f67430"
+down_revision: Union[str, Sequence[str], None] = "de172491dbc4"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
