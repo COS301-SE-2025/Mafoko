@@ -21,8 +21,6 @@ import { API_ENDPOINTS } from '../config';
 
 import '../styles/WorkspacePage.scss';
 
-
-
 // Type definitions for workspace components
 interface BookmarkedTerm {
   id: string;
@@ -151,8 +149,6 @@ const WorkspacePage: React.FC = () => {
 
   // Initialize groups (will be populated from workspace groups)
   const [groups, setGroups] = useState<string[]>(['all', 'All Terms']);
-
-
 
   // Apply theme to document based on isDarkMode state
   useEffect(() => {
@@ -1708,8 +1704,6 @@ const WorkspacePage: React.FC = () => {
                 </div>
               </div>
             )}
-
-
 
             {/* Glossaries Tab */}
             {activeTab === 'glossaries' && (

@@ -9,7 +9,10 @@ import * as GamificationService from '../src/utils/gamification';
 const mockNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -44,7 +47,9 @@ vi.mock('../src/components/ui/DarkModeComponent', () => ({
 }));
 
 vi.mock('../src/components/ui/ContributionGraph.tsx', () => ({
-  ContributionGraph: () => <div data-testid="contribution-graph">Contribution Graph</div>,
+  ContributionGraph: () => (
+    <div data-testid="contribution-graph">Contribution Graph</div>
+  ),
 }));
 
 // Mock gamification service
@@ -138,19 +143,27 @@ const mockGamificationData = {
 describe('GamificationPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Setup successful API responses
-    vi.mocked(GamificationService.GamificationService.getUserLevel).mockResolvedValue(mockGamificationData.userLevel);
-    vi.mocked(GamificationService.GamificationService.getUserAchievements).mockResolvedValue(mockGamificationData.achievements);
-    vi.mocked(GamificationService.GamificationService.getUserLoginStreak).mockResolvedValue(mockGamificationData.loginStreak);
-    vi.mocked(GamificationService.GamificationService.getUserWeeklyGoals).mockResolvedValue(mockGamificationData.weeklyGoals);
+    vi.mocked(
+      GamificationService.GamificationService.getUserLevel,
+    ).mockResolvedValue(mockGamificationData.userLevel);
+    vi.mocked(
+      GamificationService.GamificationService.getUserAchievements,
+    ).mockResolvedValue(mockGamificationData.achievements);
+    vi.mocked(
+      GamificationService.GamificationService.getUserLoginStreak,
+    ).mockResolvedValue(mockGamificationData.loginStreak);
+    vi.mocked(
+      GamificationService.GamificationService.getUserWeeklyGoals,
+    ).mockResolvedValue(mockGamificationData.weeklyGoals);
   });
 
   test('renders navigation components', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByTestId('left-nav')).toBeInTheDocument();
@@ -161,7 +174,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByText('JD')).toBeInTheDocument(); // User initials
@@ -170,14 +183,16 @@ describe('GamificationPage', () => {
 
   test('displays loading state initially', () => {
     // Mock loading state
-    vi.mocked(GamificationService.GamificationService.getUserLevel).mockImplementation(
-      () => new Promise(() => {}) // Never resolves to keep loading state
+    vi.mocked(
+      GamificationService.GamificationService.getUserLevel,
+    ).mockImplementation(
+      () => new Promise(() => {}), // Never resolves to keep loading state
     );
 
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     const loadingElements = screen.getAllByText('Loading...');
@@ -188,7 +203,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -201,7 +216,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -217,7 +232,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -230,7 +245,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -243,16 +258,24 @@ describe('GamificationPage', () => {
 
   test('handles API errors gracefully', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
-    vi.mocked(GamificationService.GamificationService.getUserLevel).mockRejectedValue(new Error('API Error'));
-    vi.mocked(GamificationService.GamificationService.getUserAchievements).mockRejectedValue(new Error('API Error'));
-    vi.mocked(GamificationService.GamificationService.getUserLoginStreak).mockRejectedValue(new Error('API Error'));
-    vi.mocked(GamificationService.GamificationService.getUserWeeklyGoals).mockRejectedValue(new Error('API Error'));
+
+    vi.mocked(
+      GamificationService.GamificationService.getUserLevel,
+    ).mockRejectedValue(new Error('API Error'));
+    vi.mocked(
+      GamificationService.GamificationService.getUserAchievements,
+    ).mockRejectedValue(new Error('API Error'));
+    vi.mocked(
+      GamificationService.GamificationService.getUserLoginStreak,
+    ).mockRejectedValue(new Error('API Error'));
+    vi.mocked(
+      GamificationService.GamificationService.getUserWeeklyGoals,
+    ).mockRejectedValue(new Error('API Error'));
 
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -261,7 +284,7 @@ describe('GamificationPage', () => {
       // Default values should be shown
       expect(screen.getByText('Level 1')).toBeInTheDocument();
     });
-    
+
     consoleSpy.mockRestore();
   });
 
@@ -269,7 +292,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByTestId('contribution-graph')).toBeInTheDocument();
@@ -279,12 +302,14 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
       // Look for achievement icons using CSS selectors
-      const achievementElements = document.querySelectorAll('.achievement-icon, .achievement-card svg');
+      const achievementElements = document.querySelectorAll(
+        '.achievement-icon, .achievement-card svg',
+      );
       expect(achievementElements.length).toBeGreaterThan(0);
     });
   });
@@ -292,11 +317,11 @@ describe('GamificationPage', () => {
   test('handles mock user data when no real user data available', () => {
     // Mock localStorage to return null
     vi.mocked(localStorage.getItem).mockReturnValue(null);
-    
+
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByText('John Mavito')).toBeInTheDocument();
@@ -306,7 +331,7 @@ describe('GamificationPage', () => {
     const { rerender } = render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     // Simulate mobile width
@@ -317,11 +342,11 @@ describe('GamificationPage', () => {
     });
 
     fireEvent(window, new Event('resize'));
-    
+
     rerender(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     // Component should still render properly on mobile
@@ -333,7 +358,7 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -349,11 +374,12 @@ describe('GamificationPage', () => {
     render(
       <Router>
         <GamificationPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      const achievementElements = document.querySelectorAll('.achievement-card');
+      const achievementElements =
+        document.querySelectorAll('.achievement-card');
       expect(achievementElements.length).toBeGreaterThan(0);
     });
   });

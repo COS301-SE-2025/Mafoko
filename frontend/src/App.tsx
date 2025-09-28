@@ -55,7 +55,6 @@ import HomeHelp from './pages/help/HomeHelp.tsx';
 import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
 import { Toaster } from 'sonner';
 
-
 ChartJS.register(
   PieController,
   ArcElement,
@@ -70,19 +69,16 @@ ChartJS.register(
 );
 
 function App() {
-  
   useEffect(() => {
     const loadGlobalUserPreferences = async () => {
       const token = localStorage.getItem('accessToken');
       if (!token) {
-       
         return;
       }
 
       try {
         const serverPreferences = await getUserPreferences();
-        
-        
+
         document.documentElement.style.setProperty(
           '--base-text-size',
           `${serverPreferences.text_size}px`,
@@ -96,18 +92,16 @@ function App() {
           serverPreferences.text_spacing.toString(),
         );
 
-        
         if (serverPreferences.high_contrast_mode) {
-          document.documentElement.setAttribute('data-high-contrast-mode', 'true');
+          document.documentElement.setAttribute(
+            'data-high-contrast-mode',
+            'true',
+          );
         } else {
           document.documentElement.removeAttribute('data-high-contrast-mode');
         }
-
-        
-        
       } catch (err) {
         console.error('Failed to load global user preferences:', err);
-        
       }
     };
 
@@ -116,7 +110,6 @@ function App() {
 
   useEffect(() => {
     const handleSWMessage = (event: MessageEvent) => {
-      
       if (event.data?.type === 'SYNC_REQUEST') {
         console.log('Client: Received comment sync request.');
         orchestrateCommentSync().then((synced) => {
@@ -124,7 +117,6 @@ function App() {
         });
       }
 
-      
       if (event.data?.type === 'TERM_SYNC_REQUEST') {
         console.log('Client: Received term action sync request.');
         orchestrateTermSync().then((synced) => {
@@ -132,7 +124,6 @@ function App() {
         });
       }
 
-      
       if (event.data?.type === 'XP_SYNC_REQUEST') {
         console.log('Client: Received XP sync request.');
         orchestrateXPSync().then((synced) => {
@@ -145,7 +136,6 @@ function App() {
 
     navigator.serviceWorker?.addEventListener('message', handleSWMessage);
 
-   
     orchestrateCommentSync();
     orchestrateTermSync();
     orchestrateXPSync();

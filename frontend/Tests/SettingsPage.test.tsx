@@ -1,5 +1,11 @@
 import { vi } from 'vitest';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import SettingsPage from '../src/pages/SettingsPage';
@@ -9,7 +15,10 @@ import * as settingsService from '../src/services/settingsService';
 const mockNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -96,17 +105,21 @@ const mockUserPreferences = {
 describe('SettingsPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Setup successful API responses
-    vi.mocked(settingsService.getUserPreferences).mockResolvedValue(mockUserPreferences);
-    vi.mocked(settingsService.updateUserPreferences).mockResolvedValue(mockUserPreferences);
+    vi.mocked(settingsService.getUserPreferences).mockResolvedValue(
+      mockUserPreferences,
+    );
+    vi.mocked(settingsService.updateUserPreferences).mockResolvedValue(
+      mockUserPreferences,
+    );
   });
 
   test('renders navigation components', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByTestId('left-nav')).toBeInTheDocument();
@@ -117,7 +130,7 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByText('Settings')).toBeInTheDocument();
@@ -127,24 +140,29 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     expect(screen.getByText('settings.profile.title')).toBeInTheDocument();
     expect(screen.getByText('settings.appLanguage.title')).toBeInTheDocument();
-    expect(screen.getByText('settings.accessibility.title')).toBeInTheDocument();
+    expect(
+      screen.getByText('settings.accessibility.title'),
+    ).toBeInTheDocument();
   });
 
   test('displays text size slider', async () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText('settings.accessibility.textSize')).toBeInTheDocument();
-      const slider = screen.getByDisplayValue('16') || screen.getByRole('slider');
+      expect(
+        screen.getByText('settings.accessibility.textSize'),
+      ).toBeInTheDocument();
+      const slider =
+        screen.getByDisplayValue('16') || screen.getByRole('slider');
       expect(slider).toBeInTheDocument();
     });
   });
@@ -153,11 +171,13 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText('settings.accessibility.textSpacing')).toBeInTheDocument();
+      expect(
+        screen.getByText('settings.accessibility.textSpacing'),
+      ).toBeInTheDocument();
       // Text spacing slider exists
       const sliders = screen.getAllByRole('slider');
       expect(sliders.length).toBeGreaterThan(1);
@@ -168,11 +188,13 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText('settings.accessibility.highContrastMode')).toBeInTheDocument();
+      expect(
+        screen.getByText('settings.accessibility.highContrastMode'),
+      ).toBeInTheDocument();
       // Look for toggle switch element
       const toggles = document.querySelectorAll('.switch, [role="switch"]');
       expect(toggles.length).toBeGreaterThan(0);
@@ -183,11 +205,13 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText('settings.accessibility.darkMode')).toBeInTheDocument();
+      expect(
+        screen.getByText('settings.accessibility.darkMode'),
+      ).toBeInTheDocument();
       // Look for toggle switch elements
       const toggles = document.querySelectorAll('.switch, [role="switch"]');
       expect(toggles.length).toBeGreaterThan(0);
@@ -198,12 +222,17 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText('settings.appLanguage.title')).toBeInTheDocument();
-      const select = screen.getByDisplayValue('English') || screen.getByRole('combobox') || document.querySelector('select');
+      expect(
+        screen.getByText('settings.appLanguage.title'),
+      ).toBeInTheDocument();
+      const select =
+        screen.getByDisplayValue('English') ||
+        screen.getByRole('combobox') ||
+        document.querySelector('select');
       expect(select).toBeInTheDocument();
     });
   });
@@ -212,7 +241,7 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -228,7 +257,7 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -245,11 +274,13 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      const toggleElement = document.querySelector('.switch') || document.querySelector('[role="switch"]');
+      const toggleElement =
+        document.querySelector('.switch') ||
+        document.querySelector('[role="switch"]');
       if (toggleElement) {
         fireEvent.click(toggleElement);
         expect(toggleElement).toBeInTheDocument();
@@ -261,11 +292,13 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      const toggleElements = document.querySelectorAll('.switch, [role="switch"]');
+      const toggleElements = document.querySelectorAll(
+        '.switch, [role="switch"]',
+      );
       if (toggleElements.length > 0) {
         fireEvent.click(toggleElements[0]);
         expect(toggleElements[0]).toBeInTheDocument();
@@ -277,11 +310,12 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
-      const select = screen.getByRole('combobox') || document.querySelector('select');
+      const select =
+        screen.getByRole('combobox') || document.querySelector('select');
       if (select) {
         fireEvent.change(select, { target: { value: 'zu' } });
         expect(select).toBeInTheDocument();
@@ -293,7 +327,7 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     // Just verify that the settings service is available
@@ -305,7 +339,7 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -313,7 +347,7 @@ describe('SettingsPage', () => {
       if (select) {
         const options = within(select).getAllByRole('option');
         expect(options.length).toBeGreaterThan(0); // Has language options
-        
+
         // Check for English option
         expect(screen.getByText('English')).toBeInTheDocument();
       }
@@ -322,13 +356,15 @@ describe('SettingsPage', () => {
 
   test('handles API errors gracefully when loading preferences', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
-    vi.mocked(settingsService.getUserPreferences).mockRejectedValue(new Error('API Error'));
+
+    vi.mocked(settingsService.getUserPreferences).mockRejectedValue(
+      new Error('API Error'),
+    );
 
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     await waitFor(() => {
@@ -341,13 +377,15 @@ describe('SettingsPage', () => {
 
   test('handles API errors gracefully when loading preferences', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
-    vi.mocked(settingsService.getUserPreferences).mockRejectedValue(new Error('Load Error'));
+
+    vi.mocked(settingsService.getUserPreferences).mockRejectedValue(
+      new Error('Load Error'),
+    );
 
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     // Just verify the component renders despite API errors
@@ -362,20 +400,24 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     // Just verify main settings elements are present
     expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByText('settings.accessibility.textSize')).toBeInTheDocument();
-    expect(screen.getByText('settings.accessibility.darkMode')).toBeInTheDocument();
+    expect(
+      screen.getByText('settings.accessibility.textSize'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('settings.accessibility.darkMode'),
+    ).toBeInTheDocument();
   });
 
   test('allows interaction with settings controls', async () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     // Test that sliders can be interacted with
@@ -393,26 +435,32 @@ describe('SettingsPage', () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     // Just verify that all main sections are rendered
     expect(screen.getByText('settings.profile.title')).toBeInTheDocument();
     expect(screen.getByText('settings.appLanguage.title')).toBeInTheDocument();
-    expect(screen.getByText('settings.accessibility.title')).toBeInTheDocument();
+    expect(
+      screen.getByText('settings.accessibility.title'),
+    ).toBeInTheDocument();
   });
 
   test('applies accessibility settings to page elements', async () => {
     render(
       <Router>
         <SettingsPage />
-      </Router>
+      </Router>,
     );
 
     // Just verify that accessibility settings section exists
     await waitFor(() => {
-      expect(screen.getByText('settings.accessibility.title')).toBeInTheDocument();
-      expect(screen.getByText('settings.accessibility.highContrastMode')).toBeInTheDocument();
+      expect(
+        screen.getByText('settings.accessibility.title'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('settings.accessibility.highContrastMode'),
+      ).toBeInTheDocument();
     });
   });
 });

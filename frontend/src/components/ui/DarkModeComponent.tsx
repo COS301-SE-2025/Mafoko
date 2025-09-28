@@ -1,5 +1,8 @@
 import React, { createContext, use, useState, useEffect } from 'react';
-import { getUserPreferences, updateUserPreferences } from '../../services/settingsService';
+import {
+  getUserPreferences,
+  updateUserPreferences,
+} from '../../services/settingsService';
 
 interface DarkModeContextType {
   isDarkMode: boolean;
@@ -28,7 +31,7 @@ export const DarkModeProvider: React.FC<{ children: React.ReactNode }> = ({
         const preferences = await getUserPreferences();
         const darkModeValue = preferences.dark_mode;
         setIsDarkMode(darkModeValue);
-        
+
         // Apply both dark mode classes to document for compatibility
         if (darkModeValue) {
           document.documentElement.classList.add('theme-dark');

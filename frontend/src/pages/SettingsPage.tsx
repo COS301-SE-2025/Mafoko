@@ -5,7 +5,10 @@ import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useTranslation } from 'react-i18next';
-import { getUserPreferences, updateUserPreferences } from '../services/settingsService';
+import {
+  getUserPreferences,
+  updateUserPreferences,
+} from '../services/settingsService';
 import { UserPreferencesUpdate } from '../types/userPreferences';
 import '../styles/DashboardPage.scss';
 import '../styles/SettingsPage.scss';
@@ -143,7 +146,7 @@ const SettingsPage: React.FC = () => {
     const loadUserPreferences = async () => {
       // Clear any existing localStorage settings to ensure backend-only mode
       localStorage.removeItem('userSettings');
-      
+
       const token = localStorage.getItem('accessToken');
       if (!token) {
         // User not logged in, redirect to login or show error
@@ -154,9 +157,9 @@ const SettingsPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const serverPreferences = await getUserPreferences();
-        
+
         // Update local state with server preferences
         setSettings({
           textSize: serverPreferences.text_size,
@@ -170,7 +173,6 @@ const SettingsPage: React.FC = () => {
         if (serverPreferences.ui_language !== i18n.resolvedLanguage) {
           await i18n.changeLanguage(serverPreferences.ui_language);
         }
-        
       } catch (err) {
         console.error('Failed to load user preferences:', err);
         setError('Failed to load settings from server');
@@ -244,9 +246,9 @@ const SettingsPage: React.FC = () => {
       ...settings,
       [key]: value,
     };
-    
+
     setSettings(newSettings);
-    
+
     // Save to server asynchronously
     savePreferencesToServer(newSettings);
   };
@@ -270,14 +272,17 @@ const SettingsPage: React.FC = () => {
           <br />
           <p>{t('settings.subtitle')}</p>
           {error && (
-            <div className="error-message" style={{ 
-              color: '#dc3545', 
-              backgroundColor: '#f8d7da', 
-              border: '1px solid #f5c6cb', 
-              padding: '0.75rem 1rem', 
-              borderRadius: '0.375rem', 
-              marginTop: '1rem' 
-            }}>
+            <div
+              className="error-message"
+              style={{
+                color: '#dc3545',
+                backgroundColor: '#f8d7da',
+                border: '1px solid #f5c6cb',
+                padding: '0.75rem 1rem',
+                borderRadius: '0.375rem',
+                marginTop: '1rem',
+              }}
+            >
               {error}
             </div>
           )}

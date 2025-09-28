@@ -286,15 +286,15 @@ const GamificationPage: React.FC = () => {
             <div className="profile-header">
               <div className="avatar">
                 {getUserInitials(
-                  user.firstName || user.first_name || '', 
-                  user.lastName || user.last_name || ''
+                  user.firstName || user.first_name || '',
+                  user.lastName || user.last_name || '',
                 )}
               </div>
               <div className="user-info">
                 <div className="username">
                   {getFullName(
-                    user.firstName || user.first_name || '', 
-                    user.lastName || user.last_name || ''
+                    user.firstName || user.first_name || '',
+                    user.lastName || user.last_name || '',
                   )}
                 </div>
                 <div className="level-badge">

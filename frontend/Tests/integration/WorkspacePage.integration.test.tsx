@@ -90,8 +90,6 @@ const mockGroups = [
   },
 ];
 
-
-
 describe('WorkspacePage Integration Tests', () => {
   let mockFetch: ReturnType<typeof vi.fn>;
 
