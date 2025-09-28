@@ -164,7 +164,7 @@ describe('SettingsPage', () => {
       expect(
         screen.getByText('settings.accessibility.textSize'),
       ).toBeInTheDocument();
-      const slider = screen.getByRole('slider');
+      const slider = screen.getByDisplayValue('16');
       expect(slider).toBeInTheDocument();
     });
   });
