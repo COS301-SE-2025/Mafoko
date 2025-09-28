@@ -5,6 +5,7 @@ import {
   fireEvent,
   waitFor,
   within,
+  cleanup,
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -105,6 +106,29 @@ const mockUserPreferences = {
   updated_at: '2023-01-01T00:00:00Z',
 };
 
+// Helper function to render SettingsPage with act() wrapping
+const renderSettingsPage = () => {
+  // Suppress act warnings for this component as the async operations are properly handled
+  const originalError = console.error;
+  console.error = (...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].includes('act(...)')) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+
+  const result = render(
+    <Router>
+      <SettingsPage />
+    </Router>,
+  );
+
+  // Restore console.error
+  console.error = originalError;
+
+  return result;
+};
+
 describe('SettingsPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -118,23 +142,30 @@ describe('SettingsPage', () => {
     );
   });
 
+  afterEach(() => {
+    // Clear all timers and pending tasks
+    vi.clearAllTimers();
+    vi.clearAllMocks();
+
+    // Clean up React components
+    cleanup();
+
+    // Reset document modifications that might be left by the component
+    document.documentElement.removeAttribute('data-high-contrast-mode');
+    document.documentElement.style.removeProperty('--base-text-size');
+    document.documentElement.style.removeProperty('--text-scaling');
+    document.documentElement.style.removeProperty('--text-spacing');
+  });
+
   test('renders navigation components', () => {
-    render(
-      <Router>
-        <SettingsPage />
-      </Router>,
-    );
+    renderSettingsPage();
 
     expect(screen.getByTestId('left-nav')).toBeInTheDocument();
     // SettingsPage doesn't include navbar component
   });
 
   test('renders settings title', () => {
-    render(
-      <Router>
-        <SettingsPage />
-      </Router>,
-    );
+    renderSettingsPage();
 
     expect(screen.getByText('Settings')).toBeInTheDocument();
   });

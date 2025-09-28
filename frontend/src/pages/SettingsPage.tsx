@@ -136,7 +136,9 @@ const SettingsPage: React.FC = () => {
   const { i18n, t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const navigate = useNavigate();
-  const [isMobile] = useState(window.innerWidth <= 768);
+  const [isMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
+  );
   // const [loading, setLoading] = useState(false); // TODO: Use this for loading state display
   const [error, setError] = useState<string | null>(null);
 
