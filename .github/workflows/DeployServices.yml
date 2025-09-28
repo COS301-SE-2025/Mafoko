@@ -15,7 +15,8 @@ on:
       - 'backend/workspace-service/**'
       - 'backend/term-addition-service/**'
       - 'backend/feedback-service/**'
-      
+      - 'backend/learning-service/**'
+      - 'backend/gamification-service/**'
       
 
 env:
@@ -62,6 +63,8 @@ jobs:
             "workspace-service"
             "term-addition-service"
             "feedback-service"
+            "learning-service"
+            "gamification-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
@@ -83,6 +86,8 @@ jobs:
             "workspace-service"
             "term-addition-service"
             "feedback-service"
+            "learning-service"
+            "gamification-service"
           )
 
           for SERVICE in "${SERVICES[@]}"; do
