@@ -8,6 +8,7 @@ import {
   getAndClearPendingTermApprovals,
   getAndClearPendingTermRejections,
   getAndClearPendingTermDeletes,
+  getAndClearPendingXPAwards,
   replaceAllTerms,
 } from './indexedDB';
 import { API_ENDPOINTS } from '../config';
@@ -128,6 +129,51 @@ export async function orchestrateCommentSync(): Promise<boolean> {
   console.log('Sync Manager: Comment orchestration complete.');
   if (didWork) await refreshAllTermsCache();
   return didWork;
+}
+
+export async function orchestrateXPSync(): Promise<boolean> {
+  const token = localStorage.getItem('accessToken');
+  if (!token) return false;
+
+  const pendingXPAwards = await getAndClearPendingXPAwards();
+
+  if (pendingXPAwards.length === 0) return false;
+
+  console.log('Sync Manager: Starting XP award orchestration...');
+
+  for (const xpAward of pendingXPAwards) {
+    try {
+      const response = await fetch(API_ENDPOINTS.addXP, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${xpAward.token}`,
+        },
+        body: JSON.stringify({
+          user_id: xpAward.user_id,
+          xp_amount: xpAward.xp_amount,
+          xp_source: xpAward.xp_source,
+          source_reference_id: xpAward.source_reference_id,
+          description: xpAward.description,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(
+          `Sync Manager: Failed to sync XP award. Status: ${response.status}`,
+        );
+      } else {
+        console.log(
+          `Sync Manager: Successfully synced XP award (${xpAward.xp_amount} XP)`,
+        );
+      }
+    } catch (error) {
+      console.error('Sync Manager: Failed to sync XP award:', error);
+    }
+  }
+
+  console.log('Sync Manager: XP award orchestration complete.');
+  return true;
 }
 
 export async function orchestrateTermSync(): Promise<boolean> {

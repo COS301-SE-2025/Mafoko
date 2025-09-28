@@ -79,6 +79,20 @@ body {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
   flex: 0 0 72px;
   min-width: 72px;
+  overflow: hidden;
+}
+
+.gamification-page .avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.gamification-page .avatar .avatar-loading {
+  font-size: 12px;
+  font-weight: 400;
+  color: white;
 }
 
 .user-info {

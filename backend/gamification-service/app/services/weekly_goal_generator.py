@@ -44,8 +44,8 @@ WEEKLY_GOAL_TEMPLATES = [
         achievement_type=AchievementType.COMMENT_COUNT,
         min_target=3,
         max_target=8,
-        base_xp=120,
-        xp_variance=30,
+        base_xp=200,
+        xp_variance=100,
     ),
     WeeklyGoalTemplate(
         name="Term Creator",
@@ -53,8 +53,8 @@ WEEKLY_GOAL_TEMPLATES = [
         achievement_type=AchievementType.TERM_COUNT,
         min_target=2,
         max_target=6,
-        base_xp=150,
-        xp_variance=40,
+        base_xp=200,
+        xp_variance=100,
     ),
     WeeklyGoalTemplate(
         name="Community Favorite",
@@ -62,8 +62,8 @@ WEEKLY_GOAL_TEMPLATES = [
         achievement_type=AchievementType.UPVOTE_COUNT,
         min_target=5,
         max_target=15,
-        base_xp=110,
-        xp_variance=25,
+        base_xp=200,
+        xp_variance=100,
     ),
     WeeklyGoalTemplate(
         name="Consistent User",
@@ -71,8 +71,8 @@ WEEKLY_GOAL_TEMPLATES = [
         achievement_type=AchievementType.LOGIN_STREAK,
         min_target=3,
         max_target=7,
-        base_xp=130,
-        xp_variance=35,
+        base_xp=200,
+        xp_variance=100,
     ),
     WeeklyGoalTemplate(
         name="Streak Keeper",
@@ -80,8 +80,8 @@ WEEKLY_GOAL_TEMPLATES = [
         achievement_type=AchievementType.LOGIN_STREAK,
         min_target=2,
         max_target=4,
-        base_xp=140,
-        xp_variance=30,
+        base_xp=200,
+        xp_variance=100,
     ),
 ]
 
@@ -125,10 +125,8 @@ async def generate_random_weekly_goals(
 
         target_value = random.randint(template.min_target, template.max_target)
 
-        xp_reward = template.base_xp + random.randint(
-            -template.xp_variance, template.xp_variance
-        )
-        xp_reward = max(100, xp_reward)  # Minimum 100 XP reward
+        xp_options = [100, 150, 200, 250, 300]
+        xp_reward = random.choice(xp_options)
 
         goal_data = {
             "name": f"{template.name} {week_id}",

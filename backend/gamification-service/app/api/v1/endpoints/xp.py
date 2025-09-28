@@ -149,3 +149,35 @@ async def get_user_login_streak(
 
     streak_data = await crud_user_xp.get_user_login_streak(db=db, user_id=user_uuid)
     return LoginStreakResponse(**streak_data)
+
+
+@router.get("/user/{user_id}/activity")
+async def get_user_daily_xp(
+    *,
+    db: AsyncSession = Depends(get_db),
+    user_id: str,
+    days: int = 365,
+    current_user: UserSchema = Depends(get_current_active_user),
+):
+    """
+    Get daily XP totals for a user over the last 365 days.
+    """
+    try:
+        import uuid
+
+        user_uuid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user ID format"
+        )
+
+    if days <= 0 or days > 365:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Days must be between 1 and 365",
+        )
+
+    daily_data = await crud_user_xp.get_user_daily_xp(
+        db=db, user_id=user_uuid, days=days
+    )
+    return daily_data

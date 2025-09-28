@@ -251,7 +251,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "8012:8080"
+      - "8013:8080"
     volumes:
       - ./gamification-service:/app
       - ./mavito-common-lib:/mavito-common-lib-src
