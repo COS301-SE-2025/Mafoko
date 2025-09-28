@@ -91,6 +91,29 @@ export interface PendingXPAward {
   timestamp: number;
 }
 
+export interface PendingFeedback {
+  id: string;
+  type: string;
+  message: string;
+  name?: string | null;
+  email?: string | null;
+  priority?: string;
+  token?: string;
+  timestamp: number;
+}
+
+export interface PendingFeedbackUpdate {
+  id: string;
+  feedbackId: string;
+  updates: {
+    status?: string;
+    priority?: string;
+    admin_response?: string | null;
+  };
+  token: string;
+  timestamp: number;
+}
+
 interface MyDB extends DBSchema {
   terms: {
     key: string;
@@ -133,9 +156,17 @@ interface MyDB extends DBSchema {
     key: string;
     value: PendingXPAward;
   };
+  'pending-feedback': {
+    key: string;
+    value: PendingFeedback;
+  };
+  'pending-feedback-updates': {
+    key: string;
+    value: PendingFeedbackUpdate;
+  };
 }
 
-const dbPromise = openDB<MyDB>('marito-db', 6, {
+const dbPromise = openDB<MyDB>('marito-db', 8, {
   upgrade(db, oldVersion) {
     if (oldVersion < 3) {
       if (!db.objectStoreNames.contains('terms')) {
@@ -188,6 +219,18 @@ const dbPromise = openDB<MyDB>('marito-db', 6, {
       // Add XP awards store
       if (!db.objectStoreNames.contains('pending-xp-awards')) {
         db.createObjectStore('pending-xp-awards', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 7) {
+      // Add feedback store
+      if (!db.objectStoreNames.contains('pending-feedback')) {
+        db.createObjectStore('pending-feedback', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 8) {
+      // Add feedback updates store
+      if (!db.objectStoreNames.contains('pending-feedback-updates')) {
+        db.createObjectStore('pending-feedback-updates', { keyPath: 'id' });
       }
     }
   },
@@ -490,4 +533,46 @@ export async function getPendingXPAwardCount(): Promise<number> {
   const db = await dbPromise;
   const allAwards = await db.getAll('pending-xp-awards');
   return allAwards.length;
+}
+
+export async function addPendingFeedback(feedback: PendingFeedback) {
+  const db = await dbPromise;
+  await db.put('pending-feedback', feedback);
+}
+
+export async function getAndClearPendingFeedback(): Promise<PendingFeedback[]> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-feedback', 'readwrite');
+  const allFeedback = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allFeedback;
+}
+
+export async function getPendingFeedbackCount(): Promise<number> {
+  const db = await dbPromise;
+  const allFeedback = await db.getAll('pending-feedback');
+  return allFeedback.length;
+}
+
+export async function addPendingFeedbackUpdate(update: PendingFeedbackUpdate) {
+  const db = await dbPromise;
+  await db.put('pending-feedback-updates', update);
+}
+
+export async function getAndClearPendingFeedbackUpdates(): Promise<
+  PendingFeedbackUpdate[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-feedback-updates', 'readwrite');
+  const allUpdates = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allUpdates;
+}
+
+export async function getPendingFeedbackUpdateCount(): Promise<number> {
+  const db = await dbPromise;
+  const allUpdates = await db.getAll('pending-feedback-updates');
+  return allUpdates.length;
 }

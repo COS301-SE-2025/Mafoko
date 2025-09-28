@@ -14,6 +14,8 @@ import {
   addTerm,
   addCommentsForTerm,
   getAndClearPendingProfilePictureUploads,
+  getAndClearPendingFeedback,
+  getAndClearPendingFeedbackUpdates,
 } from './utils/indexedDB';
 import { SW_API_ENDPOINTS } from './sw-config';
 import { Comment } from './types/termDetailTypes';
@@ -272,6 +274,12 @@ self.addEventListener('sync', ((event: SyncEvent) => {
           client.postMessage({ type: 'XP_SYNC_REQUEST' }),
         );
       });
+  } else if (event.tag === 'sync-feedback') {
+    console.log('SW: Sync event for feedback received.');
+    event.waitUntil(syncPendingFeedback());
+  } else if (event.tag === 'sync-feedback-updates') {
+    console.log('SW: Sync event for feedback updates received.');
+    event.waitUntil(syncPendingFeedbackUpdates());
   }
 }) as EventListener);
 
@@ -481,6 +489,128 @@ async function syncPendingProfilePictures() {
   } catch (error) {
     console.error(
       'Service Worker: Failed to sync pending profile pictures:',
+      error,
+    );
+  }
+}
+
+async function syncPendingFeedback() {
+  console.log('Service Worker: Starting to sync pending feedback...');
+  try {
+    const pendingFeedback = await getAndClearPendingFeedback();
+    if (pendingFeedback.length === 0) {
+      console.log('Service Worker: No pending feedback to sync.');
+      return;
+    }
+
+    for (const feedback of pendingFeedback) {
+      try {
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+
+        if (feedback.token) {
+          headers['Authorization'] = `Bearer ${feedback.token}`;
+        }
+
+        const response = await fetch(SW_API_ENDPOINTS.FEEDBACK, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            type: feedback.type,
+            message: feedback.message,
+            name: feedback.name,
+            email: feedback.email,
+            priority: feedback.priority,
+          }),
+        });
+
+        if (response.ok) {
+          console.log(
+            `Service Worker: Successfully synced feedback ${feedback.id}`,
+          );
+
+          self.clients
+            .matchAll({ includeUncontrolled: true, type: 'window' })
+            .then((clients) => {
+              clients.forEach((client) =>
+                client.postMessage({
+                  type: 'FEEDBACK_SYNCED',
+                  feedbackId: feedback.id,
+                }),
+              );
+            });
+        } else {
+          console.error(
+            `SW: Failed to sync feedback ${feedback.id}. Status: ${response.status}`,
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Service Worker: Network error while syncing feedback ${feedback.id}:`,
+          error,
+        );
+      }
+    }
+    console.log('Service Worker: Feedback sync finished.');
+  } catch (error) {
+    console.error('Service Worker: Failed to sync pending feedback:', error);
+  }
+}
+
+async function syncPendingFeedbackUpdates() {
+  console.log('Service Worker: Starting to sync pending feedback updates...');
+  try {
+    const pendingUpdates = await getAndClearPendingFeedbackUpdates();
+    if (pendingUpdates.length === 0) {
+      console.log('Service Worker: No pending feedback updates to sync.');
+      return;
+    }
+
+    for (const update of pendingUpdates) {
+      try {
+        const updateEndpoint = `${SW_API_ENDPOINTS.FEEDBACK}${update.feedbackId}`;
+        const response = await fetch(updateEndpoint, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${update.token}`,
+          },
+          body: JSON.stringify(update.updates),
+        });
+
+        if (response.ok) {
+          console.log(
+            `Service Worker: Successfully synced feedback update ${update.id} for feedback ${update.feedbackId}`,
+          );
+
+          self.clients
+            .matchAll({ includeUncontrolled: true, type: 'window' })
+            .then((clients) => {
+              clients.forEach((client) =>
+                client.postMessage({
+                  type: 'FEEDBACK_UPDATE_SYNCED',
+                  feedbackId: update.feedbackId,
+                  updateId: update.id,
+                }),
+              );
+            });
+        } else {
+          console.error(
+            `SW: Failed to sync feedback update ${update.id} for feedback ${update.feedbackId}. Status: ${response.status}`,
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Service Worker: Network error while syncing feedback update ${update.id}:`,
+          error,
+        );
+      }
+    }
+    console.log('Service Worker: Feedback updates sync finished.');
+  } catch (error) {
+    console.error(
+      'Service Worker: Failed to sync pending feedback updates:',
       error,
     );
   }

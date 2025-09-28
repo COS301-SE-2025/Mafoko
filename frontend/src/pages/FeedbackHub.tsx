@@ -26,8 +26,10 @@ import {
   FeedbackStats,
   FeedbackType,
   FeedbackStatus,
+  FeedbackPriority,
   FeedbackUpdate,
 } from '../types/feedback';
+import { addPendingFeedbackUpdate } from '../utils/indexedDB';
 import '../styles/FeedbackHub.scss';
 
 const AdminDashboard = () => {
@@ -39,13 +41,13 @@ const AdminDashboard = () => {
   const [feedbackStats, setFeedbackStats] = useState<FeedbackStats | null>(
     null,
   );
-  const [feedbackLoading, setFeedbackLoading] = useState(true);
   const [feedbackError, setFeedbackError] = useState<string | null>(null);
 
   const [selectedFeedback, setSelectedFeedback] =
     useState<FeedbackAdmin | null>(null);
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterPriority, setFilterPriority] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -62,7 +64,6 @@ const AdminDashboard = () => {
     if (!token) return;
 
     try {
-      setFeedbackLoading(true);
       setFeedbackError(null);
 
       // Fetch all feedback for admin
@@ -99,8 +100,6 @@ const AdminDashboard = () => {
       setFeedbackError(
         error instanceof Error ? error.message : 'Failed to load feedback data',
       );
-    } finally {
-      setFeedbackLoading(false);
     }
   };
 
@@ -131,9 +130,61 @@ const AdminDashboard = () => {
       await fetchFeedbackData();
     } catch (error) {
       console.error('Error updating feedback:', error);
-      setFeedbackError(
-        error instanceof Error ? error.message : 'Failed to update feedback',
-      );
+
+      // Check if this is a network error (offline)
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to update feedback';
+      if (
+        errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+        errorMessage.includes('ERR_NETWORK') ||
+        !navigator.onLine
+      ) {
+        // Queue the update for offline sync
+        await addPendingFeedbackUpdate({
+          id: crypto.randomUUID(),
+          feedbackId,
+          updates,
+          token,
+          timestamp: Date.now(),
+        });
+
+        // Register background sync
+        if (
+          'serviceWorker' in navigator &&
+          'sync' in window.ServiceWorkerRegistration.prototype
+        ) {
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            await registration.sync.register('sync-feedback-updates');
+          } catch (syncError) {
+            console.error(
+              'Failed to register background sync for feedback updates:',
+              syncError,
+            );
+          }
+        }
+
+        setFeedbackError(
+          "You are offline. Your changes have been saved and will sync when you're back online.",
+        );
+
+        // Update local state optimistically
+        setFeedbackData((prevData) =>
+          prevData.map((item) =>
+            item.id === feedbackId ? { ...item, ...updates } : item,
+          ),
+        );
+
+        // Update selected feedback if it's the one being modified
+        if (selectedFeedback && selectedFeedback.id === feedbackId) {
+          setSelectedFeedback((prev) =>
+            prev ? { ...prev, ...updates } : null,
+          );
+        }
+      } else {
+        setFeedbackError(errorMessage);
+      }
     }
   };
 
@@ -162,6 +213,9 @@ const AdminDashboard = () => {
       const matchesStatus =
         filterStatus === 'all' ||
         item.status === (filterStatus as FeedbackStatus);
+      const matchesPriority =
+        filterPriority === 'all' ||
+        item.priority === (filterPriority as FeedbackPriority);
       const matchesSearch =
         searchQuery === '' ||
         item.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -170,9 +224,9 @@ const AdminDashboard = () => {
         (item.email &&
           item.email.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      return matchesType && matchesStatus && matchesSearch;
+      return matchesType && matchesStatus && matchesPriority && matchesSearch;
     });
-  }, [feedbackData, filterType, filterStatus, searchQuery]);
+  }, [feedbackData, filterType, filterStatus, filterPriority, searchQuery]);
 
   // Pagination logic
   const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
@@ -183,7 +237,7 @@ const AdminDashboard = () => {
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [filterType, filterStatus, searchQuery]);
+  }, [filterType, filterStatus, filterPriority, searchQuery]);
 
   // Use API stats if available, otherwise calculate from local data
   const stats = useMemo(() => {
@@ -270,7 +324,7 @@ const AdminDashboard = () => {
   };
 
   // Show loading state
-  if (isLoading || feedbackLoading) {
+  if (isLoading) {
     return (
       <div
         style={{
@@ -289,43 +343,6 @@ const AdminDashboard = () => {
   // Show error if not admin
   if (authError) {
     return <AdminErrorBoundary authError={authError} />;
-  }
-
-  // Show feedback error if API failed
-  if (feedbackError) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-          gap: '1rem',
-        }}
-      >
-        <h2 style={{ color: '#dc3545' }}>Error Loading Feedback Data</h2>
-        <p>{feedbackError}</p>
-        <button
-          type="button"
-          onClick={() => void fetchFeedbackData()}
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-          }}
-        >
-          <RefreshCw size={16} />
-          Retry
-        </button>
-      </div>
-    );
   }
 
   return (
@@ -372,6 +389,52 @@ const AdminDashboard = () => {
         )}
 
         <div className={`feedback-hub-content${isMobile ? ' pt-16' : ''}`}>
+          {/* Error Display */}
+          {feedbackError && (
+            <div
+              className="feedback-error-banner"
+              style={{
+                backgroundColor: '#f8d7da',
+                color: '#721c24',
+                padding: '12px 16px',
+                borderRadius: '6px',
+                marginBottom: '20px',
+                border: '1px solid #f5c6cb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <AlertCircle size={16} />
+                <span>{feedbackError}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFeedbackError(null);
+                  void fetchFeedbackData();
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#721c24',
+                  cursor: 'pointer',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <RefreshCw size={14} />
+                Retry
+              </button>
+            </div>
+          )}
+
           {/* Stats Cards */}
           <div className="stats-cards">
             <div className="stats-card">
@@ -475,6 +538,20 @@ const AdminDashboard = () => {
                   <option value={FeedbackStatus.RESOLVED}>Resolved</option>
                   <option value={FeedbackStatus.CLOSED}>Closed</option>
                 </select>
+
+                <select
+                  value={filterPriority}
+                  onChange={(e) => {
+                    setFilterPriority(e.target.value);
+                  }}
+                  className="filter-select"
+                >
+                  <option value="all">All Priorities</option>
+                  <option value={FeedbackPriority.CRITICAL}>Critical</option>
+                  <option value={FeedbackPriority.HIGH}>High</option>
+                  <option value={FeedbackPriority.MEDIUM}>Medium</option>
+                  <option value={FeedbackPriority.LOW}>Low</option>
+                </select>
               </div>
 
               <div className="search-group">
@@ -536,6 +613,13 @@ const AdminDashboard = () => {
                               >
                                 {feedback.status.charAt(0).toUpperCase() +
                                   feedback.status.slice(1).replace('_', ' ')}
+                              </span>
+                              <span
+                                className={`priority-tag ${feedback.priority}`}
+                              >
+                                {feedback.priority.charAt(0).toUpperCase() +
+                                  feedback.priority.slice(1)}{' '}
+                                Priority
                               </span>
                             </div>
                             <p className="feedback-message">
@@ -644,6 +728,28 @@ const AdminDashboard = () => {
                             Resolved
                           </option>
                           <option value={FeedbackStatus.CLOSED}>Closed</option>
+                        </select>
+                      </div>
+
+                      <div className="form-field">
+                        <label className="form-label">Priority</label>
+                        <select
+                          value={selectedFeedback.priority}
+                          onChange={(e) => {
+                            void updateFeedbackStatus(selectedFeedback.id, {
+                              priority: e.target.value as FeedbackPriority,
+                            });
+                          }}
+                          className="form-select"
+                        >
+                          <option value={FeedbackPriority.CRITICAL}>
+                            Critical
+                          </option>
+                          <option value={FeedbackPriority.HIGH}>High</option>
+                          <option value={FeedbackPriority.MEDIUM}>
+                            Medium
+                          </option>
+                          <option value={FeedbackPriority.LOW}>Low</option>
                         </select>
                       </div>
 

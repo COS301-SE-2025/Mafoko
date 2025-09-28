@@ -52,6 +52,24 @@ vi.mock('../src/config', () => ({
   },
 }));
 
+// Mock IndexedDB utilities to prevent indexedDB access
+vi.mock('../src/utils/indexedDB.ts', () => ({
+  openDB: vi.fn(),
+  getAllRecords: vi.fn(() => Promise.resolve([])),
+  addRecord: vi.fn(() => Promise.resolve()),
+  updateRecord: vi.fn(() => Promise.resolve()),
+  deleteRecord: vi.fn(() => Promise.resolve()),
+  clearStore: vi.fn(() => Promise.resolve()),
+  default: {
+    openDB: vi.fn(),
+    getAllRecords: vi.fn(() => Promise.resolve([])),
+    addRecord: vi.fn(() => Promise.resolve()),
+    updateRecord: vi.fn(() => Promise.resolve()),
+    deleteRecord: vi.fn(() => Promise.resolve()),
+    clearStore: vi.fn(() => Promise.resolve()),
+  },
+}));
+
 // Mock fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
@@ -81,6 +99,7 @@ const mockFeedbackData = [
     name: 'John Doe',
     email: 'john@example.com',
     status: FeedbackStatus.OPEN,
+    priority: 'medium',
     created_at: '2025-08-16T10:00:00Z',
     user_id: 'user1',
     admin_response: null,
@@ -94,6 +113,7 @@ const mockFeedbackData = [
     name: 'Jane Smith',
     email: 'jane@example.com',
     status: FeedbackStatus.IN_PROGRESS,
+    priority: 'high',
     created_at: '2025-08-16T09:00:00Z',
     user_id: 'user2',
     admin_response: null,
@@ -107,6 +127,7 @@ const mockFeedbackData = [
     name: 'Bob Wilson',
     email: 'bob@example.com',
     status: FeedbackStatus.RESOLVED,
+    priority: 'low',
     created_at: '2025-08-16T08:00:00Z',
     user_id: 'user3',
     admin_response: 'Thank you!',
@@ -222,6 +243,7 @@ describe('FeedbackHub', () => {
       name: `User ${String(i)}`,
       email: `user${String(i)}@example.com`,
       status: FeedbackStatus.OPEN,
+      priority: 'medium',
       created_at: '2025-08-16T10:00:00Z',
       user_id: `user${String(i)}`,
       admin_response: null,
@@ -460,12 +482,15 @@ describe('FeedbackHub', () => {
 
     renderFeedbackHub();
 
+    // Wait for the error to be displayed
     await waitFor(() => {
-      expect(
-        screen.getByText('Error Loading Feedback Data'),
-      ).toBeInTheDocument();
+      // The component displays the error message in a banner
       expect(screen.getByText('API Error')).toBeInTheDocument();
       expect(screen.getByText('Retry')).toBeInTheDocument();
+
+      // Check that the error banner is displayed
+      const errorBanner = document.querySelector('.feedback-error-banner');
+      expect(errorBanner).toBeTruthy();
     });
   });
 

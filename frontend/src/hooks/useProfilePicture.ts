@@ -189,8 +189,13 @@ export const useProfilePicture = (userId?: string): UseProfilePictureReturn => {
           'PROFILE_PICTURE_SYNCED' &&
         (event.data as { type: string; userId: string }).userId === userId
       ) {
-        clearProfilePictureCache(userId);
-        void loadProfilePicture();
+        console.log('Profile picture sync message received');
+        if (userId) {
+          clearProfilePictureCache(userId);
+          void loadProfilePicture();
+        } else {
+          console.warn('Cannot sync profile picture: userId is undefined');
+        }
       }
     };
 
