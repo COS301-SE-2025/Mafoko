@@ -49,15 +49,17 @@ async def update_user_preferences(
     """
     try:
         # Get or create preferences
-        existing_preferences = await crud_user_preferences.get_or_create_user_preferences(
-            db, user_id=current_user.id
+        existing_preferences = (
+            await crud_user_preferences.get_or_create_user_preferences(
+                db, user_id=current_user.id
+            )
         )
-        
+
         # Update preferences
         updated_preferences = await crud_user_preferences.update_user_preferences(
             db, db_obj=existing_preferences, obj_in=preferences_update
         )
-        
+
         return UserPreferencesResponse.model_validate(updated_preferences)
     except Exception as e:
         print(f"Error updating user preferences: {e}")
@@ -78,12 +80,12 @@ async def reset_user_preferences(
     try:
         # Delete existing preferences if they exist
         await crud_user_preferences.delete_user_preferences(db, user_id=current_user.id)
-        
+
         # Create new default preferences
         preferences = await crud_user_preferences.get_or_create_user_preferences(
             db, user_id=current_user.id
         )
-        
+
         return UserPreferencesResponse.model_validate(preferences)
     except Exception as e:
         print(f"Error resetting user preferences: {e}")

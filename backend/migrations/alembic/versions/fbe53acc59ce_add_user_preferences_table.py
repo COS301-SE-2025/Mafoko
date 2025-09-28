@@ -5,6 +5,7 @@ Revises: 879249f67430
 Create Date: 2025-09-28 07:36:36.653789
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
@@ -12,8 +13,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'fbe53acc59ce'
-down_revision: Union[str, Sequence[str], None] = '879249f67430'
+revision: str = "fbe53acc59ce"
+down_revision: Union[str, Sequence[str], None] = "879249f67430"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -25,11 +26,17 @@ def upgrade() -> None:
         "user_preferences",
         sa.Column("user_id", sa.UUID(), nullable=False),
         sa.Column("dark_mode", sa.Boolean(), nullable=False, server_default="false"),
-        sa.Column("offline_mode_enabled", sa.Boolean(), nullable=False, server_default="false"),
-        sa.Column("ui_language", sa.String(length=3), nullable=False, server_default="'eng'"),
+        sa.Column(
+            "offline_mode_enabled", sa.Boolean(), nullable=False, server_default="false"
+        ),
+        sa.Column(
+            "ui_language", sa.String(length=3), nullable=False, server_default="'eng'"
+        ),
         sa.Column("text_size", sa.Integer(), nullable=False, server_default="16"),
         sa.Column("text_spacing", sa.Float(), nullable=False, server_default="1.0"),
-        sa.Column("high_contrast_mode", sa.Boolean(), nullable=False, server_default="false"),
+        sa.Column(
+            "high_contrast_mode", sa.Boolean(), nullable=False, server_default="false"
+        ),
         sa.Column(
             "updated_at",
             sa.DateTime(timezone=True),
@@ -44,7 +51,10 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("user_id"),
     )
     op.create_index(
-        op.f("ix_user_preferences_user_id"), "user_preferences", ["user_id"], unique=True
+        op.f("ix_user_preferences_user_id"),
+        "user_preferences",
+        ["user_id"],
+        unique=True,
     )
     # ### end Alembic commands ###
 

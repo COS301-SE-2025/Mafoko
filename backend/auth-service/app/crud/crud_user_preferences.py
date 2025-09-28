@@ -4,7 +4,9 @@ from sqlalchemy import select
 from typing import Optional, Dict, Any, Union
 from uuid import UUID
 
-from mavito_common.models.user_preferences import UserPreferences as UserPreferencesModel
+from mavito_common.models.user_preferences import (
+    UserPreferences as UserPreferencesModel,
+)
 from mavito_common.schemas.user_preferences import (
     UserPreferencesCreate,
     UserPreferencesUpdate,
@@ -62,7 +64,9 @@ class CRUDUserPreferences:
         if not preferences:
             # Create default preferences
             preferences_create = UserPreferencesCreate(user_id=user_id)
-            preferences = await self.create_user_preferences(db, obj_in=preferences_create)
+            preferences = await self.create_user_preferences(
+                db, obj_in=preferences_create
+            )
         return preferences
 
     async def delete_user_preferences(

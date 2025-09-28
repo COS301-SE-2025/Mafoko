@@ -34,7 +34,9 @@ async def invalid_password_exception_handler(
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(uploads.router, prefix="/api/v1/uploads", tags=["Uploads"])
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
-app.include_router(user_preferences.router, prefix="/api/v1/settings", tags=["Settings"])
+app.include_router(
+    user_preferences.router, prefix="/api/v1/settings", tags=["Settings"]
+)
 
 
 @app.get("/", tags=["Health Check"])

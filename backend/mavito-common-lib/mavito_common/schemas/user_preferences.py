@@ -13,9 +13,7 @@ class UserPreferencesBase(BaseModel):
     ui_language: str = Field(
         default="eng", max_length=3, description="UI language code (3 characters)"
     )
-    text_size: int = Field(
-        default=16, ge=12, le=24, description="Text size in pixels"
-    )
+    text_size: int = Field(default=16, ge=12, le=24, description="Text size in pixels")
     text_spacing: float = Field(
         default=1.0, ge=0.8, le=2.0, description="Text spacing multiplier"
     )
@@ -27,11 +25,13 @@ class UserPreferencesBase(BaseModel):
 
 class UserPreferencesCreate(UserPreferencesBase):
     """Schema for creating user preferences"""
+
     user_id: uuid.UUID
 
 
 class UserPreferencesUpdate(BaseModel):
     """Schema for updating user preferences"""
+
     dark_mode: Optional[bool] = None
     offline_mode_enabled: Optional[bool] = None
     ui_language: Optional[str] = Field(None, max_length=3)
@@ -43,6 +43,7 @@ class UserPreferencesUpdate(BaseModel):
 
 class UserPreferencesResponse(UserPreferencesBase):
     """Response schema for user preferences"""
+
     user_id: uuid.UUID
     updated_at: Optional[datetime] = None
     model_config = ConfigDict(from_attributes=True)
@@ -51,4 +52,5 @@ class UserPreferencesResponse(UserPreferencesBase):
 # Properties for internal use
 class UserPreferencesInDB(UserPreferencesResponse):
     """Database schema for user preferences (internal use)"""
+
     pass

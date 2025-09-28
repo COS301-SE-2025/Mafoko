@@ -19,6 +19,7 @@ class UserPreferences(Base):
     SQLAlchemy ORM model for user preferences.
     Maps to the 'user_preferences' table in the database.
     """
+
     __tablename__ = "user_preferences"
 
     user_id: Mapped[uuid.UUID] = mapped_column(
