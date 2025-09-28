@@ -1,7 +1,7 @@
 """re-add password reset fields to user table
 
 Revision ID: cae0f7e9844d
-Revises: de172491dbc4
+Revises: fbe53acc59ce
 Create Date: 2025-09-28 17:29:29.640068
 
 """
@@ -14,7 +14,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "cae0f7e9844d"
-down_revision: Union[str, Sequence[str], None] = "de172491dbc4"
+down_revision: Union[str, Sequence[str], None] = "fbe53acc59ce"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

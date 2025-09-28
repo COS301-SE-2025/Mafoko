@@ -104,7 +104,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         id: 'linguist-application',
         label: t('navigation.linguistApplication'),
         path: '/linguist-application',
-        roles: ['contributor'],
+        roles: ['contributor', 'linguist'],
         group: 'work-tools',
       },
       {
