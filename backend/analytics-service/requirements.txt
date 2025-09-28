@@ -6,6 +6,7 @@ pytest
 httpx
 pytest-asyncio
 psycopg2-binary
+redis
 ruff      
 black     
 mypy    

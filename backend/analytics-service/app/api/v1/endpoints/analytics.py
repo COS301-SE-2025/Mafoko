@@ -361,6 +361,17 @@ async def get_translation_completeness(
     }
 
 
+@router.get("/advanced/language-network")
+async def get_language_network_legacy(
+    db: AsyncSession = Depends(get_db),
+    min_connections: Annotated[int, Query(ge=1)] = 5,
+) -> Dict[str, List[Dict[str, Union[str, int, float]]]]:
+    """Legacy endpoint that redirects to the new optimized implementation."""
+    from .language_network import get_language_network
+
+    return await get_language_network(db=db, min_connections=min_connections)
+
+
 @router.get("/health")
 async def health_check() -> Dict[str, str]:
     """Simple health check endpoint to verify the service is running."""

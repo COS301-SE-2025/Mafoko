@@ -171,6 +171,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  ssr: {
+    noExternal: ['three', 'three-forcegraph', 'three-spritetext'],
+  },
+  optimizeDeps: {
+    include: ['three', 'three-forcegraph', 'three-spritetext'],
+  },
+  build: {
+    commonjsOptions: {
+      include: [/three-forcegraph/, /three-spritetext/, /node_modules/],
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
