@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { CommentItem } from '../components/TermDetail/CommentItem';
 import { Comment } from '../types/termDetailTypes';
 import '../styles/TermDetailPage.scss';
-import { SendIcon, SuggestEditArrowIcon } from '../components/Icons';
+import { SendIcon } from '../components/Icons';
 import Navbar from '../components/ui/Navbar';
 import LeftNav from '../components/ui/LeftNav';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
@@ -719,25 +719,46 @@ export const TermDetailPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="term-conent w-full pb-3">
-                    <Card className="w-full max-w-screen mx-auto bg-theme text-theme text-left">
+                    <Card
+                      className="w-full max-w-screen mx-auto bg-theme text-theme text-left "
+                      style={{ padding: '1rem' }}
+                    >
                       <CardHeader>
-                        <div className="flex flex-row items-start gap-2">
+                        <div
+                          className="flex flex-row items-start gap-2 rounded-2xl"
+                          style={{ marginBottom: '0.4rem' }}
+                        >
                           <Badge
                             variant="secondary"
-                            className="bg-accent text-sm"
+                            className="bg-accent text-sm rounded-2xl"
+                            style={{
+                              padding: '0.2rem',
+                              paddingRight: '0.6rem',
+                              paddingLeft: '0.6rem',
+                            }}
                           >
                             {term.domain}
                           </Badge>
                           <Badge
                             variant="destructive"
-                            className={`bg-accent text-sm ${languageClass} text-theme`}
+                            className={`bg-accent text-sm ${languageClass} text-theme rounded-2xl`}
+                            style={{
+                              padding: '0.2rem',
+                              paddingRight: '0.6rem',
+                              paddingLeft: '0.6rem',
+                            }}
                           >
                             {term.language}
                           </Badge>
                           {term.status && (
                             <Badge
                               variant="default"
-                              className={`text-sm ${statusClassMap[term.status] || 'bg-gray-500 text-white'}`}
+                              className={`text-sm rounded-2xl ${statusClassMap[term.status] || 'bg-gray-500 text-white'}`}
+                              style={{
+                                padding: '0.2rem',
+                                paddingRight: '0.6rem',
+                                paddingLeft: '0.6rem',
+                              }}
                             >
                               {formatStatus(term.status)}
                             </Badge>
@@ -754,7 +775,7 @@ export const TermDetailPage: React.FC = () => {
                             Description
                           </h3>
                           <p className="text-sm leading-relaxed">
-                            {term.definition}
+                            {term.definition || 'No description provided'}
                           </p>
                         </section>
                         <section>
@@ -768,11 +789,16 @@ export const TermDetailPage: React.FC = () => {
                                   <Badge
                                     key={relatedTerm.id}
                                     variant="outline"
-                                    className="text-sm text-theme"
+                                    className="text-sm text-theme rounded-2xl text-center flex justify-center items-center"
+                                    style={{
+                                      padding: '0.2rem',
+                                      paddingRight: '0.6rem',
+                                      paddingLeft: '0.6rem',
+                                    }}
                                   >
                                     <Link
                                       to={`/term/${relatedTerm.language}/${relatedTerm.term}/${relatedTerm.id}`}
-                                      className="!text-pink-600"
+                                      className="!text-pink-600 text-center"
                                     >
                                       {relatedTerm.term}
                                     </Link>
@@ -839,16 +865,7 @@ export const TermDetailPage: React.FC = () => {
                             </button>
                           </div>
                         </section>
-                        <footer className="page-footer">
-                          <button
-                            type="button"
-                            className="suggest-edit"
-                            aria-label="Suggest an edit"
-                          >
-                            Suggest an edit
-                            <SuggestEditArrowIcon />
-                          </button>
-                        </footer>
+                        <footer className="page-footer"></footer>
                       </CardContent>
                     </Card>
                   </div>
