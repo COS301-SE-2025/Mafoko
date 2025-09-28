@@ -10,6 +10,13 @@ import {
   updateUserPreferences,
 } from '../services/settingsService';
 import { UserPreferencesUpdate } from '../types/userPreferences';
+import {
+  cacheUserPreferences,
+  getCachedUserPreferences,
+  addPendingSettingsUpdate,
+  UserPreferencesCache,
+  PendingSettingsUpdate,
+} from '../utils/indexedDB';
 import '../styles/DashboardPage.scss';
 import '../styles/SettingsPage.scss';
 
@@ -130,7 +137,7 @@ const SettingsPage: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const navigate = useNavigate();
   const [isMobile] = useState(window.innerWidth <= 768);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false); // TODO: Use this for loading state display
   const [error, setError] = useState<string | null>(null);
 
   const [settings, setSettings] = useState<SettingsState>({
@@ -141,7 +148,7 @@ const SettingsPage: React.FC = () => {
     selectedLanguage: i18n.resolvedLanguage || 'en',
   });
 
-  // Load user preferences from server on component mount
+  // Load user preferences from server on component mount with offline support
   useEffect(() => {
     const loadUserPreferences = async () => {
       // Clear any existing localStorage settings to ensure backend-only mode
@@ -155,19 +162,56 @@ const SettingsPage: React.FC = () => {
       }
 
       try {
-        setLoading(true);
+        // setLoading(true);
         setError(null);
+
+        // If offline, try to load cached preferences
+        if (!navigator.onLine) {
+          const cachedPrefs = await getCachedUserPreferences();
+          if (cachedPrefs) {
+            console.log('Using cached user preferences (offline)');
+            setSettings({
+              textSize: cachedPrefs.preferences.textSize,
+              textSpacing: cachedPrefs.preferences.textSpacing,
+              highContrastMode: cachedPrefs.preferences.highContrastMode,
+              darkMode: cachedPrefs.preferences.darkMode,
+              selectedLanguage: cachedPrefs.preferences.selectedLanguage,
+            });
+            
+            if (cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage) {
+              await i18n.changeLanguage(cachedPrefs.preferences.selectedLanguage);
+            }
+            
+            setError('You are offline. Showing cached settings.');
+            // setLoading(false);
+            return;
+          } else {
+            setError('No cached settings available offline.');
+            // setLoading(false);
+            return;
+          }
+        }
 
         const serverPreferences = await getUserPreferences();
 
         // Update local state with server preferences
-        setSettings({
+        const newSettings = {
           textSize: serverPreferences.text_size,
           textSpacing: serverPreferences.text_spacing,
           highContrastMode: serverPreferences.high_contrast_mode,
           darkMode: false, // darkMode is handled separately by the DarkModeComponent
           selectedLanguage: serverPreferences.ui_language,
-        });
+        };
+        
+        setSettings(newSettings);
+
+        // Cache the fresh preferences
+        const cacheData: UserPreferencesCache = {
+          id: 'latest',
+          preferences: newSettings,
+          timestamp: Date.now(),
+        };
+        await cacheUserPreferences(cacheData);
 
         // Update language if different
         if (serverPreferences.ui_language !== i18n.resolvedLanguage) {
@@ -175,16 +219,36 @@ const SettingsPage: React.FC = () => {
         }
       } catch (err) {
         console.error('Failed to load user preferences:', err);
-        setError('Failed to load settings from server');
+        
+        // Try to load cached preferences as fallback
+        const cachedPrefs = await getCachedUserPreferences();
+        if (cachedPrefs) {
+          console.log('Using cached user preferences (fallback)');
+          setSettings({
+            textSize: cachedPrefs.preferences.textSize,
+            textSpacing: cachedPrefs.preferences.textSpacing,
+            highContrastMode: cachedPrefs.preferences.highContrastMode,
+            darkMode: cachedPrefs.preferences.darkMode,
+            selectedLanguage: cachedPrefs.preferences.selectedLanguage,
+          });
+          
+          if (cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage) {
+            await i18n.changeLanguage(cachedPrefs.preferences.selectedLanguage);
+          }
+          
+          setError('Network error. Showing cached settings.');
+        } else {
+          setError('Failed to load settings from server');
+        }
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
     loadUserPreferences();
   }, [i18n]);
 
-  // Save preferences to server when settings change
+  // Save preferences to server when settings change with offline support
   const savePreferencesToServer = async (newSettings: SettingsState) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -201,9 +265,69 @@ const SettingsPage: React.FC = () => {
       };
 
       await updateUserPreferences(updateData);
+      
+      // Update cache with successful save
+      const cacheData: UserPreferencesCache = {
+        id: 'latest',
+        preferences: newSettings,
+        timestamp: Date.now(),
+      };
+      await cacheUserPreferences(cacheData);
+      
     } catch (err) {
       console.error('Failed to save preferences to server:', err);
-      setError('Failed to save settings to server');
+      
+      // Check if this is a network error (offline)
+      const errorMessage = err instanceof Error ? err.message : 'Failed to save settings';
+      if (
+        errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+        errorMessage.includes('ERR_NETWORK') ||
+        !navigator.onLine
+      ) {
+        // Queue the update for offline sync
+        const pendingUpdate: PendingSettingsUpdate = {
+          id: crypto.randomUUID(),
+          preferences: {
+            textSize: newSettings.textSize,
+            textSpacing: newSettings.textSpacing,
+            highContrastMode: newSettings.highContrastMode,
+            selectedLanguage: newSettings.selectedLanguage,
+          },
+          token,
+          timestamp: Date.now(),
+        };
+        
+        await addPendingSettingsUpdate(pendingUpdate);
+
+        // Update cache optimistically
+        const cacheData: UserPreferencesCache = {
+          id: 'latest',
+          preferences: newSettings,
+          timestamp: Date.now(),
+        };
+        await cacheUserPreferences(cacheData);
+
+        // Register background sync
+        if (
+          'serviceWorker' in navigator &&
+          'sync' in window.ServiceWorkerRegistration.prototype
+        ) {
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            await registration.sync.register('sync-settings-updates');
+          } catch (syncError) {
+            console.error(
+              'Failed to register background sync for settings updates:',
+              syncError,
+            );
+          }
+        }
+
+        setError('You are offline. Your settings have been saved and will sync when you\'re back online.');
+      } else {
+        setError('Failed to save settings to server');
+      }
     }
   };
 
@@ -289,13 +413,13 @@ const SettingsPage: React.FC = () => {
         </header>
 
         <div className="settings-content">
-          <div
-            className="settings-section"
-            onClick={() => {
-              void navigate('/profile');
-            }}
-          >
-            <div className="section-header">
+            <div
+              className="settings-section"
+              onClick={() => {
+                void navigate('/profile');
+              }}
+            >
+              <div className="section-header">
               <div className="section-title">
                 <User className="section-icon" />
                 <h2>{t('settings.profile.title')}</h2>

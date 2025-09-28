@@ -7,6 +7,14 @@ import SouthAfricaMap from '../components/dashboard/SouthAfricaMap.tsx';
 import '../styles/DashboardPage.scss';
 import { API_ENDPOINTS } from '../config';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
+import {
+  cacheRandomTerms,
+  getCachedRandomTerms,
+  cacheUserProfile,
+  getCachedUserProfile,
+  RandomTermsCache,
+  UserProfileCache,
+} from '../utils/indexedDB';
 
 // Animated Language Counter Component
 const AnimatedLanguageCounter: React.FC = () => {
@@ -200,11 +208,21 @@ const DashboardPage: React.FC = () => {
   );
   const [loadingProfilePicture, setLoadingProfilePicture] = useState(false);
 
-  // Function to get random terms from API
+  // Function to get random terms from API with offline support
   const getRandomTerms = useCallback(async () => {
     setIsLoadingTerms(true);
 
     try {
+      // First, try to get cached data
+      const cachedTerms = await getCachedRandomTerms();
+      if (cachedTerms && navigator.onLine === false) {
+        console.log('Using cached random terms (offline)');
+        setRandomTerms(cachedTerms.terms);
+        setIsLoadingTerms(false);
+        return;
+      }
+
+      // If online, fetch fresh data
       const response = await fetch(`${API_ENDPOINTS.glossaryRandom}?count=3`);
 
       if (!response.ok) {
@@ -213,11 +231,27 @@ const DashboardPage: React.FC = () => {
 
       const data = (await response.json()) as RandomTerm[];
       setRandomTerms(data);
+
+      // Cache the fresh data
+      const cacheData: RandomTermsCache = {
+        id: 'latest',
+        terms: data,
+        timestamp: Date.now(),
+      };
+      await cacheRandomTerms(cacheData);
     } catch (error) {
       console.error('Error fetching random terms:', error);
-      // Fallback to mock data if API fails
-      const shuffled = [...MOCK_TERMS].sort(() => Math.random() - 0.5);
-      setRandomTerms(shuffled.slice(0, 3));
+      
+      // Try cached data first if available
+      const cachedTerms = await getCachedRandomTerms();
+      if (cachedTerms) {
+        console.log('Using cached random terms (fallback)');
+        setRandomTerms(cachedTerms.terms);
+      } else {
+        // Fallback to mock data if no cache available
+        const shuffled = [...MOCK_TERMS].sort(() => Math.random() - 0.5);
+        setRandomTerms(shuffled.slice(0, 3));
+      }
     } finally {
       setIsLoadingTerms(false);
     }
@@ -250,6 +284,31 @@ const DashboardPage: React.FC = () => {
 
     const fetchAndSetUserData = async () => {
       setIsLoadingUserData(true);
+      
+      // Try to get cached data first if offline
+      if (!navigator.onLine) {
+        const cachedProfile = await getCachedUserProfile();
+        if (cachedProfile) {
+          console.log('Using cached user profile (offline)');
+          const userData: UserData = {
+            uuid: cachedProfile.userData.id,
+            firstName: cachedProfile.userData.first_name,
+            lastName: cachedProfile.userData.last_name,
+            email: cachedProfile.userData.email,
+            profilePictureUrl: cachedProfile.userData.profile_pic_url,
+          };
+          setUserData(userData);
+          setAvatarInitials(
+            `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
+          );
+          if (userData.profilePictureUrl) {
+            void loadProfilePictureForUser(userData);
+          }
+          setIsLoadingUserData(false);
+          return;
+        }
+      }
+
       // Try to load from localStorage first
       const storedUserDataString = localStorage.getItem('userData');
       if (storedUserDataString) {
@@ -304,6 +363,14 @@ const DashboardPage: React.FC = () => {
               `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
             );
 
+            // Cache the fresh user data
+            const cacheData: UserProfileCache = {
+              id: 'latest',
+              userData: apiData,
+              timestamp: Date.now(),
+            };
+            await cacheUserProfile(cacheData);
+
             // Load profile picture directly here
             if (newUserData.profilePictureUrl) {
               void loadProfilePictureForUser(newUserData);
@@ -314,20 +381,72 @@ const DashboardPage: React.FC = () => {
               'Failed to fetch user data: Expected JSON, but received non-JSON response.',
               textResponse,
             );
-            // Potentially navigate to login or show an error message
-            void navigate('/login');
+            // Try cached data as fallback
+            const cachedProfile = await getCachedUserProfile();
+            if (cachedProfile) {
+              console.log('Using cached user profile (fallback)');
+              const userData: UserData = {
+                uuid: cachedProfile.userData.id,
+                firstName: cachedProfile.userData.first_name,
+                lastName: cachedProfile.userData.last_name,
+                email: cachedProfile.userData.email,
+                profilePictureUrl: cachedProfile.userData.profile_pic_url,
+              };
+              setUserData(userData);
+              setAvatarInitials(
+                `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
+              );
+            } else {
+              void navigate('/login');
+            }
           }
         } else {
           console.error('Failed to fetch user data from API:', response.status);
           const errorText = await response.text();
           console.error('Error response body:', errorText);
-          localStorage.removeItem('accessToken'); // Token might be invalid
-          localStorage.removeItem('userData');
-          void navigate('/login');
+          
+          // Try cached data as fallback before navigating to login
+          const cachedProfile = await getCachedUserProfile();
+          if (cachedProfile) {
+            console.log('Using cached user profile (API error fallback)');
+            const userData: UserData = {
+              uuid: cachedProfile.userData.id,
+              firstName: cachedProfile.userData.first_name,
+              lastName: cachedProfile.userData.last_name,
+              email: cachedProfile.userData.email,
+              profilePictureUrl: cachedProfile.userData.profile_pic_url,
+            };
+            setUserData(userData);
+            setAvatarInitials(
+              `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
+            );
+          } else {
+            localStorage.removeItem('accessToken'); // Token might be invalid
+            localStorage.removeItem('userData');
+            void navigate('/login');
+          }
         }
       } catch (error) {
         console.error('Network or other error fetching user data:', error);
-        void navigate('/login'); // Fallback to login on critical error
+        
+        // Try cached data as fallback before navigating to login
+        const cachedProfile = await getCachedUserProfile();
+        if (cachedProfile) {
+          console.log('Using cached user profile (network error fallback)');
+          const userData: UserData = {
+            uuid: cachedProfile.userData.id,
+            firstName: cachedProfile.userData.first_name,
+            lastName: cachedProfile.userData.last_name,
+            email: cachedProfile.userData.email,
+            profilePictureUrl: cachedProfile.userData.profile_pic_url,
+          };
+          setUserData(userData);
+          setAvatarInitials(
+            `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
+          );
+        } else {
+          void navigate('/login'); // Fallback to login on critical error
+        }
       } finally {
         setIsLoadingUserData(false);
       }

@@ -18,6 +18,19 @@ import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
+import {
+  cacheBookmarks,
+  getCachedBookmarks,
+  cacheWorkspaceGroups,
+  getCachedWorkspaceGroups,
+  cacheGlossaryStats,
+  getCachedGlossaryStats,
+  addPendingWorkspaceUpdate,
+  BookmarksCache,
+  WorkspaceGroupsCache,
+  GlossaryStatsCache,
+  PendingWorkspaceUpdate,
+} from '../utils/indexedDB';
 
 import '../styles/WorkspacePage.scss';
 
@@ -351,7 +364,7 @@ const WorkspacePage: React.FC = () => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Function to load all workspace data
+  // Function to load all workspace data with offline support
   const loadWorkspaceData = useCallback(async (): Promise<void> => {
     console.log('🔄 [NUCLEAR WORKSPACE DEBUG] loadWorkspaceData() CALLED!');
     console.log(
@@ -370,6 +383,51 @@ const WorkspacePage: React.FC = () => {
       setError('Please log in to access your workspace.');
       setLoading(false);
       return;
+    }
+
+    // If offline, try to load cached data
+    if (!navigator.onLine) {
+      console.log('📱 [WORKSPACE DEBUG] Offline mode - loading cached data');
+      try {
+        const cachedBookmarks = await getCachedBookmarks();
+        const cachedGroups = await getCachedWorkspaceGroups();
+        const cachedStats = await getCachedGlossaryStats();
+
+        if (cachedBookmarks) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached bookmarks');
+          setSavedTerms(cachedBookmarks.bookmarkedTerms);
+          setBookmarkedGlossaries(cachedBookmarks.bookmarkedGlossaries);
+        }
+
+        if (cachedGroups) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached groups');
+          setWorkspaceGroups(cachedGroups.groups);
+          const groupNames = [
+            'all',
+            'All Terms',
+            ...cachedGroups.groups.map((group) => group.name),
+          ];
+          setGroups(groupNames);
+        }
+
+        if (cachedStats) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached stats');
+          setGlossaryStats(cachedStats.stats);
+        }
+
+        if (cachedBookmarks || cachedGroups) {
+          setError('You are offline. Showing cached data.');
+        } else {
+          setError('No cached data available offline.');
+        }
+        setLoading(false);
+        return;
+      } catch (cacheError) {
+        console.error('Failed to load cached workspace data:', cacheError);
+        setError('Failed to load offline data.');
+        setLoading(false);
+        return;
+      }
     }
 
     try {
@@ -456,6 +514,22 @@ const WorkspacePage: React.FC = () => {
       ];
       setGroups(groupNames);
 
+      // Cache the fresh data
+      const bookmarksCache: BookmarksCache = {
+        id: 'latest',
+        bookmarkedTerms: bookmarksData.terms || [],
+        bookmarkedGlossaries: bookmarksData.glossaries || [],
+        timestamp: Date.now(),
+      };
+      await cacheBookmarks(bookmarksCache);
+
+      const groupsCache: WorkspaceGroupsCache = {
+        id: 'latest',
+        groups: groupsData,
+        timestamp: Date.now(),
+      };
+      await cacheWorkspaceGroups(groupsCache);
+
       // Fetch glossary stats (don't block on failure)
       await fetchGlossaryStats();
 
@@ -465,19 +539,72 @@ const WorkspacePage: React.FC = () => {
       localStorage.setItem('workspaceLastLoaded', Date.now().toString());
     } catch (error) {
       console.error('Failed to load workspace data:', error);
-      setError('Failed to load workspace data. Please try again.');
+      
+      // Try to load cached data as fallback
+      try {
+        const cachedBookmarks = await getCachedBookmarks();
+        const cachedGroups = await getCachedWorkspaceGroups();
+        const cachedStats = await getCachedGlossaryStats();
+
+        if (cachedBookmarks) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached bookmarks (fallback)');
+          setSavedTerms(cachedBookmarks.bookmarkedTerms);
+          setBookmarkedGlossaries(cachedBookmarks.bookmarkedGlossaries);
+        }
+
+        if (cachedGroups) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached groups (fallback)');
+          setWorkspaceGroups(cachedGroups.groups);
+          const groupNames = [
+            'all',
+            'All Terms',
+            ...cachedGroups.groups.map((group) => group.name),
+          ];
+          setGroups(groupNames);
+        }
+
+        if (cachedStats) {
+          console.log('✅ [WORKSPACE DEBUG] Using cached stats (fallback)');
+          setGlossaryStats(cachedStats.stats);
+        }
+
+        if (cachedBookmarks || cachedGroups) {
+          setError('Network error. Showing cached data.');
+        } else {
+          setError('Failed to load workspace data. Please try again.');
+        }
+      } catch (cacheError) {
+        console.error('Failed to load cached data as fallback:', cacheError);
+        setError('Failed to load workspace data. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Function to fetch glossary stats
+  // Function to fetch glossary stats with offline support
   const fetchGlossaryStats = async (): Promise<void> => {
     try {
+      // If offline, try cached data first
+      if (!navigator.onLine) {
+        const cachedStats = await getCachedGlossaryStats();
+        if (cachedStats) {
+          console.log('✅ Using cached glossary stats (offline)');
+          setGlossaryStats(cachedStats.stats);
+          return;
+        }
+      }
+
       const response = await fetch(API_ENDPOINTS.glossaryCategoriesStats);
 
       if (!response.ok) {
         console.warn('Failed to fetch glossary stats:', response.status);
+        // Try cached data as fallback
+        const cachedStats = await getCachedGlossaryStats();
+        if (cachedStats) {
+          console.log('✅ Using cached glossary stats (fallback)');
+          setGlossaryStats(cachedStats.stats);
+        }
         return;
       }
 
@@ -498,6 +625,14 @@ const WorkspacePage: React.FC = () => {
 
       setGlossaryStats(statsMap);
       console.log('✅ Glossary stats loaded successfully:', statsMap);
+
+      // Cache the fresh data
+      const statsCache: GlossaryStatsCache = {
+        id: 'latest',
+        stats: statsMap,
+        timestamp: Date.now(),
+      };
+      await cacheGlossaryStats(statsCache);
     } catch (error) {
       console.warn('Failed to fetch glossary stats:', error);
     }
@@ -573,7 +708,62 @@ const WorkspacePage: React.FC = () => {
       console.log('Notes saved successfully');
     } catch (error) {
       console.error('Failed to save notes:', error);
-      setError('Failed to save notes. Please try again.');
+      
+      // Check if this is a network error (offline)
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save notes';
+      if (
+        errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+        errorMessage.includes('ERR_NETWORK') ||
+        !navigator.onLine
+      ) {
+        // Queue the update for offline sync
+        const pendingUpdate: PendingWorkspaceUpdate = {
+          id: crypto.randomUUID(),
+          type: 'bookmark_note',
+          data: {
+            bookmark_id: bookmarkId,
+            notes: noteText.trim(),
+            bookmark_type: 'term',
+          },
+          token,
+          timestamp: Date.now(),
+        };
+        
+        await addPendingWorkspaceUpdate(pendingUpdate);
+
+        // Update local state optimistically
+        setSavedTerms((prevTerms) =>
+          prevTerms.map((term) =>
+            term.id === bookmarkId
+              ? { ...term, notes: noteText.trim() || undefined }
+              : term,
+          ),
+        );
+
+        setEditingNotes(null);
+        setNoteText('');
+
+        // Register background sync
+        if (
+          'serviceWorker' in navigator &&
+          'sync' in window.ServiceWorkerRegistration.prototype
+        ) {
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            await registration.sync.register('sync-workspace-updates');
+          } catch (syncError) {
+            console.error(
+              'Failed to register background sync for workspace updates:',
+              syncError,
+            );
+          }
+        }
+
+        setError('You are offline. Your note has been saved and will sync when you\'re back online.');
+      } else {
+        setError('Failed to save notes. Please try again.');
+      }
     }
   };
 
