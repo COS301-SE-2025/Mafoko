@@ -39,13 +39,10 @@ $text-dark: #ffffff;
       box-sizing: border-box;
       min-width: 0;
 
-      @media (min-width: 769px) {
-        margin-left: 280px; // Only when desktop and LeftNav is showing
-      }
-
       @media (max-width: 768px) {
-        margin-left: 0; // Mobile uses Navbar instead
+        margin-left: 0;
         width: 100%;
+        padding-top: 60px;
       }
       .admin-page {
         display: flex;
@@ -416,6 +413,7 @@ $text-dark: #ffffff;
                           line-height: 1.3;
                           display: -webkit-box;
                           -webkit-line-clamp: 2;
+                          line-clamp: 2;
                           -webkit-box-orient: vertical;
                           overflow: hidden;
                         }
@@ -423,14 +421,14 @@ $text-dark: #ffffff;
                     }
 
                     &.date-cell {
+                      text-align: center;
                       font-size: 0.875rem;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      gap: 0.5rem;
+                      vertical-align: middle;
 
                       svg {
                         opacity: 0.5;
+                        margin-right: 0.5rem;
+                        vertical-align: middle;
                       }
                     }
 
@@ -739,14 +737,14 @@ $text-dark: #ffffff;
                     }
 
                     &.date-cell {
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      gap: 0.5rem;
+                      text-align: center;
                       font-size: 0.875rem;
+                      vertical-align: middle;
 
                       svg {
                         opacity: 0.5;
+                        margin-right: 0.5rem;
+                        vertical-align: middle;
                       }
                     }
 
@@ -954,37 +952,83 @@ $text-dark: #ffffff;
               border-radius: 8px;
 
               .applications-table {
-                min-width: 700px; // Further reduced for mobile
+                min-width: 800px; // Increased to prevent header squishing
+                table-layout: fixed; // Force fixed layout for consistent columns
 
                 thead th {
                   padding: 0.75rem 0.5rem;
-                  font-size: 0.75rem;
+                  font-size: 0.7rem;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+
+                  // Mobile-specific column widths
+                  &:nth-child(1) {
+                    width: 40%;
+                  } // Applicant
+                  &:nth-child(2) {
+                    width: 10%;
+                  } // Status
+                  &:nth-child(3) {
+                    width: 12%;
+                  } // Applied
+                  &:nth-child(4) {
+                    width: 15%;
+                  } // Google Scholar
+                  &:nth-child(5) {
+                    width: 13%;
+                  } // Documents
+                  &:nth-child(6) {
+                    width: 10%;
+                  } // Actions
                 }
 
                 tbody td {
                   padding: 0.75rem 0.5rem;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+
+                  // Allow content columns to wrap
+                  &:nth-child(1),
+                  &:nth-child(4),
+                  &:nth-child(5) {
+                    white-space: normal;
+                  }
 
                   &.applicant-info {
                     .applicant-avatar {
-                      width: 35px;
-                      height: 35px;
+                      width: 32px;
+                      height: 32px;
+                      font-size: 0.75rem;
                     }
 
                     .applicant-details {
                       .applicant-name {
-                        font-size: 0.85rem;
+                        font-size: 0.8rem;
+                        line-height: 1.2;
                       }
 
                       .applicant-email {
-                        font-size: 0.75rem;
+                        font-size: 0.7rem;
+                        line-height: 1.2;
                       }
 
                       .qualifications {
-                        font-size: 0.7rem;
+                        font-size: 0.65rem;
+                        line-height: 1.2;
                         -webkit-line-clamp: 1;
                         line-clamp: 1;
                       }
                     }
+                  }
+
+                  // Better mobile alignment for specific cells
+                  &:nth-child(2), // Status
+                  &:nth-child(3), // Applied
+                  &:nth-child(6) {
+                    // Actions
+                    font-size: 0.7rem;
                   }
                 }
               }
@@ -997,29 +1041,82 @@ $text-dark: #ffffff;
               border-radius: 8px;
 
               .users-table {
-                min-width: 600px;
+                min-width: 650px; // Increased to prevent squishing
+                table-layout: fixed; // Force fixed layout for consistent columns
 
                 thead th {
                   padding: 0.75rem 0.5rem;
-                  font-size: 0.75rem;
+                  font-size: 0.7rem;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+
+                  // Mobile-specific column widths for users table
+                  &:nth-child(1) {
+                    width: 45%;
+                  } // User
+                  &:nth-child(2) {
+                    width: 15%;
+                  } // Role
+                  &:nth-child(3) {
+                    width: 20%;
+                  } // Joined
+                  &:nth-child(4) {
+                    width: 20%;
+                  } // Actions
                 }
 
-                tbody td {
-                  padding: 0.75rem 0.5rem;
+                tbody {
+                  .application-row {
+                    height: 60px; // Fixed height for mobile consistency
 
-                  &.user-info {
-                    .user-avatar {
-                      width: 35px;
-                      height: 35px;
-                    }
+                    td {
+                      padding: 0.75rem 0.5rem;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                      vertical-align: middle;
+                      height: 60px !important; // Force all cells to same height
+                      box-sizing: border-box;
 
-                    .user-details {
-                      .username {
-                        font-size: 0.85rem;
+                      // Allow user info column to wrap
+                      &:nth-child(1) {
+                        white-space: normal;
                       }
 
-                      .user-email {
-                        font-size: 0.75rem;
+                      &.applicant-info {
+                        // Only fix height for alignment, keep all visual styling identical to desktop
+                        height: 60px;
+                      }
+
+                      // Better mobile alignment for specific cells
+                      &:nth-child(2), // Role
+                      &:nth-child(3), // Joined
+                      &:nth-child(4) {
+                        // Actions
+                        font-size: 0.7rem;
+                        text-align: center;
+                        vertical-align: middle;
+                        height: 60px;
+                        display: table-cell;
+                      }
+
+                      // Specific mobile date cell alignment
+                      &.date-cell {
+                        text-align: center;
+                        font-size: 0.7rem;
+                        vertical-align: middle;
+                        line-height: 1.1;
+                        height: 60px;
+                        display: table-cell;
+
+                        svg {
+                          opacity: 0.5;
+                          margin-right: 0.25rem;
+                          vertical-align: baseline;
+                          width: 12px;
+                          height: 12px;
+                        }
                       }
                     }
                   }
