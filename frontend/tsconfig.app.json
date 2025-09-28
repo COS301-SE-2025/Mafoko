@@ -8,12 +8,15 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "types": ["node", "jest", "@testing-library/jest-dom", "three"],
+    "paths": {
+      "three/examples/jsm/*": ["./node_modules/@types/three/examples/jsm/*"]
+    },
 
     /* Linting */
     "strict": true,

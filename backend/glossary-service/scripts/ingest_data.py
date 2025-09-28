@@ -2,7 +2,7 @@
 import json
 import os
 import sys
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from uuid import uuid4
 
@@ -57,6 +57,19 @@ def main():
 
     db = SessionLocal()
 
+    # Get the system user to assign as owner of imported terms
+    print("Finding system user...")
+    system_user = db.execute(
+        text("SELECT id FROM users WHERE email = 'dsfsi@example.com'")
+    ).fetchone()
+    if not system_user:
+        print("Error: System user not found! Please ensure the system user exists.")
+        db.close()
+        return
+
+    system_user_id = system_user[0]
+    print(f"Using system user ID: {system_user_id}")
+
     print(f"Loading data from {DATA_FILE}...")
     with open(DATA_FILE) as f:
         raw_data = json.load(f)
@@ -77,6 +90,7 @@ def main():
                     definition=item.get("eng definition ", "").strip(),
                     language=lang_name,
                     domain=item.get("category", "General"),
+                    owner_id=system_user_id,
                 )
                 created_terms.append(new_term)
 

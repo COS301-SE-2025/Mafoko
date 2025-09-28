@@ -114,6 +114,117 @@ export interface PendingFeedbackUpdate {
   timestamp: number;
 }
 
+// Home page data interfaces
+export interface RandomTermsCache {
+  id: string;
+  terms: Array<{
+    id: string;
+    term: string;
+    definition: string;
+    language: string;
+    category: string;
+  }>;
+  timestamp: number;
+}
+
+export interface UserProfileCache {
+  id: string;
+  userData: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email?: string;
+    profile_pic_url?: string;
+    role?: string;
+  };
+  timestamp: number;
+}
+
+// Workspace page data interfaces
+export interface BookmarksCache {
+  id: string;
+  bookmarkedTerms: Array<{
+    id: string;
+    term_id: string;
+    term: string;
+    definition: string;
+    language: string;
+    domain: string;
+    bookmarked_at: string;
+    notes?: string;
+  }>;
+  bookmarkedGlossaries: Array<{
+    id: string;
+    domain: string;
+    term_count: number;
+    bookmarked_at: string;
+    description?: string;
+    notes?: string;
+  }>;
+  timestamp: number;
+}
+
+export interface WorkspaceGroupsCache {
+  id: string;
+  groups: Array<{
+    id: string;
+    name: string;
+    description?: string;
+    created_at: string;
+    items?: Array<{
+      term_id: string;
+      added_at: string;
+      item_type?: string;
+    }>;
+  }>;
+  timestamp: number;
+}
+
+export interface GlossaryStatsCache {
+  id: string;
+  stats: {
+    [domain: string]: {
+      term_count: number;
+      language_count?: number;
+    };
+  };
+  timestamp: number;
+}
+
+// Settings page data interfaces
+export interface UserPreferencesCache {
+  id: string;
+  preferences: {
+    textSize: number;
+    textSpacing: number;
+    highContrastMode: boolean;
+    darkMode: boolean;
+    selectedLanguage: string;
+  };
+  timestamp: number;
+}
+
+export interface PendingWorkspaceUpdate {
+  id: string;
+  type: 'bookmark_note' | 'group_create' | 'group_update' | 'group_delete';
+  data: Record<string, unknown>;
+  token: string;
+  timestamp: number;
+}
+
+export interface PendingSettingsUpdate {
+  id: string;
+  preferences: {
+    textSize?: number;
+    textSpacing?: number;
+    highContrastMode?: boolean;
+    darkMode?: boolean;
+    selectedLanguage?: string;
+  };
+  token: string;
+  timestamp: number;
+}
+
 interface MyDB extends DBSchema {
   terms: {
     key: string;
@@ -164,9 +275,45 @@ interface MyDB extends DBSchema {
     key: string;
     value: PendingFeedbackUpdate;
   };
+  // Home page caches
+  'random-terms-cache': {
+    key: string;
+    value: RandomTermsCache;
+  };
+  'user-profile-cache': {
+    key: string;
+    value: UserProfileCache;
+  };
+  // Workspace page caches
+  'bookmarks-cache': {
+    key: string;
+    value: BookmarksCache;
+  };
+  'workspace-groups-cache': {
+    key: string;
+    value: WorkspaceGroupsCache;
+  };
+  'glossary-stats-cache': {
+    key: string;
+    value: GlossaryStatsCache;
+  };
+  // Settings page cache
+  'user-preferences-cache': {
+    key: string;
+    value: UserPreferencesCache;
+  };
+  // Pending updates for offline functionality
+  'pending-workspace-updates': {
+    key: string;
+    value: PendingWorkspaceUpdate;
+  };
+  'pending-settings-updates': {
+    key: string;
+    value: PendingSettingsUpdate;
+  };
 }
 
-const dbPromise = openDB<MyDB>('marito-db', 8, {
+const dbPromise = openDB<MyDB>('marito-db', 9, {
   upgrade(db, oldVersion) {
     if (oldVersion < 3) {
       if (!db.objectStoreNames.contains('terms')) {
@@ -231,6 +378,33 @@ const dbPromise = openDB<MyDB>('marito-db', 8, {
       // Add feedback updates store
       if (!db.objectStoreNames.contains('pending-feedback-updates')) {
         db.createObjectStore('pending-feedback-updates', { keyPath: 'id' });
+      }
+    }
+    if (oldVersion < 9) {
+      // Add offline caches for home, workspace, and settings
+      if (!db.objectStoreNames.contains('random-terms-cache')) {
+        db.createObjectStore('random-terms-cache', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('user-profile-cache')) {
+        db.createObjectStore('user-profile-cache', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('bookmarks-cache')) {
+        db.createObjectStore('bookmarks-cache', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('workspace-groups-cache')) {
+        db.createObjectStore('workspace-groups-cache', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('glossary-stats-cache')) {
+        db.createObjectStore('glossary-stats-cache', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('user-preferences-cache')) {
+        db.createObjectStore('user-preferences-cache', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pending-workspace-updates')) {
+        db.createObjectStore('pending-workspace-updates', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('pending-settings-updates')) {
+        db.createObjectStore('pending-settings-updates', { keyPath: 'id' });
       }
     }
   },
@@ -575,4 +749,131 @@ export async function getPendingFeedbackUpdateCount(): Promise<number> {
   const db = await dbPromise;
   const allUpdates = await db.getAll('pending-feedback-updates');
   return allUpdates.length;
+}
+
+// Home page offline functions
+export async function cacheRandomTerms(terms: RandomTermsCache) {
+  const db = await dbPromise;
+  await db.put('random-terms-cache', terms);
+}
+
+export async function getCachedRandomTerms(): Promise<RandomTermsCache | null> {
+  const db = await dbPromise;
+  const cached = await db.get('random-terms-cache', 'latest');
+  // Check if cache is still valid (24 hours)
+  if (cached && Date.now() - cached.timestamp < 24 * 60 * 60 * 1000) {
+    return cached;
+  }
+  return null;
+}
+
+export async function cacheUserProfile(profile: UserProfileCache) {
+  const db = await dbPromise;
+  await db.put('user-profile-cache', profile);
+}
+
+export async function getCachedUserProfile(): Promise<UserProfileCache | null> {
+  const db = await dbPromise;
+  const cached = await db.get('user-profile-cache', 'latest');
+  // Check if cache is still valid (1 hour)
+  if (cached && Date.now() - cached.timestamp < 60 * 60 * 1000) {
+    return cached;
+  }
+  return null;
+}
+
+// Workspace page offline functions
+export async function cacheBookmarks(bookmarks: BookmarksCache) {
+  const db = await dbPromise;
+  await db.put('bookmarks-cache', bookmarks);
+}
+
+export async function getCachedBookmarks(): Promise<BookmarksCache | null> {
+  const db = await dbPromise;
+  const cached = await db.get('bookmarks-cache', 'latest');
+  // Check if cache is still valid (30 minutes)
+  if (cached && Date.now() - cached.timestamp < 30 * 60 * 1000) {
+    return cached;
+  }
+  return null;
+}
+
+export async function cacheWorkspaceGroups(groups: WorkspaceGroupsCache) {
+  const db = await dbPromise;
+  await db.put('workspace-groups-cache', groups);
+}
+
+export async function getCachedWorkspaceGroups(): Promise<WorkspaceGroupsCache | null> {
+  const db = await dbPromise;
+  const cached = await db.get('workspace-groups-cache', 'latest');
+  // Check if cache is still valid (30 minutes)
+  if (cached && Date.now() - cached.timestamp < 30 * 60 * 1000) {
+    return cached;
+  }
+  return null;
+}
+
+export async function cacheGlossaryStats(stats: GlossaryStatsCache) {
+  const db = await dbPromise;
+  await db.put('glossary-stats-cache', stats);
+}
+
+export async function getCachedGlossaryStats(): Promise<GlossaryStatsCache | null> {
+  const db = await dbPromise;
+  const cached = await db.get('glossary-stats-cache', 'latest');
+  // Check if cache is still valid (1 hour)
+  if (cached && Date.now() - cached.timestamp < 60 * 60 * 1000) {
+    return cached;
+  }
+  return null;
+}
+
+export async function addPendingWorkspaceUpdate(
+  update: PendingWorkspaceUpdate,
+) {
+  const db = await dbPromise;
+  await db.put('pending-workspace-updates', update);
+}
+
+export async function getAndClearPendingWorkspaceUpdates(): Promise<
+  PendingWorkspaceUpdate[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-workspace-updates', 'readwrite');
+  const allUpdates = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allUpdates;
+}
+
+// Settings page offline functions
+export async function cacheUserPreferences(preferences: UserPreferencesCache) {
+  const db = await dbPromise;
+  await db.put('user-preferences-cache', preferences);
+}
+
+export async function getCachedUserPreferences(): Promise<UserPreferencesCache | null> {
+  const db = await dbPromise;
+  const cached = await db.get('user-preferences-cache', 'latest');
+  // Check if cache is still valid (24 hours)
+  if (cached && Date.now() - cached.timestamp < 24 * 60 * 60 * 1000) {
+    return cached;
+  }
+  return null;
+}
+
+export async function addPendingSettingsUpdate(update: PendingSettingsUpdate) {
+  const db = await dbPromise;
+  await db.put('pending-settings-updates', update);
+}
+
+export async function getAndClearPendingSettingsUpdates(): Promise<
+  PendingSettingsUpdate[]
+> {
+  const db = await dbPromise;
+  const tx = db.transaction('pending-settings-updates', 'readwrite');
+  const allUpdates = await tx.store.getAll();
+  await tx.store.clear();
+  await tx.done;
+  return allUpdates;
 }

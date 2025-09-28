@@ -60,6 +60,10 @@ interface APIEndpoints {
   getMyProfilePictureUrl: string;
   forgotPassword: string;
   resetPassword: string;
+  // Settings endpoints
+  getUserPreferences: string;
+  updateUserPreferences: string;
+  resetUserPreferences: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
   ApproveApplicationStatus: (applicationId: string) => string;
@@ -195,8 +199,24 @@ export const API_ENDPOINTS: APIEndpoints = {
     AUTH_SERVICE_URL,
     '/api/v1/auth/me/profile-picture',
   ),
+
   forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
   resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
+
+  // Settings endpoints
+  getUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences',
+  ),
+  updateUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences',
+  ),
+  resetUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences/reset',
+  ),
+
   getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),

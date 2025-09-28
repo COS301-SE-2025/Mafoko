@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle2, RotateCcw } from 'lucide-react';
-import { Word } from '../../types/learning'; // 1. Import the shared Word type
+import { Word } from '../../types/learning';
+import '../../styles/FlashcardStyles.scss';
 
 interface FlashcardProps {
   currentCard: Word | null;
@@ -33,13 +34,20 @@ const Flashcard: React.FC<FlashcardProps> = ({
   onNext,
   onRetry,
 }) => {
+  const isCorrect =
+    selectedAnswer ===
+    (currentCard?.english_translation || currentCard?.definition);
+
   return (
     <>
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={onExit} className="text-gray-600 hover:text-gray-900">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
+        <button
+          onClick={onExit}
+          className="text-gray-600 hover:text-gray-900 text-sm sm:text-base"
+        >
           ← Exit Flashcards
         </button>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <div className="text-sm text-gray-600">
             Card {currentCardIndex + 1} of {totalCards}
           </div>
@@ -61,90 +69,85 @@ const Flashcard: React.FC<FlashcardProps> = ({
             />
           </div>
 
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 mb-6">
-            <div className="text-center">
-              <div className="text-sm text-gray-500 mb-2">
-                Translate this word:
+          <div className="flashcard-container">
+            <div className={`flashcard ${showResult ? 'is-flipped' : ''}`}>
+              {/* Question Side */}
+              <div className="card-face card-front">
+                <div className="card-content">
+                  <span className="card-prompt">Translate this word:</span>
+                  <h2 className="card-word">{currentCard?.term}</h2>
+
+                  <div className="answer-grid">
+                    {!showResult &&
+                      answerOptions.map((option, index) => (
+                        <button
+                          key={index}
+                          onClick={() => onSelectAnswer(option)}
+                          type="button"
+                        >
+                          {option}
+                        </button>
+                      ))}
+                  </div>
+                </div>
               </div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-2">
-                {currentCard?.term} {/* 3. Use .term from the shared type */}
-              </h2>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {answerOptions.map((option, index) => {
-              const isSelected = selectedAnswer === option;
-              // 4. Check against english_translation OR definition for the correct answer
-              const isCorrect =
-                option ===
-                (currentCard?.english_translation || currentCard?.definition);
-              let buttonClass =
-                'w-full p-4 text-left rounded-xl border-2 transition-all ';
-
-              if (!showResult) {
-                buttonClass +=
-                  'border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer';
-              } else if (isCorrect) {
-                buttonClass += 'border-green-500 bg-green-100 text-green-800';
-              } else if (isSelected && !isCorrect) {
-                buttonClass += 'border-red-500 bg-red-100 text-red-800';
-              } else {
-                buttonClass += 'border-gray-200 bg-gray-50 text-gray-600';
-              }
-
-              return (
-                <button
-                  key={index}
-                  onClick={() => onSelectAnswer(option)}
-                  disabled={showResult}
-                  className={buttonClass}
+              {/* Answer Side */}
+              <div className="card-face card-back">
+                <div
+                  className={`card-content ${isCorrect ? 'correct' : 'incorrect'}`}
                 >
-                  <span className="text-lg font-medium">{option}</span>
-                  {showResult && isCorrect && (
-                    <CheckCircle2 className="w-5 h-5 text-green-600 float-right mt-0.5" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                  <div>
+                    <div className="result-label">Correct answer:</div>
+                    <div className="result-text">
+                      {currentCard?.english_translation ||
+                        currentCard?.definition}
+                    </div>
+                  </div>
 
-          {/* Next Button */}
-          {showResult && (
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={onNext}
-                className="px-6 py-3 text-white rounded-xl transition-colors"
-                style={{ backgroundColor: '#f00a50', color: '#ffffff' }}
-              >
-                {currentCardIndex === totalCards - 1 ? 'Finish' : 'Next Card'}
-              </button>
+                  <div>
+                    <div className="result-label">Your answer:</div>
+                    <div className="result-text">{selectedAnswer}</div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={onNext}
+                    className="next-button"
+                  >
+                    {currentCardIndex === totalCards - 1
+                      ? 'Finish'
+                      : 'Next Card'}
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       ) : (
-        <div className="max-w-lg mx-auto text-center">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
-            <div className="text-6xl mb-4">🎉</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className="max-w-lg mx-auto text-center px-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg border border-gray-200">
+            <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">
+              🎉
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
               Flashcards Complete!
             </h2>
-            <div className="text-lg text-gray-600 mb-6">
+            <div className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
               You got{' '}
               <span className="font-bold text-blue-600">{score.correct}</span>{' '}
               out of <span className="font-bold">{score.total}</span> correct
             </div>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <button
                 onClick={onRetry}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm sm:text-base"
               >
                 <RotateCcw className="w-4 h-4" /> Try Again
               </button>
               <button
                 onClick={onExit}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-sm sm:text-base"
               >
                 Back to Words
               </button>

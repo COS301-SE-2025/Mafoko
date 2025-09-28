@@ -16,6 +16,8 @@ import {
   getAndClearPendingProfilePictureUploads,
   getAndClearPendingFeedback,
   getAndClearPendingFeedbackUpdates,
+  getAndClearPendingWorkspaceUpdates,
+  getAndClearPendingSettingsUpdates,
 } from './utils/indexedDB';
 import { SW_API_ENDPOINTS } from './sw-config';
 import { Comment } from './types/termDetailTypes';
@@ -280,6 +282,12 @@ self.addEventListener('sync', ((event: SyncEvent) => {
   } else if (event.tag === 'sync-feedback-updates') {
     console.log('SW: Sync event for feedback updates received.');
     event.waitUntil(syncPendingFeedbackUpdates());
+  } else if (event.tag === 'sync-workspace-updates') {
+    console.log('SW: Sync event for workspace updates received.');
+    event.waitUntil(syncPendingWorkspaceUpdates());
+  } else if (event.tag === 'sync-settings-updates') {
+    console.log('SW: Sync event for settings updates received.');
+    event.waitUntil(syncPendingSettingsUpdates());
   }
 }) as EventListener);
 
@@ -611,6 +619,138 @@ async function syncPendingFeedbackUpdates() {
   } catch (error) {
     console.error(
       'Service Worker: Failed to sync pending feedback updates:',
+      error,
+    );
+  }
+}
+
+async function syncPendingWorkspaceUpdates() {
+  try {
+    console.log('Service Worker: Starting workspace updates sync...');
+    const pendingUpdates = await getAndClearPendingWorkspaceUpdates();
+
+    for (const update of pendingUpdates) {
+      try {
+        let endpoint = '';
+        let method = 'PUT';
+        let body = {};
+
+        switch (update.type) {
+          case 'bookmark_note':
+            endpoint = SW_API_ENDPOINTS.UPDATE_BOOKMARK_NOTE;
+            body = update.data;
+            break;
+          case 'group_create':
+            endpoint = SW_API_ENDPOINTS.CREATE_GROUP;
+            method = 'POST';
+            body = update.data;
+            break;
+          case 'group_update':
+            endpoint = `${SW_API_ENDPOINTS.UPDATE_GROUP}${update.data.id}`;
+            body = update.data;
+            break;
+          case 'group_delete':
+            endpoint = `${SW_API_ENDPOINTS.DELETE_GROUP}${update.data.id}`;
+            method = 'DELETE';
+            break;
+          default:
+            console.warn(`Unknown workspace update type: ${update.type}`);
+            continue;
+        }
+
+        const response = await fetch(endpoint, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${update.token}`,
+          },
+          body: method !== 'DELETE' ? JSON.stringify(body) : undefined,
+        });
+
+        if (response.ok) {
+          console.log(
+            `Service Worker: Successfully synced workspace update ${update.id} (${update.type})`,
+          );
+
+          self.clients
+            .matchAll({ includeUncontrolled: true, type: 'window' })
+            .then((clients) => {
+              clients.forEach((client) =>
+                client.postMessage({
+                  type: 'WORKSPACE_UPDATE_SYNCED',
+                  updateType: update.type,
+                  updateId: update.id,
+                }),
+              );
+            });
+        } else {
+          console.error(
+            `SW: Failed to sync workspace update ${update.id} (${update.type}). Status: ${response.status}`,
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Service Worker: Network error while syncing workspace update ${update.id}:`,
+          error,
+        );
+      }
+    }
+    console.log('Service Worker: Workspace updates sync finished.');
+  } catch (error) {
+    console.error(
+      'Service Worker: Failed to sync pending workspace updates:',
+      error,
+    );
+  }
+}
+
+async function syncPendingSettingsUpdates() {
+  try {
+    console.log('Service Worker: Starting settings updates sync...');
+    const pendingUpdates = await getAndClearPendingSettingsUpdates();
+
+    for (const update of pendingUpdates) {
+      try {
+        const response = await fetch(SW_API_ENDPOINTS.UPDATE_USER_PREFERENCES, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${update.token}`,
+          },
+          body: JSON.stringify(update.preferences),
+        });
+
+        if (response.ok) {
+          console.log(
+            `Service Worker: Successfully synced settings update ${update.id}`,
+          );
+
+          self.clients
+            .matchAll({ includeUncontrolled: true, type: 'window' })
+            .then((clients) => {
+              clients.forEach((client) =>
+                client.postMessage({
+                  type: 'SETTINGS_UPDATE_SYNCED',
+                  updateId: update.id,
+                }),
+              );
+            });
+        } else {
+          console.error(
+            `SW: Failed to sync settings update ${update.id}. Status: ${response.status}`,
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Service Worker: Network error while syncing settings update ${update.id}:`,
+          error,
+        );
+      }
+    }
+    console.log('Service Worker: Settings updates sync finished.');
+  } catch (error) {
+    console.error(
+      'Service Worker: Failed to sync pending settings updates:',
       error,
     );
   }

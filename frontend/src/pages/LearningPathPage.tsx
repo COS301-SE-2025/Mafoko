@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, Circle, Trash2 } from 'lucide-react';
 import Flashcard from '../components/learning/Flashcard';
+import WordsPanel from '../components/learning/WordsPanel';
 import GlossaryCard from '../components/learning/GlossaryCard';
-import LanguageCard from '../components/learning/LanguageCard';
+import LearningPathList from '../components/learning/LearningPathList';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import '../styles/LearningPathPage.scss';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
@@ -17,15 +17,6 @@ import {
   Word,
   LanguageProgress,
 } from '../types/learning';
-import { toast } from 'sonner';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../components/ui/select.tsx';
-import { Checkbox } from '../components/ui/checkbox.tsx';
 
 const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -170,10 +161,7 @@ const LearningPathPage: React.FC = () => {
       !modalLanguage ||
       modalSelectedGlossaries.size === 0
     ) {
-      toast('Submission Failed', {
-        description:
-          'Please fill out all fields and select at least one glossary.',
-      });
+      alert('Please fill out all fields and select at least one glossary.');
       return;
     }
     try {
@@ -384,7 +372,7 @@ const LearningPathPage: React.FC = () => {
 
   return (
     <div
-      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
+      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobileMenuOpen && (
         <div
@@ -399,7 +387,9 @@ const LearningPathPage: React.FC = () => {
         />
       )}
       {isMobile ? (
-        <Navbar />
+        <div className="workspace-navbar-mobile bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50">
+          <Navbar />
+        </div>
       ) : (
         <LeftNav
           activeItem={activeMenuItem}
@@ -421,125 +411,98 @@ const LearningPathPage: React.FC = () => {
           </div>
         )}
         <div className={`learning-path-content${isMobile ? ' pt-16' : ''}`}>
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {currentView === 'paths' && 'My Learning Paths'}
-                {currentView === 'glossaries' &&
-                  (selectedPath?.path_name || '')}
-                {currentView === 'words' &&
-                  !flashcardMode &&
-                  (selectedGlossary?.name || 'Study Session')}
-                {currentView === 'words' &&
-                  flashcardMode &&
-                  `${selectedGlossary?.name || ''} - Flashcards`}
-              </h1>
-              <p className="text-gray-600 mt-1">
-                {currentView === 'paths' &&
-                  'Create and manage your custom learning paths.'}
-                {currentView === 'glossaries' &&
-                  'Select a glossary to begin studying.'}
-                {currentView === 'words' &&
-                  !flashcardMode &&
-                  'Review the terms and definitions below.'}
-              </p>
-            </div>
+          <div className="learning-path-header">
+            <div className="learning-path-header-content">
+              <div className="learning-path-title-section">
+                <h1 className="learning-path-main-title">
+                  {currentView === 'paths'}
+                  {currentView === 'glossaries' &&
+                    (selectedPath?.path_name || '')}
+                  {currentView === 'words' &&
+                    !flashcardMode &&
+                    (selectedGlossary?.name || 'Study Session')}
+                  {currentView === 'words' &&
+                    flashcardMode &&
+                    `${selectedGlossary?.name || ''} - Flashcards`}
+                </h1>
+                <p className="learning-path-subtitle">
+                  {currentView === 'paths'}
+                  {currentView === 'glossaries'}
+                  {currentView === 'words' && !flashcardMode}
+                </p>
+              </div>
 
-            {currentView === 'paths' && (
-              <div className="flex items-center gap-4">
-                <div
-                  className="level-badge-wrapper"
-                  style={{ position: 'relative' }}
-                >
-                  <span className="px-3 py-1 !bg-teal-500 text-white rounded-full text-sm font-medium level-badge">
-                    Level: {getProficiencyLevel(overallProgressPercentage)}
-                  </span>
-                  <div className="level-tooltip">
-                    <div className="tooltip-title">Overall Progress</div>
-                    <div className="tooltip-progress">
-                      <div
-                        className="tooltip-progress-fill"
-                        style={{
-                          width: `${overallProgressPercentage.toString()}%`,
-                        }}
-                      />
+              <div className="learning-path-header-actions">
+                {currentView === 'paths' && (
+                  <>
+                    <div
+                      className="level-badge-wrapper"
+                      style={{ position: 'relative' }}
+                    >
+                      <span className="level-badge">
+                        Level: {getProficiencyLevel(overallProgressPercentage)}
+                      </span>
+                      <div className="level-tooltip">
+                        <div className="tooltip-title">Overall Progress</div>
+                        <div className="tooltip-progress">
+                          <div
+                            className="tooltip-progress-fill"
+                            style={{
+                              width: `${overallProgressPercentage.toString()}%`,
+                            }}
+                          />
+                        </div>
+                        <div className="tooltip-text">
+                          {100 - overallProgressPercentage}% to next level
+                        </div>
+                      </div>
                     </div>
-                    <div className="tooltip-text">
-                      {100 - overallProgressPercentage}% to next level
+                    <button
+                      className="new-path-button"
+                      onClick={() => {
+                        void handleOpenCreateModal();
+                      }}
+                      type="button"
+                    >
+                      <span className="new-path-button-text">+ New Path</span>
+                    </button>
+                  </>
+                )}
+
+                {currentView === 'words' && !flashcardMode && studySession ? (
+                  <div className="learning-path-progress-display">
+                    <div className="learning-path-progress-percentage">
+                      {getProgressPercentage()}%
+                    </div>
+                    <div className="learning-path-progress-label">
+                      Completed
                     </div>
                   </div>
-                </div>
-                <button
-                  className="px-4 py-2 bg-yellow-400 text-white rounded-lg hover:bg-yellow-600"
-                  onClick={() => {
-                    void handleOpenCreateModal();
-                  }}
-                  type="button"
-                >
-                  + New Path
-                </button>
-              </div>
-            )}
+                ) : null}
 
-            {currentView === 'words' && !flashcardMode && studySession ? (
-              <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900">
-                  {getProgressPercentage()}%
-                </div>
-                <div className="text-sm text-gray-600">Completed</div>
+                {currentView === 'words' && flashcardMode && studySession && (
+                  <div className="learning-path-progress-display">
+                    <div className="learning-path-progress-percentage">
+                      Card {currentCardIndex + 1}
+                    </div>
+                    <div className="learning-path-progress-label">
+                      of {studySession.words.length.toString()}
+                    </div>
+                  </div>
+                )}
               </div>
-            ) : null}
-
-            {currentView === 'words' && flashcardMode && studySession && (
-              <div className="text-right">
-                <div className="text-2xl font-bold text-theme">
-                  Card {currentCardIndex + 1}
-                </div>
-                <div className="text-sm text-gray-600">
-                  of {studySession.words.length.toString()}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
 
           {currentView === 'paths' && (
-            <div className="languages-panel bg-transparent">
-              {isLoading ? (
-                <p>Loading paths...</p>
-              ) : learningPaths.length === 0 ? (
-                <p>
-                  You haven't created any learning paths yet. Click "+ New Path"
-                  to get started!
-                </p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {learningPaths.map((path) => (
-                    <div key={path.id} className="relative">
-                      <LanguageCard
-                        code={path.language_name.substring(0, 2).toUpperCase()}
-                        name={path.path_name}
-                        totalWords={path.selected_glossaries.length}
-                        color={'#212431'}
-                        completedPercentage={path.completedPercentage || 0}
-                        onClick={() => {
-                          void handleSelectPath(path);
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeletePath(path.id);
-                        }}
-                        className="absolute top-4 right-4 p-1 text-gray-400 hover:text-red-500 rounded-full hover:bg-gray-100"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <LearningPathList
+              paths={learningPaths}
+              onPathSelect={(p) => {
+                void handleSelectPath(p);
+              }}
+              onPathDelete={handleDeletePath}
+              isLoading={isLoading}
+            />
           )}
 
           {currentView === 'glossaries' && selectedPath && (
@@ -555,10 +518,7 @@ const LearningPathPage: React.FC = () => {
                   ← Back to Paths
                 </button>
               </div>
-              <div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                style={{ padding: '20px' }}
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
                 {selectedPath.selected_glossaries.map((g) => {
                   const glossaryInfo = {
                     id: g.glossary_name,
@@ -587,59 +547,13 @@ const LearningPathPage: React.FC = () => {
           )}
 
           {currentView === 'words' && !flashcardMode && studySession ? (
-            <div className="words-panel bg-transparent">
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentView('glossaries');
-                  }}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  ← Back to Glossaries
-                </button>
-                <div className="flex items-center gap-4">
-                  <div className="text-sm text-gray-600">
-                    {knownWords.size} of {studySession.words.length} words
-                    completed
-                  </div>
-                  <div className="w-32 bg-gray-200 rounded-full h-2">
-                    <div
-                      className="h-2 rounded-full bg-teal-500"
-                      style={{
-                        width: `${getProgressPercentage().toString()}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                <div className="grid grid-cols-1 gap-4">
-                  {studySession.words.map((word) => (
-                    <div
-                      key={word.id}
-                      className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:bg-gray-50"
-                    >
-                      <div className="flex-1">
-                        <h4 className="text-lg font-semibold text-gray-900">
-                          {word.term}
-                        </h4>
-                        <p className="text-gray-600 mt-1">
-                          {word.english_translation || word.definition}
-                        </p>
-                      </div>
-                      <div className="ml-4">
-                        {knownWords.has(word.id) ? (
-                          <CheckCircle2 className="w-6 h-6 text-teal-500" />
-                        ) : (
-                          <Circle className="w-6 h-6 text-gray-400" />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <WordsPanel
+              studySession={studySession}
+              knownWords={knownWords}
+              onBackClick={() => {
+                setCurrentView('glossaries');
+              }}
+            />
           ) : null}
 
           {flashcardMode && currentView === 'words' && studySession ? (
@@ -676,114 +590,57 @@ const LearningPathPage: React.FC = () => {
             role="dialog"
             aria-modal="true"
           >
-            <div className="learning-path-modal flex flex-col gap-5 !bg-tir text-theme">
+            <div
+              className={`learning-path-modal ${isDarkMode ? 'dark-mode' : ''}`}
+            >
               <h2 className="modal-title">Create a New Learning Path</h2>
-              <div className="flex flex-col space-y-2 w-[50%] text-left pb-4">
-                <label
-                  htmlFor="pathName"
-                  className="text-sm font-bold text-theme"
-                >
-                  Path Name
-                </label>
-                <input
-                  id="pathName"
-                  type="text"
-                  placeholder=""
-                  className="
-      w-full rounded-lg bg-gray-100 dark:bg-gray-800
-      px-4 py-2 text-sm
-      focus:outline-none focus:ring-2 focus:ring-pink-500
-      placeholder:text-gray-400
-    "
-                  value={modalPathName}
-                  onChange={(e) => {
-                    setModalPathName(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div
-                className="flex flex-col space-y-2 text-left mb-3 mt-3"
-                style={{}}
+              <input
+                type="text"
+                placeholder="Path Name (e.g., Spanish for Business)"
+                className="modal-input"
+                value={modalPathName}
+                onChange={(e) => {
+                  setModalPathName(e.target.value);
+                }}
+              />
+              <select
+                className={`modal-select ${isDarkMode ? 'dark-mode' : ''}`}
+                value={modalLanguage}
+                onChange={(e) => {
+                  void handleModalLanguageChange(e.target.value);
+                }}
+                aria-label="Select language"
               >
-                <label
-                  htmlFor="language"
-                  className="text-md text-theme font-bold"
-                >
-                  Language
-                </label>
-                <p className="!text-xs text-theme">
-                  Select a language to see available glossaries.
-                </p>
-                <Select
-                  value={modalLanguage}
-                  onValueChange={(value) => {
-                    void handleModalLanguageChange(value);
-                  }}
-                >
-                  <SelectTrigger
-                    className="
-      w-full rounded-lg bg-gray-100 dark:bg-gray-800
-      px-4 py-2 text-sm
-      focus:outline-none focus:ring-2 focus:ring-pink-500
-      border-0
-    "
-                  >
-                    <SelectValue placeholder="-- Select language --" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white dark:bg-gray-900 shadow-lg rounded-lg border-0">
-                    {availableLanguages.map((lang) => (
-                      <SelectItem
-                        key={lang.name}
-                        value={lang.name}
-                        className="cursor-pointer px-4 py-2 hover:bg-pink-50 dark:hover:bg-gray-800"
-                      >
-                        {lang.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="modal-glossaries ">
+                <option value="">-- Select language --</option>
+                {availableLanguages.map((lang) => (
+                  <option key={lang.name} value={lang.name}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+              <div className="modal-glossaries">
+                <label className="modal-label">Choose glossaries</label>
+                {!modalLanguage && (
+                  <div className="modal-hint">
+                    Select a language first to see available glossaries.
+                  </div>
+                )}
                 {modalLanguage && (
-                  <>
-                    <label className="modal-label text-left font-bold">
-                      Choose glossaries
-                    </label>
-                    <div
-                      className="space-y-3"
-                      style={{ paddingBottom: '20px' }}
-                    >
-                      <div
-                        className="space-y-3 max-h-60 overflow-y-scroll pr-2 flex gap-3 flex-col scrollbar-custom"
-                        style={{ paddingBottom: '20px', paddingTop: '20px' }}
-                      >
-                        {modalGlossaries.map((g) => (
-                          <div
-                            key={g.id}
-                            className=" flex items-center justify-between rounded-lg bg-secondary px-4 py-3 shadow-sm transition"
-                            style={{ padding: '8px' }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <Checkbox
-                                checked={modalSelectedGlossaries.has(g.name)}
-                                onCheckedChange={() => {
-                                  handleGlossaryToggle(g.name);
-                                }}
-                              />
-                              <span className="font-medium text-theme">
-                                {g.name}
-                              </span>
-                            </div>
-                            <span className="text-sm text-theme dark:text-gray-400">
-                              {g.words} words
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </>
+                  <div className="modal-glossary-list">
+                    {modalGlossaries.map((g) => (
+                      <label key={g.id} className="modal-glossary-item">
+                        <input
+                          type="checkbox"
+                          checked={modalSelectedGlossaries.has(g.name)}
+                          onChange={() => {
+                            handleGlossaryToggle(g.name);
+                          }}
+                        />
+                        <span className="glossary-name">{g.name}</span>
+                        <span className="glossary-count">{g.words} words</span>
+                      </label>
+                    ))}
+                  </div>
                 )}
               </div>
               <div className="modal-actions">
