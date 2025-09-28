@@ -14,6 +14,10 @@ from mavito_common.schemas.user import (
     UserUpdate,
     UserProfilePictureUpdate,
     UserCreateGoogle,
+    ForgotPasswordRequest,
+    ForgotPasswordResponse,
+    ResetPasswordRequest,
+    ResetPasswordResponse,
 )
 
 from google.oauth2 import id_token
@@ -427,3 +431,80 @@ async def update_user_profile(
     )
 
     return updated_user
+
+
+@router.post("/forgot-password", response_model=ForgotPasswordResponse)
+async def forgot_password(
+    *,
+    db: AsyncSession = Depends(get_db),
+    forgot_request: ForgotPasswordRequest,
+):
+    """
+    Request password reset email for a user.
+    This endpoint always returns success to prevent email enumeration attacks.
+    """
+    from app.utils.password_reset import find_user_by_email, create_password_reset_token
+    from app.services.email_service import email_service
+
+    try:
+        user = await find_user_by_email(db, forgot_request.email)
+
+        if user:
+            reset_token = await create_password_reset_token(db, user)
+
+            user_name = f"{user.first_name} {user.last_name}".strip()
+            await email_service.send_password_reset_email(
+                to_email=user.email, reset_token=reset_token, user_name=user_name
+            )
+
+    except Exception as e:
+
+        print(f"Error in forgot password: {e}")
+
+    return ForgotPasswordResponse(
+        message="If your email address exists in our system, you will receive a password reset link shortly."
+    )
+
+
+@router.post("/reset-password", response_model=ResetPasswordResponse)
+async def reset_password(
+    *,
+    db: AsyncSession = Depends(get_db),
+    reset_request: ResetPasswordRequest,
+):
+    """
+    Reset user password using a valid reset token.
+    """
+    from app.utils.password_reset import verify_reset_token, clear_reset_token
+
+    user = await verify_reset_token(db, reset_request.token)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired password reset token",
+        )
+
+    if len(reset_request.new_password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 6 characters long",
+        )
+
+    try:
+        update_data = {"password": reset_request.new_password}
+        await crud_user.update_user(db, db_obj=user, obj_in=update_data)
+
+        await clear_reset_token(db, user)
+
+        return ResetPasswordResponse(
+            message="Your password has been successfully reset. You can now log in with your new password."
+        )
+
+    except Exception as e:
+        await db.rollback()
+        print(f"Error resetting password: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while resetting your password. Please try again.",
+        )

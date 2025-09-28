@@ -58,6 +58,12 @@ class User(Base):
     deleted_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
+    password_reset_token: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, index=True
+    )
+    password_reset_expires: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     linguist_application: Mapped[Optional["LinguistApplication"]] = relationship(
         "LinguistApplication", back_populates="user", uselist=False
