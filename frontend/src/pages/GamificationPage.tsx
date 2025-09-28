@@ -15,18 +15,8 @@ import {
 } from '../hooks/useProfilePicture';
 import '../styles/Global.scss';
 import '../styles/GamificationPage.scss';
-import { API_ENDPOINTS } from '../config';
 import { Star } from 'lucide-react';
 import { ContributionGraph } from '../components/ui/ContributionGraph.tsx';
-
-type LevelData = {
-  current_level: number;
-  total_xp: number;
-  id: string;
-  user_id: string;
-  xp_for_next_level: number;
-  xp_progress_in_level: number;
-};
 
 interface UserData {
   uuid?: string;
@@ -147,9 +137,8 @@ const GamificationPage: React.FC = () => {
       if (storedUserData) {
         return JSON.parse(storedUserData) as UserData;
       }
-    } catch (error) {
-      console.error('Error getting current user:', error);
-    }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) { /* empty */ }
 
     return {
       userId: 'mock-user-id',
@@ -174,21 +163,17 @@ const GamificationPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const [gamificationData, setGamificationData] = useState(
-    MOCK_GAMIFICATION_DATA,
+
+  const [gamificationState, setGamificationState] = useState<GamificationState>(
+    {
+      userLevel: null,
+      achievements: null,
+      loginStreak: null,
+      weeklyGoals: null,
+      loading: true,
+      error: null,
+    },
   );
-
-  useEffect(() => {
-    const loadGamificationData = async () => {
-      try {
-        setGamificationData(await fetchGamificationData(user.id || ''));
-      } catch (err) {
-        console.error('Error fetching gamification data:', err);
-      }
-    };
-
-    void loadGamificationData();
-  }, [user]);
 
   const {
     profilePictureUrl,
@@ -196,7 +181,7 @@ const GamificationPage: React.FC = () => {
     clearProfilePictureCache,
     loadProfilePicture,
   } = useProfilePicture(
-    currentUser.userId !== 'mock-user-id' ? currentUser.userId : undefined,
+    user.id !== 'mock-user-id' ? user.id : undefined,
   );
 
   const getUserInitials = (firstName: string, lastName: string) => {
@@ -209,7 +194,7 @@ const GamificationPage: React.FC = () => {
 
   useEffect(() => {
     const loadGamificationData = async () => {
-      if (currentUser.userId === 'mock-user-id') {
+      if (user.id === 'mock-user-id') {
         console.log('Mock user detected, skipping real API calls');
         setGamificationState((prev) => ({ ...prev, loading: false }));
         return;
@@ -220,10 +205,10 @@ const GamificationPage: React.FC = () => {
       try {
         const [userLevel, achievements, loginStreak, weeklyGoals] =
           await Promise.all([
-            GamificationService.getUserLevel(currentUser.userId),
-            GamificationService.getUserAchievements(currentUser.userId),
-            GamificationService.getUserLoginStreak(currentUser.userId),
-            GamificationService.getUserWeeklyGoals(currentUser.userId),
+            GamificationService.getUserLevel(user.id || ""),
+            GamificationService.getUserAchievements(user.id || ""),
+            GamificationService.getUserLoginStreak(user.id || ""),
+            GamificationService.getUserWeeklyGoals(user.id || ""),
           ]);
 
         setGamificationState({
@@ -245,7 +230,7 @@ const GamificationPage: React.FC = () => {
     };
 
     void loadGamificationData();
-  }, [currentUser.userId]);
+  }, [user]);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -310,7 +295,6 @@ const GamificationPage: React.FC = () => {
           <div className="profile-section bg-theme text-theme">
             <div className="profile-header">
               <div className="avatar">
-                {getUserInitials(user.firstName || '', user.lastName || '')}
                 {loadingProfilePicture ? (
                   <div className="avatar-loading">Loading...</div>
                 ) : profilePictureUrl ? (
@@ -318,9 +302,9 @@ const GamificationPage: React.FC = () => {
                     src={profilePictureUrl}
                     alt="Profile Picture"
                     onError={() => {
-                      if (currentUser.userId !== 'mock-user-id') {
+                      if (user.id !== 'mock-user-id') {
                         handleProfilePictureError(
-                          currentUser.userId,
+                          user.id || "",
                           clearProfilePictureCache,
                           loadProfilePicture,
                         );
@@ -328,7 +312,7 @@ const GamificationPage: React.FC = () => {
                     }}
                   />
                 ) : (
-                  getUserInitials(currentUser.firstName, currentUser.lastName)
+                  getUserInitials(user.firstName || "", user.lastName || "")
                 )}
               </div>
               <div className="user-info">
@@ -426,7 +410,7 @@ const GamificationPage: React.FC = () => {
               <p className="section-title">Contribution Activity</p>
             </div>
             <div>
-              <ContributionGraph />
+              <ContributionGraph user={user} />
             </div>
             {!isMobile && (
               <div className="flex gap-5 flex-row-reverse">
@@ -434,7 +418,7 @@ const GamificationPage: React.FC = () => {
                   className="flex gap-2 text-center pt-3  items-center"
                   style={{ marginTop: '5px' }}
                 >
-                  <div className={`w-4 h-4 rounded-xs bg-zinc-700`}></div>
+                  <div className={`w-4 h-4 rounded-xs bg-slate-900`}></div>
                   <div className="text-center">100+ XP</div>
                 </div>
                 <div

@@ -85,7 +85,7 @@ body {
   padding-right: 60px;
   box-sizing: border-box;
   overflow-y: auto;
-  background-color: var(--bg-tir);
+  background-color: var(--bg-first);
 }
 
 .gamification-fixed-background {
@@ -94,13 +94,15 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--bg-accent);
+  background-color: var(--bg-first) !important;
   z-index: 1;
   overflow: auto;
+  display: flex;
+
 }
 
 .container {
-  background-color: var(--bg-tir) !important;
+  background-color: var(--bg-first) !important;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
@@ -122,6 +124,8 @@ body {
   position: relative;
   display: block !important;
   width: 100% !important;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .gamification-page .profile-header {

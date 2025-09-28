@@ -1,31 +1,9 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 import '../../styles/GamificationPage.scss';
+import { GamificationService, XPRecord } from '../../utils/gamification.ts';
 
-const mockXpRecords = [
-  { xp_amount: 10, created_at: '2025-01-03T12:00:00Z' },
-  { xp_amount: 25, created_at: '2025-01-15T12:00:00Z' },
-  { xp_amount: 50, created_at: '2025-02-07T12:00:00Z' },
-  { xp_amount: 5, created_at: '2025-02-19T12:00:00Z' },
-  { xp_amount: 70, created_at: '2025-03-15T12:00:00Z' },
-  { xp_amount: 101, created_at: '2025-04-05T12:00:00Z' },
-  { xp_amount: 9, created_at: '2025-04-12T12:00:00Z' },
-  { xp_amount: 20, created_at: '2025-05-01T12:00:00Z' },
-  { xp_amount: 44, created_at: '2025-05-20T12:00:00Z' },
-  { xp_amount: 5, created_at: '2025-06-02T12:00:00Z' },
-  { xp_amount: 88, created_at: '2025-06-18T12:00:00Z' },
-  { xp_amount: 101, created_at: '2025-07-01T12:00:00Z' },
-  { xp_amount: 9, created_at: '2025-07-16T12:00:00Z' },
-  { xp_amount: 15, created_at: '2025-07-29T12:00:00Z' },
-  { xp_amount: 33, created_at: '2025-08-10T12:00:00Z' },
-  { xp_amount: 55, created_at: '2025-08-25T12:00:00Z' },
-  { xp_amount: 77, created_at: '2025-09-05T12:00:00Z' },
-  { xp_amount: 2, created_at: '2025-09-12T12:00:00Z' },
-  { xp_amount: 99, created_at: '2025-09-21T12:00:00Z' },
-  { xp_amount: 150, created_at: '2025-09-27T12:00:00Z' },
-];
-
-const aggregateByDay = (records: typeof mockXpRecords) => {
+const aggregateByDay = (records: XPRecord[]) => {
   const map = new Map<string, number>();
   records.forEach((rec) => {
     const date = rec.created_at.split('T')[0];
@@ -39,11 +17,38 @@ const getLevelClass = (xp: number) => {
   if (xp < 11) return 'bg-teal-200';
   if (xp < 31) return 'bg-yellow-300';
   if (xp < 101) return 'bg-pink-600';
-  return 'bg-zinc-700';
+  return 'bg-slate-900';
 };
 
-export const ContributionGraph: React.FC = () => {
-  const xpByDay = aggregateByDay(mockXpRecords);
+interface UserData {
+  uuid?: string;
+  id?: string;
+  firstName?: string;
+  first_name?: string;
+  lastName?: string;
+  last_name?: string;
+  email?: string;
+}
+
+export const ContributionGraph = ({ user }: { user: UserData}) => {
+  const [records, setRecords] = useState<XPRecord[] | null>([]);
+
+  useEffect(() => {
+    const fetchRecords = async () => {
+      try {
+        if (!user.id) return;
+        const data = await GamificationService.getUserXPRecords(user.id);
+        setRecords(data);
+        console.log("Set data", data)
+      } catch (err) {
+        console.error("Failed to load XP records:", err);
+      }
+    };
+
+    void fetchRecords();
+  }, [user?.id]);
+
+  const xpByDay = aggregateByDay(records || []);
 
   const today = new Date();
   const days: { date: string; xp: number; weekday: number }[] = [];
