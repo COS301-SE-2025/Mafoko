@@ -7,7 +7,7 @@ from typing import Optional, List, Any, Dict
 from pydantic import model_validator
 import logging
 
-import urllib
+import urllib.parse
 
 logger = logging.getLogger(__name__)
 load_dotenv()

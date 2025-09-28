@@ -5,6 +5,7 @@ import '../../styles/TermCard.scss';
 import { addPendingVote } from '../../utils/indexedDB';
 import { Link } from 'react-router-dom';
 import { LanguageColorMap } from '../../types/search/types.ts';
+import { GamificationService } from '../../utils/gamification';
 
 interface VoteApiResponse {
   term_id: string;
@@ -17,10 +18,11 @@ interface TermCardProps {
   id: string;
   term: string;
   language: string;
-  domain: string;
+  domain: string | null;
   upvotes: number;
   downvotes: number;
-  definition: string;
+  definition: string | null;
+  owner_id?: string;
   isBookmarked?: boolean;
   onView?: () => void;
   onBookmarkChange?: (termId: string, isBookmarked: boolean) => void;
@@ -34,6 +36,7 @@ const TermCard: React.FC<TermCardProps> = ({
   upvotes: initialUpvotes,
   downvotes: initialDownvotes,
   definition,
+  owner_id,
   isBookmarked: initialIsBookmarked = false,
   onView,
   onBookmarkChange,
@@ -43,7 +46,10 @@ const TermCard: React.FC<TermCardProps> = ({
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
 
-  const handleVote = async (voteType: 'upvote' | 'downvote') => {
+  const safeDomain = domain || '';
+  const safeDefinition = definition || '';
+
+  const handleVote = async (voteType: 'up' | 'down') => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.log('Please log in to vote.');
@@ -53,29 +59,20 @@ const TermCard: React.FC<TermCardProps> = ({
     const previousVote = userVote;
     const previousUpvotes = upvotes;
     const previousDownvotes = downvotes;
-    const currentVoteType = voteType.replace('vote', '') as 'up' | 'down';
 
-    // Optimistic UI Update
-    if (userVote === currentVoteType) {
-      setUserVote(null);
-      if (currentVoteType === 'up') {
-        setUpvotes((c) => c - 1);
-      } else {
+    setUserVote((prevVote) => (prevVote === voteType ? null : voteType));
+    if (voteType === 'up') {
+      if (userVote === 'up') setUpvotes((c) => c - 1);
+      else if (userVote === 'down') {
+        setUpvotes((c) => c + 1);
         setDownvotes((c) => c - 1);
-      }
+      } else setUpvotes((c) => c + 1);
     } else {
-      let newUpvotes = upvotes;
-      let newDownvotes = downvotes;
-      if (currentVoteType === 'up') {
-        newUpvotes += 1;
-        if (previousVote === 'down') newDownvotes -= 1;
-      } else {
-        newDownvotes += 1;
-        if (previousVote === 'up') newUpvotes -= 1;
-      }
-      setUpvotes(newUpvotes);
-      setDownvotes(newDownvotes);
-      setUserVote(currentVoteType);
+      if (userVote === 'down') setDownvotes((c) => c - 1);
+      else if (userVote === 'up') {
+        setDownvotes((c) => c + 1);
+        setUpvotes((c) => c - 1);
+      } else setDownvotes((c) => c + 1);
     }
 
     if (navigator.onLine) {
@@ -86,38 +83,51 @@ const TermCard: React.FC<TermCardProps> = ({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ term_id: id, vote: voteType }),
+          body: JSON.stringify({ term_id: id, vote: `${voteType}vote` }),
         });
-        if (!response.ok) console.error('Online vote submission failed');
+        if (!response.ok) throw new Error('Online vote submission failed');
         const result = (await response.json()) as VoteApiResponse;
         setUpvotes(result.upvotes);
         setDownvotes(result.downvotes);
         setUserVote(result.user_vote);
+
+        if (voteType === 'up' && owner_id && result.user_vote === 'up') {
+          Promise.resolve().then(async () => {
+            try {
+              await GamificationService.awardTermUpvoteXP(owner_id, id);
+            } catch (xpError) {
+              console.warn(
+                'Failed to award XP for term upvote on search page:',
+                xpError,
+              );
+              // XP failure doesn't affect the vote success
+            }
+          });
+        }
       } catch (error) {
-        console.error('Error casting vote online:', error);
-        // Revert optimistic UI update on failure
+        console.error('Error casting vote online, reverting:', error);
         setUserVote(previousVote);
         setUpvotes(previousUpvotes);
         setDownvotes(previousDownvotes);
       }
     } else {
-      console.log('You are offline. Queuing authenticated vote.');
+      console.log('You are offline. Queuing vote.');
       try {
         await addPendingVote({
           id: new Date().toISOString(),
           term_id: id,
-          vote: voteType,
-          token: token,
+          vote: `${voteType}vote` as 'upvote' | 'downvote',
+          token,
         });
 
-        // 2. Register the background sync task
-        if ('serviceWorker' in navigator && 'SyncManager' in window) {
-          const swRegistration = await navigator.serviceWorker.ready;
-          await swRegistration.sync.register('sync-votes');
+        if (voteType === 'up' && owner_id) {
+          await GamificationService.awardTermUpvoteXP(owner_id, id);
         }
+
+        const swRegistration = await navigator.serviceWorker.ready;
+        await swRegistration.sync.register('sync-votes');
       } catch (dbError) {
-        console.error('Could not queue vote in IndexedDB:', dbError);
-        // Revert optimistic UI update on failure
+        console.error('Could not queue vote, reverting:', dbError);
         setUserVote(previousVote);
         setUpvotes(previousUpvotes);
         setDownvotes(previousDownvotes);
@@ -127,46 +137,35 @@ const TermCard: React.FC<TermCardProps> = ({
 
   const handleBookmark = async () => {
     const token = localStorage.getItem('accessToken');
-    if (!token) {
-      console.log('Please log in to bookmark terms.');
-      return;
-    }
+    if (!token) return;
+
+    const wasBookmarked = isBookmarked;
+    setIsBookmarked(!wasBookmarked);
 
     try {
-      // Toggle bookmark state optimistically
-      const wasBookmarked = isBookmarked;
-      setIsBookmarked(!isBookmarked);
+      const endpoint = wasBookmarked
+        ? API_ENDPOINTS.unbookmarkTerm(id)
+        : API_ENDPOINTS.bookmarkTerm;
+      const method = wasBookmarked ? 'DELETE' : 'POST';
 
-      if (wasBookmarked) {
-        // Unbookmark the term
-        const response = await fetch(API_ENDPOINTS.unbookmarkTerm(id), {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) console.error('Unbookmark action failed');
-        console.log(`Unbookmarked term: ${term}`);
-      } else {
-        // Bookmark the term
-        const response = await fetch(API_ENDPOINTS.bookmarkTerm, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ term_id: id }),
-        });
-        if (!response.ok) console.error('Bookmark action failed');
-        console.log(`Bookmarked term: ${term}`);
+      const options: RequestInit = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      if (!wasBookmarked) {
+        options.body = JSON.stringify({ term_id: id });
       }
 
-      // Notify parent component of bookmark change
-      onBookmarkChange?.(id, !isBookmarked);
+      const response = await fetch(endpoint, options);
+      if (!response.ok) throw new Error('Bookmark action failed');
+
+      onBookmarkChange?.(id, !wasBookmarked);
     } catch (error) {
       console.error('Error bookmarking term:', error);
-      // Revert optimistic update on failure
-      setIsBookmarked(isBookmarked);
+      setIsBookmarked(wasBookmarked);
     }
   };
 
@@ -186,14 +185,16 @@ const TermCard: React.FC<TermCardProps> = ({
             {language}
           </span>
           <span className="pill gray">
-            {domain.length > 11 ? `${domain.slice(0, 11)}...` : domain}
+            {safeDomain.length > 11
+              ? `${safeDomain.slice(0, 11)}...`
+              : safeDomain}
           </span>
         </div>
         <div className="term-socials">
           <button
             type="button"
             className={`social-button ${userVote === 'up' ? 'voted' : ''}`}
-            onClick={() => void handleVote('upvote')}
+            onClick={() => void handleVote('up')}
             aria-label="Upvote"
           >
             <ThumbsUp size={20} className="icon" />
@@ -202,7 +203,7 @@ const TermCard: React.FC<TermCardProps> = ({
           <button
             type="button"
             className={`social-button ${userVote === 'down' ? 'voted' : ''}`}
-            onClick={() => void handleVote('downvote')}
+            onClick={() => void handleVote('down')}
             aria-label="Downvote"
           >
             <ThumbsDown size={20} className="icon" />
@@ -211,9 +212,7 @@ const TermCard: React.FC<TermCardProps> = ({
           <button
             type="button"
             className={`social-button ${isBookmarked ? 'bookmarked' : ''}`}
-            onClick={() => {
-              void handleBookmark();
-            }}
+            onClick={handleBookmark}
             aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
             <Bookmark
@@ -226,11 +225,16 @@ const TermCard: React.FC<TermCardProps> = ({
           </button>
         </div>
       </div>
-      <p className="term-description" title={definition}>
-        {definition.length > 60 ? `${definition.slice(0, 60)}...` : definition}
+      <p className="term-description" title={safeDefinition}>
+        {safeDefinition.length > 60
+          ? `${safeDefinition.slice(0, 60)}...`
+          : safeDefinition}
       </p>
-      <button className="view-button" onClick={() => onView?.()} type="button">
-        <Link className="!text-theme" to={`/term/${language}/${term}/${id}`}>
+      <button className="view-button" onClick={onView} type="button">
+        <Link
+          className="!text-theme"
+          to={`/term/${encodeURIComponent(language)}/${encodeURIComponent(term)}/${id}`}
+        >
           <span className="view-button">View</span>
         </Link>
       </button>

@@ -53,9 +53,11 @@ async def search_endpoint(
                 "language": term.language,
                 "domain": term.domain,
                 "definition": term.definition,
+                "status": term.status,
                 "upvotes": upvotes or 0,  # Use the real count, defaulting to 0 if NULL
                 "downvotes": downvotes
                 or 0,  # Use the real count, defaulting to 0 if NULL
+                "owner_id": str(term.owner_id),  # Include owner_id for XP rewards
             }
         )
 

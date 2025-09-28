@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter, HTTPException, Query, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_, and_
@@ -18,6 +19,11 @@ from mavito_common.schemas.bookmark import (
 from app.api import deps
 
 router = APIRouter()
+
+GLOSSARY_INTERNAL_URL = os.environ.get(
+    "GLOSSARY_INTERNAL_URL",
+    "http://mavito_glossary_service:8080",  # Local/Docker fallback
+)
 
 
 @router.post("/terms", status_code=status.HTTP_201_CREATED)
@@ -127,7 +133,7 @@ async def bookmark_glossary(
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"http://mavito_glossary_service:8080/api/v1/glossary/categories/{bookmark_request.domain}/terms",
+                f"{GLOSSARY_INTERNAL_URL}/api/v1/glossary/categories/{bookmark_request.domain}/terms",
                 timeout=10.0,
             )
             if response.status_code == 404:

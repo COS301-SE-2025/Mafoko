@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, field_validator
-from mavito_common.models.feedback import FeedbackType, FeedbackStatus
+from mavito_common.models.feedback import FeedbackType, FeedbackStatus, FeedbackPriority
 
 
 # Shared properties
@@ -11,6 +11,7 @@ class FeedbackBase(BaseModel):
     message: str
     name: Optional[str] = None
     email: Optional[str] = None
+    priority: Optional[FeedbackPriority] = FeedbackPriority.medium
 
     @field_validator("message")
     @classmethod
@@ -52,6 +53,7 @@ class FeedbackCreate(FeedbackBase):
 # Properties to receive on feedback update (admin use)
 class FeedbackUpdate(BaseModel):
     status: Optional[FeedbackStatus] = None
+    priority: Optional[FeedbackPriority] = None
     admin_response: Optional[str] = None
 
     @field_validator("admin_response")
@@ -71,6 +73,7 @@ class FeedbackInDBBase(FeedbackBase):
     id: uuid.UUID
     user_id: Optional[uuid.UUID] = None
     status: FeedbackStatus
+    priority: FeedbackPriority
     created_at: datetime
     admin_response: Optional[str] = None
     resolved_at: Optional[datetime] = None

@@ -137,7 +137,9 @@ class TestLoginForAccessToken:
             "app.api.v1.endpoints.auth.create_access_token"
         ) as mock_create_token, patch(
             "app.api.v1.endpoints.auth.settings"
-        ) as mock_settings:
+        ) as mock_settings, patch(
+            "app.api.v1.endpoints.auth.award_daily_login_xp"
+        ) as mock_award_xp:
 
             # Setup mocks - make them async
             mock_crud.authenticate = AsyncMock(return_value=mock_user_model)
@@ -145,6 +147,7 @@ class TestLoginForAccessToken:
             mock_crud.set_last_login = AsyncMock(return_value=None)
             mock_create_token.return_value = "fake_access_token"
             mock_settings.ACCESS_TOKEN_EXPIRE_MINUTES = 30
+            mock_award_xp.return_value = None
 
             # Call the endpoint
             result = await login_for_access_token(db=mock_db, form_data=mock_form_data)

@@ -1,0 +1,1485 @@
+$accent-pink: #f00a50;
+$accent-yellow: #f2d001;
+$accent-teal: #00ceaf;
+$accent-blue: #212431;
+$accent-white: #ffffff;
+$background-light: #f5f5f5;
+$background-dark: #1e2433;
+$secondary-light: #ffffff;
+$secondary-dark: #292e41;
+$tertiary-light: #212431;
+$tertiary-dark: #ffffff;
+$text-light: #212431;
+$text-dark: #ffffff;
+.theme-light {
+  --bg-theme: #{$tertiary-light};
+  --text-theme: #{$text-light};
+  --accent-color: #{$accent-pink};
+  --accent-secondary: #{$accent-teal};
+  --accent-tertiary: #{$accent-yellow};
+  --bg-secondary: #{$secondary-dark};
+  --bg-first: #{$background-light};
+  --bg-tir: #{$secondary-light};
+  --workspace-border-color: #e5e7eb;
+  --workspace-bg: #{$secondary-light};
+  --page-bg: #{$background-light};
+  --page-bg-semitrans: rgba(245, 245, 245, 0.98);
+  --tab-active-bg: #{$accent-teal};
+  --tab-active-text: #{$accent-white};
+  --tab-inactive-text: #{$accent-blue};
+  --tab-hover-bg: rgba(0, 206, 175, 0.1);
+}
+
+/* Language card (moved from inline styles in LanguageCard.tsx) */
+.language-card {
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border-color: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  border-color: #e6e6e6;
+  &.dark {
+    background-color: var(--card-bg-dark, #292e41);
+    color: #ffffff !important; /* explicit white text in dark mode */
+    border: 1px solid #292e41; /* explicit border color in dark mode */
+  }
+
+  /* Ensure text elements inside dark language cards use white for readability */
+  &.dark .language-name,
+  &.dark .language-stats,
+  &.dark .progress-label {
+    color: #ffffff;
+  }
+
+  /* Stronger rule to ensure the stats text is white in dark mode (overrides utilities/global rules) */
+  &.dark .language-stats {
+    color: #ffffff !important;
+  }
+
+  /* Even higher-specificity rule scoped to the learning path grid to beat cascade/order issues */
+  .learning-path-container .languages-grid .language-card.dark .language-stats {
+    color: #ffffff !important;
+  }
+
+  .language-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #fff;
+    background-color: var(--brand-accent, #00ceaf);
+
+    @media (max-width: 768px) {
+      width: 56px;
+      height: 56px;
+      font-size: 1.125rem;
+      margin-bottom: 0.875rem;
+    }
+
+    @media (max-width: 480px) {
+      width: 48px;
+      height: 48px;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .language-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
+  }
+
+  .language-stats {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary, rgba(0, 0, 0, 0.6));
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Dark-mode overrides: ensure stats text is white in several dark-mode flavors */
+  .theme-dark .language-stats,
+  .dark-mode .language-stats,
+  .language-card.dark .language-stats {
+    color: #ffffff !important;
+  }
+
+  .progress-track {
+    background-color: var(--card-bg-dark, #eeeeee);
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 0.75rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: var(--brand-accent, #00ceaf);
+    border-radius: 999px;
+    transition: width 300ms ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-color-secondary, rgba(0, 0, 0, 0.6));
+  }
+}
+
+/* Note: progress width is set inline via style attribute for dynamic percentages */
+
+.theme-dark {
+  --bg-theme: #{$tertiary-dark};
+  --text-theme: #{$text-dark};
+  --accent-color: #{$accent-pink};
+  --accent-secondary: #{$accent-teal};
+  --accent-tertiary: #{$accent-yellow};
+  --bg-secondary: #{$secondary-light};
+  --bg-first: #{$background-dark};
+  --bg-tir: #{$secondary-dark};
+  --workspace-border-color: rgba(0, 206, 175, 0.2);
+  --workspace-bg: #{$secondary-dark};
+  --page-bg: #{$background-dark};
+  --page-bg-semitrans: rgba(30, 36, 51, 0.98);
+  --tab-active-bg: #{$accent-teal};
+  --tab-active-text: #{$accent-white};
+  --tab-inactive-text: rgba(255, 255, 255, 0.85);
+  --tab-hover-bg: rgba(0, 206, 175, 0.15);
+}
+
+.learning-path-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+  background-color: var(--bg-color-secondary);
+  width: 100%;
+  height: auto;
+
+  margin: 0;
+
+  @media (min-width: 769px) {
+    /* Reduce the expansion on large screens so content doesn't get cut off */
+    margin-left: -210px;
+    width: calc(100vw + 240px);
+
+    /* Slightly lower max-width to keep layout within common large viewports */
+    max-width: 1280px;
+    //transform: translateX(-15px);
+    //-webkit-transform: translateX(-15px);
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+    left: 0;
+    right: 0;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 100vh;
+    width: 100vw;
+    /* Nudge the whole learning path container 10px to the left on very small screens */
+    transform: translateX(-31px);
+    -webkit-transform: translateX(-31px);
+  }
+  &.dark-mode {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+
+    .heading-text {
+      color: var(--text-color-dark);
+    }
+
+    .subheading-text {
+      color: var(--text-color-secondary-dark);
+    }
+  }
+
+  .path-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+
+    .path-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .path-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+  }
+
+  .path-content {
+    padding: 1.5rem;
+    flex: 1;
+
+    .languages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.25rem;
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+    }
+
+    .path-card {
+      background-color: var(--card-bg);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .language-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        color: white;
+        font-weight: 700;
+        font-size: 1.25rem;
+      }
+
+      .language-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .language-stats {
+        font-size: 0.875rem;
+        color: var(--text-color-secondary);
+      }
+
+      .progress-bar {
+        margin-top: 1rem;
+        height: 6px;
+        background-color: var(--bg-color-secondary);
+        border-radius: 3px;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          transition: width 0.3s ease;
+        }
+      }
+    }
+
+    /* Center glossary/action buttons inside learning-path cards */
+    .languages-grid .glossary-card-actions,
+    .languages-grid .path-card .glossary-card-actions,
+    .languages-grid .language-card .glossary-card-actions {
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100%;
+    }
+
+    /* Make glossary cards inside learning-path black with white text in dark mode */
+    /* Target the actual card wrappers used on this page: .path-card and .language-card */
+    .theme-dark .learning-path-container .languages-grid .path-card,
+    .dark-mode .learning-path-container .languages-grid .path-card,
+    .learning-path-container.dark-mode .languages-grid .path-card,
+    .theme-dark .learning-path-container .languages-grid .language-card,
+    .dark-mode .learning-path-container .languages-grid .language-card,
+    .learning-path-container.dark-mode .languages-grid .language-card {
+      background: #000 !important;
+      color: #ffffff !important;
+      border-color: #000 !important;
+      box-shadow: none !important;
+    }
+
+    /* Ensure key child text elements are white */
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-name,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-name,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-stats,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-stats,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-name,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-name,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-stats,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-stats,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .progress-label,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .progress-label {
+      color: #ffffff !important;
+    }
+
+    /* Avatar/icon adjustments */
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-avatar,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .path-card
+      .language-avatar,
+    .theme-dark
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-avatar,
+    .dark-mode
+      .learning-path-container
+      .languages-grid
+      .language-card
+      .language-avatar {
+      background: transparent !important;
+      color: #ffffff !important;
+    }
+
+    .word-list {
+      background-color: var(--card-bg);
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+
+      .word-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background-color: var(--hover-bg);
+        }
+
+        .word-content {
+          .word-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+          }
+
+          .word-translation {
+            font-size: 0.875rem;
+            color: var(--text-color-secondary);
+          }
+        }
+
+        .word-difficulty {
+          padding: 0.25rem 0.5rem;
+          border-radius: 1rem;
+          font-size: 0.75rem;
+          font-weight: 500;
+
+          &.beginner {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+          }
+
+          &.intermediate {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+          }
+
+          &.advanced {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+          }
+        }
+      }
+    }
+
+    // Flashcard mode
+    .flashcard-container {
+      max-width: 600px;
+      margin: 0 auto;
+
+      .progress-indicator {
+        height: 6px;
+        background-color: var(--bg-color-secondary);
+        border-radius: 3px;
+        margin-bottom: 2rem;
+
+        .progress-fill {
+          height: 100%;
+          background-color: #3b82f6;
+          border-radius: 3px;
+          transition: width 0.3s ease;
+        }
+      }
+
+      .flashcard {
+        background-color: var(--card-bg);
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+
+        .card-prompt {
+          font-size: 0.875rem;
+          color: var(--text-color-secondary);
+          margin-bottom: 0.5rem;
+        }
+
+        .card-word {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .answer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        .answer-option {
+          padding: 1rem;
+          border-radius: 0.75rem;
+          border: 2px solid var(--border-color);
+          text-align: left;
+          font-size: 1rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+          }
+
+          &.correct {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+          }
+
+          &.incorrect {
+            border-color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+          }
+        }
+      }
+
+      .result-summary {
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--card-bg);
+        border-radius: 1rem;
+        border: 1px solid var(--border-color);
+
+        .result-emoji {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+        }
+
+        .result-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 1rem;
+        }
+
+        .result-score {
+          font-size: 1.125rem;
+          margin-bottom: 1.5rem;
+
+          .score-number {
+            font-weight: 700;
+            color: #3b82f6;
+          }
+        }
+
+        .result-actions {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+        }
+      }
+    }
+  }
+
+  // Buttons
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+
+      &:hover {
+        background-color: var(--primary-color-dark);
+      }
+    }
+
+    &.btn-secondary {
+      background-color: var(--bg-color-secondary);
+      color: var(--text-color);
+
+      &:hover {
+        background-color: var(--hover-bg);
+      }
+    }
+
+    &.btn-success {
+      background-color: #10b981;
+      color: white;
+
+      &:hover {
+        background-color: #059669;
+      }
+    }
+  }
+
+  // Utility classes
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
+  .mb-8 {
+    margin-bottom: 2rem;
+  }
+
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+
+  .mt-4 {
+    margin-top: 1rem;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .justify-between {
+    justify-content: space-between;
+  }
+
+  .items-center {
+    align-items: center;
+  }
+
+  .gap-2 {
+    gap: 0.5rem;
+  }
+
+  .gap-4 {
+    gap: 1rem;
+  }
+
+  .words-panel {
+    margin-top: 1200px; /* Moved the words panel 10px further down */
+    max-width: 80vw;
+  }
+}
+
+/* Word Card Responsive Styles */
+.word-card {
+  @media (max-width: 768px) {
+    padding: 1rem !important;
+    min-height: 120px !important;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.875rem !important;
+    min-height: 110px !important;
+  }
+
+  h4 {
+    @media (max-width: 768px) {
+      font-size: 1rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem !important;
+    }
+  }
+
+  p {
+    @media (max-width: 768px) {
+      font-size: 0.8rem !important;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem !important;
+    }
+  }
+
+  .flex.items-center.gap-2 {
+    @media (max-width: 480px) {
+      gap: 0.375rem !important;
+
+      span {
+        font-size: 0.7rem !important;
+      }
+    }
+  }
+}
+
+/* Pagination Controls Responsive Styles */
+.pagination-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (max-width: 480px) {
+    gap: 0.25rem;
+  }
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: var(--hover-bg);
+    border-color: var(--accent-color);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  @media (max-width: 480px) {
+    width: 2rem;
+    height: 2rem;
+
+    svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+  }
+}
+
+.pagination-current {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+
+  @media (max-width: 768px) {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Component Container Responsive Styles */
+.component-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.content-wrapper {
+  padding: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
+}
+
+/* Level badge tooltip */
+.level-badge-wrapper {
+  display: inline-block;
+}
+
+.level-badge {
+  cursor: default;
+}
+
+.level-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  max-width: 320px;
+  background-color: var(--workspace-bg);
+  color: var(--text-theme);
+  border: 1px solid var(--workspace-border-color);
+  padding: 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: top center;
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  z-index: 12000;
+}
+
+.level-tooltip .tooltip-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-theme);
+}
+
+.level-tooltip .tooltip-progress {
+  height: 8px;
+  background: var(--workspace-border-color);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.level-tooltip .tooltip-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-secondary), #34d399);
+  width: 0%;
+  transition: width 200ms ease;
+}
+
+.level-tooltip .tooltip-text {
+  font-size: 0.875rem;
+  color: var(--text-theme);
+  opacity: 0.8;
+}
+
+.level-badge-wrapper:hover .level-tooltip,
+.level-badge-wrapper:focus-within .level-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .level-tooltip {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    min-width: 180px;
+  }
+}
+
+/* Glossary action buttons */
+.glossary-card-actions {
+  margin-top: 0.5rem;
+}
+
+.glossary-card-actions .study-btn,
+.glossary-card-actions .flashcard-btn {
+  border: none;
+  padding: 0.4rem 0.75rem; /* smaller padding */
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem; /* slightly smaller text */
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    gap: 0.375rem;
+  }
+}
+
+.glossary-card-actions .study-btn {
+  background: #00ceaf; /* requested study color */
+  color: white;
+}
+
+.glossary-card-actions .study-btn:hover,
+.glossary-card-actions .study-btn:focus {
+  background: #00b99b;
+}
+
+.glossary-card-actions .flashcard-btn {
+  background: #f00a50; /* requested flashcard color */
+  color: white;
+}
+
+.glossary-card-actions .flashcard-btn:hover,
+.glossary-card-actions .flashcard-btn:focus {
+  background: #d10946;
+}
+
+.glossary-card-actions .study-btn svg,
+.glossary-card-actions .flashcard-btn svg {
+  opacity: 0.95;
+  width: 16px;
+  height: 16px;
+}
+
+.glossary-card-progress {
+  margin-top: 0.75rem;
+}
+
+.glossary-card-progress .progress-bar {
+  background: var(--bg-color-secondary, #eef2f7);
+}
+
+.glossary-card-progress .progress-fill {
+  transition: width 220ms ease;
+}
+
+.glossary-card-actions {
+  align-items: center;
+}
+
+/* New Path Modal Styles */
+.learning-path-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.learning-path-modal {
+  width: 100%;
+  max-width: 680px;
+  margin: 1rem;
+  /* Force an opaque solid background to avoid transparency from theme variables */
+  background-color: var(--card-bg-solid, #ffffff);
+  color: var(--text-color, #111827);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    max-width: calc(100vw - 2rem);
+    padding: 1rem;
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
+  }
+
+  @media (max-width: 480px) {
+    max-width: calc(100vw - 1rem);
+    padding: 0.75rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+  }
+}
+.learning-path-modal.dark-mode {
+  background-color: var(--card-bg-dark-solid, #292e41);
+  color: var(--text-color-dark, #ffffff);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.learning-path-modal .modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.learning-path-modal .modal-label {
+  display: block;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.learning-path-modal .modal-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+}
+
+.learning-path-modal .modal-select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+}
+.learning-path-modal .modal-select.dark-mode {
+  background-color: var(--card-bg-dark-solid, #292e41);
+  color: var(--text-color-dark, #ffffff);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.learning-path-modal .modal-glossaries {
+  margin-top: 0.5rem;
+}
+
+.learning-path-modal .modal-glossary-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    max-height: 180px;
+  }
+}
+
+.learning-path-modal .modal-glossary-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.learning-path-modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.learning-path-modal .modal-btn {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.learning-path-modal .modal-create {
+  background: #f00a50;
+  color: white;
+}
+
+.learning-path-modal .modal-cancel {
+  background: transparent;
+  border: 1px solid var(--border-color);
+}
+
+.learning-path-modal .modal-hint {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Dark mode fallback: if parent sets dark-mode, ensure modal has appropriate opaque background */
+.dark-mode .learning-path-modal {
+  background-color: var(--card-bg-dark-solid, #0f1724);
+  color: var(--text-color-dark, #ffffff);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Progress Percentage and Label Styles */
+.learning-path-progress-percentage {
+  color: var(--text-theme) !important;
+}
+
+.learning-path-progress-label {
+  color: var(--text-theme) !important;
+  opacity: 0.7;
+}
+
+/* Responsive Header Styles */
+.learning-path-header {
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.learning-path-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+}
+
+.learning-path-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.learning-path-main-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-theme);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
+  }
+}
+
+.learning-path-subtitle {
+  color: var(--text-theme);
+  opacity: 0.7;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+}
+
+.learning-path-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.75rem;
+  }
+}
+
+/* Level Badge Responsive Styles */
+.level-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #00ceaf1d !important;
+  color: #ffffff !important;
+  border: 1px solid #00ceaf;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: default;
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+}
+
+/* Higher-specificity rule to beat utility classes */
+.level-badge-wrapper .level-badge {
+  background: #00ceaf42 !important;
+  color: #00ceaf !important;
+}
+
+/* New Path Button Responsive Styles */
+.new-path-button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #d10946;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+.new-path-button-text {
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
+}
+
+/* Progress Display Responsive Styles */
+.learning-path-progress-display {
+  text-align: right;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    padding: 1rem;
+    background: var(--card-background);
+    border-radius: 0.5rem;
+    border: 1px solid var(--workspace-border-color);
+  }
+}
+
+.learning-path-progress-percentage {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-theme) !important;
+  margin-bottom: 0.25rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.125rem;
+  }
+}
+
+.learning-path-progress-label {
+  font-size: 0.875rem;
+  color: var(--text-theme) !important;
+  opacity: 0.7;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+}
+
+/* Content Area Responsive Styles */
+.learning-path-content {
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Grid Responsive Styles */
+.grid {
+  display: grid;
+  gap: 2rem;
+
+  &.grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    &.md\:grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    &.lg\:grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+  }
+}
+
+/* Back Button Responsive Styles */
+.learning-path-container button {
+  &.text-gray-600 {
+    color: var(--text-secondary) !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--text-theme) !important;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+/* Mobile Navigation Adjustments */
+.workspace-navbar-mobile {
+  background-color: var(--workspace-bg) !important;
+  border-bottom: 1px solid var(--workspace-border-color) !important;
+  box-shadow: 0 1px 3px var(--card-shadow) !important;
+}
+
+/* Container Responsive Adjustments */
+.learning-path-container {
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 100vw;
+    height: auto;
+    margin-top: 0;
+    overflow-x: hidden;
+  }
+}
+
+.main-content {
+  @media (max-width: 768px) {
+    padding-top: 0;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* Ensure body and html don't have horizontal scroll on mobile */
+@media (max-width: 768px) {
+  body,
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+}
+
+/* Utility Classes for Mobile */
+@media (max-width: 768px) {
+  .pt-16 {
+    padding-top: 4rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+
+  .mb-8 {
+    margin-bottom: 1.5rem;
+  }
+
+  .gap-8 {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pt-16 {
+    padding-top: 3.5rem;
+  }
+
+  .mb-6 {
+    margin-bottom: 0.75rem;
+  }
+
+  .mb-8 {
+    margin-bottom: 1rem;
+  }
+
+  .gap-8 {
+    gap: 1rem;
+  }
+}
+
+/* Ensure the delete button on learning path cards is red with white icon */
+.path-delete-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  /* Force the red background and white icon so other styles (utilities) don't override it. */
+  background-color: #ef4444 !important; /* red-500 */
+  color: #ffffff !important; /* white icon */
+  padding: 0.5rem !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.path-delete-button:hover {
+  background-color: #dc2626; /* red-600 */
+}
+
+/* Ensure svg icons inherit the button color (lucide-react uses stroke by default) */
+.path-delete-button svg {
+  color: inherit !important;
+  // fill: currentColor !important;
+  stroke: currentColor !important;
+}

@@ -31,6 +31,8 @@ class CommentCreate(CommentBase):
         ..., description="The ID of the term this comment belongs to."
     )
 
+    tempId: Optional[str] = None
+
 
 class CommentUpdate(CommentBase):
     """

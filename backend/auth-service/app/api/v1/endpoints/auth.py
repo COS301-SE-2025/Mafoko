@@ -2,10 +2,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 import uuid
 from pydantic import BaseModel
 from google.cloud import storage
+from sqlalchemy import select, func
 
 from mavito_common.schemas.user import (
     UserCreate,
@@ -13,6 +14,10 @@ from mavito_common.schemas.user import (
     UserUpdate,
     UserProfilePictureUpdate,
     UserCreateGoogle,
+    ForgotPasswordRequest,
+    ForgotPasswordResponse,
+    ResetPasswordRequest,
+    ResetPasswordResponse,
 )
 
 from google.oauth2 import id_token
@@ -25,9 +30,43 @@ from app.api import deps
 from mavito_common.models.user import User as UserModel  # noqa: F401
 from app.crud.crud_user import crud_user
 from mavito_common.models.user import UserRole
+from mavito_common.models.user_xp import UserXP, XPSource
 
 
 router = APIRouter()
+
+
+async def award_daily_login_xp(db: AsyncSession, user: UserModel) -> None:
+    """Award daily login XP if user hasn't received it today."""
+    today = date.today()
+
+    stmt = select(UserXP).where(
+        UserXP.user_id == user.id,
+        UserXP.xp_source == XPSource.LOGIN_STREAK,
+        func.date(UserXP.created_at) == today,
+    )
+    result = await db.execute(stmt)
+    existing_xp = result.scalars().first()
+
+    if existing_xp:
+        return  # Already awarded LOGIN_STREAK XP today
+
+    try:
+        login_xp = UserXP(
+            user_id=user.id,
+            xp_amount=5,
+            xp_source=XPSource.LOGIN_STREAK,
+            source_reference_id=None,
+            description="Daily login bonus",
+        )
+
+        db.add(login_xp)
+        await db.commit()
+        await db.refresh(login_xp)
+    except Exception as e:
+        await db.rollback()
+        print(f"Error awarding daily login XP: {e}")
+        # Don't fail the login if XP fails
 
 
 # Profile picture upload schemas
@@ -225,6 +264,9 @@ async def login_for_access_token(
     # Update last_login timestamp
     await crud_user.set_last_login(db, user=user)
 
+    # Award daily login XP
+    await award_daily_login_xp(db, user=user)
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={
@@ -263,6 +305,9 @@ async def google_login(google_token: GoogleToken, db: AsyncSession = Depends(get
                 profile_pic_url=profile_pic_url,
             )
             user = await crud_user.create_user(db, obj_in=user_in)
+
+        # Award daily login XP for Google login
+        await award_daily_login_xp(db, user=user)
 
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
@@ -386,3 +431,80 @@ async def update_user_profile(
     )
 
     return updated_user
+
+
+@router.post("/forgot-password", response_model=ForgotPasswordResponse)
+async def forgot_password(
+    *,
+    db: AsyncSession = Depends(get_db),
+    forgot_request: ForgotPasswordRequest,
+):
+    """
+    Request password reset email for a user.
+    This endpoint always returns success to prevent email enumeration attacks.
+    """
+    from app.utils.password_reset import find_user_by_email, create_password_reset_token
+    from app.services.email_service import email_service
+
+    try:
+        user = await find_user_by_email(db, forgot_request.email)
+
+        if user:
+            reset_token = await create_password_reset_token(db, user)
+
+            user_name = f"{user.first_name} {user.last_name}".strip()
+            await email_service.send_password_reset_email(
+                to_email=user.email, reset_token=reset_token, user_name=user_name
+            )
+
+    except Exception as e:
+
+        print(f"Error in forgot password: {e}")
+
+    return ForgotPasswordResponse(
+        message="If your email address exists in our system, you will receive a password reset link shortly."
+    )
+
+
+@router.post("/reset-password", response_model=ResetPasswordResponse)
+async def reset_password(
+    *,
+    db: AsyncSession = Depends(get_db),
+    reset_request: ResetPasswordRequest,
+):
+    """
+    Reset user password using a valid reset token.
+    """
+    from app.utils.password_reset import verify_reset_token, clear_reset_token
+
+    user = await verify_reset_token(db, reset_request.token)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired password reset token",
+        )
+
+    if len(reset_request.new_password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 6 characters long",
+        )
+
+    try:
+        update_data = {"password": reset_request.new_password}
+        await crud_user.update_user(db, db_obj=user, obj_in=update_data)
+
+        await clear_reset_token(db, user)
+
+        return ResetPasswordResponse(
+            message="Your password has been successfully reset. You can now log in with your new password."
+        )
+
+    except Exception as e:
+        await db.rollback()
+        print(f"Error resetting password: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while resetting your password. Please try again.",
+        )

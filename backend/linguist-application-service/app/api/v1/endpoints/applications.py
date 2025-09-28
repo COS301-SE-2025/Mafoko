@@ -46,15 +46,20 @@ async def create_linguist_application(
     existing_application = await crud_linguist_application.get_by_user_id(
         db, user_id=current_user.id
     )
-    application_status = await crud_linguist_application.get_application_status(
-        db, application_id=existing_application.id
-    )
-    if existing_application and application_status in ["pending"]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="A linguist application for this user already exists. You can only have one application.",
-        )
 
+    # First, check if an application exists.
+    if existing_application:
+        # If it exists, THEN get its status.
+        application_status = await crud_linguist_application.get_application_status(
+            db, application_id=existing_application.id
+        )
+        if application_status in ["pending"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="A linguist application for this user already exists. You can only have one application.",
+            )
+
+    # If the 'if' block was skipped (no existing application) or passed, create a new one.
     application = await crud_linguist_application.create_application(
         db=db, user_id=current_user.id, obj_in=application_in
     )

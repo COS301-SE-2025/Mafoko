@@ -270,7 +270,8 @@
 }
 
 .register-link-prompt a {
-  color: #00ceaf;
+  color: #00ceaf !important;
+  font-size: 13px;
   text-decoration: none;
   font-weight: 500;
 }
@@ -328,4 +329,36 @@
     align-items: flex-start;
     margin-bottom: 15px;
   }
+}
+
+/* Password Reset Specific Styles */
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.success-message {
+  background-color: #efe;
+  color: #363;
+  border: 1px solid #cfc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-help {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  line-height: 1.4;
 }

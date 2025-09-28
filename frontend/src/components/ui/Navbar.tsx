@@ -24,7 +24,6 @@ const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const [isMainNavbarOpen, setIsMainNavbarOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [avatarInitials, setAvatarInitials] = useState('');
   const [userRole, setUserRole] = useState<string>('contributor');
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
@@ -47,6 +46,11 @@ const Navbar = () => {
         roles: ['admin', 'contributor', 'linguist'],
       },
       {
+        name: 'Achievements',
+        path: '/achievements',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
         name: 'Workspace',
         path: '/workspace',
         roles: ['admin', 'contributor', 'linguist'],
@@ -59,11 +63,6 @@ const Navbar = () => {
       {
         name: 'Feedback',
         path: '/feedback',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: 'Feedback Hub',
-        path: '/feedbackhub',
         roles: ['admin', 'contributor', 'linguist'],
       },
       {
@@ -160,7 +159,6 @@ const Navbar = () => {
 
   const handleLinkClick = () => {
     setIsMainNavbarOpen(false);
-    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -203,7 +201,9 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         <div
-          className={`mobile-nav-dropdown md:hidden ${isMobileMenuOpen ? 'is-open' : 'is-closed'}`}
+          className={`mobile-nav-dropdown md:hidden ${
+            isMainNavbarOpen ? 'is-open' : 'is-closed'
+          }`}
         >
           {navItemsToDisplay.map((item) => (
             <NavLink

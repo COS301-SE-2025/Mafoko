@@ -3,8 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import { ChevronDown, Moon, Sun } from 'lucide-react';
+import { ChevronDown, BookOpen } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
+import {
+  useProfilePicture,
+  handleProfilePictureError,
+} from '../../hooks/useProfilePicture';
 interface LeftNavProps {
   activeItem: string;
   setActiveItem: (item: string) => void;
@@ -18,12 +22,32 @@ interface UserProfileApiResponse {
   role: 'contributor' | 'linguist' | 'admin';
 }
 
+interface UserData {
+  uuid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  profilePictureUrl?: string;
+}
+
 const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState<string>('contributor');
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    new Set(['main-navigation']),
+  );
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [avatarInitials, setAvatarInitials] = useState('');
+
+  const {
+    profilePictureUrl,
+    loadingProfilePicture,
+    clearProfilePictureCache,
+    loadProfilePicture,
+  } = useProfilePicture(userData?.uuid);
+  const { isDarkMode } = useDarkMode();
   const allMenuItems = useMemo(
     () => [
       {
@@ -31,75 +55,139 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         label: t('navigation.home'),
         path: '/dashboard',
         roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
+      },
+      {
+        id: 'analytics',
+        label: 'Dashboard',
+        path: '/analytics',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
       },
       {
         id: 'search',
         label: t('navigation.dictionary'),
         path: '/search',
         roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
       },
       {
         id: 'glossary',
         label: t('navigation.glossary'),
         path: '/glossary',
         roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
+      },
+      {
+        id: 'achievements',
+        label: 'Achievements',
+        path: '/achievements',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'main-navigation',
       },
       {
         id: 'workspace',
         label: 'Workspace',
         path: '/workspace',
         roles: ['admin', 'contributor', 'linguist'],
+        group: 'work-tools',
+      },
+      {
+        id: 'learning-path',
+        label: 'Learning Path',
+        path: '/learning-path',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'work-tools',
+        icon: BookOpen,
       },
       {
         id: 'linguist-application',
         label: t('navigation.linguistApplication'),
         path: '/linguist-application',
-        roles: ['contributor'],
-      },
-      {
-        id: 'analytics',
-        label: t('navigation.dashboard'),
-        path: '/analytics',
-        roles: ['admin', 'linguist'],
-      },
-      {
-        id: 'feedback',
-        label: 'Feedback',
-        path: '/feedback',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        id: 'help',
-        label: t('navigation.help'),
-        path: '/help',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        id: 'settings',
-        label: t('navigation.settings'),
-        path: '/settings',
-        roles: ['admin', 'contributor', 'linguist'],
+        roles: ['contributor', 'linguist'],
+        group: 'work-tools',
       },
       {
         id: 'contributor-page',
         label: 'Contributor',
         path: '/contributor',
         roles: ['contributor'],
+        group: 'work-tools',
       },
       {
         id: 'linguist-page',
         label: 'Linguist',
         path: '/linguist',
         roles: ['linguist'],
+        group: 'work-tools',
+      },
+      {
+        id: 'feedback',
+        label: 'Feedback',
+        path: '/feedback',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'support-feedback',
+      },
+      {
+        id: 'help',
+        label: t('navigation.help'),
+        path: '/help',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'support-feedback',
+      },
+      {
+        id: 'settings',
+        label: t('navigation.settings'),
+        path: '/settings',
+        roles: ['admin', 'contributor', 'linguist'],
+        group: 'account',
       },
       {
         id: 'admin-page',
         label: 'Admin',
         path: '/admin/terms',
         roles: ['admin'],
+        group: 'work-tools',
       },
     ],
     [t],
+  );
+
+  const menuGroups = useMemo(
+    () => [
+      {
+        id: 'main-navigation',
+        label: 'Main Navigation',
+        items: allMenuItems.filter(
+          (item) =>
+            item.group === 'main-navigation' && item.roles.includes(userRole),
+        ),
+      },
+      {
+        id: 'work-tools',
+        label: 'Work & Tools',
+        items: allMenuItems.filter(
+          (item) =>
+            item.group === 'work-tools' && item.roles.includes(userRole),
+        ),
+      },
+      {
+        id: 'support-feedback',
+        label: 'Support & Feedback',
+        items: allMenuItems.filter(
+          (item) =>
+            item.group === 'support-feedback' && item.roles.includes(userRole),
+        ),
+      },
+      {
+        id: 'account',
+        label: 'Account',
+        items: allMenuItems.filter(
+          (item) => item.group === 'account' && item.roles.includes(userRole),
+        ),
+      },
+    ],
+    [allMenuItems, userRole],
   );
 
   const adminSubmenuItems = [
@@ -119,9 +207,15 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       const storedUserData = localStorage.getItem('userData');
       if (storedUserData) {
         try {
-          const parsed = JSON.parse(storedUserData);
-          if (parsed.role) {
-            setUserRole(parsed.role);
+          const parsed = JSON.parse(storedUserData) as UserData;
+          if (parsed.uuid) {
+            setUserData(parsed);
+            setAvatarInitials(
+              `${parsed.firstName.charAt(0)}${parsed.lastName.charAt(0)}`.toUpperCase(),
+            );
+          }
+          if (parsed.firstName && 'role' in parsed) {
+            setUserRole((parsed as any).role);
             return;
           }
         } catch {
@@ -140,7 +234,20 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         if (response.ok) {
           const userData = (await response.json()) as UserProfileApiResponse;
           setUserRole(userData.role);
-          localStorage.setItem('userData', JSON.stringify(userData));
+          const newUserData: UserData = {
+            uuid: userData.id,
+            firstName: userData.first_name,
+            lastName: userData.last_name,
+            email: userData.email || 'N/A',
+          };
+          setUserData(newUserData);
+          setAvatarInitials(
+            `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
+          );
+          localStorage.setItem(
+            'userData',
+            JSON.stringify({ ...userData, role: userData.role }),
+          );
         } else {
           setUserRole('contributor');
         }
@@ -158,6 +265,18 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     void navigate(path);
   };
 
+  const toggleGroup = (groupId: string) => {
+    setExpandedGroups((prev) => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(groupId)) {
+        newExpanded.delete(groupId);
+      } else {
+        newExpanded.add(groupId);
+      }
+      return newExpanded;
+    });
+  };
+
   const toggleAdminDropdown = () =>
     setIsAdminDropdownOpen(!isAdminDropdownOpen);
 
@@ -166,10 +285,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     void navigate(path);
     setIsAdminDropdownOpen(false);
   };
-
-  const menuItemsToDisplay = allMenuItems.filter((item) =>
-    item.roles.includes(userRole),
-  );
 
   return (
     <div className={`left-nav ${isDarkMode ? 'dark-mode' : ''}`}>
@@ -191,13 +306,31 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
 
       {/* Navigation Menu */}
       <nav className="left-nav-navigation-menu">
-        {menuItemsToDisplay.map((item) => (
-          <div
-            key={item.id}
-            className={`left-nav-menu-item ${activeItem === item.id ? 'active' : ''}`}
-            onClick={() => handleItemClick(item.id, item.path)}
-          >
-            <span className="left-nav-menu-label">{item.label}</span>
+        {menuGroups.map((group) => (
+          <div key={group.id} className="nav-group">
+            <div
+              className="nav-group-header"
+              onClick={() => toggleGroup(group.id)}
+            >
+              <span className="nav-group-label">{group.label}</span>
+              <ChevronDown
+                size={16}
+                className={`nav-group-chevron ${expandedGroups.has(group.id) ? 'rotated' : ''}`}
+              />
+            </div>
+            {expandedGroups.has(group.id) && (
+              <div className="nav-group-items">
+                {group.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`left-nav-menu-item ${activeItem === item.id ? 'active' : ''}`}
+                    onClick={() => handleItemClick(item.id, item.path)}
+                  >
+                    <span className="left-nav-menu-label">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
 
@@ -233,19 +366,47 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         )}
       </nav>
 
-      {/* Dark Mode Toggle */}
-      <div className="left-nav-footer">
-        <div className="dark-mode-toggle" onClick={toggleDarkMode}>
-          <div className="toggle-container">
-            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-            <span className="toggle-label">
-              {isDarkMode
-                ? t('navigation.lightMode')
-                : t('navigation.darkMode')}
-            </span>
+      {/* Profile Section */}
+      {userData && (
+        <div className="left-nav-footer">
+          <div className="profile-section">
+            <div className="profile-info">
+              <div className="profile-avatar">
+                {loadingProfilePicture ? (
+                  <div className="avatar-loading">Loading...</div>
+                ) : profilePictureUrl ? (
+                  <img
+                    src={profilePictureUrl}
+                    alt="Profile Picture"
+                    onError={() => {
+                      if (userData?.uuid) {
+                        handleProfilePictureError(
+                          userData.uuid,
+                          clearProfilePictureCache,
+                          loadProfilePicture,
+                        );
+                      }
+                    }}
+                  />
+                ) : (
+                  avatarInitials
+                )}
+              </div>
+              <div className="profile-details">
+                <h3
+                  onClick={() => {
+                    void navigate('/profile');
+                  }}
+                  title="Go to Profile"
+                >
+                  {userData.firstName} {userData.lastName}
+                </h3>
+                <p>Email: {userData.email}</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

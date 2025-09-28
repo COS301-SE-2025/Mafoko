@@ -280,7 +280,12 @@ const RegistrationPage: React.FC = () => {
               />
               <label htmlFor="terms" className="terms-label">
                 {t('registrationPage.agreeToTerms')}{' '}
-                <Link to="/terms" target="_blank" rel="noopener noreferrer">
+                <Link
+                  to="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[12px]"
+                >
                   {t('registrationPage.termsAndConditionsLink')}
                 </Link>
               </label>

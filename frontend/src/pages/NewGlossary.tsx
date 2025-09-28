@@ -1,7 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS } from '../config';
-import { Search, Bookmark, Download, FileType, Filter } from 'lucide-react';
+import {
+  Search,
+  Bookmark,
+  Download,
+  FileType,
+  Filter,
+  WifiOff,
+  Database,
+} from 'lucide-react';
 import GlossaryTermCard from '../components/ui/GlossaryTermCard';
 import GlossaryCard from '../components/ui/GlossaryCard';
 import LeftNav from '../components/ui/LeftNav';
@@ -10,6 +18,8 @@ import GlossaryHeader from '../components/ui/GlossaryHeader';
 import { downloadData } from '../utils/exportUtils';
 import { useDarkMode } from '../components/ui/DarkModeComponent.tsx';
 import { LANGUAGES } from '../types/search/types';
+import { useNetworkStatus } from '../hooks/useNetworkStatus';
+import { cachingService } from '../utils/cachingService';
 import '../styles/NewGlossary.scss';
 
 // --- FULL WORKING LOGIC RESTORED ---
@@ -35,6 +45,8 @@ const GlossaryApp = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { category } = useParams<{ category?: string }>();
+  const networkStatus = useNetworkStatus();
+
   const [glossarySearch, setGlossarySearch] = useState('');
   const [termSearch, setTermSearch] = useState('');
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
@@ -66,6 +78,7 @@ const GlossaryApp = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalTerms, setTotalTerms] = useState(0);
   const [debouncedTermSearch, setDebouncedTermSearch] = useState('');
+  const [fromCache, setFromCache] = useState(false);
   const termsPerPage = 20;
   const exportPopupRef = useRef<HTMLDivElement>(null);
 
@@ -91,13 +104,15 @@ const GlossaryApp = () => {
     }, 4000);
   };
 
-  const showSuccess = (message: string) => {
+  const showSuccess = useCallback((message: string) => {
     showNotification(message, 'success');
-  };
-  const showError = (message: string) => {
+  }, []);
+  const showError = useCallback((message: string) => {
     showNotification(message, 'error');
-  };
-  // const showInfo = (message: string) => { showNotification(message, 'info'); };
+  }, []);
+  const showInfo = useCallback((message: string) => {
+    showNotification(message, 'info');
+  }, []);
 
   // Debounce search term
   useEffect(() => {
@@ -201,15 +216,13 @@ const GlossaryApp = () => {
   useEffect(() => {
     setLoading(true);
 
-    // Use the new categories stats endpoint for faster loading
-    fetch(API_ENDPOINTS.glossaryCategoriesStats)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch category stats');
-        return res.json();
-      })
-      .then((data: Record<string, number>) => {
+    // Use caching service to fetch glossaries
+    const fetchGlossaries = async () => {
+      try {
+        const response = await cachingService.getGlossaries();
+
         // Convert the stats object to glossary array
-        const glossariesData: Glossary[] = Object.entries(data).map(
+        const glossariesData: Glossary[] = Object.entries(response.data).map(
           ([name, termCount], idx) => ({
             id: idx + 1,
             name,
@@ -218,155 +231,79 @@ const GlossaryApp = () => {
             languages: [],
           }),
         );
+
         setGlossaries(glossariesData);
-      })
-      .catch(() => {
-        // Fallback to original endpoint if stats endpoint fails
-        fetch(API_ENDPOINTS.glossaryCategories)
-          .then((res) => {
-            if (!res.ok) throw new Error('Failed to fetch categories');
-            return res.json();
-          })
-          .then((data: unknown) => {
-            if (
-              Array.isArray(data) &&
-              data.length &&
-              typeof data[0] === 'object' &&
-              data[0] !== null &&
-              'name' in data[0]
-            ) {
-              setGlossaries(data as Glossary[]);
-            } else {
-              // Convert category strings to glossary objects quickly without fetching terms
-              const categoryStrings = data as string[];
-              const glossariesData: Glossary[] = categoryStrings.map(
-                (cat: string, idx: number) => ({
-                  id: idx + 1,
-                  name: cat,
-                  description: '',
-                  termCount: undefined, // Will be loaded on demand when user clicks on glossary
-                  languages: [],
-                }),
-              );
-              setGlossaries(glossariesData);
-            }
-          })
-          .catch(() => {
-            setGlossaries([]);
-          });
-      })
-      .finally(() => {
+        setFromCache(response.fromCache);
+
+        // Show notification if data is from cache
+        if (response.fromCache) {
+          showInfo('Data loaded from offline cache');
+        }
+      } catch (error) {
+        console.error('Failed to fetch glossaries:', error);
+        setGlossaries([]);
+        showError('Failed to load glossaries. Please check your connection.');
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    void fetchGlossaries();
+  }, [showError, showInfo]);
 
   useEffect(() => {
     if (!selectedGlossary) return;
     setLoading(true);
 
-    // Use advanced search endpoint with pagination
-    const searchParams = new URLSearchParams({
-      domain: selectedGlossary.name,
-      page: currentPage.toString(),
-      limit: termsPerPage.toString(),
-    });
+    // Use caching service to fetch terms
+    const fetchTerms = async () => {
+      try {
+        const response = await cachingService.getGlossaryTerms(
+          selectedGlossary.name,
+          currentPage,
+          termsPerPage,
+          debouncedTermSearch.trim() || undefined,
+          selectedLanguages.length > 0 ? selectedLanguages : undefined,
+        );
 
-    if (debouncedTermSearch.trim()) {
-      searchParams.append('query', debouncedTermSearch.trim());
-    }
+        setTerms(
+          response.data.results.map((term: Term) => ({
+            ...term,
+            translations: term.translations || {},
+          })),
+        );
+        setTotalTerms(response.data.total);
+        setFromCache(response.fromCache);
 
-    if (selectedLanguages.length > 0) {
-      selectedLanguages.forEach((lang) => {
-        searchParams.append('language', lang);
-      });
-    }
+        // Show notification if data is from cache
+        if (response.fromCache) {
+          showInfo('Terms loaded from offline cache');
+        }
+      } catch (error) {
+        console.error('Error fetching terms:', error);
+        setTerms([]);
+        setTotalTerms(0);
 
-    fetch(
-      `${API_ENDPOINTS.glossaryAdvancedSearch}?${searchParams.toString()}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          domain: selectedGlossary.name,
-          query: debouncedTermSearch.trim() || undefined,
-          languages: selectedLanguages,
-          page: currentPage,
-          limit: termsPerPage,
-        }),
-      },
-    )
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch terms');
-        return res.json();
-      })
-      .then(
-        (data: {
-          results: Term[];
-          total: number;
-          page: number;
-          pages: number;
-        }) => {
-          setTerms(
-            data.results.map((term: Term) => ({
-              ...term,
-              translations: term.translations || {},
-            })),
-          );
-          setTotalTerms(data.total);
-        },
-      )
-      .catch((err: unknown) => {
-        console.error('Error fetching terms:', err);
-        // Fallback to original endpoint if advanced search fails
-        fetch(API_ENDPOINTS.glossaryTermsByCategory(selectedGlossary.name))
-          .then((res) => {
-            if (!res.ok) throw new Error('Failed to fetch terms');
-            return res.json();
-          })
-          .then((data: unknown) => {
-            const termsData = data as Term[];
-            let filteredTerms = termsData.filter(
-              (term) =>
-                !debouncedTermSearch.trim() ||
-                term.term
-                  .toLowerCase()
-                  .includes(debouncedTermSearch.toLowerCase()) ||
-                term.definition
-                  .toLowerCase()
-                  .includes(debouncedTermSearch.toLowerCase()),
-            );
-
-            // Apply language filter if selected
-            if (selectedLanguages.length > 0) {
-              filteredTerms = filteredTerms.filter(
-                (term) =>
-                  term.language && selectedLanguages.includes(term.language),
-              );
-            }
-
-            const startIndex = (currentPage - 1) * termsPerPage;
-            const endIndex = startIndex + termsPerPage;
-            const paginatedTerms = filteredTerms.slice(startIndex, endIndex);
-
-            setTerms(
-              paginatedTerms.map((term: Term) => ({
-                ...term,
-                translations: term.translations || {},
-              })),
-            );
-            setTotalTerms(filteredTerms.length);
-          })
-          .catch(() => {
-            setTerms([]);
-            setTotalTerms(0);
-          });
-      })
-      .finally(() => {
+        if (networkStatus.isOffline) {
+          showError('No offline data available for this glossary');
+        } else {
+          showError('Failed to load terms. Please try again.');
+        }
+      } finally {
         setLoading(false);
-      });
-  }, [selectedGlossary, currentPage, debouncedTermSearch, selectedLanguages]);
+      }
+    };
+
+    void fetchTerms();
+  }, [
+    selectedGlossary,
+    currentPage,
+    debouncedTermSearch,
+    selectedLanguages,
+    networkStatus.isOffline,
+    showError,
+    showInfo,
+  ]);
 
   // Reset page when glossary, search, or language filter changes
   useEffect(() => {
@@ -388,47 +325,42 @@ const GlossaryApp = () => {
       }
 
       try {
-        // Fetch user's bookmarks to check if this glossary is bookmarked
-        const response = await fetch(API_ENDPOINTS.getBookmarks, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        // Use caching service to fetch user's bookmarks
+        const response = await cachingService.getBookmarks(token);
+        const bookmarksData = response.data as {
+          glossaries?: Array<{ domain: string }>;
+        };
 
-        if (response.ok) {
-          const bookmarksData = (await response.json()) as {
-            glossaries?: Array<{ domain: string }>;
-          };
-          const bookmarkedGlossariesData = bookmarksData.glossaries || [];
+        const bookmarkedGlossariesData = bookmarksData.glossaries || [];
 
-          // Extract glossary names into a simple array
-          const bookmarkedGlossaryNames: string[] =
-            bookmarkedGlossariesData.map(
-              (bookmark: { domain: string }) => bookmark.domain,
-            );
-          setBookmarkedGlossaries(bookmarkedGlossaryNames);
+        // Extract glossary names into a simple array
+        const bookmarkedGlossaryNames: string[] = bookmarkedGlossariesData.map(
+          (bookmark: { domain: string }) => bookmark.domain,
+        );
+        setBookmarkedGlossaries(bookmarkedGlossaryNames);
 
-          // Check if current glossary is in the bookmarked glossaries
-          const isCurrentGlossaryBookmarked = bookmarkedGlossaryNames.includes(
-            selectedGlossary.name,
-          );
+        // Check if current glossary is in the bookmarked glossaries
+        const isCurrentGlossaryBookmarked = bookmarkedGlossaryNames.includes(
+          selectedGlossary.name,
+        );
 
-          setBookmarkedCategory(isCurrentGlossaryBookmarked);
-          console.log(
-            `Glossary ${selectedGlossary.name} bookmark status: ${isCurrentGlossaryBookmarked.toString()}`,
-          );
-          console.log(`All bookmarked glossaries:`, bookmarkedGlossaryNames);
-        } else {
-          setBookmarkedCategory(false);
-        }
+        setBookmarkedCategory(isCurrentGlossaryBookmarked);
+        console.log(
+          `Glossary ${selectedGlossary.name} bookmark status: ${isCurrentGlossaryBookmarked.toString()}`,
+        );
+        console.log(`All bookmarked glossaries:`, bookmarkedGlossaryNames);
       } catch (error) {
         console.error('Error checking bookmark status:', error);
         setBookmarkedCategory(false);
+
+        if (networkStatus.isOffline) {
+          showInfo('Bookmark status not available offline');
+        }
       }
     };
 
     void checkBookmarkStatus();
-  }, [selectedGlossary]);
+  }, [selectedGlossary, networkStatus.isOffline, showInfo]);
 
   // Reusable bookmark handler that both buttons can use
   const handleBookmarkGlossary = async (
@@ -452,21 +384,17 @@ const GlossaryApp = () => {
       return false;
     }
 
+    // Check if offline
+    if (networkStatus.isOffline) {
+      showError('Bookmark operations require internet connection');
+      return false;
+    }
+
     try {
       // Check current bookmark status for this specific glossary
-      // Use the bookmarkedGlossaries array to check if this glossary is already bookmarked
       const currentlyBookmarked = bookmarkedGlossaries.includes(glossary.name);
       console.log(
         `🎯 [NUCLEAR DEBUG] Current bookmark state for ${glossary.name}: ${currentlyBookmarked ? 'BOOKMARKED' : 'NOT BOOKMARKED'}`,
-      );
-      console.log(
-        `🎯 [NUCLEAR DEBUG] Bookmarked glossaries list:`,
-        bookmarkedGlossaries,
-      );
-
-      // Show immediate feedback
-      console.log(
-        `Starting ${currentlyBookmarked ? 'UNBOOKMARK' : 'BOOKMARK'} operation for: ${glossary.name}`,
       );
 
       // Update UI optimistically
@@ -474,132 +402,55 @@ const GlossaryApp = () => {
         setBookmarkedCategory(!currentlyBookmarked);
       }
 
+      let success = false;
       if (currentlyBookmarked) {
         // Unbookmark the glossary
-        const unbookmarkUrl = API_ENDPOINTS.unbookmarkGlossary(glossary.name);
-        console.log(`🌐 [NUCLEAR DEBUG] UNBOOKMARK URL: ${unbookmarkUrl}`);
-
-        const response = await fetch(unbookmarkUrl, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        console.log(
-          `📡 [NUCLEAR DEBUG] UNBOOKMARK Response status: ${response.status.toString()}`,
-        );
-        const responseText = await response.text();
-        console.log(
-          `📡 [NUCLEAR DEBUG] UNBOOKMARK Response body: ${responseText}`,
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `Unbookmark failed: ${response.status.toString()} - ${responseText}`,
+        success = await cachingService.unbookmarkGlossary(token, glossary.name);
+        if (success) {
+          showSuccess(`Unbookmarked ${glossary.name}!`);
+          setBookmarkedGlossaries((prev) =>
+            prev.filter((name) => name !== glossary.name),
           );
         }
-
-        console.log(
-          `✅ [NUCLEAR DEBUG] Successfully unbookmarked glossary: ${glossary.name}`,
-        );
-        showSuccess(`Unbookmarked ${glossary.name}!`);
-
-        // Update local bookmarked glossaries state
-        setBookmarkedGlossaries((prev) =>
-          prev.filter((name) => name !== glossary.name),
-        );
       } else {
         // Bookmark the glossary
-        const bookmarkUrl = API_ENDPOINTS.bookmarkGlossary;
-        console.log(`🌐 [NUCLEAR DEBUG] BOOKMARK URL: ${bookmarkUrl}`);
-
-        const requestBody = {
-          domain: glossary.name,
-          description: glossary.description,
-        };
-        console.log(`📤 [NUCLEAR DEBUG] BOOKMARK Request body:`, requestBody);
-
-        const response = await fetch(bookmarkUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(requestBody),
-        });
-
-        console.log(
-          `📡 [NUCLEAR DEBUG] BOOKMARK Response status: ${response.status.toString()}`,
+        success = await cachingService.bookmarkGlossary(
+          token,
+          glossary.name,
+          glossary.description,
         );
-        const responseText = await response.text();
-        console.log(
-          `📡 [NUCLEAR DEBUG] BOOKMARK Response body: ${responseText}`,
-        );
-
-        if (!response.ok) {
-          // Handle 409 conflict (already bookmarked) by treating it as success and updating UI
-          if (response.status === 409) {
-            console.log(
-              `ℹ️ [NUCLEAR DEBUG] Glossary ${glossary.name} already bookmarked, updating UI state`,
-            );
-            showSuccess(`${glossary.name} is already bookmarked!`);
-
-            // Update local state to reflect that it's bookmarked
-            setBookmarkedGlossaries((prev) => {
-              if (!prev.includes(glossary.name)) {
-                return [...prev, glossary.name];
-              }
-              return prev;
-            });
-
-            // Update UI state
-            if (selectedGlossary?.name === glossary.name) {
-              setBookmarkedCategory(true);
-            }
-          } else {
-            throw new Error(
-              `Bookmark failed: ${response.status.toString()} - ${responseText}`,
-            );
-          }
-        } else {
-          console.log(
-            `✅ [NUCLEAR DEBUG] Successfully bookmarked glossary: ${glossary.name}`,
-          );
+        if (success) {
           showSuccess(`Bookmarked ${glossary.name}!`);
-
-          // Update local bookmarked glossaries state
           setBookmarkedGlossaries((prev) => [...prev, glossary.name]);
         }
       }
 
-      // Set timestamp and trigger events
-      const timestamp = Date.now().toString();
-      localStorage.setItem('bookmarksChanged', timestamp);
-      console.log(
-        `💾 [NUCLEAR DEBUG] Set bookmarksChanged flag to: ${timestamp}`,
-      );
+      if (success) {
+        // Set timestamp and trigger events
+        const timestamp = Date.now().toString();
+        localStorage.setItem('bookmarksChanged', timestamp);
 
-      window.dispatchEvent(
-        new CustomEvent('bookmarkChanged', {
-          detail: {
-            type: 'glossary',
-            action: currentlyBookmarked ? 'unbookmark' : 'bookmark',
-            name: glossary.name,
-          },
-        }),
-      );
-      console.log(`📢 [NUCLEAR DEBUG] Dispatched bookmarkChanged event`);
+        window.dispatchEvent(
+          new CustomEvent('bookmarkChanged', {
+            detail: {
+              type: 'glossary',
+              action: currentlyBookmarked ? 'unbookmark' : 'bookmark',
+              name: glossary.name,
+            },
+          }),
+        );
+      } else {
+        // Revert optimistic update on failure
+        if (selectedGlossary?.name === glossary.name) {
+          setBookmarkedCategory(currentlyBookmarked);
+        }
+        showError('Bookmark operation failed');
+      }
 
-      return true;
+      return success;
     } catch (error) {
-      console.error(
-        '💥 [NUCLEAR DEBUG] CATASTROPHIC ERROR during bookmark operation:',
-        error,
-      );
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
-      showError(`Bookmark operation failed: ${errorMessage}`);
+      console.error('Error during bookmark operation:', error);
+      showError('Bookmark operation failed');
 
       // Revert optimistic update on failure
       if (selectedGlossary?.name === glossary.name) {
@@ -641,22 +492,8 @@ const GlossaryApp = () => {
     try {
       setLoadingTranslations((prev) => new Set(prev).add(termId));
 
-      const response = await fetch(
-        API_ENDPOINTS.glossaryTermTranslations(termId),
-      );
-      if (!response.ok) {
-        console.warn(
-          `Failed to fetch translations for term ${termId}:`,
-          response.status,
-        );
-        return {};
-      }
-
-      const data = (await response.json()) as {
-        translations?: { [lang: string]: string };
-      };
-      // Extract the translations object from the API response
-      return data.translations ?? {};
+      const response = await cachingService.getTermTranslations(termId);
+      return response.data;
     } catch (error) {
       console.error(`Error fetching translations for term ${termId}:`, error);
       return {};
@@ -744,6 +581,57 @@ const GlossaryApp = () => {
     <div
       className={`dashboard-container${isMobileMenuOpen ? ' mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
+      {/* Offline Status Indicator */}
+      {networkStatus.isOffline && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            background: '#f59e0b',
+            color: 'white',
+            padding: '0.5rem',
+            textAlign: 'center',
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          <WifiOff size={16} />
+          <span>You're offline - showing cached data</span>
+        </div>
+      )}
+
+      {/* Cache Status Indicator */}
+      {fromCache && networkStatus.isOnline && (
+        <div
+          style={{
+            position: 'fixed',
+            top: networkStatus.isOffline ? '48px' : '0',
+            left: 0,
+            right: 0,
+            background: '#3b82f6',
+            color: 'white',
+            padding: '0.5rem',
+            textAlign: 'center',
+            fontSize: '0.85rem',
+            zIndex: 9998,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          <Database size={14} />
+          <span>Data loaded from cache</span>
+        </div>
+      )}
+
       {isMobileMenuOpen && (
         <div
           className="mobile-menu-overlay"
@@ -766,7 +654,19 @@ const GlossaryApp = () => {
         />
       )}
 
-      <div className="main-content">
+      <div
+        className="main-content"
+        style={{
+          paddingTop: networkStatus.isOffline
+            ? fromCache
+              ? '96px'
+              : '48px'
+            : fromCache
+              ? '48px'
+              : '0',
+          transition: 'padding-top 0.3s ease',
+        }}
+      >
         <div className="glossary-content">
           {selectedGlossary ? (
             // Terms List View
@@ -777,7 +677,7 @@ const GlossaryApp = () => {
               <GlossaryHeader
                 title={selectedGlossary.name}
                 description={selectedGlossary.description}
-                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})`}
+                countText={`${filteredTerms.length.toString()} of ${totalTerms.toString()} terms (Page ${currentPage.toString()} of ${Math.ceil(totalTerms / termsPerPage).toString()})${fromCache ? ' - Cached' : ''}`}
                 onBack={() => {
                   setSelectedGlossary(null);
                   setCurrentPage(1);
@@ -785,6 +685,7 @@ const GlossaryApp = () => {
                   setDebouncedTermSearch('');
                   setSelectedLanguages([]);
                   setShowLanguageFilter(false);
+                  setFromCache(false);
                   // Navigate back to main glossary page and update URL
                   void navigate('/glossary');
                 }}

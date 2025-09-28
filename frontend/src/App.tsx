@@ -1,7 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
 import RegistrationPage from './pages/RegistrationPage';
 import LoginPage from './pages/LoginPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import SearchPage from './pages/SearchPage';
 import DashboardPage from './pages/DashboardPage';
 import WorkspacePage from './pages/WorkspacePage';
@@ -22,9 +25,16 @@ import SettingsPage from './pages/SettingsPage';
 import ContributorPage from './pages/ContributorPage';
 import LinguistPage from './pages/LinguistPage';
 import AdminTermPage from './pages/AdminTermPage.tsx';
+import LearningPathPage from './pages/LearningPathPage.tsx';
+import GamificationPage from './pages/GamificationPage';
 import './App.css';
 import './styles/Global.scss';
-
+import {
+  orchestrateCommentSync,
+  orchestrateTermSync,
+  orchestrateXPSync,
+} from './utils/syncManager';
+import { getUserPreferences } from './services/settingsService';
 import {
   Chart as ChartJS,
   PieController,
@@ -38,8 +48,15 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import SettingsHelp from './pages/help/settings-help.tsx';
+import GlossaryHelp from './pages/help/GlossaryHelp.tsx';
+import WorkspaceHelp from './pages/help/WorkspaceHelp.tsx';
+import FeedbackHelp from './pages/help/FeedbackHelp.tsx';
+import DashboardHelp from './pages/help/DashboardHelp.tsx';
+import HomeHelp from './pages/help/HomeHelp.tsx';
+import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
+import { Toaster } from 'sonner';
 
-// Register all Chart.js components once at the application entry point
 ChartJS.register(
   PieController,
   ArcElement,
@@ -54,12 +71,89 @@ ChartJS.register(
 );
 
 function App() {
+  useEffect(() => {
+    const loadGlobalUserPreferences = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const serverPreferences = await getUserPreferences();
+
+        document.documentElement.style.setProperty(
+          '--base-text-size',
+          `${serverPreferences.text_size}px`,
+        );
+        document.documentElement.style.setProperty(
+          '--text-scaling',
+          (serverPreferences.text_size / 16).toString(),
+        );
+        document.documentElement.style.setProperty(
+          '--text-spacing',
+          serverPreferences.text_spacing.toString(),
+        );
+
+        if (serverPreferences.high_contrast_mode) {
+          document.documentElement.setAttribute(
+            'data-high-contrast-mode',
+            'true',
+          );
+        } else {
+          document.documentElement.removeAttribute('data-high-contrast-mode');
+        }
+      } catch (err) {
+        console.error('Failed to load global user preferences:', err);
+      }
+    };
+
+    loadGlobalUserPreferences();
+  }, []);
+
+  useEffect(() => {
+    const handleSWMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'SYNC_REQUEST') {
+        console.log('Client: Received comment sync request.');
+        orchestrateCommentSync().then((synced) => {
+          if (synced) window.location.reload();
+        });
+      }
+
+      if (event.data?.type === 'TERM_SYNC_REQUEST') {
+        console.log('Client: Received term action sync request.');
+        orchestrateTermSync().then((synced) => {
+          if (synced) window.location.reload();
+        });
+      }
+
+      if (event.data?.type === 'XP_SYNC_REQUEST') {
+        console.log('Client: Received XP sync request.');
+        orchestrateXPSync().then((synced) => {
+          if (synced) {
+            console.log('Client: XP awards synced successfully.');
+          }
+        });
+      }
+    };
+
+    navigator.serviceWorker?.addEventListener('message', handleSWMessage);
+
+    orchestrateCommentSync();
+    orchestrateTermSync();
+    orchestrateXPSync();
+
+    return () => {
+      navigator.serviceWorker?.removeEventListener('message', handleSWMessage);
+    };
+  }, []);
   return (
     <div className="MaritoApp">
       <Routes>
         <Route path="/Landing" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/home" element={<DashboardPage />} />
@@ -69,7 +163,14 @@ function App() {
         <Route path="/help" element={<HelpPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/help/getting-started" element={<GettingStarted />} />
+        <Route path="/help/settings-help" element={<SettingsHelp />} />
+        <Route path="/help/glossary-help" element={<GlossaryHelp />} />
+        <Route path="/help/workspace-help" element={<WorkspaceHelp />} />
+        <Route path="/help/feedback-help" element={<FeedbackHelp />} />
+        <Route path="/help/dashboard-help" element={<DashboardHelp />} />
+        <Route path="/help/home-help" element={<HomeHelp />} />
         <Route path="/help/community-feature" element={<CommunityHelpPage />} />
+        <Route path="/help/learning-path-help" element={<LearningPathHelp />} />
         <Route path="/help/terms" element={<TermHelpPage />} />
         <Route path="/help/faqs" element={<FrequentlyAskedPage />} />
         <Route path="/admin" element={<AdminPage />} />
@@ -85,8 +186,11 @@ function App() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/contributor" element={<ContributorPage />} />
         <Route path="/linguist" element={<LinguistPage />} />
+        <Route path="/learning-path" element={<LearningPathPage />} />
+        <Route path="/achievements" element={<GamificationPage />} />
         <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
+      <Toaster />
     </div>
   );
 }

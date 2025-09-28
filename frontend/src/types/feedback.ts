@@ -13,17 +13,26 @@ export enum FeedbackStatus {
   CLOSED = 'closed',
 }
 
+export enum FeedbackPriority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+  CRITICAL = 'critical',
+}
+
 export interface FeedbackBase {
   type: FeedbackType;
   message: string;
   name?: string | null;
   email?: string | null;
+  priority?: FeedbackPriority;
 }
 
 export type FeedbackCreate = FeedbackBase;
 
 export interface FeedbackUpdate {
   status?: FeedbackStatus;
+  priority?: FeedbackPriority;
   admin_response?: string | null;
 }
 
@@ -31,6 +40,7 @@ export interface Feedback extends FeedbackBase {
   id: string;
   user_id?: string | null;
   status: FeedbackStatus;
+  priority: FeedbackPriority;
   created_at: string; // ISO datetime string
   admin_response?: string | null;
   resolved_at?: string | null; // ISO datetime string

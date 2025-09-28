@@ -21,8 +21,6 @@ const GLOSSARY_SERVICE_URL: string =
   (import.meta.env.VITE_GLOSSARY_SERVICE_URL as string) ||
   'http://localhost:8006';
 
-const TERM_SERVICE_URL =
-  (import.meta.env.VITE_TERM_SERVICE_URL as string) || 'http://localhost:8007';
 const COMMENT_SERVICE_URL =
   (import.meta.env.VITE_COMMENT_SERVICE_URL as string) ||
   'http://localhost:8008';
@@ -36,6 +34,14 @@ const FEEDBACK_SERVICE_URL =
 const TERM_ADDITION_SERVICE_URL =
   (import.meta.env.VITE_TERM_ADDITION_SERVICE_URL as string) ||
   'http://localhost:8011';
+
+const LEARNING_SERVICE_URL =
+  (import.meta.env.VITE_LEARNING_SERVICE_URL as string) ||
+  'http://localhost:8012';
+
+const GAMIFICATION_SERVICE_URL =
+  (import.meta.env.VITE_GAMIFICATION_SERVICE_URL as string) ||
+  'http://localhost:8013';
 
 // Smart endpoint generator
 const endpoint = (serviceUrl: string, path: string): string =>
@@ -52,6 +58,12 @@ interface APIEndpoints {
   generateSignedUrl: string;
   generateProfilePictureUploadUrl: string;
   getMyProfilePictureUrl: string;
+  forgotPassword: string;
+  resetPassword: string;
+  // Settings endpoints
+  getUserPreferences: string;
+  updateUserPreferences: string;
+  resetUserPreferences: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
   ApproveApplicationStatus: (applicationId: string) => string;
@@ -64,6 +76,7 @@ interface APIEndpoints {
   getUsersWithUploads: () => string;
   search: string;
   suggest: string;
+  getAllTermsForOffline: string;
   descriptiveAnalytics: string;
   categoryFrequency: (language?: string) => string;
   languageCoverage: string;
@@ -82,8 +95,6 @@ interface APIEndpoints {
   glossaryAdvancedSearch: string;
   glossaryLanguages: string;
   glossaryRandom: string;
-  getTermDetail: (termId: string) => string;
-  getTermTranslations: (termId: string) => string;
   // Term Addition Service
   submitTerm: string;
   submitTermWithTranslations: string;
@@ -142,6 +153,26 @@ interface APIEndpoints {
   deleteFeedback: (feedbackId: string) => string;
   getFeedbackStats: string;
   searchFeedback: string;
+  // --- Gamification Service ---
+  addXP: string;
+  getUserXPRecords: (userId: string) => string;
+  getUserLoginStreak: (userId: string) => string;
+  getUserLevel: (userId: string) => string;
+  recalculateUserLevel: (userId: string) => string;
+  getAllAchievements: string;
+  getUserAchievements: (userId: string) => string;
+  checkUserAchievements: (userId: string) => string;
+
+  //-- LEARNING PATH SERVICE ---
+  getLearningDashboard: string;
+  updateLearningProgress: string;
+  getGlossaryProgress: (languageCode: string) => string;
+  getStudySessionWords: (languageCode: string, glossaryName: string) => string;
+  learningPaths: string;
+  learningPathDetail: (pathId: string) => string;
+  getRandomTerms: (languageCode: string) => string;
+  getWordCounts: string;
+  updateSessionProgress: string;
 }
 
 export const API_ENDPOINTS: APIEndpoints = {
@@ -168,6 +199,24 @@ export const API_ENDPOINTS: APIEndpoints = {
     AUTH_SERVICE_URL,
     '/api/v1/auth/me/profile-picture',
   ),
+
+  forgotPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/forgot-password'),
+  resetPassword: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/reset-password'),
+
+  // Settings endpoints
+  getUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences',
+  ),
+  updateUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences',
+  ),
+  resetUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences/reset',
+  ),
+
   getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
     endpoint(AUTH_SERVICE_URL, `/api/v1/admin/users/${userId}/role`),
@@ -211,7 +260,10 @@ export const API_ENDPOINTS: APIEndpoints = {
   // --- Search Service ---
   search: endpoint(SEARCH_SERVICE_URL, '/api/v1/search'),
   suggest: endpoint(SEARCH_SERVICE_URL, '/api/v1/suggest'),
-
+  getAllTermsForOffline: endpoint(
+    SEARCH_SERVICE_URL,
+    '/api/v1/terms/all-for-offline',
+  ),
   // --- Analytics Service ---
   descriptiveAnalytics: endpoint(
     ANALYTICS_SERVICE_URL,
@@ -287,10 +339,6 @@ export const API_ENDPOINTS: APIEndpoints = {
   glossaryRandom: endpoint(GLOSSARY_SERVICE_URL, '/api/v1/glossary/random'),
 
   // --- Term Service ---
-  getTermDetail: (termId: string) =>
-    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}`),
-  getTermTranslations: (termId: string) =>
-    endpoint(TERM_SERVICE_URL, `/api/v1/terms/${termId}/translations`),
 
   submitTerm: endpoint(TERM_ADDITION_SERVICE_URL, '/api/v1/terms/submit'),
   submitTermWithTranslations: endpoint(
@@ -486,4 +534,79 @@ export const API_ENDPOINTS: APIEndpoints = {
     '/api/v1/feedback/admin/stats',
   ),
   searchFeedback: endpoint(FEEDBACK_SERVICE_URL, '/api/v1/feedback/search/'),
+  // --- Gamification Service ---
+  addXP: endpoint(GAMIFICATION_SERVICE_URL, '/api/v1/xp/add-xp'),
+  getUserXPRecords: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/xp/user/${encodeURIComponent(userId)}/xp-records`,
+    ),
+  getUserLoginStreak: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/xp/user/${encodeURIComponent(userId)}/login-streak`,
+    ),
+  getUserLevel: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/levels/user/${encodeURIComponent(userId)}/level`,
+    ),
+  recalculateUserLevel: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/levels/user/${encodeURIComponent(userId)}/recalculate-level`,
+    ),
+  getAllAchievements: endpoint(
+    GAMIFICATION_SERVICE_URL,
+    '/api/v1/achievements/',
+  ),
+  getUserAchievements: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/achievements/user/${encodeURIComponent(userId)}`,
+    ),
+  checkUserAchievements: (userId: string) =>
+    endpoint(
+      GAMIFICATION_SERVICE_URL,
+      `/api/v1/achievements/user/${encodeURIComponent(userId)}/check`,
+    ),
+
+  // --- Learning Service ---
+  getLearningDashboard: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/dashboard',
+  ),
+  updateLearningProgress: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/progress',
+  ),
+  learningPaths: endpoint(LEARNING_SERVICE_URL, '/api/v1/learning/paths'),
+  // UPDATE and DELETE a specific learning path
+  learningPathDetail: (pathId: string) =>
+    endpoint(LEARNING_SERVICE_URL, `/api/v1/learning/paths/${pathId}`),
+  // Kept for the "Create Path" modal
+  getGlossaryProgress: (languageCode: string) =>
+    endpoint(
+      LEARNING_SERVICE_URL,
+      `/api/v1/learning/languages/${languageCode}/glossaries`,
+    ),
+  // Kept for study sessions
+  getStudySessionWords: (languageCode: string, glossaryName: string) =>
+    endpoint(
+      LEARNING_SERVICE_URL,
+      `/api/v1/learning/languages/${encodeURIComponent(languageCode)}/glossaries/${encodeURIComponent(glossaryName)}/words`,
+    ),
+  getRandomTerms: (languageCode: string) =>
+    endpoint(
+      LEARNING_SERVICE_URL,
+      `/api/v1/learning/languages/${encodeURIComponent(languageCode)}/random-terms`,
+    ),
+  getWordCounts: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/glossaries/word-counts',
+  ),
+  updateSessionProgress: endpoint(
+    LEARNING_SERVICE_URL,
+    '/api/v1/learning/session-progress',
+  ),
 };

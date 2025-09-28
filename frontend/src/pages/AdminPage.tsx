@@ -76,8 +76,6 @@ interface SystemUser {
   last_login: string | null;
 }
 
-// Add interface for user response
-
 const AdminPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const [allApplications, setAllApplications] = useState<
@@ -103,7 +101,7 @@ const AdminPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('admin');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const { authError, isLoading } = useAdminAuth();
-  const pageSize = 5; // Set to 5 entries per page for better scrolling demonstration
+  const pageSize = 5;
 
   const applyFiltersAndPagination = useCallback(() => {
     if (currentView === 'applications') {
@@ -122,15 +120,18 @@ const AdminPage: React.FC = () => {
       const totalPages = Math.ceil(filteredApplications.length / pageSize);
       setTotalPages(totalPages);
 
-      // Reset to page 1 if current page is out of bounds
-      const validCurrentPage = currentPage > totalPages ? 1 : currentPage;
-      if (validCurrentPage !== currentPage) {
-        setCurrentPage(validCurrentPage);
-        return;
+      // Fix page bounds checking
+      let validCurrentPage = currentPage;
+      if (currentPage > totalPages && totalPages > 0) {
+        validCurrentPage = 1;
+        setCurrentPage(1);
+      } else if (currentPage < 1) {
+        validCurrentPage = 1;
+        setCurrentPage(1);
       }
 
-      // Apply pagination
-      const startIndex = (currentPage - 1) * pageSize;
+      // Apply pagination with the valid page
+      const startIndex = (validCurrentPage - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const paginatedApplications = filteredApplications.slice(
         startIndex,
@@ -152,15 +153,18 @@ const AdminPage: React.FC = () => {
       const totalPages = Math.ceil(filteredUsers.length / pageSize);
       setTotalPages(totalPages);
 
-      // Reset to page 1 if current page is out of bounds
-      const validCurrentPage = currentPage > totalPages ? 1 : currentPage;
-      if (validCurrentPage !== currentPage) {
-        setCurrentPage(validCurrentPage);
-        return;
+      // Fix page bounds checking
+      let validCurrentPage = currentPage;
+      if (currentPage > totalPages && totalPages > 0) {
+        validCurrentPage = 1;
+        setCurrentPage(1);
+      } else if (currentPage < 1) {
+        validCurrentPage = 1;
+        setCurrentPage(1);
       }
 
-      // Apply pagination
-      const startIndex = (currentPage - 1) * pageSize;
+      // Apply pagination with the valid page
+      const startIndex = (validCurrentPage - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
@@ -236,14 +240,14 @@ const AdminPage: React.FC = () => {
             const getDocumentType = (
               filename: string | undefined,
             ): 'cv' | 'certificate' | 'id' | 'research' => {
-              if (!filename) return 'research'; // default for undefined filenames
+              if (!filename) return 'research';
               const lower = filename.toLowerCase();
               if (lower.includes('cv') || lower.includes('resume')) return 'cv';
               if (lower.includes('cert') || lower.includes('certificate'))
                 return 'certificate';
               if (lower.includes('id') || lower.includes('identity'))
                 return 'id';
-              return 'research'; // default
+              return 'research';
             };
 
             return {
@@ -314,7 +318,6 @@ const AdminPage: React.FC = () => {
               'Content-Type': 'application/json',
             },
           }),
-          // Corrected line here
           fetch(API_ENDPOINTS.getAllApplications, {
             method: 'GET',
             headers: {
@@ -439,7 +442,6 @@ const AdminPage: React.FC = () => {
             return;
           }
 
-          // Update the application status to approved
           const updateApplicationResponse = await fetch(
             API_ENDPOINTS.ApproveApplicationStatus(applicationId),
             {
@@ -452,7 +454,6 @@ const AdminPage: React.FC = () => {
           );
 
           if (updateApplicationResponse.ok) {
-            // Also update the user's role to linguist
             const updateUserResponse = await fetch(
               `${API_ENDPOINTS.updateUserRole(application.user_id)}?new_role=linguist`,
               {
@@ -758,7 +759,6 @@ const AdminPage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* View Toggle Buttons */}
                   <div className="view-toggle-container">
                     <button
                       type="button"
@@ -861,18 +861,8 @@ const AdminPage: React.FC = () => {
                                   {application.user.first_name}{' '}
                                   {application.user.last_name}
                                 </div>
-                                <div
-                                  className="applicant-email"
-                                  style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                  }}
-                                >
-                                  <Mail
-                                    size={14}
-                                    style={{ marginRight: '4px' }}
-                                  />
+                                <div className="applicant-email">
+                                  <Mail size={14} />
                                   {application.user.email}
                                 </div>
                               </div>
@@ -1003,18 +993,8 @@ const AdminPage: React.FC = () => {
                                 <div className="applicant-name">
                                   {user.first_name} {user.last_name}
                                 </div>
-                                <div
-                                  className="applicant-email"
-                                  style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                  }}
-                                >
-                                  <Mail
-                                    size={14}
-                                    style={{ marginRight: '4px' }}
-                                  />
+                                <div className="applicant-email">
+                                  <Mail size={14} />
                                   {user.email}
                                 </div>
                               </div>

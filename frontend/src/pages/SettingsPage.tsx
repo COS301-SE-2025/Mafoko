@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, User, Globe, Eye, Palette } from 'lucide-react';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
 import { useTranslation } from 'react-i18next';
+import {
+  getUserPreferences,
+  updateUserPreferences,
+} from '../services/settingsService';
+import { UserPreferencesUpdate } from '../types/userPreferences';
+import {
+  cacheUserPreferences,
+  getCachedUserPreferences,
+  addPendingSettingsUpdate,
+  UserPreferencesCache,
+  PendingSettingsUpdate,
+} from '../utils/indexedDB';
 import '../styles/DashboardPage.scss';
 import '../styles/SettingsPage.scss';
 
@@ -122,30 +134,217 @@ const SliderControl: React.FC<SliderControlProps> = ({
 
 const SettingsPage: React.FC = () => {
   const { i18n, t } = useTranslation();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const navigate = useNavigate();
+  const [isMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
+  );
+  // const [loading, setLoading] = useState(false); // TODO: Use this for loading state display
+  const [error, setError] = useState<string | null>(null);
 
-  const [settings, setSettings] = useState<SettingsState>(() => {
-    const savedSettings = localStorage.getItem('userSettings');
-    const defaultSettings: SettingsState = {
-      textSize: 16,
-      textSpacing: 1,
-      highContrastMode: false,
-      darkMode: false,
-      selectedLanguage: i18n.resolvedLanguage || 'en',
-    };
-
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings) as Partial<SettingsState>;
-        return { ...defaultSettings, ...parsed };
-      } catch (e) {
-        console.error('Failed to parse saved settings:', e);
-        return defaultSettings;
-      }
-    }
-
-    return defaultSettings;
+  const [settings, setSettings] = useState<SettingsState>({
+    textSize: 16,
+    textSpacing: 1,
+    highContrastMode: false,
+    darkMode: false,
+    selectedLanguage: i18n.resolvedLanguage || 'en',
   });
 
+  // Load user preferences from server on component mount with offline support
+  useEffect(() => {
+    const loadUserPreferences = async () => {
+      // Clear any existing localStorage settings to ensure backend-only mode
+      localStorage.removeItem('userSettings');
+
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        // User not logged in, redirect to login or show error
+        setError('Please log in to access settings');
+        return;
+      }
+
+      try {
+        // setLoading(true);
+        setError(null);
+
+        // If offline, try to load cached preferences
+        if (!navigator.onLine) {
+          const cachedPrefs = await getCachedUserPreferences();
+          if (cachedPrefs) {
+            console.log('Using cached user preferences (offline)');
+            setSettings({
+              textSize: cachedPrefs.preferences.textSize,
+              textSpacing: cachedPrefs.preferences.textSpacing,
+              highContrastMode: cachedPrefs.preferences.highContrastMode,
+              darkMode: cachedPrefs.preferences.darkMode,
+              selectedLanguage: cachedPrefs.preferences.selectedLanguage,
+            });
+
+            if (
+              cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage
+            ) {
+              await i18n.changeLanguage(
+                cachedPrefs.preferences.selectedLanguage,
+              );
+            }
+
+            setError('You are offline. Showing cached settings.');
+            // setLoading(false);
+            return;
+          } else {
+            setError('No cached settings available offline.');
+            // setLoading(false);
+            return;
+          }
+        }
+
+        const serverPreferences = await getUserPreferences();
+
+        // Update local state with server preferences
+        const newSettings = {
+          textSize: serverPreferences.text_size,
+          textSpacing: serverPreferences.text_spacing,
+          highContrastMode: serverPreferences.high_contrast_mode,
+          darkMode: false, // darkMode is handled separately by the DarkModeComponent
+          selectedLanguage: serverPreferences.ui_language,
+        };
+
+        setSettings(newSettings);
+
+        // Cache the fresh preferences
+        const cacheData: UserPreferencesCache = {
+          id: 'latest',
+          preferences: newSettings,
+          timestamp: Date.now(),
+        };
+        await cacheUserPreferences(cacheData);
+
+        // Update language if different
+        if (serverPreferences.ui_language !== i18n.resolvedLanguage) {
+          await i18n.changeLanguage(serverPreferences.ui_language);
+        }
+      } catch (err) {
+        console.error('Failed to load user preferences:', err);
+
+        // Try to load cached preferences as fallback
+        const cachedPrefs = await getCachedUserPreferences();
+        if (cachedPrefs) {
+          console.log('Using cached user preferences (fallback)');
+          setSettings({
+            textSize: cachedPrefs.preferences.textSize,
+            textSpacing: cachedPrefs.preferences.textSpacing,
+            highContrastMode: cachedPrefs.preferences.highContrastMode,
+            darkMode: cachedPrefs.preferences.darkMode,
+            selectedLanguage: cachedPrefs.preferences.selectedLanguage,
+          });
+
+          if (
+            cachedPrefs.preferences.selectedLanguage !== i18n.resolvedLanguage
+          ) {
+            await i18n.changeLanguage(cachedPrefs.preferences.selectedLanguage);
+          }
+
+          setError('Network error. Showing cached settings.');
+        } else {
+          setError('Failed to load settings from server');
+        }
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    void loadUserPreferences();
+  }, [i18n]);
+
+  // Save preferences to server when settings change with offline support
+  const savePreferencesToServer = useCallback(
+    async (newSettings: SettingsState) => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setError('Please log in to save settings');
+        return;
+      }
+
+      try {
+        const updateData: UserPreferencesUpdate = {
+          text_size: newSettings.textSize,
+          text_spacing: newSettings.textSpacing,
+          high_contrast_mode: newSettings.highContrastMode,
+          ui_language: newSettings.selectedLanguage,
+        };
+
+        await updateUserPreferences(updateData);
+
+        // Update cache with successful save
+        const cacheData: UserPreferencesCache = {
+          id: 'latest',
+          preferences: newSettings,
+          timestamp: Date.now(),
+        };
+        await cacheUserPreferences(cacheData);
+      } catch (err) {
+        console.error('Failed to save preferences to server:', err);
+
+        // Check if this is a network error (offline)
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to save settings';
+        if (
+          errorMessage.includes('Failed to fetch') ||
+          errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+          errorMessage.includes('ERR_NETWORK') ||
+          !navigator.onLine
+        ) {
+          // Queue the update for offline sync
+          const pendingUpdate: PendingSettingsUpdate = {
+            id: crypto.randomUUID(),
+            preferences: {
+              textSize: newSettings.textSize,
+              textSpacing: newSettings.textSpacing,
+              highContrastMode: newSettings.highContrastMode,
+              selectedLanguage: newSettings.selectedLanguage,
+            },
+            token,
+            timestamp: Date.now(),
+          };
+
+          await addPendingSettingsUpdate(pendingUpdate);
+
+          // Update cache optimistically
+          const cacheData: UserPreferencesCache = {
+            id: 'latest',
+            preferences: newSettings,
+            timestamp: Date.now(),
+          };
+          await cacheUserPreferences(cacheData);
+
+          // Register background sync
+          if (
+            'serviceWorker' in navigator &&
+            'sync' in window.ServiceWorkerRegistration.prototype
+          ) {
+            try {
+              const registration = await navigator.serviceWorker.ready;
+              await registration.sync.register('sync-settings-updates');
+            } catch (syncError) {
+              console.error(
+                'Failed to register background sync for settings updates:',
+                syncError,
+              );
+            }
+          }
+
+          setError(
+            "You are offline. Your settings have been saved and will sync when you're back online.",
+          );
+        } else {
+          setError('Failed to save settings to server');
+        }
+      }
+    },
+    [],
+  );
+
+  // Apply CSS variables when settings change
   useEffect(() => {
     document.documentElement.style.setProperty(
       '--base-text-size',
@@ -166,9 +365,22 @@ const SettingsPage: React.FC = () => {
     } else {
       document.documentElement.removeAttribute('data-high-contrast-mode');
     }
-
-    localStorage.setItem('userSettings', JSON.stringify(settings));
   }, [settings]);
+
+  const handleSettingChange = useCallback(
+    (key: keyof SettingsState, value: string | number | boolean) => {
+      const newSettings = {
+        ...settings,
+        [key]: value,
+      };
+
+      setSettings(newSettings);
+
+      // Save to server asynchronously
+      void savePreferencesToServer(newSettings);
+    },
+    [settings, savePreferencesToServer],
+  );
 
   // Sync settings with current language
   useEffect(() => {
@@ -176,93 +388,11 @@ const SettingsPage: React.FC = () => {
     if (currentLang && currentLang !== settings.selectedLanguage) {
       handleSettingChange('selectedLanguage', currentLang);
     }
-  }, [i18n.resolvedLanguage, settings.selectedLanguage]);
+  }, [i18n.resolvedLanguage, settings.selectedLanguage, handleSettingChange]);
 
-  const handleSettingChange = (
-    key: keyof SettingsState,
-    value: string | number | boolean,
-  ) => {
-    setSettings((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  // Remove duplicate declarations - they're already defined above
 
-  const [isMobile] = useState(window.innerWidth <= 768);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (settings.highContrastMode) {
-      document.documentElement.setAttribute('data-high-contrast-mode', 'true');
-    }
-  }, [settings.highContrastMode]);
-
-  React.useEffect(() => {
-    const savedSettings = localStorage.getItem('accessibilitySettings');
-    const savedUserSettings = localStorage.getItem('userSettings');
-
-    if (savedUserSettings) {
-      try {
-        const parsedUserSettings = JSON.parse(
-          savedUserSettings,
-        ) as Partial<SettingsState>;
-        setSettings((prev) => ({
-          ...prev,
-          textSize: parsedUserSettings.textSize ?? 16,
-          textSpacing: parsedUserSettings.textSpacing ?? 1,
-          highContrastMode: parsedUserSettings.highContrastMode ?? false,
-          darkMode: isDarkMode,
-        }));
-      } catch (e) {
-        console.error('Failed to parse user settings:', e);
-      }
-    } else if (savedSettings) {
-      try {
-        const parsedSettings = JSON.parse(
-          savedSettings,
-        ) as Partial<SettingsState>;
-        setSettings((prev) => ({
-          ...prev,
-          textSize: parsedSettings.textSize ?? 16,
-          textSpacing: parsedSettings.textSpacing ?? 1,
-          darkMode: isDarkMode,
-        }));
-      } catch (e) {
-        console.error('Failed to parse accessibility settings:', e);
-      }
-    }
-  }, [isDarkMode]);
-
-  // Save settings to localStorage and apply them
-  React.useEffect(() => {
-    // Save to localStorage
-    const settingsToSave = {
-      textSize: settings.textSize,
-      textSpacing: settings.textSpacing,
-      highContrastMode: settings.highContrastMode,
-    };
-    localStorage.setItem(
-      'accessibilitySettings',
-      JSON.stringify(settingsToSave),
-    );
-
-    document.documentElement.style.setProperty(
-      '--base-text-size',
-      `${settings.textSize.toString()}px`,
-    );
-    document.documentElement.style.setProperty(
-      '--text-spacing',
-      settings.textSpacing.toString(),
-    );
-
-    // Apply high contrast mode
-    if (settings.highContrastMode) {
-      document.documentElement.setAttribute('data-high-contrast-mode', 'true');
-    } else {
-      document.documentElement.removeAttribute('data-high-contrast-mode');
-    }
-  }, [settings.textSize, settings.textSpacing, settings.highContrastMode]);
+  // Remove duplicate useEffect blocks - already handled above
 
   return (
     <div
@@ -278,6 +408,21 @@ const SettingsPage: React.FC = () => {
           <h1>{t('settings.title')}</h1>
           <br />
           <p>{t('settings.subtitle')}</p>
+          {error && (
+            <div
+              className="error-message"
+              style={{
+                color: '#dc3545',
+                backgroundColor: '#f8d7da',
+                border: '1px solid #f5c6cb',
+                padding: '0.75rem 1rem',
+                borderRadius: '0.375rem',
+                marginTop: '1rem',
+              }}
+            >
+              {error}
+            </div>
+          )}
         </header>
 
         <div className="settings-content">
@@ -316,26 +461,6 @@ const SettingsPage: React.FC = () => {
                       document.documentElement.lang = languageCode;
                       localStorage.setItem('i18nextLng', languageCode);
                       handleSettingChange('selectedLanguage', languageCode);
-                      // Update the settings in localStorage to keep everything in sync
-                      const savedSettings =
-                        localStorage.getItem('userSettings');
-                      if (savedSettings) {
-                        try {
-                          const settings = JSON.parse(
-                            savedSettings,
-                          ) as Partial<SettingsState>;
-                          const updatedSettings = {
-                            ...settings,
-                            selectedLanguage: languageCode,
-                          };
-                          localStorage.setItem(
-                            'userSettings',
-                            JSON.stringify(updatedSettings),
-                          );
-                        } catch (parseError) {
-                          console.error('Error parsing settings:', parseError);
-                        }
-                      }
                     } catch (err) {
                       console.error('Error changing language:', err);
                     }

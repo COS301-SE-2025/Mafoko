@@ -6,6 +6,7 @@ import { useDarkMode } from '../components/ui/DarkModeComponent';
 import FeedbackForm from '../components/ui/FeedbackForm';
 import { API_ENDPOINTS } from '../config';
 import { FeedbackCreate, FeedbackType, Feedback } from '../types/feedback';
+import { addPendingFeedback } from '../utils/indexedDB';
 import '../styles/FeedbackPage.scss';
 
 interface FormData {
@@ -64,32 +65,71 @@ const FeedbackPage = () => {
 
   const submitFeedback = async (
     feedbackData: FeedbackCreate,
-  ): Promise<void> => {
+  ): Promise<Feedback> => {
     const token = localStorage.getItem('accessToken');
 
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    try {
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
 
-    // Add authorization header if user is logged in
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(API_ENDPOINTS.submitFeedback, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(feedbackData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(
+          `Failed to submit feedback: ${response.status.toString()} ${errorData}`,
+        );
+      }
+
+      return (await response.json()) as Feedback;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      if (
+        errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('ERR_INTERNET_DISCONNECTED') ||
+        errorMessage.includes('ERR_NETWORK') ||
+        !navigator.onLine
+      ) {
+        await addPendingFeedback({
+          id: crypto.randomUUID(),
+          type: feedbackData.type,
+          message: feedbackData.message,
+          name: feedbackData.name,
+          email: feedbackData.email,
+          priority: feedbackData.priority,
+          token: token || undefined,
+          timestamp: Date.now(),
+        });
+
+        // Register background sync
+        if (
+          'serviceWorker' in navigator &&
+          'sync' in window.ServiceWorkerRegistration.prototype
+        ) {
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            await registration.sync.register('sync-feedback');
+          } catch (syncError) {
+            console.error('Failed to register background sync:', syncError);
+          }
+        }
+
+        throw new Error('OFFLINE_QUEUED');
+      }
+
+      // Re-throw other errors
+      throw error;
     }
-
-    const response = await fetch(API_ENDPOINTS.submitFeedback, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(feedbackData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      throw new Error(
-        `Failed to submit feedback: ${response.status.toString()} ${errorData}`,
-      );
-    }
-
-    return response.json() as Promise<Feedback>;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -126,11 +166,30 @@ const FeedbackPage = () => {
       }, 3000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : 'Failed to submit feedback. Please try again.',
-      );
+
+      if (error instanceof Error && error.message === 'OFFLINE_QUEUED') {
+        setSubmitError(
+          "You are offline. Your feedback has been saved and will be submitted when you're back online.",
+        );
+        // Still show success state for offline submissions
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setFormData({
+            name: '',
+            email: '',
+            message: '',
+            type: formData.type,
+          });
+          setSubmitError(null);
+        }, 3000);
+      } else {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to submit feedback. Please try again.',
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }

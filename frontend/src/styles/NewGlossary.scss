@@ -1,3 +1,7 @@
+// Import variables and LeftNav styles from GlossaryPage and LeftNav
+@import './GlossaryPage.scss';
+@import './LeftNav.scss';
+
 /* Spinner animation for glossary loading */
 .glossary-list-spinner {
   text-align: center;
@@ -22,9 +26,6 @@
     transform: rotate(360deg);
   }
 }
-// Import variables and LeftNav styles from GlossaryPage and LeftNav
-@import './GlossaryPage.scss';
-@import './LeftNav.scss';
 
 /* Theme Class Definitions for Dark Mode Support */
 .theme-light {
@@ -153,7 +154,7 @@
 .glossary-list-container {
   width: 100%;
   margin-right: 1rem;
-  margin-top: 0px;
+  margin-top: 30px;
   margin-bottom: 1rem;
   flex: 1;
   display: flex;
@@ -298,6 +299,7 @@
   width: 107%;
   padding: 0 1rem;
   margin-left: -30px;
+  margin-top: 40px;
   //margin-right: 10px;
   background: var(--page-bg, #f5f5f5);
 

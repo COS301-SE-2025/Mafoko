@@ -26,6 +26,13 @@ class FeedbackStatus(str, enum.Enum):
     closed = "closed"
 
 
+class FeedbackPriority(str, enum.Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+    critical = "critical"
+
+
 class Feedback(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True
@@ -43,6 +50,11 @@ class Feedback(Base):
         SaEnum(FeedbackStatus, name="feedback_status_enum"),
         nullable=False,
         default=FeedbackStatus.open,
+    )
+    priority: Mapped[FeedbackPriority] = mapped_column(
+        SaEnum(FeedbackPriority, name="feedback_priority_enum"),
+        nullable=False,
+        default=FeedbackPriority.medium,
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
