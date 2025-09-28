@@ -5,6 +5,22 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  --accent-pink: #f00a50;
+  --accent-yellow: #f2d001;
+  --accent-teal: #00ceaf;
+  --accent-blue: #212431;
+  --accent-white: #ffffff;
+  --background-light: #f5f5f5;
+  --background-dark: #363b4d;
+  --secondary-light: #ffffff;
+  --secondary-dark: #212431;
+  --tertiary-light: #212431;
+  --tertiary-dark: #ffffff;
+  --text-light: #212431;
+  --text-dark: #ffffff;
+}
+
+:root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -228,4 +244,25 @@ button {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+
+  overflow-y: scroll;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: var(--bg-theme);
+  border-radius: 9999px;
 }

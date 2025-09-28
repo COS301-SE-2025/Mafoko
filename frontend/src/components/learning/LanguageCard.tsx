@@ -20,7 +20,8 @@ const LanguageCard: React.FC<LanguageCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1"
+      className="!bg-tir rounded-xl p-6 shadow-sm border border-gray-200 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1"
+      style={{ padding: '10px' }}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={(e) => {
@@ -30,7 +31,7 @@ const LanguageCard: React.FC<LanguageCardProps> = ({
         }
       }}
     >
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-3">
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4"
           style={{ backgroundColor: color }}

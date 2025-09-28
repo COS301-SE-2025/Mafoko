@@ -1,9 +1,28 @@
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 9999px;
+}
+
 .learning-path-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 64px); // Adjust based on your header/footer height
+  min-height: calc(100vh - 64px);
   background-color: var(--bg-color-secondary);
-  margin-left: -277px; /* Move the container 50px to the left */
+  margin-left: -277px;
   width: 1155px;
 
   &.dark-mode {

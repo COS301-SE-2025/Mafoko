@@ -52,6 +52,7 @@ import FeedbackHelp from './pages/help/FeedbackHelp.tsx';
 import DashboardHelp from './pages/help/DashboardHelp.tsx';
 import HomeHelp from './pages/help/HomeHelp.tsx';
 import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
+import { Toaster } from 'sonner';
 
 // Register all Chart.js components once at the application entry point
 ChartJS.register(
@@ -150,6 +151,7 @@ function App() {
         <Route path="/achievements" element={<GamificationPage />} />
         <Route path="/admin/terms" element={<AdminTermPage />} />
       </Routes>
+      <Toaster />
     </div>
   );
 }

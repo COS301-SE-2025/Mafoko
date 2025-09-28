@@ -18,6 +18,8 @@ import { UserData } from '../types/glossaryTypes';
 import { Term } from '../types/terms/types';
 import { addTerm } from '../utils/indexedDB';
 import { refreshAllTermsCache } from '../utils/syncManager';
+import { toast } from 'sonner';
+
 interface TermSchema {
   id: string;
   term: string;
@@ -454,8 +456,12 @@ const ContributorPage: React.FC = () => {
       !selectedDomain ||
       !selectedLanguage ||
       !token
-    )
-      return alert('Please fill in all required fields');
+    ) {
+      toast('Submission Failed', {
+        description: 'Please fill in all required fields.',
+      });
+      return;
+    }
 
     const translationsToSend = selectedTranslations.map((t) => t.id);
     const body: TermApplicationCreate = {
@@ -546,11 +552,12 @@ const ContributorPage: React.FC = () => {
       // After a successful online submission, refresh the main terms list
       await refreshAllTermsCache();
 
-      fetchData(); // This re-fetches the component's own lists
+      fetchData();
       setActiveTab('my');
     } catch (err: any) {
-      console.error(err);
-      alert('Failed to submit term: ' + err.message);
+      toast('Failed to submit term', {
+        description: err.message,
+      });
     }
   };
 
@@ -569,9 +576,10 @@ const ContributorPage: React.FC = () => {
 
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
-      alert(
-        'Your vote has been queued and will be submitted when you are back online.',
-      );
+      toast('Submission Failed', {
+        description:
+          'Your vote has been queued and will be submitted when you are back online.',
+      });
       return;
     }
 
@@ -637,8 +645,10 @@ const ContributorPage: React.FC = () => {
       });
       const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('sync-term-actions');
-      alert('Application queued for deletion.');
-      setCurrentAppId(null); // Reset the ID
+      toast('Application queued for deletion', {
+        description: '',
+      });
+      setCurrentAppId(null);
       return;
     }
 
@@ -649,10 +659,13 @@ const ContributorPage: React.FC = () => {
       );
       if (!response.ok) throw new Error('Failed to delete application');
       fetchData();
-      alert('Application deleted successfully');
+      toast('Delete Success', {
+        description: 'Application deleted successfully',
+      });
     } catch (err: any) {
-      console.error(err);
-      alert('Failed to delete application: ' + err.message);
+      toast('Failed to delete application', {
+        description: err.message,
+      });
       setMySubmissions(originalMySubmissions);
       setRejectedTerms(originalRejectedTerms);
     } finally {
@@ -915,7 +928,7 @@ const ContributorPage: React.FC = () => {
               </div>
               <button
                 onClick={handleSubmitTerm}
-                className="submit-btn"
+                className="submit-btn !bg-teal-500"
                 disabled={
                   !newTerm ||
                   !definition ||

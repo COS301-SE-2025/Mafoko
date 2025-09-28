@@ -17,6 +17,15 @@ import {
   Word,
   LanguageProgress,
 } from '../types/learning';
+import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/ui/select.tsx';
+import { Checkbox } from '../components/ui/checkbox.tsx';
 
 const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -161,7 +170,10 @@ const LearningPathPage: React.FC = () => {
       !modalLanguage ||
       modalSelectedGlossaries.size === 0
     ) {
-      alert('Please fill out all fields and select at least one glossary.');
+      toast('Submission Failed', {
+        description:
+          'Please fill out all fields and select at least one glossary.',
+      });
       return;
     }
     try {
@@ -372,7 +384,7 @@ const LearningPathPage: React.FC = () => {
 
   return (
     <div
-      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'dark-mode' : ''}`}
+      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
     >
       {isMobileMenuOpen && (
         <div
@@ -439,7 +451,7 @@ const LearningPathPage: React.FC = () => {
                   className="level-badge-wrapper"
                   style={{ position: 'relative' }}
                 >
-                  <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm font-medium level-badge">
+                  <span className="px-3 py-1 !bg-teal-500 text-white rounded-full text-sm font-medium level-badge">
                     Level: {getProficiencyLevel(overallProgressPercentage)}
                   </span>
                   <div className="level-tooltip">
@@ -458,7 +470,7 @@ const LearningPathPage: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+                  className="px-4 py-2 bg-yellow-400 text-white rounded-lg hover:bg-yellow-600"
                   onClick={() => {
                     void handleOpenCreateModal();
                   }}
@@ -480,7 +492,7 @@ const LearningPathPage: React.FC = () => {
 
             {currentView === 'words' && flashcardMode && studySession && (
               <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-theme">
                   Card {currentCardIndex + 1}
                 </div>
                 <div className="text-sm text-gray-600">
@@ -543,7 +555,10 @@ const LearningPathPage: React.FC = () => {
                   ← Back to Paths
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                style={{ padding: '20px' }}
+              >
                 {selectedPath.selected_glossaries.map((g) => {
                   const glossaryInfo = {
                     id: g.glossary_name,
@@ -661,55 +676,114 @@ const LearningPathPage: React.FC = () => {
             role="dialog"
             aria-modal="true"
           >
-            <div className="learning-path-modal">
+            <div className="learning-path-modal flex flex-col gap-5 !bg-tir text-theme">
               <h2 className="modal-title">Create a New Learning Path</h2>
-              <input
-                type="text"
-                placeholder="Path Name (e.g., Spanish for Business)"
-                className="modal-input"
-                value={modalPathName}
-                onChange={(e) => {
-                  setModalPathName(e.target.value);
-                }}
-              />
-              <select
-                className="modal-select"
-                value={modalLanguage}
-                onChange={(e) => {
-                  void handleModalLanguageChange(e.target.value);
-                }}
-                aria-label="Select language"
+              <div className="flex flex-col space-y-2 w-[50%] text-left pb-4">
+                <label
+                  htmlFor="pathName"
+                  className="text-sm font-bold text-theme"
+                >
+                  Path Name
+                </label>
+                <input
+                  id="pathName"
+                  type="text"
+                  placeholder=""
+                  className="
+      w-full rounded-lg bg-gray-100 dark:bg-gray-800
+      px-4 py-2 text-sm
+      focus:outline-none focus:ring-2 focus:ring-pink-500
+      placeholder:text-gray-400
+    "
+                  value={modalPathName}
+                  onChange={(e) => {
+                    setModalPathName(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div
+                className="flex flex-col space-y-2 text-left mb-3 mt-3"
+                style={{}}
               >
-                <option value="">-- Select language --</option>
-                {availableLanguages.map((lang) => (
-                  <option key={lang.name} value={lang.name}>
-                    {lang.name}
-                  </option>
-                ))}
-              </select>
-              <div className="modal-glossaries">
-                <label className="modal-label">Choose glossaries</label>
-                {!modalLanguage && (
-                  <div className="modal-hint">
-                    Select a language first to see available glossaries.
-                  </div>
-                )}
-                {modalLanguage && (
-                  <div className="modal-glossary-list">
-                    {modalGlossaries.map((g) => (
-                      <label key={g.id} className="modal-glossary-item">
-                        <input
-                          type="checkbox"
-                          checked={modalSelectedGlossaries.has(g.name)}
-                          onChange={() => {
-                            handleGlossaryToggle(g.name);
-                          }}
-                        />
-                        <span className="glossary-name">{g.name}</span>
-                        <span className="glossary-count">{g.words} words</span>
-                      </label>
+                <label
+                  htmlFor="language"
+                  className="text-md text-theme font-bold"
+                >
+                  Language
+                </label>
+                <p className="!text-xs text-theme">
+                  Select a language to see available glossaries.
+                </p>
+                <Select
+                  value={modalLanguage}
+                  onValueChange={(value) => {
+                    void handleModalLanguageChange(value);
+                  }}
+                >
+                  <SelectTrigger
+                    className="
+      w-full rounded-lg bg-gray-100 dark:bg-gray-800
+      px-4 py-2 text-sm
+      focus:outline-none focus:ring-2 focus:ring-pink-500
+      border-0
+    "
+                  >
+                    <SelectValue placeholder="-- Select language --" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-900 shadow-lg rounded-lg border-0">
+                    {availableLanguages.map((lang) => (
+                      <SelectItem
+                        key={lang.name}
+                        value={lang.name}
+                        className="cursor-pointer px-4 py-2 hover:bg-pink-50 dark:hover:bg-gray-800"
+                      >
+                        {lang.name}
+                      </SelectItem>
                     ))}
-                  </div>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="modal-glossaries ">
+                {modalLanguage && (
+                  <>
+                    <label className="modal-label text-left font-bold">
+                      Choose glossaries
+                    </label>
+                    <div
+                      className="space-y-3"
+                      style={{ paddingBottom: '20px' }}
+                    >
+                      <div
+                        className="space-y-3 max-h-60 overflow-y-scroll pr-2 flex gap-3 flex-col scrollbar-custom"
+                        style={{ paddingBottom: '20px', paddingTop: '20px' }}
+                      >
+                        {modalGlossaries.map((g) => (
+                          <div
+                            key={g.id}
+                            className=" flex items-center justify-between rounded-lg bg-secondary px-4 py-3 shadow-sm transition"
+                            style={{ padding: '8px' }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <Checkbox
+                                checked={modalSelectedGlossaries.has(g.name)}
+                                onCheckedChange={() => {
+                                  handleGlossaryToggle(g.name);
+                                }}
+                              />
+                              <span className="font-medium text-theme">
+                                {g.name}
+                              </span>
+                            </div>
+                            <span className="text-sm text-theme dark:text-gray-400">
+                              {g.words} words
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
               <div className="modal-actions">

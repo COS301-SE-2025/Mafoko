@@ -15,6 +15,8 @@ import {
 } from '../hooks/useProfilePicture';
 import '../styles/Global.scss';
 import '../styles/GamificationPage.scss';
+import { Star } from 'lucide-react';
+import { ContributionGraph } from '../components/ui/ContributionGraph.tsx';
 
 interface UserData {
   uuid?: string;
@@ -24,7 +26,6 @@ interface UserData {
   lastName?: string;
   last_name?: string;
   email?: string;
-  profilePictureUrl?: string;
 }
 
 const ACHIEVEMENT_DEFINITIONS = [
@@ -130,7 +131,37 @@ const getAchievementIconPath = (
 };
 
 const GamificationPage: React.FC = () => {
-  const [isMobile] = useState(window.innerWidth <= 768);
+  const [user] = useState<UserData>(() => {
+    try {
+      const storedUserData = localStorage.getItem('userData');
+      if (storedUserData) {
+        return JSON.parse(storedUserData) as UserData;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
+      /* empty */
+    }
+
+    return {
+      userId: 'mock-user-id',
+      firstName: 'John',
+      lastName: 'Mavito',
+      email: 'john.mavito@example.com',
+    };
+  });
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const { isDarkMode } = useDarkMode();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -145,43 +176,12 @@ const GamificationPage: React.FC = () => {
     },
   );
 
-  const getCurrentUser = () => {
-    try {
-      const storedUserData = localStorage.getItem('userData');
-      if (storedUserData) {
-        const parsed = JSON.parse(storedUserData) as UserData;
-        const firstName = parsed.firstName || parsed.first_name || 'John';
-        const lastName = parsed.lastName || parsed.last_name || 'Mavito';
-
-        return {
-          userId: parsed.uuid || parsed.id || 'mock-user-id',
-          firstName,
-          lastName,
-          email: parsed.email || 'user@example.com',
-        };
-      }
-    } catch (error) {
-      console.error('Error getting current user:', error);
-    }
-
-    return {
-      userId: 'mock-user-id',
-      firstName: 'John',
-      lastName: 'Mavito',
-      email: 'john.mavito@example.com',
-    };
-  };
-
-  const currentUser = getCurrentUser();
-
   const {
     profilePictureUrl,
     loadingProfilePicture,
     clearProfilePictureCache,
     loadProfilePicture,
-  } = useProfilePicture(
-    currentUser.userId !== 'mock-user-id' ? currentUser.userId : undefined,
-  );
+  } = useProfilePicture(user.id !== 'mock-user-id' ? user.id : undefined);
 
   const getUserInitials = (firstName: string, lastName: string) => {
     return `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
@@ -193,7 +193,7 @@ const GamificationPage: React.FC = () => {
 
   useEffect(() => {
     const loadGamificationData = async () => {
-      if (currentUser.userId === 'mock-user-id') {
+      if (user.id === 'mock-user-id') {
         console.log('Mock user detected, skipping real API calls');
         setGamificationState((prev) => ({ ...prev, loading: false }));
         return;
@@ -204,10 +204,10 @@ const GamificationPage: React.FC = () => {
       try {
         const [userLevel, achievements, loginStreak, weeklyGoals] =
           await Promise.all([
-            GamificationService.getUserLevel(currentUser.userId),
-            GamificationService.getUserAchievements(currentUser.userId),
-            GamificationService.getUserLoginStreak(currentUser.userId),
-            GamificationService.getUserWeeklyGoals(currentUser.userId),
+            GamificationService.getUserLevel(user.id || ''),
+            GamificationService.getUserAchievements(user.id || ''),
+            GamificationService.getUserLoginStreak(user.id || ''),
+            GamificationService.getUserWeeklyGoals(user.id || ''),
           ]);
 
         setGamificationState({
@@ -229,7 +229,7 @@ const GamificationPage: React.FC = () => {
     };
 
     void loadGamificationData();
-  }, [currentUser.userId]);
+  }, [user]);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -273,8 +273,7 @@ const GamificationPage: React.FC = () => {
 
   return (
     <div
-      className={isDarkMode ? 'theme-dark' : 'theme-light'}
-      style={{ display: 'flex', minHeight: '100vh', width: '100vw' }}
+      className={`gamification-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobile ? (
         <Navbar />
@@ -291,8 +290,8 @@ const GamificationPage: React.FC = () => {
           width: '100%',
         }}
       >
-        <div className="container" ref={containerRef}>
-          <div className="profile-section">
+        <div className="container text-theme" ref={containerRef}>
+          <div className="profile-section bg-theme text-theme">
             <div className="profile-header">
               <div className="avatar">
                 {loadingProfilePicture ? (
@@ -302,9 +301,9 @@ const GamificationPage: React.FC = () => {
                     src={profilePictureUrl}
                     alt="Profile Picture"
                     onError={() => {
-                      if (currentUser.userId !== 'mock-user-id') {
+                      if (user.id !== 'mock-user-id') {
                         handleProfilePictureError(
-                          currentUser.userId,
+                          user.id || '',
                           clearProfilePictureCache,
                           loadProfilePicture,
                         );
@@ -312,12 +311,12 @@ const GamificationPage: React.FC = () => {
                     }}
                   />
                 ) : (
-                  getUserInitials(currentUser.firstName, currentUser.lastName)
+                  getUserInitials(user.firstName || '', user.lastName || '')
                 )}
               </div>
               <div className="user-info">
                 <div className="username">
-                  {getFullName(currentUser.firstName, currentUser.lastName)}
+                  {getFullName(user.firstName || '', user.lastName || '')}
                 </div>
                 <div className="level-badge">
                   {gamificationState.loading
@@ -328,7 +327,6 @@ const GamificationPage: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className="xp-progress">
               <div className="progress-bar">
                 <div
@@ -363,8 +361,10 @@ const GamificationPage: React.FC = () => {
                 </span>
               </div>
             </div>
-
-            <div className="stats-grid" style={{ marginTop: '20px' }}>
+            <div
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5"
+              style={{ marginTop: '20px' }}
+            >
               <div className="stat-card">
                 <div className="stat-value">
                   {gamificationState.loading
@@ -400,7 +400,59 @@ const GamificationPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="xp-guide-section">
+          <div
+            className="bg-theme h-80 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex flex-col p-10 mb-10 gap-4"
+            style={{ padding: '20px', marginBottom: '30px' }}
+          >
+            <div className="p-3 flex gap-3">
+              <Star className="text-teal-500" />
+              <p className="section-title">Contribution Activity</p>
+            </div>
+            <div>
+              <ContributionGraph user={user} />
+            </div>
+            {!isMobile && (
+              <div className="flex gap-5 flex-row-reverse">
+                <div
+                  className="flex gap-2 text-center pt-3  items-center"
+                  style={{ marginTop: '5px' }}
+                >
+                  <div className={`w-4 h-4 rounded-xs bg-slate-900`}></div>
+                  <div className="text-center">100+ XP</div>
+                </div>
+                <div
+                  className="flex gap-2 text-center pt-3  items-center"
+                  style={{ marginTop: '5px' }}
+                >
+                  <div className={`w-4 h-4 rounded-xs bg-pink-600`}></div>
+                  <div className="text-center">31-100 XP</div>
+                </div>
+                <div
+                  className="flex gap-2 text-center pt-3  items-center"
+                  style={{ marginTop: '5px' }}
+                >
+                  <div className={`w-4 h-4 rounded-xs bg-yellow-300`}></div>
+                  <div className="text-center">11-30 XP</div>
+                </div>
+                <div
+                  className="flex gap-2 text-center pt-3  items-center"
+                  style={{ marginTop: '5px' }}
+                >
+                  <div className={`w-4 h-4 rounded-xs bg-teal-200`}></div>
+                  <div className="text-center">1-10 XP</div>
+                </div>
+                <div
+                  className="flex gap-2 text-center pt-3 items-center"
+                  style={{ marginTop: '5px' }}
+                >
+                  <div className={`w-4 h-4 rounded-xs bg-gray-200`}></div>
+                  <div className="text-center">No Activity</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="xp-guide-section bg-theme text-theme">
             <div className="section-title">
               <svg
                 width="16"
@@ -520,7 +572,7 @@ const GamificationPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="goals-section">
+          <div className="goals-section bg-theme">
             <div className="section-title">
               <svg
                 width="16"
