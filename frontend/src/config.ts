@@ -58,6 +58,10 @@ interface APIEndpoints {
   generateSignedUrl: string;
   generateProfilePictureUploadUrl: string;
   getMyProfilePictureUrl: string;
+  // Settings endpoints
+  getUserPreferences: string;
+  updateUserPreferences: string;
+  resetUserPreferences: string;
   getAll: string;
   updateUserRole: (userId: string) => string;
   ApproveApplicationStatus: (applicationId: string) => string;
@@ -192,6 +196,19 @@ export const API_ENDPOINTS: APIEndpoints = {
   getMyProfilePictureUrl: endpoint(
     AUTH_SERVICE_URL,
     '/api/v1/auth/me/profile-picture',
+  ),
+  // Settings endpoints
+  getUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences',
+  ),
+  updateUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences',
+  ),
+  resetUserPreferences: endpoint(
+    AUTH_SERVICE_URL,
+    '/api/v1/settings/preferences/reset',
   ),
   getAll: endpoint(AUTH_SERVICE_URL, '/api/v1/admin/users'),
   updateUserRole: (userId: string) =>
