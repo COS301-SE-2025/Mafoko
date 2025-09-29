@@ -12,18 +12,18 @@
 ## Project Description
 **Marito** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Marito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
 
-
 ---
-## Project Resources
+## Demo 4 Documentation
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
-*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Srs/Software_Requirement_Document.pdf)
-*  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf) 
-*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/User%20Manual/UserManualv2.pdf)
-*  [Technical Installation Manual](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Technical%20Installation%20Manual/Technical%20Installation%20Manual.pdf)
-*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Coding%20Standards/Coding%20Standards.pdf)
-*  [Testing Policy](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Testing%20Policy/Testing%20Policy.pdf)
-
+*  [Architecture](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Architecture)
+*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Software_Requirement_Document.pdf)
+*  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Architectural_Specifications_v4.pdf)
+*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/UserManualv2.pdf)
+*  [Technical Installation Manual](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Technical%20Installation%20Manual.pdf)
+*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Coding%20Standards.pdf)
+*  [Testing Policy](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Testing%20Policy.pdf)
+*  [Service Contract](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/service_Contract_Marito.pdf)
 ---
 
 ## Git Structure & Branching Strategy
