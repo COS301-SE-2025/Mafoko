@@ -24,6 +24,7 @@
 *  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Coding%20Standards.pdf)
 *  [Testing Policy](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Testing%20Policy.pdf)
 *  [Service Contract](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/service_Contract_Marito.pdf)
+*  [System architecture & deployment - Quality Testing - Technology choices](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Architecture%20requirements%20%26%20Quality%20TestingV6.0.0.pdf)
 ---
 
 ## Git Structure & Branching Strategy
@@ -91,6 +92,7 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>
   </a>
 </p>
+
 
 
 
