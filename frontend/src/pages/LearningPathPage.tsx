@@ -653,7 +653,9 @@ const LearningPathPage: React.FC = () => {
                           <input
                             type="checkbox"
                             checked={modalSelectedGlossaries.has(g.name)}
-                            onChange={() => { handleGlossaryToggle(g.name); }}
+                            onChange={() => {
+                              handleGlossaryToggle(g.name);
+                            }}
                             className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                           />
                           <span className="font-medium">{g.name}</span>
