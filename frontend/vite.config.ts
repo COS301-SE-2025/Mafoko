@@ -29,6 +29,7 @@ export default defineConfig({
           '**/*.{js,css,html,ico,png,svg,jpg,jpeg,woff,woff2,ttf,eot}',
         ], // Files to precache
         // Runtime caching for API calls
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         runtimeCaching: [
           // Glossary service endpoints - Cache first for stable data
           {
@@ -128,6 +129,9 @@ export default defineConfig({
             },
           },
         ],
+      },
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4 MB - ADD THIS SECTION
       },
       manifest: {
         name: 'Marito - Multilingual Lexicons',
