@@ -351,53 +351,103 @@ This section outlines the high-level user goals and core system interactions tha
     \item Rate limiting will be implemented to prevent spam submissions.
 \end{itemize}
 
-\subsection{User Story \#5: Gamification Feature}
+\subsection{User Story \#5: Community Gamification System}
 
-\textbf{ID:} US005 (Marito Project) \\
-\textbf{Title:} Contribution-Based Rewards and Progress Tracking \\
-\textbf{As a:} frequent Marito contributor (e.g., user who submits suggestions or comments), \\
-\textbf{I want:} to earn points, unlock badges, and track my contribution progress, \\
-\textbf{So that:} I feel motivated to participate and can see recognition for my efforts.
+\textbf{Title:} XP-Based Community Engagement and Activity Tracking \\
+\textbf{As a:} contributor using the Marito application, \\
+\textbf{I want:} to earn experience points for my community contributions and visualize my activity progress, \\
+\textbf{So that:} I am motivated to actively participate and can track my engagement over time.
 
 \vspace{1em}
 \textbf{Acceptance Criteria:}
 \begin{enumerate}
-    \item \textbf{Points for Contribution:}
+    \item \textbf{XP Earning System:}
     \begin{itemize}
-        \item \textbf{Given} I submit a suggestion, comment, or report an issue on a term,
-        \item \textbf{Then} I earn points based on the type and quality of the contribution.
-    \end{itemize}
-    
-    \item \textbf{Achievement Unlocking:}
-    \begin{itemize}
-        \item \textbf{Given} I reach a milestone,
-        \item \textbf{Then} I unlock a badge or achievement.
-    \end{itemize}
-
-    \item \textbf{Progress Dashboard:}
-    \begin{itemize}
-        \item \textbf{Given} I navigate to my profile,
-        \item \textbf{Then} I can view my total points, badges earned, and contribution rank.
+        \item \textbf{Given} I perform community actions,
+        \item \textbf{When} I complete specific activities,
+        \item \textbf{Then} I earn XP for the following actions:
+        \begin{itemize}
+            \item Adding a comment
+            \item Adding a new term
+            \item Having my term receive an upvote
+        \end{itemize}
     \end{itemize}
 
-    \item \textbf{Real-Time Feedback:}
+    \item \textbf{Activity Graph Visualization:}
     \begin{itemize}
-        \item \textbf{Given} I perform a gamified action,
-        \item \textbf{Then} I receive instant feedback such as a pop-up message.
+        \item \textbf{Given} I navigate to my profile or dashboard,
+        \item \textbf{When} I view my activity section,
+        \item \textbf{Then} I see a GitHub-style commit graph that displays:
+        \begin{itemize}
+            \item Daily activity squares for the past year
+            \item Color based on XP earned that day
+            \item Tooltip showing exact XP earned on hover
+        \end{itemize}
     \end{itemize}
 
-    \item \textbf{Leveling Up:}
+    \item \textbf{Weekly Activity Goals:}
     \begin{itemize}
-        \item \textbf{Given} I reach predefined thresholds,
-        \item \textbf{Then} my user rank or title updates accordingly.
+        \item \textbf{Given} I want to set engagement targets,
+        \item \textbf{When} I access my goal settings,
+        \item \textbf{Then} I can:
+        \begin{itemize}
+            \item Set weekly goals (e.g., ``Add 3 terms this week'')
+            \item View progress toward current goals
+            \item Earn bonus XP when goals are completed
+            \item Receive notifications about goal progress and completion
+        \end{itemize}
     \end{itemize}
 
-    \item \textbf{Offline Support:}
+    \item \textbf{Goal Achievement Rewards:}
     \begin{itemize}
-        \item \textbf{Given} I contribute while offline,
-        \item \textbf{Then} my contributions and points are synced once I reconnect.
+        \item \textbf{Given} I work toward weekly goals,
+        \item \textbf{When} I complete a weekly goal,
+        \item \textbf{Then} I receive:
+        \begin{itemize}
+            \item Bonus XP for goal completion
+            \item Visual confirmation of achievement
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Upvote-Based XP System:}
+    \begin{itemize}
+        \item \textbf{Given} I have contributed terms to the community,
+        \item \textbf{When} other users upvote my terms,
+        \item \textbf{Then} I automatically earn XP for each upvote received,
+        \item \textbf{And} I receive notifications about the XP earned from community validation.
+    \end{itemize}
+
+    \item \textbf{XP Statistics:}
+    \begin{itemize}
+        \item \textbf{Given} I want to track my overall progress,
+        \item \textbf{When} I view my profile,
+        \item \textbf{Then} I can see:
+        \begin{itemize}
+            \item Total XP accumulated
+            \item XP earned this week/month
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Offline XP Tracking:}
+    \begin{itemize}
+        \item \textbf{Given} I contribute to the community while offline,
+        \item \textbf{When} my internet connection is restored,
+        \item \textbf{Then} all offline contributions are synced,
+        \item \textbf{And} the appropriate XP is awarded retroactively,
+        \item \textbf{And} my activity graph and statistics are updated accordingly.
     \end{itemize}
 \end{enumerate}
+
+\vspace{1em}
+\textbf{Notes / Assumptions:}
+\begin{itemize}
+    \item XP values may need adjustment based on user behavior.
+    \item Weekly goals should be achievable.
+    \item The system should prevent XP farming or abuse.
+    \item Integration with existing community features is present.
+    \item Offline functionality is provided for XP features.
+\end{itemize}
+
 
 \subsection{User Story \#6: UpVote System}
 
@@ -1772,6 +1822,98 @@ text
 \item Language options match the term bank's supported languages.
 \end{itemize}
 
+\subsection{User Story \#33: Learning Paths}
+
+\textbf{ID:} US033 (Marito Project) \\
+\textbf{Title:} Learning Path Management and Study Flow \\
+\textbf{As a:} Learner, Instructor, or Admin, \\
+\textbf{I want:} to discover, create, manage and study curated learning paths built from glossaries, \\
+\textbf{So that:} learners can progress through domain-oriented term sets, track progress and study using flashcards or study lists.
+
+\vspace{1em}
+\textbf{Primary Actors:}
+\begin{itemize}
+    \item Learner (primary): browses, creates paths, studies, and tracks progress.
+\end{itemize}
+
+\vspace{1em}
+\textbf{Scope:} \\
+This story covers the Learning Path user-facing flows: discovery, creation/editing, glossary attachment, study (list + flashcards), progress tracking, and sharing/exporting a path.
+
+\vspace{1em}
+\textbf{Acceptance Criteria:}
+\begin{enumerate}
+    \item \textbf{Create \& View Paths:}
+    \begin{itemize}
+        \item \textbf{Given} I am a Learner,
+        \item \textbf{When} I visit the Learning Paths page,
+        \item \textbf{Then} I should see a list of available paths with title, number of words, and progress indicator (if enrolled).
+        \item \textbf{And} I should be able to open a path to view its details (categories, glossaries attached, and actions).
+    \end{itemize}
+
+    \item \textbf{Create a Learning Path:}
+    \begin{itemize}
+        \item \textbf{Given} I am an authenticated user,
+        \item \textbf{When} I choose to create a new path,
+        \item \textbf{Then} I must provide a title, and attach at least one glossary (existing or imported).
+    \end{itemize}
+
+    \item \textbf{Delete Path:}
+    \begin{itemize}
+        \item \textbf{Given} I am the path owner,
+        \item \textbf{Then} I should be able to change the title, attached glossaries, and order.
+        \item \textbf{When} I delete a path, a confirmation must be presented and enrolled learners' progress data should be archived/handled per policy.
+    \end{itemize}
+
+    \item \textbf{Attach / Remove Glossaries:}
+    \begin{itemize}
+        \item \textbf{Given} I am creating a path,
+        \item \textbf{When} I attach a glossary,
+        \item \textbf{Then} the glossary's terms should be linked to the path and visible in the path detail view.
+        \item Removing a glossary should remove its terms from the path but preserve learner progress metadata for audit.
+    \end{itemize}
+
+    \item \textbf{Study Flows: Study Words and Flashcards:}
+    \begin{itemize}
+        \item \textbf{Given} I am enrolled as a user,
+        \item \textbf{When} I open a glossary or path study view,
+        \item \textbf{Then} I can choose between ``Study Words'' (list + progress per word) or ``Flashcards'' (randomized).
+        \item Selecting an individual word shows its details (definition, translations, example) and the ability to mark mastery or add notes.
+        \item Flashcards should provide a way to mark correct/incorrect and affect progress calculation.
+    \end{itemize}
+
+    \item \textbf{Track Progress:}
+    \begin{itemize}
+        \item \textbf{Given} I study words or use flashcards,
+        \item \textbf{When} I mark words as studied or answer flashcards,
+        \item \textbf{Then} the system should update my per-path and per-glossary progress metrics in near real-time and display them in the path overview.
+    \end{itemize}
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Edge Cases \& Error Handling:}
+\begin{itemize}
+    \item Large glossaries: import should be chunked or background-processed; UI shows progress and completion notifications.
+    \item Conflicting glossary versions: system should detect duplicate glossary IDs and allow merge or versioning.
+\end{itemize}
+
+\vspace{1em}
+\textbf{Notes / Assumptions:}
+\begin{itemize}
+    \item Progress model: tracked per-learner, per-path, and per-glossary using a percentage and a timestamped event log.
+    \item Glossaries are uniquely identified and can be attached to multiple paths.
+    \item UI components (Study Words, Flashcards, Path Editor modal) will reuse existing glossary and flashcard components where possible.
+\end{itemize}
+
+\vspace{1em}
+\textbf{Acceptance Test Ideas:}
+\begin{enumerate}
+    \item Create a path with glossaries, enroll a test learner, mark several words as learned, and verify progress updates on dashboard.
+    \item Import a sample glossary file with mixed valid/invalid entries; verify errors are surfaced and valid terms are attachable.
+    \item Verify enrolled learners can enroll and see progress; verify users without appropriate roles cannot perform restricted actions.
+\end{enumerate}
+
+
 \section{Use Case Diagrams}
 
 This section presents the key use case diagrams developed for the Marito application. Each diagram visualizes the interactions between user roles and the system, based on the user stories defined earlier in this document. These diagrams serve as a visual blueprint for understanding the system's expected behavior.
@@ -1803,7 +1945,7 @@ This section presents the key use case diagrams developed for the Marito applica
 \subsection{Gamification Use Case Diagram}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{GamifictionUseCase.png}
+  \includegraphics[width=0.9\textwidth]{gamification_new.PNG}
   \caption{Gamification Use Case Diagram}
   \label{fig:gamification-use-case}
 \end{figure}
@@ -1864,12 +2006,20 @@ This section presents the key use case diagrams developed for the Marito applica
   \label{fig:workspace-use-case}
 \end{figure}
 
-\subsection{Term Additions and Verification Case Diagram}
+\subsection{Term Additions and Verification Use Case Diagram}
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{TermAdditions.png}
   \caption{Term Additions and Verification Use Case Diagram}
   \label{fig:Term Additions and Verification}
+\end{figure}
+
+\subsection{Learning Path Use Case Diagram}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{learning_path.jpg}
+  \caption{Learning Path Use Case Diagram}
+  \label{fig:Learning Path Use Case Diagram}
 \end{figure}
 
 \subsection{Overview}
@@ -1887,6 +2037,7 @@ The main use cases covered include:
   \item Term Additions and Verification
   \item Feedback System Use Case
   \item Workspace Management Use Case
+  \item Learning Path Use Case
 \end{itemize}
 
 \section{Functional Requirements}
@@ -2235,9 +2386,9 @@ These constraints serve as the foundation for all architectural, design, and imp
 
 
 \section{Domain Model}
-    \href{https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Domain%20Model/domain_model_V1.1.0.jpg}{Domain Model}
+    \href{https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Domain%20Model/domain_model_V1.2.0.jpg}{Domain Model}
 
 \section{Architectural Specifications \& Service Contract}
-    \href{https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf}{Architectural Specifications \& Service Contract}
+    \href{https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf}{Architectural Specifications \& Service Contract}
 
 \end{document}

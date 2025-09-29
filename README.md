@@ -17,12 +17,12 @@
 ## Project Resources
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
-*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/develop/Documentation/Srs/Software_Requirement_Document.pdf)
-*  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf) 
-*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/fix/learning-path-frontend/Documentation/User%20Manual/UserManualv2.pdf)
-* [Technical Installation Manual](https://github.com/COS301-SE-2025/Marito/blob/docs/tech-manual/Documentation/Technical%20Installation%20Manual/Technical%20Installation%20Manual.pdf)
-*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/doc/customization-and-workspace-docs/Documentation/Coding%20Standards/Coding%20Standards.pdf)
-*  [Testing Policy](https://github.com/COS301-SE-2025/Marito/blob/fix/learning-path-frontend/Documentation/Testing%20Policy/Testing%20Policy.pdf)
+*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Srs/Software_Requirement_Document.pdf)
+*  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/System%20Requirements/Architectural_Specifications_v4.pdf) 
+*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/User%20Manual/UserManualv2.pdf)
+*  [Technical Installation Manual](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Technical%20Installation%20Manual/Technical%20Installation%20Manual.pdf)
+*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Coding%20Standards/Coding%20Standards.pdf)
+*  [Testing Policy](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/Testing%20Policy/Testing%20Policy.pdf)
 
 ---
 
