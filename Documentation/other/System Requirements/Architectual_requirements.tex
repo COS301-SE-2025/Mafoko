@@ -1,0 +1,136 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PREAMBLE ---
+\usepackage[margin=1in, landscape]{geometry}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+
+% Define colors and column types
+\definecolor{tablehead}{gray}{0.92}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% --- DOCUMENT START ---
+\begin{document}
+
+\begin{longtable}{L{0.14\textwidth} L{0.2\textwidth} L{0.2\textwidth} L{0.36\textwidth}}
+
+% --- TABLE CAPTION ---
+\caption{Marito Project: Architecture Mapping from Requirements to Implementation} \\
+\toprule 
+
+% --- TABLE HEADER ---
+\rowcolor{tablehead}
+\textbf{Requirement} & \textbf{Architectural Strategies Used} & \textbf{Architectural Pattern Used} & \textbf{Our Specific Implementation (Marito Project)} \\
+\midrule
+\endfirsthead
+
+% This header will repeat on all subsequent pages
+\caption{Marito Project: Architecture Mapping (continued)} \\
+\toprule
+\rowcolor{tablehead}
+\textbf{Requirement} & \textbf{Architectural Strategies Used} & \textbf{Architectural Pattern Used} & \textbf{Our Specific Implementation (Marito Project)} \\
+\midrule
+\endhead
+
+% --- TABLE CONTENT ---
+
+% Row 1: Scalability
+\textbf{Scalability} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Horizontal scale-out
+\end{itemize} &
+Microservices &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Backend:} Services are packaged in \texttt{Docker} containers and deployed to \textbf{Google Cloud Run} for request-based auto-scaling.
+    \item \textbf{Frontend:} Hosted as a static site (e.g., on GitHub Pages or Firebase Hosting), which scales globally for content delivery.
+\end{itemize} \\
+\midrule
+
+% Row 2: Performance
+\textbf{Performance} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Async APIs
+    \item Database Indexing
+\end{itemize} &
+Microservices with Asynchronous APIs &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Backend:} Built with \textbf{FastAPI} using an \texttt{async/await} model for non-blocking I/O, ensuring low-latency responses.
+    \item \textbf{Database:} The backend queries an indexed \textbf{PostgreSQL} database, allowing for highly efficient filtering and sorting of millions of records.
+\end{itemize} \\
+\midrule
+
+% Row 3: Availability
+\textbf{Availability} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Replication
+\end{itemize} &
+Leader-Follower Replication &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Database:} \textbf{Google Cloud SQL} for PostgreSQL can be configured for High Availability (HA) to manage replication and failover automatically.
+    \item \textbf{Services:} \textbf{Google Cloud Run} is a managed service that ensures backend services are reliable and restarted on failure.
+\end{itemize} \\
+\midrule
+
+% Row 4: Usability & Data Integrity
+\textbf{Usability} \& \textbf{Data Integrity} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Real-time UI
+    \item Persistent State
+\end{itemize} &
+Component-Based UI &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Frontend:} A \textbf{React} and \texttt{TypeScript} application follows a component-based pattern to separate UI concerns.
+    \item \textbf{Backend:} The backend uses \textbf{PostgreSQL} as the single source of truth for all terminology and user interaction data, ensuring data integrity.
+\end{itemize} \\
+\midrule
+
+% Row 5: Security
+\textbf{Security} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item TLS \& tokens
+    \item Secure Cloud Storage
+\end{itemize} &
+API Gateway &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Gateway Service:} \textbf{Google API Gateway} serves as the single entry point, handling TLS termination (enforcing HTTPS).
+    \item \textbf{Authentication:} The backend's authentication service manages \textbf{JWT tokens} to secure protected API endpoints.
+    \item \textbf{File Uploads:} User-submitted documents are securely uploaded directly to a private \textbf{Google Cloud Storage} bucket using temporary signed URLs.
+\end{itemize} \\
+\midrule
+
+% Row 6: Offline & Portability
+\textbf{Offline Accessibility} \& \textbf{Portability} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Service workers and caching
+    \item Background Sync
+\end{itemize} &
+Progressive Web App (PWA) &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Frontend:} Built as a PWA with a Service Worker to support offline access. API POST requests are queued using \textbf{Workbox Background Sync} and sent automatically upon reconnection.
+    \item \textbf{Backend:} The entire backend is containerized with \textbf{Docker}, ensuring it is portable and can run consistently in any environment.
+\end{itemize} \\
+\midrule
+
+% Row 7: Maintainability & DevOps
+\textbf{Maintainability} \& \textbf{Deployment} &
+\begin{itemize}[nosep, leftmargin=*]
+    \item Modular design
+    \item CI/CD Automation
+    \item Database Migrations
+\end{itemize} &
+Automated Testing \& Deployment Pipeline &
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textbf{Code Quality:} \textbf{Husky pre-commit hooks} enforce \texttt{Ruff}, \texttt{Black}, and \texttt{Mypy} checks locally inside Docker containers.
+    \item \textbf{CI/CD:} A \textbf{GitHub Actions} workflow automates testing and quality checks for both frontend and backend.
+    \item \textbf{Database Schema:} The backend uses a dedicated container to run \textbf{Alembic} database migrations, ensuring a consistent schema across all environments.
+\end{itemize} \\
+\bottomrule
+
+\end{longtable}
+
+\end{document}
+

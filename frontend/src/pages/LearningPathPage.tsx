@@ -17,6 +17,13 @@ import {
   Word,
   LanguageProgress,
 } from '../types/learning';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/ui/select.tsx';
 
 const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -591,33 +598,43 @@ const LearningPathPage: React.FC = () => {
             aria-modal="true"
           >
             <div
-              className={`learning-path-modal ${isDarkMode ? 'dark-mode' : ''}`}
+              className={`learning-path-modal flex gap-4 flex-col text-left ${isDarkMode ? 'dark-mode' : ''}`}
             >
-              <h2 className="modal-title">Create a New Learning Path</h2>
+              <h2 className="modal-title text-center">
+                Create a New Learning Path
+              </h2>
+
+              <label className="font-bold">Learning Path Name</label>
               <input
                 type="text"
-                placeholder="Path Name (e.g., Spanish for Business)"
+                placeholder="Path Name (e.g. Afrikaans for Business)"
                 className="modal-input"
                 value={modalPathName}
                 onChange={(e) => {
                   setModalPathName(e.target.value);
                 }}
               />
-              <select
-                className={`modal-select ${isDarkMode ? 'dark-mode' : ''}`}
+
+              <label className="font-bold">Language</label>
+              <Select
                 value={modalLanguage}
-                onChange={(e) => {
-                  void handleModalLanguageChange(e.target.value);
+                onValueChange={(value) => {
+                  void handleModalLanguageChange(value);
                 }}
-                aria-label="Select language"
               >
-                <option value="">-- Select language --</option>
-                {availableLanguages.map((lang) => (
-                  <option key={lang.name} value={lang.name}>
-                    {lang.name}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger
+                  className={`modal-select ${isDarkMode ? 'dark-mode' : ''}`}
+                >
+                  <SelectValue placeholder="-- Select language --" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {availableLanguages.map((lang) => (
+                    <SelectItem key={lang.name} value={lang.name}>
+                      {lang.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <div className="modal-glossaries">
                 <label className="modal-label">Choose glossaries</label>
                 {!modalLanguage && (
@@ -626,18 +643,26 @@ const LearningPathPage: React.FC = () => {
                   </div>
                 )}
                 {modalLanguage && (
-                  <div className="modal-glossary-list">
+                  <div className="space-y-2 flex flex-col gap-3">
                     {modalGlossaries.map((g) => (
-                      <label key={g.id} className="modal-glossary-item">
-                        <input
-                          type="checkbox"
-                          checked={modalSelectedGlossaries.has(g.name)}
-                          onChange={() => {
-                            handleGlossaryToggle(g.name);
-                          }}
-                        />
-                        <span className="glossary-name">{g.name}</span>
-                        <span className="glossary-count">{g.words} words</span>
+                      <label
+                        key={g.id}
+                        className="flex items-center justify-between rounded-lg border border-input bg-background px-4 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition"
+                      >
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={modalSelectedGlossaries.has(g.name)}
+                            onChange={() => {
+                              handleGlossaryToggle(g.name);
+                            }}
+                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          />
+                          <span className="font-medium">{g.name}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {g.words} words
+                        </span>
                       </label>
                     ))}
                   </div>

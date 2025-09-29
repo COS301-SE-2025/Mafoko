@@ -19,6 +19,13 @@ import { Term } from '../types/terms/types';
 import { addTerm } from '../utils/indexedDB';
 import { refreshAllTermsCache } from '../utils/syncManager';
 import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/ui/select.tsx';
 
 interface TermSchema {
   id: string;
@@ -781,41 +788,34 @@ const ContributorPage: React.FC = () => {
       <div className="contributor-page-container">
         <div className="contributor-page-content">
           <h1 className="page-title">Term Contributions</h1>
-          <div className="tabs">
-            <button
-              className={activeTab === 'submit' ? 'active-tab' : ''}
-              onClick={() => {
-                setActiveTab('submit');
-                setTermToEditId(null);
-                setSelectedTranslations([]);
-              }}
-            >
-              Submit Term
-            </button>
-            <button
-              className={activeTab === 'edit' ? 'active-tab' : ''}
-              onClick={() => setActiveTab('edit')}
-            >
-              Suggest Edit
-            </button>
-            <button
-              className={activeTab === 'my' ? 'active-tab' : ''}
-              onClick={() => setActiveTab('my')}
-            >
-              My Submissions
-            </button>
-            <button
-              className={activeTab === 'pending' ? 'active-tab' : ''}
-              onClick={() => setActiveTab('pending')}
-            >
-              Pending Terms
-            </button>
-            <button
-              className={activeTab === 'rejected' ? 'active-tab' : ''}
-              onClick={() => setActiveTab('rejected')}
-            >
-              Rejected Terms
-            </button>
+          <div className="tabs flex flex-wrap md:flex-nowrap gap-2 md:gap-4 ">
+            {[
+              { key: 'submit', label: 'Submit Term' },
+              { key: 'edit', label: 'Suggest Edit' },
+              { key: 'my', label: 'My Submissions' },
+              { key: 'pending', label: 'Pending Terms' },
+              { key: 'rejected', label: 'Rejected Terms' },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => {
+                  // @ts-ignore
+                  setActiveTab(tab.key);
+                  if (tab.key === 'submit') {
+                    setTermToEditId(null);
+                    setSelectedTranslations([]);
+                  }
+                }}
+                className={`flex-1 md:flex-none px-4 py-2 text-sm font-medium rounded-t-lg transition 
+        ${
+          activeTab === tab.key
+            ? 'bg-primary text-primary-foreground'
+            : 'hover:bg-accent hover:text-accent-foreground text-muted-foreground'
+        }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           {activeTab === 'submit' && (
@@ -848,33 +848,41 @@ const ContributorPage: React.FC = () => {
                 />
               </div>
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group flex justify-center items-center">
                   <label>Domain*</label>
-                  <select
+                  <Select
                     value={selectedDomain}
-                    onChange={(e) => setSelectedDomain(e.target.value)}
+                    onValueChange={(value) => setSelectedDomain(value)}
                   >
-                    <option value="">Select Domain</option>
-                    {domains.map((d) => (
-                      <option key={d} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Select Domain" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {domains.map((d) => (
+                        <SelectItem key={d} value={d}>
+                          {d}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="form-group">
+                <div className="form-group flex justify-center items-center">
                   <label>Language*</label>
-                  <select
+                  <Select
                     value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    onValueChange={(value) => setSelectedLanguage(value)}
                   >
-                    <option value="">Select Language</option>
-                    {languages.map((l) => (
-                      <option key={l} value={l}>
-                        {l}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {languages.map((l) => (
+                        <SelectItem key={l} value={l}>
+                          {l}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className="translations-section">

@@ -1,0 +1,164 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\titleformat{\section}[block]{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+
+% Code listing style
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Testing Policy Documentation\\\large\textbf{Marito Multilingual Terminology PWA}}
+\author{Team Name: Velox}
+\date{September 7, 2025}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This document outlines the testing policy and procedures for the Marito project. It describes our approach to testing, tools used, and the processes we follow to ensure high-quality software delivery.
+
+\section{Testing Framework}
+
+\subsection{Testing Levels}
+\begin{itemize}
+    \item \textbf{Unit Testing}: Testing individual components and functions
+    \item \textbf{Integration Testing}: Testing interactions between components
+    \item \textbf{End-to-End Testing}: Testing complete user workflows
+    \item \textbf{Performance Testing}: Testing system performance under load
+\end{itemize}
+
+\section{Testing Tools}
+
+\subsection{Frontend Testing}
+\begin{itemize}
+    \item \textbf{Vitest}: Primary testing framework for React components
+    \item \textbf{React Testing Library}: For testing React components in a user-centric way
+    \item \textbf{Cypress}: For end-to-end testing
+\end{itemize}
+
+\subsection{Backend Testing}
+\begin{itemize}
+    \item \textbf{Pytest}: Primary testing framework for Python services
+    \item \textbf{Coverage.py}: For measuring code coverage
+    \item \textbf{Locust}: For load testing
+\end{itemize}
+
+\section{Continuous Integration}
+
+\subsection{GitHub Actions}
+We use GitHub Actions as our CI/CD platform instead of Travis CI for the following reasons:
+\begin{itemize}
+    \item Native integration with GitHub repositories
+    \item More generous free tier for open-source projects
+    \item Better support for matrix builds and parallel testing
+    \item Faster build times and more concurrent jobs
+    \item Built-in secret management
+\end{itemize}
+
+\section{Testing Procedure}
+
+\subsection{Local Testing}
+\begin{enumerate}
+    \item Developers must write tests for new features
+    \item All tests must pass locally before committing
+    \item Run \texttt{npm test} for frontend tests
+    \item Run \texttt{pytest} for backend tests
+\end{enumerate}
+
+\subsection{Automated Testing}
+\begin{enumerate}
+    \item Tests run automatically on pull requests
+    \item Code coverage reports are generated
+    \item Performance tests run nightly
+    \item Security scanning is performed on dependencies
+\end{enumerate}
+
+\section{Test Repository Structure}
+
+\subsection{Frontend Tests}
+Tests are located in the \texttt{frontend/Tests} directory:
+\begin{lstlisting}[frame=single]
+frontend/
+  Tests/
+    components/
+    pages/
+    utils/
+    e2e/
+\end{lstlisting}
+
+\subsection{Backend Tests}
+Each service has its own tests directory:
+\begin{lstlisting}[frame=single]
+backend/
+  service-name/
+    tests/
+      unit/
+      integration/
+      e2e/
+\end{lstlisting}
+
+\section{Testing Standards}
+
+\subsection{Coverage Requirements}
+\begin{itemize}
+    \item Minimum 80\% code coverage for new features
+    \item Critical paths must have 100\% coverage
+    \item Integration tests for all API endpoints
+    \item E2E tests for main user workflows
+\end{itemize}
+
+\subsection{Testing Best Practices}
+\begin{itemize}
+    \item Write tests before implementation (TDD)
+    \item Keep tests focused and atomic
+    \item Use meaningful test descriptions
+    \item Mock external dependencies
+    \item Follow AAA pattern (Arrange-Act-Assert)
+\end{itemize}
+
+\section{Git Repository}
+All test cases and reports can be found in our GitHub repository:
+\begin{itemize}
+    \item Repository: \url{https://github.com/COS301-SE-2025/Marito}
+    \item Test Documentation: \texttt{/Documentation/Testing Policy/}
+    \item CI/CD Workflows: \texttt{/.github/workflows/}
+\end{itemize}
+
+\end{document}
