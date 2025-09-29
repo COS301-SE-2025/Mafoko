@@ -26,6 +26,7 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
   return (
     <div
       className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-sm  cursor-default hover:shadow-md transition-all"
+      style={{ padding: '10px' }}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={(e) => {

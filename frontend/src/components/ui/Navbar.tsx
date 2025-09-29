@@ -36,6 +36,11 @@ const Navbar = () => {
         roles: ['admin', 'contributor', 'linguist'],
       },
       {
+        name: 'Analytics',
+        path: '/analytics',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
         name: t('navigation.dictionary'),
         path: '/search',
         roles: ['admin', 'contributor', 'linguist'],
@@ -53,6 +58,11 @@ const Navbar = () => {
       {
         name: 'Workspace',
         path: '/workspace',
+        roles: ['admin', 'contributor', 'linguist'],
+      },
+      {
+        name: 'Learning Path',
+        path: '/learning-path',
         roles: ['admin', 'contributor', 'linguist'],
       },
       {
@@ -82,7 +92,6 @@ const Navbar = () => {
       },
       { name: 'Linguist Page', path: '/linguist', roles: ['linguist'] },
       { name: 'Admin Page', path: '/admin/terms', roles: ['admin'] },
-      { name: 'Analytics', path: '/analytics', roles: ['admin', 'linguist'] },
     ],
     [t],
   );
@@ -179,25 +188,7 @@ const Navbar = () => {
       <nav
         className={`main-navbar-dropdown ${isMainNavbarOpen ? 'is-open' : 'is-closed'} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       >
-        <div className="main-navbar-content">
-          {/* Logo */}
-          <div className="navbar-brand">
-            <img
-              src="public/DFSI_Logo.png"
-              alt="Marito Logo"
-              className="navbar-logo"
-            />
-            <span className="navbar-title">Marito</span>
-          </div>
-
-          {/* Dark Mode & Avatar */}
-          <div className="navbar-user-controls">
-            <button onClick={toggleDarkMode} type="button">
-              {t('navigation.darkMode')}
-            </button>
-            <div className="navbar-avatar">{avatarInitials}</div>
-          </div>
-        </div>
+        <div className="main-navbar-content"></div>
 
         {/* Mobile Menu */}
         <div
