@@ -114,6 +114,7 @@
   padding-top: 0;
   // Add top padding to ensure search bar is visible after top bar removal
   padding-top: 2.5rem;
+
   @media (max-width: 767px) {
     padding-bottom: 120px;
     padding-top: 1.5rem;
@@ -301,7 +302,6 @@
   margin-left: -30px;
   margin-top: 40px;
   //margin-right: 10px;
-  background: var(--page-bg, #f5f5f5);
 
   @media (max-width: 768px) {
     width: 118%;

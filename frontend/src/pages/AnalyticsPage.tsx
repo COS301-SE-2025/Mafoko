@@ -341,38 +341,38 @@ const AnalyticsPage: React.FC = () => {
               </div>
 
               {/* Language Network Visualization */}
-              <div className="chart-card" style={{ marginBottom: '2rem' }}>
-                <div className="chart-header">
-                  <h2
-                    className="text-xl font-semibold"
-                    style={{ color: 'var(--text-color)', margin: 0 }}
-                  >
-                    <FaProjectDiagram
-                      style={{ display: 'inline', marginRight: '0.5rem' }}
-                    />
-                    {t(
-                      'analytics.languageNetwork.title',
-                      'Language Network Analysis',
-                    )}
-                  </h2>
-                  <p
-                    className="chart-subtitle"
-                    style={{
-                      color: 'var(--text-color-secondary)',
-                      fontSize: '0.875rem',
-                      margin: '0.25rem 0 0 0',
-                    }}
-                  >
-                    {t(
-                      'analytics.languageNetwork.subtitle',
-                      '3D visualization of language connections and term sharing',
-                    )}
-                  </p>
-                </div>
-                <div style={{ marginTop: '1rem', height: '500px' }}>
-                  <LanguageNetwork isDarkMode={isDarkMode} />
-                </div>
-              </div>
+              {/*<div className="chart-card" style={{ marginBottom: '2rem' }}>*/}
+              {/*  <div className="chart-header">*/}
+              {/*    <h2*/}
+              {/*      className="text-xl font-semibold"*/}
+              {/*      style={{ color: 'var(--text-color)', margin: 0 }}*/}
+              {/*    >*/}
+              {/*      <FaProjectDiagram*/}
+              {/*        style={{ display: 'inline', marginRight: '0.5rem' }}*/}
+              {/*      />*/}
+              {/*      {t(*/}
+              {/*        'analytics.languageNetwork.title',*/}
+              {/*        'Language Network Analysis',*/}
+              {/*      )}*/}
+              {/*    </h2>*/}
+              {/*    <p*/}
+              {/*      className="chart-subtitle"*/}
+              {/*      style={{*/}
+              {/*        color: 'var(--text-color-secondary)',*/}
+              {/*        fontSize: '0.875rem',*/}
+              {/*        margin: '0.25rem 0 0 0',*/}
+              {/*      }}*/}
+              {/*    >*/}
+              {/*      {t(*/}
+              {/*        'analytics.languageNetwork.subtitle',*/}
+              {/*        '3D visualization of language connections and term sharing',*/}
+              {/*      )}*/}
+              {/*    </p>*/}
+              {/*  </div>*/}
+              {/*  <div style={{ marginTop: '1rem', height: '500px' }}>*/}
+              {/*    <LanguageNetwork isDarkMode={isDarkMode} />*/}
+              {/*  </div>*/}
+              {/*</div>*/}
 
               <div className="main-charts-section">
                 <div className="charts-left-column">

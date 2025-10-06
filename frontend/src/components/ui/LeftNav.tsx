@@ -3,12 +3,30 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
 import { useDarkMode } from './DarkModeComponent.tsx';
-import { ChevronDown, BookOpen } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config.ts';
 import {
   useProfilePicture,
   handleProfilePictureError,
 } from '../../hooks/useProfilePicture';
+
+import {
+  Settings,
+  Trophy,
+  PenTool,
+  Briefcase,
+  Book,
+  Search,
+  BookOpen,
+  HelpCircle,
+  MessageSquare,
+  BarChart3,
+  Shield,
+  ChevronDown,
+  House,
+  BadgeCheck,
+  Plus,
+} from 'lucide-react';
+
 interface LeftNavProps {
   activeItem: string;
   setActiveItem: (item: string) => void;
@@ -48,146 +66,123 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     loadProfilePicture,
   } = useProfilePicture(userData?.uuid);
   const { isDarkMode } = useDarkMode();
-  const allMenuItems = useMemo(
-    () => [
-      {
-        id: 'dashboard',
-        label: t('navigation.home'),
-        path: '/dashboard',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'main-navigation',
-      },
-      {
-        id: 'analytics',
-        label: 'Dashboard',
-        path: '/analytics',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'main-navigation',
-      },
-      {
-        id: 'search',
-        label: t('navigation.dictionary'),
-        path: '/search',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'main-navigation',
-      },
-      {
-        id: 'glossary',
-        label: t('navigation.glossary'),
-        path: '/glossary',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'main-navigation',
-      },
-      {
-        id: 'achievements',
-        label: 'Achievements',
-        path: '/achievements',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'main-navigation',
-      },
-      {
-        id: 'workspace',
-        label: 'Workspace',
-        path: '/workspace',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'work-tools',
-      },
-      {
-        id: 'learning-path',
-        label: 'Learning Path',
-        path: '/learning-path',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'work-tools',
-        icon: BookOpen,
-      },
-      {
-        id: 'linguist-application',
-        label: t('navigation.linguistApplication'),
-        path: '/linguist-application',
-        roles: ['contributor', 'linguist'],
-        group: 'work-tools',
-      },
-      {
-        id: 'contributor-page',
-        label: 'Contributor',
-        path: '/contributor',
-        roles: ['contributor'],
-        group: 'work-tools',
-      },
-      {
-        id: 'linguist-page',
-        label: 'Linguist',
-        path: '/linguist',
-        roles: ['linguist'],
-        group: 'work-tools',
-      },
-      {
-        id: 'feedback',
-        label: 'Feedback',
-        path: '/feedback',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'support-feedback',
-      },
-      {
-        id: 'help',
-        label: t('navigation.help'),
-        path: '/help',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'support-feedback',
-      },
-      {
-        id: 'settings',
-        label: t('navigation.settings'),
-        path: '/settings',
-        roles: ['admin', 'contributor', 'linguist'],
-        group: 'account',
-      },
-      {
-        id: 'admin-page',
-        label: 'Admin',
-        path: '/admin/terms',
-        roles: ['admin'],
-        group: 'work-tools',
-      },
-    ],
-    [t],
-  );
 
   const menuGroups = useMemo(
     () => [
       {
         id: 'main-navigation',
         label: 'Main Navigation',
-        items: allMenuItems.filter(
-          (item) =>
-            item.group === 'main-navigation' && item.roles.includes(userRole),
-        ),
+        items: [
+          {
+            id: 'dashboard',
+            label: t('navigation.home'),
+            path: '/dashboard',
+            icon: House,
+          },
+          {
+            id: 'analytics',
+            label: 'Dashboard',
+            path: '/analytics',
+            icon: BarChart3,
+          },
+        ],
       },
       {
-        id: 'work-tools',
-        label: 'Work & Tools',
-        items: allMenuItems.filter(
-          (item) =>
-            item.group === 'work-tools' && item.roles.includes(userRole),
-        ),
+        id: 'workspace-tools',
+        label: 'Workspace & Tools',
+        items: [
+          {
+            id: 'workspace',
+            label: 'Workspace',
+            path: '/workspace',
+            icon: Briefcase,
+          },
+          {
+            id: 'glossary',
+            label: t('navigation.glossary'),
+            path: '/glossary',
+            icon: Book,
+          },
+          {
+            id: 'search',
+            label: t('navigation.dictionary'),
+            path: '/search',
+            icon: Search,
+          },
+          {
+            id: 'learning-path',
+            label: 'Learning Paths',
+            path: '/learning-path',
+            icon: BookOpen,
+          },
+          {
+            id: 'contributor-page',
+            label: 'Term Additions',
+            path: '/contributor',
+            icon: Plus,
+          },
+          {
+            id: 'linguist-page',
+            label: 'Linguist',
+            path: '/linguist',
+            icon: BadgeCheck,
+          },
+          ...(userRole === 'admin'
+            ? [
+                {
+                  id: 'admin-page',
+                  label: 'Admin',
+                  path: '/admin/terms',
+                  icon: Shield,
+                },
+              ]
+            : []),
+        ],
+      },
+      {
+        id: 'profile-account',
+        label: 'Profile & Account',
+        items: [
+          {
+            id: 'settings',
+            label: t('navigation.settings'),
+            path: '/settings',
+            icon: Settings,
+          },
+          {
+            id: 'achievements',
+            label: 'Achievements',
+            path: '/achievements',
+            icon: Trophy,
+          },
+          {
+            id: 'linguist-application',
+            label: t('navigation.linguistApplication'),
+            path: '/linguist-application',
+            icon: PenTool,
+          },
+        ],
       },
       {
         id: 'support-feedback',
         label: 'Support & Feedback',
-        items: allMenuItems.filter(
-          (item) =>
-            item.group === 'support-feedback' && item.roles.includes(userRole),
-        ),
-      },
-      {
-        id: 'account',
-        label: 'Account',
-        items: allMenuItems.filter(
-          (item) => item.group === 'account' && item.roles.includes(userRole),
-        ),
+        items: [
+          {
+            id: 'help',
+            label: t('navigation.help'),
+            path: '/help',
+            icon: HelpCircle,
+          },
+          {
+            id: 'feedback',
+            label: 'Feedback',
+            path: '/feedback',
+            icon: MessageSquare,
+          },
+        ],
       },
     ],
-    [allMenuItems, userRole],
+    [t, userRole],
   );
 
   const adminSubmenuItems = [
@@ -260,6 +255,18 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     void fetchUserRole();
   }, []);
 
+  useEffect(() => {
+    const parentGroup = menuGroups.find((group) =>
+      group.items.some((item) => item.id === activeItem),
+    );
+
+    setExpandedGroups(() => {
+      const newSet = new Set<string>();
+      if (parentGroup) newSet.add(parentGroup.id); // only expand current section
+      return newSet;
+    });
+  }, [activeItem, menuGroups]);
+
   const handleItemClick = (itemId: string, path: string) => {
     setActiveItem(itemId);
     void navigate(path);
@@ -290,7 +297,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     <div className={`left-nav ${isDarkMode ? 'dark-mode' : ''}`}>
       {/* Header */}
       <div className="left-nav-header">
-        <div className="left-nav-title-section">
+        <div className="left-nav-atitle-section">
           <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
             Marito
           </h2>
@@ -323,10 +330,43 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
                 {group.items.map((item) => (
                   <div
                     key={item.id}
-                    className={`left-nav-menu-item ${activeItem === item.id ? 'active' : ''}`}
                     onClick={() => handleItemClick(item.id, item.path)}
+                    className={`
+    flex items-center gap-3 cursor-pointer px-4 py-2 transition-colors duration-150
+    border-l-[3px] border-transparent
+    hover:bg-[#f00a50]/10 hover:border-[#f00a50]
+    dark:hover:bg-[#f00a50]/20 dark:hover:border-[#f00a50]
+    ${
+      activeItem === item.id
+        ? 'bg-[#f00a50]/10 border-l-[3px] border-l-[#f00a50]' +
+          ' text-[#f00a50] font-semibold'
+        : ''
+    }
+  `}
                   >
-                    <span className="left-nav-menu-label">{item.label}</span>
+                    {item.icon && (
+                      <item.icon
+                        size={18}
+                        className={`${
+                          activeItem === item.id
+                            ? 'text-[#f00a50]'
+                            : isDarkMode
+                              ? 'text-zinc-400'
+                              : 'text-zinc-600'
+                        }`}
+                      />
+                    )}
+                    <span
+                      className={`${
+                        activeItem === item.id
+                          ? 'text-[#f00a50]'
+                          : isDarkMode
+                            ? 'text-zinc-400'
+                            : 'text-zinc-600'
+                      }`}
+                    >
+                      {item.label}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -366,10 +406,9 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         )}
       </nav>
 
-      {/* Profile Section */}
       {userData && (
         <div className="left-nav-footer">
-          <div className="profile-section">
+          <div className="flex flex-row gap-5 text-left">
             <div className="profile-info">
               <div className="profile-avatar">
                 {loadingProfilePicture ? (
@@ -401,7 +440,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
                 >
                   {userData.firstName} {userData.lastName}
                 </h3>
-                <p>Email: {userData.email}</p>
+                <p>{userData.email}</p>
               </div>
             </div>
           </div>

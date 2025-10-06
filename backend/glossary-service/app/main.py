@@ -5,14 +5,18 @@ from app.api.v1.endpoints import glossary
 
 app = FastAPI(title="Marito Search Service")
 
-if settings.BACKEND_CORS_ORIGINS_LIST:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS_LIST],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins, 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(glossary.router, prefix="/api/v1/glossary", tags=["Glossary"])
 

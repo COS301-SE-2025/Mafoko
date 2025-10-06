@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { ArrowLeft } from 'lucide-react';
 
 interface GlossaryHeaderProps {
@@ -16,163 +15,63 @@ const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
   onBack,
 }) => (
   <div
-    className="terms-list-header"
-    style={{
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      background: 'var(--header-background)',
-      color: 'var(--header-text)',
-      padding: '1rem 0',
-      boxSizing: 'border-box',
-    }}
+    className="
+      w-full flex flex-col items-center
+      bg-[var(--header-background)] text-[var(--header-text)]
+      py-4 md:py-5
+    "
   >
     <div
-      className="header-content"
-      style={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        flexWrap: 'wrap',
-        minHeight: '56px',
-        padding: '0 1rem',
-      }}
+      className="
+        w-full flex items-center justify-center relative flex-wrap
+        min-h-[56px] px-4 md:px-6
+      "
     >
-      {/* Back Button (absolute left) */}
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 2,
-        }}
-      >
+      {/* Back Button */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20">
         <button
           type="button"
           onClick={onBack}
-          className="back-btn"
-          style={{
-            background: 'var(--return-button-bg)',
-            border: '1px solid var(--glossary-border-color)',
-            borderRadius: '0.5rem',
-            padding: '0.5rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s ease',
-            minWidth: 36,
-            minHeight: 36,
-          }}
+          className="
+            flex items-center justify-center
+            bg-[var(--return-button-bg)] border border-[var(--glossary-border-color)]
+            rounded-md p-2 min-w-[36px] min-h-[36px]
+            transition-all duration-200 hover:opacity-90
+          "
         >
           <ArrowLeft
-            style={{
-              color: 'var(--return-button-icon)',
-              width: 22,
-              height: 22,
-            }}
+            className="w-[22px] h-[22px]"
+            style={{ color: 'var(--return-button-icon)' }}
           />
         </button>
       </div>
-      {/* Centered Title/Description */}
+
+      {/* Title and Description */}
       <div
-        style={{
-          textAlign: 'center',
-          flex: 1,
-          minWidth: 0,
-          padding: '0 0.5rem',
-        }}
+        className="flex-1 text-center min-w-0 px-2"
+        style={{ padding: '30px' }}
       >
         <h1
-          className="header-title"
-          style={{
-            margin: 0,
-            fontSize: '1.35rem',
-            fontWeight: 700,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            maxWidth: '100vw',
-          }}
+          className="
+            m-0 text-[1.35rem] font-bold truncate max-w-full
+            md:text-[1.4rem]
+          "
         >
           {title}
         </h1>
         {description && (
           <p
-            className="header-desc"
-            style={{
-              fontSize: '0.98rem',
-              margin: '0.2rem 0 0 0',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              maxWidth: '100vw',
-            }}
+            className="
+              text-[0.98rem] mt-[0.2rem] truncate max-w-full
+              md:text-base
+            "
           >
             {description}
           </p>
         )}
       </div>
-      {/* Actions (absolute right) */}
-      <div
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          zIndex: 2,
-        }}
-      >
-        {countText && (
-          <div
-            className="header-count"
-            style={{
-              marginRight: '1.5rem',
-              fontSize: '0.98rem',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: '40vw',
-            }}
-          >
-            {countText}
-          </div>
-        )}
-      </div>
-      {/* Mobile responsive tweaks */}
-      <style>{`
-    @media (max-width: 600px) {
-      .terms-list-header {
-        padding: 0.5rem 0 !important;
-      }
-      .header-content {
-        padding: 0 0.2rem !important;
-        min-height: 44px !important;
-      }
-      .header-title {
-        font-size: 1.05rem !important;
-      }
-      .header-desc {
-        font-size: 0.85rem !important;
-      }
-      .header-count {
-        font-size: 0.85rem !important;
-        margin-right: 0.5rem !important;
-      }
-      .back-btn {
-        min-width: 28px !important;
-        min-height: 28px !important;
-        padding: 0.25rem !important;
-      }
-    }
-  `}</style>
+
+      {/* Count Text */}
     </div>
   </div>
 );

@@ -84,6 +84,8 @@ interface UserData {
   lastName: string;
   email?: string;
   profilePictureUrl?: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 interface Letter {
@@ -197,7 +199,7 @@ const DashboardPage: React.FC = () => {
   const alphabet = useMemo(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), []);
 
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [avatarInitials, setAvatarInitials] = useState<string>('U');
+  const [avatarInitials, setAvatarInitials] = useState<string>('');
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
     null,
@@ -311,12 +313,12 @@ const DashboardPage: React.FC = () => {
         try {
           const parsedData = JSON.parse(storedUserDataString) as UserData;
           setUserData(parsedData);
-          if (parsedData.firstName && parsedData.lastName) {
+          if (parsedData.first_name && parsedData.last_name) {
             setAvatarInitials(
-              `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
+              `${parsedData.first_name.charAt(0)}${parsedData.last_name.charAt(0)}`.toUpperCase(),
             );
-          } else if (parsedData.firstName) {
-            setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
+          } else if (parsedData.first_name) {
+            setAvatarInitials(parsedData.first_name.charAt(0).toUpperCase());
           }
 
           // Always try to load profile picture since localStorage might not have the latest data
@@ -355,9 +357,14 @@ const DashboardPage: React.FC = () => {
               profilePictureUrl: apiData.profile_pic_url,
             };
             setUserData(newUserData);
-            setAvatarInitials(
-              `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
-            );
+
+            if (newUserData.first_name && newUserData.last_name) {
+              setAvatarInitials(
+                `${newUserData.first_name.charAt(0)}${newUserData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else {
+              setAvatarInitials('');
+            }
 
             // Cache the fresh user data
             const cacheData: UserProfileCache = {
@@ -389,9 +396,13 @@ const DashboardPage: React.FC = () => {
                 profilePictureUrl: cachedProfile.userData.profile_pic_url,
               };
               setUserData(userData);
-              setAvatarInitials(
-                `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
-              );
+              if (userData.first_name && userData.last_name) {
+                setAvatarInitials(
+                  `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+                );
+              } else {
+                setAvatarInitials('');
+              }
             } else {
               void navigate('/login');
             }
@@ -413,9 +424,13 @@ const DashboardPage: React.FC = () => {
               profilePictureUrl: cachedProfile.userData.profile_pic_url,
             };
             setUserData(userData);
-            setAvatarInitials(
-              `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
-            );
+            if (userData.first_name && userData.last_name) {
+              setAvatarInitials(
+                `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else {
+              setAvatarInitials('');
+            }
           } else {
             localStorage.removeItem('accessToken'); // Token might be invalid
             localStorage.removeItem('userData');
@@ -437,9 +452,13 @@ const DashboardPage: React.FC = () => {
             profilePictureUrl: cachedProfile.userData.profile_pic_url,
           };
           setUserData(userData);
-          setAvatarInitials(
-            `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
-          );
+          if (userData.first_name && userData.last_name) {
+            setAvatarInitials(
+              `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+            );
+          } else {
+            setAvatarInitials('');
+          }
         } else {
           void navigate('/login'); // Fallback to login on critical error
         }
@@ -707,7 +726,7 @@ const DashboardPage: React.FC = () => {
               {t('dashboard.loadingProfile')}
             </div>
           ) : (
-            <div className="profile-section">
+            <div className="shadow-md rounded-md p-4 flex flex-row gap-7 bg-theme">
               <div className="profile-info">
                 <div className="profile-avatar">
                   {loadingProfilePicture ? (
@@ -744,7 +763,7 @@ const DashboardPage: React.FC = () => {
                     title={t('dashboard.goToProfile')}
                   >
                     {userData
-                      ? `${userData.firstName} ${userData.lastName}`
+                      ? `${userData.first_name || ''} ${userData.last_name || ''}`
                       : t('dashboard.userName')}
                   </h3>
                   <p>

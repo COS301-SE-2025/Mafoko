@@ -13,8 +13,8 @@ export default defineConfig({
   },
   base: '/Marito/',
   plugins: [
-    react(),
     tailwindcss(),
+    react(),
     VitePWA({
       registerType: 'autoUpdate', // Automatically update the PWA when a new version is available
       strategies: 'injectManifest',
