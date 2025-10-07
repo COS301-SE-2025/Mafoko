@@ -8,7 +8,6 @@ import {
   FileType,
   Filter,
   WifiOff,
-  Check,
   ChevronRight,
   ChevronLeft,
 } from 'lucide-react';
@@ -23,17 +22,6 @@ import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { cachingService } from '../utils/cachingService';
 import '../styles/NewGlossary.scss';
 import { GlossaryList } from '../components/ui/GlossaryList.tsx';
-
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '../components/ui/select';
-
-import { Badge } from '../components/ui/badge';
-import { Button } from '../components/ui/button';
 
 interface Term {
   id: number;
@@ -77,15 +65,6 @@ const GlossaryApp = () => {
     [],
   );
   const [showExportPopup, setShowExportPopup] = useState(false);
-  const [expandedTermIds, setExpandedTermIds] = useState<Set<number>>(
-    new Set(),
-  );
-  const [termTranslations, setTermTranslations] = useState<
-    Record<string, { [lang: string]: string }>
-  >({});
-  const [loadingTranslations, setLoadingTranslations] = useState<Set<string>>(
-    new Set(),
-  );
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalTerms, setTotalTerms] = useState(0);
@@ -151,18 +130,10 @@ const GlossaryApp = () => {
   useEffect(() => {
     const state = location.state as { selectedGlossaryName?: string } | null;
     if (state?.selectedGlossaryName && glossaries.length > 0) {
-      console.log(
-        'NAVIGATION STATE - Looking for glossary:',
-        state.selectedGlossaryName,
-      );
       const targetGlossary = glossaries.find(
         (g) => g.name === state.selectedGlossaryName,
       );
       if (targetGlossary) {
-        console.log(
-          'NAVIGATION STATE - Found glossary, selecting:',
-          targetGlossary,
-        );
         setSelectedGlossary(targetGlossary);
         // Clear the navigation state to prevent re-selection on subsequent renders
         window.history.replaceState(null, '', location.pathname);
@@ -173,8 +144,6 @@ const GlossaryApp = () => {
   // Handle URL parameter for direct category navigation
   useEffect(() => {
     if (category && glossaries.length > 0) {
-      console.log('URL PARAMETER - Looking for glossary:', category);
-
       // Clean and normalize the category from URL
       const cleanCategory = category
         .replace(/-+/g, ' ') // Replace hyphens with spaces
@@ -207,16 +176,7 @@ const GlossaryApp = () => {
       }
 
       if (targetGlossary) {
-        console.log(
-          'URL PARAMETER - Found glossary, selecting:',
-          targetGlossary,
-        );
         setSelectedGlossary(targetGlossary);
-      } else {
-        console.log(
-          'URL PARAMETER - No matching glossary found for:',
-          category,
-        );
       }
     }
   }, [category, glossaries]);
@@ -357,10 +317,6 @@ const GlossaryApp = () => {
         );
 
         setBookmarkedCategory(isCurrentGlossaryBookmarked);
-        console.log(
-          `Glossary ${selectedGlossary.name} bookmark status: ${isCurrentGlossaryBookmarked.toString()}`,
-        );
-        console.log(`All bookmarked glossaries:`, bookmarkedGlossaryNames);
       } catch (error) {
         console.error('Error checking bookmark status:', error);
         setBookmarkedCategory(false);
@@ -379,16 +335,13 @@ const GlossaryApp = () => {
     glossary: Glossary | null = selectedGlossary,
   ) => {
     if (!glossary) {
-
       showError('No glossary selected!');
       return false;
     }
 
     const token = localStorage.getItem('accessToken');
 
-
     if (!token) {
-
       showError('Please log in to bookmark glossaries.');
       return false;
     }
@@ -402,7 +355,6 @@ const GlossaryApp = () => {
     try {
       // Check current bookmark status for this specific glossary
       const currentlyBookmarked = bookmarkedGlossaries.includes(glossary.name);
-
 
       // Update UI optimistically
       if (selectedGlossary?.name === glossary.name) {
@@ -455,8 +407,8 @@ const GlossaryApp = () => {
       }
 
       return success;
-    } catch (error) {
-
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       showError('Bookmark operation failed');
 
       // Revert optimistic update on failure
@@ -484,31 +436,8 @@ const GlossaryApp = () => {
     }
   }, [selectedGlossary]);
 
-  // Filter terms based on search (now handled by API, but kept for fallback)
   const filteredTerms = terms;
 
-  // Helper function to fetch translations for a specific term
-  const fetchTranslationsForTerm = async (
-    termId: string,
-  ): Promise<{ [lang: string]: string }> => {
-    try {
-      setLoadingTranslations((prev) => new Set(prev).add(termId));
-
-      const response = await cachingService.getTermTranslations(termId);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching translations for term ${termId}:`, error);
-      return {};
-    } finally {
-      setLoadingTranslations((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(termId);
-        return newSet;
-      });
-    }
-  };
-
-  // Helper function to get all terms for export
   const getAllTermsForExport = async (): Promise<Term[]> => {
     if (!selectedGlossary) {
       return filteredTerms;
@@ -579,15 +508,9 @@ const GlossaryApp = () => {
     return filteredTerms;
   };
 
-  const toggleLanguage = (lang: string) => {
-    setSelectedLanguages((prev) =>
-      prev.includes(lang) ? prev.filter((l) => l !== lang) : [...prev, lang],
-    );
-  };
-
   return (
     <div
-      className={`dashboard-container${isMobileMenuOpen ? ' mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`dashboard-container !bg-[var(--bg-first)] ${isMobileMenuOpen ? ' mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {/* Offline Status Indicator */}
       {networkStatus.isOffline && (
@@ -638,7 +561,7 @@ const GlossaryApp = () => {
       )}
 
       <div
-        className="main-content"
+        className="main-content !bg-[var(--bg-first)]"
         style={{
           paddingTop: networkStatus.isOffline
             ? fromCache
@@ -650,7 +573,7 @@ const GlossaryApp = () => {
           transition: 'padding-top 0.3s ease',
         }}
       >
-        <div className="glossary-content">
+        <div className="glossary-content !bg-[var(--bg-first)]">
           {selectedGlossary ? (
             // Terms List View
             <div
@@ -687,7 +610,9 @@ const GlossaryApp = () => {
                     type="text"
                     placeholder="Search terms..."
                     value={termSearch}
-                    onChange={(e) => setTermSearch(e.target.value)}
+                    onChange={(e) => {
+                      setTermSearch(e.target.value);
+                    }}
                     className="flex-1 bg-transparent text-[var(--text-theme)] placeholder:text-[var(--text-theme)] placeholder:opacity-50 focus:outline-none text-sm sm:text-base"
                     autoComplete="off"
                   />
@@ -882,64 +807,42 @@ const GlossaryApp = () => {
                   </div>
                 ) : (
                   <div
+                    className="grid lg:grid-cols-2 md:grid-cols-1 gap-20"
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '1.5rem',
+                      paddingLeft: '10px',
+                      paddingRight: '10px',
                     }}
                   >
                     {filteredTerms
                       .slice()
-                      .sort((a, b) => a.language.localeCompare(b.language || "", undefined, { sensitivity: "base" }))
-                      .map((term) => {
-                      const isExpanded = expandedTermIds.has(term.id);
-                      return (
+                      .sort((a, b) =>
+                        (a.language || '').localeCompare(
+                          b.language || '',
+                          undefined,
+                          {
+                            sensitivity: 'base',
+                          },
+                        ),
+                      )
+                      .map((term) => (
                         <div
                           key={term.id}
                           style={{
-                            display: 'flex',
-                            maxWidth: 900,
-                            margin: '0 auto',
                             width: '100%',
+                            maxWidth: '600px',
+                            margin: '0 auto',
                           }}
                         >
                           <GlossaryTermCard
                             term={{
-                              ...term,
-                              translations:
-                                termTranslations[term.id.toString()] ?? {},
-                            }}
-                            isExpanded={isExpanded}
-                            isLoadingTranslations={loadingTranslations.has(
-                              term.id.toString(),
-                            )}
-                            onToggleExpand={(id: number) => {
-                              const termIdStr = id.toString();
-                              setExpandedTermIds((prev) => {
-                                const newSet = new Set(prev);
-                                if (newSet.has(id)) {
-                                  newSet.delete(id);
-                                } else {
-                                  newSet.add(id);
-                                  // Fetch translations when expanding if not already cached
-                                  if (!(termIdStr in termTranslations)) {
-                                    void fetchTranslationsForTerm(
-                                      termIdStr,
-                                    ).then((translations) => {
-                                      setTermTranslations((prev) => ({
-                                        ...prev,
-                                        [termIdStr]: translations,
-                                      }));
-                                    });
-                                  }
-                                }
-                                return newSet;
-                              });
+                              id: term.id.toString(),
+                              term: term.term,
+                              definition: term.definition,
+                              language: term.language,
                             }}
                           />
                         </div>
-                      );
-                    })}
+                      ))}
                   </div>
                 )}
               </div>
@@ -947,7 +850,7 @@ const GlossaryApp = () => {
               {totalTerms > termsPerPage && (
                 <div
                   className="flex items-center justify-center gap-6 py-6 hover:!text-teal-500"
-                  style={{ paddingBottom: '30px', paddingTop: "30px" }}
+                  style={{ paddingBottom: '30px', paddingTop: '30px' }}
                 >
                   {/* Previous Button */}
                   <button
@@ -1088,7 +991,9 @@ const GlossaryApp = () => {
               glossarySearch={glossarySearch}
               setGlossarySearch={setGlossarySearch}
               bookmarkedGlossaries={bookmarkedGlossaries}
-              handleBookmarkGlossary={handleBookmarkGlossary}
+              handleBookmarkGlossary={(glossary) =>
+                void handleBookmarkGlossary(glossary)
+              }
               setSelected={setSelectedGlossary}
               onView={(g) => {
                 setSelectedGlossary(g);

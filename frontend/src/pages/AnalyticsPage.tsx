@@ -2,16 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import HorizontalBarChart from '../components/data/HorizontalBarChart';
 import type { TermData } from '../components/data/HorizontalBarChart';
-import {
-  FaGlobe,
-  FaDatabase,
-  FaLanguage,
-  FaProjectDiagram,
-} from 'react-icons/fa';
+import { FaGlobe, FaDatabase, FaLanguage } from 'react-icons/fa';
 import StatCard from '../components/data/StatCard';
 import PieChart from '../components/data/PieChart';
 import Histogram from '../components/data/Histogram';
-import LanguageNetwork from '../components/data/LanguageNetwork';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar.tsx';
 import { API_ENDPOINTS } from '../config';

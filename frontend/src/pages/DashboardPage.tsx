@@ -750,12 +750,11 @@ const DashboardPage: React.FC = () => {
                     avatarInitials
                   )}
                 </div>
-                <div className="profile-details">
+                <div className="profile-details text-left">
                   <h3
                     style={{
                       color: isDarkMode ? '#f0f0f0' : '#333333',
                       cursor: 'pointer',
-                      textDecoration: 'underline',
                     }}
                     onClick={() => {
                       void navigate('/profile');
@@ -766,10 +765,7 @@ const DashboardPage: React.FC = () => {
                       ? `${userData.first_name || ''} ${userData.last_name || ''}`
                       : t('dashboard.userName')}
                   </h3>
-                  <p>
-                    {t('dashboard.userEmail')}:{' '}
-                    {userData ? userData.email || 'N/A' : 'N/A'}
-                  </p>
+                  <p>{userData ? userData.email || 'N/A' : 'N/A'}</p>
                 </div>
               </div>
             </div>

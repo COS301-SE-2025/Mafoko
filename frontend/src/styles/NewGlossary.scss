@@ -86,7 +86,7 @@
   min-height: 100vh;
   display: flex;
   width: 100%;
-  background-color: var(--bg-first);
+  background-color: var(--bg-secondary) !important;
   color: var(--text-theme);
 }
 .theme-dark .dashboard-container,

@@ -21,12 +21,12 @@ interface GlossaryCardProps {
 }
 
 export default function GlossaryCard({
-                                       glossary,
-                                       onView,
-                                       onExport,
-                                       onBookmark,
-                                       isBookmarked: initialBookmarked = false,
-                                     }: GlossaryCardProps) {
+  glossary,
+  onView,
+  onExport,
+  onBookmark,
+  isBookmarked: initialBookmarked = false,
+}: GlossaryCardProps) {
   // use glossary name to pick correct mock icon/description
   const { icon: Icon, description } = glossaryMap[glossary.name] ?? {
     icon: null,
@@ -110,10 +110,10 @@ export default function GlossaryCard({
           absolute -top-4 left-0 right-0 bottom-0 rounded-2xl
           transition-colors duration-300
           ${
-          isDarkMode
-            ? 'bg-teal-900/40 group-hover:bg-teal-800/60'
-            : 'bg-teal-100 group-hover:bg-teal-200'
-        }
+            isDarkMode
+              ? 'bg-teal-900/40 group-hover:bg-teal-800/60'
+              : 'bg-teal-100 group-hover:bg-teal-200'
+          }
           z-0
         `}
       />
@@ -123,10 +123,10 @@ export default function GlossaryCard({
           relative z-10 rounded-2xl border shadow-md transition-all duration-300
           p-5 flex flex-col justify-between h-[220px]
           ${
-          isDarkMode
-            ? 'bg-[#212431FF] border-gray-800 group-hover:border-teal-300'
-            : 'bg-white border-gray-200 group-hover:border-teal-300'
-        }
+            isDarkMode
+              ? 'bg-[#212532FF] border-gray-800 group-hover:border-teal-300'
+              : 'bg-white border-gray-200 group-hover:border-teal-300'
+          }
         `}
         style={{ padding: '15px' }}
       >
@@ -153,10 +153,10 @@ export default function GlossaryCard({
             className={`
               w-[15] h-[15] flex items-center justify-center rounded-full
               ${
-              isBookmarked
-                ? 'bg-yellow-400 hover:bg-yellow-300'
-                : 'bg-teal-400 hover:bg-teal-300'
-            }
+                isBookmarked
+                  ? 'bg-yellow-400 hover:bg-yellow-300'
+                  : 'bg-teal-400 hover:bg-teal-300'
+              }
               transition-colors p-0
             `}
             title={isBookmarked ? 'Unbookmark glossary' : 'Bookmark glossary'}
@@ -165,7 +165,6 @@ export default function GlossaryCard({
               className="w-5 h-5 text-white"
               fill={isBookmarked ? '#fff' : 'none'}
               strokeWidth={2.3}
-
             />
           </button>
         </div>

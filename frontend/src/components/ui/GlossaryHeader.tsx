@@ -15,64 +15,80 @@ const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
   onBack,
 }) => (
   <div
-    className="
-      w-full flex flex-col items-center
-      bg-[var(--header-background)] text-[var(--header-text)]
-      py-4 md:py-5
-    "
+    className="w-full bg-[var(--bg-first)] text-[var(--header-text)] py-4 md:py-5"
+    style={{
+      borderBottom: '1px solid var(--glossary-border-color)',
+      boxSizing: 'border-box',
+    }}
   >
+    {/* Top Row: Back Button + Title + Count */}
     <div
-      className="
-        w-full flex items-center justify-center relative flex-wrap
-        min-h-[56px] px-4 md:px-6
-      "
+      className="flex items-center justify-between w-full px-4 md:px-6 h-[20vh]"
+      style={{
+        gap: '12px',
+        flexWrap: 'wrap',
+      }}
     >
       {/* Back Button */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20">
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            flex items-center justify-center
-            bg-[var(--return-button-bg)] border border-[var(--glossary-border-color)]
-            rounded-md p-2 min-w-[36px] min-h-[36px]
-            transition-all duration-200 hover:opacity-90
-          "
-        >
-          <ArrowLeft
-            className="w-[22px] h-[22px]"
-            style={{ color: 'var(--return-button-icon)' }}
-          />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={onBack}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'var(--return-button-bg)',
+          border: '1px solid var(--glossary-border-color)',
+          borderRadius: '8px',
+          padding: '8px',
+          minWidth: '36px',
+          minHeight: '36px',
+          cursor: 'pointer',
+          transition: 'opacity 0.2s ease',
+        }}
+      >
+        <ArrowLeft
+          style={{
+            width: '22px',
+            height: '22px',
+            color: 'var(--return-button-icon)',
+          }}
+        />
+      </button>
 
-      {/* Title and Description */}
+      {/* Title and Count inline */}
       <div
-        className="flex-1 text-center min-w-0 px-2"
-        style={{ padding: '30px' }}
+        className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-center text-center"
+        style={{
+          minWidth: 0,
+        }}
       >
         <h1
-          className="
-            m-0 text-[1.35rem] font-bold truncate max-w-full
-            md:text-[1.4rem]
-          "
+          className="font-bold truncate text-lg"
+          style={{
+            padding: '20px',
+            color: 'var(--header-text)',
+          }}
         >
           {title}
         </h1>
-        {description && (
-          <p
-            className="
-              text-[0.98rem] mt-[0.2rem] truncate max-w-full
-              md:text-base
-            "
-          >
-            {description}
-          </p>
-        )}
       </div>
 
-      {/* Count Text */}
+      <div style={{ width: '36px', height: '36px' }} />
     </div>
+
+    {/* Description below */}
+    {description && (
+      <p
+        className="mt-2 text-center text-sm md:text-base px-6"
+        style={{
+          color: 'var(--header-text)',
+          opacity: 0.8,
+        }}
+      >
+        {description}
+      </p>
+    )}
   </div>
 );
 

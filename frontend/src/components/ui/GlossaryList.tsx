@@ -15,7 +15,7 @@ interface GlossaryListPageProps {
   setGlossarySearch: (v: string) => void;
   bookmarkedGlossaries: string[];
   handleBookmarkGlossary: (g: Glossary) => void;
-  setSelected:  Dispatch<SetStateAction<Glossary | null>>
+  setSelected: Dispatch<SetStateAction<Glossary | null>>;
   onView: (g: Glossary) => void;
   loading: boolean;
 }
@@ -37,47 +37,50 @@ export function GlossaryList({
   return (
     <div className="glossary-list-container">
       <div
-        className="glossary-search"
+        className="w-full mx-auto flex items-center justify-center"
         style={{
+          margin: '1.5rem auto 2.5rem auto',
           paddingTop: '30px',
           marginBottom: '2rem',
-          position: 'relative',
-          width: '100%',
-          margin: '1.5rem auto 2.5rem auto',
+          maxWidth: '700px',
         }}
       >
-        <Search
-          className="glossary-search-icon"
+        <div
+          className="flex items-center w-full"
           style={{
-            position: 'absolute',
-            left: '0.5rem',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'var(--text-theme)',
-            opacity: 0.6,
-            width: 16,
-            height: 16,
-          }}
-        />
-        <input
-          className="glossary-search-input"
-          type="text"
-          placeholder="Search glossaries..."
-          value={glossarySearch}
-          onChange={(e) => setGlossarySearch(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '0.75rem 0.7rem 0.75rem 1.7rem',
-            border: '1px solid var(--glossary-border-color)',
-            borderRadius: '0.5rem',
-            outline: 'none',
-            fontSize: '0.95rem',
-            transition: 'all 0.2s ease-in-out',
             background: 'var(--bg-tir)',
-            color: 'var(--text-theme)',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           }}
-          autoComplete="off"
-        />
+        >
+          <Search
+            className="shrink-0"
+            style={{
+              color: 'var(--text-theme)',
+              opacity: 0.6,
+              width: '18px',
+              height: '18px',
+              marginRight: '10px',
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Search glossaries..."
+            value={glossarySearch}
+            onChange={(e) => setGlossarySearch(e.target.value)}
+            autoComplete="off"
+            className="flex-1"
+            style={{
+              border: 'none',
+              outline: 'none',
+              background: 'transparent',
+              fontSize: '0.95rem',
+              color: 'var(--text-theme)',
+              width: '100%',
+            }}
+          />
+        </div>
       </div>
 
       <div className="glossary-list">
@@ -86,7 +89,7 @@ export function GlossaryList({
         ) : filteredGlossaries.length === 0 ? (
           <div className="glossary-list-message">No glossaries found.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 gap-[35px]">
             {filteredGlossaries.map((g) => (
               <div key={g.id}>
                 <GlossaryCard
@@ -97,7 +100,7 @@ export function GlossaryList({
                   }}
                   isBookmarked={bookmarkedGlossaries.includes(g.name)}
                   onBookmark={() => {
-                    handleBookmarkGlossary(g)
+                    handleBookmarkGlossary(g);
                   }}
                   onView={() => onView(g)}
                 />
