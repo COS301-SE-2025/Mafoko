@@ -806,9 +806,59 @@ const DashboardPage: React.FC = () => {
                 </div>
 
                 <div className="intro-text">
-                  <p>{t('dashboard.aboutMarito.intro')}</p>
+                  {/*<p>{t('dashboard.aboutMarito.intro')}</p>
 
-                  <p>{t('dashboard.aboutMarito.mission')}</p>
+                  <p>{t('dashboard.aboutMarito.mission')}</p>*/}
+
+                  <section
+                    className="about-mafoko max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left">
+                    <h2 className="!text-3xl font-bold mb-4 text-primary">
+                      About Mafoko
+                    </h2>
+                    <p className="text-lg mb-6">
+                      Mafoko (meaning “words” in Setswana) is a multilingual
+                      platform designed to celebrate and connect South Africa’s
+                      11 official languages.
+                    </p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">Why Mafoko exists</h2>
+                    <p className="mt-2">
+                      South Africa’s languages are vibrant, expressive, and deeply tied to our identity, yet many of them remain underrepresented in the digital world.
+                      Mafoko was built to change that. It brings together words and meanings from multiple glossaries into one searchable space, making it easier than ever
+                      to explore terms, understand translations, and learn across all 11 official languages.
+                    </p>
+                    <p className="mt-4">
+                      Whether you’re online or offline, Mafoko keeps language knowledge within reach. It also encourages collaboration, letting communities
+                      suggest updates, share insights, and help improve the quality of each glossary entry over time.
+                    </p>
+                    <p className="mt-4">
+                      By turning scattered linguistic resources into one living, growing platform, Mafoko helps preserve our heritage while supporting inclusive
+                      education and natural language research for low-resource languages.
+                    </p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">Who it’s
+                      for</h2>
+                    <p>Students, educators, researchers, and anyone passionate
+                      about language and culture.</p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">How to use Mafoko</h2>
+                    <p className="mt-2">
+                      You can use Mafoko to search for terms, explore different language domains, view translations,
+                      and even share your own feedback to help improve the platform.
+                    </p>
+                    <p className="mt-4">
+                      For a detailed walkthrough including short guides and video demonstrations
+                      visit the <a href="/help" className="!text-[#00ceaf] underline">Help Page</a>.
+                    </p>
+
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">Behind the
+                      project</h2>
+                    <p>Mafoko is developed for the Data Science for Social Impact
+                      (DSFSI) group at the University of Pretoria.</p>
+
+                  </section>
+
 
                   <p className="team-credit">
                     {t('dashboard.aboutMarito.teamCredit')}

@@ -25,7 +25,7 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
 }) => {
   return (
     <div
-      className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-sm  cursor-default hover:shadow-md transition-all"
+      className="!bg-[var(--bg-tir)] rounded-xl p-3 sm:p-4 md:p-6 shadow-sm  cursor-default hover:shadow-md transition-all !text-theme"
       style={{ padding: '10px' }}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -36,35 +36,34 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
         }
       }}
     >
-      <div className="flex items-start justify-between mb-4">
-        <span className="text-sm text-gray-500">{glossary.words} words</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <h3 className="text-lg font-semibold mb-4">
         {glossary.name}
       </h3>
 
-      {/* Progress bar above the action buttons */}
-      <div className="glossary-card-progress mb-4">
-        <div className="progress-row flex items-center justify-between">
-          <div className="progress-bar w-full bg-gray-200 rounded-full h-2 mr-3 overflow-hidden">
-            <div
-              className="progress-fill h-2 rounded-full"
-              style={{
-                width: `${completedPercentage}%`,
-                background: '#00ceaf',
-              }}
-            />
-          </div>
-          <div className="progress-label text-sm text-gray-600">
-            {completedPercentage}%
+      <div className="w-full flex justify-center items-center" style={{ padding: "10px"}}>
+        <div className="flex flex-col items-center w-[80%]">
+          <div className="w-full flex items-center gap-5">
+            <div className="flex-1 bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div
+                className="h-3 rounded-full transition-all duration-300"
+                style={{
+                  width: `${completedPercentage}%`,
+                  background: '#00ceaf',
+                }}
+              />
+            </div>
+            <span className="text-sm text-gray-600 w-10 text-right">
+        {completedPercentage}%
+      </span>
           </div>
         </div>
       </div>
 
+
       <div className="glossary-card-actions flex gap-3">
         <button
           type="button"
-          className="study-btn flex items-center gap-2"
+          className="study-btn flex items-center justify-center gap-2"
           onClick={(e) => {
             e.stopPropagation();
             if (onStudy) onStudy();

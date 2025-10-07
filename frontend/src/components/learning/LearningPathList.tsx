@@ -19,9 +19,6 @@ interface LearningPathListProps {
   isLoading: boolean;
 }
 
-// Use a theme variable with a sensible fallback instead of a hard-coded color
-const ACCENT_COLOR = 'var(--brand-accent, #00ceaf)';
-
 const LearningPathList: FC<LearningPathListProps> = ({
   paths,
   onPathSelect,
@@ -30,6 +27,7 @@ const LearningPathList: FC<LearningPathListProps> = ({
 }) => {
   return (
     <div className="component-container">
+      <h1>Learning Paths</h1>
       <div className="content-wrapper">
         {isLoading ? (
           <p>Loading paths...</p>
@@ -58,14 +56,8 @@ const LearningPathList: FC<LearningPathListProps> = ({
                     aria-label="Delete learning path"
                     title="Delete learning path"
                     onClick={(e) => {
-                      // Prevent triggering any parent click handlers (e.g., card selection)
                       e.stopPropagation();
-                      const confirmed = window.confirm(
-                        'Are you sure you want to delete this learning path? This action cannot be undone.',
-                      );
-                      if (confirmed) {
-                        onPathDelete(path.id);
-                      }
+                      onPathDelete(path.id);
                     }}
                     className="path-delete-button"
                   >

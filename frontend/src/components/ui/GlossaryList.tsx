@@ -25,7 +25,6 @@ export function GlossaryList({
   glossarySearch,
   setGlossarySearch,
   bookmarkedGlossaries,
-  setSelected,
   handleBookmarkGlossary,
   onView,
   loading,

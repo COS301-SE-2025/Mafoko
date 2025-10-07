@@ -22,6 +22,7 @@ import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { cachingService } from '../utils/cachingService';
 import '../styles/NewGlossary.scss';
 import { GlossaryList } from '../components/ui/GlossaryList.tsx';
+import { toast } from 'sonner';
 
 interface Term {
   id: number;
@@ -403,13 +404,14 @@ const GlossaryApp = () => {
         if (selectedGlossary?.name === glossary.name) {
           setBookmarkedCategory(currentlyBookmarked);
         }
-        showError('Bookmark operation failed');
       }
 
       return success;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
-      showError('Bookmark operation failed');
+      toast('Failed to bookmark', {
+        description: '',
+      });
 
       // Revert optimistic update on failure
       if (selectedGlossary?.name === glossary.name) {
@@ -478,8 +480,9 @@ const GlossaryApp = () => {
         const data = (await response.json()) as { results: Term[] };
         return data.results;
       }
-    } catch (error) {
-      console.error('Advanced search failed, trying fallback:', error);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch(e) {
+      {/* */}
     }
 
     // Fallback to original endpoint to get all terms
@@ -490,7 +493,6 @@ const GlossaryApp = () => {
       if (fallbackResponse.ok) {
         const fallbackData = (await fallbackResponse.json()) as Term[];
 
-        // Apply language filter if selected
         if (selectedLanguages.length > 0) {
           return fallbackData.filter(
             (term) =>
@@ -500,8 +502,11 @@ const GlossaryApp = () => {
 
         return fallbackData;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error('Failed to fetch all terms for export:', error);
+      toast('Export Failed', {
+        description: 'Failed to fetch all terms for export.',
+      });
     }
 
     // Last resort: return current page data

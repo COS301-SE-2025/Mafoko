@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Flashcard from '../components/learning/Flashcard';
 import WordsPanel from '../components/learning/WordsPanel';
-import GlossaryCard from '../components/learning/GlossaryCard';
 import LearningPathList from '../components/learning/LearningPathList';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
 import '../styles/LearningPathPage.scss';
@@ -24,6 +23,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select.tsx';
+import {toast} from "sonner";
+import {
+  LearningPathGlossaryList
+} from "../components/ui/LearningPathGlossaryList.tsx";
 
 const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -168,7 +171,9 @@ const LearningPathPage: React.FC = () => {
       !modalLanguage ||
       modalSelectedGlossaries.size === 0
     ) {
-      alert('Please fill out all fields and select at least one glossary.');
+      toast('Submission Failed', {
+        description: 'Please fill out all fields and select at least one glossary.',
+      });
       return;
     }
     try {
@@ -365,8 +370,10 @@ const LearningPathPage: React.FC = () => {
       const isFinished =
         currentCardIndex >= (studySession?.words.length || 0) &&
         retryPile.length === 0;
+
       const indexToSave = isFinished ? 0 : currentCardIndex;
       const retryIdsToSave = isFinished ? [] : retryPile.map((w) => w.id);
+
       void learningService.updateSessionProgress(
         selectedPath.language_name,
         selectedGlossary.name,
@@ -375,11 +382,124 @@ const LearningPathPage: React.FC = () => {
       );
     }
     setFlashcardMode(false);
+    setCurrentView('glossaries');
   };
+
+  // eslint-disable-next-line react-x/no-nested-component-definitions
+  function LearningPathMode() {
+    if (currentView === "paths")
+    {
+      return(<>
+        <div
+            className="level-badge-wrapper"
+            style={{ position: 'relative' }}
+        >
+                      <span className="level-badge">
+                        Level: {getProficiencyLevel(overallProgressPercentage)}
+                      </span>
+          <div className="level-tooltip">
+            <div className="tooltip-title">Overall Progress</div>
+            <div className="tooltip-progress">
+              <div
+                  className="tooltip-progress-fill"
+                  style={{
+                    width: `${overallProgressPercentage.toString()}%`,
+                  }}
+              />
+            </div>
+            <div className="tooltip-text">
+              {100 - overallProgressPercentage}% to next level
+            </div>
+          </div>
+        </div>
+        <button
+            className="new-path-button"
+            onClick={() => {
+              void handleOpenCreateModal();
+            }}
+            type="button"
+        >
+          <span className="new-path-button-text">+ New Path</span>
+        </button>
+      </>);
+    } else if (currentView === 'words' && !flashcardMode && studySession) {
+      return(
+          <div className="learning-path-progress-display">
+          </div>
+      )
+    } else if(currentView === 'words' && flashcardMode && studySession){
+      return (<div className="learning-path-progress-display">
+        <div className="learning-path-progress-percentage">
+          Card {currentCardIndex + 1}
+        </div>
+        <div className="learning-path-progress-label">
+          of {studySession.words.length.toString()}
+        </div>
+      </div>)
+    }
+  }
+
+  // eslint-disable-next-line react-x/no-nested-component-definitions
+  function Modes() {
+    if (currentView === 'paths') {
+      return (
+          <LearningPathList
+              paths={learningPaths}
+              onPathSelect={(p) => {
+                void handleSelectPath(p);
+              }}
+              onPathDelete={handleDeletePath}
+              isLoading={isLoading}
+          />
+      )
+    } else if (currentView === 'glossaries' && selectedPath )
+    {
+      return(
+          <LearningPathGlossaryList selectedPath={selectedPath} setCurrentView={setCurrentView} glossaryWordCounts={glossaryWordCounts} handleGlossarySelect={handleGlossarySelect} />
+      )
+    } else if (currentView === 'words' && !flashcardMode && studySession ) {
+      return (
+          <WordsPanel
+            studySession={studySession}
+            knownWords={knownWords}
+            onBackClick={() => {
+              setCurrentView('glossaries');
+            }}
+          />
+      )
+    } else if(flashcardMode && currentView === 'words' && studySession) {
+      return(
+          <Flashcard
+              currentCard={getCurrentCard()}
+              answerOptions={getAnswerOptions()}
+              selectedAnswer={selectedAnswer}
+              showResult={showResult}
+              currentCardIndex={currentCardIndex}
+              totalCards={studySession.words.length}
+              score={score}
+              progressPercent={
+                // eslint-disable-next-line
+                studySession
+                    ? ((currentCardIndex + 1) / studySession.words.length) * 100
+                    : 0
+              }
+              onExit={exitFlashcards}
+              onSelectAnswer={handleAnswerSelect}
+              onNext={nextCard}
+              onRetry={() => {
+                // eslint-disable-next-line
+                if (studySession) {
+                  startFlashcards(studySession.words);
+                }
+              }}
+          />
+      )
+    }
+  }
 
   return (
     <div
-      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`learning-path-container  !bg-[var(--bg-first)] ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobileMenuOpen && (
         <div
@@ -403,7 +523,7 @@ const LearningPathPage: React.FC = () => {
           setActiveItem={setActiveMenuItem}
         />
       )}
-      <div className="main-content">
+      <div className="main-content !bg-[var(--bg-first)]">
         {!isMobile && (
           <div className="top-bar learning-path-top-bar">
             <button
@@ -440,155 +560,12 @@ const LearningPathPage: React.FC = () => {
               </div>
 
               <div className="learning-path-header-actions">
-                {currentView === 'paths' && (
-                  <>
-                    <div
-                      className="level-badge-wrapper"
-                      style={{ position: 'relative' }}
-                    >
-                      <span className="level-badge">
-                        Level: {getProficiencyLevel(overallProgressPercentage)}
-                      </span>
-                      <div className="level-tooltip">
-                        <div className="tooltip-title">Overall Progress</div>
-                        <div className="tooltip-progress">
-                          <div
-                            className="tooltip-progress-fill"
-                            style={{
-                              width: `${overallProgressPercentage.toString()}%`,
-                            }}
-                          />
-                        </div>
-                        <div className="tooltip-text">
-                          {100 - overallProgressPercentage}% to next level
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      className="new-path-button"
-                      onClick={() => {
-                        void handleOpenCreateModal();
-                      }}
-                      type="button"
-                    >
-                      <span className="new-path-button-text">+ New Path</span>
-                    </button>
-                  </>
-                )}
-
-                {currentView === 'words' && !flashcardMode && studySession ? (
-                  <div className="learning-path-progress-display">
-                    <div className="learning-path-progress-percentage">
-                      {getProgressPercentage()}%
-                    </div>
-                    <div className="learning-path-progress-label">
-                      Completed
-                    </div>
-                  </div>
-                ) : null}
-
-                {currentView === 'words' && flashcardMode && studySession && (
-                  <div className="learning-path-progress-display">
-                    <div className="learning-path-progress-percentage">
-                      Card {currentCardIndex + 1}
-                    </div>
-                    <div className="learning-path-progress-label">
-                      of {studySession.words.length.toString()}
-                    </div>
-                  </div>
-                )}
+                <LearningPathMode />
               </div>
             </div>
           </div>
 
-          {currentView === 'paths' && (
-            <LearningPathList
-              paths={learningPaths}
-              onPathSelect={(p) => {
-                void handleSelectPath(p);
-              }}
-              onPathDelete={handleDeletePath}
-              isLoading={isLoading}
-            />
-          )}
-
-          {currentView === 'glossaries' && selectedPath && (
-            <>
-              <div className="flex items-center mb-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentView('paths');
-                  }}
-                  className="text-gray-600 hover:text-gray-900 mr-4"
-                >
-                  ← Back to Paths
-                </button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                {selectedPath.selected_glossaries.map((g) => {
-                  const glossaryInfo = {
-                    id: g.glossary_name,
-                    name: g.glossary_name,
-                    words: glossaryWordCounts[g.glossary_name] || 0,
-                    completedPercentage: 0,
-                  };
-                  return (
-                    <GlossaryCard
-                      key={g.glossary_name}
-                      glossary={glossaryInfo}
-                      onStudy={() => {
-                        void handleGlossarySelect(glossaryInfo, false);
-                      }}
-                      onFlashcards={() => {
-                        void handleGlossarySelect(glossaryInfo, true);
-                      }}
-                      completedPercentage={
-                        selectedPath.completedPercentage || 0
-                      }
-                    />
-                  );
-                })}
-              </div>
-            </>
-          )}
-
-          {currentView === 'words' && !flashcardMode && studySession ? (
-            <WordsPanel
-              studySession={studySession}
-              knownWords={knownWords}
-              onBackClick={() => {
-                setCurrentView('glossaries');
-              }}
-            />
-          ) : null}
-
-          {flashcardMode && currentView === 'words' && studySession ? (
-            <Flashcard
-              currentCard={getCurrentCard()}
-              answerOptions={getAnswerOptions()}
-              selectedAnswer={selectedAnswer}
-              showResult={showResult}
-              currentCardIndex={currentCardIndex}
-              totalCards={studySession.words.length}
-              score={score}
-              progressPercent={
-                // eslint-disable-next-line
-                studySession
-                  ? ((currentCardIndex + 1) / studySession.words.length) * 100
-                  : 0
-              }
-              onExit={exitFlashcards}
-              onSelectAnswer={handleAnswerSelect}
-              onNext={nextCard}
-              onRetry={() => {
-                // eslint-disable-next-line
-                if (studySession) {
-                  startFlashcards(studySession.words);
-                }
-              }}
-            />
-          ) : null}
+          <Modes />
         </div>
 
         {showNewPathModal && (

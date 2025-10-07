@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, Loader2 } from 'lucide-react';
 import { useDarkMode } from './DarkModeComponent';
 import { glossaryMap } from './glossaryMock';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import { cachingService } from '../../utils/cachingService';
+import { toast } from 'sonner';
 
 interface Glossary {
   name: string;
@@ -14,20 +15,16 @@ interface Glossary {
 interface GlossaryCardProps {
   glossary: Glossary;
   onView?: (glossary: Glossary) => void;
-  onExport?: (glossary: Glossary) => void;
-  /** Called after a bookmark toggle completes successfully */
   onBookmark?: (glossary: Glossary, isBookmarked: boolean) => void;
   isBookmarked?: boolean;
 }
 
 export default function GlossaryCard({
-  glossary,
-  onView,
-  onExport,
-  onBookmark,
-  isBookmarked: initialBookmarked = false,
-}: GlossaryCardProps) {
-  // use glossary name to pick correct mock icon/description
+                                       glossary,
+                                       onView,
+                                       onBookmark,
+                                       isBookmarked: initialBookmarked = false,
+                                     }: GlossaryCardProps) {
   const { icon: Icon, description } = glossaryMap[glossary.name] ?? {
     icon: null,
     description: glossary.description,
@@ -41,22 +38,30 @@ export default function GlossaryCard({
   const handleBookmarkToggle = async (
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    e.stopPropagation(); // prevent triggering onView
+    e.stopPropagation();
+
+    if (loading) return; // 🔒 Prevent concurrent toggles
+
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      alert('Please log in to bookmark glossaries.');
+      toast('Bookmark Failed', {
+        description: 'Please log in to bookmark glossaries.',
+      });
       return;
     }
 
     if (networkStatus.isOffline) {
-      alert('Bookmark operations require internet connection.');
+      toast('Bookmark Failed', {
+        description: 'Bookmark operations require internet connection.',
+      });
       return;
     }
 
     setLoading(true);
+
     try {
       const currentlyBookmarked = isBookmarked;
-      setIsBookmarked(!currentlyBookmarked); // optimistic UI update
+      const action = currentlyBookmarked ? 'unbookmark' : 'bookmark';
 
       let success = false;
       if (currentlyBookmarked) {
@@ -70,30 +75,31 @@ export default function GlossaryCard({
       }
 
       if (success) {
-        const newState = !currentlyBookmarked;
-        setIsBookmarked(newState);
+        setIsBookmarked(!currentlyBookmarked);
 
-        // sync bookmarks cross-tab
+        // sync cross-tab
         localStorage.setItem('bookmarksChanged', Date.now().toString());
         window.dispatchEvent(
           new CustomEvent('bookmarkChanged', {
             detail: {
               type: 'glossary',
-              action: newState ? 'bookmark' : 'unbookmark',
+              action,
               name: glossary.name,
             },
           }),
         );
 
-        onBookmark?.(glossary, newState);
+        onBookmark?.(glossary, !currentlyBookmarked);
       } else {
-        setIsBookmarked(currentlyBookmarked); // revert
-        alert('Bookmark operation failed.');
+        toast('Bookmark Failed', {
+          description: 'Bookmark operation failed.',
+        });
       }
     } catch (error) {
       console.error('Bookmark toggle failed:', error);
-      setIsBookmarked((prev) => !prev); // revert
-      alert('Bookmark operation failed.');
+      toast('Bookmark Failed', {
+        description: 'Unexpected error occurred.',
+      });
     } finally {
       setLoading(false);
     }
@@ -104,16 +110,15 @@ export default function GlossaryCard({
       className="relative cursor-pointer transition-transform duration-300 hover:-translate-y-1 group !bg-[var(--bg-tri)]"
       onClick={() => onView?.(glossary)}
     >
-      {/* Folder background */}
       <div
         className={`
           absolute -top-4 left-0 right-0 bottom-0 rounded-2xl
           transition-colors duration-300
           ${
-            isDarkMode
-              ? 'bg-teal-900/40 group-hover:bg-teal-800/60'
-              : 'bg-teal-100 group-hover:bg-teal-200'
-          }
+          isDarkMode
+            ? 'bg-teal-900/40 group-hover:bg-teal-800/60'
+            : 'bg-teal-100 group-hover:bg-teal-200'
+        }
           z-0
         `}
       />
@@ -123,10 +128,10 @@ export default function GlossaryCard({
           relative z-10 rounded-2xl border shadow-md transition-all duration-300
           p-5 flex flex-col justify-between h-[220px]
           ${
-            isDarkMode
-              ? 'bg-[#212532FF] border-gray-800 group-hover:border-teal-300'
-              : 'bg-white border-gray-200 group-hover:border-teal-300'
-          }
+          isDarkMode
+            ? 'bg-[#212532FF] border-gray-800 group-hover:border-teal-300'
+            : 'bg-white border-gray-200 group-hover:border-teal-300'
+        }
         `}
         style={{ padding: '15px' }}
       >
@@ -151,21 +156,25 @@ export default function GlossaryCard({
             onClick={handleBookmarkToggle}
             disabled={loading}
             className={`
-              w-[15] h-[15] flex items-center justify-center rounded-full
+              w-[50] h-[50] flex items-center justify-center rounded-full
               ${
-                isBookmarked
-                  ? 'bg-yellow-400 hover:bg-yellow-300'
-                  : 'bg-teal-400 hover:bg-teal-300'
-              }
-              transition-colors p-0
+              isBookmarked
+                ? 'bg-yellow-400 hover:bg-yellow-300'
+                : 'bg-teal-400 hover:bg-teal-300'
+            }
+              transition-colors
             `}
             title={isBookmarked ? 'Unbookmark glossary' : 'Bookmark glossary'}
           >
-            <Bookmark
-              className="w-5 h-5 text-white"
-              fill={isBookmarked ? '#fff' : 'none'}
-              strokeWidth={2.3}
-            />
+            {loading ? (
+              <Loader2 className="w-4 h-4 text-white animate-spin" />
+            ) : (
+              <Bookmark
+                className="w-5 h-5 text-white"
+                fill={isBookmarked ? '#fff' : 'none'}
+                strokeWidth={2.3}
+              />
+            )}
           </button>
         </div>
 
