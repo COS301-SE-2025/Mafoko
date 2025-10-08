@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
@@ -6,8 +5,8 @@ import LsImage from '/LS_image.png';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import DfsiLogo from '/DFSI_Logo.png';
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { API_ENDPOINTS } from '../config';
+import { PasswordField } from '../components/ui/PasswordInput.tsx';
 
 interface LoginResponse {
   access_token: string;
@@ -56,33 +55,6 @@ const LoginPage: React.FC = () => {
       setErrorMessage(
         'Network error. Please check your connection and try again.',
       );
-    }
-  };
-
-  const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
-    console.log('Google token response:', tokenResponse.credential);
-    try {
-      const response = await fetch(API_ENDPOINTS.loginWithGoogle, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id_token: tokenResponse.credential }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to authenticate with backend');
-      }
-
-      const data = (await response.json()) as LoginResponse;
-
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('userData');
-      localStorage.setItem('accessToken', data.access_token);
-      await navigate('/dashboard');
-    } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMessage(t('loginPage.errors.googleLoginFailed'));
     }
   };
 
@@ -139,21 +111,11 @@ const LoginPage: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
-              {' '}
-              <label htmlFor="password">{t('loginPage.passwordLabel')}</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder={t('loginPage.passwordPlaceholder')}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                required
-              />
-            </div>
+            <PasswordField
+              value={password}
+              onChange={setPassword}
+              label={'Password'}
+            />
 
             <div className="form-options">
               <div className="remember-me">
@@ -168,19 +130,6 @@ const LoginPage: React.FC = () => {
             <button type="submit" className="login-button primary">
               {t('loginPage.loginButton')}
             </button>
-
-            <div className="social-login-divider">
-              <span>{t('loginPage.orDivider')}</span>
-            </div>
-
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                void handleGoogleLogin(credentialResponse);
-              }}
-              onError={() => {
-                setErrorMessage(t('LoginPage errors googleLoginFailed'));
-              }}
-            />
           </form>
           <p className="register-link-prompt">
             {t('loginPage.noAccount')}{' '}

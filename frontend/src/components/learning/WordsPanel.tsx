@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Circle, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  CheckCircle2,
+  Circle,
+  ChevronLeft,
+  ChevronRight,
+  ChevronFirst,
+  ChevronLast,
+} from 'lucide-react';
 
 interface Word {
   id: string;
@@ -28,6 +35,14 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
   onBackClick,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+
+  const toggleFlip = (wordId: string) => {
+    setFlippedCards((prev) => ({
+      ...prev,
+      [wordId]: !prev[wordId],
+    }));
+  };
 
   const getProgressPercentage = (): number => {
     if (!studySession || studySession.words.length === 0) return 0;
@@ -47,31 +62,35 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
   };
 
   return (
-    <div className="component-container words-panel">
-      <div className="content-wrapper">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+    <div className="">
+      <div className="px-4 sm:px-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4 w-full">
+          {/* Back button */}
           <button
             type="button"
             onClick={onBackClick}
-            className="text-gray-600 hover:text-gray-900 flex items-center gap-2 font-medium"
+            className="text-theme hover:text-gray-900 flex items-center gap-2 font-medium shrink-0"
           >
             ← Back to Glossaries
           </button>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-            <div className="text-sm text-gray-600">
+
+          {/* Progress section */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+            <div className="text-sm text-theme text-center sm:text-left w-full sm:w-auto">
               {knownWords.size} of {studySession.words.length} words completed
             </div>
-            <div className="w-full sm:w-32 bg-gray-200 rounded-full h-2">
+            <div className="w-full sm:w-40 bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
-                className="h-2 rounded-full bg-teal-500 transition-all duration-300"
+                className="h-2 bg-teal-500 transition-all duration-300"
                 style={{
-                  width: `${getProgressPercentage().toString()}%`,
+                  width: `${getProgressPercentage()}%`,
                 }}
               ></div>
             </div>
           </div>
         </div>
 
+        {/* Content */}
         {studySession.words.length === 0 ? (
           <div className="text-center text-gray-500 py-12">
             <div className="text-lg font-medium mb-2">No terms found</div>
@@ -81,82 +100,108 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-              {currentWords.map((word) => (
-                <div
-                  key={word.id}
-                  className="word-card bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-1 transition-all duration-200 min-h-[140px] flex flex-col justify-between"
-                >
-                  <div className="flex-1">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
-                      {word.term}
-                    </h4>
-                    <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">
-                      {word.english_translation || word.definition}
-                    </p>
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    {knownWords.has(word.id) ? (
-                      <div className="flex items-center gap-2 text-teal-600">
-                        <CheckCircle2 className="w-5 h-5" />
-                        <span className="text-xs font-medium">Completed</span>
+            {/* Flashcards grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 mb-8">
+              {currentWords.map((word) => {
+                const flipped = flippedCards[word.id] || false;
+                return (
+                  <div
+                    key={word.id}
+                    onClick={() => toggleFlip(word.id)}
+                    className="relative cursor-pointer transform-gpu perspective "
+                  >
+                    {/* Card inner container */}
+                    <div
+                      className={`relative w-full h-44 transition-transform duration-500  ${
+                        flipped ? 'rotate-y-180' : ''
+                      }`}
+                      style={{
+                        transformStyle: 'preserve-3d',
+                      }}
+                    >
+                      {/* Front side */}
+                      <div className="absolute inset-0 bg-[var(--bg-tir)] rounded-xl p-6 shadow-sm border border-theme flex flex-col justify-center items-center backface-hidden">
+                        <h4 className="text-lg font-semibold text-theme mb-2 text-center">
+                          {word.term}
+                        </h4>
+                        <p className="text-xs text-gray-500 text-center">
+                          Tap to reveal
+                        </p>
                       </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-gray-400">
-                        <Circle className="w-5 h-5" />
-                        <span className="text-xs">Not completed</span>
+
+                      {/* Back side */}
+                      <div
+                        className={`absolute inset-0 ${knownWords.has(word.id) ? 'bg-teal-500' : 'bg-zinc-700'} text-white rounded-xl p-6 shadow-md flex flex-col justify-center items-center rotate-y-180 backface-hidden`}
+                      >
+                        <p className="text-lg font-bold text-center">
+                          {word.english_translation || 'No translation'}
+                        </p>
+                        {word.definition && (
+                          <p className="text-sm mt-2 text-center opacity-90 leading-relaxed">
+                            {word.definition}
+                          </p>
+                        )}
                       </div>
-                    )}
+                    </div>
+
+                    {/* Completion status */}
+                    <div className="flex justify-end mt-2">
+                      {knownWords.has(word.id) ? (
+                        <div className="flex items-center gap-2 text-teal-600 text-xs font-medium">
+                          <CheckCircle2 className="w-4 h-4" />
+                          Known
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-gray-400 text-xs">
+                          <Circle className="w-4 h-4" />
+                          Not learned
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Pagination Controls */}
+            {/* Pagination */}
             {totalPages > 1 && (
-              <div className="pagination-controls">
-                <div className="pagination-info">
+              <div className="pagination-controls flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+                <div>
                   Showing {startIndex + 1}-
                   {Math.min(endIndex, studySession.words.length)} of{' '}
                   {studySession.words.length} terms
                 </div>
-                <div className="pagination-buttons">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => handlePageChange(1)}
                     disabled={currentPage === 1}
-                    className="pagination-button"
-                    aria-label="First page"
+                    className="p-2 disabled:opacity-40 hover:text-teal-600"
                   >
-                    <ChevronLeft size={16} />
-                    <ChevronLeft size={16} style={{ marginLeft: '-12px' }} />
+                    <ChevronFirst size={16} />
                   </button>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="pagination-button"
-                    aria-label="Previous page"
+                    className="p-2 disabled:opacity-40 hover:text-teal-600"
                   >
                     <ChevronLeft size={16} />
                   </button>
-                  <span className="pagination-current">
+                  <span className="text-gray-700">
                     Page {currentPage} of {totalPages}
                   </span>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="pagination-button"
-                    aria-label="Next page"
+                    className="p-2 disabled:opacity-40 hover:text-teal-600"
                   >
                     <ChevronRight size={16} />
                   </button>
                   <button
                     onClick={() => handlePageChange(totalPages)}
                     disabled={currentPage === totalPages}
-                    className="pagination-button"
-                    aria-label="Last page"
+                    className="p-2 disabled:opacity-40 hover:text-teal-600"
                   >
-                    <ChevronRight size={16} />
-                    <ChevronRight size={16} style={{ marginLeft: '-12px' }} />
+                    <ChevronLast size={16} />
                   </button>
                 </div>
               </div>

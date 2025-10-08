@@ -3,7 +3,7 @@
 /* Theme-specific variables */
 .theme-light {
   --left-nav-hover-bg: #f5f5f5;
-  --left-nav-active-bg: #f00a50;
+  --left-nav-active-bg: #e1dee0;
   --left-nav-active-border: #b10338;
   --left-nav-hover-border: #f00a50;
   --nav-group-header-bg: #f8f9fa;
@@ -101,7 +101,6 @@
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
   margin: 4px 12px;
-  border-radius: 8px;
 
   &:hover {
     background-color: var(--left-nav-hover-bg);
@@ -138,7 +137,6 @@
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
   margin: 4px 12px;
-  border-radius: 8px;
 }
 
 .nav-group-items .left-nav-menu-item {
@@ -147,13 +145,11 @@
 }
 
 .left-nav-menu-item:hover {
-  background-color: var(--left-nav-hover-bg);
   border-left-color: var(--left-nav-hover-border);
 }
 
 .left-nav-menu-item.active {
-  background-color: var(--left-nav-active-bg);
-  border-left-color: var(--left-nav-active-border);
+  border-left-color: var(--left-nav-hover-border);
 }
 
 .left-nav-menu-icon {

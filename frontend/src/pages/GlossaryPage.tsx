@@ -533,9 +533,9 @@ const GlossaryPage = () => {
               {error && (
                 <div
                   style={{
-                    background: '#553c2c',
+                    background: '#ffffff',
                     border: `1px solid #d69e2e`,
-                    color: '#fbb6ce',
+                    color: '#000000',
                     padding: '12px',
                     borderRadius: '6px',
                     marginBottom: '1rem',

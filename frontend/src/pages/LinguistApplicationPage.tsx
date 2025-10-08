@@ -336,7 +336,7 @@ const LinguistApplicationPage: React.FC = () => {
       );
 
     return (
-      <div className="application-form-card animate-fadeIn">
+      <div className="application-form-card animate-fadeIn !bg-[var(--bg-tir)]">
         <h2>{t('linguistApplicationPage.title')}</h2>
         <p>{t('linguistApplicationPage.description')}</p>
         {error && <div className="error-message">{error}</div>}
@@ -407,7 +407,7 @@ const LinguistApplicationPage: React.FC = () => {
 
   return (
     <div
-      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`dashboard-container !bg-[var(--bg-first)] ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobile ? (
         <Navbar />

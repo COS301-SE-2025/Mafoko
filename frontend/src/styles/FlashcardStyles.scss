@@ -1,4 +1,8 @@
 .flashcard-container {
+  * {
+    color: var(--text-theme);
+  }
+
   max-width: 600px;
   margin: 0 auto;
   perspective: 1500px;
@@ -130,8 +134,7 @@
             }
 
             &:hover {
-              border-color: #f00a50;
-              background-color: rgba(240, 10, 80, 0.05);
+              border-color: #00ceaf;
             }
           }
         }
@@ -146,8 +149,10 @@
         padding: 2rem;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        gap: 1rem;
+        justify-content: space-evenly; // distributes content evenly
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 350px; // keeps proportional height
 
         @media (max-width: 768px) {
           padding: 1.5rem;
@@ -202,7 +207,7 @@
         .next-button {
           margin-top: 1.5rem;
           padding: 0.75rem 1.5rem;
-          background-color: #f00a50;
+          background-color: #c1bfc0;
           color: white;
           border-radius: 0.75rem;
           font-weight: 600;
@@ -221,7 +226,7 @@
           }
 
           &:hover {
-            background-color: #d10946;
+            background-color: #8d898b;
           }
         }
       }

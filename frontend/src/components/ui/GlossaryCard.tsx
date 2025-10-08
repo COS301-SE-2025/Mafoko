@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { Book, Bookmark, Download } from 'lucide-react';
+import { useState } from 'react';
+import { Bookmark, Loader2 } from 'lucide-react';
 import { useDarkMode } from './DarkModeComponent';
+import { glossaryMap } from './glossaryMock';
+import { useNetworkStatus } from '../../hooks/useNetworkStatus';
+import { cachingService } from '../../utils/cachingService';
+import { toast } from 'sonner';
 
 interface Glossary {
   name: string;
@@ -11,182 +15,177 @@ interface Glossary {
 interface GlossaryCardProps {
   glossary: Glossary;
   onView?: (glossary: Glossary) => void;
-  onExport?: (glossary: Glossary) => void;
-  onBookmark?: (glossary: Glossary) => void;
+  onBookmark?: (glossary: Glossary, isBookmarked: boolean) => void;
   isBookmarked?: boolean;
 }
 
-const GlossaryCard: React.FC<GlossaryCardProps> = ({
+export default function GlossaryCard({
   glossary,
   onView,
-  onExport,
   onBookmark,
-  isBookmarked: isBookmarkedProp = false,
-}) => {
-  // Use prop for bookmark status instead of local state
-  const [isBookmarked, setIsBookmarked] = useState(isBookmarkedProp);
+  isBookmarked: initialBookmarked = false,
+}: GlossaryCardProps) {
+  const { icon: Icon, description } = glossaryMap[glossary.name] ?? {
+    icon: null,
+    description: glossary.description,
+  };
 
-  // Update local state when prop changes
-  React.useEffect(() => {
-    setIsBookmarked(isBookmarkedProp);
-  }, [isBookmarkedProp]);
-
-  // Use the same dark mode hook as the rest of the app
   const { isDarkMode } = useDarkMode();
+  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
+  const [loading, setLoading] = useState(false);
+  const networkStatus = useNetworkStatus();
+
+  const handleBookmarkToggle = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.stopPropagation();
+
+    if (loading) return; // 🔒 Prevent concurrent toggles
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      toast('Bookmark Failed', {
+        description: 'Please log in to bookmark glossaries.',
+      });
+      return;
+    }
+
+    if (networkStatus.isOffline) {
+      toast('Bookmark Failed', {
+        description: 'Bookmark operations require internet connection.',
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const currentlyBookmarked = isBookmarked;
+      const action = currentlyBookmarked ? 'unbookmark' : 'bookmark';
+
+      let success = false;
+      if (currentlyBookmarked) {
+        success = await cachingService.unbookmarkGlossary(token, glossary.name);
+      } else {
+        success = await cachingService.bookmarkGlossary(
+          token,
+          glossary.name,
+          glossary.description,
+        );
+      }
+
+      if (success) {
+        setIsBookmarked(!currentlyBookmarked);
+
+        // sync cross-tab
+        localStorage.setItem('bookmarksChanged', Date.now().toString());
+        window.dispatchEvent(
+          new CustomEvent('bookmarkChanged', {
+            detail: {
+              type: 'glossary',
+              action,
+              name: glossary.name,
+            },
+          }),
+        );
+
+        onBookmark?.(glossary, !currentlyBookmarked);
+      } else {
+        toast('Bookmark Failed', {
+          description: 'Bookmark operation failed.',
+        });
+      }
+    } catch (error) {
+      console.error('Bookmark toggle failed:', error);
+      toast('Bookmark Failed', {
+        description: 'Unexpected error occurred.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
-      className="rounded-lg shadow-md hover:shadow-lg transition-shadow border"
-      style={{
-        backgroundColor: 'var(--card-background)',
-        borderColor: 'var(--glossary-border-color)',
-        color: 'var(--text-theme)',
-      }}
+      className="relative cursor-pointer transition-transform duration-300 hover:-translate-y-1 group !bg-[var(--bg-tri)]"
+      onClick={() => onView?.(glossary)}
     >
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-1">
-          <Book
-            className="w-6 h-6"
-            style={{ color: isDarkMode ? '#fcfcfcff' : '#000000ff' }}
-          />
-          <span
-            className="text-sm px-2 py-1 rounded-full"
-            style={{
-              color: '#00ceaf',
-              backgroundColor: ' #00ceaf1c',
-              border: '1.5px solid #00ceaf',
-            }}
-          >
-            {glossary.termCount} terms
-          </span>
-        </div>
-        <h3
-          className="text-lg font-semibold mb-0.5"
-          style={{ color: 'var(--text-theme)' }}
-        >
-          {glossary.name}
-        </h3>
-        <p
-          className="mb-1 text-xs line-clamp-1"
-          style={{ color: 'var(--no-translation-color)' }}
-        >
-          {glossary.description}
-        </p>
-        <div
-          className="flex items-center text-xs mb-1"
-          style={{ color: 'var(--no-translation-color)' }}
-        >
-          {/* <span>{glossary.languages && glossary.languages.length > 0 ? glossary.languages.join(', ') : '—'}</span> */}
-        </div>
+      <div
+        className={`
+          absolute -top-4 left-0 right-0 bottom-0 rounded-2xl
+          transition-colors duration-300
+          ${
+            isDarkMode
+              ? 'bg-teal-900/40 group-hover:bg-teal-800/60'
+              : 'bg-teal-100 group-hover:bg-teal-200'
+          }
+          z-0
+        `}
+      />
 
-        <div
-          className="flex items-center justify-between pt-2"
-          style={{ borderTop: '2px solid #00ceaf99' }}
-        >
-          <div className="flex space-x-2">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onExport) onExport(glossary);
-              }}
-              className="transition-colors"
-              style={{
-                color: '#ffffffff',
-                backgroundColor: '#f00a4fff',
-                border: '1.5px solid #f00a4fff',
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f00a4fe8';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f00a4fff';
-              }}
-              title="Export glossary"
+      <div
+        className={`
+          relative z-10 rounded-2xl border shadow-md transition-all duration-300
+          p-5 flex flex-col justify-between h-[220px]
+          ${
+            isDarkMode
+              ? 'bg-[#212532FF] border-gray-800 group-hover:border-teal-300'
+              : 'bg-white border-gray-200 group-hover:border-teal-300'
+          }
+        `}
+        style={{ padding: '15px' }}
+      >
+        <div className="flex items-start justify-between mb-2 text-left">
+          <div>
+            <h3
+              className={`text-lg font-semibold ${
+                isDarkMode ? 'text-gray-50' : 'text-gray-900'
+              }`}
             >
-              <Download className="w-4 h-4" />
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsBookmarked((prev) => !prev);
-                if (onBookmark) onBookmark(glossary);
-              }}
-              className="transition-colors"
-              style={{
-                color: '#ffffffff',
-                backgroundColor: '#f2d201ff',
-                border: '1.5px solid #f2d201ff',
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f2d201dc';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f2d201ff';
-              }}
-              title="Bookmark glossary"
-            >
-              <Bookmark
-                className="w-4 h-4"
-                fill={isBookmarked ? '#fff' : 'none'}
-              />
-            </button>
+              {glossary.name}
+            </h3>
+            <p className="text-xs font-medium text-zinc-500">
+              {glossary.termCount} terms
+            </p>
+            <p className="text-xs font-medium text-zinc-500">
+              {description || glossary.description}
+            </p>
           </div>
 
           <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onView) onView(glossary);
-            }}
-            className="text-sm font-medium transition-colors"
-            style={{
-              color: isDarkMode ? '#ffffffff' : '#000000',
-              backgroundColor: isDarkMode ? '#11131aff' : '#f0f0f0',
-              border: isDarkMode
-                ? '1.5px solid #11131aff'
-                : '1.5px solid #f0f0f0',
-              borderRadius: '999px',
-              padding: '0.35rem 1.1rem',
-              outline: 'none',
-              cursor: 'pointer',
-              marginLeft: 4,
-              fontWeight: 600,
-              letterSpacing: 0.2,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = isDarkMode
-                ? '#191c27b3'
-                : '#f0f0f0aa';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = isDarkMode
-                ? '#11131aff'
-                : '#f0f0f0';
-            }}
+            onClick={handleBookmarkToggle}
+            disabled={loading}
+            className={`
+              w-[50] h-[50] flex items-center justify-center rounded-full
+              ${
+                isBookmarked
+                  ? 'bg-yellow-400 hover:bg-yellow-300'
+                  : 'bg-teal-400 hover:bg-teal-300'
+              }
+              transition-colors
+            `}
+            title={isBookmarked ? 'Unbookmark glossary' : 'Bookmark glossary'}
           >
-            View
+            {loading ? (
+              <Loader2 className="w-4 h-4 text-white animate-spin" />
+            ) : (
+              <Bookmark
+                className="w-5 h-5 text-white"
+                fill={isBookmarked ? '#fff' : 'none'}
+                strokeWidth={2.3}
+              />
+            )}
           </button>
         </div>
+
+        <p
+          className={`text-sm line-clamp-3 ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}
+        >
+          {glossary.description}
+        </p>
       </div>
     </div>
   );
-};
-
-export default GlossaryCard;
+}

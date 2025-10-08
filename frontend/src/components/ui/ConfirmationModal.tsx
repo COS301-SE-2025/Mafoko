@@ -21,12 +21,15 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay text-theme" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <h2 className="modal-title">{title}</h2>
-        <div className="modal-content">{children}</div>
+        <div className="modal-content text-theme">{children}</div>
         <div className="modal-actions">
-          <button className="modal-btn modal-cancel" onClick={onClose}>
+          <button
+            className="modal-btn modal-cancel text-black"
+            onClick={onClose}
+          >
             Cancel
           </button>
           <button className="modal-btn modal-confirm" onClick={onConfirm}>

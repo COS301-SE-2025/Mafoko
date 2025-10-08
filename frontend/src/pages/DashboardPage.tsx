@@ -84,6 +84,8 @@ interface UserData {
   lastName: string;
   email?: string;
   profilePictureUrl?: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 interface Letter {
@@ -197,7 +199,7 @@ const DashboardPage: React.FC = () => {
   const alphabet = useMemo(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), []);
 
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [avatarInitials, setAvatarInitials] = useState<string>('U');
+  const [avatarInitials, setAvatarInitials] = useState<string>('');
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
     null,
@@ -311,12 +313,12 @@ const DashboardPage: React.FC = () => {
         try {
           const parsedData = JSON.parse(storedUserDataString) as UserData;
           setUserData(parsedData);
-          if (parsedData.firstName && parsedData.lastName) {
+          if (parsedData.first_name && parsedData.last_name) {
             setAvatarInitials(
-              `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
+              `${parsedData.first_name.charAt(0)}${parsedData.last_name.charAt(0)}`.toUpperCase(),
             );
-          } else if (parsedData.firstName) {
-            setAvatarInitials(parsedData.firstName.charAt(0).toUpperCase());
+          } else if (parsedData.first_name) {
+            setAvatarInitials(parsedData.first_name.charAt(0).toUpperCase());
           }
 
           // Always try to load profile picture since localStorage might not have the latest data
@@ -355,9 +357,14 @@ const DashboardPage: React.FC = () => {
               profilePictureUrl: apiData.profile_pic_url,
             };
             setUserData(newUserData);
-            setAvatarInitials(
-              `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
-            );
+
+            if (newUserData.first_name && newUserData.last_name) {
+              setAvatarInitials(
+                `${newUserData.first_name.charAt(0)}${newUserData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else {
+              setAvatarInitials('');
+            }
 
             // Cache the fresh user data
             const cacheData: UserProfileCache = {
@@ -389,9 +396,13 @@ const DashboardPage: React.FC = () => {
                 profilePictureUrl: cachedProfile.userData.profile_pic_url,
               };
               setUserData(userData);
-              setAvatarInitials(
-                `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
-              );
+              if (userData.first_name && userData.last_name) {
+                setAvatarInitials(
+                  `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+                );
+              } else {
+                setAvatarInitials('');
+              }
             } else {
               void navigate('/login');
             }
@@ -413,9 +424,13 @@ const DashboardPage: React.FC = () => {
               profilePictureUrl: cachedProfile.userData.profile_pic_url,
             };
             setUserData(userData);
-            setAvatarInitials(
-              `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
-            );
+            if (userData.first_name && userData.last_name) {
+              setAvatarInitials(
+                `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else {
+              setAvatarInitials('');
+            }
           } else {
             localStorage.removeItem('accessToken'); // Token might be invalid
             localStorage.removeItem('userData');
@@ -437,9 +452,13 @@ const DashboardPage: React.FC = () => {
             profilePictureUrl: cachedProfile.userData.profile_pic_url,
           };
           setUserData(userData);
-          setAvatarInitials(
-            `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
-          );
+          if (userData.first_name && userData.last_name) {
+            setAvatarInitials(
+              `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+            );
+          } else {
+            setAvatarInitials('');
+          }
         } else {
           void navigate('/login'); // Fallback to login on critical error
         }
@@ -707,7 +726,7 @@ const DashboardPage: React.FC = () => {
               {t('dashboard.loadingProfile')}
             </div>
           ) : (
-            <div className="profile-section">
+            <div className="shadow-md rounded-md p-4 flex flex-row gap-7 bg-theme">
               <div className="profile-info">
                 <div className="profile-avatar">
                   {loadingProfilePicture ? (
@@ -731,12 +750,11 @@ const DashboardPage: React.FC = () => {
                     avatarInitials
                   )}
                 </div>
-                <div className="profile-details">
+                <div className="profile-details text-left">
                   <h3
                     style={{
                       color: isDarkMode ? '#f0f0f0' : '#333333',
                       cursor: 'pointer',
-                      textDecoration: 'underline',
                     }}
                     onClick={() => {
                       void navigate('/profile');
@@ -744,13 +762,10 @@ const DashboardPage: React.FC = () => {
                     title={t('dashboard.goToProfile')}
                   >
                     {userData
-                      ? `${userData.firstName} ${userData.lastName}`
+                      ? `${userData.first_name || ''} ${userData.last_name || ''}`
                       : t('dashboard.userName')}
                   </h3>
-                  <p>
-                    {t('dashboard.userEmail')}:{' '}
-                    {userData ? userData.email || 'N/A' : 'N/A'}
-                  </p>
+                  <p>{userData ? userData.email || 'N/A' : 'N/A'}</p>
                 </div>
               </div>
             </div>
@@ -791,9 +806,78 @@ const DashboardPage: React.FC = () => {
                 </div>
 
                 <div className="intro-text">
-                  <p>{t('dashboard.aboutMarito.intro')}</p>
+                  {/*<p>{t('dashboard.aboutMarito.intro')}</p>
 
-                  <p>{t('dashboard.aboutMarito.mission')}</p>
+                  <p>{t('dashboard.aboutMarito.mission')}</p>*/}
+
+                  <section className="about-mafoko max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left">
+                    <h2 className="!text-3xl font-bold mb-4 text-primary">
+                      About Mafoko
+                    </h2>
+                    <p className="text-lg mb-6">
+                      Mafoko (meaning “words” in Setswana) is a multilingual
+                      platform designed to celebrate and connect South Africa’s
+                      11 official languages.
+                    </p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">
+                      Why Mafoko exists
+                    </h2>
+                    <p className="mt-2">
+                      South Africa’s languages are vibrant, expressive, and
+                      deeply tied to our identity, yet many of them remain
+                      underrepresented in the digital world. Mafoko was built to
+                      change that. It brings together words and meanings from
+                      multiple glossaries into one searchable space, making it
+                      easier than ever to explore terms, understand
+                      translations, and learn across all 11 official languages.
+                    </p>
+                    <p className="mt-4">
+                      Whether you’re online or offline, Mafoko keeps language
+                      knowledge within reach. It also encourages collaboration,
+                      letting communities suggest updates, share insights, and
+                      help improve the quality of each glossary entry over time.
+                    </p>
+                    <p className="mt-4">
+                      By turning scattered linguistic resources into one living,
+                      growing platform, Mafoko helps preserve our heritage while
+                      supporting inclusive education and natural language
+                      research for low-resource languages.
+                    </p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">
+                      Who it’s for
+                    </h2>
+                    <p>
+                      Students, educators, researchers, and anyone passionate
+                      about language and culture.
+                    </p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">
+                      How to use Mafoko
+                    </h2>
+                    <p className="mt-2">
+                      You can use Mafoko to search for terms, explore different
+                      language domains, view translations, and even share your
+                      own feedback to help improve the platform.
+                    </p>
+                    <p className="mt-4">
+                      For a detailed walkthrough including short guides and
+                      video demonstrations visit the{' '}
+                      <a href="/help" className="!text-[#00ceaf] underline">
+                        Help Page
+                      </a>
+                      .
+                    </p>
+
+                    <h2 className="text-2xl font-semibold mt-8 mb-3">
+                      Behind the project
+                    </h2>
+                    <p>
+                      Mafoko is developed for the Data Science for Social Impact
+                      (DSFSI) group at the University of Pretoria.
+                    </p>
+                  </section>
 
                   <p className="team-credit">
                     {t('dashboard.aboutMarito.teamCredit')}

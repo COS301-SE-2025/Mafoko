@@ -775,7 +775,7 @@ const ContributorPage: React.FC = () => {
 
   return (
     <div
-      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`dashboard-container  !bg-[var(--bg-first)] ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobile ? (
         <Navbar />
