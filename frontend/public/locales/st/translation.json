@@ -381,5 +381,36 @@
     "achievements": "Lintho tse Fihletsoeng",
     "supportAndFeedback": "Tšehetso le Maikutlo",
     "feedback": "Maikutlo"
+  },
+  "termAdditions": {
+    "contributionTitle": "Mekhoa ea Mantsoe",
+    "termTitle": "Lentsoe",
+    "termPlaceholder": "Kenya lentsoe",
+    "defTitle": "Tlhaloso",
+    "defPlaceholder": "Kenya tlhaloso",
+    "exampleTitle": "Mohlala",
+    "examplePlaceholder": "Kenya tšebeliso ea mohlala",
+    "domainTitle": "Sebaka sa Tsebo",
+    "languageTitle": "Puo",
+    "extTransTitle": "Liphetolelo Tse Teng",
+    "extContent": "Khetha mantsoe a netefalitsoeng ke batsamaisi ho a kenya e le phetolelo:",
+    "selectTrans": "Liphetolelo Tse Khethiloeng",
+    "remove": "Tlosa",
+    "submitTerm": "Romela Lentsoe",
+    "selectToEdit": "Khetha Lentsoe ho le Hlophisa",
+    "searchPlaceholder": "Batla lentsoe le ka hlophisoang...",
+    "selected": "Le Khethiloe",
+    "content2": "Khetha mantsoe a netefalitsoeng ke batsamaisi ho a kenya e le phetolelo:",
+    "submitEdit": "Romela Phetoho",
+    "translation": "Liphetolelo",
+    "status": "Boemo",
+    "votes": "Livotu",
+    "action": "Ketso",
+    "reviewFeedback": "Hlahloba Maikutlo",
+    "deleteApplication": "Hlosa Kopo",
+    "deleteContent": "Na u tiile hore u batla ho hlakola kopo ee? Ketso ena e ke ke ea khutlisetsoa morao.",
+    "delete": "Hlosa",
+    "cancel": "Khansela"
   }
+
 }

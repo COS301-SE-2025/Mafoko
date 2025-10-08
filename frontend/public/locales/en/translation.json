@@ -481,5 +481,36 @@
     "achievements": "Achievements",
     "supportAndFeedback": "Support and Feedback",
     "feedback": "Feedback"
+  },
+  "termAdditions": {
+    "contributionTitle": "Term Contributions",
+    "termTitle": "Term",
+    "termPlaceholder": "Enter Term",
+    "defTitle": "Definition",
+    "defPlaceholder": "Enter Definition",
+    "exampleTitle": "Example",
+    "examplePlaceholder": "Enter example usage",
+    "domainTitle": "Domain",
+    "languageTitle": "Language",
+    "extTransTitle": "Existing Translations",
+    "extContent": "Select related admin-verified terms to add as translations:",
+    "selectTrans": "Selected Translations",
+    "remove": "Remove",
+    "submitTerm": "Submit Term",
+    "selectToEdit": "Select Term to Edit",
+    "searchPlaceholder": "Search for an editable term...",
+    "selected": "Selected",
+    "content2": "Select related admin-verified terms to add as translations:",
+    "submitEdit": "Submit Edit",
+    "translation": "Translations",
+    "status": "Status",
+    "votes": "Votes",
+    "action": "Action",
+    "reviewFeedback": "Review Feedback",
+    "deleteApplication": "Delete Application",
+    "deleteContent": "Are you sure you want to delete this submission? This action cannot be undone.",
+    "delete": "Delete",
+    "cancel": "Cancel"
+
   }
 }
