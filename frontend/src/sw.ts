@@ -780,7 +780,7 @@ self.addEventListener('fetch', ((event: FetchEvent) => {
   // Only handle navigation requests
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(async () => {
+      fetch(event.request, { redirect: 'follow' }).catch(async () => {
         // Return cached main app for all navigation requests
         const cachedResponse =
           (await caches.match('/')) || (await caches.match('/index.html'));

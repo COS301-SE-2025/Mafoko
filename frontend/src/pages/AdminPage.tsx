@@ -853,17 +853,19 @@ const AdminPage: React.FC = () => {
                         {displayedApplications.map((application) => (
                           <tr key={application.id} className="application-row">
                             <td className="applicant-info">
-                              <div className="applicant-avatar">
-                                <User size={20} />
-                              </div>
-                              <div className="applicant-details">
-                                <div className="applicant-name">
-                                  {application.user.first_name}{' '}
-                                  {application.user.last_name}
+                              <div>
+                                <div className="applicant-avatar">
+                                  <User size={20} />
                                 </div>
-                                <div className="applicant-email">
-                                  <Mail size={14} />
-                                  {application.user.email}
+                                <div className="applicant-details">
+                                  <div className="applicant-name">
+                                    {application.user.first_name}{' '}
+                                    {application.user.last_name}
+                                  </div>
+                                  <div className="applicant-email">
+                                    <Mail size={14} />
+                                    {application.user.email}
+                                  </div>
                                 </div>
                               </div>
                             </td>
