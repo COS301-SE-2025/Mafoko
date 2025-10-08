@@ -206,12 +206,14 @@ const RegistrationPage: React.FC = () => {
               value={password}
               onChange={setPassword}
               label={t('registrationPage.passwordLabel')}
+              placeholder={t('registrationPage.passwordPlaceholder')}
             />
 
             <PasswordField
               value={confirmPassword}
               onChange={setConfirmPassword}
               label={t('registrationPage.confirmPasswordLabel')}
+              placeholder={t('registrationPage.confirmPasswordPlaceholder')}
             />
 
             <div className="form-group terms-checkbox">

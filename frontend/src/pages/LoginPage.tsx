@@ -114,7 +114,8 @@ const LoginPage: React.FC = () => {
             <PasswordField
               value={password}
               onChange={setPassword}
-              label={'Password'}
+              label={t('registrationPage.passwordLabel')}
+              placeholder={t('registrationPage.passwordPlaceholder')}
             />
 
             <div className="form-options">

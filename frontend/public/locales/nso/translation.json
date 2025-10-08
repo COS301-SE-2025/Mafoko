@@ -135,6 +135,30 @@
       "mission": "Marito e šoma gabotse ka bobedi inthaneteng le ntle ga inthanete, e fa matla setšhaba go hwetša didirišwa tša dipolelo tše tletšego, go fa maikutlo, le go šomišana go ageng di-lexicons tše tiilego bakeng sa dipolelo tše di nago le didirišwa tše nnyane. Sethala se ke karolo ya mošomo wo o tšwelago pele wo o dirwago ke DSFSI (Data Science for Social Impact) Yunibesithing ya Pretoria go dira gore didirišwa tša dipolelo di fihlelelege setšhabeng sohle le go tšwela pele dinyakišišo tša go šomana le polelo ya tlhago bakeng sa dipolelo tša Afrika.",
       "teamCredit": "E agile ka bomotho ke Velox",
       "learnMoreDSFSI": "Ithute mo go oketšegilego ka DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Ka Mafoko",
+      "content": "Mafoko (a bolelago “mantšu” ka Setswana) ke setsha sa dipuo tše dintši se se dirilwego go keteka le go kopanya dipuo tše 11 tša semmušo tša Afrika Borwa."
+    },
+    "whyMafoko": {
+      "title": "Lebaka la gore Mafoko e be gona",
+      "content": "Dipuo tša Afrika Borwa di na le maatla, di bontšha maikutlo, ebile di amana kudu le boitsebišo bja rena, eupša tše dintši ga di emelwe ka botlalo lefaseng la dijithale. Mafoko e agilwe go fetola seo. E kopanya mantšu le ditlhalošo tše di tšwago go dikgoboketšo tša mantšu tše dintši e di dira lefelo le tee leo le ka nyakišišwago gabonolo, gomme seo se dira gore go be bonolo kudu go hlahloba mantšu, go kwešiša diphetolelo, le go ithuta dipuo ka moka tše 11 tša semmušo.",
+      "content2": "Ge o le inthaneteng goba o se gona, Mafoko e boloka tsebo ya polelo e le kgauswi le wena. E hlohleletša le tšhomišano ka go dumelela ditšhaba go šišinya dintlafatšo, go abelana ka tsebo, le go thuša go kaonafatša boleng bja ntlha ye nngwe le ye nngwe ya dikgoboketšo tša mantšu ka nako.",
+      "content3": "Ka go kopanya methopo ya polelo yeo e bego e phatlaletše gore e be setsha se se phelago, se se holago, Mafoko e thuša go šireletša bohwa bja rena mola e thekga thuto ye e akareditšego le nyakišišo ya dipolelo tša tlhago tša dipuo tše di nago le methopo ye e fokolago."
+    },
+    "whoMafoko": {
+      "title": "E etseditswe bomang",
+      "content": "Baithuti, barutiši, bafuputši, le mang le mang yo a ratago dipuo le setšo."
+    },
+    "howMafoko": {
+      "title": "Mokgwa wa go diriša Mafoko",
+      "content": "O ka diriša Mafoko go nyaka mantšu, go hlahloba mafelo a fapaneng a polelo, go lebelela diphetolelo, le go fa maikutlo a gago go thuša go kaonafatša setsha.",
+      "help": "Bakeng sa tlhaloso e feletšego yeo e akaretšago ditaelo tše khutshwane le dikhophi tša video tša go bontšha, etela",
+      "helpLink": "Letlakala la Thušo"
+    },
+    "behindProject": {
+      "title": "Ka morago ga Morero",
+      "content": "Mafoko e agilwe bakeng sa sehlopha sa Data Science for Social Impact (DSFSI) kua Yunibesithing ya Pretoria."
     }
   },
   "glossaryPage": {
@@ -296,5 +320,69 @@
       "passwordUpdateFailed": "Go hlogile go mpshafatša lentšu-la-siphiri",
       "passwordUpdateError": "Go hlogile go mpshafatša lentšu-la-siphiri: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Melao le Dipeelano",
+    "welcome": "Re a go amogela go Mafoko, setsha sa dipuo tše dintši se hlabollwago le go laolwa ke sehlopha sa Data Science for Social Impact (DSFSI) kua Yunibesithing ya Pretoria. Ka go diriša Mafoko, o dumelana le Melao le Dipeelano tše. Hle bala ka kelohloko pele o tsena goba o tšea karolo mo setšhabeng se.",
+    "purposeTitle": "Morero wa Mafoko",
+    "purpose": "Mafoko (le bolelang 'mantšu' ka Setswana) ke setsha sa thuto se se nago le morero wa kgwebo se se hlohleletšago dipuo tše 11 tša semmušo tša Afrika Borwa ka go fa phihlelelo ya dikgoboketšo tša mantšu le didiriswa tša dipuo tše dintši. Setsha se se hlomilwe go thekga thuto ye e akaretšago, nyakišišo, le tšhomišano gare ga ditšhaba tša dipuo.",
+    "userTitle": "Diakhaonto tša Basebedi",
+    "user": "Go tšea karolo go Mafoko, go swana le go romela mantšu, go bouta, go fa dikgopolo, goba go dira kopo ya go ba setsebi sa polelo, basebedi ba swanetše go bopa akhaonto. O dumelana le go fana ka tshedimosetso ye e nepagetšego le ya nnete ge o ngwadiša, gomme o boloke tshedimosetso ya gago ya go tsena e le sephiri. DSFSI e na le tokelo ya go emiša goba go phumola diakhaonto tše di phatlago melao ye goba tše di romelago diteng tše di sa swanelago.",
+    "contributionTitle": "Meneelo ya Basebedi",
+    "contribution": "Mafoko e dumelela basebedi go romela mantšu, diphetolelo, ditlhaloso, le dikgopolo. Ka go romela diteng, o fa DSFSI tumelelo ye e sego ya go lefiwa, ye e sa lekanyetšwago ya go bontšha, go dira ditlhahiso gape, le go phatlalatša meneelo ya gago ka gare ga Mafoko bakeng sa thuto le nyakišišo.",
+    "contribution2": "Meneelo ka moka e swanetše go ba ye e maleba, e hlomphegago, le ye e šomišwago gabotse ka polelo. Diteng tše di kgetholago, tše di nyatšago goba tše di sego nnete di tla tlošwa, gomme go boeletšwa ga molato go ka feleletša ka go emišwa ga akhaonto.",
+    "linguistTitle": "Dikopo tša Ditsebi tša Dipuo",
+    "linguist": "Basebedi bao ba nyakago go ba ditsebi tša dipuo mo setšhabeng ba ka dira dikopo ka go fana ka bopaki bja dingwalwa tša bona tša thuto (bjalo ka direkhoto tša Google Scholar). DSFSI e na le tokelo ya go lekola le go netefatša bokgoni pele e fa tumelelo ya maemo a setsebi.",
+    "propertyTitle": "Bokgoni bja Bohlale",
+    "property": "Setsha sa Mafoko, go akaretša moralo wa sona, sebopego, le dikgoboketšo tša mantšu, ke thoto ya bokgoni bja monagano ya DSFSI le Yunibesithi ya Pretoria. Mantšu le diphetolelo di dula e le thoto ya babopi le balekane, eupša di ka dirišwa gape ka gare ga Mafoko bakeng sa morero wa thuto le nyakišišo bjalo ka ge go hlaloswa godimo.",
+    "accuracyTitle": "Go Nepa le Tlhokomeliso",
+    "accuracy": "Le ge Mafoko e ikemišetša go fana ka tshedimosetso ya dipuo ye e nepagetšego le e tshepahalago, DSFSI ga e fane ka netefatšo mabapi le go phethagala goba go nepagala ga diteng. Setsha se se nepagetšwe 'bjalo ka ge se le gona' bakeng sa thuto, gomme DSFSI ga e tšee boikarabelo bja diphošo, go tlogelwa, goba diphetho tše di tšweletšego ka lebaka la tšhomišo ya sona.",
+    "commercialTitle": "Tirišo ye e sego ya Kgwebo",
+    "commercial": "Mafoko e fiwa mahala bakeng sa thuto le nyakišišo. Ga go na diteng tša setsha tšeo di ka dirwago gape, tša phatlalatšwa goba tša dirišwa bakeng sa poelo ntle le tumelelo ye e ngwadilwego pele go tšwa go DSFSI.",
+    "privaryTitle": "Bosephiri le Tirišo ya Tshedimosetso",
+    "privacy": "Mafoko ga e diriše dikokisi (cookies), go latela tshedimosetso, goba ditirelo tša papatso. Tshedimosetso ya akhaonto e bolokilwe feela go dumelela go tšea karolo ga mosebedi le go boloka tshepetšo ya setsha. DSFSI ga e abelane ka tshedimosetso ya botho le batho ba ka ntle.",
+    "changeTitle": "Diphetogo go Melao",
+    "change": "DSFSI e ka mpshafatša Melao le Dipeelano tše nako le nako go bontšha ntlafatšo goba diphetogo tša maano. Go tšwelapele go diriša Mafoko morago ga ntlafatšo go ra gore o amogela melao ye e mpshafaditšwego.",
+    "contactTitle": "Kgokagano",
+    "contact": "Bakeng sa dipotšišo goba matshwenyego mabapi le Melao le Dipeelano tše, hle ikgokaganye le sehlopha sa Data Science for Social Impact (DSFSI) kua Yunibesithing ya Pretoria.",
+    "email": "Imeile"
+  },
+  "feedbackPage": {
+    "thanks": "Re leboga kudu",
+    "your": "Ya gago",
+    "success": "e rometšwe ka katlego. Re leboga maikutlo a gago.",
+    "redirect": "E fetošetša",
+    "submit": "Romela",
+    "description": "Abelana dikgopolo tša gago go re thuša go kaonafatša tirelo ya rena.",
+    "description2": "Re tsebiše se se sa dirago gabotse gore re se lokiše.",
+    "description3": "Re rata go kwa se re se dirago gabotse.",
+    "name": "Leina (Boikgethelo)",
+    "namePlaceholder": "Leina",
+    "email": "Imeile (Boikgethelo)",
+    "emailPlaceholder": "Imeile",
+    "suggest": "Hlalosa kgopelo ya gago ka botlalo",
+    "issue": "Ka kgopelo hlalosa bothata bjo o kopanego le bjona",
+    "compliment": "Re botše se se dirilego gore phihlelo ya gago e be ntle",
+    "submiting": "E romela",
+    "singluarSubmit": "Romela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Kgopelo ya tokafatso",
+    "complaint": "Tletlebo",
+    "compliment": "Thoriso"
+  }
+  "navbar": {
+    "mainNavigation": "Tsamaiso ya Mathomo",
+    "analytics": "Dikgopolo tša Tshekatsheko",
+    "workspaceAndTools": "Lefelo la Mosebetsi le Didirišwa",
+    "workspace": "Lefelo la Mosebetsi",
+    "learing": "Ditsela tša Thuto",
+    "termAddition": "Go Oketša Mantšu",
+    "linguist": "Setsebi sa Polelo",
+    "admin": "Molaodi",
+    "profileAndAccount": "Profaele le Akhaonto",
+    "achievements": "Dikatlego",
+    "supportAndFeedback": "Thušo le Maikutlo",
+    "feedback": "Maikutlo"
   }
 }

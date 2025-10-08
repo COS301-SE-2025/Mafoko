@@ -50,15 +50,15 @@
     "orDivider": "OKANYE",
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunayo i-akhawunti?",
-    "registerLink": "[XH] Register",
-    "welcomeImageAlt": "[XH] Marito Login Welcome",
+    "registerLink": "Bhalisa",
+    "welcomeImageAlt": "Marito Login Welcome",
     "dsfsiLogoAlt": "[XH] DSFSI Logo",
-    "errorTokenMissing": "[XH] Login successful, but no token received. Please contact support.",
-    "errorDefault": "[XH] Login failed. Please check your credentials.",
-    "errorUnexpectedFormat": "[XH] Login error (status {{status}}). Unexpected error format.",
-    "errorWithStatus": "[XH] Login failed (status {{status}}). Please try again.",
-    "errorNetwork": "[XH] An error occurred: {{message}}.",
-    "errorUnknownNetwork": "[XH] An unknown network error occurred. Please try again."
+    "errorTokenMissing": "Ukungena kuphumelele, kodwa akukho phawu lufunyenweyo. Nceda uqhagamshelane nenkxaso.",
+    "errorDefault": "Ukungena akuphumelelanga. Nceda ujonge iinkcazi zakho.",
+    "errorUnexpectedFormat": "Impazamo yenzekile.",
+    "errorWithStatus": "Impazamo yokungena. Ifomati yempazamo engalindelekanga.",
+    "errorNetwork": "Impazamo yenzekile.",
+    "errorUnknownNetwork": "Kwenzeke impazamo yenethiwekhi engaziwayo. Nceda zama kwakhona."
   },
   "registrationPage": {
     "title": "QALISA NGOKU",
@@ -132,6 +132,30 @@
       "mission": "IMarito isebenza ngokugqibeleleyo kokubini kwi-intanethi nangaphandle kwe-intanethi, inika amandla uluntu ukuba lufumane izixhobo zeelwimi ezipheleleyo, lunikeze ingxelo, kwaye lusebenzisane ekwakheni ii-lexicons ezomeleleyo kwiilwimi ezinezixhobo ezincinane. Le qonga yinxalenye yephulo eliqhubekayo le-DSFSI (iNzululwazi yeDatha yeMpembelelo yeNtlalo) kwiYunivesithi yasePretoria ukwenza izixhobo zeelwimi zifumaneke luluntu lonke kwaye zikhuthaze uphando lokusetyenziswa kolwimi lwendalo kwiilwimi zaseAfrika.",
       "teamCredit": "Yakhelwe ngokuzingca yi-Velox",
       "learnMoreDSFSI": "Funda ngakumbi nge-DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Malunga neMafoko",
+      "content": "IMafoko (elithetha “amagama” ngesiTswana) liqonga leelwimi ezininzi eliyilwe ukuze libhiyozelwe kwaye lidibanise iilwimi ezili-11 ezisemthethweni zaseMzantsi Afrika."
+    },
+    "whyMafoko": {
+      "title": "Kutheni iMafoko ikhona",
+      "content": "Iilwimi zaseMzantsi Afrika zinegazi, ziyachaza, kwaye zinxulumene kakhulu nesazisi sethu, kodwa uninzi lwazo alusabonwa ngokwaneleyo kwihlabathi ledijithali. IMafoko yakhiwe ukuze itshintshe loo meko. Idibanisa amagama neentsingiselo ezivela kwiiglosari ezininzi ibe yindawo enye enokukhangelwa lula, nto leyo eyenza kube lula ngakumbi ukufumana amagama, ukuqonda iinguqulelo, nokufunda kuzo zonke iilwimi ezili-11 ezisemthethweni.",
+      "content2": "Nokuba usekwi-intanethi okanye awukho kuyo, iMafoko igcina ulwazi ngeelwimi lufikeleleka. Ikhuthaza nokusebenzisana ngokuvumela uluntu ukuba luphakamise uhlaziyo, lwabelane ngolwazi, kwaye luncede ekuphuculeni umgangatho wokungena kwiglosa nganye ngokuhamba kwexesha.",
+      "content3": "Ngokudibanisa izixhobo zolwimi ezazisachithakele zibe liqonga elinye eliphilayo nelikhulayo, iMafoko inceda ekugcineni ilifa lethu ngelixa ixhasa imfundo ebandakanya wonke umntu kunye nophando ngeelwimi zendalo zeelwimi ezineziseko ezilinganiselweyo."
+    },
+    "whoMafoko": {
+      "title": "Ngubani oyenzelwe yona",
+      "content": "Abafundi, ootitshala, abaphandi, kunye nabani na onothando ngolwimi nenkcubeko."
+    },
+    "howMafoko": {
+      "title": "Indlela yokusebenzisa iMafoko",
+      "content": "Ungasebenzisa iMafoko ukukhangela amagama, uhlolisise iindawo zolwimi ezahlukeneyo, ubone iinguqulelo, kwaye wabelane ngengxelo yakho ukunceda ukuphucula iqonga.",
+      "help": "Ukuze ufumane inkcazelo eneenkcukacha ebandakanya izikhokelo ezimfutshane kunye nevidiyo zokubonisa, nceda undwendwele",
+      "helpLink": "Iphepha Loncedo"
+    },
+    "behindProject": {
+      "title": "Ngasemva kweProjekthi",
+      "content": "IMafoko iphuhliselwe iqela leData Science for Social Impact (DSFSI) kwiYunivesithi yasePitoli."
     }
   },
   "glossaryPage": {
@@ -265,5 +289,69 @@
       "passwordUpdateFailed": "Kwasilela ukubuyekeza ipasiwedi",
       "passwordUpdateError": "Kwasilela ukubuyekeza ipasiwedi: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Imiqathango Nemigaqo",
+    "welcome": "Wamkelekile eMafoko, iqonga leelwimi ezininzi eliphuhliswe nelilawulwa liqela leData Science for Social Impact (DSFSI) kwiYunivesithi yasePitoli. Ngokusebenzisa iMafoko, uyavuma nale Miqathango nemigaqo. Nceda uyifunde ngononophelo phambi kokuba ufikelele okanye unikele iqhaza kweli qonga.",
+    "purposeTitle": "Injongo ye Mafoko",
+    "purpose": "IMafoko (elithetha ukuba “amagama” ngesiTswana) liqonga lemfundo elingajonganga nzuzo elikhuthaza iilwimi ezisemthethweni ezilishumi elinanye zaseMzantsi Afrika ngokubonelela ngamathuba okufikelela kwiiglosa ezininzi kunye neenkqubo zolwimi. Eli qonga lenzelwe ukuxhasa imfundo ebandakanya wonke umntu, uphando, kunye nentsebenziswano phakathi koluntu lweelwimi.",
+    "userTitle": "Iiakhawunti Zabasebenzisi",
+    "user": "Ukuze unikele iqhaza eMafoko, njengokungenisa amagama, ukuvota, ukuphawula, okanye ukufaka isicelo sokuba yingcali yolwimi, abasebenzisi kufuneka benze iakhawunti. Uyavuma ukubonelela ngolwazi oluchanekileyo noluthembekileyo xa ubhalisa kwaye ugcine iinkcukacha zakho zokungena ziyimfihlo. I-DSFSI inelungelo lokumisa okanye ukususa iiakhawunti ezophula le miqathango okanye ezithumela umxholo ongafanelekanga.",
+    "contributionTitle": "Igalelo Labasebenzisi",
+    "contribution": "IMafoko ivumela abasebenzisi ukuba bafake amagama, iinguqulelo, iinkcazo, kunye nezimvo. Ngokunikela ngomxholo, unika i-DSFSI ilayisensi engeyoyodwa, engahlawulwayo yokubonisa, ukuvelisa kwakhona, nokusasaza igalelo lakho ngaphakathi eMafoko ngenjongo yemfundo nophando.",
+    "contribution2": "Zonke iziphumo kufuneka zibe ezifanelekileyo, ezihloniphekileyo, nezilungiselelwe ulwimi. Umxholo onobandlululo, ongahloneliyo okanye okhohlisayo uya kususwa, kwaye ukuphindwa kwetyala kungakhokelela ekumiselweni kweakhawunti.",
+    "linguistTitle": "Izicelo ZeeNkcubeko ZeeLwimi",
+    "linguist": "Abasebenzisi abafuna ukuba ziingcali zolwimi kweli qonga banokufaka izicelo ngokubonelela ngobungqina bezincwadi zabo zophando (ezifana neerekhodi zeGoogle Scholar). I-DSFSI inelungelo lokuhlola nokungqina ubunyani beeziqinisekiso phambi kokunika amalungelo engcali yolwimi.",
+    "propertyTitle": "Ubunini Bobukrelekrele",
+    "property": "Iqonga leMafoko, eliquka uyilo lwayo, isakhiwo, kunye neglosa eziqokelelweyo, liyimpahla yobukrelekrele ye-DSFSI kunye neYunivesithi yasePitoli. Amagama kunye neenguqulelo nganye ziseselempahla yababhali nababoneleli bazo, kodwa zingasetyenziswa kwakhona ngaphakathi eMafoko ngenjongo yemfundo nophando njengoko kuchaziwe apha ngasentla.",
+    "accuracyTitle": "Uchaneko kunye Nesikhumbuzo",
+    "accuracy": "Nangona iMafoko ijolise ekuboneleleni ngolwazi lweelwimi olunembileyo noluthembekileyo, i-DSFSI ayinakuqinisekisa ngokupheleleyo ngokugqibeleleyo okanye ngochaneko lomxholo. Eli qonga linikezelwa 'njengoko linjalo' ngenjongo yemfundo, kwaye i-DSFSI ayinaxanduva ngalo naluphi na uhlobo lweempazamo, ukushiywa, okanye iziphumo ezivelayo ekusebenzisweni kwalo.",
+    "commercialTitle": "Ukusetyenziswa Okungajonganga Nzuzo",
+    "commercial": "IMafoko inikezelwa simahla ngenjongo yemfundo nophando. Akukho mxholo okwiqonga onokuvuselelwa, usasazwe, okanye usetyenziswe ngenjongo yorhwebo ngaphandle kwemvume ebhaliweyo evela kwi-DSFSI.",
+    "privaryTitle": "Ubumfihlo kunye Nokusetyenziswa Kwedatha",
+    "privacy": "IMafoko ayisebenzisi ii-cookie, ukulandela umkhondo wedatha, okanye iinkonzo zokuthengisa. Ulwazi lweakhawunti lugcinwa kuphela ukuze luvumele ukuthatha inxaxheba komsebenzisi kunye nokugcina ukusebenza kweqonga. I-DSFSI ayabelani ngedatha yabucala namaqela angaphandle.",
+    "changeTitle": "Utshintsho KwiMiqathango",
+    "change": "I-DSFSI inokuba ihlaziye le Miqathango nemigaqo ngamaxesha athile ukubonisa uphuculo okanye utshintsho lwemigaqo-nkqubo. Ukuqhubeka nokusebenzisa iMafoko emva kotshintsho kuthetha ukuba uyamkela imiqathango ehlaziyiweyo.",
+    "contactTitle": "Qhagamshelana Nathi",
+    "contact": "Ngemibuzo okanye inkxalabo ephathelele kule Miqathango nemigaqo, nceda uqhagamshelane neqela leData Science for Social Impact (DSFSI) kwiYunivesithi yasePitoli.",
+    "email": "Imeyile"
+  },
+  "feedbackPage": {
+    "thanks": "Enkosi kakhulu",
+    "your": "Okho",
+    "success": "kuthunyelwe ngempumelelo. Siyabulela ingxelo yakho.",
+    "redirect": "Iyalungiselela ukudlulisela",
+    "submit": "Thumela",
+    "description": "Yabelana ngezimvo zakho ukusinceda siphucule inkonzo yethu.",
+    "description2": "Sazise ukuba yintoni engahambanga kakuhle ukuze sikwazi ukuyilungisa.",
+    "description3": "Singathanda ukuva ukuba yintoni esiyenzayo kakuhle.",
+    "name": "Igama (Ongakukhetha)",
+    "namePlaceholder": "Igama",
+    "email": "I-imeyile (Ongakukhetha)",
+    "emailPlaceholder": "I-imeyile",
+    "suggest": "Chaza ngokweenkcukacha ingcebiso yakho",
+    "issue": "Nceda uchaze ingxaki oyibonileyo",
+    "compliment": "Sazise ukuba yintoni eyenze amava akho abe mahle",
+    "submiting": "Iyathumela",
+    "singluarSubmit": "Thumela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Ingcebiso",
+    "complaint": "Isikhalazo",
+    "compliment": "Ukuncoma"
+  }
+  "navbar": {
+    "mainNavigation": "Ukuzulazula Okuphambili",
+    "analytics": "Uhlalutyo",
+    "workspaceAndTools": "Indawo Yokusebenza Nezixhobo",
+    "workspace": "Indawo Yokusebenza",
+    "learing": "Iindlela Zokufunda",
+    "termAddition": "Ukongezwa Kwamagama",
+    "linguist": "Isazi Seelwimi",
+    "admin": "Umlawuli",
+    "profileAndAccount": "Iprofayile NeAkhawunti",
+    "achievements": "Iimpumelelo",
+    "supportAndFeedback": "Inkxaso Nezimvo",
+    "feedback": "Impendulo"
   }
 }

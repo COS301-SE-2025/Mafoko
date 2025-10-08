@@ -65,8 +65,32 @@
       "mission": "Marito yi tirha kahle hinkwako eka inthanete na handle ka inthanete, yi nyika matimba vaaki ku fikelela switirhisiwa swa tindzimi swo fela, ku nyika mavonelo, na ku tirhisana ku aka ma-lexicons yo tiya eka tindzimi leti nga na switirhisiwa swintsongo. Pulatifomo leyi i xiphemu xa ntirho lowu ya emahlweni lowu endliwaka hi DSFSI (Data Science for Social Impact) eka Yunivesiti ya Pretoria ku endla leswaku switirhisiwa swa tindzimi swi fikeleleka vaaki hinkwavo na ku susa emahlweni dylondzo ya ku tirhisa ririmi ra ntumbuluko eka tindzimi ta Afrika.",
       "teamCredit": "Yi akiwe hi ku tinyungubyisa hi Velox",
       "learnMoreDSFSI": "Dyondza swo tala hi DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Hi ta Mafoko",
+      "content": "Mafoko (leswi vulaka “marito” hi Xitsonga) i pulatifomo ya tindzimi to tala leyi vuriweke leswaku yi tlangela ni ku hlanganisa tindzimi ta 11 leti amukeriweke hi nawu eAfrika Dzonga."
+    },
+    "whyMafoko": {
+      "title": "Hikuva yini Mafoko yi ri kona",
+      "content": "Tindzimi ta Afrika Dzonga ti tele hi vutomi, ti kombisa mintirho ni ku hlanganisiwa ka swa rixaka ra hina, kambe letin’wana leti ti ha ri hava xiyimo lexi nga erivaleni emisaveni ya dijithali. Mafoko yi simekiwile leswaku yi ta cinca leswi. Yi hlanganisa marito ni tinhlamuselo leti humaka eka tindzawulo to hambana ta marito ku endla ndhawu yin’we leyi nga laviseka, leswi endlaka leswaku swi olova ku kuma marito, ku twisisa tinhlamuselo, ni ku dyondza eka tindzimi hinkwato ta 11 leti amukeriweke hi nawu.",
+      "content2": "Ku nga khathariseki loko u tirhisa inthanete kumbe u nga yi tirhisi, Mafoko yi endla leswaku vutivi bya ririmi byi tshama bya ri ekusuhi. Yi khutaza ntirho wa ntshamisano, yi pfumelela mindyangu leswaku yi komba matirhiselo lamantshwa, yi avelana vutivi, naswona yi pfuna eku antswisiseni ka kahle ka nhlayo yin’wana ni yin’wana ya marito hi nkarhi hinkwawo.",
+      "content3": "Hi ku hlanganisa swiviko swa ririmi leswi a swi hangalake swi va pulatifomo yin’we leyi hanyaka, leyi endlaka leswaku yi kula nkarhi na nkarhi, Mafoko yi pfuna eku hlayiseni ndzhaka ya hina naswona yi seketela dyondzo leyi pfulekeke ni ndzavisiso wa ririmi ra ntumbuluko eka tindzimi leti nga na switirhisiwa swin’wana swo koma."
+    },
+    "whoMafoko": {
+      "title": "Yi endliwe eka mani",
+      "content": "Vadyondzi, vadidiyeri, vatsari va ndzavisiso, ni un’wana ni un’wana loyi a tsakelaka ririmi ni ndzhaka ya rixaka."
+    },
+    "howMafoko": {
+      "title": "Ndlela yo tirhisa Mafoko",
+      "content": "U nga tirhisa Mafoko ku lava marito, ku kambela swivumbeko swa tindzimi to hambana, ku vona tinhlamuselo, naswona u nga avelana miehleketo ya wena ku pfuna eku antswisiseni ka pulatifomo.",
+      "help": "Ku kuma nkombiso lowu heleleke lowu katsiweke tinhlamuselo to komisa ni tivhidiyo ta dyondzo, endzela",
+      "helpLink": "Xiphemu xa Mpfuneto"
+    },
+    "behindProject": {
+      "title": "Endzhaku ka Projeka",
+      "content": "Mafoko yi endliwe eka nhlangano wa Data Science for Social Impact (DSFSI) eka Yunivhesiti ya Pretoria."
     }
-  },
+},
 
   "landingPage": {
     "registerButton": "Tsarisa",
@@ -298,5 +322,69 @@
       "passwordUpdateFailed": "Ku herile ku pfuxeta phasiwedi",
       "passwordUpdateError": "Ku herile ku pfuxeta phasiwedi: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Swilaveko Na Mibandela",
+    "welcome": "Amukelekile eMafoko, xipulatifomo xa tindzimi to tala lexi hleriweke naswona xi lawuriwa hi ntlawa wa Data Science for Social Impact (DSFSI) eka Yunivhesiti ya Pretoria. Loko u tirhisa Mafoko, u amukela Swilaveko na Mibandela leyi. Hi kombela u yi hlaya hi vukheta u nga si sungula ku tirhisa kumbe ku nghenelela eka pulatifomo leyi.",
+    "purposeTitle": "Xikongomelo xa Mafoko",
+    "purpose": "Mafoko (lexi vulaka 'marito' hi Xitsonga) i pulatifomo ya dyondzo leyi nga ri ya bindzu leyi tlakusaka tindzimi ta 11 ta Afrika Dzonga ta xileriso hi ku nyika ku fikelela eka tiglosa to tala na swinawana swa tindzimi. Pulatifomo leyi yi endleriwile ku seketela dyondzo ya vanhu hinkwavo, ndzavisiso, na ku tirhisana exikarhi ka mavandla ya tindzimi.",
+    "userTitle": "Tikhawunti ta Vasebenzisi",
+    "user": "Ku kota ku nghenelela eMafoko, ku fana ni ku rhumela marito, ku vouta, ku nyika mavonelo, kumbe ku endla xikombelo xo va muhlayi wa ririmi, vasebenzisi va fanele va endla akhawunti. U pfumela ku nyika mahungu lama nga kahle ni lama pfunaka loko u tsarisa, naswona u ta hlayisa mahungu ya wena ya ku nghena hi xihundla. DSFSI yi na lunghelo ro yimisa kumbe ku susa tikhawunti leti nga landzeliki Mibandela leyi kumbe leti rhumelaka swilo leswi nga fanelangiki.",
+    "contributionTitle": "Mihandzu ya Vasebenzisi",
+    "contribution": "Mafoko yi pfumela vasebenzisi ku rhumela marito, ku hundzuluxela, ku hlamusela, na ku nyika mavonelo. Loko u rhumela swilo, u nyika DSFSI layisense leyi nga ri ya xiyimo xin’we, leyi nga riki na hakelo, yo kombisa, ku andzisa, no hangalasa mihandzu ya wena eMafoko hi xikongomelo xa dyondzo na ndzavisiso.",
+    "contribution2": "Mihandzu hinkwayo yi fanele ku va leyi fambisanaka, leyi xiximekaka, naswona yi hlawuriwile hi ririmi lerinene. Swiviko leswi kgetholaka, leswi thyakisaka kumbe leswi nga pfuniki swi ta susiwa, naswona ku tlhela u endla leswi swi nga humesa ku yimisiwa ka akhawunti.",
+    "linguistTitle": "Swikombelo swa Vahlayi va Tindzimi",
+    "linguist": "Vasebenzisi lava lavaka ku va vahlayi va tindzimi eMafoko va nga endla swikombelo hi ku nyika vumbhoni bya tibuku ta vona ta dyondzo (tanihi matsalwa ya Google Scholar). DSFSI yi na lunghelo ro kambisisa ni ku tiyisisa vukhongeri byin’wana na byin’wana loko ku nga si nyikiwa mpfumelelo wa ntirho wa vahlayi.",
+    "propertyTitle": "Vuhundzuluxeri bya Riqingho",
+    "property": "Pulatifomo ya Mafoko, ku katsa na vuhundzuluxeri bya yona, xiyimo, na tiglosa leti hlengeletiwaka, i ndzhaka ya vuhundzuluxeri bya DSFSI na Yunivhesiti ya Pretoria. Marito ni minkarhi yo hundzuluxela swi sala swi ri swa vatsari ni vahumelerisi, kambe swi nga tlhela swi tirhisiwa eMafoko hi xikongomelo xa dyondzo na ndzavisiso tanihi leswi ku hlamuseriweke laha henhla.",
+    "accuracyTitle": "Ku Lulama na Xitiviso",
+    "accuracy": "Hambileswi Mafoko yi lavaka ku nyika mahungu ya ririmi lama lulameke na lama tshembekaka, DSFSI a yi na xitshembiso xa ku hetiseka kumbe ku lulama ka swilo. Pulatifomo yi nyikiwa 'tanihi leswi nga kona' hi xikongomelo xa dyondzo, naswona DSFSI a yi na vutihlamuleri eka swihoxo, leswi nga tsariwangiki, kumbe swivangelo leswi humaka eku tirhiseni ka yona.",
+    "commercialTitle": "Ku Tirhisiwa Loku Nga Riki Ka Vuhundzuluxeri Bya Bindzu",
+    "commercial": "Mafoko yi nyikiwa mahala hi xikongomelo xa dyondzo na ndzavisiso. A ku na swilo leswi nga kona eMafoko leswi nga kopiwi, swi hangalasiwa, kumbe swi tirhisiwa hi xikongomelo xa ku kuma mali handle ka mpfumelelo lowu tsariweke ku suka eDSFSI.",
+    "privaryTitle": "Vuhundzuluxeri Bya Xihundla Na Ku Tirhisiwa Ka Datha",
+    "privacy": "Mafoko a yi tirhisi tikukhi, ku landza, kumbe timali ta vukanganyisi. Mahungu ya akhawunti ma hlayisiwa ntsena ku pfuna vasebenzisi ku nghenelela ni ku hlayisa ntirho wa pulatifomo. DSFSI a yi avanyisi mahungu ya vanhu na tinhlangano ta le handle.",
+    "changeTitle": "Swihundzuluxo Eka Mibandela",
+    "change": "DSFSI yi nga hundzuluxa Swilaveko na Mibandela leyi nkarhi na nkarhi ku kombisa ku antswa kumbe ku cinca ka milawu. Ku ya emahlweni u tirhisa Mafoko endzhaku ka ku hundzuluxiwa swi vula leswaku u amukele Mibandela leyi antswisiweke.",
+    "contactTitle": "Ku Tihlanganisa",
+    "contact": "Loko u ri na swivutiso kumbe swivilelo mayelana na Swilaveko na Mibandela leyi, hi kombela u tihlanganise na ntlawa wa Data Science for Social Impact (DSFSI) eka Yunivhesiti ya Pretoria.",
+    "email": "Imeyili"
+  },
+  "feedbackPage": {
+    "thanks": "Inkomu swinene",
+    "your": "Ya wena",
+    "success": "yi rhumeriwile kahle. Hi khensa mavonelo ya wena.",
+    "redirect": "Yi le ku rhumeriweni",
+    "submit": "Rhumela",
+    "description": "Avelana miehleketo ya wena ku hi pfuna ku antswisa vukorhokeri bya hina.",
+    "description2": "Hi byela leswi nga fambangiki kahle leswaku hi swi lulamisa.",
+    "description3": "Hi ta tsakela ku twa leswi hi swi endlaka kahle.",
+    "name": "Vito (Hi ku tihlawulela)",
+    "namePlaceholder": "Vito",
+    "email": "Imeyili (Hi ku tihlawulela)",
+    "emailPlaceholder": "Imeyili",
+    "suggest": "Hlamusela xiphakamiso xa wena hi vuenti",
+    "issue": "Hi kombela u hlamusela xiphiqo lexi u xi humeleleke",
+    "compliment": "Hi byela leswi endleke leswaku maendlelo ya wena ma va ya kahle",
+    "submiting": "Yi le ku rhumeriweni",
+    "singluarSubmit": "Rhumela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Xiphakamiso",
+    "complaint": "Xikombelo xo khongeleka",
+    "compliment": "Ku khensa"
+  },
+  "navbar": {
+    "mainNavigation": "Ndhlela Nkulu Ya Ku Famba",
+    "analytics": "Vuhlaziyi",
+    "workspaceAndTools": "Ndhawu Ya Ntirho Ni Switirhisiwa",
+    "workspace": "Ndhawu Ya Ntirho",
+    "learing": "Tindlela Ta Dyondzo",
+    "termAddition": "Ku Engeteriwa Ka Marito",
+    "linguist": "Mutivi Wa Ririmi",
+    "admin": "Mulawuri",
+    "profileAndAccount": "Profayili Ni Akhawunti",
+    "achievements": "Swikombiso Swa Nkateko",
+    "supportAndFeedback": "Nseketelo Ni Mavonelo",
+    "feedback": "Mavonelo"
   }
 }

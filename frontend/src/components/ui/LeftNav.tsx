@@ -71,7 +71,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
     () => [
       {
         id: 'main-navigation',
-        label: 'Main Navigation',
+        label: t('navbar.mainNavigation'),
         items: [
           {
             id: 'dashboard',
@@ -81,7 +81,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           },
           {
             id: 'analytics',
-            label: 'Dashboard',
+            label: t('navbar.analytics'),
             path: '/analytics',
             icon: BarChart3,
           },
@@ -89,11 +89,11 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       },
       {
         id: 'workspace-tools',
-        label: 'Workspace & Tools',
+        label: t('navbar.workspaceAndTools'),
         items: [
           {
             id: 'workspace',
-            label: 'Workspace',
+            label: t('navbar.workspace'),
             path: '/workspace',
             icon: Briefcase,
           },
@@ -111,29 +111,30 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           },
           {
             id: 'learning-path',
-            label: 'Learning Paths',
+            label: t('navbar.learing'),
             path: '/learning-path',
             icon: BookOpen,
           },
           {
             id: 'contributor-page',
-            label: 'Term Additions',
+            label: t('navbar.termAddition'),
             path: '/contributor',
             icon: Plus,
           },
-          {
-            id: 'linguist-page',
-            label: 'Linguist',
-            path: '/linguist',
-            icon: BadgeCheck,
-          },
+
           ...(userRole === 'admin'
             ? [
                 {
                   id: 'admin-page',
-                  label: 'Admin',
+                  label: t('navbar.admin'),
                   path: '/admin/terms',
                   icon: Shield,
+                },
+                {
+                  id: 'linguist-page',
+                  label: t('navbar.linguist'),
+                  path: '/linguist',
+                  icon: BadgeCheck,
                 },
               ]
             : []),
@@ -141,7 +142,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       },
       {
         id: 'profile-account',
-        label: 'Profile & Account',
+        label: t('navbar.profileAndAccount'),
         items: [
           {
             id: 'settings',
@@ -151,21 +152,21 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           },
           {
             id: 'achievements',
-            label: 'Achievements',
+            label: t('navbar.achievements'),
             path: '/achievements',
             icon: Trophy,
           },
-          {
-            id: 'linguist-application',
-            label: t('navigation.linguistApplication'),
-            path: '/linguist-application',
-            icon: PenTool,
-          },
+          // {
+          //   id: 'linguist-application',
+          //   label: t('navigation.linguistApplication'),
+          //   path: '/linguist-application',
+          //   icon: PenTool,
+          // },
         ],
       },
       {
         id: 'support-feedback',
-        label: 'Support & Feedback',
+        label: t('navbar.supportAndFeedback'),
         items: [
           {
             id: 'help',
@@ -175,7 +176,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           },
           {
             id: 'feedback',
-            label: 'Feedback',
+            label: t('navbar.feedback'),
             path: '/feedback',
             icon: MessageSquare,
           },
@@ -299,7 +300,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       <div className="left-nav-header">
         <div className="left-nav-atitle-section">
           <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
-            Marito
+           Mafoko
           </h2>
         </div>
         <div className="logo-container">

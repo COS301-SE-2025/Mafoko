@@ -1,7 +1,7 @@
 {
   "settings": {
     "title": "Instellings",
-    "subtitle": "Pas jou Marito-ervaring aan",
+    "subtitle": "Pas jou Mafoko-ervaring aan",
     "selectLanguage": "Kies jou voorkeur taal",
     "profile": {
       "title": "Profiel & Rekening",
@@ -33,10 +33,10 @@
   },
 
   "landingPage": {
-    "greeting": "Welkom by Marito PWA!",
+    "greeting": "Welkom by Mafoko PWA!",
     "registerButton": "Registreer",
     "loginButton": "Teken in",
-    "footerText": "Marito Projek"
+    "footerText": "Mafoko Projek"
   },
   "loginPage": {
     "title": "WELKOM TERUG!",
@@ -52,7 +52,7 @@
     "loginWithGoogle": "Teken in met Google",
     "noAccount": "Het jy nie 'n rekening nie?",
     "registerLink": "Registreer",
-    "welcomeImageAlt": "[AF] Marito Login Welcome",
+    "welcomeImageAlt": "[AF] Mafoko Login Welcome",
     "dsfsiLogoAlt": "[AF] DSFSI Logo",
     "errorTokenMissing": "[AF] Login successful, but no token received. Please contact support.",
     "errorDefault": "[AF] Login failed. Please check your credentials.",
@@ -63,7 +63,7 @@
   },
   "registrationPage": {
     "title": "BEGIN NOU",
-    "subtitle": "Skep jou Marito-rekening.",
+    "subtitle": "Skep jou Mafoko-rekening.",
     "firstNameLabel": "Voornaam",
     "firstNamePlaceholder": "Voer jou voornaam in",
     "lastNameLabel": "Van",
@@ -76,13 +76,13 @@
     "confirmPasswordPlaceholder": "Bevestig jou wagwoord",
     "agreeToTerms": "Ek stem in met die",
     "termsAndConditionsLink": "Terme en Voorwaardes",
-    "createAccountButton": "[AF] Create Account",
-    "creatingAccountButton": "[AF] Creating Account...",
-    "orDivider": "[AF] OR",
+    "createAccountButton": "Skep Rekening",
+    "creatingAccountButton": "Rekening skep...",
+    "orDivider": "Of",
     "createWithGoogle": "[AF] Create Account with Google",
-    "haveAccount": "[AF] Already have an account?",
-    "loginLink": "[AF] Login",
-    "welcomeImageAlt": "[AF] Marito Welcome",
+    "haveAccount": "Het jy reeds 'n rekening?",
+    "loginLink": "Aanmeld",
+    "welcomeImageAlt": "Mafoko Welkom",
     "dsfsiLogoAlt": "[AF] DSFSI Logo",
     "errorPasswordsDoNotMatch": "Wagwoorde stem nie ooreen nie.",
     "errorAgreeToTerms": "Jy moet instem tot die terme en voorwaardes.",
@@ -106,7 +106,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Welkom by Marito",
+    "welcome": "Welkom by Mafoko",
     "welcomeBack": "Welkom terug",
     "userName": "Gebruikersnaam",
     "userId": "Gebruiker ID",
@@ -133,10 +133,34 @@
     "noTermsAvailable": "Geen terme beskikbaar nie",
     "browseCategoryGlossary": "Verken {{category}} woordelys",
     "aboutMarito": {
-      "intro": "Die term 'Marito' kom van Xitsonga en beteken 'woorde' of 'name'. Dit is 'n progressiewe webtoepassing wat die gaping tussen Suid-Afrika se ryk taalerfenis en moderne digitale toeganklikheid oorbrug. Taalliefhebbers, NLP-navorsers en taalkundiges kan Marito as 'n verenigde platform gebruik om veeltalige woordelyste, woordeboeke en terminologie-banke oor 11 van Suid-Afrika se amptelike tale te verken, by te dra en te bewaar.",
-      "mission": "Marito werk naatloos aanlyn en vanlyn, en bemagtig gemeenskappe om toegang tot omvattende taalhulpbronne te verkry, terugvoer in te dien en aan robuuste leksikons vir hulpbronbeperkte tale saam te werk. Hierdie platform is deel van 'n deurlopende inisiatief deur DSFSI (Data Science for Social Impact) by die Universiteit van Pretoria om taalhulpbronne te demokratiseer en natuurlike taalverwerkingsnavorsing vir Afrika-tale te bevorder.",
+      "intro": "Die term 'Mafoko' kom van Xitsonga en beteken 'woorde' of 'name'. Dit is 'n progressiewe webtoepassing wat die gaping tussen Suid-Afrika se ryk taalerfenis en moderne digitale toeganklikheid oorbrug. Taalliefhebbers, NLP-navorsers en taalkundiges kan Mafoko as 'n verenigde platform gebruik om veeltalige woordelyste, woordeboeke en terminologie-banke oor 11 van Suid-Afrika se amptelike tale te verken, by te dra en te bewaar.",
+      "mission": "Mafoko werk naatloos aanlyn en vanlyn, en bemagtig gemeenskappe om toegang tot omvattende taalhulpbronne te verkry, terugvoer in te dien en aan robuuste leksikons vir hulpbronbeperkte tale saam te werk. Hierdie platform is deel van 'n deurlopende inisiatief deur DSFSI (Data Science for Social Impact) by die Universiteit van Pretoria om taalhulpbronne te demokratiseer en natuurlike taalverwerkingsnavorsing vir Afrika-tale te bevorder.",
       "teamCredit": "Trots ontwikkel deur Velox",
       "learnMoreDSFSI": "Leer meer oor DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Oor Mafoko",
+      "content": "Mafoko (wat “woorde” in Setswana beteken) is ’n meertalige platform wat ontwerp is om Suid-Afrika se 11 amptelike tale te vier en te verbind."
+    },
+    "whyMafoko": {
+      "title": "Waarom Mafoko bestaan",
+      "content": "Suid-Afrika se tale is lewendige en uitdrukkingsvolle draers van ons identiteit, maar baie van hulle bly steeds onderverteenwoordig in die digitale wêreld. Mafoko is geskep om dit te verander. Dit bring woorde en betekenisse uit verskeie woordelyste bymekaar in een deursoekbare ruimte, wat dit makliker as ooit maak om terme te verken, vertalings te verstaan, en oor al 11 amptelike tale te leer.",
+      "content2": "Of jy nou aanlyn of vanlyn is, Mafoko hou taal­kennis binne bereik. Dit moedig ook samewerking aan deur gemeenskappe toe te laat om voorstelle te maak, insigte te deel, en te help om die gehalte van elke woordelysinskrywing mettertyd te verbeter.",
+      "content3": "Deur verspreide taalkundige hulpbronne in een lewende, groeiende platform te verenig, help Mafoko om ons erfenis te bewaar terwyl dit inklusiewe onderrig en natuurlike taalnavorsing vir lae-hulpbron­tale ondersteun."
+    },
+    "whoMafoko": {
+      "title": "Vir wie dit bedoel is",
+      "content": "Studente, opvoeders, navorsers, en enigeen wat ’n passie het vir taal en kultuur."
+    },
+    "howMafoko": {
+      "title": "Hoe om Mafoko te gebruik",
+      "content": "Jy kan Mafoko gebruik om terme te soek, verskillende taaldomeine te verken, vertalings te bekyk, en selfs jou eie terugvoer te deel om die platform te help verbeter.",
+      "help": "Vir ’n volledige uiteensetting met kort gidsvideo’s en demonstrasies, besoek asseblief die",
+      "helpLink": "Hulpblad"
+    },
+    "behindProject": {
+      "title": "Agter die Projek",
+      "content": "Mafoko is ontwikkel vir die Data Science for Social Impact (DSFSI)-groep aan die Universiteit van Pretoria."
     }
   },
   "glossaryPage": {
@@ -325,5 +349,69 @@
       "documentsRequired": "ID Dokument en CV is verplig vir taalkundige aansoek",
       "applicationError": "Kon nie aansoek indien nie: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title" : "Terme en Voorwaardes",
+    "welcome": "Welkom by Mafoko, 'n veeltalige platform wat ontwikkel en bedryf word deur die Datawetenskap vir Sosiale Impak (DSFSI) groep aan die Universiteit van Pretoria. Deur Mafoko te gebruik, stem jy in tot hierdie Bepalings en Voorwaardes. Lees dit asseblief sorgvuldig deur voordat jy toegang tot die platform verkry of daartoe bydra.",
+    "purposeTitle": "Doel van Mafoko",
+    "purpose": "Mafoko (wat \"woorde\" in Setswana beteken) is 'n opvoedkundige, nie-kommersiële platform wat Suid-Afrika se 11 amptelike tale bevorder deur toegang te bied tot veeltalige woordelyste en taalkundige hulpbronne. Die platform is ontwerp om inklusiewe leer, navorsing en samewerking oor taalgemeenskappe heen te ondersteun.",
+    "userTitle": "Gebruikersrekening",
+    "user": "Om tot Mafoko by te dra, soos om terme in te dien, te stem, kommentaar te lewer of aansoek te doen om 'n taalkundige te word, moet gebruikers 'n rekening skep. Jy stem in om akkurate en eerlike inligting te verskaf wanneer jy registreer en om die vertroulikheid van jou aanmeldbesonderhede te handhaaf. DSFSI behou die reg voor om rekeninge wat hierdie Terme oortree of onvanpaste inhoud indien, op te skort of te verwyder.",
+    "contributionTitle": "Gebruikersbydraes",
+    "contribution": "Mafoko laat gebruikers toe om terme, vertalings, definisies en kommentaar in te dien. Deur inhoud by te dra, gee jy DSFSI 'n nie-eksklusiewe, tantièmevrye lisensie om jou bydraes binne Mafoko te vertoon, te reproduseer en te versprei vir opvoedkundige en navorsingsdoeleindes.",
+    "contribution2": "Alle voorleggings moet relevant, respekvol en taalkundig gepas wees. Inhoud wat diskriminerend, aanstootlik of misleidend is, sal verwyder word, en herhaalde oortredings kan lei tot die opskorting van die rekening.",
+    "linguistTitle": "Taalkundige Toepassings",
+    "linguist": "Gebruikers wat taalkundiges op die platform wil word, kan aansoek doen deur bewys van akademiese publikasies (soos Google Scholar-rekords) te lewer. DSFSI behou die reg voor om geloofsbriewe te hersien en te verifieer voordat toestemmings op taalkundige vlak verleen word.",
+    "propertyTitle": "Intellektuele Eiendom",
+    "property": "Die Mafoko-platform, insluitend die ontwerp, struktuur en saamgestelde woordelyste, is die intellektuele eiendom van DSFSI en die Universiteit van Pretoria. Individuele terme en vertalings bly die eiendom van hul onderskeie outeurs en bydraers, maar kan binne Mafoko hergebruik word vir opvoedkundige en navorsingsdoeleindes soos hierbo uiteengesit.",
+    "accuracyTitle": "Akkuraatheid en Vrywaring",
+    "accuracy": "Alhoewel Mafoko daarna streef om akkurate en betroubare taalkundige inligting te verskaf, gee DSFSI geen waarborge rakende die volledigheid of korrektheid van die inhoud nie. Die platform word \"soos dit is\" aangebied vir opvoedkundige gebruik, en DSFSI is nie aanspreeklik vir enige foute, weglatings of uitkomste wat voortspruit uit die gebruik daarvan nie.",
+    "commercial": "Mafoko word gratis verskaf vir opvoedkundige en navorsingsdoeleindes. Geen inhoud van die platform mag gereproduseer, herversprei of vir kommersiële gewin gebruik word sonder vooraf skriftelike toestemming van DSFSI nie.",
+    "commercialTitle": "Nie-kommersiële gebruik",
+    "privaryTitle": "Privaatheid en datagebruik",
+    "privacy": "Mafoko gebruik nie koekies, analitiese dophou of advertensiedienste nie. Rekeninginligting word slegs gestoor om gebruikersdeelname moontlik te maak en platformfunksionaliteit te handhaaf. DSFSI deel nie persoonlike data met derde partye nie.",
+    "change": "DSFSI mag hierdie Terme en Voorwaardes periodiek opdateer om verbeterings of beleidsveranderinge te weerspieël. Voortgesette gebruik van Mafoko na opdaterings dui op u aanvaarding van die hersiene terme.",
+    "changeTitle": "Wysigings aan Voorwaardes",
+    "contactTitle": "Kontak",
+    "contact": "Vir enige vrae of bekommernisse rakende hierdie Bepalings en Voorwaardes, kontak asseblief die Datawetenskap vir Sosiale Impak (DSFSI) groep aan die Universiteit van Pretoria.",
+    "email":"E-pos"
+  },
+  "feedbackPage": {
+    "thanks": "Baie dankie",
+    "your": "U",
+    "success": "is suksesvol ingedien. Ons waardeer u terugvoer.",
+    "redirect": "Herlei tans",
+    "submit": "Dien ’n",
+    "description": "Deel u idees om ons te help om ons diens te verbeter.",
+    "description2": "Laat weet ons wat verkeerd gegaan het sodat ons dit reg kan stel.",
+    "description3": "Ons sal graag wil hoor wat ons goed doen.",
+    "name": "Naam (Opsioneel)",
+    "namePlaceholder": "Naam",
+    "email": "E-pos (Opsioneel)",
+    "emailPlaceholder": "E-pos",
+    "suggest": "Beskryf u voorstel in detail",
+    "issue": "Beskryf asseblief die probleem wat u ervaar het",
+    "compliment": "Vertel ons wat u ervaring wonderlik gemaak het",
+    "submiting": "Dien tans in",
+    "singluarSubmit": "Dien in"
+  },
+  "feedbackTitles": {
+    "suggestions": "Voorstel",
+    "complaint": "Klag",
+    "compliment": "Kompliment"
+  },
+  "navbar": {
+    "mainNavigation": "Hoofnavigasie",
+    "analytics": "Analise",
+    "workspaceAndTools": "Werkruimte en Hulpmiddele",
+    "workspace": "Werkruimte",
+    "learing": "Leerpaaie",
+    "termAddition": "Termbyvoegings",
+    "linguist": "Taalkundige",
+    "admin": "Administrateur",
+    "profileAndAccount": "Profiel en Rekening",
+    "achievements": "Prestasies",
+    "supportAndFeedback": "Ondersteuning en Terugvoer",
+    "feedback": "Terugvoer"
   }
 }

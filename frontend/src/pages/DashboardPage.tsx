@@ -812,70 +812,51 @@ const DashboardPage: React.FC = () => {
 
                   <section className="about-mafoko max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left">
                     <h2 className="!text-3xl font-bold mb-4 text-primary">
-                      About Mafoko
+                      {t('dashboard.aboutMafoko.title')}
                     </h2>
                     <p className="text-lg mb-6">
-                      Mafoko (meaning “words” in Setswana) is a multilingual
-                      platform designed to celebrate and connect South Africa’s
-                      11 official languages.
+                      {t('dashboard.aboutMafoko.content')}
                     </p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
-                      Why Mafoko exists
+                      {t('dashboard.whyMafoko.title')}
                     </h2>
                     <p className="mt-2">
-                      South Africa’s languages are vibrant, expressive, and
-                      deeply tied to our identity, yet many of them remain
-                      underrepresented in the digital world. Mafoko was built to
-                      change that. It brings together words and meanings from
-                      multiple glossaries into one searchable space, making it
-                      easier than ever to explore terms, understand
-                      translations, and learn across all 11 official languages.
+                      {t('dashboard.whyMafoko.content')}
                     </p>
                     <p className="mt-4">
-                      Whether you’re online or offline, Mafoko keeps language
-                      knowledge within reach. It also encourages collaboration,
-                      letting communities suggest updates, share insights, and
-                      help improve the quality of each glossary entry over time.
+                      {t('dashboard.whyMafoko.content2')}
                     </p>
                     <p className="mt-4">
-                      By turning scattered linguistic resources into one living,
-                      growing platform, Mafoko helps preserve our heritage while
-                      supporting inclusive education and natural language
-                      research for low-resource languages.
+                      {t('dashboard.whyMafoko.content3')}
                     </p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
-                      Who it’s for
+                      {t('dashboard.whoMafoko.title')}
                     </h2>
                     <p>
-                      Students, educators, researchers, and anyone passionate
-                      about language and culture.
+                      {t('dashboard.whoMafoko.content')}
                     </p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
-                      How to use Mafoko
+                      {t('dashboard.howMafoko.title')}
                     </h2>
                     <p className="mt-2">
-                      You can use Mafoko to search for terms, explore different
-                      language domains, view translations, and even share your
-                      own feedback to help improve the platform.
+                      {t('dashboard.howMafoko.content')}
                     </p>
                     <p className="mt-4">
-                      For a detailed walkthrough including short guides and
-                      video demonstrations visit the{' '}
+                      {t('dashboard.howMafoko.help')}{' '}
                       <a href="/help" className="!text-[#00ceaf] underline">
-                        Help Page
+                        {t('dashboard.howMafoko.helpLink')}
                       </a>
                       .
                     </p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
-                      Behind the project
+                      {t('dashboard.behindProject.title')}
                     </h2>
                     <p>
-                      Mafoko is developed for the Data Science for Social Impact
-                      (DSFSI) group at the University of Pretoria.
+                      {t('dashboard.behindProject.content')}
                     </p>
                   </section>
 

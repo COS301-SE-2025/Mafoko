@@ -189,6 +189,30 @@
       "mission": "Marito works seamlessly both offline and online, empowering communities to access comprehensive language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the University of Pretoria to democratize linguistic resources and advance natural language processing research for African languages.",
       "teamCredit": "Proudly developed by Velox",
       "learnMoreDSFSI": "Learn more about DSFSI"
+    },
+    "aboutMofoko": {
+     "title": "About Mafoko",
+      "content": "Mafoko (meaning “words” in Setswana) is a multilingual platform designed to celebrate and connect South Africa’s 11 official languages."
+    },
+    "whyMafoko": {
+      "title": "Why Mafoko exists",
+      "content": "South Africa’s languages are vibrant, expressive, and deeply tied to our identity, yet many of them remain underrepresented in the digital world. Mafoko was built to change that. It brings together words and meanings from multiple glossaries into one searchable space, making it easier than ever to explore terms, understand translations, and learn across all 11 official languages.",
+      "content2": "Whether you’re online or offline, Mafoko keeps language knowledge within reach. It also encourages collaboration, letting communities suggest updates, share insights, and help improve the quality of each glossary entry over time.",
+      "content3": "By turning scattered linguistic resources into one living, growing platform, Mafoko helps preserve our heritage while supporting inclusive education and natural language research for low-resource languages."
+    },
+    "whoMafoko": {
+      "title": "Who it’s for",
+      "content": "Students, educators, researchers, and anyone passionate about language and culture."
+    },
+    "howMafoko": {
+      "title": "How to use Mafoko",
+      "content": "You can use Mafoko to search for terms, explore different language domains, view translations, and even share your own feedback to help improve the platform.",
+      "help": "For a detailed walkthrough including short guides and video demonstrations visit the",
+      "helpLink": "Help Page"
+    },
+    "behindProject" : {
+      "title": "Behind the Project",
+      "content": "Mafoko is developed for the Data Science for Social Impact (DSFSI) group at the University of Pretoria."
     }
   },
 
@@ -393,5 +417,69 @@
       "documentsRequired": "ID Document and CV are required for linguist application",
       "applicationError": "Failed to submit application: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title" : "Terms and Conditions",
+    "welcome": "Welcome to Mafoko, a multilingual platform developed and operated by the Data Science for Social Impact (DSFSI) group at the University of Pretoria. By using Mafoko, you agree to these Terms and Conditions. Please read them carefully before accessing or contributing to the platform.",
+    "purposeTitle": "Purpose of Mafoko",
+    "purpose": "Mafoko (meaning “words” in Setswana) is an educational, non-commercial platform that promotes South Africa’s 11 official languages by providing access to multilingual glossaries and linguistic resources. The platform is designed to support inclusive learning, research, and collaboration across language communities.",
+    "userTitle": "User Accounts",
+    "user": "To contribute to Mafoko, such as submitting terms, voting, commenting, or applying to become a linguist, users must create an account. You agree to provide accurate and truthful information when registering and to maintain the confidentiality of your login details. DSFSI reserves the right to suspend or remove accounts that violate these Terms or submit inappropriate content.",
+    "contributionTitle": "User Contributions",
+    "contribution": "Mafoko allows users to submit terms, translations, definitions, and comments. By contributing content, you grant DSFSI a non-exclusive, royalty-free license to display, reproduce, and distribute your contributions within Mafoko for educational and research purposes.",
+    "contribution2": "All submissions must be relevant, respectful, and linguistically appropriate. Content that is discriminatory, offensive, or misleading will be removed, and repeated violations may result in account suspension.",
+    "linguistTitle": "Linguist Applications",
+    "linguist": "Users who wish to become linguists on the platform may apply by providing proof of scholarly publications (such as Google Scholar records). DSFSI reserves the right to review and verify credentials before granting linguist-level permissions.",
+    "propertyTitle": "Intellectual Property",
+    "property": "The Mafoko platform, including its design, structure, and compiled glossaries, is the intellectual property of DSFSI and the University of Pretoria. Individual terms and translations remain the property of their respective authors and contributors, but may be reused within Mafoko for educational and research purposes as outlined above.",
+    "accuracyTitle": "Accuracy and Disclaimer",
+    "accuracy": "While Mafoko aims to provide accurate and reliable linguistic information, DSFSI makes no guarantees regarding the completeness or correctness of content. The platform is offered “as is” for educational use, and DSFSI is not liable for any errors, omissions, or outcomes resulting from its use.",
+    "commercial": "Mafoko is provided free of charge for educational and research purposes. No content from the platform may be reproduced, redistributed, or used for commercial gain without prior written consent from DSFSI.",
+    "commercialTitle": "Non-Commercial Use",
+    "privaryTitle": "Privacy and Data Use",
+    "privacy": "Mafoko does not use cookies, analytics tracking, or advertising services. Account information is stored solely to enable user participation and maintain platform functionality. DSFSI does not share personal data with third parties.",
+    "change": "DSFSI may update these Terms and Conditions periodically to reflect improvements or policy changes. Continued use of Mafoko after updates indicates your acceptance of the revised terms.",
+    "changeTitle": "Changes to Terms",
+    "contactTitle": "Contact",
+    "contact": "For any questions or concerns regarding these Terms and Conditions, please contact the Data Science for Social Impact (DSFSI) group at the University of Pretoria.",
+    "email":"Email"
+  },
+  "feedbackPage": {
+    "thanks": "Thank You",
+    "your": "Your",
+    "success": "has been submitted successfully. We appreciate your feedback",
+    "redirect": "Redirecting",
+    "submit": "Submit a",
+    "description": "Share your ideas to help us improve our service.",
+    "description2": "Let us know what went wrong so we can make it right.",
+    "description3": "We'd love to hear what we're doing well",
+    "name": "Name (Optional)",
+    "namePlaceholder": "Name",
+    "email": "Email (Optional)",
+    "emailPlaceholder": "Email",
+    "suggest": "Describe your suggestion in detail",
+    "issue": "Please describe the issue you experienced",
+    "compliment": "Tell us what made your experience great",
+    "submiting": "Submitting",
+    "singluarSubmit": "Submit"
+  },
+  "feedbackTitles": {
+    "suggestions": "Suggestion",
+    "complaint": "Complaint",
+    "compliment": "Compliment"
+  },
+  "navbar": {
+    "mainNavigation" : "Main Navigation",
+    "analytics": "Analytics",
+    "workspaceAndTools": "Workspace & Tools",
+    "workspace": "Workspace",
+    "learing": "Learning Paths",
+    "termAddition": "Term Additions",
+    "linguist": "Linguist",
+    "admin": "Admin",
+    "profileAndAccount": "Profile and Account",
+    "achievements": "Achievements",
+    "supportAndFeedback": "Support and Feedback",
+    "feedback": "Feedback"
   }
 }

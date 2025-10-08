@@ -150,6 +150,30 @@
       "mission": "IMarito isebenza kahle kokubili ku-intanethi nangaphandle kwe-intanethi, inikeza amandla imiphakathi ukuze ithhole izinsiza zolimi eziphelele, inikeze impendulo, futhi ibambisane ekwakheni ama-lexicons aqinile ezilimini ezinezinsiza ezincanyana. Le nkundla iyingxenye yomzamo oqhubekayo we-DSFSI (Data Science for Social Impact) eNyuvesi yase-Pretoria wokwenza izinsiza zolimi zifinyeleleke wonke umuntu kanye nokuthuthukisa ucwaningo lokucubungula ulimi lwemvelo lwezilimi zase-Afrika.",
       "teamCredit": "Yakhelwe ngokuziqhenya yi-Velox",
       "learnMoreDSFSI": "Funda kabanzi nge-DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Mayelana noMafoko",
+      "content": "IMafoko (elisho ukuthi “amagama” ngesiTswana) iyipulatifomu yezilimi eziningi eyenzelwe ukuhlinzeka nokuhlanganisa izilimi eziyi-11 ezisemthethweni zaseNingizimu Afrika."
+    },
+    "whyMafoko": {
+      "title": "Kungani iMafoko ikhona",
+      "content": "Izilimi zaseNingizimu Afrika ziyaphila, ziyavezwa, futhi zihlobene ngokujulile nobuwena bethu, kodwa eziningi zisalokhu zingamele kahle emhlabeni wedijithali. IMafoko yakhiwe ukuze ishintshe lokho. Ihlanganisa amagama nezincazelo ezivela kumagrosa amaningi ibe yindawo eyodwa engaseshwa kalula, okwenza kube lula kakhulu ukuhlola amagama, ukuqonda izinguqulo, nokufunda kuzo zonke izilimi eziyi-11 ezisemthethweni.",
+      "content2": "Noma ngabe uxhumekile ku-inthanethi noma awuxhumekanga, iMafoko igcina ulwazi ngolimi lufinyeleleka kalula. Iphinde ikhuthaze ukubambisana, ivumele imiphakathi ukuba iphakamise izibuyekezo, yabelane ngolwazi, futhi isize ukuthuthukisa izinga lekhwalithi yokungena kulowo nalowo grosa ngokuhamba kwesikhathi.",
+      "content3": "Ngokuguqula izinsiza zolimi ezazihlukanisiwe zibe ipulatifomu eyodwa ephilayo futhi ekhula njalo, iMafoko isiza ekugcineni ifa lethu ngenkathi isekela imfundo ebandakanya wonke umuntu kanye nocwaningo lwezilimi zemvelo lwezilimi ezinezinsiza ezilinganiselwe."
+    },
+    "whoMafoko": {
+      "title": "Abayenzelwe bona",
+      "content": "Abafundi, othisha, abacwaningi, nanoma ubani onothando ngolimi namasiko."
+    },
+    "howMafoko": {
+      "title": "Indlela yokusebenzisa iMafoko",
+      "content": "Ungasebenzisa iMafoko ukusesha amagama, ukuhlola izigaba zolimi ezihlukene, ukubuka izinguqulo, noma ukwabelana ngempendulo yakho ukuze usize ukuthuthukisa le pulatifomu.",
+      "help": "Ukuze uthole incazelo eningiliziwe ehlanganisa iziqondiso ezimfushane namavidiyo wokubonisa, vakashela ikhasi lethu le",
+      "helpLink": "Ikhasi Losizo"
+    },
+    "behindProject": {
+      "title": "Ngemuva kwePhrojekthi",
+      "content": "IMafoko ithuthukiselwe iqembu leData Science for Social Impact (DSFSI) eNyuvesi yasePitoli."
     }
   },
 
@@ -315,5 +339,69 @@
       "passwordUpdateFailed": "Kwehluleke ukubuyekeza iphasiwedi",
       "passwordUpdateError": "Kwehluleke ukubuyekeza iphasiwedi: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Imigomo Nemibandela",
+    "welcome": "Siyakwamukela ku Mafoko, ipulatifomu yezilimi eziningi eyakhiwe futhi ephethwe yiqembu le Data Science for Social Impact (DSFSI) eNyuvesi yasePitoli. Ngokusebenzisa iMafoko, uyavuma nale Migomo Nemibandela. Sicela uyifunde ngokucophelela ngaphambi kokuthi ufinyelele noma ube negalelo kule pulatifomu.",
+    "purposeTitle": "Inhloso ye Mafoko",
+    "purpose": "IMafoko (okusho ukuthi “amazwi” ngesiTswana) iyipulatifomu yezemfundo engahwebi ekhuthaza izilimi eziyi-11 ezisemthethweni zaseNingizimu Afrika ngokunikeza ukufinyelela kumagama nezinsiza zezichazamazwi eziningi. Le pulatifomu yakhelwe ukusekela ukufunda okuhlanganisayo, ucwaningo, kanye nokubambisana phakathi kwemiphakathi yezilimi.",
+    "userTitle": "Ama-akhawunti Womsebenzisi",
+    "user": "Ukuze ube negalelo ku Mafoko, njengokuthumela amagama, ukuvota, ukuphawula, noma ukufaka isicelo sokuba uchwepheshe wolimi, abasebenzisi kufanele badale i-akhawunti. Uyavuma ukunikeza imininingwane eqondile neqinisekile lapho ubhalisa futhi ugcine ulwazi lwakho lokungena liyimfihlo. I-DSFSI inelungelo lokumisa noma ukususa ama-akhawunti aphula le Migomo noma athumele okuqukethwe okungafanele.",
+    "contributionTitle": "Igalelo Labasebenzisi",
+    "contribution": "IMafoko ivumela abasebenzisi ukuthi bathumele amagama, ukuhumusha, izincazelo, kanye nokuphawula. Ngokuletha okuqukethwe, unikeza i-DSFSI ilayisensi engakhokhelwa, engeyona ekhethekile yokubonisa, ukukhiqiza kabusha, nokusabalalisa iminikelo yakho ngaphakathi kwe Mafoko ngenhloso yezemfundo nocwaningo.",
+    "contribution2": "Zonke izethulo kufanele zibe ezifanele, ezinokuhlonipha, nezilungele ngokolimi. Okuqukethwe okucwasayo, okudelelayo, noma okungamanga kuzokhishwa, futhi ukuphindwa kwecala kungaholela ekumiswa kwe-akhawunti.",
+    "linguistTitle": "Izicelo Zochwepheshe Bezilimi",
+    "linguist": "Abasebenzisi abafisa ukuba ochwepheshe bezilimi kule pulatifomu bangafaka izicelo ngokunikeza ubufakazi bezincwadi zabo zesayensi (njengamarekhodi e-Google Scholar). I-DSFSI inelungelo lokubuyekeza futhi iqinisekise ubuqiniso bezitifiketi ngaphambi kokunikeza amalungelo ochwepheshe.",
+    "propertyTitle": "Impahla Yengqondo",
+    "property": "Iphulatifomu ye Mafoko, ehlanganisa ukwakheka kwayo, isakhiwo, kanye nezichazamazwi eziqoqiwe, iyimpahla yobuhlakani ye-DSFSI kanye neNyuvesi yasePitoli. Amagama nokuhumusha ngakunye kuhlala kuyimpahla yababhali nabanikeli bawo, kodwa kungasetshenziswa kabusha ngaphakathi kwe Mafoko ngenhloso yezemfundo nocwaningo njengoba kuchaziwe ngenhla.",
+    "accuracyTitle": "Ukunemba Nesaziso",
+    "accuracy": "Ngenkathi iMafoko ihlose ukuhlinzeka ngolwazi lwezilimi olunembile noluthembekile, i-DSFSI ayinasiqiniseko ngokuphelele mayelana nokuphelela noma ukunemba kokuqukethwe. Le pulatifomu inikezwa “njengoba injalo” ngenhloso yezemfundo, futhi i-DSFSI ayinacala nganoma yiziphi amaphutha, ukushiywa, noma imiphumela evela ekusetshenzisweni kwayo.",
+    "commercialTitle": "Ukusetshenziswa Okungahwebi",
+    "commercial": "IMafoko inikezwa mahhala ngenhloso yezemfundo nocwaningo. Akuvunyelwe ukuthi okuqukethwe kule pulatifomu kukhiqizwe kabusha, kusatshalaliswe, noma kusetshenziswe ngenhloso yokuthola inzuzo ngaphandle kwemvume ebhaliwe evela ku-DSFSI.",
+    "privaryTitle": "Ubumfihlo Nokusetshenziswa Kwemininingwane",
+    "privacy": "IMafoko ayisebenzisi amakhukhi, ukulandelela kwezibalo, noma izinsizakalo zokukhangisa. Ulwazi lwe-akhawunti lugcinwa kuphela ukuze luvumele ukubamba iqhaza komsebenzisi nokugcina ukusebenza kwepulatifomu. I-DSFSI ayabelani ngemininingwane yomuntu siqu nabanye abantu noma izinhlangano zangaphandle.",
+    "changeTitle": "Izinguquko Ezemigomo",
+    "change": "I-DSFSI ingabuyekeza le Migomo Nemibandela ngezikhathi ezithile ukuze ibonise ukuthuthuka noma izinguquko zenqubomgomo. Ukuqhubeka nokusebenzisa iMafoko ngemva kwezibuyekezo kusho ukuthi uyamukela imigomo ebuyekeziwe.",
+    "contactTitle": "Oxhumana Nabo",
+    "contact": "Ngemibuzo noma ukukhathazeka mayelana nale Migomo Nemibandela, sicela uxhumane neqembu le Data Science for Social Impact (DSFSI) eNyuvesi yasePitoli.",
+    "email": "I-imeyili"
+  },
+  "feedbackPage": {
+    "thanks": "Ngiyabonga",
+    "your": "Okho",
+    "success": "kuthunyelwe ngempumelelo. Siyakwazisa ukubuyekeza kwakho.",
+    "redirect": "Iyadluliselwa",
+    "submit": "Thumela",
+    "description": "Yabelana ngemibono yakho ukusisiza sithuthukise insiza yethu.",
+    "description2": "Sazise ukuthi yini engahambanga kahle ukuze sikulungise.",
+    "description3": "Sifisa ukuzwa ukuthi yini esiyenza kahle.",
+    "name": "Igama (Ongakukhetha)",
+    "namePlaceholder": "Igama",
+    "email": "I-imeyili (Ongakukhetha)",
+    "emailPlaceholder": "I-imeyili",
+    "suggest": "Chaza ngokuningiliziwe isiphakamiso sakho",
+    "issue": "Sicela uchaze inkinga oyibonile",
+    "compliment": "Sitshele ukuthi yikuphi okwenze ulwazi lwakho lwaba luhle",
+    "submiting": "Iyathunyelwa",
+    "singluarSubmit": "Thumela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Isiphakamiso",
+    "complaint": "Isikhalazo",
+    "compliment": "Ukuncoma"
+  },
+  "navbar": {
+    "mainNavigation": "Ukuzulazula Okuyinhloko",
+    "analytics": "Ukuhlaziywa",
+    "workspaceAndTools": "Indawo Yokusebenza Namathuluzi",
+    "workspace": "Indawo Yokusebenza",
+    "learing": "Izindlela Zokufunda",
+    "termAddition": "Ukufakwa Kwamagama",
+    "linguist": "Isazi Solimi",
+    "admin": "Umlawuli",
+    "profileAndAccount": "Iphrofayela Ne-Akhawunti",
+    "achievements": "Imiphumela",
+    "supportAndFeedback": "Ukusekela Nokubuyekeza",
+    "feedback": "Impendulo"
   }
 }

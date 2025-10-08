@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { DarkModeProvider } from './components/ui/DarkModeComponent.tsx';
 import App from './App.tsx';
@@ -16,13 +16,13 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <React.Suspense fallback={<div>Loading translations...</div>}>
-        <BrowserRouter basename="/Marito">
+        <HashRouter>
           <DarkModeProvider>
             <GoogleOAuthProvider clientId={googleClientId}>
               <App />
             </GoogleOAuthProvider>
           </DarkModeProvider>
-        </BrowserRouter>
+        </HashRouter>
       </React.Suspense>
     </React.StrictMode>,
   );

@@ -121,8 +121,47 @@
     "viewAll": "Buka Konkhe",
     "communityActivity": "Imisebenti Yemmango",
     "hideActivity": "Fihla Imisebenti",
-    "viewAllActivity": "Buka Yonkhe Imisebenti"
-  },
+    "viewAllActivity": "Buka Yonkhe Imisebenti",
+    "title": "Hlanganani hi Marito",
+    "loadingProfile": "Yi loda profayili...",
+    "goToProfile": "Ya eka tluka ra profayili",
+    "discoverRandomTerms": "Kuma Marito ya Khombo",
+    "getNewTerms": "Kuma marito mantshwa ya khombo",
+    "loadingTerms": "Yi loda marito...",
+    "noTermsAvailable": "Ku hava marito lama kumekaka",
+    "browseCategoryGlossary": "Languta {{category}} nxaxamelo wa marito",
+    "aboutMarito": {
+      "intro": "Rito 'Marito' ri huma eka Xitsonga, ri vula 'marito' kumbe 'mavito'. Lexi i xikumiwa xa webu lexi ya emahlweni lexi hlanganisaka ndhawu ya le xikarhi ka ndhavuko wa ririmi wa Afrika Dzonga na ku fikelela ka xidijitali xa sweswi. Vatiwa va tindzimi, valavi va NLP, na vutivi bya tindzimi va nga tirhisa Marito tanihi pulatifomo yo hlanganisiwa ku lavisisa, ku hoxa matshalatshala, na ku hlayisa swinyorwa swa marito ya tindzimi to hambana, mabuku ya marito, na mabenge ya marito eka tindzimi ta 11 ta ximfumo ta Afrika Dzonga.",
+      "mission": "Marito yi tirha kahle hinkwako eka inthanete na handle ka inthanete, yi nyika matimba vaaki ku fikelela switirhisiwa swa tindzimi swo fela, ku nyika mavonelo, na ku tirhisana ku aka ma-lexicons yo tiya eka tindzimi leti nga na switirhisiwa swintsongo. Pulatifomo leyi i xiphemu xa ntirho lowu ya emahlweni lowu endliwaka hi DSFSI (Data Science for Social Impact) eka Yunivesiti ya Pretoria ku endla leswaku switirhisiwa swa tindzimi swi fikeleleka vaaki hinkwavo na ku susa emahlweni dylondzo ya ku tirhisa ririmi ra ntumbuluko eka tindzimi ta Afrika.",
+      "teamCredit": "Yi akiwe hi ku tinyungubyisa hi Velox",
+      "learnMoreDSFSI": "Dyondza swo tala hi DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "NgeMafoko",
+      "content": "IMafoko (lechaza “emavi” ngesiTswana) liyipulatifomu yemilomo leminingi leyakhelwe kutsi ibungate kanye nekuxhumanisa tilwimi letingu-11 letisemthethweni taseNingizimu Afrika."
+    },
+    "whyMafoko": {
+      "title": "Kungani iMafoko ikhona",
+      "content": "Tilwimi taseNingizimu Afrika tiyaphila, tiyavezwa, futsi tihlobene kakhulu nebuntfu bethu, kodvwa letinyenti takhona asikavakali kahle emhlabeni wedijithali. IMafoko yakhiwe kutawushintja loko. Ihlanganisa emavi netincazelo letivela kumagrosa lamanyenti ibe yindawo leyodwa lengaseshwa kalula, lokwenza kube lula kakhulu kuhlola emavi, kucondza tinhlamuselo, futsi kufundza ngato tonkhe tilwimi letingu-11 letisemthethweni.",
+      "content2": "Noma ngabe uxhumekile ku-inthanethi noma awuxhumekanga, iMafoko igcina lwati lwemilomo lusedvute. Iphindze ikhutsate kubambisana, ivumele imiphakatsi kutsi inikete tincomo, yabelane ngelwati, futsi isite ekuphuculeni likhwalithi yeluhlobo ngalunye lweligrosa ngesikhatsi lesidze.",
+      "content3": "Ngokuvuselela tinsita telulwimi letatihlukene wente ipulatifomu leyodwa lephilako nalekhula njalo, iMafoko isita ekugcineni lifa lethu futsi isekela imfundvo lehlanganako kanye necwaningo lelisekela tilwimi letine tinsita letincane."
+    },
+    "whoMafoko": {
+      "title": "Labayakhelwe yona",
+      "content": "Bafundzi, titfunywa tetemfundvo, bacwaningi, kanye nanoma ngubani lonetintfo ngelulwimi nesiko."
+    },
+    "howMafoko": {
+      "title": "Indlela yekusebenzisa iMafoko",
+      "content": "Ungasebentisa iMafoko kutfola emavi, kuhlola tindzawo letihlukene telulwimi, kubuka tinhlamuselo, futsi wabelane ngemibono yakho kusita ekuphuculeni ipulatifomu.",
+      "help": "Kutfola incazelo lenemininingwane lehlanganisa timhlahlandlela letimfisha kanye nemavidiyo ekuchazeni, sicela uvakashele",
+      "helpLink": "Likhasi LeLisito"
+    },
+    "behindProject": {
+      "title": "Ngemuva kwePhrojekthi",
+      "content": "IMafoko yakhiwe yelihlangano leData Science for Social Impact (DSFSI) eNyuvesi yasePitoli."
+    }
+},
+
   "glossaryPage": {
     "title": "Luhla Lwemagama Ngetilimi Letinyenti",
     "subtitle": "Buka tigaba, hlola emagama, utfole tihumusho",
@@ -282,5 +321,69 @@
       "passwordUpdateFailed": "Kwehlulekile kubuyeketa liphasiswedi",
       "passwordUpdateError": "Kwehlulekile kubuyeketa liphasiswedi: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Imigomo Nemibandzela",
+    "welcome": "Siyakwamukela eMafoko, lipulatifomu lemilomo leliningi lelakhiwe futhi lephatselwe lihlangano leData Science for Social Impact (DSFSI) eNyuvesi yasePitoli. Ngokusebenzisa iMafoko, uyavuma nale Migomo Nemibandzela. Sicela uyifundze kahle ungakafinyeleli noma ungakatfaki kuhlelo lolu.",
+    "purposeTitle": "Injongo ye Mafoko",
+    "purpose": "IMafoko (lecishe kutsi lichaze ‘emavi’ ngesiTswana) liyipulatifomu yefundvo lengasiyo yekuhweba lekhutsata tilwimi letingu-11 letisemthethweni taseNingizimu Afrika ngokunikeza lithuba lekufinyelela emagama lamanyenti nemitfombo yemitfombolwimi. Lipulatifomu leli lakhelwe kutsi lisekele imfundvo lebambisanako, locwaningo kanye nekubambisana phakathi kwemiphakatsi yetilwimi.",
+    "userTitle": "Ema-Akhawunti Elusebenti",
+    "user": "Kutsi usebente kuMafoko, njengakulayisha emagama, kuvota, kuphawula noma kufaka sicelo sekuba ngumfundzisi welulwimi, umsebenti kufanele adale i-akhawunti. Uyavuma kuniketa lwati lolunembile naluthembekile uma ubhalisa, bese ugcina imininingwane yakho yokungena iyimfihlo. I-DSFSI inelilungelo lekumisa noma kususa ema-akhawunti lakhinyabetse imigomo noma lafaka lokungafanele.",
+    "contributionTitle": "Tinkhupha Talabosebenti",
+    "contribution": "IMafoko ivumela basebenti kutsi balayishe emagama, tinhlamuselo, tincazelo kanye nemazwi. Ngokuniketa loku, unika i-DSFSI ilayisensi lengasiyo yekukhokha, lengesiyo yebunikazi yekukhombisa, kukopisha kabusha, nekusabalalisa tinikelo takho ngaphakathi kuMafoko ngenhloso yefundvo nocwaningo.",
+    "contribution2": "Tonkhupha tonkhe kufanele tibe letifanele, letihloniphekile, naletifaneleke ngekulwimi. Lokuhlambalazako, lokungafanele noma lokuyimanga kutosuswa, futsi kutibona lokungaphindze kungaholela ekuvinjelweni kwe-akhawunti.",
+    "linguistTitle": "Ticelo Taletilwimi",
+    "linguist": "Basebenti labafuna kuba nguchwepheshe wetilwimi kulelipulatifomu bangafaka ticelo ngalokunikeza bufakazi bemaphepha abo esayensi (njengemarekhodi e-Google Scholar). I-DSFSI inelilungelo lekubuka nekucinisekisa imibhalo ngaphambi kwekunika licensi leliphezulu.",
+    "propertyTitle": "Incenye Yengcondvo",
+    "property": "Liphulatifomu leMafoko, lelifaka umklamo walona, sakhiwo salo, kanye nemagama lawakhelwe, liyipropathi yengcondvo ye-DSFSI kanye neNyuvesi yasePitoli. Emagama netinguqulo ngalinye kusala kuyipropathi yabanikeli bawo, kodvwa kungaphindze kusetjentiswe ngaphakathi kuMafoko ngenhloso yefundvo necwaningo njengoba kuchaziwe ngenhla.",
+    "accuracyTitle": "Kunemba Nemkhawulo",
+    "accuracy": "Nakuba iMafoko ifuna kuniketa lwati lolunembile noluthembekile lwetilwimi, i-DSFSI ayinakuqinisekisa kuphumelela noma kunemba kwemitfombo. Liphulatifomu liniketiwe 'njengoba linjalo' ngenhloso yefundvo, futsi i-DSFSI ayinacala kunoma yikuphi kukhubeka, kushiywa noma imiphumela lephuma ekusebentisweni kwalo.",
+    "commercialTitle": "Kusetjentiswa Lokungahwebi",
+    "commercial": "IMafoko iniketiwe mahhala ngenhloso yefundvo necwaningo. Akukho lokusemaphulatifomu lokungakopishwa, kusatjalaliswe noma kusetjentiswe ngekutsengisa ngaphandle kwemvume lebhaliwe evela ku-DSFSI.",
+    "privaryTitle": "Kuyimfihlo Nekusetjentiswa Kwedatha",
+    "privacy": "IMafoko ayisebentisi emakhukhi, kutfutfukisa tilandeleko, noma tinsita tekukhangisa. Lwati lwe-akhawunti lugcinwa kuphela kucinisekisa kubamba kwabasebenti kanye nekugcina kushushiswa kahle kwepulatifomu. I-DSFSI ayabelani ngelwati lwemuntfu nemalunga langaphandle.",
+    "changeTitle": "Kuchubekela Phambili Kwemigomo",
+    "change": "I-DSFSI ingahle ivuselele le Migomo Nemibandzela ngesikhatsi lesitsite kusikhombisa kutfutfuka noma kuchubeka kwenqubomgomo. Kusebentisa iMafoko ngemva kwekuchubekela phambili kusho kutsi uyemukela imigomo leyishintjiwe.",
+    "contactTitle": "Kutfumela",
+    "contact": "Ngekunye nemibuto noma kunetseka mayelana nale Migomo Nemibandzela, sicela uxhumane neData Science for Social Impact (DSFSI) eNyuvesi yasePitoli.",
+    "email": "I-imeyili"
+  },
+  "feedbackPage": {
+    "thanks": "Siyabonga",
+    "your": "Sakho",
+    "success": "sithunyelwe ngempumelelo. Siyakwazisa impendvulo yakho.",
+    "redirect": "Iyadlulisela",
+    "submit": "Thumela",
+    "description": "Yabelana ngemibono yakho kusisita siphucule lensita yethu.",
+    "description2": "Sazise lokungalunganga ukuze sikulungise.",
+    "description3": "Siyawutsandza kuva lokuhle lokwenteke.",
+    "name": "Libito (Ngakukhetsa)",
+    "namePlaceholder": "Libito",
+    "email": "I-imeyili (Ngakukhetsa)",
+    "emailPlaceholder": "I-imeyili",
+    "suggest": "Chaza kahle ngesiphakamiso sakho",
+    "issue": "Sicela uchaze inkinga loyibonile",
+    "compliment": "Sitshele kutsi yini leyente kutsi umuzwa wakho ube muhle",
+    "submiting": "Iyathumela",
+    "singluarSubmit": "Thumela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Siphakamiso",
+    "complaint": "Sikhalo",
+    "compliment": "Kubonga"
+  },
+  "navbar": {
+    "mainNavigation": "Kuhambahamba Lokukhetsekile",
+    "analytics": "Kuhlaziywa",
+    "workspaceAndTools": "Indzawo Yemsebenti Netinsita",
+    "workspace": "Indzawo Yemsebenti",
+    "learing": "Emavi Efundvo",
+    "termAddition": "Kwengezwa Kwemavi",
+    "linguist": "Sazi Selulwimi",
+    "admin": "Umlawuli",
+    "profileAndAccount": "Liphrofayili Nekhonto",
+    "achievements": "Kuphetsa",
+    "supportAndFeedback": "Sekelo Nemibono",
+    "feedback": "Imibono"
   }
 }
