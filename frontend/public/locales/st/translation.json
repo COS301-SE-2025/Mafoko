@@ -418,6 +418,10 @@
     "submissions": "Lintho Tseo Ke Li Rometseng",
     "pending": "Mantsoe A Emetseng",
     "rejected": "Mantsoe A Hanoeng"
+  "contributePlaceholder": {
+    "domain": "Khetha Sebaka sa Tsebo",
+    "language": "Khetha Puo"
   }
+}
 
 }

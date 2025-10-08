@@ -440,6 +440,11 @@
     "submissions": "Izithunyelwe Zami",
     "pending": "Amagama Alindile",
     "rejected": "Amagama Enqatshelwe"
+  },
+  "contributePlaceholder": {
+    "domain": "Khetha Umkhakha",
+    "language": "Khetha Ulimi"
   }
+
 
 }

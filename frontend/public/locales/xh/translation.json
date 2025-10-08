@@ -390,5 +390,10 @@
     "submissions": "Izithunyelwe Zam",
     "pending": "Amagama Asalindile",
     "rejected": "Amagama Ayalwe"
+  },
+  "contributePlaceholder": {
+    "domain": "Khetha Icandelo",
+    "language": "Khetha Ulwimi"
   }
+
 }

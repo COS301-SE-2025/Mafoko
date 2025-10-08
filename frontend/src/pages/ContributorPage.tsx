@@ -857,7 +857,7 @@ const ContributorPage: React.FC = () => {
                     onValueChange={(value) => setSelectedDomain(value)}
                   >
                     <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Select Domain" />
+                      <SelectValue placeholder={t('contributePlaceholder.domain')} />
                     </SelectTrigger>
                     <SelectContent>
                       {domains.map((d) => (
@@ -875,7 +875,7 @@ const ContributorPage: React.FC = () => {
                     onValueChange={(value) => setSelectedLanguage(value)}
                   >
                     <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Select Language" />
+                      <SelectValue placeholder={t('contributePlaceholder.language')} />
                     </SelectTrigger>
                     <SelectContent>
                       {languages.map((l) => (
@@ -1015,7 +1015,7 @@ const ContributorPage: React.FC = () => {
                         value={selectedDomain}
                         onChange={(e) => setSelectedDomain(e.target.value)}
                       >
-                        <option value="">{t('termAdditions.domainTitle')}</option>
+                        <option value="">{t('contributePlaceholder.domain')}</option>
                         {domains.map((d) => (
                           <option key={d} value={d}>
                             {d}
@@ -1029,7 +1029,7 @@ const ContributorPage: React.FC = () => {
                         value={selectedLanguage}
                         onChange={(e) => setSelectedLanguage(e.target.value)}
                       >
-                        <option value="">{t('termAdditions.languageTitle')}</option>
+                        <option value="">{t('contributePlaceholder.language')}</option>
                         {languages.map((l) => (
                           <option key={l} value={l}>
                             {l}

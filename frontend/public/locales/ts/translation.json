@@ -423,5 +423,10 @@
     "submissions": "Swi Rhumeriwile Swa Mina",
     "pending": "Marito Lama Nga Hoxiwangiki",
     "rejected": "Marito Lama Ariwangiki"
+  },
+  "contributePlaceholder": {
+    "domain": "Hlawula Ndhawu",
+    "language": "Hlawula Ririmi"
   }
+
 }

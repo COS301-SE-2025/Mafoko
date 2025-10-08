@@ -450,6 +450,11 @@
     "submissions": "My Insendings",
     "pending": "Hangende Terme",
     "rejected": "Verworpe Terme"
+  },
+  "contributePlaceholder": {
+    "domain": "Kies Domein",
+    "language": "Kies Taal"
   }
+
 
 }

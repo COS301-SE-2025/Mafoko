@@ -518,5 +518,9 @@
     "submissions": "My Submissions",
     "pending": "Pending Terms",
     "rejected": "Rejected Terms"
+  },
+  "contributePlaceholder": {
+    "domain": "Select Domain",
+    "language": "Select Language"
   }
 }

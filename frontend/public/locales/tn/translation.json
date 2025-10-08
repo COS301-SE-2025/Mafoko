@@ -423,5 +423,10 @@
     "submissions": "Dineelo Tsa Me",
     "pending": "Mafoko a A Emetseng",
     "rejected": "Mafoko a A Ganetsweng"
+  },
+  "contributePlaceholder": {
+    "domain": "Kgetha Karolo",
+    "language": "Kgetha Puo"
   }
+
 }

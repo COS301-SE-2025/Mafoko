@@ -421,5 +421,10 @@
     "submissions": "Dineo tša Ka",
     "pending": "Mantšu a a Sa Fetogago",
     "rejected": "Mantšu a a Ganetšwego"
+  },
+  "contributePlaceholder": {
+    "domain": "Kgetha Lefapha",
+    "language": "Kgetha Polelo"
   }
+
 }
