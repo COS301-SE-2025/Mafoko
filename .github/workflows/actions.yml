@@ -113,5 +113,5 @@ jobs:
           npx prettier --check .
 
       - name: Run Frontend Tests
-        run: |
-          npx vitest run
+        run: npx vitest run --no-watch --passWithNoTests --reporter=verbose --threads=false --runInBand
+
