@@ -61,7 +61,7 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
 
   if (isMobile) {
     return (
-      <li className="application-card">
+      <li className="application-card ">
         <div className="card-header">
           <span className="card-term">{termToDisplay.term}</span>
           {renderStatusBadge(app.status)}
@@ -800,7 +800,7 @@ const LinguistPage: React.FC = () => {
 
   return (
     <div
-      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`dashboard-container !bg-[var(--bg-first)] ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobile ? (
         <Navbar />

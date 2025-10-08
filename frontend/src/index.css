@@ -24,7 +24,6 @@
   transform: rotateY(180deg);
 }
 
-
 :root {
   --accent-pink: #f00a50;
   --accent-yellow: #f2d001;
@@ -116,6 +115,7 @@ body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  background-color: var(--bg-first);
 }
 
 h1 {

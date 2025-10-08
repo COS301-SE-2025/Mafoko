@@ -2,18 +2,33 @@ import GlossaryCard from '../learning/GlossaryCard.tsx';
 import React from 'react';
 import {
   GlossaryProgress,
-  LearningPathGlossary
+  LearningPathGlossary,
 } from '../../types/learning.ts';
 
 interface LearningPath {
-  id: string
-  path_name: string
-  language_name: string
-  selected_glossaries: LearningPathGlossary[]
-  completedPercentage?: number
+  id: string;
+  path_name: string;
+  language_name: string;
+  selected_glossaries: LearningPathGlossary[];
+  completedPercentage?: number;
 }
 
-export function LearningPathGlossaryList({selectedPath, setCurrentView, glossaryWordCounts, handleGlossarySelect} : { selectedPath: LearningPath, setCurrentView:  React.Dispatch<React.SetStateAction<"paths" | "glossaries" | "words">>,glossaryWordCounts: Record<string, number>, handleGlossarySelect: (glossary: GlossaryProgress, startWithFlashcards: boolean)=> Promise<void> } ) {
+export function LearningPathGlossaryList({
+  selectedPath,
+  setCurrentView,
+  glossaryWordCounts,
+  handleGlossarySelect,
+}: {
+  selectedPath: LearningPath;
+  setCurrentView: React.Dispatch<
+    React.SetStateAction<'paths' | 'glossaries' | 'words'>
+  >;
+  glossaryWordCounts: Record<string, number>;
+  handleGlossarySelect: (
+    glossary: GlossaryProgress,
+    startWithFlashcards: boolean,
+  ) => Promise<void>;
+}) {
   return (
     <>
       <div className="flex items-center mb-6">
@@ -22,7 +37,7 @@ export function LearningPathGlossaryList({selectedPath, setCurrentView, glossary
           onClick={() => {
             setCurrentView('paths');
           }}
-          className="text-gray-600 hover:text-gray-900 mr-4"
+          className="text-theme hover:text-gray-900 mr-4"
         >
           ← Back to Paths
         </button>
@@ -45,13 +60,11 @@ export function LearningPathGlossaryList({selectedPath, setCurrentView, glossary
               onFlashcards={() => {
                 void handleGlossarySelect(glossaryInfo, true);
               }}
-              completedPercentage={
-                selectedPath.completedPercentage || 0
-              }
+              completedPercentage={selectedPath.completedPercentage || 0}
             />
           );
         })}
       </div>
     </>
-  )
+  );
 }

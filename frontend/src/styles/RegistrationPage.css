@@ -167,12 +167,11 @@
   border-color: #00ceaf;
   outline: none;
   box-shadow:
-          0px 2px 5px 0px rgba(0, 0, 0, 0.1),
-          0 0 0 3px rgba(0, 206, 175, 0.25);
+    0px 2px 5px 0px rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(0, 206, 175, 0.25);
 }
 
-.form-group input[type='text']:focus
-.form-group input[type='email']:focus,
+.form-group input[type='text']:focus .form-group input[type='email']:focus,
 .form-group input[type='password']:focus {
   border-color: #00ceaf;
   outline: none;
@@ -181,12 +180,13 @@
     0 0 0 3px rgba(0, 206, 175, 0.25);
 }
 
-.password-input input[type='email']:focus, input[type='password']:focus {
+.password-input input[type='email']:focus,
+input[type='password']:focus {
   border-color: #00ceaf;
   outline: none;
   box-shadow:
-          0px 2px 5px 0px rgba(0, 0, 0, 0.1),
-          0 0 0 3px rgba(0, 206, 175, 0.25);
+    0px 2px 5px 0px rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(0, 206, 175, 0.25);
 }
 
 .form-group.terms-checkbox {

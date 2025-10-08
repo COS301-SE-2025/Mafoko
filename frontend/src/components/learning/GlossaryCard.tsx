@@ -36,53 +36,50 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
         }
       }}
     >
-      <h3 className="text-lg font-semibold mb-4">
-        {glossary.name}
-      </h3>
+      <div className="w-full flex flex-col items-start gap-3 px-4 py-3 text-theme">
+        {/* Title */}
+        <h3 className="text-lg font-semibold ">{glossary.name}</h3>
 
-      <div className="w-full flex justify-center items-center" style={{ padding: "10px"}}>
-        <div className="flex flex-col items-center w-[80%]">
-          <div className="w-full flex items-center gap-5">
-            <div className="flex-1 bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div
-                className="h-3 rounded-full transition-all duration-300"
-                style={{
-                  width: `${completedPercentage}%`,
-                  background: '#00ceaf',
-                }}
-              />
-            </div>
-            <span className="text-sm text-gray-600 w-10 text-right">
-        {completedPercentage}%
-      </span>
+        {/* Progress bar container */}
+        <div className="w-full flex items-center gap-4">
+          <div className="flex-1 bg-gray-200/80 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
+            <div
+              className="h-3 bg-[#00ceaf] rounded-full transition-all duration-300"
+              style={{ width: `${completedPercentage}%` }}
+            />
           </div>
+          <span className="text-sm font-medium text-gray-500 dark:text-zinc-400 w-12 text-right">
+            {completedPercentage}%
+          </span>
         </div>
       </div>
 
-
-      <div className="glossary-card-actions flex gap-3">
+      <div
+        className="glossary-card-actions flex gap-3 justify-between items-center"
+        style={{ paddingTop: '15px' }}
+      >
         <button
           type="button"
-          className="study-btn flex items-center justify-center gap-2"
+          className=" flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white"
           onClick={(e) => {
             e.stopPropagation();
             if (onStudy) onStudy();
           }}
         >
           <BookOpen className="w-4 h-4" />
-          Study Words
+          Flash Cards
         </button>
 
         <button
           type="button"
-          className="flashcard-btn flex items-center gap-2"
+          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white"
           onClick={(e) => {
             e.stopPropagation();
             if (onFlashcards) onFlashcards();
           }}
         >
           <Play className="w-4 h-4" />
-          Flashcards
+          Test Knowledge
         </button>
       </div>
     </div>

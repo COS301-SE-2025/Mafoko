@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Circle, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  CheckCircle2,
+  Circle,
+  ChevronLeft,
+  ChevronRight,
+  ChevronFirst,
+  ChevronLast,
+} from 'lucide-react';
 
 interface Word {
   id: string;
@@ -23,10 +30,10 @@ interface WordsPanelProps {
 const ITEMS_PER_PAGE = 20;
 
 const WordsPanel: React.FC<WordsPanelProps> = ({
-                                                 studySession,
-                                                 knownWords,
-                                                 onBackClick,
-                                               }) => {
+  studySession,
+  knownWords,
+  onBackClick,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
 
@@ -56,25 +63,27 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
 
   return (
     <div className="">
-      <div className="content-wrapper">
-        {/* Header / Progress */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+      <div className="px-4 sm:px-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4 w-full">
+          {/* Back button */}
           <button
             type="button"
             onClick={onBackClick}
-            className="text-gray-600 hover:text-gray-900 flex items-center gap-2 font-medium"
+            className="text-theme hover:text-gray-900 flex items-center gap-2 font-medium shrink-0"
           >
             ← Back to Glossaries
           </button>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-            <div className="text-sm text-gray-600">
+
+          {/* Progress section */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+            <div className="text-sm text-theme text-center sm:text-left w-full sm:w-auto">
               {knownWords.size} of {studySession.words.length} words completed
             </div>
-            <div className="w-full sm:w-32 bg-gray-200 rounded-full h-2">
+            <div className="w-full sm:w-40 bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
-                className="h-2 rounded-full bg-teal-500 transition-all duration-300"
+                className="h-2 bg-teal-500 transition-all duration-300"
                 style={{
-                  width: `${getProgressPercentage().toString()}%`,
+                  width: `${getProgressPercentage()}%`,
                 }}
               ></div>
             </div>
@@ -92,18 +101,18 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
         ) : (
           <>
             {/* Flashcards grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 mb-8">
               {currentWords.map((word) => {
                 const flipped = flippedCards[word.id] || false;
                 return (
                   <div
                     key={word.id}
                     onClick={() => toggleFlip(word.id)}
-                    className="relative cursor-pointer transform-gpu perspective"
+                    className="relative cursor-pointer transform-gpu perspective "
                   >
                     {/* Card inner container */}
                     <div
-                      className={`relative w-full h-44 transition-transform duration-500 ${
+                      className={`relative w-full h-44 transition-transform duration-500  ${
                         flipped ? 'rotate-y-180' : ''
                       }`}
                       style={{
@@ -111,10 +120,8 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                       }}
                     >
                       {/* Front side */}
-                      <div
-                        className="absolute inset-0 bg-white rounded-xl p-6 shadow-sm border border-gray-200 flex flex-col justify-center items-center backface-hidden"
-                      >
-                        <h4 className="text-lg font-semibold text-gray-900 mb-2 text-center">
+                      <div className="absolute inset-0 bg-[var(--bg-tir)] rounded-xl p-6 shadow-sm border border-theme flex flex-col justify-center items-center backface-hidden">
+                        <h4 className="text-lg font-semibold text-theme mb-2 text-center">
                           {word.term}
                         </h4>
                         <p className="text-xs text-gray-500 text-center">
@@ -124,7 +131,7 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
 
                       {/* Back side */}
                       <div
-                        className={`absolute inset-0 ${knownWords.has(word.id) ? "bg-teal-500" : "bg-zinc-700" } text-white rounded-xl p-6 shadow-md flex flex-col justify-center items-center rotate-y-180 backface-hidden`}
+                        className={`absolute inset-0 ${knownWords.has(word.id) ? 'bg-teal-500' : 'bg-zinc-700'} text-white rounded-xl p-6 shadow-md flex flex-col justify-center items-center rotate-y-180 backface-hidden`}
                       >
                         <p className="text-lg font-bold text-center">
                           {word.english_translation || 'No translation'}
@@ -170,8 +177,7 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                     disabled={currentPage === 1}
                     className="p-2 disabled:opacity-40 hover:text-teal-600"
                   >
-                    <ChevronLeft size={16} />
-                    <ChevronLeft size={16} className="-ml-3" />
+                    <ChevronFirst size={16} />
                   </button>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
@@ -195,8 +201,7 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                     disabled={currentPage === totalPages}
                     className="p-2 disabled:opacity-40 hover:text-teal-600"
                   >
-                    <ChevronRight size={16} />
-                    <ChevronRight size={16} className="-ml-3" />
+                    <ChevronLast size={16} />
                   </button>
                 </div>
               </div>

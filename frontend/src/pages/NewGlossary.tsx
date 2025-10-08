@@ -481,8 +481,10 @@ const GlossaryApp = () => {
         return data.results;
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch(e) {
-      {/* */}
+    } catch (e) {
+      {
+        /* */
+      }
     }
 
     // Fallback to original endpoint to get all terms

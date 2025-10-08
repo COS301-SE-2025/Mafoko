@@ -202,9 +202,17 @@ const RegistrationPage: React.FC = () => {
               />
             </div>
 
-            <PasswordField value={password} onChange={setPassword} label={t('registrationPage.passwordLabel')} />
+            <PasswordField
+              value={password}
+              onChange={setPassword}
+              label={t('registrationPage.passwordLabel')}
+            />
 
-            <PasswordField value={confirmPassword} onChange={setConfirmPassword} label={t('registrationPage.confirmPasswordLabel')} />
+            <PasswordField
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              label={t('registrationPage.confirmPasswordLabel')}
+            />
 
             <div className="form-group terms-checkbox">
               <input
@@ -237,7 +245,6 @@ const RegistrationPage: React.FC = () => {
                 ? t('registrationPage.creatingAccountButton')
                 : t('registrationPage.createAccountButton')}
             </button>
-
           </form>
 
           <p className="login-link">

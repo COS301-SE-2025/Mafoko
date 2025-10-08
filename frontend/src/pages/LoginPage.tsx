@@ -111,7 +111,11 @@ const LoginPage: React.FC = () => {
               />
             </div>
 
-            <PasswordField value={password} onChange={setPassword} label={"Password"} />
+            <PasswordField
+              value={password}
+              onChange={setPassword}
+              label={'Password'}
+            />
 
             <div className="form-options">
               <div className="remember-me">
@@ -126,7 +130,6 @@ const LoginPage: React.FC = () => {
             <button type="submit" className="login-button primary">
               {t('loginPage.loginButton')}
             </button>
-
           </form>
           <p className="register-link-prompt">
             {t('loginPage.noAccount')}{' '}

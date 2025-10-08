@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import LanguageCard from './LanguageCard';
-import { Trash2 } from 'lucide-react';
 
 type GlossaryRef = { glossary_name: string };
 
@@ -26,9 +25,9 @@ const LearningPathList: FC<LearningPathListProps> = ({
   isLoading,
 }) => {
   return (
-    <div className="component-container">
+    <div className="w-full text-theme">
       <h1>Learning Paths</h1>
-      <div className="content-wrapper">
+      <div className="w-full">
         {isLoading ? (
           <p>Loading paths...</p>
         ) : paths.length === 0 ? (
@@ -37,7 +36,7 @@ const LearningPathList: FC<LearningPathListProps> = ({
             get started!
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-6 w-full">
             {paths.map((path) => {
               const code =
                 (path.language_name ?? '').slice(0, 2).toUpperCase() || '??';
@@ -50,19 +49,8 @@ const LearningPathList: FC<LearningPathListProps> = ({
                     totalWords={path.selected_glossaries.length}
                     completedPercentage={path.completedPercentage ?? 0}
                     onClick={() => onPathSelect(path)}
+                    onDelete={() => onPathDelete(path.id)}
                   />
-                  <button
-                    type="button"
-                    aria-label="Delete learning path"
-                    title="Delete learning path"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onPathDelete(path.id);
-                    }}
-                    className="path-delete-button"
-                  >
-                    <Trash2 size={18} />
-                  </button>
                 </div>
               );
             })}
