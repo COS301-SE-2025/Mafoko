@@ -416,5 +416,12 @@
     "deleteContent": "A o tlhomamisa gore o batla go phimola tiriso eno? Tiro eno e ka se boe morago.",
     "delete": "Phimola",
     "cancel": "Khansela"
+  },
+  "contribute": {
+    "submit": "Romela Lefoko",
+    "suggest": "Akanya ka Phetogo",
+    "submissions": "Dineelo Tsa Me",
+    "pending": "Mafoko a A Emetseng",
+    "rejected": "Mafoko a A Ganetsweng"
   }
 }

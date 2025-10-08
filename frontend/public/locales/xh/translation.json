@@ -383,5 +383,12 @@
     "deleteContent": "Uqinisekile ukuba ufuna ukucima esi sabelo? Eli nyathelo alinakuhlehliswa.",
     "delete": "Cima",
     "cancel": "Rhoxisa"
+  },
+  "contribute": {
+    "submit": "Thumela Igama",
+    "suggest": "Cebisa Uhlelo",
+    "submissions": "Izithunyelwe Zam",
+    "pending": "Amagama Asalindile",
+    "rejected": "Amagama Ayalwe"
   }
 }

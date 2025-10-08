@@ -511,6 +511,12 @@
     "deleteContent": "Are you sure you want to delete this submission? This action cannot be undone.",
     "delete": "Delete",
     "cancel": "Cancel"
-
+  },
+  "contribute": {
+    "submit": "Submit Term",
+    "suggest": "Suggest Edit",
+    "submissions": "My Submissions",
+    "pending": "Pending Terms",
+    "rejected": "Rejected Terms"
   }
 }

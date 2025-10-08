@@ -414,5 +414,12 @@
     "deleteContent": "Na o nete gore o nyaka go phumula neo ye? Tiro ye e ka se boe morago.",
     "delete": "Phumula",
     "cancel": "Khansela"
+  },
+  "contribute": {
+    "submit": "Romela Lentšu",
+    "suggest": "Eletša Phetolo",
+    "submissions": "Dineo tša Ka",
+    "pending": "Mantšu a a Sa Fetogago",
+    "rejected": "Mantšu a a Ganetšwego"
   }
 }

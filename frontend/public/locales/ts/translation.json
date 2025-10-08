@@ -416,5 +416,12 @@
     "deleteContent": "U na vutshembeki byo lava ku susa xiviko lexi? Xiendlo lexi a xi nge hundzuluxeriwi endzhaku.",
     "delete": "Susa",
     "cancel": "Khansela"
+  },
+  "contribute": {
+    "submit": "Rhumela Rito",
+    "suggest": "Nyika Xiphakamiso Xa Ku Hlela",
+    "submissions": "Swi Rhumeriwile Swa Mina",
+    "pending": "Marito Lama Nga Hoxiwangiki",
+    "rejected": "Marito Lama Ariwangiki"
   }
 }

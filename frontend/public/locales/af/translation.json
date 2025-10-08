@@ -443,5 +443,13 @@
     "deleteContent": "Is u seker u wil hierdie bydrae uitvee? Hierdie aksie kan nie ongedaan gemaak word nie.",
     "delete": "Vee Uit",
     "cancel": "Kanselleer"
+  },
+  "contribute": {
+    "submit": "Dien Term In",
+    "suggest": "Stel Wysiging Voor",
+    "submissions": "My Insendings",
+    "pending": "Hangende Terme",
+    "rejected": "Verworpe Terme"
   }
+
 }

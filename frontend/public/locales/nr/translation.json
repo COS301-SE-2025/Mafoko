@@ -416,5 +416,12 @@
     "deleteContent": "Uqinisekile ukuthi ufuna ukususa lokhu kuthunyelwe? Lesi senzo asikwazi ukuguqulwa.",
     "delete": "Susa",
     "cancel": "Khansela"
+  },
+  "contribute": {
+    "submit": "Thumela Igama",
+    "suggest": "Phakamisa Ukuhlela",
+    "submissions": "Izithunyelwe Zami",
+    "pending": "Amagama Alindile",
+    "rejected": "Amagama Enqatshelwe"
   }
 }

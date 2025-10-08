@@ -413,5 +413,12 @@
     "deleteContent": "Ni khou ṱoḓa u thutha heḽi fhungo? Hetshi tshiito a tshi nga dovhi tsha bviswa.",
     "delete": "Thuthani",
     "cancel": "Khanselani"
+  },
+  "contribute": {
+    "submit": "Rumelani Lifhungo",
+    "suggest": "Ṱoḓani U Lugisa",
+    "submissions": "Zwine Ndo Rumela",
+    "pending": "Maipfi A Sa Fhedzaho",
+    "rejected": "Maipfi O Refuswaho"
   }
 }

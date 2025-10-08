@@ -415,5 +415,13 @@
     "deleteContent": "Ucinisekile yini kutsi ufuna kususa lesicelo? Lesisebenti asisoze sibuyiselwe emuva.",
     "delete": "Susa",
     "cancel": "Khansela"
+  },
+  "contribute": {
+    "submit": "Thumela Ligama",
+    "suggest": "Phakamisa Kuguqulwa",
+    "submissions": "Tinikelo Tami",
+    "pending": "Emavi Lasebete",
+    "rejected": "Emavi Lalahlwe"
   }
+
 }

@@ -792,11 +792,11 @@ const ContributorPage: React.FC = () => {
           <h1 className="page-title">{t('termAdditions.contributionTitle')}</h1>
           <div className="tabs flex flex-wrap md:flex-nowrap gap-2 md:gap-4 ">
             {[
-              { key: 'submit', label: 'Submit Term' },
-              { key: 'edit', label: 'Suggest Edit' },
-              { key: 'my', label: 'My Submissions' },
-              { key: 'pending', label: 'Pending Terms' },
-              { key: 'rejected', label: 'Rejected Terms' },
+              { key: 'submit', label: t('contribute.submit') },
+              { key: 'edit', label: t('contribute.suggest') },
+              { key: 'my', label: t('contribute.submissions') },
+              { key: 'pending', label: t('contribute.pending') },
+              { key: 'rejected', label: t('contribute.rejected') },
             ].map((tab) => (
               <button
                 key={tab.key}
