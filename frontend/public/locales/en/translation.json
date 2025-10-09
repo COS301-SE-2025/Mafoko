@@ -730,7 +730,19 @@
 
     "languagesTitle": "Supported Languages",
     "languagesBody": "Mafoko supports all 11 official South African languages. You can filter your searches to focus on a single language or explore terms across all of them.",
-    "languagesList": ["Afrikaans", "English", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "English",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Searching for Terms",
     "searchSubheadingHow": "How Searching Works",
@@ -881,7 +893,7 @@
     "faqsDesc": "Answers to common questions about the platform."
   },
   "copyURL": "Copy URL",
-  "related" : "Related Terms",
+  "related": "Related Terms",
   "comments": "Comments",
   "reply": "Replying To",
   "addReply": "Add a Reply",

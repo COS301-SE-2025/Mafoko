@@ -632,7 +632,19 @@
 
     "languagesTitle": "Tilwimi Letisekelwako",
     "languagesBody": "Marito isekela tonkhe tilwimi letilishumi nanye letisemthethweni eNingizimu Afrika. Ungasebentisa kukhetsa kuhlunga ngekulwimi linye noma uphenye tonkhe tilwimi.",
-    "languagesList": ["Afrikaans", "Sisingisi", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "Sisingisi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Kuphenya Tisho",
     "searchSubheadingHow": "Kusebenta Kwendlela Yekuphenya",
@@ -774,6 +786,13 @@
 
     "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
     "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
-  }
-
+  },
+  "copyURL": "Kopisha URL",
+  "related": "Emagama Lahlobene",
+  "comments": "Timphendvulo",
+  "reply": "Kuphendvula Ku",
+  "addReply": "Faka Imphendvulo",
+  "addComment": "Faka Sikhulumiswano",
+  "noDescription": "Akukho Incazelo Leniketwe",
+  "view": "Buka"
 }

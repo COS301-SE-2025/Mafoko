@@ -24,7 +24,9 @@ const TermHelpPage: React.FC = () => {
       id: 'overview',
       title: t('termHelpPage.overviewTitle'),
       content: (
-        <div dangerouslySetInnerHTML={{ __html: t('termHelpPage.overviewBody') }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: t('termHelpPage.overviewBody') }}
+        />
       ),
       assetLocation: '',
     },
@@ -58,7 +60,7 @@ const TermHelpPage: React.FC = () => {
                 <div key={lang} className="px-3 py-1 rounded bg-theme">
                   {lang}
                 </div>
-              )
+              ),
             )}
           </div>
         </div>
@@ -131,7 +133,7 @@ const TermHelpPage: React.FC = () => {
             {t('termHelpPage.offlineSteps', { returnObjects: true }).map(
               (step: string, i: number) => (
                 <li key={i}>{step}</li>
-              )
+              ),
             )}
           </ol>
           <p className="mt-2">{t('termHelpPage.offlineEnd')}</p>
@@ -140,7 +142,6 @@ const TermHelpPage: React.FC = () => {
       assetLocation: '',
     },
   ];
-
 
   return (
     <div>
@@ -170,7 +171,9 @@ const TermHelpPage: React.FC = () => {
                   <li>
                     <button
                       type="button"
-                      onClick={() => {scrollToSection('intro')}}
+                      onClick={() => {
+                        scrollToSection('intro');
+                      }}
                       className="text-left hover:text-theme transition-colors"
                     >
                       {t('termHelpPage.title')}
@@ -180,7 +183,7 @@ const TermHelpPage: React.FC = () => {
                     <li key={`${obj.title}-${obj.id}`}>
                       <button
                         type="button"
-                        onClick={() => scrollToSection(obj.id)}
+                        onClick={() => { scrollToSection(obj.id); }}
                         className="text-left hover:text-theme transition-colors"
                       >
                         {obj.title}
@@ -190,14 +193,17 @@ const TermHelpPage: React.FC = () => {
                 </ul>
               </aside>
 
-
               <div className="article-content article-scrollable-content">
                 <div className="p-6 max-w-4xl mx-auto space-y-12 text-base leading-relaxed text-left">
                   <section id="intro">
                     <h1 className="text-3xl font-bold text-theme mb-4">
                       {t('termHelpPage.title')}
                     </h1>
-                    <p dangerouslySetInnerHTML={{ __html: t('termHelpPage.intro') }} />
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: t('termHelpPage.intro'),
+                      }}
+                    />
                   </section>
 
                   {DictionaryContent.map((obj) => {

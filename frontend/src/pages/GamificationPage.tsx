@@ -510,7 +510,9 @@ const GamificationPage: React.FC = () => {
                 </div>
 
                 <div className="xp-guide-info text-left  flex justify-center items-center">
-                  <div className="!font-bold !text-[18px] text-[#f00a50]">+100 XP</div>
+                  <div className="!font-bold !text-[18px] text-[#f00a50]">
+                    +100 XP
+                  </div>
                 </div>
               </div>
 
@@ -538,7 +540,9 @@ const GamificationPage: React.FC = () => {
                 </div>
 
                 <div className="xp-guide-info text-left  flex justify-center items-center">
-                  <div className="!font-bold !text-[18px] text-[#f00a50]">+10 XP</div>
+                  <div className="!font-bold !text-[18px] text-[#f00a50]">
+                    +10 XP
+                  </div>
                 </div>
               </div>
 
@@ -594,8 +598,10 @@ const GamificationPage: React.FC = () => {
                     {t('achievements.dailyLoginBonus')}
                   </div>
                 </div>
-                  <div className="xp-guide-info text-left  flex justify-center items-center">
-                    <div className="!font-bold !text-[18px] text-[#f00a50]">+5 XP</div>
+                <div className="xp-guide-info text-left  flex justify-center items-center">
+                  <div className="!font-bold !text-[18px] text-[#f00a50]">
+                    +5 XP
+                  </div>
                 </div>
               </div>
             </div>

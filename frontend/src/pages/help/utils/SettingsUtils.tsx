@@ -33,7 +33,9 @@ export const SettingsContent: SectionProps[] = [
     content: (
       <div>
         <p>
-          You can update your <strong>name</strong>, <strong>email</strong>,{' '} or <strong>password</strong> at any time from your profile settings. Each change requires confirmation for security purposes.
+          You can update your <strong>name</strong>, <strong>email</strong>, or{' '}
+          <strong>password</strong> at any time from your profile settings. Each
+          change requires confirmation for security purposes.
         </p>
 
         <ol className="list-decimal list-inside space-y-2 mt-4">

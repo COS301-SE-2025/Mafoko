@@ -237,7 +237,9 @@ const TermCard: React.FC<TermCardProps> = ({
           className="!text-theme"
           to={`/term/${encodeURIComponent(language)}/${encodeURIComponent(term)}/${id}`}
         >
-          <span className="view-button">{t('view', { defaultValue: 'View' })}</span>
+          <span className="view-button">
+            {t('view', { defaultValue: 'View' })}
+          </span>
         </Link>
       </button>
     </div>

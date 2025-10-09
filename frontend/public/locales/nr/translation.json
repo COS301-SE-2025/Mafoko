@@ -633,7 +633,19 @@
 
     "languagesTitle": "Izilimi Ezisekelwayo",
     "languagesBody": "UMarito usekela zonke izilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika. Ungasebenzisa ukuhlunga ukuze ugxile kolunye ulimi noma ucwaninge phakathi kwazo zonke.",
-    "languagesList": ["Afrikaans", "IsiNgisi", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgisi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Ukufuna Amabizo",
     "searchSubheadingHow": "Indlela Yokusebenza Kokufuna",
@@ -775,5 +787,13 @@
 
     "faqsTitle": "Imibuzo Ejwayelekile",
     "faqsDesc": "Izimpendulo zemibuzo ejwayelekile mayelana nesayithi."
-  }
+  },
+  "copyURL": "Kopisha i-URL",
+  "related": "Amagama Ahlobene",
+  "comments": "Amazwana",
+  "reply": "Ukuphendula Ku",
+  "addReply": "Faka Impendulo",
+  "addComment": "Faka Amazwana",
+  "noDescription": "Akukho Incazelo Enikeziwe",
+  "view": "Buka"
 }

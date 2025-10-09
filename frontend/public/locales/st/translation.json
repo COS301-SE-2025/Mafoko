@@ -623,7 +623,19 @@
 
     "languagesTitle": "Iilwimi Ezixhaswayo",
     "languagesBody": "I-Marito ixhasa zonke iilwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika. Ungasebenzisa ukuhluza ukuze ugxile kulwimi olunye okanye uphande amagama kuwo onke.",
-    "languagesList": ["Afrikaans", "IsiNgesi", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgesi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Ukukhangela Amagama",
     "searchSubheadingHow": "Indlela Yokusebenza Kokukhangela",
@@ -765,6 +777,13 @@
 
     "faqsTitle": "Lipotso Tse Botsoang Hangata",
     "faqsDesc": "Likarabo tsa lipotso tse tloaelehileng mabapi le sethala."
-  }
-
+  },
+  "copyURL": "Kopitsa URL",
+  "related": "Mantsoe a Amanang",
+  "comments": "Maikutlo",
+  "reply": "Ho Arabela Ho",
+  "addReply": "Kenya Karabo",
+  "addComment": "Kenya Maikutlo",
+  "noDescription": "Ha ho Tlhaloso e Fanoeng",
+  "view": "Sheba"
 }

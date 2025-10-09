@@ -600,7 +600,19 @@
 
     "languagesTitle": "Iilwimi Ezixhaswayo",
     "languagesBody": "I-Marito ixhasa zonke iilwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika. Ungasebenzisa ukuhluza ukuze ugxile kulwimi olunye okanye uphande amagama kuwo onke.",
-    "languagesList": ["Afrikaans", "IsiNgesi", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgesi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Ukukhangela Amagama",
     "searchSubheadingHow": "Indlela Yokusebenza Kokukhangela",
@@ -655,5 +667,13 @@
     "section11": "Ukulandela Inqubekela Phambili Yakho",
     "section12": "Learning Path ilandelela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa kanye nezibalo zomphakathi wakho, ukwenza kube lula ukuhlala ukhuthazekile.",
     "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
-  }
+  },
+  "copyURL": "Kopa i-URL",
+  "related": "Amagama Ahlobene",
+  "comments": "Izimvo",
+  "reply": "Uphendula Ku",
+  "addReply": "Yongeza Impendulo",
+  "addComment": "Yongeza Izimvo",
+  "noDescription": "Akukho Inkcazelo Inikiweyo",
+  "view": "Jonga"
 }

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import HelpSearch from '../../components/ui/HelpSearch.tsx';
 import '../../styles/HelpPage.scss';
-import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/ui/Navbar.tsx';
 import LeftNav from '../../components/ui/LeftNav.tsx';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
@@ -23,7 +22,6 @@ const HelpPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const { isDarkMode } = useDarkMode();
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const hashLink = (path: string) =>
     path.startsWith('#') || path.startsWith('/#')
@@ -92,7 +90,13 @@ const HelpPage: React.FC = () => {
             'Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.',
         }),
         link: '#/help/settings-help',
-        keywords: ['settings', 'mode', 'dark mode', 'light mode', 'accessibility'],
+        keywords: [
+          'settings',
+          'mode',
+          'dark mode',
+          'light mode',
+          'accessibility',
+        ],
       },
       {
         title: t('helpPage2.homeTitle', { defaultValue: 'Home Page' }),
@@ -145,9 +149,9 @@ const HelpPage: React.FC = () => {
   );
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => { setIsMobile(window.innerWidth <= 768); };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => { window.removeEventListener('resize', handleResize); };
   }, []);
 
   const handleSearch = useCallback(
@@ -203,7 +207,10 @@ const HelpPage: React.FC = () => {
         {isMobile ? (
           <Navbar />
         ) : (
-          <LeftNav activeItem={activeMenuItem} setActiveItem={setActiveMenuItem} />
+          <LeftNav
+            activeItem={activeMenuItem}
+            setActiveItem={setActiveMenuItem}
+          />
         )}
 
         <div className="help-page-main-content">
@@ -273,7 +280,7 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() => { setCurrentPage(currentPage - 1); }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   {t('helpPage.previous')}
@@ -287,7 +294,7 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() => { setCurrentPage(currentPage + 1); }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   {t('helpPage.next')}

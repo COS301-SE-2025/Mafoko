@@ -943,7 +943,9 @@ const DashboardPage: React.FC = () => {
                                 </h3>
                               </div>
                             </div>
-                            <p className="term-definition !text-left">{term.definition ? term.definition : ''}</p>
+                            <p className="term-definition !text-left">
+                              {term.definition ? term.definition : ''}
+                            </p>
                             <div className="flex w-full justify-center items-center">
                               <button
                                 type="button"

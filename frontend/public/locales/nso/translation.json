@@ -583,7 +583,19 @@
 
     "languagesTitle": "Maleme ao a Thekgwago",
     "languagesBody": "Marito e thekga maleme ka moka a 11 a semmušo a Afrika Borwa. O ka diriša dikgetho tša go kgetha gore o lebelele leleme le tee goba o nyake mantšu go tšwa go a mantši.",
-    "languagesList": ["Afrikaans", "Seisimane", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "Seisimane",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Go Nyaka Mantšu",
     "searchSubheadingHow": "Kamoo Go Nyaka go Šomago Kateng",
@@ -725,5 +737,13 @@
 
     "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
     "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
-  }
+  },
+  "copyURL": "Kopiša URL",
+  "related": "Mantšu a Amanago",
+  "comments": "Maikutlo",
+  "reply": "Go Arabela Go",
+  "addReply": "Tsenya Karabo",
+  "addComment": "Tsenya Maikutlo",
+  "noDescription": "Ga go Tlhaloso e Filwego",
+  "view": "Lebelela"
 }

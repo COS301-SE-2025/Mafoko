@@ -774,17 +774,24 @@ export const TermDetailPage: React.FC = () => {
                       <CardContent className="space-y-6">
                         <section>
                           <h3 className="font-semibold text-2xl mb-2">
-                            {t('termAdditions.defTitle', { defaultValue: 'Description' })}
+                            {t('termAdditions.defTitle', {
+                              defaultValue: 'Description',
+                            })}
                           </h3>
                           <p className="text-sm leading-relaxed">
-                            {term.definition || t('noDescription', { defaultValue: 'No Description Provided' })}
+                            {term.definition ||
+                              t('noDescription', {
+                                defaultValue: 'No Description Provided',
+                              })}
                           </p>
                         </section>
                         <section>
                           {relatedTerms.length > 0 && (
                             <div>
                               <h3 className="font-semibold text-2xl mb-2">
-                                {t('related', { defaultValue: 'Related Terms' })}
+                                {t('related', {
+                                  defaultValue: 'Related Terms',
+                                })}
                               </h3>
                               <div className="flex flex-wrap gap-2 text-3xl">
                                 {relatedTerms.map((relatedTerm) => (
@@ -812,7 +819,9 @@ export const TermDetailPage: React.FC = () => {
                         </section>
                         <section className="comments-section">
                           <div className="comments-header">
-                            <h3 className="section-title">{t('comments', { defaultValue: 'Comments' })}</h3>
+                            <h3 className="section-title">
+                              {t('comments', { defaultValue: 'Comments' })}
+                            </h3>
                             <span className="comment-count">
                               {comments.length}
                             </span>
@@ -835,13 +844,19 @@ export const TermDetailPage: React.FC = () => {
                           <div className="add-comment">
                             {replyingToCommentId && (
                               <div className="replying-to-info">
-                                <span>{t('reply', { defaultValue: 'Replying' +
-                                    ' To' })} {replyingToUser}</span>
+                                <span>
+                                  {t('reply', {
+                                    defaultValue: 'Replying' + ' To',
+                                  })}{' '}
+                                  {replyingToUser}
+                                </span>
                                 <button
                                   onClick={() => setReplyingToCommentId(null)}
                                   className="cancel-reply-btn"
                                 >
-                                  {t('common.cancel', { defaultValue: 'Cancel' })}
+                                  {t('common.cancel', {
+                                    defaultValue: 'Cancel',
+                                  })}
                                 </button>
                               </div>
                             )}
@@ -852,10 +867,12 @@ export const TermDetailPage: React.FC = () => {
                               onChange={(e) => setNewComment(e.target.value)}
                               placeholder={
                                 replyingToCommentId
-                                  ? t('addReply', { defaultValue: 'Add' +
-                                      ' a Reply' })
-                                  : t('addComment', { defaultValue: 'Add a' +
-                                      ' Comment' })
+                                  ? t('addReply', {
+                                      defaultValue: 'Add' + ' a Reply',
+                                    })
+                                  : t('addComment', {
+                                      defaultValue: 'Add a' + ' Comment',
+                                    })
                               }
                             />
                             <button
@@ -876,7 +893,12 @@ export const TermDetailPage: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <p>{t('learningGlossarylist.noTermsFound', { defaultValue: 'No Terms Found' })}.</p>
+                <p>
+                  {t('learningGlossarylist.noTermsFound', {
+                    defaultValue: 'No Terms Found',
+                  })}
+                  .
+                </p>
               )}
             </div>
           </div>

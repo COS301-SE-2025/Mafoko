@@ -630,7 +630,19 @@
 
     "languagesTitle": "Nyambo Dziṅwe Dzi Ṱhegedzwaho",
     "languagesBody": "Marito i ṱhegedza Nyambo dza 11 dza Muvhuso wa Afurika Tshipembe. U nga shumisa zwiṱhegedzwa u nanga luambo ḽuthihi kana u ṱola maipfi kha dziṅwe dzothe.",
-    "languagesList": ["Afrikaans", "Lungisea", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "Lungisea",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "U Ṱola Maipfi",
     "searchSubheadingHow": "Ndila Ine U Ṱola Ya Shuma Ngayo",
@@ -772,5 +784,13 @@
 
     "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
     "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
-  }
+  },
+  "copyURL": "Kopani URL",
+  "related": "Maipfi a Tshiṱangana",
+  "comments": "Mbevho",
+  "reply": "U Fhindula Kha",
+  "addReply": "Engedzani Phindulo",
+  "addComment": "Engedzani Mbevho",
+  "noDescription": "A Huna Tsumbudzo Yo Fhiḽaho",
+  "view": "Vhonani"
 }

@@ -174,7 +174,6 @@ export default function GlossaryCard({
               <Loader2 className="w-4 h-4 text-white animate-spin " />
             ) : (
               <Bookmark
-
                 className=" text-white"
                 size={20}
                 fill={isBookmarked ? '#fff' : 'none'}

@@ -558,7 +558,9 @@ body {
   min-height: 120px;
   height: 100%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    transform 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .xp-guide-item:hover {
@@ -605,4 +607,3 @@ body {
   text-align: right;
   margin-top: auto;
 }
-

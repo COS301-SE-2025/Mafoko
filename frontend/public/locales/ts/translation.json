@@ -633,7 +633,19 @@
 
     "languagesTitle": "Tindzimi leti Seketeriwaka",
     "languagesBody": "Marito ri seketela tindzimi hinkwato ta semmuso ta 11 ta Afrika Dzonga. U nga tirhisa tifilita leswaku u hlawula ririmi rin’we kumbe u lavisisa eka hinkwato.",
-    "languagesList": ["Afrikaans", "Xinghezi", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "Xinghezi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Ku Lavisisa Marito",
     "searchSubheadingHow": "Ndlela Leyi Ku Lavisisa Ku Tirhaka Ha Yona",
@@ -775,6 +787,13 @@
 
     "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
     "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
-  }
-
+  },
+  "copyURL": "Kopa URL",
+  "related": "Marito Lama Hlanganyelaka",
+  "comments": "Mavonelo",
+  "reply": "Ku Hlamula Eka",
+  "addReply": "Engetela Hlamulo",
+  "addComment": "Engetela Nhlamulo",
+  "noDescription": "A Ku Na Nhlamuselo Yinikiweke",
+  "view": "Languta"
 }

@@ -661,7 +661,19 @@
 
     "languagesTitle": "Ondersteunde Tale",
     "languagesBody": "Marito ondersteun al 11 van Suid-Afrika se amptelike tale. Jy kan jou soektogte filtreer om op ’n enkele taal te fokus of terme oor almal te verken.",
-    "languagesList": ["Afrikaans", "Engels", "isiNdebele", "isiXhosa", "isiZulu", "Sesotho", "Sepedi", "Setswana", "Siswati", "Tshivenda", "Xitsonga"],
+    "languagesList": [
+      "Afrikaans",
+      "Engels",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
 
     "searchTitle": "Soek na Terme",
     "searchSubheadingHow": "Hoe Soektogte Werk",
@@ -779,6 +791,13 @@
 
     "faqsTitle": "Gereelde Vrae",
     "faqsDesc": "Antwoorde op algemene vrae oor die platform."
-  }
-
+  },
+  "copyURL": "Kopieer URL",
+  "related": "Verwante Terme",
+  "comments": "Kommentaar",
+  "reply": "Beantwoord Aan",
+  "addReply": "Voeg ’n Antwoord By",
+  "addComment": "Voeg ’n Kommentaar By",
+  "noDescription": "Geen Beskrywing Verskaf Nie",
+  "view": "Bekyk"
 }

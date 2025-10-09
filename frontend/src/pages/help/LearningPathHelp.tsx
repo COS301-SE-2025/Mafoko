@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
-import { LearningPathContent } from './utils/FeedbackUtils.tsx';
 import { HelpNodeSection } from './HelpSection.tsx';
 import { SectionProps } from './types.ts';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +10,6 @@ const LearningPathPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
 
   // Smooth scroll handler
   const scrollToSection = (id: string) => {
@@ -25,11 +23,7 @@ const LearningPathPage: React.FC = () => {
     {
       id: 'select-glossary',
       title: t('leaningPathHelp.section4Title'),
-      content: (
-        <p>
-          {t('leaningPathHelp.section4')}
-        </p>
-      ),
+      content: <p>{t('leaningPathHelp.section4')}</p>,
       assetLocation: '',
     },
     {
@@ -40,10 +34,12 @@ const LearningPathPage: React.FC = () => {
           <p>{t('leaningPathHelp.section5')}:</p>
           <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
             <li>
-              <strong>{t('leaningPathHelp.section6')}:</strong>{t('leaningPathHelp.section7')}
+              <strong>{t('leaningPathHelp.section6')}:</strong>
+              {t('leaningPathHelp.section7')}
             </li>
             <li>
-              <strong>{t('leaningPathHelp.section8')}:</strong> {t('leaningPathHelp.section9')}
+              <strong>{t('leaningPathHelp.section8')}:</strong>{' '}
+              {t('leaningPathHelp.section9')}
             </li>
           </ul>
         </div>
@@ -55,12 +51,8 @@ const LearningPathPage: React.FC = () => {
       title: t('leaningPathHelp.section11'),
       content: (
         <div>
-          <p>
-            {t('leaningPathHelp.section12')}
-          </p>
-          <p>
-            {t('leaningPathHelp.section13')}
-          </p>
+          <p>{t('leaningPathHelp.section12')}</p>
+          <p>{t('leaningPathHelp.section13')}</p>
         </div>
       ),
       assetLocation: '',
@@ -79,7 +71,8 @@ const LearningPathPage: React.FC = () => {
           <button
             type="button"
             className="article-theme-toggle-btn"
-            onClick={() => navigate('/help')}
+
+            onClick={() => void navigate('/help')}
           >
             {t('common.back')}
           </button>
@@ -100,7 +93,7 @@ const LearningPathPage: React.FC = () => {
                   <li>
                     <button
                       type="button"
-                      onClick={() => scrollToSection('intro')}
+                      onClick={() => { scrollToSection('intro'); }}
                       className="text-left hover:text-theme transition-colors"
                     >
                       {t('leaningPathHelp.title')}
@@ -110,7 +103,7 @@ const LearningPathPage: React.FC = () => {
                     <li key={`${obj.title}-${obj.id}`}>
                       <button
                         type="button"
-                        onClick={() => scrollToSection(obj.id)}
+                        onClick={() => { scrollToSection(obj.id); }}
                         className="text-left hover:text-theme transition-colors"
                       >
                         {obj.title}
@@ -128,14 +121,13 @@ const LearningPathPage: React.FC = () => {
                     <h1 className="text-3xl font-bold text-theme mb-4">
                       {t('leaningPathHelp.title')}
                     </h1>
-                    <p>
-                      {t('leaningPathHelp.section1')}
-                    </p>
-                    <p>
-                      {t('leaningPathHelp.section2')}
-                    </p>
+                    <p>{t('leaningPathHelp.section1')}</p>
+                    <p>{t('leaningPathHelp.section2')}</p>
 
-                    <div className="video-container" style={{ paddingBottom: "30px"}}>
+                    <div
+                      className="video-container"
+                      style={{ paddingBottom: '30px' }}
+                    >
                       <video
                         controls
                         width="100%"
