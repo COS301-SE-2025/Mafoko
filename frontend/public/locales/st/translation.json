@@ -545,51 +545,51 @@
     }
   },
   "achievements": {
-    "contributionActivity": "Mosebetsi oa Menehelo",
+    "contributionActivity": "Mosebetsi oa Kabelo",
     "weeklyGoals": "Lipakane tsa Beke le Beke",
     "howToEarnXP": "Mokhoa oa ho Fumana XP",
     "unlocked": "E Butsoe",
     "level": "Boemo",
-    "loading": "E laisa",
-    "totalXP": "XP e Kakaretso",
-    "currentStreak": "Letoto la Hajoale",
-    "achievementsLabel": "Lintho tse Fumanweng",
+    "loading": "E a jarisoa",
+    "totalXP": "XP e Felletseng",
+    "currentStreak": "Tatellano ea Hajoale",
+    "achievementsLabel": "Liphihlello",
     "noActivity": "Ha ho Mosebetsi",
     "addTerm": "Kenya lentsoe le lecha",
     "addComment": "Kenya maikutlo",
-    "receiveUpvote": "Amohela palonyana e kaholimo",
+    "receiveUpvote": "Fumana voutu e phahameng",
     "dailyLoginBonus": "Moputso oa ho kena letsatsi le leng le le leng",
-    "perUpvote": "ka palonyana e kaholimo",
-    "noGoals": "Ha ho Lipakane Beke Ena",
-    "checkBackNextWeek": "Sheba hape bekeng e tlang",
-    "completed": "E Phethiloe",
-    "loadingWeeklyGoals": "E laisa lipakane tsa beke le beke",
-    "progress": "tsoelo-pele",
-    "loadingAchievements": "E laisa lintho tse fumanoeng",
+    "perUpvote": "ka voutu e ’ngoe le e ’ngoe",
+    "noGoals": "Ha ho Lipakane Beke ena",
+    "checkBackNextWeek": "Sheba hape beke e tlang",
+    "completed": "E Felile",
+    "loadingWeeklyGoals": "E jarisa lipakane tsa beke le beke",
+    "progress": "ts'ebetso",
+    "loadingAchievements": "E jarisa liphihlello",
     "of": "ea",
-    "termPioneer": {
-      "title": "Motlai oa Mantsoe",
+    "term_pioneer": {
+      "title": "Moetapele oa Mantsoe",
       "desc": "Kenya mantsoe a hao a pele a 10 bukeng ea mantsoe"
     },
-    "communityContributor": {
-      "title": "Motšehetsi oa Sechaba",
-      "desc": "Etsa maikutlo a 25 ka mantsoe"
+    "community_contributor": {
+      "title": "Monehelo oa Sechaba",
+      "desc": "Ngola maikutlo a 25 ho mantsoe"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Ea Ratoang ke Sechaba",
-      "desc": "Amohela lipalonyana tse 100 bakeng sa menehelo ea hao"
+      "desc": "Fumana livoutu tse 100 holim’a menehelo ea hao"
     },
-    "multilingualMaster": {
-      "title": "Setsebi sa Dipuo Tse Fapaneng",
-      "desc": "Kenya letsoho libukeng tsa mantsoe tsa dipuo tse 5 tse fapaneng"
+    "multilingual_master": {
+      "title": "Setsebi sa Lipuo Tse Fapaneng",
+      "desc": "Ena menehelo ho dibuka tsa dipuo tse hlano tse fapaneng"
     },
-    "consistencyChampion": {
-      "title": "Moetapele oa Boitelo le Tsoelo-pele",
-      "desc": "E-ba mafolofolo matsatsi a 30 a latellanang"
+    "consistency_champion": {
+      "title": "Moahloli oa Botsitso",
+      "desc": "Eba mafolofolo matsatsi a 30 a latellanang"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Mohlokomeli oa Puo",
-      "desc": "Lumella hore menehelo ea hao e 50 e netefatsoe ke litsebi"
+      "desc": "Etsa hore menehelo ea hao e 50 e tiisoe ke litsebi"
     }
   },
   "weeklyGoals": {

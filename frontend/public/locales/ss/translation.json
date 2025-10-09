@@ -576,27 +576,27 @@
     "progress": "kuqhubeka",
     "loadingAchievements": "Iyafaka timphumelelo",
     "of": "ya",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Umphayona Wamagama",
       "desc": "Faka emagama akho lali-10 ekucaleni kuhlobo lwamagama"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Umnikeli Wemphakatsi",
       "desc": "Bhala emavi langema-25 etimphakatsini tamagama"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Loyintandokati Yemphakatsi",
       "desc": "Yemukela emavoti langema-100 ekunikeleni kwakho"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Ingcweti Yemalulwimi Lamanyenti",
       "desc": "Nikela kumabhuku emagama emalulwimi lamahlanu lehlukene"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Inchampiyoni Yekuchubeka",
       "desc": "Sebenta emalanga langema-30 elandelanayo ngaphandle kwekuhluleka"
     },
-    "languageGuardian": {
+    "language-guardian": {
       "title": "Umlondvoloti Welulwimi",
       "desc": "Vumela kunikelwa kwakho lokungema-50 kuhlolwe bachwepheshe"
     }

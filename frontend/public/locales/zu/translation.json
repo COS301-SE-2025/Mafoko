@@ -572,51 +572,51 @@
     }
   },
   "achievements": {
-    "contributionActivity": "Umsebenzi Wokufaka Igalelo",
-    "weeklyGoals": "Izinhloso Zamasonto Onke",
-    "howToEarnXP": "Indlela Yokuzuza i-XP",
+    "contributionActivity": "Umsebenzi Wokunikela",
+    "weeklyGoals": "Izinhloso Zamasonto",
+    "howToEarnXP": "Indlela Yokuthola i-XP",
     "unlocked": "Kuvuliwe",
     "level": "Izinga",
-    "loading": "Ilayisha",
-    "totalXP": "I-XP Ephelele",
+    "loading": "Kulayishwa",
+    "totalXP": "XP Ephelele",
     "currentStreak": "Uchungechunge Lwamanje",
-    "achievementsLabel": "Izinqubekelaphambili",
-    "noActivity": "Ayikho Imisebenzi",
-    "addTerm": "Nezela igama elisha",
-    "addComment": "Nezela ukuphawula",
-    "receiveUpvote": "Thola ivoti elikhuphukayo",
-    "dailyLoginBonus": "Ibhonasi yokungena nsuku zonke",
-    "perUpvote": "ngamunye ovotelwe phezulu",
-    "noGoals": "Azikho Izinhloso Zalesi Sonto",
-    "checkBackNextWeek": "Buyela ngesonto elizayo",
-    "completed": "Kuqediwe",
-    "loadingWeeklyGoals": "Ilayisha izinhloso zamasonto onke",
+    "achievementsLabel": "Izimpumelelo",
+    "noActivity": "Akukho msebenzi",
+    "addTerm": "Faka igama elisha",
+    "addComment": "Faka amazwana",
+    "receiveUpvote": "Thola ukuvotelwa phezulu",
+    "dailyLoginBonus": "Umklomelo wokungena nsuku zonke",
+    "perUpvote": "ngokuvota phezulu ngakunye",
+    "noGoals": "Azikho izinhloso kuleli sonto",
+    "checkBackNextWeek": "Buyela emuva ngesonto elizayo",
+    "completed": "Kuphothuliwe",
+    "loadingWeeklyGoals": "Kulayishwa izinhloso zamasonto",
     "progress": "inqubekelaphambili",
-    "loadingAchievements": "Ilayisha izinqubekelaphambili",
-    "of": "kuka",
-    "termPioneer": {
-      "title": "Umqalisi Wamagama",
-      "desc": "Nezela amagama akho ayi-10 okuqala kwisichazamazwi"
+    "loadingAchievements": "Kulayishwa izimpumelelo",
+    "of": "kwa",
+    "term_pioneer": {
+      "title": "Umsunguli Wamagama",
+      "desc": "Faka amagama akho okuqala ayi-10 esichazamazwini"
     },
-    "communityContributor": {
-      "title": "Umfaki Wegalelo Lomphakathi",
-      "desc": "Yenza ukuphawula okungu-25 emagameni"
+    "community_contributor": {
+      "title": "Umnikeli Womphakathi",
+      "desc": "Bhala amazwana angu-25 kumagama"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Intandokazi Yomphakathi",
-      "desc": "Thola amavoti ayi-100 emagalelweni akho"
+      "desc": "Thola ukuvotelwa phezulu oku-100 eminikelo yakho"
     },
-    "multilingualMaster": {
-      "title": "Ingcweti Yolwimi Oluningi",
-      "desc": "Faka isandla kwizichazamazwi zolimi ezi-5 ezahlukene"
+    "multilingual_master": {
+      "title": "Ingilosi Yezilimi Eziningi",
+      "desc": "Nikela kuzichazamazwi zezilimi ezi-5 ezihlukene"
     },
-    "consistencyChampion": {
-      "title": "Inchampiyoni Yokuzinza",
-      "desc": "Hlala usebenzile izinsuku ezingama-30 zilandelana"
+    "consistency_champion": {
+      "title": "Impumelelo Yokungaguquki",
+      "desc": "Sebenza izinsuku ezingama-30 zilandelana"
     },
-    "languageGuardian": {
-      "title": "Umlondolozi Wolimi",
-      "desc": "Vumela ukuthi iminikelo yakho engama-50 iqinisekiswe ngochwepheshe"
+    "language_guardian": {
+      "title": "Umlondolozi Wezilimi",
+      "desc": "Amagalelo akho angama-50 aqinisekiswe ngongoti"
     }
   },
   "weeklyGoals": {
