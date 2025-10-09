@@ -1,64 +1,2441 @@
-# api-spec.yml
-# OpenAPI 2.0 specification for the Marito Project API Gateway.
-
 swagger: '2.0'
 info:
   title: Marito API Gateway
   description: The single public entry point for all Marito backend microservices.
-  version: 1.0.0
+  version: '1.0.0'
 schemes:
   - https
 produces:
   - application/json
-
+x-google-backend:
+  address: https://default-service-885391982107.us-central1.run.app
+  path_translation: APPEND_PATH_TO_ADDRESS
+x-google-cors:
+  allowOrigins:
+    - "https://cos301-se-2025.github.io"
+    - "http://localhost:*"
+  allowMethods: "GET, POST, OPTIONS, PUT, DELETE"
+  allowHeaders: "Content-Type, Authorization"
+  exposeHeaders: "Content-Length"
+  maxAge: "86400"
+  allowCredentials: true
 paths:
-  # --- Routes for Auth Service ---
-  /api/v1/auth/{proxy+}:
-    x-google-backend:
-      # Replace with the URL of your deployed 'auth-service' on Cloud Run
-      address: https://auth-service-885391982107.us-central1.run.app
-  
-  /api/v1/uploads/{proxy+}:
-    x-google-backend:
-      # This also points to your 'auth-service'
-      address: https://auth-service-885391982107.us-central1.run.app
+  /api/v1/auth/register:
+    options:
+      operationId: authRegisterOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/register
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: authRegister
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/register
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/auth/login:
+    options:
+      operationId: authLoginOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/login
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: authLogin
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/login
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/auth/google-login:
+    options:
+      operationId: authGoogleLoginOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/google-login
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: authGoogleLogin
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/google-login
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/me:
+    options:
+      operationId: authMeOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/me
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: authGetMe
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/me
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    put:
+      operationId: authUpdateMe
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/me
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/me/profile-picture:
+    options:
+      operationId: authProfilePictureOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/me/profile-picture
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getMyProfilePictureUrl
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/me/profile-picture
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    put:
+      operationId: updateProfilePicture
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/me/profile-picture
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/profile-picture/upload-url:
+    options:
+      operationId: authGenerateProfilePictureUploadUrlOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/profile-picture/upload-url
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: authGenerateProfilePictureUploadUrl
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/profile-picture/upload-url
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/uploads/generate-signed-url:
+    options:
+      operationId: uploadsGenerateSignedUrlOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/uploads/generate-signed-url
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: uploadsGenerateSignedUrl
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/uploads/generate-signed-url
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/admin/users:
+    options:
+      operationId: adminGetUsersOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/admin/users
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: adminGetUsers
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/admin/users
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/admin/users/{userId}/role:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to update.
+    options:
+      operationId: updateUserRoleOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    put:
+      operationId: updateUserRole
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/admin/users/{userId}/uploads:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user whose uploads to retrieve.
+    options:
+      operationId: getUserUploadsOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserUploads
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/admin/download-url:
+    parameters:
+      - in: query
+        name: gcs_key
+        type: string
+        required: true
+        description: The GCS key of the file to download.
+    options:
+      operationId: getSignedDownloadUrlOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/admin/download-url
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getSignedDownloadUrl
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/admin/download-url
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/admin/users-with-uploads:
+    options:
+      operationId: getUsersWithUploadsOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/admin/users-with-uploads
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUsersWithUploads
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/admin/users-with-uploads
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/linguist-applications:
+    options:
+      operationId: linguistApplicationsOptions
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app/api/v1/linguist-applications
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: linguistApplicationsCreate
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app/api/v1/linguist-applications
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/linguist-applications/all:
+    options:
+      operationId: linguistGetAllApplicationsOptions
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app/api/v1/linguist-applications/all
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: linguistGetAllApplications
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app/api/v1/linguist-applications/all
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/linguist-applications/me_application:
+    options:
+      operationId: linguistGetMyApplicationOptions
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app/api/v1/linguist-applications/me_application
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: linguistGetMyApplication
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app/api/v1/linguist-applications/me_application
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/linguist-applications/{applicationId}/approve:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+    options:
+      operationId: ApproveApplicationStatusOptions
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: ApproveApplicationStatus
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/linguist-applications/{applicationId}/reject:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+    options:
+      operationId: RejectApplicationStatusOptions
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: RejectApplicationStatus
+      x-google-backend:
+        address: https://linguist-application-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/search:
+    options:
+      operationId: searchOptions
+      x-google-backend:
+        address: https://search-service-885391982107.us-central1.run.app/api/v1/search
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: searchQuery
+      x-google-backend:
+        address: https://search-service-885391982107.us-central1.run.app/api/v1/search
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/suggest:
+    options:
+      operationId: suggestOptions
+      x-google-backend:
+        address: https://search-service-885391982107.us-central1.run.app/api/v1/suggest
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: searchSuggest
+      x-google-backend:
+        address: https://search-service-885391982107.us-central1.run.app/api/v1/suggest
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/descriptive:
+    options:
+      operationId: analyticsOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: analyticsDescriptive
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/descriptive/category-frequency:
+    options:
+      operationId: categoryFrequencyOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/category-frequency
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: categoryFrequency
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/category-frequency
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/descriptive/language-coverage:
+    options:
+      operationId: languageCoverageOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/language-coverage
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: languageCoverage
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/language-coverage
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/descriptive/popular-terms:
+    parameters:
+      - in: query
+        name: limit
+        type: integer
+        required: false
+        description: Limit the number of popular terms
+      - in: query
+        name: domain
+        type: string
+        required: false
+        description: Filter by domain
+      - in: query
+        name: language
+        type: string
+        required: false
+        description: Filter by language
+    options:
+      operationId: popularTermsOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/popular-terms
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: popularTerms
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/popular-terms
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/descriptive/total-statistics:
+    options:
+      operationId: totalStatisticsOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/total-statistics
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: totalStatistics
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/total-statistics
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/descriptive/unique-terms:
+    options:
+      operationId: uniqueTermsOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/unique-terms
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: uniqueTerms
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/descriptive/unique-terms
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/analytics/advanced/language-network:
+    options:
+      operationId: languageNetworkOptions
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/advanced/language-network
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: languageNetwork
+      x-google-backend:
+        address: https://analytics-service-885391982107.us-central1.run.app/api/v1/analytics/advanced/language-network
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/votes:
+    options:
+      operationId: votesOptions
+      x-google-backend:
+        address: https://vote-service-885391982107.us-central1.run.app/api/v1/votes
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: votesSubmit
+      x-google-backend:
+        address: https://vote-service-885391982107.us-central1.run.app/api/v1/votes
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/votes/terms:
+    options:
+      operationId: voteOnTermOptions
+      x-google-backend:
+        address: https://vote-service-885391982107.us-central1.run.app/api/v1/votes/terms
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: voteOnTerm
+      x-google-backend:
+        address: https://vote-service-885391982107.us-central1.run.app/api/v1/votes/terms
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/votes/comments:
+    options:
+      operationId: voteOnCommentOptions
+      x-google-backend:
+        address: https://vote-service-885391982107.us-central1.run.app/api/v1/votes/comments
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: voteOnComment
+      x-google-backend:
+        address: https://vote-service-885391982107.us-central1.run.app/api/v1/votes/comments
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/glossary:
+    options:
+      operationId: glossaryOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryGetAll
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/glossary/categories:
+    options:
+      operationId: glossaryCategoriesOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/categories
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryCategories
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/categories
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/glossary/categories/stats:
+    options:
+      operationId: glossaryCategoriesStatsOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/categories/stats
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryCategoriesStats
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/categories/stats
+      responses:
+        '200':
+          description: Success
+  /api/v1/glossary/categories/{category}/terms:
+    parameters:
+      - name: category
+        in: path
+        required: true
+        type: string
+        description: The category of glossary terms to retrieve.
+    options:
+      operationId: glossaryTermsByCategoryOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryTermsByCategory
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/glossary/terms/{termId}/translations:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the glossary term to retrieve translations for.
+    options:
+      operationId: glossaryTermTranslationsOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryTermTranslations
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/glossary/search:
+    options:
+      operationId: glossarySearchOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/search
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossarySearch
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/search
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/glossary/languages:
+    options:
+      operationId: glossaryLanguagesOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/languages
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryLanguages
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/languages
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/glossary/random:
+    options:
+      operationId: glossaryRandomOptions
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/random
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: glossaryRandom
+      x-google-backend:
+        address: https://glossary-service-885391982107.us-central1.run.app/api/v1/glossary/random
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/terms/{termId}:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to retrieve.
+    options:
+      operationId: getTermDetailOptions
+      x-google-backend:
+        address: https://term-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getTermDetail
+      x-google-backend:
+        address: https://term-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/{termId}/translations:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to retrieve translations for.
+    options:
+      operationId: getTermTranslationsOptions
+      x-google-backend:
+        address: https://term-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getTermTranslations
+      x-google-backend:
+        address: https://term-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/submit:
+    options:
+      operationId: submitTermOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/submit
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: submitTerm
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/submit
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/submit-with-translations:
+    options:
+      operationId: submitTermWithTranslationsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/submit-with-translations
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: submitTermWithTranslations
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/submit-with-translations
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/my-submitted:
+    options:
+      operationId: getMySubmittedTermsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/my-submitted
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getMySubmittedTerms
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/my-submitted
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/editable:
+    options:
+      operationId: getEditableTermsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/editable
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getEditableTerms
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/editable
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/term-applications/pending-verification:
+    options:
+      operationId: getPendingVerificationTermsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/term-applications/pending-verification
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getPendingVerificationTerms
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/term-applications/pending-verification
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/term-applications/all:
+    options:
+      operationId: getAllTermApplicationsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/term-applications/all
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getAllTermApplications
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/term-applications/all
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/{termId}/reviews:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to retrieve reviews for.
+    options:
+      operationId: getTermReviewsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getTermReviews
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/term-applications/{termId}/vote:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term application to vote for.
+    options:
+      operationId: voteForTermOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: voteForTerm
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/attributes:
+    options:
+      operationId: getAttributesOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/attributes
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getAttributes
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/attributes
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/admin-verified:
+    options:
+      operationId: getAllAdminVerifiedTermsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/admin-verified
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getAllAdminVerifiedTerms
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/admin-verified
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/terms/terms-by-ids:
+    options:
+      operationId: getTermsByIdsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/terms-by-ids
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: getTermsByIds
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/terms/terms-by-ids
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/term-applications/{applicationId}:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term application to delete.
+    options:
+      operationId: deleteTermApplicationOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    delete:
+      operationId: deleteTermApplication
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/linguist/terms/applications-for-review:
+    options:
+      operationId: getLinguistReviewSubmissionsOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/linguist/terms/applications-for-review
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getLinguistReviewSubmissions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/linguist/terms/applications-for-review
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/linguist/terms/{applicationId}/verify:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term application to verify.
+    options:
+      operationId: linguistVerifyApplicationOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: linguistVerifyApplication
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/linguist/terms/{applicationId}/reject:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term application to reject.
+    options:
+      operationId: linguistRejectApplicationOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: linguistRejectApplication
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/admin/terms/applications-for-approval:
+    options:
+      operationId: getAdminApplicationsForApprovalOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/admin/terms/applications-for-approval
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getAdminApplicationsForApproval
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app/api/v1/admin/terms/applications-for-approval
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/admin/terms/{applicationId}/approve:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term application to approve.
+    options:
+      operationId: adminApproveApplicationOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    put:
+      operationId: adminApproveApplication
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/admin/terms/{applicationId}/reject:
+    parameters:
+      - name: applicationId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term application to reject.
+    options:
+      operationId: adminRejectApplicationOptions
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: adminRejectApplication
+      x-google-backend:
+        address: https://term-addition-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/comments/by_term/{termId}:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to retrieve comments for.
+    options:
+      operationId: getCommentsOptions
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getComments
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/comments:
+    options:
+      operationId: postCommentOptions
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app/api/v1/comments
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: postComment
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app/api/v1/comments
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/comments/{commentId}:
+    parameters:
+      - name: commentId
+        in: path
+        required: true
+        type: string
+        description: The ID of the comment to edit or delete.
+    options:
+      operationId: commentManagementOptions
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    put:
+      operationId: editComment
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    delete:
+      operationId: deleteComment
+      x-google-backend:
+        address: https://comment-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/workspace/bookmarks:
+    options:
+      operationId: getBookmarksOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getBookmarks
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/bookmarks/terms:
+    options:
+      operationId: bookmarkTermOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks/terms
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: bookmarkTerm
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks/terms
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/bookmarks/terms/{termId}:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to unbookmark.
+    options:
+      operationId: unbookmarkTermOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    delete:
+      operationId: unbookmarkTerm
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/bookmarks/glossaries:
+    options:
+      operationId: bookmarkGlossaryOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks/glossaries
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: bookmarkGlossary
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks/glossaries
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/bookmarks/glossaries/{domain}:
+    parameters:
+      - name: domain
+        in: path
+        required: true
+        type: string
+        description: The domain of the glossary to unbookmark.
+    options:
+      operationId: unbookmarkGlossaryOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    delete:
+      operationId: unbookmarkGlossary
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/bookmarks/search:
+    options:
+      operationId: searchBookmarksOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks/search
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: searchBookmarks
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/bookmarks/search
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/groups:
+    options:
+      operationId: workspaceGroupsOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/groups
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserGroups
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/groups
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    post:
+      operationId: createGroup
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/groups
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/groups/{groupId}:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        type: string
+        description: The ID of the group to manage.
+    options:
+      operationId: groupManagementOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getGroupWithTerms
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    put:
+      operationId: updateGroup
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    delete:
+      operationId: deleteGroup
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/groups/{groupId}/terms:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        type: string
+        description: The ID of the group to manage terms for.
+    options:
+      operationId: groupTermsOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: addTermsToGroup
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/groups/{groupId}/terms/{termId}:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        type: string
+        description: The ID of the group to remove the term from.
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to remove from the group.
+    options:
+      operationId: removeTermFromGroupOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    delete:
+      operationId: removeTermFromGroup
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/groups/bulk-delete:
+    options:
+      operationId: bulkDeleteGroupsOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/groups/bulk-delete
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: bulkDeleteGroups
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/groups/bulk-delete
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/notes:
+    options:
+      operationId: workspaceNotesOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/notes
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserNotes
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/notes
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    post:
+      operationId: createNote
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/notes
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/notes/{noteId}:
+    parameters:
+      - name: noteId
+        in: path
+        required: true
+        type: string
+        description: The ID of the note to manage.
+    options:
+      operationId: noteManagementOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getNote
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    put:
+      operationId: updateNote
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+    delete:
+      operationId: deleteNote
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/notes/term/{termId}:
+    parameters:
+      - name: termId
+        in: path
+        required: true
+        type: string
+        description: The ID of the term to get notes for.
+    options:
+      operationId: getNoteByTermOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getNoteByTerm
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/workspace/notes/bookmark-note:
+    options:
+      operationId: updateBookmarkNoteOptions
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/notes/bookmark-note
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    put:
+      operationId: updateBookmarkNote
+      x-google-backend:
+        address: https://workspace-service-885391982107.us-central1.run.app/api/v1/workspace/notes/bookmark-note
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+  /api/v1/feedback:
+    options:
+      operationId: feedbackRootOptions
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: submitFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    get:
+      operationId: getAllFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/feedback/my-feedback:
+    options:
+      operationId: getMyFeedbackOptions
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app/api/v1/feedback/my-feedback
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getMyFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app/api/v1/feedback/my-feedback
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/feedback/{feedbackId}:
+    parameters:
+      - name: feedbackId
+        in: path
+        required: true
+        type: string
+        description: The ID of the feedback to manage.
+    options:
+      operationId: feedbackManagementOptions
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    put:
+      operationId: updateFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    delete:
+      operationId: deleteFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/feedback/admin/stats:
+    options:
+      operationId: getFeedbackStatsOptions
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app/api/v1/feedback/admin/stats
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getFeedbackStats
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app/api/v1/feedback/admin/stats
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/feedback/search:
+    options:
+      operationId: searchFeedbackOptions
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: searchFeedback
+      x-google-backend:
+        address: https://feedback-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/forgot-password:
+    options:
+      operationId: forgotPasswordOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/forgot-password
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: forgotPassword
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/forgot-password
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/reset-password:
+    options:
+      operationId: resetPasswordOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/reset-password
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: resetPassword
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/reset-password
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/verify-email:
+    options:
+      operationId: verifyEmailOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/verify-email
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: verifyEmail
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/verify-email
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  /api/v1/auth/resend-verification:
+    options:
+      operationId: resendVerificationOptions
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/resend-verification
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: resendVerification
+      security: []
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/auth/resend-verification
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+  # Settings endpoints
+  /api/v1/settings/preferences:
+    options:
+      operationId: getUserPreferencesOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/settings/preferences
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserPreferences
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/settings/preferences
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    put:
+      operationId: updateUserPreferences
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/settings/preferences
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
 
-  /api/v1/admin/{proxy+}:
-    x-google-backend:
-      # This also points to your 'auth-service'
-      address: https://auth-service-885391982107.us-central1.run.app
+  /api/v1/settings/preferences/reset:
+    options:
+      operationId: resetUserPreferencesOptions
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/settings/preferences/reset
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: resetUserPreferences
+      x-google-backend:
+        address: https://auth-service-885391982107.us-central1.run.app/api/v1/settings/preferences/reset
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
 
-  # --- Routes for Search Service ---
-  /api/v1/search/{proxy+}:
-    x-google-backend:
-      # Replace with the URL of your deployed 'search-service'
-      address: https://search-service-885391982107.us-central1.run.app
+  /api/v1/terms/all-for-offline:
+    options:
+      operationId: getAllTermsForOfflineOptions
+      x-google-backend:
+        address: https://search-service-885391982107.us-central1.run.app/api/v1/terms/all-for-offline
+        deadline: 60.0
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getAllTermsForOffline
+      x-google-backend:
+        address: https://search-service-885391982107.us-central1.run.app/api/v1/terms/all-for-offline
+        deadline: 60.0
+      responses:
+        '200':
+          description: Success
 
-  /api/v1/suggest/{proxy+}:
-    x-google-backend:
-      # This also points to your 'search-service'
-      address: https://search-service-885391982107.us-central1.run.app
+  /api/v1/learning/dashboard:
+    options:
+      operationId: getLearningDashboardOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/dashboard
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getLearningDashboard
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/dashboard
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
 
-  # --- Routes for Vote Service ---
-  /api/v1/votes/{proxy+}:
-    x-google-backend:
-      # Replace with the URL of your deployed 'vote-service'
-      address: https://vote-service-885391982107.us-central1.run.app
+  /api/v1/learning/progress:
+    options:
+      operationId: updateLearningProgressOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/progress
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: updateLearningProgress
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/progress
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
 
-  # --- Routes for Linguist Application Service ---
-  /api/v1/linguist-applications/{proxy+}:
-    x-google-backend:
-      # Replace with the URL of your deployed 'linguist-application-service'
-      address: https://linguist-application-service-885391982107.us-central1.run.app
+  /api/v1/learning/paths:
+    options:
+      operationId: learningPathsOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/paths
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: learningPaths
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/paths
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    post:
+      operationId: createLearningPath
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/paths
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
 
-  # --- Routes for Glossary Service ---
-  /api/v1/glossary/{proxy+}:
-    x-google-backend:
-      # Replace with the URL of your deployed 'glossary-service'
-      address: https://glossary-service-885391982107.us-central1.run.app
+  /api/v1/learning/paths/{pathId}:
+    parameters:
+      - name: pathId
+        in: path
+        required: true
+        type: string
+        description: The ID of the learning path to manage.
+    options:
+      operationId: learningPathDetailOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: learningPathDetail
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    put:
+      operationId: updateLearningPath
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+    delete:
+      operationId: deleteLearningPath
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
 
-  # --- Routes for Analytics Service ---
-  /api/v1/analytics/{proxy+}:
-    x-google-backend:
-      # Replace with the URL of your deployed 'analytics-service'
-      address: https://analytics-service-885391982107.us-central1.run.app
+  /api/v1/learning/languages/{languageCode}/glossaries:
+    parameters:
+      - name: languageCode
+        in: path
+        required: true
+        type: string
+        description: The language code to get glossary progress for.
+    options:
+      operationId: getGlossaryProgressOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getGlossaryProgress
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/learning/languages/{languageCode}/random-terms:
+    parameters:
+      - name: languageCode
+        in: path
+        required: true
+        type: string
+        description: The language code to get random terms for.
+    options:
+      operationId: getRandomTermsOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getRandomTerms
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/learning/glossaries/word-counts:
+    options:
+      operationId: getWordCountsOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/glossaries/word-counts
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: getWordCounts
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/glossaries/word-counts
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/learning/session-progress:
+    options:
+      operationId: updateSessionProgressOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/session-progress
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: updateSessionProgress
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app/api/v1/learning/session-progress
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/xp/add-xp:
+    options:
+      operationId: addXPOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app/api/v1/xp/add-xp
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: addXP
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app/api/v1/xp/add-xp
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/xp/user/{userId}/xp-records:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to get XP records for.
+    options:
+      operationId: getUserXPRecordsOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserXPRecords
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/xp/user/{userId}/login-streak:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to get login streak for.
+    options:
+      operationId: getUserLoginStreakOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserLoginStreak
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/levels/user/{userId}/level:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to get level for.
+    options:
+      operationId: getUserLevelOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserLevel
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/levels/user/{userId}/recalculate-level:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to recalculate level for.
+    options:
+      operationId: recalculateUserLevelOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: recalculateUserLevel
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/achievements:
+    options:
+      operationId: getAllAchievementsOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app/api/v1/achievements
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getAllAchievements
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app/api/v1/achievements
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/achievements/user/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to get achievements for.
+    options:
+      operationId: getUserAchievementsOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserAchievements
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/achievements/user/{userId}/progress:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to get achievement progress for.
+    options:
+      operationId: getUserAchievementProgressOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserAchievementProgress
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/achievements/user/{userId}/weekly:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to get achievement weekly progress for.
+    options:
+      operationId: getUserAchievementWeeklyProgressOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getUserAchievementWeeklyProgress
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/achievements/user/{userId}/check:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+        description: The ID of the user to check achievements for.
+    options:
+      operationId: checkUserAchievementsOptions
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    post:
+      operationId: checkUserAchievements
+      x-google-backend:
+        address: https://gamification-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
+
+  /api/v1/learning/languages/{languageCode}/glossaries/{glossaryName}/words:
+    parameters:
+      - name: languageCode
+        in: path
+        required: true
+        type: string
+        description: The language code for the study session
+      - name: glossaryName
+        in: path
+        required: true
+        type: string
+        description: The name of the glossary for the study session
+    options:
+      operationId: getStudySessionWordsOptions
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: CORS preflight response
+    get:
+      operationId: getStudySessionWords
+      x-google-backend:
+        address: https://learning-path-service-885391982107.us-central1.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+      responses:
+        '200':
+          description: Success
