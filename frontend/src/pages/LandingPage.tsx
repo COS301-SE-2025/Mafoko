@@ -15,7 +15,7 @@ const LandingPage: React.FC = () => {
       <nav className="landing-nav">
         <div className="nav-left">
           <img src={DfsiLogo} alt="DSFSI Logo" className="nav-logo" />
-          <span className="nav-title">{t('appTitle', 'Marito')}</span>
+          <span className="nav-title">{t('appTitle', 'Mafoko')}</span>
         </div>
         <div className="nav-right">
           <LanguageSwitcher />

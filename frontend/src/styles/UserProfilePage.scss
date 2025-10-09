@@ -182,18 +182,8 @@ $text-dark: #ffffff;
       align-items: center;
       justify-content: center;
       position: relative;
-      cursor: pointer;
       transition: all 0.2s ease;
 
-      &:hover {
-        transform: scale(1.02);
-
-        .picture-overlay {
-          opacity: 1;
-        }
-      }
-
-      // Desktop sizing
       @media (min-width: 769px) {
         width: 10rem;
         height: 10rem;
@@ -221,27 +211,6 @@ $text-dark: #ffffff;
       .loading-placeholder {
         color: var(--profile-secondary-text);
         font-size: 0.875rem;
-      }
-
-      .picture-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        border-radius: 50%;
-        color: white;
-
-        // Always show on mobile for better UX
-        @media (max-width: 768px) {
-          opacity: 0.3;
-        }
       }
     }
 

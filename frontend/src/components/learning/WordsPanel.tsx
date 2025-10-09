@@ -64,10 +64,10 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
   };
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="px-4 sm:px-0">
+        {/* Header and Progress */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4 w-full">
-          {/* Back button */}
           <button
             type="button"
             onClick={onBackClick}
@@ -76,7 +76,6 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
             ← {t('learningPathPage.learningGlossarylist.backToGlossaries')}
           </button>
 
-          {/* Progress section */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
             <div className="text-sm text-theme text-center sm:text-left w-full sm:w-auto">
               {knownWords.size} of {studySession.words.length}{' '}
@@ -106,18 +105,23 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
         ) : (
           <>
             {/* Flashcards grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 mb-8">
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8"
+              style={{ paddingTop: '10px' }}
+            >
               {currentWords.map((word) => {
                 const flipped = flippedCards[word.id] || false;
+                const isKnown = knownWords.has(word.id);
+
                 return (
                   <div
                     key={word.id}
                     onClick={() => toggleFlip(word.id)}
-                    className="relative cursor-pointer transform-gpu perspective "
+                    className="relative cursor-pointer transform-gpu perspective"
                   >
-                    {/* Card inner container */}
+                    {/* Card container */}
                     <div
-                      className={`relative w-full h-44 transition-transform duration-500  ${
+                      className={`relative w-full min-h-[12rem] sm:min-h-[14rem] md:min-h-[16rem] transition-transform duration-500 ${
                         flipped ? 'rotate-y-180' : ''
                       }`}
                       style={{
@@ -126,10 +130,10 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                     >
                       {/* Front side */}
                       <div className="absolute inset-0 bg-[var(--bg-tir)] rounded-xl p-6 shadow-sm border border-theme flex flex-col justify-center items-center backface-hidden">
-                        <h4 className="text-lg font-semibold text-theme mb-2 text-center">
+                        <h4 className="text-lg sm:text-xl font-semibold text-theme mb-2 text-center break-words">
                           {word.term}
                         </h4>
-                        <p className="text-xs text-gray-500 text-center">
+                        <p className="text-xs sm:text-sm text-gray-500 text-center">
                           {t(
                             'learningPathPage.learningGlossarylist.tapToReveal',
                           )}
@@ -137,32 +141,38 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                       </div>
 
                       {/* Back side */}
+                      {/* Back side */}
                       <div
-                        className={`absolute inset-0 ${knownWords.has(word.id) ? 'bg-teal-500' : 'bg-zinc-700'} text-white rounded-xl p-6 shadow-md flex flex-col justify-center items-center rotate-y-180 backface-hidden`}
+                        className={`absolute inset-0 ${
+                          isKnown ? 'bg-teal-500' : 'bg-zinc-700'
+                        } text-white rounded-xl shadow-md flex flex-col rotate-y-180 backface-hidden`}
+                        style={{ padding: '15px' }}
                       >
-                        <p className="text-lg font-bold text-center">
-                          {word.english_translation ||
-                            t(
-                              'learningPathPage.learningGlossarylist.noTranslation',
-                            )}
-                        </p>
-                        {word.definition && (
-                          <p className="text-sm mt-2 text-center opacity-90 leading-relaxed">
-                            {word.definition}
+                        {/* Scrollable content wrapper */}
+                        <div className="flex-1 overflow-y-auto max-h-[18rem] sm:max-h-[22rem] md:max-h-[26rem] p-6">
+                          <p className="text-base sm:text-lg font-bold text-center break-words !text-[20px]">
+                            {word.english_translation ||
+                              t(
+                                'learningPathPage.learningGlossarylist.noTranslation',
+                              )}
                           </p>
-                        )}
+
+                          <p className="text-xs sm:text-sm mt-3 text-center opacity-90 leading-relaxed whitespace-pre-wrap break-words text-left">
+                            {word.definition || ''}
+                          </p>
+                        </div>
                       </div>
                     </div>
 
                     {/* Completion status */}
                     <div className="flex justify-end mt-2">
-                      {knownWords.has(word.id) ? (
-                        <div className="flex items-center gap-2 text-teal-600 text-xs font-medium">
+                      {isKnown ? (
+                        <div className="flex items-center gap-2 text-teal-600 text-xs sm:text-sm font-medium">
                           <CheckCircle2 className="w-4 h-4" />
                           {t('learningPathPage.learningGlossarylist.known')}
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2 text-gray-400 text-xs">
+                        <div className="flex items-center gap-2 text-gray-400 text-xs sm:text-sm">
                           <Circle className="w-4 h-4" />
                           {t(
                             'learningPathPage.learningGlossarylist.notLearned',

@@ -608,6 +608,235 @@
     "Streak Keeper": "Motshedisi wa Tatelano",
     "Maintain a login streak of 3 consecutive days": "Boloka tatelano ya go tsena mo malatsing a le mararo a a latelanang",
     "Active Commenter": "Mokwaledi wa Maikutlo yo o Maitekanelo",
-    "Write 4 comments on terms this week": "Kwale maikutlo a le mane ka mafoko mo bekeng eno"
+    "Write 4 comments on terms this week": "Kwale maikutlo a le mane ka mafoko mo bekeng eno",
+    "Term Creator": "Mokgweetsi wa Mafoko",
+    "Maintain a login streak of 2 consecutive days": "Boloka tatelano ya go tsena mo malatsing a mabedi a a latelanang",
+    "Submit 6 new terms this week": "Romela mafoko a matšha a le 6 mo bekeng eno"
+  },
+  "termHelpPage": {
+    "onThisPage": "Letlakaleng le",
+    "title": "Go kwešiša Lentšu la Mmantšu",
+    "intro": "Lentšu la <strong>Mmantšu</strong> ke lefelong leo o ka le šomišago go nyaka ditlhalošo tša mantšu ka maleme a mantši mo malemeng a 11 a semmušo a Afrika Borwa. Le thekga go nyaka ka lebelo, go kgetha ka leleme goba lefapha, le go šomiša ntle le inthanete ge mmantšu e šetše e laeditšwe.",
+
+    "overviewTitle": "Go kwešiša Lentšu la Mmantšu",
+    "overviewBody": "Lentšu la Mmantšu le go dumelela go nyaka ditlhalošo tša mantšu ka maleme a mantši a semmušo a Afrika Borwa.",
+
+    "whatIsATermTitle": "Lentšu ke Eng?",
+    "whatIsATermBody": "Lentšu le lengwe le le lengwe mo Marito le na le dintlha tše di latelago:",
+    "termFields": {
+      "term": "Lentšu: Lentšu goba polelo.",
+      "language": "Leleme: Le lengwe la maleme a 11 a semmušo a Afrika Borwa.",
+      "domain": "Lefapha: Lefapha la dithuto goba sehlogo.",
+      "definition": "Tlhalošo: Tlhalošo e hlakilego ya moelelo wa lentšu.",
+      "related": "Mantšu a Amanago: Dikgokagano go mantšu a nago le moelelo o swanago goba o amanago."
+    },
+
+    "languagesTitle": "Maleme ao a Thekgwago",
+    "languagesBody": "Marito e thekga maleme ka moka a 11 a semmušo a Afrika Borwa. O ka diriša dikgetho tša go kgetha gore o lebelele leleme le tee goba o nyake mantšu go tšwa go a mantši.",
+    "languagesList": [
+      "Afrikaans",
+      "Seisimane",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Go Nyaka Mantšu",
+    "searchSubheadingHow": "Kamoo Go Nyaka go Šomago Kateng",
+    "searchBody1": "Mosebetsi wa go nyaka mo Marito o go thuša go hwetša mantšu ka lebelo mo malemeng ka moka a 11 a semmušo.",
+    "searchBody2": "Ge o ngwala, Marito e dira nyako ya nako-ya-sebele gomme e mpshafatša dipoelo ka nako yeo.",
+    "searchFields": {
+      "term": "Lentšu: Leina goba polelo yeo e emetšego kgopolo e itšego.",
+      "definition": "Tlhalošo: Mantšu ao ditlhalošo tša ona di nago le mantšu a o a nyakilego le ona a tla tšwelela.",
+      "filters": "Dikgetho: Kgetha ka leleme goba lefapha."
+    },
+    "searchSubheadingLive": "Ditšhišinyo tša Nako-ya-sebele",
+    "searchLiveBody": "Marito e ka šišinya mantšu a amanago goba dikakaretšo ge o sa dutše o ngwala.",
+    "searchSubheadingSensitivity": "Kutlwelobotši ya Nyako",
+    "searchSensitivityBody": "Ka tlwaelo, Marito e dira nyako e nepagetšego goba e batametšego go nepahalo, eupša o ka bula nyako e sa nepahalago (fuzzy search).",
+    "searchSubheadingResultCards": "Dikhate tša Dipoelo",
+    "searchResultBody": "Mantšu a bontšhwa mo dikhating tše nago le leina la lentšu, leleme, lefapha, tlhalošo, le dikonopo tša go vouta.",
+
+    "filtersTitle": "Dikgetho tša Go Kgetha",
+    "filtersBody": "Go fokotša dipoelo, diriša dikgetho tšeo di lego letlakaleng la nyako.",
+    "filtersList": {
+      "language": "Leleme: Fokotša dipoelo go leleme le tee fela.",
+      "domain": "Lefapha: Shebana le mafapha a bjalo ka Thuto, Bophelo, goba Theknolotši.",
+      "fuzzy": "Nyako e sa Nepahalago: Hwetša mantšu le ge go na le diphoso tša go peleta goba phapano."
+    },
+
+    "viewTitle": "Go Lebelela Mantšu",
+    "viewBody": "Kgotla konopo ya 'Lebelela' khating ya lentšu go bula tlhalošo e feletšego gomme o hlahlobe mantšu a amanago.",
+
+    "offlineTitle": "Tirišo ntle le Inthanete",
+    "offlineBody": "Marito e ka šomišwa ntle le inthanete ge mmantšu e šetše e laeditšwe pele.",
+    "offlineHow": "Kamoo o ka Laollang Kateng",
+    "offlineSteps": [
+      "Eya letlakaleng la Mmantšu.",
+      "Kgetha mmantšu yeo o nyakago go e laolla.",
+      "Kgotla 'Laolla' go e boloka sešebeding sa gago."
+    ],
+    "offlineEnd": "Ka morago ga go laolla, mantšu a mmantšu woo a tla dula a le gona le ge o se wa hokela inthaneteng."
+  },
+  "workspaceHelpPage": {
+    "title": "Go tlhaloganya Workspace",
+    "intro": "<strong>Workspace</strong> e go letla go boloka mafoko le diglosari tse o nang le kgatlhego mo go tsone, go di rulaganya mo ditlhopheng, le go laola ditlhopha tseo. Ke kwa o ka salang morago ka teng kgatelopele ya ditlhahiso tsa gago tsa mafoko le go boloka dikwalo tsa gago tsa tiro.",
+    "groupsTitle": "Go Laola Ditlhopha",
+    "groupsBody": "Ditlhopha di thusa go rulaganya mafoko a a bolokilweng. O ka dira ditlhopha tse disha, wa di reetsa maina a mangwe, kgotsa wa phimola tse o sa di tlhokeng.",
+    "groupsSteps": [
+      "Dira Setlhopha: Tobetsa konopo ya <em>Setlhopha se Sesha</em>, tsenya leina, tlhopha mafoko, mme o netefatse ka go tobetsa <em>Oketsa Mafoko</em>.",
+      "Tlotla Setlhopha: Tobetsa <em>letshwao la pentšele</em> fa thoko ga leina la setlhopha, fetola leina, mme o netefatse ka go tobetsa <em>Fetola Leina</em>.",
+      "Phimola Setlhopha: Tobetsa <em>letshwao la go phimola</em>, tlhopha ditlhopha tse o batlang go di tima, mme o netefatse."
+    ],
+    "moveTitle": "Go Fetisetsa Mafoko Gare ga Ditlhopha",
+    "moveBody": "Go fetisetsa lefoko go setlhopha se sengwe, tobetsa <em>letshwao la go fetisetsa</em> fa thoko ga lefoko mme o tlhophe setlhopha se sesha.",
+    "notesTitle": "Go Dirisa Dikwalo",
+    "notesBody": "Dikwalo di go letla go oketsa bokao mo mafokong a a bolokilweng. O ka dira, fetola, kgotsa phimola dikwalo mo Workspace.",
+    "notesSteps": [
+      "Oketsa Lokwalo: Tobetsa <em>letshwao la lokwalo</em> fa thoko ga lefoko, kwala lokwalo, mme o tobetsa <em>Boloka</em>.",
+      "Fetola Lokwalo: Tobetsa <em>letshwao la pentšele</em>, fetola mafoko, mme o tobetsa <em>Boloka</em>.",
+      "Phimola Lokwalo: Dirisa kgetho ya go phimola go tima dikwalo tse di sa tlhokegang."
+    ],
+    "deleteTitle": "Go Phimola Mafoko le Diglosari",
+    "deleteBody": "O ka tima dilo mo Workspace nako nngwe le nngwe:",
+    "deleteSteps": [
+      "Phimola Lefoko: Eya mo <em>Mafokong a a Bolokilweng</em>, tobetsa <em>letshwao la go phimola</em>, mme o netefatse.",
+      "Phimola Glosari: Eya mo <em>Diglosaring tse di Bolokilweng</em>, tobetsa kgetho ya go tima, mme o netefatse."
+    ]
+  },
+  "common": {
+    "back": "Morago",
+    "onThisPage": "Mo tsebeng e"
+  },
+  "settingsHelpPage": {
+    "title": "Dipehelo le Boikamahanyo",
+    "intro": "Sebelisa leqephe la <strong>Dipehelo</strong> ho fetola dikgetho tsa hao — ho kenyeletsa sehlooho, dintlha tsa profaele, le phihlello — ho etsa boiphihlelo bo botle ka ho fetisisa bakeng sa hao.",
+    "onThisPage": "Leqepheng lena",
+    "modesTitle": "Ho Fetola Pakeng tsa Mokhoa o Khanyang le o Monyenyane",
+    "modesBody": "Mafoko e o dumella ho fetola kapele pakeng tsa <strong>mokhoa o khanyang</strong> le <strong>mokhoa o lefifi</strong> ho latela seo o se ratang le tikoloho ya hao. Tshebetso ena e fumaneha maqephe ohle mme e ntlafatsa sebopeho hang-hang ntle le ho sitisa mosebetsi wa hao.",
+    "modesSteps": [
+      "Fumana Konopo: Batla letshwao la letsatsi/khoeli hukung e ka tlase le letsohong le letshoto.",
+      "Fetola Mokhoa: Tobetsa letshwao ho fetola hang-hang pakeng tsa Mokhoa o Khanyang le o Lefifi."
+    ],
+    "profileTitle": "Ho Ntlafatsa Profaele ya Hao",
+    "profileBody": "O ka ntlafatsa <strong>lebitso</strong>, <strong>imeile</strong>, kapa <strong>phasewete</strong> neng kapa neng ho tloha diphehong tsa profaele ya hao. Phetoho e nngwe le e nngwe e hloka netefatso bakeng sa tshireletso.",
+    "profileSteps": [
+      "Ntlafatsa Lebitso: Tobetsa <em>Fetola Lebitso</em>, kenya lebitso le letjha, netefatsa ka phasewete ya hao, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Imeile: Tobetsa <em>Fetola Imeile</em>, kenya aterese e ntjha, netefatsa ka phasewete, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Phasewete: Tobetsa <em>Fetola Phasewete</em>, kenya phasewete e ntjha, netefatsa, mme o tobetse <em>Boloka</em>."
+    ],
+    "accessibilityTitle": "Dipehelo tsa Phihlello",
+    "accessibilityBody": "Mafoko e fana ka dikgetho tse fapaneng tsa phihlello hore o ka ikamahanya le lenaneo ho latela ditlhoko tsa hao. O ka fetola <strong>puo</strong>, <strong>boholo ba mongolo</strong>, <strong>sebaka</strong>, le <strong>phapang ya mebala</strong> ka ho toba ho menu ya dipehelo.",
+    "accessibilitySteps": [
+      "Fetola Puo ya Lenaneo: Bula lenane la ho theoha mme o kgethe puo eo o e ratang.",
+      "Bulela Mokgwa wa Phapang e Phahameng: Tobetsa <em>High Contrast toggle</em> ho fetola mokgwa wa mebala e pharalletseng."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Go Utloisisa Ditsela tsa Thuto",
+    "section1": "Tiriso ya Learning Path e go letla go rulaganya loeto lo lo tlhomameng la go ithuta nngwe ya dipuo tsa semmuso tsa Aforika Borwa. Ka go tlhopha puo le didiriswa tse o batlang go ithuta ka tsone, o ka latela tsela e e rulagantsweng go na le go batla ka mokgwa o o sa rulaganngwang.",
+    "section2": "Tsela nngwe le nngwe ya thuto e kopanya di-glossary, didirisiwa tsa boitlhaganyo le go sala morago kgatelopele go go thusa go nna o kgothadiwa le go tswelelela.",
+    "section3": "Sebatli sa gago ga se tshegetse tag ya video.",
+    "section4": "Fa o sena go tlhopha puo, o tla kopiwa go tlhopha glossary. Glossary nngwe le nngwe e rulagantswe ka lefapha (Thuto, Bophelo, Thekenoloji) gore o tsepamise maikutlo mo mafokong a a botlhokwa mo go wena.",
+    "section4Title": "Go Tlhopha Glossary",
+    "section5": "Fa glossary ya gago e setse e rulagantswe, o ka tlhopha tsela e o batlang go ithuta ka yone",
+    "section6": "Ditekanyetso tsa Boitlhaganyo",
+    "section7": "Araba dipotso go lekola kitso ya gago le go matlafatsa se o se ithutileng.",
+    "section8": "Dikarete tsa Thuto",
+    "section9": "Dirisa tlhahlobo ya mofuta wa dikarete go aga tlhaloganyo le go gopola mafoko ka lebelo la gago.",
+    "section10": "Go Ithuta ka Ditekanyetso le Dikarete",
+    "section11": "Go Sala Morago Kgatelopele ya Gago",
+    "section12": "Learning Path e sala morago tiro ya gago gore o bone gore o fitlheletse kae. Kgatelopele e bontshiwa mmogo le dipalo tsa setšhaba, go dira gore go nne motlhofo go nna o kgothadiwa.",
+    "section13": "Kopanya Ditsela tsa Thuto le dikgwetlho tsa beke le beke le dikgatlego go bona dibejane fa o tokafatsa bokgoni jwa gago jwa puo."
+  },
+  "helpPage2": {
+    "section1": "Go Thoma",
+    "section2": "Tataiso ya mohato ka mohato ya go hlama akhaonto, go tsena, le go sepela ka setšhaba lekgetlo la mathomo.",
+    "section3": "Tšhomišano ya Setšhaba",
+    "section3Desc": "Ithute ka go romela, go tlogela ditlhaloso, le go šoma mmogo le ba bangwe o šomiša didiriswa tša setšhaba tša bjalo ka go fa ditlhopho le dipoledišano.",
+
+    "dictionaryTitle": "Pukuntšu",
+    "dictionaryDesc": "Nyaka mantšu ka dipuo tše di fapanego, bulela patlo e e sa nepahalago, gomme o fetole dipeakanyo tša pukuntšu ya gago.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Rulaganya, hlopha, le go romela di-glossary ka sehlopha, lefapha, goba polokelo ya phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mošomo",
+    "workspaceDesc": "Boloka le go laola mantšu le di-glossary tša gago, latela dikgopelo, gomme o šome mmogo o šomiša dingwalo le dihlopha.",
+
+    "settingsTitle": "Dipeakanyo le Go Ikgethela",
+    "settingsDesc": "Fetola dikgetho tša bjalo ka mokgwa wa lesedi/kapa wa lefifi, dikgetho tša phihlelelo, dintlha tša profaele, le dipeakanyo tše dingwe tša modirisi.",
+
+    "homeTitle": "Letlakala la Lehae",
+    "homeDesc": "Hlahloba mmepe wa Afrika Borwa o šomago, hwetša mantšu a a sa tlwaelegago, gomme o bone kakaretšo ya dikateng tše di kgethegilego.",
+
+    "dashboardTitle": "Boto ya Tshekatsheko",
+    "dashboardDesc": "Latela mešomo ya sethala ka digarafi, lebelela data, gomme o hlahlobe meneelo ya gago lefelong le tee.",
+
+    "learningPathTitle": "Ditsela tša Thuto",
+    "learningPathDesc": "Aga leeto le le rulagantšwego la go ithuta e nngwe ya dipuo tša semmušo tša Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela ditlhahiso, thoriso, goba ditletlebo go sehlopha go thuša go kaonafatša sethala.",
+
+    "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
+    "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
+  },
+  "copyURL": "Kopitsa URL",
+  "related": "Mafoko a Amanang",
+  "comments": "Dikomenete",
+  "reply": "Go Araba Go",
+  "addReply": "Tsenya Karabo",
+  "addComment": "Tsenya Komenete",
+  "noDescription": "Ga go Tlhaloso e e Neilweng",
+  "view": "Leba",
+  "workspace": {
+    "section1": "Ha u hokahane le inthanete. Tlhokomeliso ea hau e bolokiloe 'me e tla hokahana ha u khutlela inthaneteng.",
+    "section2": "E hlolehile ho boloka lintlha. Ka kopo leka hape.",
+    "section3": "Ka kopo kena ho hlakola li-bookmark.",
+    "section4": "E hlolehile ho hlakola lentsoe. Ka kopo leka hape.",
+    "section5": "Ka kopo kena ho hlakola lihlopha.",
+    "section6": "E Hlakiwe ka Katleho",
+    "section7": "E hlolehile ho hlakola lihlopha. Ka kopo leka hape.",
+    "section8": "Hlakola Lihlopha",
+    "section9": "Na u tiile hore u batla ho hlakola",
+    "section10": "Sena se tla fetisetsa mantsoe 'ohle a lihlopha tsena ho sehlopha sa \"Mantsoe ’Ohle\".",
+    "section11": "Ka kopo kenya lebitso la sehlopha",
+    "section12": "Sehlopha se nang le lebitso lena se se se ntse se le teng",
+    "section13": "Ka kopo kena ho theha lihlopha.",
+    "section14": "Kena",
+    "section15": "Sebaka sa Mosebetsi",
+    "section16": "Sebaka sa ka sa Mosebetsi",
+    "section17": "Mantsoe a Bolokiloeng",
+    "section18": "Mantsoe a Thesaurus a Bolokiloeng",
+    "section19": "Liqoqo tsa Ka",
+    "section20": "Hlakola Tse Khethiloeng",
+    "section21": "Sehlopha se Secha",
+    "section22": "Hlakola Lihlopha",
+    "section23": "Batla Liqoqo...",
+    "section24": "Theha Sehlopha se Secha",
+    "section25": "Lebitso la Sehlopha",
+    "section26": "Theha sehlopha se secha ho hlophisa mantsoe a hau a bolokiloeng.",
+    "section27": "Khetha Mantsoe a ho Kenyelletsa Sehlopheng",
+    "section28": "Khetha mantsoe ao u batlang ho a kenya sehlopheng sa hau se secha. U ka khetha a mangata.",
+    "section29": "Ha ho mantsoe a bookmark a fumanehang. Etsa bookmark pele ho kenya lihlopha.",
+    "section30": "Kenya",
+    "section31": "E Kenyelletsoa...",
+    "section32": "Mantsoe",
+    "section33": "Fetisetsa Lentsoe Sehlopheng",
+    "section34": "Fetisetsa",
+    "section35": "ho tloha",
+    "section36": "ho ea sehlopheng se fapaneng.",
+    "section37": "Tlosa ho lihlopha tse itseng",
+    "section38": "Hajoale",
+    "section39": "Reha Sehlopha Bocha",
+    "section40": "Reha Bocha",
+    "section41": "Ho Rehoa Bocha"
   }
 }

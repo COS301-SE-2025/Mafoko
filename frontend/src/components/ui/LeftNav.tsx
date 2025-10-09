@@ -24,6 +24,7 @@ import {
   House,
   BadgeCheck,
   Plus,
+  Users,
 } from 'lucide-react';
 
 interface LeftNavProps {
@@ -51,7 +52,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState<string>('contributor');
-  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(['main-navigation']),
   );
@@ -145,7 +145,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         items: [
           {
             id: 'settings',
-            label: t('navigation.settings'),
+            label: t('settings.title'),
             path: '/settings',
             icon: Settings,
           },
@@ -155,12 +155,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             path: '/achievements',
             icon: Trophy,
           },
-          // {
-          //   id: 'linguist-application',
-          //   label: t('navigation.linguistApplication'),
-          //   path: '/linguist-application',
-          //   icon: PenTool,
-          // },
         ],
       },
       {
@@ -186,8 +180,13 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
   );
 
   const adminSubmenuItems = [
-    { id: 'admin', label: 'User Management', path: '/admin' },
-    { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
+    { id: 'admin', label: 'User Management', path: '/admin', icon: Users },
+    {
+      id: 'feedbackhub',
+      label: 'Feedback Hub',
+      path: '/feedbackhub',
+      icon: MessageSquare,
+    },
   ];
 
   useEffect(() => {
@@ -260,9 +259,15 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       group.items.some((item) => item.id === activeItem),
     );
 
+    // Check if active item is in admin submenu
+    const isAdminSubmenuActive = adminSubmenuItems.some(
+      (sub) => sub.id === activeItem,
+    );
+
     setExpandedGroups(() => {
       const newSet = new Set<string>();
-      if (parentGroup) newSet.add(parentGroup.id); // only expand current section
+      if (parentGroup) newSet.add(parentGroup.id);
+      if (isAdminSubmenuActive) newSet.add('admin-section');
       return newSet;
     });
   }, [activeItem, menuGroups]);
@@ -282,15 +287,6 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       }
       return newExpanded;
     });
-  };
-
-  const toggleAdminDropdown = () =>
-    setIsAdminDropdownOpen(!isAdminDropdownOpen);
-
-  const handleAdminItemClick = (itemId: string, path: string) => {
-    setActiveItem(itemId);
-    void navigate(path);
-    setIsAdminDropdownOpen(false);
   };
 
   return (
@@ -374,30 +370,61 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
           </div>
         ))}
 
-        {/* Admin Dropdown */}
+        {/* Admin Dropdown with consistent styling */}
         {userRole === 'admin' && (
-          <div className="left-nav-admin-section">
+          <div className="nav-group">
             <div
-              className={`left-nav-menu-item admin-menu-item ${adminSubmenuItems.some((sub) => activeItem === sub.id) ? 'active' : ''}`}
-              onClick={toggleAdminDropdown}
+              className="nav-group-header"
+              onClick={() => toggleGroup('admin-section')}
             >
-              <div className="admin-menu-content">
-                <span className="left-nav-menu-label">Admin</span>
-                <ChevronDown
-                  size={16}
-                  className={isAdminDropdownOpen ? 'rotated' : ''}
-                />
-              </div>
+              <span className="nav-group-label">Admin</span>
+              <ChevronDown
+                size={16}
+                className={`nav-group-chevron ${expandedGroups.has('admin-section') ? 'rotated' : ''}`}
+              />
             </div>
-            {isAdminDropdownOpen && (
-              <div className="admin-submenu">
-                {adminSubmenuItems.map((sub) => (
+            {expandedGroups.has('admin-section') && (
+              <div className="nav-group-items">
+                {adminSubmenuItems.map((item) => (
                   <div
-                    key={sub.id}
-                    className={`admin-submenu-item ${activeItem === sub.id ? 'active' : ''}`}
-                    onClick={() => handleAdminItemClick(sub.id, sub.path)}
+                    key={item.id}
+                    onClick={() => handleItemClick(item.id, item.path)}
+                    className={`
+    flex items-center gap-3 cursor-pointer px-4 py-2 transition-colors duration-150
+    border-l-[3px] border-transparent
+    hover:bg-[#f00a50]/10 hover:border-[#f00a50]
+    dark:hover:bg-[#f00a50]/20 dark:hover:border-[#f00a50]
+    ${
+      activeItem === item.id
+        ? 'bg-[#f00a50]/10 border-l-[3px] border-l-[#f00a50]' +
+          ' text-[#f00a50] font-semibold'
+        : ''
+    }
+  `}
                   >
-                    <span className="submenu-label">{sub.label}</span>
+                    {item.icon && (
+                      <item.icon
+                        size={18}
+                        className={`${
+                          activeItem === item.id
+                            ? 'text-[#f00a50]'
+                            : isDarkMode
+                              ? 'text-zinc-400'
+                              : 'text-zinc-600'
+                        }`}
+                      />
+                    )}
+                    <span
+                      className={`${
+                        activeItem === item.id
+                          ? 'text-[#f00a50]'
+                          : isDarkMode
+                            ? 'text-zinc-400'
+                            : 'text-zinc-600'
+                      }`}
+                    >
+                      {item.label}
+                    </span>
                   </div>
                 ))}
               </div>

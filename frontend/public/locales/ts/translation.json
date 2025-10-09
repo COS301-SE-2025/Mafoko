@@ -608,6 +608,235 @@
     "Streak Keeper": "Mulondzeleri wa Ku Tiyimisela",
     "Maintain a login streak of 3 consecutive days": "Tiyisisa ku nghena hi masiku ya mune lama landelanaka",
     "Active Commenter": "Muchumayeri wa Swihlawulekisi",
-    "Write 4 comments on terms this week": "Tsala swiviko swa mune hi marito evhikini leyi"
+    "Write 4 comments on terms this week": "Tsala swiviko swa mune hi marito evhikini leyi",
+    "Term Creator": "Mutumbuluxi wa Marito",
+    "Maintain a login streak of 2 consecutive days": "Tiyisisa ku nghena hi masiku ya 2 lama landelanaka",
+    "Submit 6 new terms this week": "Rhumela marito lamantshwa ya 6 evhikini leyi"
+  },
+  "termHelpPage": {
+    "onThisPage": "Eka tluka leri",
+    "title": "Ku Twisisa Bukhu ra Marito",
+    "intro": "I-<strong>Bukhu ra Marito</strong> i ndhawu leyi u nga lavaka tihlovo ta marito hi tindzimi to hambana eka tindzimi ta semmuso ta 11 ta Afrika Dzonga. Ri seketela ku lavisisa hi ku hatlisa, ku hlaya hi ririmi kumbe ndhawu, naswona ri nga tirhisiwa handle ka inthanete loko tibuku ta marito ti hlayiwile.",
+
+    "overviewTitle": "Ku Twisisa Bukhu ra Marito",
+    "overviewBody": "Bukhu ra Marito ri endla leswaku u kota ku lavisisa marito ya tindzimi to hambana eka tindzimi ta semmuso ta 11 ta Afrika Dzonga.",
+
+    "whatIsATermTitle": "Rito i yini?",
+    "whatIsATermBody": "Rito rin’wana ni rin’wana eka Marito ri na vuxokoxoko lebyi landzelaka:",
+    "termFields": {
+      "term": "Rito: Rito kumbe xifaniso xa mhaka.",
+      "language": "Ririmi: Rin’wana ra tindzimi ta semmuso ta 11 ta Afrika Dzonga.",
+      "domain": "Ndhawu: Xiyimo xa dyondzo kumbe ntirho.",
+      "definition": "Nhlamuselo: Nhlamuselo leyi hlawulekeke ya nkoka wa rito.",
+      "related": "Marito lama fambelanaka: Swihlanganisi swa marito lama fanaka kumbe lama fambelanaka."
+    },
+
+    "languagesTitle": "Tindzimi leti Seketeriwaka",
+    "languagesBody": "Marito ri seketela tindzimi hinkwato ta semmuso ta 11 ta Afrika Dzonga. U nga tirhisa tifilita leswaku u hlawula ririmi rin’we kumbe u lavisisa eka hinkwato.",
+    "languagesList": [
+      "Afrikaans",
+      "Xinghezi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Ku Lavisisa Marito",
+    "searchSubheadingHow": "Ndlela Leyi Ku Lavisisa Ku Tirhaka Ha Yona",
+    "searchBody1": "Misebenzi ya ku lavisisa eka Marito yi pfuna ku kuma marito hi ku hatlisa eka tindzimi hinkwato ta semmuso ta 11.",
+    "searchBody2": "Loko u ri karhi u tsala, Marito yi lavisisa hi nkarhi lowu fanaka, yi pfuna ku kombisa switirhisiwa hi nkarhi wa xiviri.",
+    "searchFields": {
+      "term": "Rito: Rito kumbe marito lama yimelaka nhlokomhaka yin’wana.",
+      "definition": "Nhlamuselo: Marito lawa nhlamuselo ya wona yi nga na marito lawa u ma lavaka ma ta humelela.",
+      "filters": "Tifilita: Hlawula hi ririmi kumbe ndhawu."
+    },
+    "searchSubheadingLive": "Swihlawulekisi Swi Ri Eku Lavisiseni",
+    "searchLiveBody": "Marito ri nga nyika swihlawulekisi kumbe marito lama fambelanaka loko u ri karhi u tsala.",
+    "searchSubheadingSensitivity": "Ku Kongoma Ka Ku Lavisisa",
+    "searchSensitivityBody": "Hi ndlela ya ntolovelo, Marito ri lavisisa marito lama fanaka kahle kumbe lama tshineleke, kambe u nga tirhisa ku lavisisa loku nga kongomi (fuzzy search).",
+    "searchSubheadingResultCards": "Tikadi Ta Mavonelo",
+    "searchResultBody": "Marito ma kombisiwa eka tikadi leti nga na vito, ririmi, ndhawu, nhlamuselo, ni tikhonopo ta ku vouta.",
+
+    "filtersTitle": "Tindlela Ta Ku Filita",
+    "filtersBody": "Ku cinca mavonelo, tirhisa tifilita eka tluka ra ku lavisisa.",
+    "filtersList": {
+      "language": "Ririmi: Fikisa mavonelo eka ririmi rin’we ntsena.",
+      "domain": "Ndhawu: Languta eka swiyimo swo tanihi Dyondzo, Rihanyo, kumbe Thekinoloji.",
+      "fuzzy": "Ku Lavisisa Loku Nga Kongomi: Kuma marito ni loko ku ri ni swihoxo swa vuhlamusi kumbe ku hambana."
+    },
+
+    "viewTitle": "Ku Languta Marito",
+    "viewBody": "Clicka khonopo ya 'Languta' eka khadi ra rito leswaku u vula nhlamuselo ya rona hinkwayo ni ku languta marito lama fambelanaka.",
+
+    "offlineTitle": "Ku Tirhisiwa Handle Ka Inthanete",
+    "offlineBody": "Marito ri nga tirhisiwa handle ka inthanete loko tibuku ta marito ti hlayiwile emahlweni.",
+    "offlineHow": "Ndlela Yo Ku Hlayisa",
+    "offlineSteps": [
+      "Ya eka tluka ra Tibuku ta Marito.",
+      "Hlawula tibuku leti u lavaka ku ti hlayisa.",
+      "Clicka 'Hlayisa' leswaku u ti veka eka xitirhisiwa xa wena."
+    ],
+    "offlineEnd": "Endzhaku ko hlayisa, marito lawa ma ta tshama ma ri kona ni loko ku nga ri na inthanete."
+  },
+  "workspaceHelpPage": {
+    "title": "Go tlhaloganya Workspace",
+    "intro": "<strong>Workspace</strong> e go letla go boloka mafoko le diglosari tse o nang le kgatlhego mo go tsone, go di rulaganya mo ditlhopheng, le go laola ditlhopha tseo. Ke kwa o ka salang morago ka teng kgatelopele ya ditlhahiso tsa gago tsa mafoko le go boloka dikwalo tsa gago tsa tiro.",
+    "groupsTitle": "Go Laola Ditlhopha",
+    "groupsBody": "Ditlhopha di thusa go rulaganya mafoko a a bolokilweng. O ka dira ditlhopha tse disha, wa di reetsa maina a mangwe, kgotsa wa phimola tse o sa di tlhokeng.",
+    "groupsSteps": [
+      "Dira Setlhopha: Tobetsa konopo ya <em>Setlhopha se Sesha</em>, tsenya leina, tlhopha mafoko, mme o netefatse ka go tobetsa <em>Oketsa Mafoko</em>.",
+      "Tlotla Setlhopha: Tobetsa <em>letshwao la pentšele</em> fa thoko ga leina la setlhopha, fetola leina, mme o netefatse ka go tobetsa <em>Fetola Leina</em>.",
+      "Phimola Setlhopha: Tobetsa <em>letshwao la go phimola</em>, tlhopha ditlhopha tse o batlang go di tima, mme o netefatse."
+    ],
+    "moveTitle": "Go Fetisetsa Mafoko Gare ga Ditlhopha",
+    "moveBody": "Go fetisetsa lefoko go setlhopha se sengwe, tobetsa <em>letshwao la go fetisetsa</em> fa thoko ga lefoko mme o tlhophe setlhopha se sesha.",
+    "notesTitle": "Go Dirisa Dikwalo",
+    "notesBody": "Dikwalo di go letla go oketsa bokao mo mafokong a a bolokilweng. O ka dira, fetola, kgotsa phimola dikwalo mo Workspace.",
+    "notesSteps": [
+      "Oketsa Lokwalo: Tobetsa <em>letshwao la lokwalo</em> fa thoko ga lefoko, kwala lokwalo, mme o tobetsa <em>Boloka</em>.",
+      "Fetola Lokwalo: Tobetsa <em>letshwao la pentšele</em>, fetola mafoko, mme o tobetsa <em>Boloka</em>.",
+      "Phimola Lokwalo: Dirisa kgetho ya go phimola go tima dikwalo tse di sa tlhokegang."
+    ],
+    "deleteTitle": "Go Phimola Mafoko le Diglosari",
+    "deleteBody": "O ka tima dilo mo Workspace nako nngwe le nngwe:",
+    "deleteSteps": [
+      "Phimola Lefoko: Eya mo <em>Mafokong a a Bolokilweng</em>, tobetsa <em>letshwao la go phimola</em>, mme o netefatse.",
+      "Phimola Glosari: Eya mo <em>Diglosaring tse di Bolokilweng</em>, tobetsa kgetho ya go tima, mme o netefatse."
+    ]
+  },
+  "common": {
+    "back": "Morago",
+    "onThisPage": "Mo tsebeng e"
+  },
+  "settingsHelpPage": {
+    "title": "Swisetelo na Ku Tiyisa",
+    "intro": "Tirhisa pheji ra <strong>Settings</strong> ku lulamisa leswi u swi rhandzaka — ku katsa mutshamo, vuxokoxoko bya phurofaele, ni ku fikelela — ku tumbuluxa ntokoto lowu nga wa wena.",
+    "onThisPage": "Eka tluka leri",
+    "modesTitle": "Ku Hundzula Pakati ka Light na Dark Mode",
+    "modesBody": "Mafoko yi ku pfumelela ku hundzula hi ku hatlisa exikarhi ka <strong>Light Mode</strong> na <strong>Dark Mode</strong> hi ku landza leswi u swi rhandzaka ni ndzhawu ya wena. Xivumbeko lexi xi kona eka matluka hinkwawo naswona xi pfuxeta xihundla lexi nga emahlweni ka wena hi ku hatlisa handle ko endla khombo eka ntirho wa wena.",
+    "modesSteps": [
+      "Kuma Xihlawulekisi: Languta xifaniso xa dyambu/n’weti ehansi ka levohlo ra ximatsi.",
+      "Hundzula Mode: Clicka xifaniso ku hundzula hi ku hatlisa exikarhi ka Light na Dark Mode."
+    ],
+    "profileTitle": "Ku Pfuxeta Phurofaele Ya Wena",
+    "profileBody": "U nga pfuxeta <strong>vito</strong>, <strong>imeyili</strong>, kumbe <strong>phasiphwedi</strong> nkarhi wihi na wihi eka swisetelo swa phurofaele. Ku cinca ku kondza ku tiyisiwa hi ku sirhelela.",
+    "profileSteps": [
+      "Pfuxeta Vito: Clicka <em>Cinca Vito</em>, nghenisa vito lerintshwa, tiyisisa hi phasiphwedi ya wena, kutani u clicka <em>Hlayisa</em>.",
+      "Pfuxeta Imeyili: Clicka <em>Cinca Imeyili</em>, nghenisa imeyili leyintshwa, tiyisisa hi phasiphwedi, kutani u clicka <em>Hlayisa</em>.",
+      "Pfuxeta Phasiphwedi: Clicka <em>Cinca Phasiphwedi</em>, nghenisa leyintshwa, tiyisisa, kutani u clicka <em>Hlayisa</em>."
+    ],
+    "accessibilityTitle": "Swisetelo swa Ku Fikelela",
+    "accessibilityBody": "Mafoko yi nyika swihlawulekisi swo hambanahambana swa ku fikelela leswaku u kota ku lulamisa app hi ndlela leyi fambelanaka ni swilaveko swa wena. U nga cinca <strong>ririmi</strong>, <strong>vukulu bya marito</strong>, <strong>ndzhawu</strong>, ni <strong>pharologanyo ya mihlovo</strong> eka menyu ya settings.",
+    "accessibilitySteps": [
+      "Cinca Ririmi ra App: Pfula menu ya ririmi kutani u hlawula ririmi leri u ri rhandzaka.",
+      "Vula High Contrast Mode: Clicka <em>High Contrast toggle</em> ku hundzula eka muhlovo wa pharologanyo ya le henhla."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Ukuqonda Izindlela Zokufunda",
+    "section1": "Isici se-Learning Path sikuvumela ukuthi ulungise uhambo lokufunda olulawulwayo lokufundela olunye lwezilimi ezisemthethweni zaseNingizimu Afrika. Ngokukhetha ulimi kanye nezinsiza ofuna ukuzisebenzisa, ungakwazi ukulandela indlela ehlelekile esikhundleni sokuhlola ngokungahleliwe.",
+    "section2": "Indlela ngayinye yokufunda ihlanganisa amagama, amathuluzi okuzilolonga, kanye nokulandela intuthuko ukuze uhlale ukhuthazekile futhi ube nokuzimisela.",
+    "section3": "Isiphequluli sakho asisekeli ilebula yevidiyo.",
+    "section4": "Ngemva kokuba ukhethe ulimi, uzocelwa ukukhetha i-glossary. I-glossary ngayinye ihlelwe ngokwesigaba (Imfundo, Ezempilo, Ubuchwepheshe) ukuze ugxile kumagama abalulekile kuwe.",
+    "section4Title": "Ukukhetha i-Glossary",
+    "section5": "Uma i-glossary yakho isilungisiwe, ungakhetha indlela ofuna ukufunda ngayo",
+    "section6": "Izivivinyo Zokuzilolonga",
+    "section7": "Phendula imibuzo ukuze uhlolisise ulwazi lwakho futhi uqiniseke ngalokho okufundile.",
+    "section8": "Amakhadi Okufunda",
+    "section9": "Sebenzisa amakhadi okufunda ukuze wakhe ukuqonda nokukhumbula amagama ngesivinini sakho.",
+    "section10": "Ukufunda Ngezivivinyo Namakhadi",
+    "section11": "Ukulandela Inqubekela Phambili Yakho",
+    "section12": "Learning Path ilandelela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa kanye nezibalo zomphakathi wakho, ukwenza kube lula ukuhlala ukhuthazekile.",
+    "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
+  },
+  "helpPage2": {
+    "section1": "Go Thoma",
+    "section2": "Tataiso ya mohato ka mohato ya go hlama akhaonto, go tsena, le go sepela ka setšhaba lekgetlo la mathomo.",
+    "section3": "Tšhomišano ya Setšhaba",
+    "section3Desc": "Ithute ka go romela, go tlogela ditlhaloso, le go šoma mmogo le ba bangwe o šomiša didiriswa tša setšhaba tša bjalo ka go fa ditlhopho le dipoledišano.",
+
+    "dictionaryTitle": "Pukuntšu",
+    "dictionaryDesc": "Nyaka mantšu ka dipuo tše di fapanego, bulela patlo e e sa nepahalago, gomme o fetole dipeakanyo tša pukuntšu ya gago.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Rulaganya, hlopha, le go romela di-glossary ka sehlopha, lefapha, goba polokelo ya phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mošomo",
+    "workspaceDesc": "Boloka le go laola mantšu le di-glossary tša gago, latela dikgopelo, gomme o šome mmogo o šomiša dingwalo le dihlopha.",
+
+    "settingsTitle": "Dipeakanyo le Go Ikgethela",
+    "settingsDesc": "Fetola dikgetho tša bjalo ka mokgwa wa lesedi/kapa wa lefifi, dikgetho tša phihlelelo, dintlha tša profaele, le dipeakanyo tše dingwe tša modirisi.",
+
+    "homeTitle": "Letlakala la Lehae",
+    "homeDesc": "Hlahloba mmepe wa Afrika Borwa o šomago, hwetša mantšu a a sa tlwaelegago, gomme o bone kakaretšo ya dikateng tše di kgethegilego.",
+
+    "dashboardTitle": "Boto ya Tshekatsheko",
+    "dashboardDesc": "Latela mešomo ya sethala ka digarafi, lebelela data, gomme o hlahlobe meneelo ya gago lefelong le tee.",
+
+    "learningPathTitle": "Ditsela tša Thuto",
+    "learningPathDesc": "Aga leeto le le rulagantšwego la go ithuta e nngwe ya dipuo tša semmušo tša Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela ditlhahiso, thoriso, goba ditletlebo go sehlopha go thuša go kaonafatša sethala.",
+
+    "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
+    "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
+  },
+  "copyURL": "Kopa URL",
+  "related": "Marito Lama Hlanganyelaka",
+  "comments": "Mavonelo",
+  "reply": "Ku Hlamula Eka",
+  "addReply": "Engetela Hlamulo",
+  "addComment": "Engetela Nhlamulo",
+  "noDescription": "A Ku Na Nhlamuselo Yinikiweke",
+  "view": "Languta",
+  "workspace": {
+    "section1": "A wu kona eka inthanete. Notsi ya wena yi hlayisiwile naswona yi ta hlanganisiwa loko u tlhela u va eka inthanete.",
+    "section2": "Ku tsandzekile ku hlayisa manotsi. Hi kombela u ringeta nakambe.",
+    "section3": "Hi kombela u nghena eka akhawunti ku susa tibukimaka.",
+    "section4": "Ku tsandzekile ku susa rito. Ringeta nakambe.",
+    "section5": "Hi kombela u nghena eka akhawunti ku susa mintlawa.",
+    "section6": "Ku Susiwile Hi Ku Humelela",
+    "section7": "Ku tsandzekile ku susa mintlawa. Ringeta nakambe.",
+    "section8": "Susa Mintlawa",
+    "section9": "Xana wa tiyisisa leswaku u lava ku susa",
+    "section10": "Leswi swi ta suka marito hinkwawo eka mintlawa leyi swi ya eka ntlawa wa \"Marito Hinkwaswo\".",
+    "section11": "Hi kombela u nghenisa vito ra ntlawa",
+    "section12": "Ntlawa lowu nga na vito leri wu kona khale",
+    "section13": "Hi kombela u nghena eka akhawunti ku endla mintlawa.",
+    "section14": "Nghena",
+    "section15": "Ndhawu ya Vutshamo",
+    "section16": "Ndhawu ya Mina ya Vutshamo",
+    "section17": "Marito Lama Hlayisiweke",
+    "section18": "Tiglossary Leta Hlayisiweke",
+    "section19": "Ku Hlanganisiwa Ka Mina",
+    "section20": "Susa Leswi Khethiwaka",
+    "section21": "Ntlawa Lowuntshwa",
+    "section22": "Susa Mintlawa",
+    "section23": "Secha Ku Hlanganisiwa...",
+    "section24": "Endla Ntlawa Lowuntshwa",
+    "section25": "Vito ra Ntlawa",
+    "section26": "Endla ntlawa lowuntshwa ku lulamisa marito lama hlayisiweke.",
+    "section27": "Hlawula marito lawa u lavaka ku ma engetela eka ntlawa lowuntshwa.",
+    "section28": "U nga hlawula marito yo tala.",
+    "section29": "A ku na marito lama nga bukimakiwa. Bukimaka marito yo sungula u nga si engetela mintlawa.",
+    "section30": "Engetela",
+    "section31": "Ku Engeteriwa...",
+    "section32": "Marito",
+    "section33": "Hundzisa Rito Eka Ntlawa",
+    "section34": "Hundzisa",
+    "section35": "ku suka",
+    "section36": "ku ya eka ntlawa wun'wana.",
+    "section37": "Susa eka mintlawa leyi hlawuriweke",
+    "section38": "Sweswi",
+    "section39": "Thya Ntlawa Vito Lerintshwa",
+    "section40": "Thya Lerintshwa",
+    "section41": "Ku Thyiwa Lerintshwa"
   }
 }

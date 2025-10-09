@@ -171,10 +171,11 @@ export default function GlossaryCard({
             title={isBookmarked ? 'Unbookmark glossary' : 'Bookmark glossary'}
           >
             {loading ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin" />
+              <Loader2 className="w-4 h-4 text-white animate-spin " />
             ) : (
               <Bookmark
-                className="w-5 h-5 text-white"
+                className=" text-white"
+                size={20}
                 fill={isBookmarked ? '#fff' : 'none'}
                 strokeWidth={2.3}
               />

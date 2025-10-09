@@ -1,7 +1,7 @@
 {
   "settings": {
     "title": "Amalungiselelo",
-    "subtitle": "Lungisa indlela yakho ye-Marito",
+    "subtitle": "Lungisa indlela yakho ye-Mafoko",
     "selectLanguage": "Khetha ilimi lakho olithandako",
     "profile": {
       "title": "Iphrofayili ne-Akhawundi",
@@ -34,7 +34,7 @@
   },
 
   "dashboard": {
-    "welcome": "Siyakwamukela ku-Marito",
+    "welcome": "Siyakwamukela ku-Mafoko",
     "welcomeBack": "Wamukelekile godu",
     "userName": "Ibizo Lomsebenzisi",
     "userId": "Inomboro Yomsebenzisi",
@@ -61,8 +61,8 @@
     "noTermsAvailable": "Awekho amagama atholakelako",
     "browseCategoryGlossary": "Bheka {{category}} uhlu lwamagama",
     "aboutMarito": {
-      "intro": "Igama 'Marito' livela ku-Xitsonga, lithethela 'amagama' namkha 'amagama'. Leli yiaplikheshini yewebhu ehamba phambili edibanisa isikhala esiphakathi komfuyo wabuciko bolimi baseNingizimu Afrika nokufinyelela kwamanje kwedijithali. Abancameli bolimi, abatjhejisisi be-NLP, kanye neengcali zeelimi zingasebenzisa i-Marito njengepulatfomo ehilanganisiweko ukurhubhulula, ukuthabatheka ingxenye, nokugcina amaglossary eelimi ezinengi, amadikshonari, namabhanki amagama eelimini ezili-11 ezisemthethweni zaseNingizimu Afrika.",
-      "mission": "I-Marito isebenza kahle kokubili ku-inthanethi nangemhlaba we-inthanethi, inikeza amandla imiphakathi ukufinyelela iinsetjenziswa zeelimi ezipelele, ukunikeza impendulo, nokusebenzisana ekwakheni ama-lexicons aqinako eelimini ezinayo iinsetjenziswa ezincinane. Lelipulatfomo liyingxenye yezinyatselo eziragelelako ezenziwa ngu-DSFSI (Data Science for Social Impact) eYunivesithi yasePretoria ukwenza iinsetjenziswa zeelimi zifikeleleke emiphakathini yonke nokurhagela phambili utjhejo lokusetjenziswa kolimi lwemvelo lweelimi zase-Afrika.",
+      "intro": "Igama 'Mafoko' livela ku-Xitsonga, lithethela 'amagama' namkha 'amagama'. Leli yiaplikheshini yewebhu ehamba phambili edibanisa isikhala esiphakathi komfuyo wabuciko bolimi baseNingizimu Afrika nokufinyelela kwamanje kwedijithali. Abancameli bolimi, abatjhejisisi be-NLP, kanye neengcali zeelimi zingasebenzisa i-Marito njengepulatfomo ehilanganisiweko ukurhubhulula, ukuthabatheka ingxenye, nokugcina amaglossary eelimi ezinengi, amadikshonari, namabhanki amagama eelimini ezili-11 ezisemthethweni zaseNingizimu Afrika.",
+      "mission": "I-Mafoko isebenza kahle kokubili ku-inthanethi nangemhlaba we-inthanethi, inikeza amandla imiphakathi ukufinyelela iinsetjenziswa zeelimi ezipelele, ukunikeza impendulo, nokusebenzisana ekwakheni ama-lexicons aqinako eelimini ezinayo iinsetjenziswa ezincinane. Lelipulatfomo liyingxenye yezinyatselo eziragelelako ezenziwa ngu-DSFSI (Data Science for Social Impact) eYunivesithi yasePretoria ukwenza iinsetjenziswa zeelimi zifikeleleke emiphakathini yonke nokurhagela phambili utjhejo lokusetjenziswa kolimi lwemvelo lweelimi zase-Afrika.",
       "teamCredit": "Yakhiwe ngobuqotho ngu-Velox",
       "learnMoreDSFSI": "Funda okungaphezulu nge-DSFSI"
     },
@@ -110,7 +110,7 @@
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunaso isikhwama?",
     "registerLink": "Bhalisela",
-    "welcomeImageAlt": "Ukwamukela kokungena ku-Marito",
+    "welcomeImageAlt": "Ukwamukela kokungena ku-Mafoko",
     "dsfsiLogoAlt": "Ilogo ye-DSFSI",
     "errorTokenMissing": "Ungene ngepumelelo, kodwana awukho umtlolo-mqondiso otholakileko. Sibawa uthintane ngesizo.",
     "errorDefault": "Ukungena kuhlulekile. Sibawa uhlole imininingwana yakho.",
@@ -121,7 +121,7 @@
   },
   "registrationPage": {
     "title": "THOMA KHONA NJANI",
-    "subtitle": "Dala i-akhawundi yakho ye-Marito.",
+    "subtitle": "Dala i-akhawundi yakho ye-Mafoko.",
     "firstNameLabel": "Ibizo Lokuthoma",
     "firstNamePlaceholder": "Faka ibizo lakho lokuthoma",
     "lastNameLabel": "Isibongo",
@@ -140,7 +140,7 @@
     "createWithGoogle": "Dala I-akhawundi nge-Google",
     "haveAccount": "Sewuvele unayo i-akhawundi?",
     "loginLink": "Ngena",
-    "welcomeImageAlt": "Ukwamukela ku-Marito",
+    "welcomeImageAlt": "Ukwamukela ku-Mafoko",
     "dsfsiLogoAlt": "Ilogo ye-DSFSI",
     "errorPasswordsDoNotMatch": "Amaphasiwedi awakafani.",
     "errorAgreeToTerms": "Kumele uvume imithetho nemibandela.",
@@ -608,6 +608,235 @@
     "Streak Keeper": "Umlondolozi Wezikhathi Ezilandelanayo",
     "Maintain a login streak of 3 consecutive days": "Gcina uchungechunge lokungena ngemvume kwezinsuku ezintathu ezilandelanayo",
     "Active Commenter": "Umphawuli Osebenzako",
-    "Write 4 comments on terms this week": "Bhala ukuphawula okune ngemagama kuleviki"
+    "Write 4 comments on terms this week": "Bhala ukuphawula okune ngemagama kuleviki",
+    "Term Creator": "Umqambi Wamagama",
+    "Maintain a login streak of 2 consecutive days": "Gcina uchungechunge lokungena ngemvume kwezinsuku ezimbili ezilandelanayo",
+    "Submit 6 new terms this week": "Thumela amagama amasha ayisithupha kuleviki"
+  },
+  "termHelpPage": {
+    "onThisPage": "Kuleli khasi",
+    "title": "Ukuqonda Incwadi Yamabizo",
+    "intro": "I-<strong>Incwadi Yamabizo</strong> yindawo lapho ungafuna khona izincazelo zamabizo ngezilimi eziningi phakathi kwezilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika. Ivumela ukufuna ngokushesha, ukuhlunga ngolimi noma ngesigaba, futhi ingasetshenziswa ngaphandle kwe-inthanethi uma izichazamazwi sezilandiwe ngaphambilini.",
+
+    "overviewTitle": "Ukuqonda Incwadi Yamabizo",
+    "overviewBody": "Incwadi Yamabizo ivumela ukuthi ufune izincazelo zamabizo ngezilimi ezahlukene phakathi kwezilimi ezisemthethweni eziyishumi nanye zaseNingizimu Afrika.",
+
+    "whatIsATermTitle": "Iyini iBizo?",
+    "whatIsATermBody": "Ibizo ngalinye kuMarito liqukethe imininingwane elandelayo:",
+    "termFields": {
+      "term": "Ibizo: Igama noma isisho.",
+      "language": "Ulimi: Olunye lwezilimi ezisemthethweni eziyishumi nanye zaseNingizimu Afrika.",
+      "domain": "Isigaba: Indawo noma umkhakha ofundwayo.",
+      "definition": "Incazelo: Ukuchazwa okuhle nokucacile kwegama.",
+      "related": "Amabizo Ahambisanayo: Amagama ahlobene noma anezincazelo eziseduzane."
+    },
+
+    "languagesTitle": "Izilimi Ezisekelwayo",
+    "languagesBody": "UMarito usekela zonke izilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika. Ungasebenzisa ukuhlunga ukuze ugxile kolunye ulimi noma ucwaninge phakathi kwazo zonke.",
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgisi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Ukufuna Amabizo",
+    "searchSubheadingHow": "Indlela Yokusebenza Kokufuna",
+    "searchBody1": "Umsebenzi wokufuna kuMarito usiza ekutholeni amagama ngokushesha phakathi kwezilimi ezisemthethweni eziyishumi nanye zaseNingizimu Afrika.",
+    "searchBody2": "Ngesikhathi ubhala, uMarito usesha ngesikhathi sangempela, ubonise imiphumela ngokushesha.",
+    "searchFields": {
+      "term": "Ibizo: Igama noma isisho esimelela umqondo othile.",
+      "definition": "Incazelo: Amagama anezincazelo aqukethe amagama owawasesha nawo azovela.",
+      "filters": "Ukuhlunga: Hlunga ngokolimi noma ngesigaba."
+    },
+    "searchSubheadingLive": "Iziphakamiso Ezibukhoma",
+    "searchLiveBody": "UMarito ungaphakamisa amagama ahlobene noma aphothuliwe ngesikhathi ubhala.",
+    "searchSubheadingSensitivity": "Ukunemba Kokufuna",
+    "searchSensitivityBody": "Ngokuvamile, uMarito usesha ngokunembile noma ngokuseduze, kodwa ungase uvumele ukufuna okungeyona ngokunembile (fuzzy search).",
+    "searchSubheadingResultCards": "Amakhadi Emiphumela",
+    "searchResultBody": "Amabizo aboniswa kumakhadi aqukethe igama, ulimi, isigaba, incazelo, kanye nezinkinobho zokuvota.",
+
+    "filtersTitle": "Izinketho Zokuhlunga",
+    "filtersBody": "Ukuze unciphise imiphumela, sebenzisa izihlungi ezitholakala ekhasini lokufuna.",
+    "filtersList": {
+      "language": "Ulimi: Nciphisa imiphumela kulolunye ulimi kuphela.",
+      "domain": "Isigaba: Gxila ezifundweni ezifana neMfundo, Ezempilo, noma Ezobuchwepheshe.",
+      "fuzzy": "Ukufuna Okungeyona Ngokunembile: Thola amagama noma kube khona amaphutha okubhala noma ukuhluka kancane."
+    },
+
+    "viewTitle": "Ukubuka Amabizo",
+    "viewBody": "Chofoza inkinobho ethi 'Buka' kumakhadi egama ukuze uvule incazelo ephelele futhi ubone amagama ahlobene.",
+
+    "offlineTitle": "Ukusebenzisa Ngaphandle Kwe-Inthanethi",
+    "offlineBody": "UMarito ungasebenza ngaphandle kwe-inthanethi uma izichazamazwi sezilandiwe ngaphambilini.",
+    "offlineHow": "Indlela Yokulanda",
+    "offlineSteps": [
+      "Yiya ekhasini lezichazamazwi.",
+      "Khetha izichazamazwi ofuna ukuzilanda.",
+      "Chofoza 'Landa' ukuze uzigcine kudivayisi yakho."
+    ],
+    "offlineEnd": "Ngemva kokulanda, amagama kuleyo sichazamazwi azohlala etholakala ngisho noma ungekho ku-inthanethi."
+  },
+  "workspaceHelpPage": {
+    "title": "Ukuqonda i-Workspace",
+    "intro": "<strong>Workspace</strong> ivumela wena ukuthi ugcine amagama nezichazamazwi ozithandayo, uwahlukanise ngamaqembu, futhi uphathe lawo maqembu. Kule ndawo lapho ungakwazi khona ukulandela inqubekela phambili yezethulo zakho zamagama kanye nokugcina amanothi omsebenzi wakho.",
+    "groupsTitle": "Ukuphatha Amaqembu",
+    "groupsBody": "Amaqembu asiza ukuhlela amagama agciniweyo. Ungenza amaqembu amasha, ushintshe amagama awo, noma ususe lawo ongawasadingi.",
+    "groupsSteps": [
+      "Yenza Iqembu: Chofoza inkinobho ethi <em>Iqembu Elisha</em>, faka igama, khetha amagama, bese uqinisekisa ngokuchofoza <em>Engeza Amagama</em>.",
+      "Guqula Igama Leqembu: Chofoza <em>isithonjana sepensela</em> eduze kwegama leqembu, shintsha igama, bese uqinisekisa ngokuchofoza <em>Guqula Igama</em>.",
+      "Susa Iqembu: Chofoza <em>isithonjana sokususa</em>, khetha amaqembu ofuna ukuwasusa, bese uqinisekisa."
+    ],
+    "moveTitle": "Ukuhambisa Amagama Phakathi Kwamaqembu",
+    "moveBody": "Ukuhambisa igama kuqembu elihlukile, chofoza <em>isithonjana sokuhambisa</em> eduze kwegama bese ukhetha iqembu elisha.",
+    "notesTitle": "Ukusebenzisa Amanothi",
+    "notesBody": "Amanothi akuvumela ukuthi ungeze imininingwane eyengeziwe kumagama agciniweyo. Ungakwazi ukwenza, ukuhlela, noma ukususa amanothi ngaphakathi ku-Workspace.",
+    "notesSteps": [
+      "Engeza Inothi: Chofoza <em>isithonjana senothi</em> eduze kwegama, bhala inothi yakho, bese uchofoza <em>Gcina</em>.",
+      "Hlela Inothi: Chofoza <em>isithonjana sepensela</em>, shintsha umbhalo, bese uchofoza <em>Gcina</em>.",
+      "Susa Inothi: Sebenzisa inketho yokususa ukususa amanothi ongawasadingi."
+    ],
+    "deleteTitle": "Ukususa Amagama Nezichazamazwi",
+    "deleteBody": "Ungasusa izinto eziku-Workspace yakho noma kunini:",
+    "deleteSteps": [
+      "Susa Igama: Iya ku-<em>Amagama Agciniweyo</em>, chofoza <em>isithonjana sokususa</em>, bese uqinisekisa.",
+      "Susa Isichazamazwi: Iya ku-<em>Izichazamazwi Ezigciniweyo</em>, chofoza inketho yokususa, bese uqinisekisa."
+    ]
+  },
+  "common": {
+    "back": "Emuva",
+    "onThisPage": "Kuleli khasi"
+  },
+  "settingsHelpPage": {
+    "title": "Swisetelo na Ku Tiyisa",
+    "intro": "Tirhisa pheji ra <strong>Settings</strong> ku lulamisa leswi u swi rhandzaka — ku katsa mutshamo, vuxokoxoko bya phurofaele, ni ku fikelela — ku tumbuluxa ntokoto lowu nga wa wena.",
+    "onThisPage": "Eka tluka leri",
+    "modesTitle": "Ku Hundzula Pakati ka Light na Dark Mode",
+    "modesBody": "Mafoko yi ku pfumelela ku hundzula hi ku hatlisa exikarhi ka <strong>Light Mode</strong> na <strong>Dark Mode</strong> hi ku landza leswi u swi rhandzaka ni ndzhawu ya wena. Xivumbeko lexi xi kona eka matluka hinkwawo naswona xi pfuxeta xihundla lexi nga emahlweni ka wena hi ku hatlisa handle ko endla khombo eka ntirho wa wena.",
+    "modesSteps": [
+      "Kuma Xihlawulekisi: Languta xifaniso xa dyambu/n’weti ehansi ka levohlo ra ximatsi.",
+      "Hundzula Mode: Clicka xifaniso ku hundzula hi ku hatlisa exikarhi ka Light na Dark Mode."
+    ],
+    "profileTitle": "Ku Pfuxeta Phurofaele Ya Wena",
+    "profileBody": "U nga pfuxeta <strong>vito</strong>, <strong>imeyili</strong>, kumbe <strong>phasiphwedi</strong> nkarhi wihi na wihi eka swisetelo swa phurofaele. Ku cinca ku kondza ku tiyisiwa hi ku sirhelela.",
+    "profileSteps": [
+      "Pfuxeta Vito: Clicka <em>Cinca Vito</em>, nghenisa vito lerintshwa, tiyisisa hi phasiphwedi ya wena, kutani u clicka <em>Hlayisa</em>.",
+      "Pfuxeta Imeyili: Clicka <em>Cinca Imeyili</em>, nghenisa imeyili leyintshwa, tiyisisa hi phasiphwedi, kutani u clicka <em>Hlayisa</em>.",
+      "Pfuxeta Phasiphwedi: Clicka <em>Cinca Phasiphwedi</em>, nghenisa leyintshwa, tiyisisa, kutani u clicka <em>Hlayisa</em>."
+    ],
+    "accessibilityTitle": "Swisetelo swa Ku Fikelela",
+    "accessibilityBody": "Mafoko yi nyika swihlawulekisi swo hambanahambana swa ku fikelela leswaku u kota ku lulamisa app hi ndlela leyi fambelanaka ni swilaveko swa wena. U nga cinca <strong>ririmi</strong>, <strong>vukulu bya marito</strong>, <strong>ndzhawu</strong>, ni <strong>pharologanyo ya mihlovo</strong> eka menyu ya settings.",
+    "accessibilitySteps": [
+      "Cinca Ririmi ra App: Pfula menu ya ririmi kutani u hlawula ririmi leri u ri rhandzaka.",
+      "Vula High Contrast Mode: Clicka <em>High Contrast toggle</em> ku hundzula eka muhlovo wa pharologanyo ya le henhla."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Ukuqonda Izindlela Zokufunda",
+    "section1": "Isici se-Learning Path sikuvumela ukuthi ulungise uhambo lokufunda olulawulwayo lokufundela olunye lwezilimi ezisemthethweni zaseNingizimu Afrika. Ngokukhetha ulimi kanye nezinsiza ofuna ukuzisebenzisa, ungakwazi ukulandela indlela ehlelekile esikhundleni sokuhlola ngokungahleliwe.",
+    "section2": "Indlela ngayinye yokufunda ihlanganisa amagama, amathuluzi okuzilolonga, kanye nokulandela intuthuko ukuze uhlale ukhuthazekile futhi ube nokuzimisela.",
+    "section3": "Isiphequluli sakho asisekeli ilebula yevidiyo.",
+    "section4": "Ngemva kokuba ukhethe ulimi, uzocelwa ukukhetha i-glossary. I-glossary ngayinye ihlelwe ngokwesigaba (Imfundo, Ezempilo, Ubuchwepheshe) ukuze ugxile kumagama abalulekile kuwe.",
+    "section4Title": "Ukukhetha i-Glossary",
+    "section5": "Uma i-glossary yakho isilungisiwe, ungakhetha indlela ofuna ukufunda ngayo",
+    "section6": "Izivivinyo Zokuzilolonga",
+    "section7": "Phendula imibuzo ukuze uhlolisise ulwazi lwakho futhi uqiniseke ngalokho okufundile.",
+    "section8": "Amakhadi Okufunda",
+    "section9": "Sebenzisa amakhadi okufunda ukuze wakhe ukuqonda nokukhumbula amagama ngesivinini sakho.",
+    "section10": "Ukufunda Ngezivivinyo Namakhadi",
+    "section11": "Ukulandela Inqubekela Phambili Yakho",
+    "section12": "Learning Path ilandelela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa kanye nezibalo zomphakathi wakho, ukwenza kube lula ukuhlala ukhuthazekile.",
+    "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
+  },
+  "helpPage2": {
+    "section1": "Ukuqala",
+    "section2": "Isiqondiso ngesinyathelo ngesinyathelo sokudala i-akhawunti, ukungena, nokuzulazula kuqala esizeni.",
+    "section3": "Ukusebenzisana Komphakathi",
+    "section3Desc": "Funda ukuthi ungathumela kanjani, uphawule, futhi usebenzisane nabanye usebenzisa amathuluzi omphakathi afana nokuvota nokuxoxa.",
+
+    "dictionaryTitle": "Isichazamazwi",
+    "dictionaryDesc": "Sesha amagama ezilimini ezahlukene, vula usesho olungacacile, futhi ulungise izilungiselelo zesichazamazwi sakho.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Hlela, hlunga, futhi uthumele ama-glossary ngokuya ngesigaba, indawo, noma ibhange lezinguqulo.",
+
+    "workspaceTitle": "Indawo Yokusebenza",
+    "workspaceDesc": "Gcina futhi uphathe amagama kanye nama-glossary akho, landela izethulo, futhi usebenzisane usebenzisa amanothi namaqembu.",
+
+    "settingsTitle": "Izilungiselelo Nokwenza Ngokwezifiso",
+    "settingsDesc": "Lungisa izintandokazi ezifana nemodi emnyama/noma ekhanyayo, izinketho zokufinyelela, imininingwane yephrofayela, kanye nezinye izilungiselelo zomsebenzisi.",
+
+    "homeTitle": "Ikhasi Lasekhaya",
+    "homeDesc": "Hlola imephu esebenzisanayo yaseNingizimu Afrika, thola amagama ahlukahlukene, futhi uthole izihloko ezivelele.",
+
+    "dashboardTitle": "Ibhodi Yemininingwane",
+    "dashboardDesc": "Landela umsebenzi wesayithi ngamashadi, bheka idatha, futhi uhlaziye iminikelo yakho endaweni eyodwa.",
+
+    "learningPathTitle": "Izindlela Zokufunda",
+    "learningPathDesc": "Dizayina uhambo oluqondisiwe lokufunda olunye lwezilimi ezisemthethweni zaseNingizimu Afrika.",
+
+    "feedbackTitle": "Impendulo",
+    "feedbackDesc": "Thumela iziphakamiso, izincomo, noma izikhalo ngqo eqenjini ukusiza ukuthuthukisa isayithi.",
+
+    "faqsTitle": "Imibuzo Ejwayelekile",
+    "faqsDesc": "Izimpendulo zemibuzo ejwayelekile mayelana nesayithi."
+  },
+  "copyURL": "Kopisha i-URL",
+  "related": "Amagama Ahlobene",
+  "comments": "Amazwana",
+  "reply": "Ukuphendula Ku",
+  "addReply": "Faka Impendulo",
+  "addComment": "Faka Amazwana",
+  "noDescription": "Akukho Incazelo Enikeziwe",
+  "view": "Buka",
+  "workspace": {
+    "section1": "Awukho ku-inthanethi. Inothi lakho ligciniwe futhi lizahlanganiswa nawubuya ku-inthanethi.",
+    "section2": "Kwehlulekile ukugcina amanothi. Sicela uzame futhi.",
+    "section3": "Sicela ungene ngemvume ukuze ususe izibekisi.",
+    "section4": "Kwehlulekile ukususa ithemu. Sicela uzame futhi.",
+    "section5": "Sicela ungene ngemvume ukuze ususe amaqembu.",
+    "section6": "Kususwe Ngempumelelo",
+    "section7": "Kwehlulekile ukususa amaqembu. Sicela uzame futhi.",
+    "section8": "Susa Amaqembu",
+    "section9": "Uqinisekile ukuthi ufuna ukususa",
+    "section10": "Lokhu kuzohambisa wonke amathemu kula maqembu ku-\"Onke Amathemu\" iqembu.",
+    "section11": "Sicela ufake igama leqembu",
+    "section12": "Iqembu elinaleli gama selikhona",
+    "section13": "Sicela ungene ngemvume ukuze wakhe amaqembu.",
+    "section14": "Ngena",
+    "section15": "Indawo Yokusebenza",
+    "section16": "Indawo Yami Yokusebenza",
+    "section17": "Amathemu Agciniweyo",
+    "section18": "AmaGlossary Agciniweyo",
+    "section19": "Iziqoqo Zami",
+    "section20": "Susa Okukhethiweyo",
+    "section21": "Iqembu Elitsha",
+    "section22": "Susa Amaqembu",
+    "section23": "Sesha Iziqoqo...",
+    "section24": "Yakha Iqembu Elitsha",
+    "section25": "Igama Leqembu",
+    "section26": "Yakha iqembu elitsha ukuze uhlele amathemu agciniweyo.",
+    "section27": "Khetha amathemu ofuna ukuwafaka eqenjini elisha.",
+    "section28": "Ungakhetha amathemu amaningi.",
+    "section29": "Awekho amathemu abekiwe. Bukmarka amathemu kuqala.",
+    "section30": "Faka",
+    "section31": "Kuyafakwa...",
+    "section32": "Amathemu",
+    "section33": "Hambisa Ithemu Kuqembu",
+    "section34": "Hambisa",
+    "section35": "kusuka",
+    "section36": "kuya eqenjini elihlukile.",
+    "section37": "Susa kumaqembu athile",
+    "section38": "Okwamanje",
+    "section39": "Qamba Kabusha Iqembu",
+    "section40": "Qamba Kabusha",
+    "section41": "Kuyaqanjwa kabusha"
   }
 }

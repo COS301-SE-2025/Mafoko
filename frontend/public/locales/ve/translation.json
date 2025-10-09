@@ -605,6 +605,235 @@
     "Streak Keeper": "Mulondoli wa U Tevhela",
     "Maintain a login streak of 3 consecutive days": "Vhulunga u tevhela ha u dzhena nga maḓuvha a 3 a tevhelanaho",
     "Active Commenter": "Muvhumbudzi wa Maitele",
-    "Write 4 comments on terms this week": "Nwala maitele a 4 kha maipfi kha hei vhege"
+    "Write 4 comments on terms this week": "Nwala maitele a 4 kha maipfi kha hei vhege",
+    "Term Creator": "Muvhumbudzi wa Maipfi",
+    "Maintain a login streak of 2 consecutive days": "Vhulunga u tevhela ha u dzhena nga maḓuvha a 2 a tevhelanaho",
+    "Submit 6 new terms this week": "Rumela maipfi matswa a 6 kha hei vhege"
+  },
+  "termHelpPage": {
+    "onThisPage": "Kha Heḽi Siaṱari",
+    "title": "U Pfesesa Bugu ya Maipfi",
+    "intro": "I <strong>Bugu ya Maipfi</strong> ndi fhethu hune wa nga ṱola kha hone dzine dza amba nga maledzi manzhi kha dziṅwe dza Nyambo dza 11 dza Muvhuso wa Afurika Tshipembe. I tendela u ṱola nga u ṱavhanya, u nanga nga luambo kana thero, na u shumisa hu sina inthanete musi bugu dza maipfi dzo no dzheniswa.",
+
+    "overviewTitle": "U Pfesesa Bugu ya Maipfi",
+    "overviewBody": "Bugu ya Maipfi i ita uri u kone u ṱola dzine dza amba nga maledzi manzhi kha Nyambo dza 11 dza Muvhuso wa Afurika Tshipembe.",
+
+    "whatIsATermTitle": "Ipfi Ndi Mini?",
+    "whatIsATermBody": "Ipfi ḽiṅwe na ḽiṅwe kha Marito ḽi na zwidodombedzwa zwi tevhelaho:",
+    "termFields": {
+      "term": "Ipfi: Ipfi kana ṱhaluso ya zwine zwa amba.",
+      "language": "Luambo: Ḽiṅwe ḽa Nyambo dza 11 dza Muvhuso wa Afurika Tshipembe.",
+      "domain": "Thavhelo: Tshipiḓa tsha thuto kana ndeme ya tshitaela.",
+      "definition": "Ṱhaluso: Ṱhaluso yo teaho ya ipfi.",
+      "related": "Maipfi a Vhaṱuku: Zwihulwane zwa maipfi ane a vha na nzudzanyo kana maanḓa o teaho."
+    },
+
+    "languagesTitle": "Nyambo Dziṅwe Dzi Ṱhegedzwaho",
+    "languagesBody": "Marito i ṱhegedza Nyambo dza 11 dza Muvhuso wa Afurika Tshipembe. U nga shumisa zwiṱhegedzwa u nanga luambo ḽuthihi kana u ṱola maipfi kha dziṅwe dzothe.",
+    "languagesList": [
+      "Afrikaans",
+      "Lungisea",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "U Ṱola Maipfi",
+    "searchSubheadingHow": "Ndila Ine U Ṱola Ya Shuma Ngayo",
+    "searchBody1": "Mushumo wa u ṱola kha Marito u thusa u wana maipfi nga luvhilo kha Nyambo dza 11 dza Muvhuso wa Afurika Tshipembe.",
+    "searchBody2": "Musi u tshi ṅwala, Marito i ita u ṱola ha tshifhinga tsha vhukuma nahone i tshi bvisa mivhigo nga tshifhinga tsha zwino.",
+    "searchFields": {
+      "term": "Ipfi: Dzina kana ṱhaluso ine ya fhaṱa maanḓa kana khagiso.",
+      "definition": "Ṱhaluso: Maipfi ane a vha na ṱhaluso ine ya vha na maanḓa ane wa ṱola nayo a ḓo bvelela.",
+      "filters": "Zwiṱhegedzwa: Nanga nga luambo kana thero."
+    },
+    "searchSubheadingLive": "Zwiṅwalwa Zwa Tshifhinga Tshavhukuma",
+    "searchLiveBody": "Marito i nga ṋea zwipfi zwa ṱhegedzo kana maipfi ane a elana musi u tshi ṅwala.",
+    "searchSubheadingSensitivity": "U Khouwa Ha U Ṱola",
+    "searchSensitivityBody": "Nga ndila ya vhukuma, Marito i ita u ṱola ho teaho kana ho fhambananaho hafhu, fhedzi u nga tendela u ṱola ho ṱanganedzwaho (fuzzy search).",
+    "searchSubheadingResultCards": "Makhaḓi a Mivhigo",
+    "searchResultBody": "Maipfi a bviswa kha makhaḓi ane a sumbedza dzina, luambo, thero, ṱhaluso, na zwitimbulelwa zwa u vouta.",
+
+    "filtersTitle": "Zwiṱhegedzwa Zwa U Nanga",
+    "filtersBody": "U itela u fhelisa mivhigo, shumisa zwiṱhegedzwa zwi re kha siaṱari ḽa u ṱola.",
+    "filtersList": {
+      "language": "Luambo: Fhelisa mivhigo kha luambo ḽuthihi.",
+      "domain": "Thavhelo: Shela mulenzhe kha ndawo dzi fanaho na Thuto, Mutakalo, kana Thekinoloji.",
+      "fuzzy": "U Ṱola Ho Ṱanganedzwaho: Wana maipfi le a nga vha na dziphambano dza u ṅwala kana u fhambanaho."
+    },
+
+    "viewTitle": "U Vhona Maipfi",
+    "viewBody": "Pinda konopo ya 'Vhona' kha khaḓi ya ipfi u ṱola ṱhaluso yo fhelelaho na u vhala maipfi ane a elana nayo.",
+
+    "offlineTitle": "U Shumisa Hu Sina Inthanete",
+    "offlineBody": "Marito i nga shumiswa hu sina inthanete musi bugu dza maipfi dzo no dzheniswa nga phanda.",
+    "offlineHow": "Ndila Ya U Dzhenisa",
+    "offlineSteps": [
+      "Ya kha siaṱari ḽa Bugu dza Maipfi.",
+      "Nanga bugu dza maipfi dzine wa khou ṱoḓa u dzi dzhenisa.",
+      "Pinda 'Dzhenisa' u dzi vhulunga kha tshishumiswa tshaṋu."
+    ],
+    "offlineEnd": "Musi u no dzhenisa, maipfi a bugu yeo a ḓo vha hone na musi u sina khokhonetho ya inthanete."
+  },
+  "workspaceHelpPage": {
+    "title": "Go tlhaloganya Workspace",
+    "intro": "<strong>Workspace</strong> e go letla go boloka mafoko le diglosari tse o nang le kgatlhego mo go tsone, go di rulaganya mo ditlhopheng, le go laola ditlhopha tseo. Ke kwa o ka salang morago ka teng kgatelopele ya ditlhahiso tsa gago tsa mafoko le go boloka dikwalo tsa gago tsa tiro.",
+    "groupsTitle": "Go Laola Ditlhopha",
+    "groupsBody": "Ditlhopha di thusa go rulaganya mafoko a a bolokilweng. O ka dira ditlhopha tse disha, wa di reetsa maina a mangwe, kgotsa wa phimola tse o sa di tlhokeng.",
+    "groupsSteps": [
+      "Dira Setlhopha: Tobetsa konopo ya <em>Setlhopha se Sesha</em>, tsenya leina, tlhopha mafoko, mme o netefatse ka go tobetsa <em>Oketsa Mafoko</em>.",
+      "Tlotla Setlhopha: Tobetsa <em>letshwao la pentšele</em> fa thoko ga leina la setlhopha, fetola leina, mme o netefatse ka go tobetsa <em>Fetola Leina</em>.",
+      "Phimola Setlhopha: Tobetsa <em>letshwao la go phimola</em>, tlhopha ditlhopha tse o batlang go di tima, mme o netefatse."
+    ],
+    "moveTitle": "Go Fetisetsa Mafoko Gare ga Ditlhopha",
+    "moveBody": "Go fetisetsa lefoko go setlhopha se sengwe, tobetsa <em>letshwao la go fetisetsa</em> fa thoko ga lefoko mme o tlhophe setlhopha se sesha.",
+    "notesTitle": "Go Dirisa Dikwalo",
+    "notesBody": "Dikwalo di go letla go oketsa bokao mo mafokong a a bolokilweng. O ka dira, fetola, kgotsa phimola dikwalo mo Workspace.",
+    "notesSteps": [
+      "Oketsa Lokwalo: Tobetsa <em>letshwao la lokwalo</em> fa thoko ga lefoko, kwala lokwalo, mme o tobetsa <em>Boloka</em>.",
+      "Fetola Lokwalo: Tobetsa <em>letshwao la pentšele</em>, fetola mafoko, mme o tobetsa <em>Boloka</em>.",
+      "Phimola Lokwalo: Dirisa kgetho ya go phimola go tima dikwalo tse di sa tlhokegang."
+    ],
+    "deleteTitle": "Go Phimola Mafoko le Diglosari",
+    "deleteBody": "O ka tima dilo mo Workspace nako nngwe le nngwe:",
+    "deleteSteps": [
+      "Phimola Lefoko: Eya mo <em>Mafokong a a Bolokilweng</em>, tobetsa <em>letshwao la go phimola</em>, mme o netefatse.",
+      "Phimola Glosari: Eya mo <em>Diglosaring tse di Bolokilweng</em>, tobetsa kgetho ya go tima, mme o netefatse."
+    ]
+  },
+  "common": {
+    "back": "Morago",
+    "onThisPage": "Mo tsebeng e"
+  },
+  "settingsHelpPage": {
+    "title": "Dipehelo le Boikamahanyo",
+    "intro": "Sebelisa leqephe la <strong>Dipehelo</strong> ho fetola dikgetho tsa hao — ho kenyeletsa sehlooho, dintlha tsa profaele, le phihlello — ho etsa boiphihlelo bo botle ka ho fetisisa bakeng sa hao.",
+    "onThisPage": "Leqepheng lena",
+    "modesTitle": "Ho Fetola Pakeng tsa Mokhoa o Khanyang le o Monyenyane",
+    "modesBody": "Mafoko e o dumella ho fetola kapele pakeng tsa <strong>mokhoa o khanyang</strong> le <strong>mokhoa o lefifi</strong> ho latela seo o se ratang le tikoloho ya hao. Tshebetso ena e fumaneha maqephe ohle mme e ntlafatsa sebopeho hang-hang ntle le ho sitisa mosebetsi wa hao.",
+    "modesSteps": [
+      "Fumana Konopo: Batla letshwao la letsatsi/khoeli hukung e ka tlase le letsohong le letshoto.",
+      "Fetola Mokhoa: Tobetsa letshwao ho fetola hang-hang pakeng tsa Mokhoa o Khanyang le o Lefifi."
+    ],
+    "profileTitle": "Ho Ntlafatsa Profaele ya Hao",
+    "profileBody": "O ka ntlafatsa <strong>lebitso</strong>, <strong>imeile</strong>, kapa <strong>phasewete</strong> neng kapa neng ho tloha diphehong tsa profaele ya hao. Phetoho e nngwe le e nngwe e hloka netefatso bakeng sa tshireletso.",
+    "profileSteps": [
+      "Ntlafatsa Lebitso: Tobetsa <em>Fetola Lebitso</em>, kenya lebitso le letjha, netefatsa ka phasewete ya hao, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Imeile: Tobetsa <em>Fetola Imeile</em>, kenya aterese e ntjha, netefatsa ka phasewete, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Phasewete: Tobetsa <em>Fetola Phasewete</em>, kenya phasewete e ntjha, netefatsa, mme o tobetse <em>Boloka</em>."
+    ],
+    "accessibilityTitle": "Dipehelo tsa Phihlello",
+    "accessibilityBody": "Mafoko e fana ka dikgetho tse fapaneng tsa phihlello hore o ka ikamahanya le lenaneo ho latela ditlhoko tsa hao. O ka fetola <strong>puo</strong>, <strong>boholo ba mongolo</strong>, <strong>sebaka</strong>, le <strong>phapang ya mebala</strong> ka ho toba ho menu ya dipehelo.",
+    "accessibilitySteps": [
+      "Fetola Puo ya Lenaneo: Bula lenane la ho theoha mme o kgethe puo eo o e ratang.",
+      "Bulela Mokgwa wa Phapang e Phahameng: Tobetsa <em>High Contrast toggle</em> ho fetola mokgwa wa mebala e pharalletseng."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "U Pfesesa Ndila dza U Vhala",
+    "section1": "Tshivhalo tsha Learning Path tshi ni tendela u dzudzanya lwendo lwa u guda lu hulwaho kha dzilimi dza vhutsho dza Afrika Tshipembe. Nga u nanga luambo na zwishumiswa zwine na funa u zwi guda, ni nga tevhedza ndila yo rulaganywaho hu sina u guda nga tshivhazwahulu.",
+    "section2": "Ndila iṅwe na iṅwe ya u guda i tanzana na glossary, tshishumiswa tsha u ita nyambedzano, na u tevhedza pfanelo u itela u ni thusa ni tshi dzula ni tshi khou takalela u guda.",
+    "section3": "Sebatli a si thekgi tshiga tsha video.",
+    "section4": "Musi no no nanga luambo, ni do humbelwa u nanga glossary. Glossary iṅwe na iṅwe i vhumbiwa nga nga dzidomain (Vhuḓifhinduleli, Mutakalo, Thekenolodzhi) uri ni dzule ni tshi shela mbilu kha maipfi a na ndeme kha inwi.",
+    "section4Title": "U Nanga Glossary",
+    "section5": "Musi glossary yaṋu i tshi vha yo no dzudzanywa, ni nga nanga ndila ine na funa u guda ngayo",
+    "section6": "Mivhigo ya U Ita Nyambedzano",
+    "section7": "Phendulani mbudziso u lingedza vhudivhi haṋu na u khwaṱhisedza zwe na guda.",
+    "section8": "Khaḓi dza U Guda",
+    "section9": "Shumisani khaḓi dza u gudisa u vhulunga na u humbula maipfi nga tshifhinga tshaṋu.",
+    "section10": "U Guda Nga Mivhigo Na Khaḓi",
+    "section11": "U Tevhedza Pfanelo Yaṋu",
+    "section12": "Learning Path i tevhedza mishumo yaṋu uri ni kone u vhona hune na swika hone. Pfanelo i sumbedzwa na dzipoindi dza lushaka, zwi ita uri ni dzule ni tshi khou takalela.",
+    "section13": "Vhanganisani Ndila dza U Guda na khakhathi dza vhege na mivhuso u wana mabeji musi ni tshi khwinifhadza vhukoni haṋu ha luambo."
+  },
+  "helpPage2": {
+    "section1": "Go Thoma",
+    "section2": "Tataiso ya mohato ka mohato ya go hlama akhaonto, go tsena, le go sepela ka setšhaba lekgetlo la mathomo.",
+    "section3": "Tšhomišano ya Setšhaba",
+    "section3Desc": "Ithute ka go romela, go tlogela ditlhaloso, le go šoma mmogo le ba bangwe o šomiša didiriswa tša setšhaba tša bjalo ka go fa ditlhopho le dipoledišano.",
+
+    "dictionaryTitle": "Pukuntšu",
+    "dictionaryDesc": "Nyaka mantšu ka dipuo tše di fapanego, bulela patlo e e sa nepahalago, gomme o fetole dipeakanyo tša pukuntšu ya gago.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Rulaganya, hlopha, le go romela di-glossary ka sehlopha, lefapha, goba polokelo ya phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mošomo",
+    "workspaceDesc": "Boloka le go laola mantšu le di-glossary tša gago, latela dikgopelo, gomme o šome mmogo o šomiša dingwalo le dihlopha.",
+
+    "settingsTitle": "Dipeakanyo le Go Ikgethela",
+    "settingsDesc": "Fetola dikgetho tša bjalo ka mokgwa wa lesedi/kapa wa lefifi, dikgetho tša phihlelelo, dintlha tša profaele, le dipeakanyo tše dingwe tša modirisi.",
+
+    "homeTitle": "Letlakala la Lehae",
+    "homeDesc": "Hlahloba mmepe wa Afrika Borwa o šomago, hwetša mantšu a a sa tlwaelegago, gomme o bone kakaretšo ya dikateng tše di kgethegilego.",
+
+    "dashboardTitle": "Boto ya Tshekatsheko",
+    "dashboardDesc": "Latela mešomo ya sethala ka digarafi, lebelela data, gomme o hlahlobe meneelo ya gago lefelong le tee.",
+
+    "learningPathTitle": "Ditsela tša Thuto",
+    "learningPathDesc": "Aga leeto le le rulagantšwego la go ithuta e nngwe ya dipuo tša semmušo tša Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela ditlhahiso, thoriso, goba ditletlebo go sehlopha go thuša go kaonafatša sethala.",
+
+    "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
+    "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
+  },
+  "copyURL": "Kopani URL",
+  "related": "Maipfi a Tshiṱangana",
+  "comments": "Mbevho",
+  "reply": "U Fhindula Kha",
+  "addReply": "Engedzani Phindulo",
+  "addComment": "Engedzani Mbevho",
+  "noDescription": "A Huna Tsumbudzo Yo Fhiḽaho",
+  "view": "Vhonani",
+  "workspace": {
+    "section1": "A hu na khokho ya inthanethe. Noti yanu yo vhulungiwa nahone i do ṱangana musi na dovha na vha na khokho.",
+    "section2": "Yo kundelwa u vhulunga dzinoti. Ni khou humbelwa uri ni lingedze hafhu.",
+    "section3": "Ni humbelwa uri ni loge u itela u thutha dzi-bookmark.",
+    "section4": "Yo kundelwa u thutha ipfi. Lingedzani hafhu.",
+    "section5": "Ni humbelwa uri ni loge u itela u thutha zwigwada.",
+    "section6": "Yo Thuthiwa Nga Vhuṱanzi",
+    "section7": "Yo kundelwa u thutha zwigwada. Lingedzani hafhu.",
+    "section8": "Thuthani Zwikgoda",
+    "section9": "Ni na vhuṱanzi ha u ṱoḓa u thutha",
+    "section10": "Hezwi zwi do sudza maipfi oṱhe a zwigwada hezwi kha tshigwada tsha \"Maipfi Oṱhe\".",
+    "section11": "Ni humbelwa uri ni ṱalutse dzina la tshigwada",
+    "section12": "Tshigwada tshi na dzina eli tshi khou no vha hone",
+    "section13": "Ni humbelwa uri ni loge u itela u ita zwigwada.",
+    "section14": "Logani",
+    "section15": "Tshikalo tsha Mushumo",
+    "section16": "Tshikalo tshanga tsha Mushumo",
+    "section17": "Maipfi a Vhulungiwaho",
+    "section18": "MaGlossary a Vhulungiwaho",
+    "section19": "Mavhekanyele anga",
+    "section20": "Thuthani Zwo Khethwaho",
+    "section21": "Tshigwada Tshiswa",
+    "section22": "Thuthani Zwigwada",
+    "section23": "Ṱolani Mavhekanyele...",
+    "section24": "Itani Tshigwada Tshiswa",
+    "section25": "Dzina la Tshigwada",
+    "section26": "Itani tshigwada tshiswa u itela u dzudzanya maipfi a vhulungiwaho.",
+    "section27": "Nangani maipfi ane na khou ṱoḓa u a engedza kha tshigwada.",
+    "section28": "Ni nga nanga maipfi manzhi.",
+    "section29": "A huna maipfi a no itwa bookmark. Itani bookmark u thoma u itela u engedza kha zwigwada.",
+    "section30": "Engedzani",
+    "section31": "Hu khou engedzwa...",
+    "section32": "Maipfi",
+    "section33": "Sudzanani Ipfi kha Tshigwada",
+    "section34": "Sudzanani",
+    "section35": "u bva kha",
+    "section36": "u ya kha tshigwada tshine tsha fhambana.",
+    "section37": "Thuthani kha zwigwada zwine zwa khethea",
+    "section38": "Zwa zwino",
+    "section39": "Vhidzani Tshigwada Nga Dzina Ḓiswa",
+    "section40": "Vhidzani Nga Ḓiswa",
+    "section41": "Hu khou vhidzwa nga ḓiswa"
   }
 }
