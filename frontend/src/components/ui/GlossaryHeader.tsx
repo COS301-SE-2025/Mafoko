@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { ArrowLeft } from 'lucide-react';
 
 interface GlossaryHeaderProps {
@@ -12,168 +11,83 @@ interface GlossaryHeaderProps {
 const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
   title,
   description,
-  countText,
   onBack,
 }) => (
   <div
-    className="terms-list-header"
+    className="w-full bg-[var(--bg-first)] text-[var(--header-text)] py-4 md:py-5"
     style={{
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      background: 'var(--header-background)',
-      color: 'var(--header-text)',
-      padding: '1rem 0',
+      borderBottom: '1px solid var(--glossary-border-color)',
       boxSizing: 'border-box',
     }}
   >
+    {/* Top Row: Back Button + Title + Count */}
     <div
-      className="header-content"
+      className="flex items-center justify-between w-full px-4 md:px-6 h-[20vh]"
       style={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
+        gap: '12px',
         flexWrap: 'wrap',
-        minHeight: '56px',
-        padding: '0 1rem',
       }}
     >
-      {/* Back Button (absolute left) */}
-      <div
+      {/* Back Button */}
+      <button
+        type="button"
+        onClick={onBack}
         style={{
-          position: 'absolute',
-          left: 0,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'var(--return-button-bg)',
+          border: '1px solid var(--glossary-border-color)',
+          borderRadius: '8px',
+          padding: '8px',
+          minWidth: '36px',
+          minHeight: '36px',
+          cursor: 'pointer',
+          transition: 'opacity 0.2s ease',
         }}
       >
-        <button
-          type="button"
-          onClick={onBack}
-          className="back-btn"
+        <ArrowLeft
           style={{
-            background: 'var(--return-button-bg)',
-            border: '1px solid var(--glossary-border-color)',
-            borderRadius: '0.5rem',
-            padding: '0.5rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s ease',
-            minWidth: 36,
-            minHeight: 36,
+            width: '22px',
+            height: '22px',
+            color: 'var(--return-button-icon)',
           }}
-        >
-          <ArrowLeft
-            style={{
-              color: 'var(--return-button-icon)',
-              width: 22,
-              height: 22,
-            }}
-          />
-        </button>
-      </div>
-      {/* Centered Title/Description */}
+        />
+      </button>
+
+      {/* Title and Count inline */}
       <div
+        className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-center text-center"
         style={{
-          textAlign: 'center',
-          flex: 1,
           minWidth: 0,
-          padding: '0 0.5rem',
         }}
       >
         <h1
-          className="header-title"
+          className="font-bold truncate text-lg"
           style={{
-            margin: 0,
-            fontSize: '1.35rem',
-            fontWeight: 700,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            maxWidth: '100vw',
+            padding: '20px',
+            color: 'var(--header-text)',
           }}
         >
           {title}
         </h1>
-        {description && (
-          <p
-            className="header-desc"
-            style={{
-              fontSize: '0.98rem',
-              margin: '0.2rem 0 0 0',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              maxWidth: '100vw',
-            }}
-          >
-            {description}
-          </p>
-        )}
       </div>
-      {/* Actions (absolute right) */}
-      <div
+
+      <div style={{ width: '36px', height: '36px' }} />
+    </div>
+
+    {/* Description below */}
+    {description && (
+      <p
+        className="mt-2 text-center text-sm md:text-base px-6"
         style={{
-          position: 'absolute',
-          right: 0,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          zIndex: 2,
+          color: 'var(--header-text)',
+          opacity: 0.8,
         }}
       >
-        {countText && (
-          <div
-            className="header-count"
-            style={{
-              marginRight: '1.5rem',
-              fontSize: '0.98rem',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: '40vw',
-            }}
-          >
-            {countText}
-          </div>
-        )}
-      </div>
-      {/* Mobile responsive tweaks */}
-      <style>{`
-    @media (max-width: 600px) {
-      .terms-list-header {
-        padding: 0.5rem 0 !important;
-      }
-      .header-content {
-        padding: 0 0.2rem !important;
-        min-height: 44px !important;
-      }
-      .header-title {
-        font-size: 1.05rem !important;
-      }
-      .header-desc {
-        font-size: 0.85rem !important;
-      }
-      .header-count {
-        font-size: 0.85rem !important;
-        margin-right: 0.5rem !important;
-      }
-      .back-btn {
-        min-width: 28px !important;
-        min-height: 28px !important;
-        padding: 0.25rem !important;
-      }
-    }
-  `}</style>
-    </div>
+        {description}
+      </p>
+    )}
   </div>
 );
 

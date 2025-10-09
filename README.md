@@ -1,4 +1,4 @@
-# Marito: A PWA for Multilingual Lexicons, Term Banks, and Glossaries
+# Mafoko: A PWA for Multilingual Lexicons, Term Banks, and Glossaries
 <p align="center">
     <img src="frontend/public/DFSI_Logo.png" alt="banner"/>
 </p>
@@ -10,21 +10,20 @@
 
 
 ## Project Description
-**Marito** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Marito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
+**Mafoko** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Marito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
 
 ---
 ## Demo 4 Documentation
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
-*  [Architecture](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Architecture)
-*  [SRS Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Software_Requirement_Document.pdf)
-*  [Architectural requirements](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Architectural_Specifications_v4.pdf)
-*  [User Manual ](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/UserManualv2.pdf)
-*  [Technical Installation Manual](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Technical%20Installation%20Manual.pdf)
-*  [Coding Standards Document](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Coding%20Standards.pdf)
-*  [Testing Policy](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Testing%20Policy.pdf)
-*  [Service Contract](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/service_Contract_Marito.pdf)
-*  [System architecture & deployment - Quality Testing - Technology choices](https://github.com/COS301-SE-2025/Marito/blob/main/Documentation/demo_4/Architecture%20requirements%20%26%20Quality%20TestingV6.0.0.pdf)
+*  [Architecture](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/Architecture)
+*  [SRS Document](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/Software_Requirement_Document.pdf)
+*  [Architectural requirements](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/Architectural_Specifications_v4.pdf)
+*  [User Manual ](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/UserManualv2.pdf)
+*  [Technical Installation Manual](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/Technical%20Installation%20Manual.pdf)
+*  [Coding Standards Document](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/Coding%20Standards.pdf)
+*  [Testing Policy](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/Testing%20Policy.pdf)
+*  [Service Contract](https://github.com/COS301-SE-2025/Mafoko/blob/main/Documentation/demo_4/service_Contract_Marito.pdf)
 ---
 
 ## Git Structure & Branching Strategy
@@ -76,17 +75,17 @@ This structure ensures clean separation between environments, supports parallel 
   <a href="https://choosealicense.com/licenses/mit/">
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"/>
   </a>
-  <a href="https://github.com/COS301-SE-2025/Marito/actions">
+  <a href="https://github.com/COS301-SE-2025/Mafoko/actions">
     <img src="https://github.com/COS301-SE-2025/Marito/actions/workflows/actions.yml/badge.svg?branch=main" alt="Build Status"/>
   </a>
-  <a href="https://codecov.io/gh/COS301-SE-2025/Marito">
-    <img src="https://img.shields.io/codecov/c/github/COS301-SE-2025/Marito" alt="Code Coverage"/>
+  <a href="https://codecov.io/gh/COS301-SE-2025/Mafoko">
+    <img src="https://img.shields.io/codecov/c/github/COS301-SE-2025/Mafoko" alt="Code Coverage"/>
   </a>
-  <a href="https://github.com/COS301-SE-2025/Marito">
+  <a href="https://github.com/COS301-SE-2025/Mafoko">
     <img src="https://img.shields.io/badge/requirements-purple" alt="Requirements"/>
   </a>
-  <a href="https://github.com/COS301-SE-2025/Marito/issues">
-    <img src="https://img.shields.io/github/issues/COS301-SE-2025/Marito" alt="GitHub Issues"/>
+  <a href="https://github.com/COS301-SE-2025/Mafoko/issues">
+    <img src="https://img.shields.io/github/issues/COS301-SE-2025/Mafoko" alt="GitHub Issues"/>
   </a>
   <a href="https://uptimerobot.com/">
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>

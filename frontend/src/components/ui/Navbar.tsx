@@ -1,178 +1,35 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useDarkMode } from './DarkModeComponent';
+import { useAppMenu } from './AppMenu';
 import '../../styles/Navbar.scss';
-import { useDarkMode } from './DarkModeComponent.tsx';
-import { API_ENDPOINTS } from '../../config.ts';
-
-interface UserProfileApiResponse {
-  id: string;
-  first_name: string;
-  last_name: string;
-  role: 'contributor' | 'linguist' | 'admin';
-}
-interface UserData {
-  uuid: string;
-  firstName: string;
-  lastName: string;
-  role?: 'contributor' | 'linguist' | 'admin';
-}
 
 const Navbar = () => {
-  const { t } = useTranslation();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-
+  const { isDarkMode } = useDarkMode();
+  const { t, ready } = useTranslation();
   const [isMainNavbarOpen, setIsMainNavbarOpen] = useState(false);
-  const [avatarInitials, setAvatarInitials] = useState('');
-  const [userRole, setUserRole] = useState<string>('contributor');
-  const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [userRole] = useState('contributor');
 
-  const allNavItems = useMemo(
-    () => [
-      {
-        name: t('navigation.home'),
-        path: '/dashboard',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: 'Analytics',
-        path: '/analytics',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: t('navigation.dictionary'),
-        path: '/search',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: t('navigation.glossary'),
-        path: '/glossary',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: 'Achievements',
-        path: '/achievements',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: 'Workspace',
-        path: '/workspace',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: 'Learning Path',
-        path: '/learning-path',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: t('navigation.linguistApplication'),
-        path: '/linguist-application',
-        roles: ['contributor'],
-      },
-      {
-        name: 'Feedback',
-        path: '/feedback',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: t('navigation.help'),
-        path: '/help',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: t('navigation.settings'),
-        path: '/settings',
-        roles: ['admin', 'contributor', 'linguist'],
-      },
-      {
-        name: 'Contributor Page',
-        path: '/contributor',
-        roles: ['contributor'],
-      },
-      { name: 'Linguist Page', path: '/linguist', roles: ['linguist'] },
-      { name: 'Admin Page', path: '/admin/terms', roles: ['admin'] },
-    ],
-    [t],
-  );
+  const menuGroups = useAppMenu(userRole);
 
-  const adminSubmenuItems = useMemo(
-    () => [
-      { id: 'admin', label: 'User Management', path: '/admin' },
-      { id: 'feedbackhub', label: 'Feedback Hub', path: '/feedbackhub' },
-    ],
-    [],
-  );
+  console.log(menuGroups);
 
-  const navItemsToDisplay = useMemo(
-    () => allNavItems.filter((item) => item.roles.includes(userRole)),
-    [allNavItems, userRole],
-  );
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
-
-      const stored = localStorage.getItem('userData');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored) as UserData;
-          setUserRole(parsed.role || 'contributor');
-          setAvatarInitials(
-            parsed.firstName && parsed.lastName
-              ? `${parsed.firstName[0]}${parsed.lastName[0]}`.toUpperCase()
-              : 'U',
-          );
-          return;
-        } catch {
-          localStorage.removeItem('userData');
-        }
-      }
-
-      try {
-        const res = await fetch(API_ENDPOINTS.getMe, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'ngrok-skip-browser-warning': 'true',
-          },
-        });
-        if (res.ok) {
-          const data: UserProfileApiResponse = await res.json();
-          setUserRole(data.role);
-          setAvatarInitials(
-            `${data.first_name[0]}${data.last_name[0]}`.toUpperCase(),
-          );
-          localStorage.setItem(
-            'userData',
-            JSON.stringify({
-              uuid: data.id,
-              firstName: data.first_name,
-              lastName: data.last_name,
-              role: data.role,
-            }),
-          );
-        }
-      } catch (err) {
-        console.error('Navbar fetch error:', err);
-      }
-    };
-
-    void fetchUserData();
-  }, []);
-
-  const toggleAdminDropdown = () => setIsAdminDropdownOpen((prev) => !prev);
-
-  const handleAdminItemClick = () => setIsAdminDropdownOpen(false);
-
-  const handleLinkClick = () => {
-    setIsMainNavbarOpen(false);
+  const toggleGroup = (id: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
   };
+
+  // Don’t render until i18n has loaded
+  if (!ready) return null;
 
   return (
     <>
-      {/* Hamburger button */}
       <div
         className={`fixed-outer-navbar-toggle ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
       >
@@ -184,50 +41,52 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Main Navbar */}
       <nav
-        className={`main-navbar-dropdown ${isMainNavbarOpen ? 'is-open' : 'is-closed'} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+        className={`main-navbar-dropdown ${isMainNavbarOpen ? 'is-open' : 'is-closed'} ${
+          isDarkMode ? 'theme-dark' : 'theme-light'
+        }`}
       >
-        <div className="main-navbar-content"></div>
-
-        {/* Mobile Menu */}
         <div
-          className={`mobile-nav-dropdown md:hidden ${
-            isMainNavbarOpen ? 'is-open' : 'is-closed'
+          className={`mobile-nav-dropdown md:hidden p-4 ${
+            isMainNavbarOpen ? 'is-open' : ''
           }`}
         >
-          {navItemsToDisplay.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              className="mobile-nav-link"
-              onClick={handleLinkClick}
-            >
-              {item.name}
-            </NavLink>
-          ))}
-
-          {userRole === 'admin' && (
-            <>
+          {menuGroups.map((group) => (
+            <div key={group.id} className="mobile-nav-group mb-3">
               <div
-                className="mobile-admin-toggle"
-                onClick={toggleAdminDropdown}
+                className="flex justify-between items-center py-2 cursor-pointer"
+                onClick={() => toggleGroup(group.id)}
               >
-                Admin
+                <span className="font-semibold text-base">{group.label}</span>
+                <ChevronDown
+                  size={16}
+                  className={`${expandedGroups.has(group.id) ? 'rotate-180' : ''} transition-transform`}
+                />
               </div>
-              {isAdminDropdownOpen &&
-                adminSubmenuItems.map((sub) => (
-                  <NavLink
-                    key={sub.id}
-                    to={sub.path}
-                    className="mobile-admin-submenu-item"
-                    onClick={handleAdminItemClick}
-                  >
-                    {sub.label}
-                  </NavLink>
-                ))}
-            </>
-          )}
+
+              {expandedGroups.has(group.id) && group.items?.length > 0 && (
+                <div className="pl-3 border-l border-gray-300 dark:border-gray-700">
+                  {group.items.map((item) => (
+                    <NavLink
+                      key={item.id}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 py-2 text-sm ${
+                          isActive
+                            ? 'text-[#f00a50] font-semibold'
+                            : 'text-theme' + ' hover:text-[#f00a50]'
+                        }`
+                      }
+                      onClick={() => setIsMainNavbarOpen(false)}
+                    >
+                      <item.icon size={18} />
+                      <span>{item.label}</span>
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </nav>
     </>

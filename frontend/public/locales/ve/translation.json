@@ -135,6 +135,30 @@
       "mission": "Marito i shuma zwavhuḓi zwoṱhe kha inthanete na nnḓa ha inthanete, i nea tshitshavha mathalutshedzo u swika kha zwishumiswa zwa nyambo zwo fhelaho, u nea themendelo, na u tirisana u ita ma-lexicons matuku kha nyambo dzine dzi na zwishumiswa zwituku. Phulatifomo iyi ndi tshipiḓa tsha mushumo u ya phanḓa une wa itwa nga DSFSI (Data Science for Social Impact) kha Yunivesithi ya Pretoria u ita uri zwishumiswa zwa nyambo zwi swikelelehe tshitshavha tshoṱhe na u isa phanḓa ṱhoḓisiso ya u tirisana na nyambo ya vhubvo kha nyambo dza Afrika.",
       "teamCredit": "Yo itiwa nga u ḓivhadzwa nga Velox",
       "learnMoreDSFSI": "Guda zwinzhi nga DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Nga ha Mafoko",
+      "content": "Mafoko (zwi re na “maipfi” nga luambo lwa Setswana) ndi tshaṱhulumatshelo tsha manwe manzhi tshi tshi itelwaho u thuthubedza na u batanedza manwe a 11 a re mulayoni a Afrika Tshipembe."
+    },
+    "whyMafoko": {
+      "title": "Ndi ngani Mafoko i hone",
+      "content": "Manwe a Afrika Tshipembe a na vhutshilo, a sumbedza maitele, nahone a khwinisa vhutshilo ha vhathu, fhedzi manwe manzhi a hone a kha di sina tshivhalo kha shango la dzibveledzwa dza inthanethe. Mafoko yo itelwa u shandula hei mbuno. I kovha maipfi na dzitshumelo u bva kha dzikhosi dzi re na manwe manzhi a mafhungo, ya ita fhethu hithihi hune ha nga wanala hafhasi, zwi tshi ita uri zwi vhe khwine u ṱoḓa maipfi, u pfesesa u tolwa, na u guda nga ha manwe a 11 a re mulayoni.",
+      "content2": "Hufha u tshi vha o ṱanganelwa na inthanethe kana u songo ṱanganela, Mafoko i ita uri vhuṱanzi ha luambo vhu vhe tsini na iwe. I tendela mvelaphanda, i ita uri tshitshavha tshi kone u nḓivhadza pfanelo dza tshanduko, u ṱanziela, na u thusa kha u khwinisa vhulali ha nyambo dzo no ṱavhanywaho tshifhinga tshoṱhe.",
+      "content3": "Nga u batanedza vhukuma ha luambo hune ha vha ho ṱhithiswa uri vhe setsha se tshi tshilaho, tshi tshi khula tshifhinga tshoṱhe, Mafoko i thusa u tsireledza ndaela yashu na u tikedza vhuḓalo ha mveledziso ya thuto na u ṱolisisa nyambo dza tshikolo dzo no sedza manwe ane a sa athu vha na zwishumiswa zwanzhi."
+    },
+    "whoMafoko": {
+      "title": "I itelwa nnyi",
+      "content": "Vhafunzi, vhadidini vha thuto, vhaṅwe vha re na dzangalelo kha nyambo na mvelo yashu."
+    },
+    "howMafoko": {
+      "title": "Ndila ya u shumisa Mafoko",
+      "content": "Ni nga shumisa Mafoko u ṱoḓa maipfi, u sedza mafhungo a nyambo o fhambanaho, u vhona dzitolwa, na u ṱanziela dzikhumbelo dzaṋu uri ni thuse u khwinisa tshaṱhulumatshelo.",
+      "help": "U wana tshifhinga tshoṱhe tsha mbonalo tshine tsha katela tsumbedzo dzi khutshwane na dzivhidiyo dza u ṱalutshedza, etelani",
+      "helpLink": "Siaṱari ḽa Thuso"
+    },
+    "behindProject": {
+      "title": "Nga murahu ha Phurojekiti",
+      "content": "Mafoko yo itelwa tshigwada tsha Data Science for Social Impact (DSFSI) kha Yunivesithi ya Pretoria."
     }
   },
   "glossaryPage": {
@@ -241,7 +265,6 @@
     "next": "I tevhelaho",
     "pageInfo": "Siaṱari {{current}} kha {{total}}"
   },
-
   "profile": {
     "title": "Phuroifaile ya Mushumisi",
     "settings": "Mavhumbelo",
@@ -296,5 +319,292 @@
       "passwordUpdateFailed": "Zwo kondaho u mpfuxetsha phasiwede",
       "passwordUpdateError": "Zwo kondaho u mpfuxetsha phasiwede: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Milayo Na Mavhuvhisi",
+    "welcome": "Ni amukelelwa kha Mafoko, tsh平台 tsha nyambo nnzhi tsho bveledzwaho nahone tshi khou vhuyedzwa nga tshigwada tsha Data Science for Social Impact (DSFSI) kha Yunivesithi ya Pretoria. Nga u shumisa Mafoko, ni khou tendela Milayo na Mavhuvhisi aya. Ni humbelwa uri ni i vhalelese nga vhuṱali ni sa athu u swikelela kana u dzhenelela kha tsh平台 tshino.",
+    "purposeTitle": "Ndivho ya Mafoko",
+    "purpose": "Mafoko (ine ya amba uri 'maipfi' nga Seswana) ndi tsh平台 tsha zwa thuto tshine tshi sa khou ita zwa mavu a huṱa, tshine tsha khuthadza nyambo dza Afrika Tshipembe dzi ofhisaho dza fumi na nthihi nga u ita uri hu vhe na phanḓa kha dzi-glossary nnzhi na thogomeliso dza nyambo. Tsh平台 tshino tsho itelwa u tikedza thuto i no katela vhoṱhe, nyambo dza nyambedzano, na u shumisana ha vhathu vha nyambo dzo fhambanaho.",
+    "userTitle": "Dzibodo dza Vhashumisi",
+    "user": "U itela uri ni kone u nanga kha Mafoko, zwi tshi katela u rumela maipfi, u pfa u vouta, u nwala dzikomo, kana u ita khumbelo ya u vha nyambedzi, ni fanela u ita akhaonto. Ni khou tendela u ita uri mafhungo ane na a ṋea a vhe o tou fana na zwine zwa vha zwokwadi, na u vhulunga mafhungo enea e tshisumbedzo. DSFSI i na vhuimo ha u imisa kana u thutha akhaonto dzo fhambanaho na milayo iyi kana dzi tshi rumela zwithu zwi sa tea.",
+    "contributionTitle": "Dzineelo dza Vhashumisi",
+    "contribution": "Mafoko i tendela vhashumisi u rumela maipfi, dzineelo, na dzithlaluso. Nga u ita zwo ralo, ni khou ṋea DSFSI laisensi i songo khetheaho, i si na mbuelo ya u sumbedza, u ita kopi hafhu, na u phasaladza dzineelo dzaṋu kha Mafoko nga ndivho ya thuto na nyambedzano.",
+    "contribution2": "Dzineelo dzoṱhe dzi fanela u vha dzi dzavhuḓi, dzi tshi ṱhonifha, na dzi tshi shumiswa nga nḓila ya nyambo yavhuḓi. Zwithu zwi khethekanywaho, zwi nyadzaho, kana zwi songo teaho zwi do thuthiwa, nahone arali zwi tshi itea kanzhi, akhaonto i nga imisiwa.",
+    "linguistTitle": "Dzikhumbelo dza Vhanyambedzi",
+    "linguist": "Vhashumisi vhane vha tama u vha vhanyambedzi kha tsh平台 vha nga ita khumbelo nga u ṋea vhuṱanzi ha nyolo ya u rumela nga nyambedzano (sa maṅwalo a Google Scholar). DSFSI i na pfanelo ya u ṱola na u khwaṱhisedza thendelo dza dzibveledzo phanḓa ha u ṋea pfanelo dza vhanyambedzi.",
+    "propertyTitle": "Pfanelo dza Muhumbulo",
+    "property": "Tsh平台 tsha Mafoko, tshi katelaho nḓila ine tsha bveledzwa ngayo, tshivhumbeo, na dzi-glossary dzo kuvhangiwaho, ndi pfanelo ya Muhumbulo ya DSFSI na Yunivesithi ya Pretoria. Maipfi na dzineelo dzi tshiṱuku dzi sala dzi lepfanelo dza vhaṅwali vhadzo, fhedzi dzi nga shumiswa hafhu kha Mafoko nga ndivho ya thuto na nyambedzano, sa zwe zwa ṱaluswa nṱha.",
+    "accuracyTitle": "U Vhuṱa na Tshivhumbudzo",
+    "accuracy": "Naho Mafoko i khou lingedza u ṋea mafhungo a vhukuma a zwa nyambo, DSFSI a i ni ṋei tsireledzo kha u fhelelwa kana u ṱolula mafhungo ayo. Tsh平台 tshi ṋewa 'sa zwe tsha vha' nga ndivho ya thuto, nahone DSFSI a i na vhudifhinduleli kha maphoso, u litsha, kana zwidodombedzwa zwi bvaho kha u shumisa hashu.",
+    "commercialTitle": "U Shumisa Hune ha Si Tshi Khou Vha Tshikwama",
+    "commercial": "Mafoko i ṋewa mahala nga ndivho ya thuto na nyambedzano. A huna zwithu zwa tsh平台 zwi re na pfanelo ya u ita kopi, u phasaladzwa hafhu, kana u shumiswa nga ndivho ya mavu a huṱa hu songo vha na thendelo yo nwalwaho kha DSFSI.",
+    "privaryTitle": "Vhuhulwane ha Dzina na Tshumiso ya Datha",
+    "privacy": "Mafoko a i shumisi khukhi, u tevhela mafhungo, kana tshumelo dza u adzisa. Mafhungo a akhaonto a vhulungwa fhedzi u itela u ita uri vhashumisi vha kone u dzhenelela, na u fhaṱutshedza tsh平台 uri tshi shumise zwavhuḓi. DSFSI a i aḓelani na mafhungo a vhathu na vhathu vha ngei nnda.",
+    "changeTitle": "Dzishanduko kha Milayo",
+    "change": "DSFSI i nga khwinisa Milayo na Mavhuvhisi aya nga tshifhinga tshiṅwe na tshiṅwe u sumbedza u bvelela kana u shanduka ha maano. U dzula ni tshi shumisa Mafoko nga murahu ha tshifhinga tshiṅwe zwi ṱalusa uri ni khou tendela milayo mitswa.",
+    "contactTitle": "Thintano",
+    "contact": "Arali ni na mbudziso kana thaidzo nga ha Milayo na Mavhuvhisi aya, ni humbelwa uri ni ṋee vhukwamani na tshigwada tsha Data Science for Social Impact (DSFSI) kha Yunivesithi ya Pretoria.",
+    "email": "Imeili"
+  },
+  "feedbackPage": {
+    "thanks": "Ro livhuwa",
+    "your": "Yaṋu",
+    "success": "yo rumelwa nga ndila yo teaho. Ri livhuwa mbonalo yaṋu.",
+    "redirect": "I khou shumaho u rumela hafhu",
+    "submit": "Rumelani",
+    "description": "Vhelekedzani dzimakone dzaṋu u thusa u khwinisa tshumelo yashu.",
+    "description2": "Ri vhudzeni zwo fhambanaho uri ri kone u zwi lugisa.",
+    "description3": "Ri nga takalela u pfa zwa uri ri khou ita zwavhudi.",
+    "name": "Dzina (Nga u khetha)",
+    "namePlaceholder": "Dzina",
+    "email": "Imeili (Nga u khetha)",
+    "emailPlaceholder": "Imeili",
+    "suggest": "Hlalosani pfanelo yaṋu nga vhuṱali",
+    "issue": "Ni khou humbela ni ṱalutshedze bothata le no vhonaho",
+    "compliment": "Ri vhudzeni zwa uri ndi mini zwe zwa ita uri ni takale",
+    "submiting": "I khou rumela",
+    "singluarSubmit": "Rumela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Nyambedzano",
+    "complaint": "Khumbo",
+    "compliment": "Matshelo a u livhuwa"
+  },
+  "navbar": {
+    "mainNavigation": "Nḓila Khulwane ya U Fhamba",
+    "analytics": "Ntsumbedzo ya U Vhudzisa",
+    "workspaceAndTools": "Fhethu ha Mushumo na Zwishumiswa",
+    "workspace": "Fhethu ha Mushumo",
+    "learing": "Ndila dza Vhuḓifhinduleli ha Vhuḓidini",
+    "termAddition": "U Engedzwa ha Maipfi",
+    "linguist": "Tshifhinga tsha Nyambo",
+    "admin": "Muvhusi",
+    "profileAndAccount": "Profayili na Akhaonto",
+    "achievements": "Zwitevhelaho",
+    "supportAndFeedback": "Tshedzo na Mbonalo",
+    "feedback": "Mbonalo"
+  },
+  "termAdditions": {
+    "contributionTitle": "Zwine Zwa Vhidziwa Nga Maipfi",
+    "termTitle": "Lifhungo",
+    "termPlaceholder": "Dzhenisani lifhungo",
+    "defTitle": "Ṱhaluso",
+    "defPlaceholder": "Dzhenisani ṱhaluso",
+    "exampleTitle": "Mbonelo",
+    "examplePlaceholder": "Dzhenisani nḓila ya mbonelo",
+    "domainTitle": "Ndima",
+    "languageTitle": "Luambo",
+    "extTransTitle": "Dzitolwa Dzo No Vha Hone",
+    "extContent": "Khethani maipfi a a khwaṱhisedzwaho nga vhulanguli uri a dzheniswe sa dzitolwa:",
+    "selectTrans": "Dzitolwa Dzo Khethwaho",
+    "remove": "Bvisani",
+    "submitTerm": "Rumelani Lifhungo",
+    "selectToEdit": "Khethani Lifhungo U Itela U Lugisa",
+    "searchPlaceholder": "Ṱoḓani lifhungo ḽine ḽa nga lugisiwa...",
+    "selected": "Lo Khethwa",
+    "content2": "Khethani maipfi a a khwaṱhisedzwaho nga vhulanguli uri a dzheniswe sa dzitolwa:",
+    "submitEdit": "Rumelani U Lugisa",
+    "translation": "Dzitolwa",
+    "status": "Vhuimo",
+    "votes": "Vhufhinga",
+    "action": "Ndeme",
+    "reviewFeedback": "Sedzani Mbonalo",
+    "deleteApplication": "Thuthani Tshikumbelo",
+    "deleteContent": "Ni khou ṱoḓa u thutha heḽi fhungo? Hetshi tshiito a tshi nga dovhi tsha bviswa.",
+    "delete": "Thuthani",
+    "cancel": "Khanselani"
+  },
+  "contribute": {
+    "submit": "Rumelani Lifhungo",
+    "suggest": "Ṱoḓani U Lugisa",
+    "submissions": "Zwine Ndo Rumela",
+    "pending": "Maipfi A Sa Fhedzaho",
+    "rejected": "Maipfi O Refuswaho"
+  },
+  "contributePlaceholder": {
+    "domain": "Khethani Ndima",
+    "language": "Khethani Luambo"
+  },
+  "analyticsPage": {
+    "filterByLang": "Sefa Nga Luambo",
+    "allLanguages": "Maluambo Othe"
+  },
+  "homePage": {
+    "connecting": "I khou ṱanganedza",
+    "languages": "Maluambo a Afrika Tshipembe"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "A huna khokha kha inthanethe - hu khou vhumbulwa data yo vhulungwaho",
+    "searchPlaceholder": "Ṱoḓa maipfi",
+    "filterByLanguage": "Hlungani Nga Luambo",
+    "allLanguages": "Maluambo Othe",
+    "activeFilter": "Hlungo Iri U Shuma",
+    "clear": "Thutha",
+    "loadingTerms": "Hu khou longwa Maipfi",
+    "noTermsFound": "A huna maipfi a wanalaho kha glossary iyi.",
+    "noTermsMatch": "A huna maipfi ane a elana na ṱoḓo yanu.",
+    "page": "sia",
+    "of": "ya",
+    "exportData": "Rumela Datha",
+    "exportMessage": "Dzhenisani maipfi othe a bvaho kha",
+    "exportMessage2": "nga fomo ine na i takalela.",
+    "format": "Fomo",
+    "agriculture": "Maipfi a amba nga zwa u lima, u alusa na ndangala dza u ita zwiliwa zwa vhupo ha zwa u lima.",
+    "construction": "Maipfi ane a shumiswa kha zwa u fhaṱa, zwiwanwa zwa u fhaṱa na ndangulo ya mishumo.",
+    "demography": "Maipfi a amba nga zwavhudi nga ha vhatshena vha vhathu na tshivhalo tsha vhathu.",
+    "education": "Maipfi a amba nga thuto, u gudisa, na maitele a zwa thuto.",
+    "energy": "Mivhono ine ya ambaho na u ita maanḓa na ndangulo ya zwa maanḓa.",
+    "environment": "Maipfi a amba nga khoro ya vhupo, vhupo na u dzula hu tshi tshimbila zwavhudi.",
+    "generalDemography": "Tshivhalo tsha vhathu tshi akaredzanaho, tshine tsha katela vhuria, mbeu, na u tshimbila ha vhathu.",
+    "businessEnterprises": "Mivhono ine ya ambaho na ndangulo ya mabhizinesi, vhuḓidini na mishumo ya khamphani.",
+    "geography": "Maipfi a amba nga zwavhupo, mavu, na u ita mapu.",
+    "healthVitalStats": "Maipfi a amba nga zwa mutakalo, ndivho ya vhutshilo na maitele a mutakalo.",
+    "householdIncome": "Mivhono ine ya amba nga mutakalo wa muṱa, zwa u shumisa na mvelaphanda ya vhutshilo.",
+    "housingServices": "Maipfi ane a amba nga dzinadzo dza dzimba, vhukuma na ndangulo ya madoroboni.",
+    "incomeWealth": "Maipfi a zwa vhutshilo ane a amba nga u langa ha tshelede, phenzheni na lupfumo lwa muṱa.",
+    "industryTrade": "Maipfi a amba nga u ita mishumo, u reṱisa, na mishumo ya zwa u ita zwipiwa.",
+    "labour": "Maipfi a amba nga zwa mushumo, a katela vhashumi, mishumo na maraga a mushumo.",
+    "lawJustice": "Maipfi a amba nga milayo, pfanelo na ndangulo ya zwa vhulamukanyi.",
+    "manufacturing": "Mivhono ine ya amba nga zwa u ita zwipiwa, ndangulo dza u ita zwipiwa na mitsiko ya u rumela.",
+    "nationalAccounts": "Makhovhedzi a vhutshilo ane a katela GDP, tshelede ya shango na ndivho dza zwa tshelede.",
+    "government": "Maipfi ane a amba nga vhupo ha muvhuso, ndangulo na zwitela zwa vhathu.",
+    "populationCensus": "Maipfi a amba nga tshivhalo tsha vhathu na ndivho ya zwa vhathu.",
+    "poverty": "Mivhono ine ya amba nga u shaiwa, thaidzo dza u sa lingana na mvelaphanda ya vhathu.",
+    "prices": "Maipfi a zwa vhutshilo ane a amba nga mitengo, mitengo ya vhaṱengi na maanḓa a u renga.",
+    "privateSector": "Maipfi ane a amba nga mabhizinesi a poraefete, u dzhenisa tshelede na mishumo ya zwa vhutshilo.",
+    "publicFinance": "Maipfi ane a amba nga bugu dza muvhuso, muthelo na ndangulo ya tshelede ya vhathu.",
+    "scienceTech": "Mivhono ya sainsi na thekhinolodzhi ine ya katela nyambedzano na ndangulo ntswa.",
+    "socialConditions": "Maipfi ane a amba nga mvelaphanda ya vhathu, ndangulo dza vhathu na vhutshilo.",
+    "statisticalProcesses": "Maipfi a tshidzidzaho ane a amba nga ndayo dza manwalwa, metadata na tshumisano ya datha.",
+    "businessRegisters": "Mivhono ine ya amba nga u vhulunga na u khwinisa khoro dza mabhizinesi a shango.",
+    "tourism": "Maipfi a amba nga u shumela vhuendi, mishumo ya zwa u takalela na zwivhalo zwa vhaendi.",
+    "tourismMigration": "Maipfi a amba nga u tshimbila ha vhaendi, u tshimbila ha vhathu na ndangulo dza vhukati.",
+    "trade": "Mivhono ine ya amba nga zwa u rengisa, u rumela na zwa vhutshilo ha shango.",
+    "transportCommunication": "Maipfi a amba nga zwa u tshimbidza zwipiwa, ndangulo na zwa vhupfumi ha vhufhio.",
+    "searchGlossary": "Ṱoḓa dzikhishinari",
+    "loadingGlossary": "Hu khou longwa dzikhishinari",
+    "glossaryError": "A huna dzikhishinari dzine dza wanala",
+    "bookmarkError": "U vhulunga tshiga ho kundelwa",
+    "bookmarkErrorDetails": "Hu itaho vhukhakhi vhu si lavhelelwaho.",
+    "connectionError": "U vhulunga tshiga zwi ṱoḓa khokha ya inthanethe.",
+    "loginError": "Ni fanela u loga u itela u vhulunga dzikhishinari.",
+    "terms": "maipfi",
+    "hide": "Dzima",
+    "show": "Sumbedzani",
+    "loading": "Hu khou longwa...",
+    "langSelect": "Khethani Luambo",
+    "translating": "Hu khou humbudzwa",
+    "translate": "Humbudzani",
+    "Notranslate": "A huna ṱhalutshedzo i re hone kha luambo luno"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "Ni khou ṱoḓa u ṱanganedza uri ni ṱoḓa u thutha hei ndila ya u guda tshoṱhe?",
+      "createPath": "Vhumbani Ndila ya U Guda",
+      "cancel": "Fhelisani",
+      "words": "maipfi",
+      "language": "Luambo",
+      "learningPathName": "Dzina la Ndila ya U Guda",
+      "createNewPath": "Vhumbani Ndila Ntswa ya U Guda",
+      "toNextLevel": "kha ḽeḽo ḽeṅwe ḓiṱoḓo",
+      "overallProgress": "Mushumo woṱhe wa Muvhuso",
+      "levelTitle": "Ḓiṱoḓo",
+      "newPath": "Ndila Ntswa",
+      "confirm": "Khwaṱhisedzani",
+      "test": "U Lingedza",
+      "studySession": "Ṱhoḓisani ya U Guda",
+      "glossaries": "Maṅwalwa a Mafhungo"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Ndila dza U Guda",
+      "loadingPaths": "I khou longela Ndila",
+      "message": "A ni athu u vhumba ndila ya u guda. Pfani '+ Ndila Ntswa' u thoma!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Iḓani hafhu kha Ndila",
+      "flashCards": "Khaḓi dza U Guda",
+      "testKnowledge": "Linganani Vhuḓivhi",
+      "backToGlossaries": "Iḓani hafhu kha Maṅwalwa a Mafhungo",
+      "wordsCompleted": "maipfi a fhelelaho",
+      "noTermsFound": "A huna Maipfi a Wanaho",
+      "glossaryTermError": "Ḽiṅwalwa ḽa mafhungo ḽi a si na maipfi zwino.",
+      "tapToReveal": "Pwanyani u Vhonisa",
+      "known": "Zwi Ḓivhiwaho",
+      "notLearned": "A zwi athu u Gudwa",
+      "showing": "I khou Vhonisa",
+      "of": "ya",
+      "terms": "maipfi",
+      "page": "Siaṱari",
+      "noTranslation": "A huna Tshivhumbeo",
+      "exitTestKnowledge": "Bvani kha U Linga Vhuḓivhi",
+      "cards": "Khaḓi",
+      "score": "Mavhonele",
+      "translateThisWord": "Ḓivhazani ipfi ili",
+      "correctAnswer": "Mushumo wo Lugaho",
+      "yourAnswer": "Mushumo wanṋu",
+      "nextCard": "Khaḓi i Tevhelaho",
+      "finish": "Fhedzani",
+      "testComplete": "U Linga ho Fhelelwa",
+      "youGot": "No wana",
+      "correct": "zwo Lugaho",
+      "outOf": "u bva kha",
+      "tryAgain": "Lingani Hafhu"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Mushumo wa U Nwalisela",
+    "weeklyGoals": "Zwipele zwa Vhiki na Vhiki",
+    "howToEarnXP": "Ndila ya U Wana XP",
+    "unlocked": "Yo Vuliwa",
+    "level": "Dzinga",
+    "loading": "I khou dzhenisa",
+    "totalXP": "XP yoṱhe",
+    "currentStreak": "U shumisana ha zwino",
+    "achievementsLabel": "Mushumo wa Vhuṱhogwa",
+    "noActivity": "A huna mushumo",
+    "addTerm": "Engedza ipfi litswa",
+    "addComment": "Engedza maitele",
+    "receiveUpvote": "Ṱanganedza vhavhoti vha ntha",
+    "dailyLoginBonus": "Mupfumo wa u dzhenisa nga duvha ḽiṅwe na ḽiṅwe",
+    "perUpvote": "nga khothe iṅwe na iṅwe ya ntha",
+    "noGoals": "A huna zwipele zwavhiki",
+    "checkBackNextWeek": "Vhuyelele hafhu vha viki i tevhelaho",
+    "completed": "Yo Fhedza",
+    "loadingWeeklyGoals": "I khou dzhenisa zwipele zwa vhiki",
+    "progress": "u bvelela",
+    "loadingAchievements": "I khou dzhenisa mivhuso ya vhutali",
+    "of": "ya",
+    "termPioneer": {
+      "title": "Muvhumbudzi wa Mafhungo",
+      "desc": "Engedza mafhungo a u thoma a 10 kha burodzedzi ḽa mafhungo"
+    },
+    "communityContributor": {
+      "title": "Munwe wa Tshitshavha",
+      "desc": "Nwala maitele a 25 kha mafhungo"
+    },
+    "crowdFavorite": {
+      "title": "Mutshavha Wa Funwaho",
+      "desc": "Ṱanganedza mavhoti a 100 kha zwine wa ita"
+    },
+    "multilingualMaster": {
+      "title": "Mupfumi wa Nyambo Dzinzhi",
+      "desc": "Tshila kha maburodze a mafhungo a nyambo dziṱanu dzo fhambananaho"
+    },
+    "consistencyChampion": {
+      "title": "Muhulwane wa U Dzudzanya",
+      "desc": "Ita mushumo maḓuvha a 30 a tevhelanayo"
+    },
+    "languageGuardian": {
+      "title": "Muvhiki wa Nyambo",
+      "desc": "Tendela zwine wa ita zwi 50 zwi sedzululwe nga vhaḓivhi"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Mushumisi wa Tshifhinga Tshoṱhe",
+    "Log in on 6 different days this week": "Dzhena kha siaṱari nga maḓuvha a 6 o fhambananaho kha hei vhege",
+    "Streak Keeper": "Mulondoli wa U Tevhela",
+    "Maintain a login streak of 3 consecutive days": "Vhulunga u tevhela ha u dzhena nga maḓuvha a 3 a tevhelanaho",
+    "Active Commenter": "Muvhumbudzi wa Maitele",
+    "Write 4 comments on terms this week": "Nwala maitele a 4 kha maipfi kha hei vhege"
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, User, Globe, Eye, Palette } from 'lucide-react';
+import { ChevronRight, User, Globe, Palette } from 'lucide-react';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
@@ -91,46 +91,46 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   </label>
 );
 
-interface SliderControlProps {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  unit?: string;
-  onChange: (value: number) => void;
-}
+// interface SliderControlProps {
+//   label: string;
+//   value: number;
+//   min: number;
+//   max: number;
+//   step: number;
+//   unit?: string;
+//   onChange: (value: number) => void;
+// }
 
-const SliderControl: React.FC<SliderControlProps> = ({
-  label,
-  value,
-  min,
-  max,
-  step,
-  unit = '',
-  onChange,
-}) => (
-  <div className="slider-item">
-    <div className="slider-header">
-      <span className="slider-label">{label}</span>
-      <span className="slider-value">
-        {value.toString()}
-        {unit}
-      </span>
-    </div>
-    <input
-      type="range"
-      min={min}
-      max={max}
-      step={step}
-      value={value}
-      onChange={(e) => {
-        onChange(Number(e.target.value));
-      }}
-      className="slider"
-    />
-  </div>
-);
+// const SliderControl: React.FC<SliderControlProps> = ({
+//   label,
+//   value,
+//   min,
+//   max,
+//   step,
+//   unit = '',
+//   onChange,
+// }) => (
+//   <div className="slider-item">
+//     <div className="slider-header">
+//       <span className="slider-label">{label}</span>
+//       <span className="slider-value">
+//         {value.toString()}
+//         {unit}
+//       </span>
+//     </div>
+//     <input
+//       type="range"
+//       min={min}
+//       max={max}
+//       step={step}
+//       value={value}
+//       onChange={(e) => {
+//         onChange(Number(e.target.value));
+//       }}
+//       className="slider"
+//     />
+//   </div>
+// );
 
 const SettingsPage: React.FC = () => {
   const { i18n, t } = useTranslation();
@@ -478,39 +478,39 @@ const SettingsPage: React.FC = () => {
           </SettingsSection>
 
           <div className="accessibility-wrapper">
-            <h2 className="accessibility-title">
-              <Eye className="section-icon" />
-              {t('settings.accessibility.title')}
-            </h2>
+            {/*<h2 className="accessibility-title">*/}
+            {/*  <Eye className="section-icon" />*/}
+            {/*  {t('settings.accessibility.title')}*/}
+            {/*</h2>*/}
 
-            <SettingsSection
-              title={t('settings.accessibility.textAndVisual')}
-              icon={<div className="subsection-icon">Aa</div>}
-              showChevron={false}
-            >
-              <SliderControl
-                label={t('settings.accessibility.textSize')}
-                value={settings.textSize}
-                min={12}
-                max={24}
-                step={1}
-                unit="px"
-                onChange={(value) => {
-                  handleSettingChange('textSize', value);
-                }}
-              />
-              <SliderControl
-                label={t('settings.accessibility.textSpacing')}
-                value={settings.textSpacing}
-                min={0.8}
-                max={2}
-                step={0.1}
-                unit="x"
-                onChange={(value) => {
-                  handleSettingChange('textSpacing', value);
-                }}
-              />
-            </SettingsSection>
+            {/*<SettingsSection*/}
+            {/*  title={t('settings.accessibility.textAndVisual')}*/}
+            {/*  icon={<div className="subsection-icon">Aa</div>}*/}
+            {/*  showChevron={false}*/}
+            {/*>*/}
+            {/*  <SliderControl*/}
+            {/*    label={t('settings.accessibility.textSize')}*/}
+            {/*    value={settings.textSize}*/}
+            {/*    min={12}*/}
+            {/*    max={24}*/}
+            {/*    step={1}*/}
+            {/*    unit="px"*/}
+            {/*    onChange={(value) => {*/}
+            {/*      handleSettingChange('textSize', value);*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*  <SliderControl*/}
+            {/*    label={t('settings.accessibility.textSpacing')}*/}
+            {/*    value={settings.textSpacing}*/}
+            {/*    min={0.8}*/}
+            {/*    max={2}*/}
+            {/*    step={0.1}*/}
+            {/*    unit="x"*/}
+            {/*    onChange={(value) => {*/}
+            {/*      handleSettingChange('textSpacing', value);*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</SettingsSection>*/}
 
             <SettingsSection
               title={t('settings.accessibility.colorAndContrast')}
