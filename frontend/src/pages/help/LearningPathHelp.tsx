@@ -71,7 +71,6 @@ const LearningPathPage: React.FC = () => {
           <button
             type="button"
             className="article-theme-toggle-btn"
-
             onClick={() => void navigate('/help')}
           >
             {t('common.back')}
@@ -93,7 +92,9 @@ const LearningPathPage: React.FC = () => {
                   <li>
                     <button
                       type="button"
-                      onClick={() => { scrollToSection('intro'); }}
+                      onClick={() => {
+                        scrollToSection('intro');
+                      }}
                       className="text-left hover:text-theme transition-colors"
                     >
                       {t('leaningPathHelp.title')}
@@ -103,7 +104,9 @@ const LearningPathPage: React.FC = () => {
                     <li key={`${obj.title}-${obj.id}`}>
                       <button
                         type="button"
-                        onClick={() => { scrollToSection(obj.id); }}
+                        onClick={() => {
+                          scrollToSection(obj.id);
+                        }}
                         className="text-left hover:text-theme transition-colors"
                       >
                         {obj.title}

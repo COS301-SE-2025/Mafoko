@@ -29,7 +29,9 @@ export const SettingsHelp: React.FC = () => {
           <button
             type="button"
             className="article-theme-toggle-btn"
-            onClick={() => { void navigate('/help')}}
+            onClick={() => {
+              void navigate('/help');
+            }}
           >
             Back
           </button>
@@ -50,7 +52,9 @@ export const SettingsHelp: React.FC = () => {
                   <li>
                     <button
                       type="button"
-                      onClick={() => { scrollToSection('intro'); }}
+                      onClick={() => {
+                        scrollToSection('intro');
+                      }}
                       className="text-left hover:text-theme transition-colors"
                     >
                       Settings & Customization
@@ -60,7 +64,9 @@ export const SettingsHelp: React.FC = () => {
                     <li key={`${obj.title}-${obj.id}`}>
                       <button
                         type="button"
-                        onClick={() => { scrollToSection(obj.id); }}
+                        onClick={() => {
+                          scrollToSection(obj.id);
+                        }}
                         className="text-left hover:text-theme transition-colors"
                       >
                         {obj.title}

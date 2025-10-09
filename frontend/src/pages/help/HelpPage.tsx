@@ -149,9 +149,13 @@ const HelpPage: React.FC = () => {
   );
 
   useEffect(() => {
-    const handleResize = () => { setIsMobile(window.innerWidth <= 768); };
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
     window.addEventListener('resize', handleResize);
-    return () => { window.removeEventListener('resize', handleResize); };
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const handleSearch = useCallback(
@@ -280,7 +284,9 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === 1}
-                  onClick={() => { setCurrentPage(currentPage - 1); }}
+                  onClick={() => {
+                    setCurrentPage(currentPage - 1);
+                  }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   {t('helpPage.previous')}
@@ -294,7 +300,9 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === totalPages}
-                  onClick={() => { setCurrentPage(currentPage + 1); }}
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1);
+                  }}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   {t('helpPage.next')}

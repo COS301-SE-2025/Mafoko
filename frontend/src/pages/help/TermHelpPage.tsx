@@ -183,7 +183,9 @@ const TermHelpPage: React.FC = () => {
                     <li key={`${obj.title}-${obj.id}`}>
                       <button
                         type="button"
-                        onClick={() => { scrollToSection(obj.id); }}
+                        onClick={() => {
+                          scrollToSection(obj.id);
+                        }}
                         className="text-left hover:text-theme transition-colors"
                       >
                         {obj.title}

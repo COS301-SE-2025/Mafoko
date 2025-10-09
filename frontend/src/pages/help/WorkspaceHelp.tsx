@@ -26,12 +26,14 @@ export const WorkspaceHelp: React.FC = () => {
         <div className="space-y-6 leading-relaxed text-base">
           <p>{t('workspaceHelpPage.groupsBody')}</p>
           <ol className="list-decimal list-inside space-y-2 mt-1">
-            { }
-            {(t('workspaceHelpPage.groupsSteps', { returnObjects: true }) as string[]).map(
-              (step, i) => (
-                <li key={i} dangerouslySetInnerHTML={{ __html: step }} />
-              ),
-            )}
+            {}
+            {(
+              t('workspaceHelpPage.groupsSteps', {
+                returnObjects: true,
+              }) as string[]
+            ).map((step, i) => (
+              <li key={i} dangerouslySetInnerHTML={{ __html: step }} />
+            ))}
           </ol>
         </div>
       ),
@@ -58,13 +60,14 @@ export const WorkspaceHelp: React.FC = () => {
           <p>{t('workspaceHelpPage.notesBody')}</p>
           <ol className="list-decimal list-inside space-y-2 mt-1">
             <ol className="list-decimal list-inside space-y-2 mt-1">
-              {(t('workspaceHelpPage.notesSteps', { returnObjects: true }) as string[]).map(
-                (step, i) => (
-                  <li key={i} dangerouslySetInnerHTML={{ __html: step }} />
-                ),
-              )}
+              {(
+                t('workspaceHelpPage.notesSteps', {
+                  returnObjects: true,
+                }) as string[]
+              ).map((step, i) => (
+                <li key={i} dangerouslySetInnerHTML={{ __html: step }} />
+              ))}
             </ol>
-
           </ol>
         </div>
       ),
@@ -77,11 +80,13 @@ export const WorkspaceHelp: React.FC = () => {
         <div className="space-y-6 leading-relaxed text-base">
           <p>{t('workspaceHelpPage.deleteBody')}</p>
           <ol className="list-decimal list-inside space-y-2 mt-1">
-            {(t('workspaceHelpPage.deleteSteps', { returnObjects: true }) as string[]).map(
-              (step, i) => (
-                <li key={i} dangerouslySetInnerHTML={{ __html: step }} />
-              ),
-            )}
+            {(
+              t('workspaceHelpPage.deleteSteps', {
+                returnObjects: true,
+              }) as string[]
+            ).map((step, i) => (
+              <li key={i} dangerouslySetInnerHTML={{ __html: step }} />
+            ))}
           </ol>
         </div>
       ),
@@ -101,7 +106,7 @@ export const WorkspaceHelp: React.FC = () => {
             type="button"
             className="article-theme-toggle-btn"
             onClick={() => {
-               void navigate('/help');
+              void navigate('/help');
             }}
           >
             {t('common.back')}
