@@ -746,6 +746,39 @@
     "section11": "Volg jou Vordering",
     "section12": "Die Leerpad hou jou aktiwiteit dop sodat jy kan sien hoe ver jy gevorder het. Vordering word saam met jou gemeenskapsstatistieke vertoon, wat dit maklik maak om gemotiveerd te bly.",
     "section13": "Kombineer Leerpaaie met weeklikse uitdagings en prestasies om kentekens te verdien terwyl jy jou taalvaardighede verbeter."
+  },
+  "helpPage2": {
+    "section1": "Aan die begin",
+    "section2": "Stap-vir-stap gids vir die skep van ’n rekening, aanmelding, en navigasie van die platform vir die eerste keer.",
+    "section3": "Gemeenskapsinteraksie",
+    "section3Desc": "Leer hoe om plasings te maak, te kommentaar lewer, en met ander in gesprek te tree deur gebruik te maak van gemeenskapsinstrumente soos stemme en besprekings.",
+
+    "dictionaryTitle": "Woordeboek",
+    "dictionaryDesc": "Soek vir terme oor verskeie tale, aktiveer vae soek, en pas jou woordeboekinstellings aan.",
+
+    "glossaryTitle": "Woordelys",
+    "glossaryDesc": "Organiseer, filtreer, en voer woordelyste uit volgens kategorie, domein of vertaalbank.",
+
+    "workspaceTitle": "Werkruimte",
+    "workspaceDesc": "Stoor en bestuur jou eie terme en woordelyste, volg indienings, en werk saam deur notas en groepe te gebruik.",
+
+    "settingsTitle": "Instellings en Aanpassing",
+    "settingsDesc": "Pas voorkeure aan soos donker/lig modus, toeganklikheidsopsies, profieldetails, en ander gebruikersinstellings.",
+
+    "homeTitle": "Tuisblad",
+    "homeDesc": "Verken die interaktiewe Suid-Afrikaanse kaart, ontdek willekeurige terme, en kry ’n oorsig van uitgeligte inhoud.",
+
+    "dashboardTitle": "Beheerpaneel",
+    "dashboardDesc": "Volg platformaktiwiteit met grafieke, sien data, en analiseer jou bydraes op een plek.",
+
+    "learningPathTitle": "Leerpaaie",
+    "learningPathDesc": "Ontwerp ’n gestruktureerde leerreis vir een van Suid-Afrika se amptelike tale.",
+
+    "feedbackTitle": "Terugvoer",
+    "feedbackDesc": "Stuur voorstelle, komplimente, of klagtes direk aan die span om die platform te verbeter.",
+
+    "faqsTitle": "Gereelde Vrae",
+    "faqsDesc": "Antwoorde op algemene vrae oor die platform."
   }
 
 }

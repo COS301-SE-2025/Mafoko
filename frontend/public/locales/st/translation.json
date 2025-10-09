@@ -732,6 +732,39 @@
     "section11": "Ho Latela Tsoelo-pele ya Hao",
     "section12": "Tsela ya Thuto e latela mesebetsi ya hao hore o bone hore na o fihletse kae. Tsoelo-pele e bontshwa hammoho le dipalo tsa setjhaba, ho etsa hore ho be bonolo ho dula o khothalletswa.",
     "section13": "Kopanya Ditsela tsa Thuto le diphephetso tsa beke le beke le dikhau ho fumana mabheji ha o ntse o ntlafatsa bokgoni ba hao ba puo."
+  },
+  "helpPage2": {
+    "section1": "Ho Qala",
+    "section2": "Tataiso ea mohato ka mohato bakeng sa ho etsa ak’haonte, ho kena, le ho tsamaisa sethala lekhetlo la pele.",
+    "section3": "Tšebelisano ea Sechaba",
+    "section3Desc": "Ithute ho beha litaba, ho fana ka maikutlo, le ho sebelisana le ba bang ka lisebelisoa tsa sechaba tse kang likhetho le lipuisano.",
+
+    "dictionaryTitle": "Bukantswe",
+    "dictionaryDesc": "Batla mantsoe a lipuo tse fapaneng, bulela patlo e sa hlakang, ’me u hlophise litlhophiso tsa bukantswe ea hau.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Hlophisa, sefa, le ho romela li-glossary ka sehlopha, lefapha, kapa polokelo ea phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mosebetsi",
+    "workspaceDesc": "Boloka le ho tsamaisa mantsoe le li-glossary tsa hao, latela likopo, le sebelisana u sebelisa lintlha le lihlopha.",
+
+    "settingsTitle": "Litlhophiso le Boikhethelo",
+    "settingsDesc": "Fetola likhetho tse kang mokhoa o lefifi/kapa o khanyang, likhetho tsa phihlello, lintlha tsa profaele, le litlhophiso tse ling tsa mosebelisi.",
+
+    "homeTitle": "Leqephe la Lapeng",
+    "homeDesc": "Hlahloba ’mapa o sebelisanang oa Afrika Borwa, fumana mantsoe a sa tloaelehang, ’me u fumane kakaretso ea litaba tse khethehileng.",
+
+    "dashboardTitle": "Boto ea Tsamaiso",
+    "dashboardDesc": "Latela ts'ebetso ea sethala ka litšoantšo, sheba data, ’me u hlahlobe menehelo ea hau sebakeng se le seng.",
+
+    "learningPathTitle": "Litsela tsa Thuto",
+    "learningPathDesc": "Rala leeto le hlophisitsoeng la ho ithuta e ’ngoe ea lipuo tsa semmuso tsa Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela litlhahiso, litlotla, kapa litletlebo ho sehlopha ka kotloloho ho thusa ho ntlafatsa sethala.",
+
+    "faqsTitle": "Lipotso Tse Botsoang Hangata",
+    "faqsDesc": "Likarabo tsa lipotso tse tloaelehileng mabapi le sethala."
   }
 
 }

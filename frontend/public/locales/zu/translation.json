@@ -759,6 +759,38 @@
     "section11": "Ukulandela Inqubekela Phambili Yakho",
     "section12": "I-Learning Path ilandela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa eduze kwezibalo zomphakathi wakho, okwenza kube lula ukuhlala ukhuthazekile.",
     "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
-  }
+  },
+  "helpPage2": {
+    "section1": "Ukuqala",
+    "section2": "Umhlahlandlela wesinyathelo ngesinyathelo wokudala i-akhawunti, ukungena ngemvume, nokuzulazula endaweni yokuqala.",
+    "section3": "Ukusebenzisana Komphakathi",
+    "section3Desc": "Funda ukuthi ungabhala kanjani, uphawule, futhi usebenzisane nabanye usebenzisa amathuluzi omphakathi afana nokuvota nokuxoxa.",
 
+    "dictionaryTitle": "Isichazamazwi",
+    "dictionaryDesc": "Sesha amagama ezilimini ezahlukene, uvule usesho olungacacile, futhi ulungise izilungiselelo zesichazamazwi sakho.",
+
+    "glossaryTitle": "I-Glossary",
+    "glossaryDesc": "Hlela, hlunga, futhi uthumele ama-glossary ngokuya ngesigaba, isizinda, noma ibhange lezinguqulo.",
+
+    "workspaceTitle": "Indawo Yokusebenza",
+    "workspaceDesc": "Gcina futhi uphathe amagama namaglossary akho, landela izethulo, futhi usebenzisane usebenzisa amanothi namaqembu.",
+
+    "settingsTitle": "Izilungiselelo Nokwenza Ngokwezifiso",
+    "settingsDesc": "Lungisa izintandokazi ezifana nemodi emnyama/nemhlophe, izinketho zokufinyeleleka, imininingwane yephrofayela, nezinye izilungiselelo zomsebenzisi.",
+
+    "homeTitle": "Ikhasi Lasekhaya",
+    "homeDesc": "Hlola imephu esebenzisanayo yaseNingizimu Afrika, thola amagama ahlukahlukene, futhi uthole isifinyezo sokuqukethwe okufakiwe.",
+
+    "dashboardTitle": "Ideshibhodi",
+    "dashboardDesc": "Landela umsebenzi wepulatifomu ngamashadi, bheka idatha, futhi uhlaziye iminikelo yakho endaweni eyodwa.",
+
+    "learningPathTitle": "Izindlela Zokufunda",
+    "learningPathDesc": "Dizayina uhambo oluqondisiwe lokufunda olunye lwezilimi ezisemthethweni zaseNingizimu Afrika.",
+
+    "feedbackTitle": "Impendulo",
+    "feedbackDesc": "Thumela iziphakamiso, izincomo, noma izikhalo ngqo eqenjini ukusiza ukuthuthukisa ipulatifomu.",
+
+    "faqsTitle": "Imibuzo Ejwayelekile",
+    "faqsDesc": "Izimpendulo zemibuzo evamile mayelana nepulatifomu."
+  }
 }

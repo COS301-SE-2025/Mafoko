@@ -846,5 +846,46 @@
     "section11": "Tracking Your Progress",
     "section12": "The Learning Path tracks your activity so you can see how far you’ve come. Progress is displayed alongside your community stats, making it easy to stay motivated.",
     "section13": "Combine Learning Paths with weekly challenges and achievements to earn badges while improving your language skills."
-  }
+  },
+  "helpPage2": {
+    "section1": "Getting Started",
+    "section2": "Step-by-step guide for creating an account, signing in, and navigating the platform for the first time.",
+    "section3": "Community Interaction",
+    "section3Desc": "Learn how to post, comment, and engage with others using the community tools like upvotes and discussions.",
+
+    "dictionaryTitle": "Dictionary",
+    "dictionaryDesc": "Search for terms across multiple languages, enable fuzzy search, and adjust your dictionary settings.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Organize, filter, and export glossaries by category, domain, or translation bank.",
+
+    "workspaceTitle": "Workspace",
+    "workspaceDesc": "Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.",
+
+    "settingsTitle": "Settings and Customization",
+    "settingsDesc": "Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.",
+
+    "homeTitle": "Home Page",
+    "homeDesc": "Explore the interactive South African map, discover random terms, and get an overview of featured content.",
+
+    "dashboardTitle": "Dashboard",
+    "dashboardDesc": "Track application activity with graphs, view platform data, and analyze your contributions in one place.",
+
+    "learningPathTitle": "Learning Paths",
+    "learningPathDesc": "Design a guided journey for learning one of South Africa’s official languages.",
+
+    "feedbackTitle": "Feedback",
+    "feedbackDesc": "Send suggestions, compliments, or complaints directly to the team to help improve the platform.",
+
+    "faqsTitle": "FAQs",
+    "faqsDesc": "Answers to common questions about the platform."
+  },
+  "copyURL": "Copy URL",
+  "related" : "Related Terms",
+  "comments": "Comments",
+  "reply": "Replying To",
+  "addReply": "Add a Reply",
+  "addComment": "Add a Comment",
+  "noDescription": "No Description Provided",
+  "view": "View"
 }

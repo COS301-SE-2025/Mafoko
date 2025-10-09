@@ -742,6 +742,39 @@
     "section11": "Ukulandela Inqubekela Phambili Yakho",
     "section12": "Learning Path ilandelela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa kanye nezibalo zomphakathi wakho, ukwenza kube lula ukuhlala ukhuthazekile.",
     "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
+  },
+  "helpPage2": {
+    "section1": "Go Thoma",
+    "section2": "Tataiso ya mohato ka mohato ya go hlama akhaonto, go tsena, le go sepela ka setšhaba lekgetlo la mathomo.",
+    "section3": "Tšhomišano ya Setšhaba",
+    "section3Desc": "Ithute ka go romela, go tlogela ditlhaloso, le go šoma mmogo le ba bangwe o šomiša didiriswa tša setšhaba tša bjalo ka go fa ditlhopho le dipoledišano.",
+
+    "dictionaryTitle": "Pukuntšu",
+    "dictionaryDesc": "Nyaka mantšu ka dipuo tše di fapanego, bulela patlo e e sa nepahalago, gomme o fetole dipeakanyo tša pukuntšu ya gago.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Rulaganya, hlopha, le go romela di-glossary ka sehlopha, lefapha, goba polokelo ya phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mošomo",
+    "workspaceDesc": "Boloka le go laola mantšu le di-glossary tša gago, latela dikgopelo, gomme o šome mmogo o šomiša dingwalo le dihlopha.",
+
+    "settingsTitle": "Dipeakanyo le Go Ikgethela",
+    "settingsDesc": "Fetola dikgetho tša bjalo ka mokgwa wa lesedi/kapa wa lefifi, dikgetho tša phihlelelo, dintlha tša profaele, le dipeakanyo tše dingwe tša modirisi.",
+
+    "homeTitle": "Letlakala la Lehae",
+    "homeDesc": "Hlahloba mmepe wa Afrika Borwa o šomago, hwetša mantšu a a sa tlwaelegago, gomme o bone kakaretšo ya dikateng tše di kgethegilego.",
+
+    "dashboardTitle": "Boto ya Tshekatsheko",
+    "dashboardDesc": "Latela mešomo ya sethala ka digarafi, lebelela data, gomme o hlahlobe meneelo ya gago lefelong le tee.",
+
+    "learningPathTitle": "Ditsela tša Thuto",
+    "learningPathDesc": "Aga leeto le le rulagantšwego la go ithuta e nngwe ya dipuo tša semmušo tša Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela ditlhahiso, thoriso, goba ditletlebo go sehlopha go thuša go kaonafatša sethala.",
+
+    "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
+    "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
   }
 
 }

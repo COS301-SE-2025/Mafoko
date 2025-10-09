@@ -6,6 +6,7 @@ import { addPendingVote } from '../../utils/indexedDB';
 import { Link } from 'react-router-dom';
 import { LanguageColorMap } from '../../types/search/types.ts';
 import { GamificationService } from '../../utils/gamification';
+import { useTranslation } from 'react-i18next';
 
 interface VoteApiResponse {
   term_id: string;
@@ -41,6 +42,7 @@ const TermCard: React.FC<TermCardProps> = ({
   onView,
   onBookmarkChange,
 }) => {
+  const { t } = useTranslation();
   const [upvotes, setUpvotes] = useState(initialUpvotes);
   const [downvotes, setDownvotes] = useState(initialDownvotes);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
@@ -235,7 +237,7 @@ const TermCard: React.FC<TermCardProps> = ({
           className="!text-theme"
           to={`/term/${encodeURIComponent(language)}/${encodeURIComponent(term)}/${id}`}
         >
-          <span className="view-button">View</span>
+          <span className="view-button">{t('view', { defaultValue: 'View' })}</span>
         </Link>
       </button>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import HelpSearch from '../../components/ui/HelpSearch.tsx';
 import '../../styles/HelpPage.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/ui/Navbar.tsx';
 import LeftNav from '../../components/ui/LeftNav.tsx';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
@@ -23,13 +23,19 @@ const HelpPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const { isDarkMode } = useDarkMode();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const hashLink = (path: string) =>
+    path.startsWith('#') || path.startsWith('/#')
+      ? path
+      : `#${path.startsWith('/') ? path : `/${path}`}`;
 
   const articles: Article[] = useMemo(
     () => [
       {
-        title: 'Getting Started',
-        desc: 'Step-by-step guide for creating an account, signing in, and navigating the platform for the first time.',
-        link: '/help/getting-started',
+        title: t('helpPage2.section1'),
+        desc: t('helpPage2.section2'),
+        link: '#/help/getting-started',
         keywords: [
           'introduction',
           'first steps',
@@ -42,147 +48,114 @@ const HelpPage: React.FC = () => {
         ],
       },
       {
-        title: 'Community Interaction',
-        desc: 'Learn how to post, comment, and engage with others using the community tools like upvotes and discussions.',
-        link: '/help/community-feature',
+        title: t('helpPage2.section3'),
+        desc: t('helpPage2.section3Desc', {
+          defaultValue:
+            'Learn how to post, comment, and engage with others using the community tools like upvotes and discussions.',
+        }),
+        link: '#/help/community-feature',
         keywords: ['comment', 'upvote', 'downvote', 'community'],
       },
       {
-        title: 'Dictionary',
-        desc: 'Search for terms across multiple languages, enable fuzzy search, and adjust your dictionary settings.',
-        link: '/help/terms',
-        keywords: [
-          'fuzzy',
-          'dictionary',
-          'language',
-          'search',
-          'dictionary',
-          'term',
-          'language',
-        ],
+        title: t('helpPage2.dictionaryTitle', { defaultValue: 'Dictionary' }),
+        desc: t('helpPage2.dictionaryDesc', {
+          defaultValue:
+            'Search for terms across multiple languages, enable fuzzy search, and adjust your dictionary settings.',
+        }),
+        link: '#/help/terms',
+        keywords: ['fuzzy', 'dictionary', 'language', 'search', 'term'],
       },
       {
-        title: 'Glossary',
-        desc: 'Organize, filter, and export glossaries by category, domain, or translation bank.',
-        link: '/help/glossary-help',
-        keywords: [
-          'glossary',
-          'category',
-          'domain',
-          'translation bank',
-          'export',
-          'csv export',
-          'pdf export',
-          'json export',
-          'data export',
-        ],
+        title: t('helpPage2.glossaryTitle', { defaultValue: 'Glossary' }),
+        desc: t('helpPage2.glossaryDesc', {
+          defaultValue:
+            'Organize, filter, and export glossaries by category, domain, or translation bank.',
+        }),
+        link: '#/help/glossary-help',
+        keywords: ['glossary', 'category', 'domain', 'translation bank'],
       },
       {
-        title: 'Workspace',
-        desc: 'Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.',
-        link: '/help/workspace-help',
-        keywords: [
-          'workspace',
-          'save',
-          'save term',
-          'save glossary',
-          'groups',
-          'term submission',
-          'track term submission',
-          'notes',
-        ],
+        title: t('helpPage2.workspaceTitle', { defaultValue: 'Workspace' }),
+        desc: t('helpPage2.workspaceDesc', {
+          defaultValue:
+            'Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.',
+        }),
+        link: '#/help/workspace-help',
+        keywords: ['workspace', 'groups', 'save term', 'notes'],
       },
       {
-        title: 'Settings and Customization',
-        desc: 'Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.',
-        link: '/help/settings-help',
-        keywords: [
-          'settings',
-          'user settings',
-          'mode',
-          'light mode',
-          'dark mode',
-          'accessibility',
-          'accessibility options',
-          'options',
-          'profile',
-          'profile picture',
-          'contrast',
-          'colour',
-        ],
+        title: t('helpPage2.settingsTitle', {
+          defaultValue: 'Settings and Customization',
+        }),
+        desc: t('helpPage2.settingsDesc', {
+          defaultValue:
+            'Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.',
+        }),
+        link: '#/help/settings-help',
+        keywords: ['settings', 'mode', 'dark mode', 'light mode', 'accessibility'],
       },
       {
-        title: 'Home Page',
-        desc: 'Explore the interactive South African map, discover random terms, and get an overview of featured content.',
-        link: '/help/home-help',
-        keywords: [
-          'home',
-          'home page',
-          'map',
-          'South African map',
-          'interactive map',
-          'random terms',
-        ],
+        title: t('helpPage2.homeTitle', { defaultValue: 'Home Page' }),
+        desc: t('helpPage2.homeDesc', {
+          defaultValue:
+            'Explore the interactive South African map, discover random terms, and get an overview of featured content.',
+        }),
+        link: '#/help/home-help',
+        keywords: ['home', 'map', 'random terms'],
       },
       {
-        title: 'Dashboard',
-        desc: 'Track application activity with graphs, view platform data, and analyze your contributions in one place.',
-        link: '/help/dashboard-help',
-        keywords: ['dashboard', 'graph', 'app activity', 'data information'],
+        title: t('helpPage2.dashboardTitle', { defaultValue: 'Dashboard' }),
+        desc: t('helpPage2.dashboardDesc', {
+          defaultValue:
+            'Track application activity with graphs, view platform data, and analyze your contributions in one place.',
+        }),
+        link: '#/help/dashboard-help',
+        keywords: ['dashboard', 'graph', 'app activity', 'data'],
       },
       {
-        title: 'Learning Paths',
-        desc:
-          'Design a guided journey for learning one of South Africa’s' +
-          ' official languages.',
-        link: '/help/learning-path-help',
-        keywords: ['learn', 'test', 'que cards', 'learn languages'],
+        title: t('helpPage2.learningPathTitle', {
+          defaultValue: 'Learning Paths',
+        }),
+        desc: t('helpPage2.learningPathDesc', {
+          defaultValue:
+            'Design a guided journey for learning one of South Africa’s official languages.',
+        }),
+        link: '#/help/learning-path-help',
+        keywords: ['learn', 'languages', 'path'],
       },
       {
-        title: 'Feedback',
-        desc: 'Send suggestions, compliments, or complaints directly to the team to help improve the platform.',
-        link: '/help/feedback-help',
-        keywords: [
-          'feedback',
-          'complaint',
-          'compliment',
-          'suggest',
-          'suggestion',
-        ],
+        title: t('helpPage2.feedbackTitle', { defaultValue: 'Feedback' }),
+        desc: t('helpPage2.feedbackDesc', {
+          defaultValue:
+            'Send suggestions, compliments, or complaints directly to the team to help improve the platform.',
+        }),
+        link: '#/help/feedback-help',
+        keywords: ['feedback', 'complaint', 'suggestion'],
       },
       {
-        title: 'FAQs',
-        desc: 'Answers to common questions about the platform.',
-        link: '/help/faqs',
-        keywords: [
-          'faq',
-          'downloads',
-          'contribute',
-          'search',
-          'dictionary',
-          'offline',
-        ],
+        title: t('helpPage2.faqsTitle', { defaultValue: 'FAQs' }),
+        desc: t('helpPage2.faqsDesc', {
+          defaultValue: 'Answers to common questions about the platform.',
+        }),
+        link: '#/help/faqs',
+        keywords: ['faq', 'questions', 'help'],
       },
     ],
-    [],
+    [t],
   );
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleSearch = useCallback(
-    async (t: string): Promise<void> => {
+    async (text: string): Promise<void> => {
       await Promise.resolve();
-      setTerm(t);
+      setTerm(text);
       setCurrentPage(1);
-      const query = t.toLowerCase().trim();
+      const query = text.toLowerCase().trim();
 
       if (!query) {
         setResults([]);
@@ -203,9 +176,7 @@ const HelpPage: React.FC = () => {
   const fetchSuggestions = async (term: string): Promise<string[]> => {
     await Promise.resolve();
     const query = term.toLowerCase().trim();
-
     const keywordSet = new Set<string>();
-
     articles.forEach((article) => {
       article.keywords.forEach((keyword) => {
         if (keyword.includes(query) || query.includes(keyword)) {
@@ -213,7 +184,6 @@ const HelpPage: React.FC = () => {
         }
       });
     });
-
     return Array.from(keywordSet).slice(0, 5);
   };
 
@@ -225,16 +195,15 @@ const HelpPage: React.FC = () => {
 
   return (
     <div
-      className={`help-page-fixed-background ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`help-page-fixed-background ${
+        isDarkMode ? 'theme-dark' : 'theme-light'
+      }`}
     >
-      <div className={`help-page-container`}>
+      <div className="help-page-container">
         {isMobile ? (
           <Navbar />
         ) : (
-          <LeftNav
-            activeItem={activeMenuItem}
-            setActiveItem={setActiveMenuItem}
-          />
+          <LeftNav activeItem={activeMenuItem} setActiveItem={setActiveMenuItem} />
         )}
 
         <div className="help-page-main-content">
@@ -258,48 +227,53 @@ const HelpPage: React.FC = () => {
                 </h2>
                 <div className="help-page-topics-grid">
                   {articles.map((topic, index) => (
-                    // eslint-disable-next-line react-x/no-array-index-key
                     <div key={index} className="help-page-topic-card">
                       <h3>{topic.title}</h3>
                       <p>{topic.desc}</p>
-                      <Link to={topic.link} className="help-page-article-link">
+                      {/* ✅ Use normal <a> for HashRouter navigation */}
+                      <a
+                        href={hashLink(topic.link)}
+                        className="help-page-article-link"
+                      >
                         {t('helpPage.articleLink')}
-                      </Link>
+                      </a>
                     </div>
                   ))}
                 </div>
               </section>
             )}
+
             {term && (
               <div className="p-6 w-full">
                 {paginatedResults.length > 0 ? (
                   <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-2">
                     {paginatedResults.map((res, index) => (
-                      // eslint-disable-next-line react-x/no-array-index-key
                       <div key={index} className="help-page-topic-card">
                         <h3>{res.title}</h3>
                         <p>{res.desc}</p>
-                        <Link to={res.link} className="help-page-article-link">
+                        <a
+                          href={hashLink(res.link)}
+                          className="help-page-article-link"
+                        >
                           {t('helpPage.articleLink')}
-                        </Link>
+                        </a>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <p className="text-theme opacity-60 text-center">
-                    {t('searchPage.noResults', { term: term })}
+                    {t('searchPage.noResults', { term })}
                   </p>
                 )}
               </div>
             )}
+
             {term && totalPages > 1 && (
               <div className="pagination-controls flex justify-center space-x-4 p-4">
                 <button
                   type="button"
                   disabled={currentPage === 1}
-                  onClick={() => {
-                    setCurrentPage(currentPage - 1);
-                  }}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   {t('helpPage.previous')}
@@ -313,9 +287,7 @@ const HelpPage: React.FC = () => {
                 <button
                   type="button"
                   disabled={currentPage === totalPages}
-                  onClick={() => {
-                    setCurrentPage(currentPage + 1);
-                  }}
+                  onClick={() => setCurrentPage(currentPage + 1)}
                   className="px-4 py-2 bg-theme rounded disabled:opacity-50"
                 >
                   {t('helpPage.next')}
