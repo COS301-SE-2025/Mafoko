@@ -307,8 +307,10 @@ const WorkspacePage: React.FC = () => {
       (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
     ) {
       //nothing
-      console.log('   ')
-      {/* */}
+      console.log('   ');
+      {
+        /* */
+      }
     }
 
     void loadWorkspaceData();
@@ -356,7 +358,7 @@ const WorkspacePage: React.FC = () => {
       event: CustomEvent<{ action?: string; name?: string }>,
     ) => {
       void loadWorkspaceData();
-      console.log(event)
+      console.log(event);
 
       const timestamp = Date.now().toString();
       localStorage.setItem('workspaceLastLoaded', timestamp);
@@ -1618,7 +1620,9 @@ const WorkspacePage: React.FC = () => {
                                       onChange={() => {
                                         handleToggleGroupSelection(groupName);
                                       }}
-                                      onClick={(e) => { e.stopPropagation(); }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                      }}
                                       className="group-checkbox"
                                     />
                                     <FolderPlus className="group-icon" />
