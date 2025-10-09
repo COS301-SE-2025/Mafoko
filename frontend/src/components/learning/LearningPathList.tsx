@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import LanguageCard from './LanguageCard';
+import { useTranslation } from 'react-i18next';
 
 type GlossaryRef = { glossary_name: string };
 
@@ -24,17 +25,16 @@ const LearningPathList: FC<LearningPathListProps> = ({
   onPathDelete,
   isLoading,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full text-theme">
-      <h1>Learning Paths</h1>
+      <h1>{t('learningPathPage.learningPathlist.learningPathTitle')}</h1>
       <div className="w-full">
         {isLoading ? (
-          <p>Loading paths...</p>
+          <p>{t('learningPathPage.learningPathlist.loadingPaths')}...</p>
         ) : paths.length === 0 ? (
-          <p>
-            You haven't created any learning paths yet. Click "+ New Path" to
-            get started!
-          </p>
+          <p>{t('learningPathPage.learningPathlist.message')}</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-6 w-full">
             {paths.map((path) => {

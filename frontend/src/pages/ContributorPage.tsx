@@ -857,7 +857,9 @@ const ContributorPage: React.FC = () => {
                     onValueChange={(value) => setSelectedDomain(value)}
                   >
                     <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder={t('contributePlaceholder.domain')} />
+                      <SelectValue
+                        placeholder={t('contributePlaceholder.domain')}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {domains.map((d) => (
@@ -875,7 +877,9 @@ const ContributorPage: React.FC = () => {
                     onValueChange={(value) => setSelectedLanguage(value)}
                   >
                     <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder={t('contributePlaceholder.language')} />
+                      <SelectValue
+                        placeholder={t('contributePlaceholder.language')}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {languages.map((l) => (
@@ -890,9 +894,7 @@ const ContributorPage: React.FC = () => {
               <div className="translations-section">
                 <h3>{t('termAdditions.extTransTitle')}</h3>
                 <div className="form-group">
-                  <label>
-                    {t('termAdditions.extContent')}
-                  </label>
+                  <label>{t('termAdditions.extContent')}</label>
                   <input
                     type="text"
                     value={translationSearchQuery}
@@ -1015,7 +1017,9 @@ const ContributorPage: React.FC = () => {
                         value={selectedDomain}
                         onChange={(e) => setSelectedDomain(e.target.value)}
                       >
-                        <option value="">{t('contributePlaceholder.domain')}</option>
+                        <option value="">
+                          {t('contributePlaceholder.domain')}
+                        </option>
                         {domains.map((d) => (
                           <option key={d} value={d}>
                             {d}
@@ -1029,7 +1033,9 @@ const ContributorPage: React.FC = () => {
                         value={selectedLanguage}
                         onChange={(e) => setSelectedLanguage(e.target.value)}
                       >
-                        <option value="">{t('contributePlaceholder.language')}</option>
+                        <option value="">
+                          {t('contributePlaceholder.language')}
+                        </option>
                         {languages.map((l) => (
                           <option key={l} value={l}>
                             {l}
@@ -1041,9 +1047,7 @@ const ContributorPage: React.FC = () => {
                   <div className="translations-section">
                     <h3>{t('termAdditions.extTransTitle')}</h3>
                     <div className="form-group">
-                      <label>
-                        {t('termAdditions.content2')}
-                      </label>
+                      <label>{t('termAdditions.content2')}</label>
                       <input
                         type="text"
                         value={translationSearchQuery}
@@ -1158,9 +1162,7 @@ const ContributorPage: React.FC = () => {
         <div className="review-modal-backdrop">
           <div className="review-modal">
             <h2>{t('termAdditions.deleteApplication')}</h2>
-            <p>
-              {t('termAdditions.deleteContent')}
-            </p>
+            <p>{t('termAdditions.deleteContent')}</p>
             <div className="modal-actions">
               <button
                 onClick={() => {

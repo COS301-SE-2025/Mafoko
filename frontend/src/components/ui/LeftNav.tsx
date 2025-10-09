@@ -12,7 +12,6 @@ import {
 import {
   Settings,
   Trophy,
-  PenTool,
   Briefcase,
   Book,
   Search,
@@ -300,12 +299,12 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
       <div className="left-nav-header">
         <div className="left-nav-atitle-section">
           <h2 className="left-nav-app-title" style={{ fontSize: '32px' }}>
-           Mafoko
+            Mafoko
           </h2>
         </div>
         <div className="logo-container">
           <img
-            src="/Marito/icons/maskable_icon_x512.png"
+            src="/Mafoko/icons/maskable_icon_x512.png"
             alt="DFSI Logo"
             className="dfsi-logo"
           />

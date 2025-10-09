@@ -90,7 +90,7 @@
       "title": "Endzhaku ka Projeka",
       "content": "Mafoko yi endliwe eka nhlangano wa Data Science for Social Impact (DSFSI) eka Yunivhesiti ya Pretoria."
     }
-},
+  },
 
   "landingPage": {
     "registerButton": "Tsarisa",
@@ -427,6 +427,187 @@
   "contributePlaceholder": {
     "domain": "Hlawula Ndhawu",
     "language": "Hlawula Ririmi"
+  },
+  "analyticsPage": {
+    "filterByLang": "Filitara Hi Ririmi",
+    "allLanguages": "Tindzimi Hinkwato"
+  },
+  "homePage": {
+    "connecting": "Yi hlanganisa",
+    "languages": "Tindzimi ta Afrika Dzonga"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "A wu ri eka inthanete - ku kombisa data leyi hlayisiweke",
+    "searchPlaceholder": "Secha marito",
+    "filterByLanguage": "Filitara Hi Ririmi",
+    "allLanguages": "Tindzimi Hinkwato",
+    "activeFilter": "Filitara Leyi Tirhaka",
+    "clear": "Sula",
+    "loadingTerms": "Ku layicha Marito",
+    "noTermsFound": "Ku hava marito lama kumiweke eka glossary leyi.",
+    "noTermsMatch": "Ku hava marito lama fambelanaka ni ku secha ka wena.",
+    "page": "tluka",
+    "of": "ra",
+    "exportData": "Rhumela Datha",
+    "exportMessage": "Kopa marito hinkwawo lama humaka eka",
+    "exportMessage2": "hi xivumbeko lexi u xi rhandzaka.",
+    "format": "Xivumbeko",
+    "agriculture": "Marito lama khumbaka vurimi, ku hlayisa swifuwo, ni tindlela ta ntirho wa vurimi.",
+    "construction": "Marito lama tirhisiwaka eka ntirho wa ku aka, switirhisiwa swa kuxavisiwa ni ku lawula projeke.",
+    "demography": "Marito ya nkoka lama hlamuselaka vun’we bya vanhu ni tinhlayo ta vaakindhawu.",
+    "education": "Marito lama fambelanaka ni dyondzo, ku letela ni tindlela ta dyondzo.",
+    "energy": "Mikombiso leyi fambelanaka ni ku humesa matimba ni tindlela ta matimba.",
+    "environment": "Marito lama hlamuselaka ku sirhelela tikokweti, vuakatiko ni ku hlayisa tikokweti hi nkarhi hinkwawo.",
+    "generalDemography": "Tinhlayo ta vanhu leti katsiweke, eka malembe, rimbewu ni ku rhurha ka vanhu.",
+    "businessEnterprises": "Mikombiso leyi fambelanaka ni vulawuri bya bindzu, vurhangeri ni ntirho wa khampani.",
+    "geography": "Marito lama fambelanaka ni ndhawu, swiphemu swa tiko ni ku endla mepe.",
+    "healthVitalStats": "Marito ni nkcazelo lama fambelanaka ni rihanyo, nhlayiso na tinhlayo ta nkoka ta rihanyo.",
+    "householdIncome": "Mikombiso leyi fambelanaka ni mali ya kaya, swiendlo ni xiyimo xa vutomi.",
+    "housingServices": "Marito lama hlamuselaka tiyindlu, swilo swa motse ni ntirho wa nkoka wa doroba.",
+    "incomeWealth": "Marito ya ikhonomi lama hlamuselaka ku avanyisa ka mali leyi hakeriwaka, penshene ni rifuwo ra kaya.",
+    "industryTrade": "Marito lama fambelanaka ni ntirho wa ku endla swilo, ntshovelo ni ntirho wa vandla ra vuhandzuri.",
+    "labour": "Marito lama fambelanaka ni ntirho lama katsiweke vatirhi, muholo ni makete wa vatirhi.",
+    "lawJustice": "Marito lama hlamuselaka milawu, timfanelo ni ndlela ya vululami.",
+    "manufacturing": "Mikombiso leyi fambelanaka ni ku endla swilo, tindlela ta ku endla ni ketani ya ku nyika.",
+    "nationalAccounts": "Swikombiso swa ikhonomi leswi katsiweke GDP, mali ya tiko ni tinhlayo ta timali.",
+    "government": "Marito lama hlamuselaka mavumbiwa ya mfumo, vurhangeri ni minkarhi ya mfumo wa vaaki.",
+    "populationCensus": "Marito lama fambelanaka ni ku hlayiwa ka vanhu ni ku hlamusela ka tinhlayo ta vaakindhawu.",
+    "poverty": "Mikombiso ni swiviko leswi pimaka vusweti, ku ka swi nga ringanani ni nhluvuko wa vaaki.",
+    "prices": "Marito ya ikhonomi lama fambelanaka ni timali, swikongomelo swa ntengo wa vatirhi ni matimba ya ku xava.",
+    "privateSector": "Marito lama hlamuselaka bindzu ra poraefete, matshalatshala ni ntirho wa khampani.",
+    "publicFinance": "Marito lama hlamuselaka tekanyetso ya mfumo, ntshovelo wa timali ni vulawuri bya timali ta vaaki.",
+    "scienceTech": "Mikombiso ya sayense ni thekinoloji leyi katsiweke vuhlayiseki ni ku tumbuluxa loku ku nga kona.",
+    "socialConditions": "Marito lama hlamuselaka madyondzo ya vaaki, mitirho ya vaaki ni xiyimo xa vutomi.",
+    "statisticalProcesses": "Marito ya vutshila lama hlamuselaka milawu ya tinhlayo, metadata ni tindlela ta datha.",
+    "businessRegisters": "Mikombiso leyi fambelanaka ni ku hlayisa ni ku pfuxeta tikhadikhodi ta mabindzu ya tiko.",
+    "tourism": "Marito lama fambelanaka ni vutshila bya vuhluvukisi, ku tshama hi nkarhi wo leha ni tinhlayo ta vaendzi.",
+    "tourismMigration": "Marito lama hlamuselaka ku famba ka vaendzi, minjheko ya ku rhurhela ni mafambelo ya vanhu.",
+    "trade": "Mikombiso leyi katsiweke ku xaviselana, ku rhumela ni bindzu ra matiko.",
+    "transportCommunication": "Marito lama hlamuselaka ku rhumela, vusirheleri ni mindzila ya vuhlanganisi.",
+    "searchGlossary": "Secha tidikshinari",
+    "loadingGlossary": "Ku layicha tidikshinari",
+    "glossaryError": "A ku na tidikshinari leti kumiweke",
+    "bookmarkError": "Ku veka ntlhangu ku tsandzekile",
+    "bookmarkErrorDetails": "Ku humelele xihoxo lexi nga languteriwangiki.",
+    "connectionError": "Ku veka ntlhangu swi lava ku hlanganisiwa na inthanete.",
+    "loginError": "Tshinela eka akhawunti ya wena ku veka ntlhangu eka tidikshinari.",
+    "terms": "marito",
+    "hide": "Fihla",
+    "show": "Kombisa",
+    "loading": "Ku layicha...",
+    "langSelect": "Hlawula Ririmi",
+    "translating": "Ku hundzuluxa...",
+    "translate": "Hundzuluxa",
+    "Notranslate": "Ku hava vuhundzuluxeri lebyi kumekaka eka ririmi leri"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "U na ntilo leswaku u lava ku susa ndlela leyi ya dyondzo hilaha ku nga heriki?",
+      "createPath": "Endla Ndlela ya Dyondzo",
+      "cancel": "Khansela",
+      "words": "marito",
+      "language": "Ririmi",
+      "learningPathName": "Vito ra Ndlela ya Dyondzo",
+      "createNewPath": "Endla Ndlela Leyintshwa ya Dyondzo",
+      "toNextLevel": "eka xiyimo lexi landzelaka",
+      "overallProgress": "Nhluvuko Hinkwawo",
+      "levelTitle": "Xiyimo",
+      "newPath": "Ndlela Leyintshwa",
+      "confirm": "Tiyisisa",
+      "test": "Linga",
+      "studySession": "Xiyenge xa Dyondzo",
+      "glossaries": "Tikhoxari"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Tindlela ta Dyondzo",
+      "loadingPaths": "Yi layicha Tindlela",
+      "message": "A wu si endla ndlela ya dyondzo. Tshikelela '+ Ndlela Leyintshwa' ku sungula!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Vuya Eka Tindlela",
+      "flashCards": "Tikharata ta Dyondzo",
+      "testKnowledge": "Linga Vutivi",
+      "backToGlossaries": "Vuya Eka Tikhoxari",
+      "wordsCompleted": "marito lama helerisiweke",
+      "noTermsFound": "Ku hava Marito Lama Kumiweke",
+      "glossaryTermError": "Khoxari leyi a yi na marito sweswi.",
+      "tapToReveal": "Khomelela Ku Kombisa",
+      "known": "Lama Tiviwaka",
+      "notLearned": "Lama Nga Si Dyondzisiwaka",
+      "showing": "Yi komba",
+      "of": "ya",
+      "terms": "marito",
+      "page": "Tluka",
+      "noTranslation": "Ku hava Vuhundzuluxeri",
+      "exitTestKnowledge": "Huma Eka Nhlayo ya Vutivi",
+      "cards": "Tikharata",
+      "score": "Mavonelo",
+      "translateThisWord": "Hundzuluxa rito leri",
+      "correctAnswer": "Nhlamulo Leyinene",
+      "yourAnswer": "Nhlamulo ya Wena",
+      "nextCard": "Kharata Leyilandzelaka",
+      "finish": "Hedzisa",
+      "testComplete": "Ku Linga Ku Heterile",
+      "youGot": "U kumile",
+      "correct": "leswi hlayisiweke kahle",
+      "outOf": "eka",
+      "tryAgain": "Linga Nakambe"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Mintirho ya Mavonelo",
+    "weeklyGoals": "Swikongomelo swa Vhiki",
+    "howToEarnXP": "Ndlela yo Kuma XP",
+    "unlocked": "Yi Pfurile",
+    "level": "Nlevele",
+    "loading": "Yi ri eku layisheni",
+    "totalXP": "XP Hinkwayo",
+    "currentStreak": "Ku tshama u ri karhi u endla",
+    "achievementsLabel": "Switirhisiwa swa Mavonelo",
+    "noActivity": "A ku na ntirho",
+    "addTerm": "Engetela rito lerintshwa",
+    "addComment": "Engetela nhlamuselo",
+    "receiveUpvote": "Amukela mavhoti ya le henhla",
+    "dailyLoginBonus": "Nhlengeletano ya ku nghena siku na siku",
+    "perUpvote": "hi xihlawulekisi xin’we na xin’we xa le henhla",
+    "noGoals": "A ku na swikongomelo leswi nga kona vhiki leri",
+    "checkBackNextWeek": "Vuya hi vhiki leri taka",
+    "completed": "Yi Hete",
+    "loadingWeeklyGoals": "Yi ri eku layisheni ka swikongomelo swa vhiki",
+    "progress": "ku hluvuka",
+    "loadingAchievements": "Yi ri eku layisheni ka switirhisiwa swa mavonelo",
+    "of": "ya",
+    "termPioneer": {
+      "title": "Mutumbuluxi wa Marito",
+      "desc": "Engetela marito ya wena yo sungula ya 10 eka buku ya marito"
+    },
+    "communityContributor": {
+      "title": "Muchumayeri wa Ndzhaka ya Vanhu",
+      "desc": "Tsala swiviko swa 25 eka marito"
+    },
+    "crowdFavorite": {
+      "title": "Loyi A Tsakelwaka Hi Vanhu",
+      "desc": "Amukela mavhoti ya 100 eka leswi u swi nyikeke"
+    },
+    "multilingualMaster": {
+      "title": "Nyikwetlembetano wa Tindzimi Tingi",
+      "desc": "Humelela eka tibuku ta marito ta tindzimi ta ntlhanu to hambana"
+    },
+    "consistencyChampion": {
+      "title": "Xipfumeri Xa Ku Tiyimisela",
+      "desc": "Endla ntirho wa masiku ya 30 hi ku landelana"
+    },
+    "languageGuardian": {
+      "title": "Mulanguteri wa Ririmi",
+      "desc": "Pfumelela mintirho ya wena ya 50 ku hlayiwa hi vatsari"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Mutirhisi Wa Xikombiso Lexinene",
+    "Log in on 6 different days this week": "Nghena hi masiku ya tsevu lama hambaneke evhikini leyi",
+    "Streak Keeper": "Mulondzeleri wa Ku Tiyimisela",
+    "Maintain a login streak of 3 consecutive days": "Tiyisisa ku nghena hi masiku ya mune lama landelanaka",
+    "Active Commenter": "Muchumayeri wa Swihlawulekisi",
+    "Write 4 comments on terms this week": "Tsala swiviko swa mune hi marito evhikini leyi"
   }
-
 }

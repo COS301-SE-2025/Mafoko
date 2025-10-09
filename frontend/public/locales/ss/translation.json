@@ -160,7 +160,7 @@
       "title": "Ngemuva kwePhrojekthi",
       "content": "IMafoko yakhiwe yelihlangano leData Science for Social Impact (DSFSI) eNyuvesi yasePitoli."
     }
-},
+  },
 
   "glossaryPage": {
     "title": "Luhla Lwemagama Ngetilimi Letinyenti",
@@ -426,5 +426,187 @@
   "contributePlaceholder": {
     "domain": "Khetsa Sikhala",
     "language": "Khetsa Lulwimi"
+  },
+  "analyticsPage": {
+    "filterByLang": "Hlungisa Ngemalulwimi",
+    "allLanguages": "Tonkhulumo Tonkhe"
+  },
+  "homePage": {
+    "connecting": "Ixhumanisa",
+    "languages": "Tilwimi taseNingizimu Afrika"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "Awukho ku-inthanethi - kuboniswa idatha legciniwe",
+    "searchPlaceholder": "Sesha emagama",
+    "filterByLanguage": "Hlungisa Ngemlomo",
+    "allLanguages": "Tindzimi Tonkhe",
+    "activeFilter": "Sihluti Lesisebentako",
+    "clear": "Sula",
+    "loadingTerms": "Ilayisha Emagama",
+    "noTermsFound": "Akukho emagama latfolakele kule glossary.",
+    "noTermsMatch": "Akukho emagama ahambelana nekusesha kwakho.",
+    "page": "likhasi",
+    "of": "la",
+    "exportData": "Thumela Idatha Ngaphandle",
+    "exportMessage": "Layisha onkhe emagama avela ku",
+    "exportMessage2": "ngesimo lolikhetsile.",
+    "format": "Simo",
+    "agriculture": "Emagama lahambelana netemo, kufuywa kwemfuyo, kanye netinqubo tekukhiqiza tekulima.",
+    "construction": "Emagama asetjentiswa ekwakheni, tintfo tekwakha, kanye nekuphatsa umsebenti.",
+    "demography": "Emagama abalulekile lachaza kubunjwa kwesive kanye netibalo temphakatsi.",
+    "education": "Emagama lahambelana nemfundvo, kufundzisa kanye netinhlelo temfundvo.",
+    "energy": "Imicondvo lehlobene nekukhiqizwa kwemandla kanye netinhlelo tamandla.",
+    "environment": "Emagama lachaza kuvikelwa kwemvelo, ekoloji kanye nekusimama kwemvelo.",
+    "generalDemography": "Tibalo temphakatsi letihlanganisa iminyaka, bulili kanye nekufuduka kwabantu.",
+    "businessEnterprises": "Imicondvo lehlobene nekuphatsa emagumbi ebhizinisi, kusungula kanye nemsebenti wekhamphani.",
+    "geography": "Emagama lahambelana netindawo, emaphrovinsi kanye nekudweba emamephu.",
+    "healthVitalStats": "Tincazelo nemagama lahambelana netempilo, inhlalakahle kanye netibalo letibalulekile.",
+    "householdIncome": "Imicondvo lehlobene netimali yasemakhaya, tindleko kanye netinga tekuphila.",
+    "housingServices": "Emagama lachaza tindlu, ingqalasimiso kanye netinsita temadolobha letibalulekile.",
+    "incomeWealth": "Emagama emnotfo lachaza kusatjalaliswa kwemholo, timali temhlalaphansi kanye nemcebo wemakhaya.",
+    "industryTrade": "Emagama lahambelana nemakhamphani, kutsengisa kanye nekukhiqiza embonini.",
+    "labour": "Emagama ahlobene nemsebenti kufaka sikhatsi setisebenti, imiholo kanye nemakethe yemsebenti.",
+    "lawJustice": "Emagama lachaza timo temtsetfo, emalungelo kanye nekuphatsa kwekwehlulela.",
+    "manufacturing": "Imicondvo lehlobene nekukhiqiza kwemboni, tinqubo tekukhiqiza kanye netichungechunge tekuphasisa.",
+    "nationalAccounts": "Tikhombandlela temnotfo letibalulekile letihlanganisa GDP, imali yelive kanye netibalo temali.",
+    "government": "Emagama lachaza sakhono selihulumende, kubusa kanye netinhlelo temphakatsi.",
+    "populationCensus": "Emagama lahambelana nekubalwa kwemphakatsi kanye nekucwaninga ngemphakatsi.",
+    "poverty": "Imicondvo kanye netindlela tekukala kubhaca, kungalingani kanye nekutfutfukisa umphakatsi.",
+    "prices": "Emagama emnotfo lachaza intengo, intengo yabathengi kanye nekwenta kwemali.",
+    "privateSector": "Emagama lachaza umsebenti wemabhizinisi angaphandle kwembuso, kutfutfukisa kanye netimali letitfutfukisako.",
+    "publicFinance": "Emagama lachaza tekanyetso yemali yembuso, intela kanye nekuphatsa kwezimali temphakatsi.",
+    "scienceTech": "Imicondvo yesayensi kanye neteknoloji lehlanganisa lucwaningo kanye nekuvelela lobusha.",
+    "socialConditions": "Emagama lachaza inhlalakahle yemphakatsi, tinsita temphakatsi kanye netimo tekuphila.",
+    "statisticalProcesses": "Emagama ebuchwepheshe lachaza amazinga etibalo, metadata kanye netindlela tedatha.",
+    "businessRegisters": "Imicondvo lehlobene nekugcina nekubuyeketa tibhuku temabhizinisi tembuso.",
+    "tourism": "Emagama lahambelana nekuvakasha, imboni yekungcebeleka kanye netibalo tebavakashi.",
+    "tourismMigration": "Emagama lachaza kuhamba kwemvakashi, tinhlobo tekufuduka kanye nekufuduka kwabantu.",
+    "trade": "Imicondvo lehlanganisa kuhlanganyela ekutengi, kutsengisa kanye nekushintshana kwelive nelive.",
+    "transportCommunication": "Emagama lachaza tindlela tekuthutha, ingqalasimiso kanye netinhlelo tekukhulumisana.",
+    "searchGlossary": "Sesha tidikshinari",
+    "loadingGlossary": "Ilayisha tidikshinari",
+    "glossaryError": "Akukho tidikshinari letitfolakele",
+    "bookmarkError": "Kubeka luphawu kwehlulekile",
+    "bookmarkErrorDetails": "Kwentiwe iphutha lelingakalindzeleki.",
+    "connectionError": "Kubeka luphawu kudzinga kube nekunamatselana ku-inthanethi.",
+    "loginError": "Sicela ungene ngemvume ukuze ubeke luphawu kumadikhishinari.",
+    "terms": "emagama",
+    "hide": "Fihla",
+    "show": "Khombisa",
+    "loading": "Ilayisha...",
+    "langSelect": "Khetsa Lulwimi",
+    "translating": "Kuhumusha",
+    "translate": "Humusha",
+    "Notranslate": "Akukho kuhunyushwa lokutfolakalako kulolulwimi"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "Ucinisekile kutsi ufuna kususa lendlela yekufundza kuze kube phakadze?",
+      "createPath": "Yakha Lendlela Yekufundza",
+      "cancel": "Khansela",
+      "words": "emagama",
+      "language": "Lulwimi",
+      "learningPathName": "Libito Lelendlela Yekufundza",
+      "createNewPath": "Yakha Lendlela Lensha Yekufundza",
+      "toNextLevel": "kuya ezingeni lelandzelako",
+      "overallProgress": "Inchubekela Embili Yonke",
+      "levelTitle": "Lizinga",
+      "newPath": "Lendlela Lensha",
+      "confirm": "Cinisekisa",
+      "test": "Linga",
+      "studySession": "Seshini Yekufundza",
+      "glossaries": "Tiglosari"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Tinhlelo Tekufundza",
+      "loadingPaths": "Ilayisha Tindlela",
+      "message": "Awukakayakhi lendlela yekufundza. Cindzetela '+ Lendlela Lensha' kuqala!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Buyela Etindleleni",
+      "flashCards": "Emakhadi Ekufundza",
+      "testKnowledge": "Hlola Ulwati",
+      "backToGlossaries": "Buyela KumaGlossari",
+      "wordsCompleted": "emagama lacedvwe",
+      "noTermsFound": "Awekho emagama latfolakele",
+      "glossaryTermError": "Le glossary ayikanawo emagama njengamanje.",
+      "tapToReveal": "Cindzetela Kuveza",
+      "known": "Latiwako",
+      "notLearned": "Angakafundvwa",
+      "showing": "Ibonisa",
+      "of": "ya",
+      "terms": "emagama",
+      "page": "Likhasi",
+      "noTranslation": "Akunawo Umhumusho",
+      "exitTestKnowledge": "Phuma Ekuhlolweni Kwelwati",
+      "cards": "Emakhadi",
+      "score": "Emaphuzu",
+      "translateThisWord": "Humusha ligama leli",
+      "correctAnswer": "Imphendvulo Lenephile",
+      "yourAnswer": "Imphendvulo Yakho",
+      "nextCard": "Likhadi Lelilandzelako",
+      "finish": "Cedza",
+      "testComplete": "Kuhlolwa Kucedziwe",
+      "youGot": "Utfumele",
+      "correct": "letiphumelelayo",
+      "outOf": "ku",
+      "tryAgain": "Phindza Futsi"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Umsebenti WeKunikelwa",
+    "weeklyGoals": "Tinhloso Taseviki",
+    "howToEarnXP": "Indlela Yekutfolela i-XP",
+    "unlocked": "Kuvuliwe",
+    "level": "Lizinga",
+    "loading": "Iyafaka",
+    "totalXP": "i-XP Yonke",
+    "currentStreak": "Kuchubeka Kwamanje",
+    "achievementsLabel": "Timphumelelo",
+    "noActivity": "Kute Umsebenti",
+    "addTerm": "Faka ligama lelisha",
+    "addComment": "Faka umbono",
+    "receiveUpvote": "Yemukela livoti lelikhuphukile",
+    "dailyLoginBonus": "Umklomelo Wekungena Njalo",
+    "perUpvote": "ngalivoti lelikhuphukile",
+    "noGoals": "Kute Tinhloso Levikini",
+    "checkBackNextWeek": "Buyela evikini lelitako",
+    "completed": "Kucinisekisiwe",
+    "loadingWeeklyGoals": "Iyafaka tinhloso taseviki",
+    "progress": "kuqhubeka",
+    "loadingAchievements": "Iyafaka timphumelelo",
+    "of": "ya",
+    "termPioneer": {
+      "title": "Umphayona Wamagama",
+      "desc": "Faka emagama akho lali-10 ekucaleni kuhlobo lwamagama"
+    },
+    "communityContributor": {
+      "title": "Umnikeli Wemphakatsi",
+      "desc": "Bhala emavi langema-25 etimphakatsini tamagama"
+    },
+    "crowdFavorite": {
+      "title": "Loyintandokati Yemphakatsi",
+      "desc": "Yemukela emavoti langema-100 ekunikeleni kwakho"
+    },
+    "multilingualMaster": {
+      "title": "Ingcweti Yemalulwimi Lamanyenti",
+      "desc": "Nikela kumabhuku emagama emalulwimi lamahlanu lehlukene"
+    },
+    "consistencyChampion": {
+      "title": "Inchampiyoni Yekuchubeka",
+      "desc": "Sebenta emalanga langema-30 elandelanayo ngaphandle kwekuhluleka"
+    },
+    "languageGuardian": {
+      "title": "Umlondvoloti Welulwimi",
+      "desc": "Vumela kunikelwa kwakho lokungema-50 kuhlolwe bachwepheshe"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Umsebenzisi Lohleleke Kahle",
+    "Log in on 6 different days this week": "Ngena ngemvume etinsukwini letisitfupha letehlukene kuleliviki",
+    "Streak Keeper": "Umlondvoloti Wechungechunge",
+    "Maintain a login streak of 3 consecutive days": "Gcina uchungechunge lwekungenela ngemvume etinsukwini letintsatfu letilandzelanayo",
+    "Active Commenter": "Umphawuli Losebentako",
+    "Write 4 comments on terms this week": "Bhala emavi lamane ngemagama kuleliviki"
   }
 }

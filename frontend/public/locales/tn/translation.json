@@ -372,7 +372,7 @@
     "suggestions": "Tlhahiso",
     "complaint": "Pelaelo",
     "compliment": "Thoriso"
-  }
+  },
   "navbar": {
     "mainNavigation": "Go Tsamaelana Gape Kgatlhong",
     "analytics": "Ditshekatsheko",
@@ -427,6 +427,187 @@
   "contributePlaceholder": {
     "domain": "Kgetha Karolo",
     "language": "Kgetha Puo"
+  },
+  "analyticsPage": {
+    "filterByLang": "Tlhotlheletsa Ka Puo",
+    "allLanguages": "Dipuo Tsotlhe"
+  },
+  "homePage": {
+    "connecting": "E a golagana",
+    "languages": "Dipuo tsa Aforika Borwa"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "Ga o mo inthaneteng - go bontshiwa data e e bolokilweng",
+    "searchPlaceholder": "Batla mafoko",
+    "filterByLanguage": "Tlhotlheletsa ka Puo",
+    "allLanguages": "Dipuo Tsotlhe",
+    "activeFilter": "Filtha e e Dirang",
+    "clear": "Phimola",
+    "loadingTerms": "E laisa Mafoko",
+    "noTermsFound": "Ga go mafoko a a fitlhetsweng mo pukuntshung eno.",
+    "noTermsMatch": "Ga go mafoko a a tshwanang le patlo ya gago.",
+    "page": "letlhaka",
+    "of": "la",
+    "exportData": "Romela Data",
+    "exportMessage": "Kopolola mafoko otlhe a a tswang mo go",
+    "exportMessage2": "ka sebopego se o se ratang.",
+    "format": "Sebopego",
+    "agriculture": "Mafoko a a amang temo, go disa diphologolo, le ditsamaiso tsa tlhagiso ya temo.",
+    "construction": "Dikakanyo tsa kago, didiriswa tsa kago, le taolo ya merero.",
+    "demography": "Mafoko a botlhokwa a a tlhalosang ditlhopha tsa batho le dipalopalo tsa setšhaba.",
+    "education": "Mafoko a a amanang le thuto, dithuto, le ditsamaiso tsa thuto.",
+    "energy": "Dikakanyo tse di amanang le tlhagiso ya maatla le ditsamaiso tsa maatla.",
+    "environment": "Mafoko a a tlhalosang tshireletso ya tikologo, tikologo le botshepegi jwa tikologo.",
+    "generalDemography": "Dipalopalo tsa batho tse di akaretsang dingwaga, bong le go fuduga ga batho.",
+    "businessEnterprises": "Dikakanyo tse di amanang le taolo ya dikgwebo, borakgwebo le tshedimosetso ya khampani.",
+    "geography": "Mafoko a a amanang le mafelo, diporofense le go dira mmepe.",
+    "healthVitalStats": "Dikakanyo le mafoko a a amanang le botsogo, boitekanelo, le dipalopalo tsa botlhokwa.",
+    "householdIncome": "Dikakanyo tse di amanang le tekanyetso ya lelapa, ditshenyegelo le maemo a botshelo.",
+    "housingServices": "Mafoko a a tlhalosang dintlo, ditlamelo le ditirelo tsa metse tse di botlhokwa.",
+    "incomeWealth": "Mafoko a ikonomi a a tlhalosang kabo ya letseno, dipenshene le maruo a malapa.",
+    "industryTrade": "Mafoko a a amanang le tlhagiso, kgwebo, le tlhabololo ya diindasteri.",
+    "labour": "Mafoko a a amanang le badiri go akaretsa madi a a duelang, meputso le maraka wa badiri.",
+    "lawJustice": "Mafoko a a tlhalosang tsamaiso ya molao, ditokelo le botsamaisi jwa tshiamiso.",
+    "manufacturing": "Dikakanyo tse di amanang le tlhagiso ya diindasteri, ditsamaiso tsa tlhagiso le ditlhopha tsa phepelo.",
+    "nationalAccounts": "Dikakanyo tsa ikonomi tse dikgolo tse di akaretsang GDP, letseno la bosetšhaba le dipalopalo tsa madi.",
+    "government": "Mafoko a a tlhalosang sebopego sa puso, botsamaisi le mekgatlho ya setšhaba.",
+    "populationCensus": "Mafoko a a amanang le palo ya batho le tshekatsheko ya dipalopalo tsa setšhaba.",
+    "poverty": "Dikakanyo le dikai tse di lekanyang lehuma, pharologanyo le tlhabololo ya setšhaba.",
+    "prices": "Mafoko a ikonomi a a tlhalosang ditlhwatlhwa, ditlhwatlhwa tsa bareki le maatla a go reka.",
+    "privateSector": "Mafoko a a tlhalosang dikgwebo tsa poraefete, matsete le ditiro tsa kgwebo.",
+    "publicFinance": "Mafoko a a tlhalosang tekanyetso ya puso, lekgetho le taolo ya madi a setšhaba.",
+    "scienceTech": "Dikakanyo tsa saense le thekenoloji tse di akaretsang dipatlisiso le boitlhomogi.",
+    "socialConditions": "Mafoko a a tlhalosang boitekanelo jwa setšhaba, ditirelo tsa setšhaba le maemo a botshelo.",
+    "statisticalProcesses": "Mafoko a a amanang le ditlhokego tsa dipalopalo, metadata le ditsamaiso tsa data.",
+    "businessRegisters": "Dikakanyo tse di amanang le go boloka le go ntšhafatsa direkoto tsa dikgwebo tsa bosetšhaba.",
+    "tourism": "Mafoko a a amanang le bohahlaudi, dithuto tsa boikhutso le dipalopalo tsa baeti.",
+    "tourismMigration": "Mafoko a a tlhalosang go tsamaya ga bahahlaudi, mekgwa ya go fuduga le phitlhelelo ya batho.",
+    "trade": "Dikakanyo tse di akaretsang kgwebo, thekišo le kgwebo ya ditšhaba.",
+    "transportCommunication": "Mafoko a a tlhalosang dipalangwa, ditlamelo le marangrang a puisano.",
+    "searchGlossary": "Batla dikishinari",
+    "loadingGlossary": "E laisa dikishinari",
+    "glossaryError": "Ga go na dikishinari tse di fitlhetsweng",
+    "bookmarkError": "Go bea letshwao go retetse",
+    "bookmarkErrorDetails": "Phoso e e sa solofelwang e diregile.",
+    "connectionError": "Go bea letshwao go batla kgolagano ya inthanete.",
+    "loginError": "Tsena o tsenele go bea letshwao mo dikishinaring.",
+    "terms": "mafoko",
+    "hide": "Fitlha",
+    "show": "Bontsha",
+    "loading": "E laisa...",
+    "langSelect": "Kgetha Puo",
+    "translating": "E fetolela",
+    "translate": "Fetolela",
+    "Notranslate": "Ga go phetolelo e e leng teng ya puo eno"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "A o nete gore o batla go phimola tsela eno ya thuto ka bosakhutleng?",
+      "createPath": "Bopa Tsela ya Thuto",
+      "cancel": "Khansela",
+      "words": "mafoko",
+      "language": "Puo",
+      "learningPathName": "Leina la Tsela ya Thuto",
+      "createNewPath": "Bopa Tsela e Ntšha ya Thuto",
+      "toNextLevel": "go ya kwa lefelong le le latelang",
+      "overallProgress": "Tšwelopele ka Kakaretso",
+      "levelTitle": "Lefelo",
+      "newPath": "Tsela e Ntšha",
+      "confirm": "Netefatsa",
+      "test": "Teko",
+      "studySession": "Seboka sa Thuto",
+      "glossaries": "Dikgosari"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Ditsela tsa Thuto",
+      "loadingPaths": "E laisa Ditsela",
+      "message": "Ga o ise o bopa tsela ya thuto. Tobetsa '+ Tsela e Ntšha' go simolola!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Boela Kwa Ditseleng",
+      "flashCards": "Dikharete tsa Thuto",
+      "testKnowledge": "Lekola Kitso",
+      "backToGlossaries": "Boela Kwa Dikgosari",
+      "wordsCompleted": "mafoko a feditšweng",
+      "noTermsFound": "Ga go Mafoko a a Fitlhetsweng",
+      "glossaryTermError": "Kgosari eno ga e na mafoko ga jaana.",
+      "tapToReveal": "Tobetsa go Bontsha",
+      "known": "A a Itsagalang",
+      "notLearned": "A a Sa Ithutiwang",
+      "showing": "E bontsha",
+      "of": "ya",
+      "terms": "mafoko",
+      "page": "Tsebe",
+      "noTranslation": "Ga go Phetolelo",
+      "exitTestKnowledge": "Tswa mo Tekong ya Kitso",
+      "cards": "Dikharete",
+      "score": "Mareko",
+      "translateThisWord": "Fetolela lefoko leno",
+      "correctAnswer": "Karabo e e Nepileng",
+      "yourAnswer": "Karabo ya Gago",
+      "nextCard": "Kharata e e Latelang",
+      "finish": "Fetsa",
+      "testComplete": "Teko e Feditse",
+      "youGot": "O bone",
+      "correct": "tse di nepahetseng",
+      "outOf": "mo go",
+      "tryAgain": "Leka Gape"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Tiro ya Meneelo",
+    "weeklyGoals": "Dikgakololo tsa Beke le Beke",
+    "howToEarnXP": "Tsela ya go Bona XP",
+    "unlocked": "E Bulegile",
+    "level": "Lefelo",
+    "loading": "E a laisa",
+    "totalXP": "XP Yotlhe",
+    "currentStreak": "Letoto la Jaanong",
+    "achievementsLabel": "Dikgatlhegelo",
+    "noActivity": "Ga go na Tiro",
+    "addTerm": "Tsenya lefoko le lentšha",
+    "addComment": "Tsenya tlhaloso",
+    "receiveUpvote": "Amogela palonyana e e kwa godimo",
+    "dailyLoginBonus": "Pono ya Letsatsi le Lengwe le Lengwe",
+    "perUpvote": "ka palonyana nngwe le nngwe",
+    "noGoals": "Ga go na Dikgakololo Beke Eno",
+    "checkBackNextWeek": "Boela gape Beke e E Tlang",
+    "completed": "E Feditse",
+    "loadingWeeklyGoals": "E laisa dikgakololo tsa beke le beke",
+    "progress": "tšwelopele",
+    "loadingAchievements": "E laisa dikgagatso",
+    "of": "ya",
+    "termPioneer": {
+      "title": "Mothusi wa Mafoko",
+      "desc": "Tsenya mafoko a gago a ntlha a le 10 mo bukeng ya mafoko"
+    },
+    "communityContributor": {
+      "title": "Moneelo wa Setšhaba",
+      "desc": "Tlhama ditlhaloso di le 25 mo mafokong"
+    },
+    "crowdFavorite": {
+      "title": "Yo o Ratwang ke Setšhaba",
+      "desc": "Amogela dipalonyana di le 100 mo meneelong ya gago"
+    },
+    "multilingualMaster": {
+      "title": "Setsebi sa Dipuo Tse Dintsi",
+      "desc": "Tlhoma letsoho mo dibukeng tsa mafoko tsa dipuo tse 5 tse di farologaneng"
+    },
+    "consistencyChampion": {
+      "title": "Mokwaledi wa Boitlamo",
+      "desc": "Nna o dira tiro malatsi a 30 a a latelanang"
+    },
+    "languageGuardian": {
+      "title": "Molebeli wa Dipuo",
+      "desc": "Dumelela meneelo ya gago e le 50 go netefadiwa ke ditsebi"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Modirisi yo o Neng",
+    "Log in on 6 different days this week": "Tsenela mo bekeng eno mo malatsing a le 6 a a farologaneng",
+    "Streak Keeper": "Motshedisi wa Tatelano",
+    "Maintain a login streak of 3 consecutive days": "Boloka tatelano ya go tsena mo malatsing a le mararo a a latelanang",
+    "Active Commenter": "Mokwaledi wa Maikutlo yo o Maitekanelo",
+    "Write 4 comments on terms this week": "Kwale maikutlo a le mane ka mafoko mo bekeng eno"
   }
-
 }

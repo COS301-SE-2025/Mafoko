@@ -339,7 +339,7 @@
     "suggestions": "Ingcebiso",
     "complaint": "Isikhalazo",
     "compliment": "Ukuncoma"
-  }
+  },
   "navbar": {
     "mainNavigation": "Ukuzulazula Okuphambili",
     "analytics": "Uhlalutyo",
@@ -394,6 +394,187 @@
   "contributePlaceholder": {
     "domain": "Khetha Icandelo",
     "language": "Khetha Ulwimi"
+  },
+  "analyticsPage": {
+    "filterByLang": "Hluza Ngolwimi",
+    "allLanguages": "Zonke Iilwimi"
+  },
+  "homePage": {
+    "connecting": "Iyaqhagamshela",
+    "languages": "Iilwimi zaseMzantsi Afrika"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "Awukho kwi-intanethi - kuboniswa idatha egciniweyo",
+    "searchPlaceholder": "Khangela amagama",
+    "filterByLanguage": "Hluza Ngolwimi",
+    "allLanguages": "Zonke Iilwimi",
+    "activeFilter": "Isihluzi Esisebenzayo",
+    "clear": "Cima",
+    "loadingTerms": "Kulayishwa Amagama",
+    "noTermsFound": "Akukho magama afunyenweyo kule glossary.",
+    "noTermsMatch": "Akukho magama ahambelana nophando lwakho.",
+    "page": "iphepha",
+    "of": "le",
+    "exportData": "Rhweba Idatha Ngaphandle",
+    "exportMessage": "Khuphela onke amagama avela ku",
+    "exportMessage2": "ngokwefomathi oyikhethileyo.",
+    "format": "Ifomathi",
+    "agriculture": "Amagama achaza ezolimo, ukufuya izilwanyana kunye neenkqubo zemveliso yezolimo.",
+    "construction": "Amagama asetyenziswa kulwakhiwo, izixhobo zokwakha kunye nolawulo lweprojekthi.",
+    "demography": "Amagama aphambili achaza iimpawu zabemi kunye neenkcukacha-manani zentlalo.",
+    "education": "Amagama anxulumene nemfundo, uqeqesho kunye neenkqubo zemfundo.",
+    "energy": "Iingcamango ezinxulumene nemveliso yamandla kunye neenkqubo zamandla.",
+    "environment": "Amagama achaza ukhuseleko lokusingqongileyo, i-ecology, kunye nokuqhubeka kokusingqongileyo.",
+    "generalDemography": "Iinkcukacha-manani ezibanzi zabemi ezibandakanya ubudala, isini, kunye nokufuduka kwabantu.",
+    "businessEnterprises": "Iingcamango ezinxulumene nolawulo lwamashishini, ushishino kunye nemisebenzi yeenkampani.",
+    "geography": "Amagama anxulumene neendawo, imimandla, kunye nokwenza iimephu.",
+    "healthVitalStats": "Iinkcazelo kunye namagama anxulumene nempilo, intlalontle kunye neenkcukacha-manani ezibalulekileyo.",
+    "householdIncome": "Iingcamango ezinxulumene nohlahlo-lwabiwo-mali lwasekhaya, iindleko kunye nemigangatho yokuphila.",
+    "housingServices": "Amagama achaza izindlu, iziseko ezingundoqo kunye neenkonzo ezisisiseko zasedolophini.",
+    "incomeWealth": "Amagama ezomnotho achaza ukusasazwa kwemivuzo, imbuyekezo kunye nempahla yasekhaya.",
+    "industryTrade": "Amagama anxulumene nemveliso, ukuthumela ngaphandle kunye nemveliso yezoqoqosho.",
+    "labour": "Amagama anxulumene nomsebenzi abandakanya abasebenzi, imivuzo kunye nemarike yomsebenzi.",
+    "lawJustice": "Amagama achaza iinkqubo zomthetho, amalungelo kunye nolawulo lobulungisa.",
+    "manufacturing": "Iingcamango ezinxulumene nemveliso yoshishino, iinkqubo zemveliso kunye neenkqubo zokuhanjiswa kwezinto.",
+    "nationalAccounts": "Iimpawu eziphambili zoqoqosho ezifaka i-GDP, ingeniso yelizwe kunye neenkcukacha-manani zezemali.",
+    "government": "Amagama achaza izakhiwo zikarhulumente, ulawulo kunye namaziko oluntu.",
+    "populationCensus": "Amagama anxulumene neCensus yokubala abantu kunye nokuhlalutya ulwazi lwabemi.",
+    "poverty": "Iingcamango kunye neempawu zokulinganisa intlupheko, ukungalingani kunye nophuhliso loluntu.",
+    "prices": "Amagama ezomnotho achaza ixabiso, amaxabiso abathengi kunye namandla okuthenga.",
+    "privateSector": "Amagama achaza amashishini azimeleyo, utyalo-mali kunye nemisebenzi yeenkampani.",
+    "publicFinance": "Amagama achaza uhlahlo-lwabiwo-mali lukarhulumente, irhafu kunye nolawulo lwezimali zoluntu.",
+    "scienceTech": "Iingcamango zesayensi kunye netekhnoloji ezibandakanya uphando kunye nokuqamba okungokutsha.",
+    "socialConditions": "Amagama achaza intlalontle yoluntu, iinkonzo zoluntu kunye neemeko zokuphila.",
+    "statisticalProcesses": "Amagama obuchwephesha achaza imigangatho yezibalo, i-metadata kunye neendlela zokusebenza kwedatha.",
+    "businessRegisters": "Iingcamango ezinxulumene nokugcina kunye nokuhlaziya iirejista zeshishini zikazwelonke.",
+    "tourism": "Amagama achaza ukhenketho, amashishini okuzonwabisa kunye neenkcukacha-manani zabakhenkethi.",
+    "tourismMigration": "Amagama achaza ukuhamba kwabakhenkethi, iindlela zokufuduka kunye nokuhamba kwabantu.",
+    "trade": "Iingcamango ezibandakanya ukuthengwa, ukuthengiswa kunye norhwebo lwamazwe ngamazwe.",
+    "transportCommunication": "Amagama achaza uthutho, iziseko ezingundoqo kunye nemigca yonxibelelwano.",
+    "searchGlossary": "Khangela iiglosa",
+    "loadingGlossary": "Kulayishwa iiglosa",
+    "glossaryError": "Akukho ziglosa zifunyenweyo",
+    "bookmarkError": "Ukubeka uphawu akuphumelelanga",
+    "bookmarkErrorDetails": "Kwenzeke impazamo engalindelekanga.",
+    "connectionError": "Ukubeka uphawu kufuna unxibelelwano lwe-intanethi.",
+    "loginError": "Nceda ungene ukuze ubeke uphawu kwiiglosa.",
+    "terms": "amagama",
+    "hide": "Fihla",
+    "show": "Bonisa",
+    "loading": "Kulayishwa...",
+    "langSelect": "Khetha Ulwimi",
+    "translating": "Iguqulela",
+    "translate": "Guqulela",
+    "Notranslate": "Akukho nguqulelo ifumanekayo kolu lwimi"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "Na o tiile hore o batla ho hlakola tsela ena ea thuto ka ho sa feleng?",
+      "createPath": "Etsa Tsela ea Thuto",
+      "cancel": "Khansela",
+      "words": "mantsoe",
+      "language": "Puo",
+      "learningPathName": "Lebitso la Tsela ea Thuto",
+      "createNewPath": "Etsa Tsela e Ncha ea Thuto",
+      "toNextLevel": "ho ea boemong bo latelang",
+      "overallProgress": "Tsoelo-pele ka Kakaretso",
+      "levelTitle": "Boemo",
+      "newPath": "Indlela Entsha",
+      "confirm": "Qinisekisa",
+      "test": "Uvavanyo",
+      "studySession": "Iseshoni Yokufunda",
+      "glossaries": "Iiglosari"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Ditsela tsa Thuto",
+      "loadingPaths": "E laisa Ditsela",
+      "message": "Ha o e-s’o thehe tsela ea thuto. Tobetsa '+ Tsela e Ncha' ho qala!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Khutlela ho Ditsela",
+      "flashCards": "Likarete tsa Thuto",
+      "testKnowledge": "Leka Tsebo",
+      "backToGlossaries": "Khutlela ho Likhoshare",
+      "wordsCompleted": "mantsoe a phethetsoeng",
+      "noTermsFound": "Ha ho Mantsoe a Fumanoeng",
+      "glossaryTermError": "Khoshare ena ha e so be le mantsoe hajoale.",
+      "tapToReveal": "Tobetsa ho Senola",
+      "known": "A Tsejoang",
+      "notLearned": "Ha a So Ithutoe",
+      "showing": "E bontša",
+      "of": "ea",
+      "terms": "mantsoe",
+      "page": "Leqephe",
+      "noTranslation": "Ha ho Phetolelo",
+      "exitTestKnowledge": "Tsoa Tekong ea Tsebo",
+      "cards": "Likarete",
+      "score": "Lintlha",
+      "translateThisWord": "Fetolela lentsoe lena",
+      "correctAnswer": "Karabo e Nepileng",
+      "yourAnswer": "Karabo ea Hao",
+      "nextCard": "Karete e Latelang",
+      "finish": "Qeta",
+      "testComplete": "Teko e Phethiloe",
+      "youGot": "O fumane",
+      "correct": "tse nepahetseng",
+      "outOf": "ho tsoa ho",
+      "tryAgain": "Leka Hape"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Umsebenzi Wokunikela",
+    "weeklyGoals": "Iinjongo Zeveki",
+    "howToEarnXP": "Indlela Yokufumana i-XP",
+    "unlocked": "Kuvuliwe",
+    "level": "Inqanaba",
+    "loading": "Ilayisha",
+    "totalXP": "i-XP iyonke",
+    "currentStreak": "Ulandelelwano Lwangoku",
+    "achievementsLabel": "Iziphumezo",
+    "noActivity": "Akukho Misebenzi",
+    "addTerm": "Yongeza igama elitsha",
+    "addComment": "Yongeza uluvo",
+    "receiveUpvote": "Fumana ivoti ephezulu",
+    "dailyLoginBonus": "Ibhonasi Yokungena Yonke Imihla",
+    "perUpvote": "nganye ivoti ephezulu",
+    "noGoals": "Akukho Injongo Kule Veki",
+    "checkBackNextWeek": "Buyela kwiveki ezayo",
+    "completed": "Kugqityiwe",
+    "loadingWeeklyGoals": "Ilayisha iinjongo zeveki",
+    "progress": "inkqubela phambili",
+    "loadingAchievements": "Ilayisha iziphumezo",
+    "of": "ye",
+    "termPioneer": {
+      "title": "Umqalisi Wamagama",
+      "desc": "Yongeza amagama akho ali-10 okuqala kwisiChazamazwi"
+    },
+    "communityContributor": {
+      "title": "Umnikeli Woluntu",
+      "desc": "Yenza izimvo ezingama-25 kwizichazamazwi zamagama"
+    },
+    "crowdFavorite": {
+      "title": "Intandokazi Yoluntu",
+      "desc": "Fumana iivoti ezili-100 kwizinto ozinikelileyo"
+    },
+    "multilingualMaster": {
+      "title": "Ingcali Yolwimi Oluninzi",
+      "desc": "Nikela kwizichazamazwi zeelwimi ezi-5 ezahlukeneyo"
+    },
+    "consistencyChampion": {
+      "title": "Inkampani Yokuzinzisa",
+      "desc": "Yiba nesakhono sokusebenza iintsuku ezingama-30 zilandelelana"
+    },
+    "languageGuardian": {
+      "title": "Umlondolozi Wolwimi",
+      "desc": "Vumela ukuba izinikelo zakho ezingama-50 ziqinisekiswe ziingcali"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Umsebenzisi Ozinzileyo",
+    "Log in on 6 different days this week": "Ngena kwiintsuku ezi-6 ezahlukeneyo kule veki",
+    "Streak Keeper": "Ugcini-layini",
+    "Maintain a login streak of 3 consecutive days": "Gcina ulayini lwemihla emi-3 elandelanayo",
+    "Active Commenter": "Umphenduli Osebenzayo",
+    "Write 4 comments on terms this week": "Bhala izimvo ezi-4 kumagama kule veki"
   }
-
 }

@@ -18,6 +18,7 @@ import {
 
 // Animated Language Counter Component
 const AnimatedLanguageCounter: React.FC = () => {
+  const { t } = useTranslation();
   const [count, setCount] = useState(1);
   const [showText, setShowText] = useState(false);
 
@@ -50,12 +51,12 @@ const AnimatedLanguageCounter: React.FC = () => {
 
   return (
     <div className="animated-title">
-      <span className="connecting-text">Connecting&nbsp;</span>
+      <span className="connecting-text">{t('homePage.connecting')}&nbsp;</span>
       <span className="animated-number">{count}</span>
       {showText && (
         <span className="languages-text fade-in">
           {' '}
-          South African languages...
+          {t('homePage.languages')}...
         </span>
       )}
     </div>
@@ -98,86 +99,6 @@ interface Letter {
 }
 
 // Mock data for random terms
-const MOCK_TERMS: RandomTerm[] = [
-  {
-    id: '1',
-    term: 'Ubuntu',
-    definition:
-      'A philosophy emphasizing the interconnectedness of humanity - "I am because we are"',
-    language: 'isiZulu',
-    category: 'Philosophy',
-  },
-  {
-    id: '2',
-    term: 'Lekgotla',
-    definition:
-      'A traditional meeting or gathering place where important decisions are made',
-    language: 'Sesotho',
-    category: 'Culture',
-  },
-  {
-    id: '3',
-    term: 'Vukuzenzele',
-    definition:
-      'Wake up and do it for yourself - a call for self-reliance and empowerment',
-    language: 'isiZulu',
-    category: 'Motivation',
-  },
-  {
-    id: '4',
-    term: 'Khongolose',
-    definition: 'To protect, preserve, or take care of something precious',
-    language: 'isiXhosa',
-    category: 'Action',
-  },
-  {
-    id: '5',
-    term: 'Sawubona',
-    definition:
-      'A greeting meaning "I see you" - acknowledging the whole person',
-    language: 'isiZulu',
-    category: 'Greeting',
-  },
-  {
-    id: '6',
-    term: 'Thokoza',
-    definition: 'An expression of gratitude, praise, or acknowledgment',
-    language: 'isiZulu',
-    category: 'Expression',
-  },
-  {
-    id: '7',
-    term: 'Indaba',
-    definition:
-      'A meeting, discussion, or conference to address important matters',
-    language: 'isiZulu',
-    category: 'Communication',
-  },
-  {
-    id: '8',
-    term: 'Bophelo',
-    definition:
-      'Life in its fullest sense - encompassing vitality and existence',
-    language: 'Sesotho',
-    category: 'Life',
-  },
-  {
-    id: '9',
-    term: 'Harambee',
-    definition:
-      'Let us all pull together - a call for collective effort and unity',
-    language: 'Swahili',
-    category: 'Unity',
-  },
-  {
-    id: '10',
-    term: 'Mamlambo',
-    definition:
-      'River goddess in Zulu mythology, associated with prosperity and fortune',
-    language: 'isiZulu',
-    category: 'Mythology',
-  },
-];
 
 const DashboardPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -187,6 +108,87 @@ const DashboardPage: React.FC = () => {
   const [activeMenuItem, setActiveMenuItem] = useState('dashboard');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [letters, setLetters] = useState<Letter[]>([]);
+
+  const MOCK_TERMS: RandomTerm[] = [
+    {
+      id: '1',
+      term: 'Ubuntu',
+      definition:
+        'A philosophy emphasizing the interconnectedness of humanity - "I am because we are"',
+      language: 'isiZulu',
+      category: 'Philosophy',
+    },
+    {
+      id: '2',
+      term: 'Lekgotla',
+      definition:
+        'A traditional meeting or gathering place where important decisions are made',
+      language: 'Sesotho',
+      category: 'Culture',
+    },
+    {
+      id: '3',
+      term: 'Vukuzenzele',
+      definition:
+        'Wake up and do it for yourself - a call for self-reliance and empowerment',
+      language: 'isiZulu',
+      category: 'Motivation',
+    },
+    {
+      id: '4',
+      term: 'Khongolose',
+      definition: 'To protect, preserve, or take care of something precious',
+      language: 'isiXhosa',
+      category: 'Action',
+    },
+    {
+      id: '5',
+      term: 'Sawubona',
+      definition:
+        'A greeting meaning "I see you" - acknowledging the whole person',
+      language: 'isiZulu',
+      category: 'Greeting',
+    },
+    {
+      id: '6',
+      term: 'Thokoza',
+      definition: 'An expression of gratitude, praise, or acknowledgment',
+      language: 'isiZulu',
+      category: 'Expression',
+    },
+    {
+      id: '7',
+      term: 'Indaba',
+      definition:
+        'A meeting, discussion, or conference to address important matters',
+      language: 'isiZulu',
+      category: 'Communication',
+    },
+    {
+      id: '8',
+      term: 'Bophelo',
+      definition:
+        'Life in its fullest sense - encompassing vitality and existence',
+      language: 'Sesotho',
+      category: 'Life',
+    },
+    {
+      id: '9',
+      term: 'Harambee',
+      definition:
+        'Let us all pull together - a call for collective effort and unity',
+      language: 'Swahili',
+      category: 'Unity',
+    },
+    {
+      id: '10',
+      term: 'Mamlambo',
+      definition:
+        'River goddess in Zulu mythology, associated with prosperity and fortune',
+      language: 'isiZulu',
+      category: 'Mythology',
+    },
+  ];
 
   // Random terms state
   const [randomTerms, setRandomTerms] = useState<RandomTerm[]>([]);
@@ -313,12 +315,30 @@ const DashboardPage: React.FC = () => {
         try {
           const parsedData = JSON.parse(storedUserDataString) as UserData;
           setUserData(parsedData);
-          if (parsedData.first_name && parsedData.last_name) {
-            setAvatarInitials(
-              `${parsedData.first_name.charAt(0)}${parsedData.last_name.charAt(0)}`.toUpperCase(),
-            );
-          } else if (parsedData.first_name) {
-            setAvatarInitials(parsedData.first_name.charAt(0).toUpperCase());
+          if (userData) {
+            if (userData.first_name && userData.last_name) {
+              setAvatarInitials(
+                `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else if (userData.first_name) {
+              setAvatarInitials(userData.first_name.charAt(0).toUpperCase());
+            } else if (userData.firstName && userData.lastName) {
+              setAvatarInitials(
+                `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase(),
+              );
+            }
+          } else {
+            if (parsedData.first_name && parsedData.last_name) {
+              setAvatarInitials(
+                `${parsedData.first_name.charAt(0)}${parsedData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else if (parsedData.first_name) {
+              setAvatarInitials(parsedData.first_name.charAt(0).toUpperCase());
+            } else if (parsedData.firstName && parsedData.lastName) {
+              setAvatarInitials(
+                `${parsedData.firstName.charAt(0)}${parsedData.lastName.charAt(0)}`.toUpperCase(),
+              );
+            }
           }
 
           // Always try to load profile picture since localStorage might not have the latest data
@@ -353,6 +373,8 @@ const DashboardPage: React.FC = () => {
               uuid: apiData.id,
               firstName: apiData.first_name,
               lastName: apiData.last_name,
+              first_name: apiData.first_name,
+              last_name: apiData.last_name,
               email: apiData.email,
               profilePictureUrl: apiData.profile_pic_url,
             };
@@ -361,6 +383,10 @@ const DashboardPage: React.FC = () => {
             if (newUserData.first_name && newUserData.last_name) {
               setAvatarInitials(
                 `${newUserData.first_name.charAt(0)}${newUserData.last_name.charAt(0)}`.toUpperCase(),
+              );
+            } else if (newUserData.firstName && newUserData.lastName) {
+              setAvatarInitials(
+                `${newUserData.firstName.charAt(0)}${newUserData.lastName.charAt(0)}`.toUpperCase(),
               );
             } else {
               setAvatarInitials('');
@@ -400,6 +426,10 @@ const DashboardPage: React.FC = () => {
                 setAvatarInitials(
                   `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
                 );
+              } else if (userData.firstName && userData.lastName) {
+                setAvatarInitials(
+                  `${userData.firstName.charAt(0)}userData{parsedData.lastName.charAt(0)}`.toUpperCase(),
+                );
               } else {
                 setAvatarInitials('');
               }
@@ -428,6 +458,10 @@ const DashboardPage: React.FC = () => {
               setAvatarInitials(
                 `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
               );
+            } else if (userData.firstName && userData.lastName) {
+              setAvatarInitials(
+                `${userData.firstName.charAt(0)}userData{parsedData.lastName.charAt(0)}`.toUpperCase(),
+              );
             } else {
               setAvatarInitials('');
             }
@@ -455,6 +489,10 @@ const DashboardPage: React.FC = () => {
           if (userData.first_name && userData.last_name) {
             setAvatarInitials(
               `${userData.first_name.charAt(0)}${userData.last_name.charAt(0)}`.toUpperCase(),
+            );
+          } else if (userData.firstName && userData.lastName) {
+            setAvatarInitials(
+              `${userData.firstName.charAt(0)}userData{parsedData.lastName.charAt(0)}`.toUpperCase(),
             );
           } else {
             setAvatarInitials('');
@@ -812,38 +850,28 @@ const DashboardPage: React.FC = () => {
 
                   <section className="about-mafoko max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left">
                     <h2 className="!text-3xl font-bold mb-4 text-primary">
-                      {t('dashboard.aboutMafoko.title')}
+                      {t('dashboard.aboutMofoko.title')}
                     </h2>
                     <p className="text-lg mb-6">
-                      {t('dashboard.aboutMafoko.content')}
+                      {t('dashboard.aboutMofoko.content')}
                     </p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
                       {t('dashboard.whyMafoko.title')}
                     </h2>
-                    <p className="mt-2">
-                      {t('dashboard.whyMafoko.content')}
-                    </p>
-                    <p className="mt-4">
-                      {t('dashboard.whyMafoko.content2')}
-                    </p>
-                    <p className="mt-4">
-                      {t('dashboard.whyMafoko.content3')}
-                    </p>
+                    <p className="mt-2">{t('dashboard.whyMafoko.content')}</p>
+                    <p className="mt-4">{t('dashboard.whyMafoko.content2')}</p>
+                    <p className="mt-4">{t('dashboard.whyMafoko.content3')}</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
                       {t('dashboard.whoMafoko.title')}
                     </h2>
-                    <p>
-                      {t('dashboard.whoMafoko.content')}
-                    </p>
+                    <p>{t('dashboard.whoMafoko.content')}</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
                       {t('dashboard.howMafoko.title')}
                     </h2>
-                    <p className="mt-2">
-                      {t('dashboard.howMafoko.content')}
-                    </p>
+                    <p className="mt-2">{t('dashboard.howMafoko.content')}</p>
                     <p className="mt-4">
                       {t('dashboard.howMafoko.help')}{' '}
                       <a href="/help" className="!text-[#00ceaf] underline">
@@ -855,9 +883,7 @@ const DashboardPage: React.FC = () => {
                     <h2 className="text-2xl font-semibold mt-8 mb-3">
                       {t('dashboard.behindProject.title')}
                     </h2>
-                    <p>
-                      {t('dashboard.behindProject.content')}
-                    </p>
+                    <p>{t('dashboard.behindProject.content')}</p>
                   </section>
 
                   <p className="team-credit">
@@ -901,26 +927,37 @@ const DashboardPage: React.FC = () => {
                     <div className="terms-grid">
                       {Array.isArray(randomTerms) &&
                         randomTerms.map((term) => (
-                          <div key={term.id} className="term-card">
-                            <div className="term-header">
-                              <h3 className="term-title">{term.term}</h3>
-                              <span className="term-language">
-                                {term.language}
-                              </span>
+                          <div
+                            key={term.id}
+                            className="term-card flex flex-col gap-5"
+                          >
+                            <div className="term-header flex flex-row gap-5 bg-pink">
+                              <div>
+                                <span className="term-language">
+                                  {term.language}
+                                </span>
+                              </div>
+                              <div className="w-full truncate overflow-hidden whitespace-nowrap">
+                                <h3 className="term-title w-[80%]">
+                                  {term.term}
+                                </h3>
+                              </div>
                             </div>
                             <p className="term-definition">{term.definition}</p>
-                            <button
-                              type="button"
-                              className="term-category"
-                              onClick={() => {
-                                handleCategoryClick(term.category);
-                              }}
-                              title={t('dashboard.browseCategoryGlossary', {
-                                category: term.category,
-                              })}
-                            >
-                              {term.category}
-                            </button>
+                            <div className="flex w-full justify-center items-center">
+                              <button
+                                type="button"
+                                className="term-category w-[90%] truncate overflow-hidden whitespace-nowrap"
+                                onClick={() => {
+                                  handleCategoryClick(term.category);
+                                }}
+                                title={t('dashboard.browseCategoryGlossary', {
+                                  category: term.category,
+                                })}
+                              >
+                                {term.category}
+                              </button>
+                            </div>
                           </div>
                         ))}
                       {!Array.isArray(randomTerms) && (

@@ -449,7 +449,7 @@ const AnalyticsPage: React.FC = () => {
                               fontWeight: '500',
                             }}
                           >
-                            Filter by Language
+                            {t('analyticsPage.filterByLang')}
                           </label>
                           <select
                             id="language-filter"
@@ -481,7 +481,7 @@ const AnalyticsPage: React.FC = () => {
                                 color: isDarkMode ? '#ffffff' : '#000000',
                               }}
                             >
-                              All Languages
+                              {t('analyticsPage.allLanguages')}
                             </option>
                             {availableLanguages.map((language) => (
                               <option

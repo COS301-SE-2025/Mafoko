@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
 import LsImage from '/LS_image.png';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 import DfsiLogo from '/DFSI_Logo.png';
 import { API_ENDPOINTS } from '../config';
 import { PasswordField } from '../components/ui/PasswordInput.tsx';
@@ -72,7 +71,6 @@ const LoginPage: React.FC = () => {
       {/* Right Half - Form */}
       <div className="login-right-half">
         <div className="auth-page-header">
-          <LanguageSwitcher />
           <img
             src={DfsiLogo}
             alt={t('loginPage.dsfsiLogoAlt', 'DSFSI Logo')}

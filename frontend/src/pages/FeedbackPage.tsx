@@ -277,13 +277,16 @@ const FeedbackPage = () => {
                 <CheckCircle className="success-icon" />
                 <h2 className="success-title">{t('feedbackPage.thanks')}!</h2>
                 <p className="success-message">
-                  {t('feedbackPage.your')} {activeTab} {t('feedbackPage.thanks')}!
+                  {t('feedbackPage.your')} {activeTab}{' '}
+                  {t('feedbackPage.thanks')}!
                 </p>
                 <div className="success-progress">
                   <div className="progress-bar">
                     <div className="progress-fill"></div>
                   </div>
-                  <p className="progress-text">{t('feedbackPage.redirect')}...</p>
+                  <p className="progress-text">
+                    {t('feedbackPage.redirect')}...
+                  </p>
                 </div>
               </div>
             </div>
@@ -379,14 +382,11 @@ const FeedbackPage = () => {
                   </h2>
                   <p className="form-description">
                     {activeTab === FeedbackType.SUGGESTION &&
-                      `${t('feedbackPage.description')}.`
-                    }
+                      `${t('feedbackPage.description')}.`}
                     {activeTab === FeedbackType.COMPLAINT &&
-                      `${t('feedbackPage.description2')}.`
-                    }
+                      `${t('feedbackPage.description2')}.`}
                     {activeTab === FeedbackType.COMPLIMENT &&
-                      `${t('feedbackPage.description')}!`
-                    }
+                      `${t('feedbackPage.description')}!`}
                   </p>
                 </div>
 

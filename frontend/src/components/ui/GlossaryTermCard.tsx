@@ -9,6 +9,7 @@ import {
   SelectItem,
 } from './select';
 import cachingService from '../../utils/cachingService';
+import { useTranslation } from 'react-i18next';
 
 interface GlossaryTermCardProps {
   term: {
@@ -20,6 +21,7 @@ interface GlossaryTermCardProps {
 }
 
 const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
+  const { t } = useTranslation();
   const [selectedLang, setSelectedLang] = useState<string>(''); // pending selection
   // @ts-ignore
   const [activeLang, setActiveLang] = useState<string>(''); // confirmed translation language
@@ -96,7 +98,11 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
           >
             <SelectTrigger className="w-full border border-[var(--glossary-border-color)] !bg-[var(--bg-tir)] text-[var(--text-theme)]">
               <SelectValue
-                placeholder={fetchingLangs ? 'Loading...' : 'Select language'}
+                placeholder={
+                  fetchingLangs
+                    ? t('glossaryPage2.loading')
+                    : t('glossaryPage2.langSelect')
+                }
               />
             </SelectTrigger>
             <SelectContent
@@ -120,12 +126,12 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Translating...
+              {t('glossaryPage2.translating')}...
             </>
           ) : (
             <>
               <Languages className="w-4 h-4" />
-              Translate
+              {t('glossaryPage2.translate')}
             </>
           )}
         </button>
@@ -135,7 +141,7 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
       {translation !== null && (
         <div className="mt-5 p-4 rounded-lg border border-[var(--glossary-border-color)] bg-[var(--bg-tir)]">
           <div className="text-[var(--text-theme)] text-base">
-            {translation || 'No translation available for this language.'}
+            {translation || t('glossaryPage2.Notranslate')}
           </div>
         </div>
       )}

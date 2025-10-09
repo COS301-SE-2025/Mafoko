@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Bookmark, Loader2 } from 'lucide-react';
 import { useDarkMode } from './DarkModeComponent';
-import { glossaryMap } from './glossaryMock';
+import { useGlossaryMap } from './glossaryMock';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import { cachingService } from '../../utils/cachingService';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface Glossary {
   name: string;
@@ -25,6 +26,9 @@ export default function GlossaryCard({
   onBookmark,
   isBookmarked: initialBookmarked = false,
 }: GlossaryCardProps) {
+  const { t } = useTranslation();
+  const glossaryMap = useGlossaryMap();
+  // @ts-ignore
   const { icon: Icon, description } = glossaryMap[glossary.name] ?? {
     icon: null,
     description: glossary.description,
@@ -44,15 +48,15 @@ export default function GlossaryCard({
 
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      toast('Bookmark Failed', {
-        description: 'Please log in to bookmark glossaries.',
+      toast(t('glossaryPage2.bookmarkError'), {
+        description: t('glossaryPage2.loginError'),
       });
       return;
     }
 
     if (networkStatus.isOffline) {
-      toast('Bookmark Failed', {
-        description: 'Bookmark operations require internet connection.',
+      toast(t('glossaryPage2.bookmarkError'), {
+        description: t('glossaryPage2.connectionError'),
       });
       return;
     }
@@ -91,14 +95,14 @@ export default function GlossaryCard({
 
         onBookmark?.(glossary, !currentlyBookmarked);
       } else {
-        toast('Bookmark Failed', {
-          description: 'Bookmark operation failed.',
+        toast(t('glossaryPage2.bookmarkError'), {
+          description: t('glossaryPage2.bookmarkErrorDetails'),
         });
       }
     } catch (error) {
       console.error('Bookmark toggle failed:', error);
-      toast('Bookmark Failed', {
-        description: 'Unexpected error occurred.',
+      toast(t('glossaryPage2.bookmarkError'), {
+        description: t('glossaryPage2.bookmarkErrorDetails'),
       });
     } finally {
       setLoading(false);
@@ -145,7 +149,7 @@ export default function GlossaryCard({
               {glossary.name}
             </h3>
             <p className="text-xs font-medium text-zinc-500">
-              {glossary.termCount} terms
+              {glossary.termCount} {t('glossaryPage2.terms')}
             </p>
             <p className="text-xs font-medium text-zinc-500">
               {description || glossary.description}

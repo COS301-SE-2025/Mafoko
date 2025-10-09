@@ -351,7 +351,7 @@
     }
   },
   "termsAndConditions": {
-    "title" : "Terme en Voorwaardes",
+    "title": "Terme en Voorwaardes",
     "welcome": "Welkom by Mafoko, 'n veeltalige platform wat ontwikkel en bedryf word deur die Datawetenskap vir Sosiale Impak (DSFSI) groep aan die Universiteit van Pretoria. Deur Mafoko te gebruik, stem jy in tot hierdie Bepalings en Voorwaardes. Lees dit asseblief sorgvuldig deur voordat jy toegang tot die platform verkry of daartoe bydra.",
     "purposeTitle": "Doel van Mafoko",
     "purpose": "Mafoko (wat \"woorde\" in Setswana beteken) is 'n opvoedkundige, nie-kommersiële platform wat Suid-Afrika se 11 amptelike tale bevorder deur toegang te bied tot veeltalige woordelyste en taalkundige hulpbronne. Die platform is ontwerp om inklusiewe leer, navorsing en samewerking oor taalgemeenskappe heen te ondersteun.",
@@ -374,7 +374,7 @@
     "changeTitle": "Wysigings aan Voorwaardes",
     "contactTitle": "Kontak",
     "contact": "Vir enige vrae of bekommernisse rakende hierdie Bepalings en Voorwaardes, kontak asseblief die Datawetenskap vir Sosiale Impak (DSFSI) groep aan die Universiteit van Pretoria.",
-    "email":"E-pos"
+    "email": "E-pos"
   },
   "feedbackPage": {
     "thanks": "Baie dankie",
@@ -454,7 +454,187 @@
   "contributePlaceholder": {
     "domain": "Kies Domein",
     "language": "Kies Taal"
+  },
+  "analyticsPage": {
+    "filterByLang": "Filtreer Volgens Taal",
+    "allLanguages": "Alle Tale"
+  },
+  "homePage": {
+    "connecting": "Koppel",
+    "languages": "Suid-Afrikaanse tale"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "Jy is vanlyn - vertoon tans gestoorde data",
+    "searchPlaceholder": "Soek terme",
+    "filterByLanguage": "Filtreer volgens taal",
+    "allLanguages": "Alle tale",
+    "activeFilter": "Aktiewe filter",
+    "clear": "Vee uit",
+    "loadingTerms": "Laai terme",
+    "noTermsFound": "Geen terme is vir hierdie woordelys gevind nie.",
+    "noTermsMatch": "Geen terme stem met jou soektog ooreen nie.",
+    "page": "bladsy",
+    "of": "van",
+    "exportData": "Voer data uit",
+    "exportMessage": "Laai alle terme af van",
+    "exportMessage2": "in jou verkose formaat.",
+    "format": "Formaat",
+    "agriculture": "Terme wat landbou, vee en landbouproduksieprosesse dek.",
+    "construction": "Terminologie vir konstruksiemetodes, materiale en projekbestuur.",
+    "demography": "Sleutelterme wat bevolkingskenmerke en sosiale statistiek beskryf.",
+    "education": "Terme wat verband hou met leer, opleiding en akademiese stelsels.",
+    "energy": "Begrippe en terminologie wat met kragopwekking en energiesisteme verband hou.",
+    "environment": "Terme wat omgewingsbewaring, ekologie en volhoubaarheid beskryf.",
+    "generalDemography": "Breër demografiese statistiek insluitend ouderdom, geslag en migrasie.",
+    "businessEnterprises": "Begrippe wat verband hou met besigheidsbestuur, entrepreneurskap en maatskappybedrywighede.",
+    "geography": "Geospatiale, streek- en kartografiese terminologie.",
+    "healthVitalStats": "Definisies en dataterme vir gesondheid, welsyn en vitale statistiek.",
+    "householdIncome": "Begrippe wat huishoudbegrotings, uitgawes en lewenstandaarde dek.",
+    "housingServices": "Terminologie rakende behuisingsinfrastruktuur en noodsaaklike stedelike dienste.",
+    "incomeWealth": "Ekonomiese terme oor inkomstedistribusie, pensioene en huishoudelike welvaart.",
+    "industryTrade": "Terme wat verband hou met vervaardiging, uitvoer en industriële produksie.",
+    "labour": "Werksverwante terminologie insluitend arbeidsmag, lone en arbeidsmarkte.",
+    "lawJustice": "Terme wat regsisteme, regte en geregtelike administrasie beskryf.",
+    "manufacturing": "Begrippe oor industriële vervaardiging, produksieprosesse en voorsieningskettings.",
+    "nationalAccounts": "Kern ekonomiese aanwysers insluitend BBP, nasionale inkomste en finansiële statistiek.",
+    "government": "Terme wat regeringsstrukture, administrasie en openbare instellings dek.",
+    "populationCensus": "Sensusverwante terminologie vir bevolkingsdata-insameling en demografiese ontleding.",
+    "poverty": "Begrippe en aanwysers wat armoede, ongelykheid en sosiale ontwikkeling meet.",
+    "prices": "Ekonomiese terme wat inflasie, verbruikerspryse en koopkrag dek.",
+    "privateSector": "Terminologie rakende private ondernemings, beleggings en korporatiewe aktiwiteite.",
+    "publicFinance": "Terme wat staatsbegrotings, belasting en fiskale bestuur dek.",
+    "scienceTech": "Wetenskaplike en tegnologiese begrippe insluitend navorsing en innovasie.",
+    "socialConditions": "Terme wat gemeenskapswelsyn, maatskaplike dienste en lewensomstandighede beskryf.",
+    "statisticalProcesses": "Tegniese terme wat statistiese standaarde, metadata en datametodologie dek.",
+    "businessRegisters": "Begrippe wat verband hou met die instandhouding en opdatering van nasionale besigheidsregisterstelsels.",
+    "tourism": "Terme wat verband hou met reis, ontspanningsbedrywe en besoekerstatistiek.",
+    "tourismMigration": "Terminologie wat toerismevloei, migrasietendense en mobiliteit beskryf.",
+    "trade": "Begrippe wat invoer, uitvoer en internasionale handel dek.",
+    "transportCommunication": "Terme wat logistiek, infrastruktuur en kommunikasienetwerke beskryf.",
+    "searchGlossary": "Soek woordelyste",
+    "loadingGlossary": "Laai woordelyste",
+    "glossaryError": "Geen woordelyste gevind nie",
+    "bookmarkError": "Boekmerk het misluk",
+    "bookmarkErrorDetails": "’n Onverwagte fout het voorgekom.",
+    "connectionError": "Boekmerkbedrywighede vereis ’n internetverbinding.",
+    "loginError": "Meld asseblief aan om woordelyste te boekmerk.",
+    "terms": "terme",
+    "hide": "Versteek",
+    "show": "Wys",
+    "loading": "Laai tans...",
+    "langSelect": "Kies taal",
+    "translating": "Vertaal tans",
+    "translate": "Vertaal",
+    "Notranslate": "Geen vertaling beskikbaar vir hierdie taal nie"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "Is u seker dat u hierdie leerpad permanent wil uitvee?",
+      "createPath": "Skep Leerpad",
+      "cancel": "Kanselleer",
+      "words": "woorde",
+      "language": "Taal",
+      "learningPathName": "Naam van Leerpad",
+      "createNewPath": "Skep ’n Nuwe Leerpad",
+      "toNextLevel": "na volgende vlak",
+      "overallProgress": "Algehele Vordering",
+      "levelTitle": "Vlak",
+      "newPath": "Nuwe Pad",
+      "confirm": "Bevestig",
+      "test": "Toets",
+      "studySession": "Studeersessie",
+      "glossaries": "Glossariums"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Leerpaaie",
+      "loadingPaths": "Laai Leerpaaie",
+      "message": "U het nog geen leerpaaie geskep nie. Klik op '+ Nuwe Pad' om te begin!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Terug na Paaie",
+      "flashCards": "Flitskaarte",
+      "testKnowledge": "Toets Kennis",
+      "backToGlossaries": "Terug na Glossariums",
+      "wordsCompleted": "woorde voltooi",
+      "noTermsFound": "Geen Terme Gevind nie",
+      "glossaryTermError": "Hierdie glossarium bevat nog geen terme nie.",
+      "tapToReveal": "Tik om te Wys",
+      "known": "Bekend",
+      "notLearned": "Nie geleer nie",
+      "showing": "Wys",
+      "of": "van",
+      "terms": "terme",
+      "page": "Bladsy",
+      "noTranslation": "Geen Vertaling",
+      "exitTestKnowledge": "Verlaat Kennis Toets",
+      "cards": "Kaarte",
+      "score": "Punte",
+      "translateThisWord": "Vertaal hierdie woord",
+      "correctAnswer": "Korrekte Antwoord",
+      "yourAnswer": "U Antwoord",
+      "nextCard": "Volgende Kaart",
+      "finish": "Voltooi",
+      "testComplete": "Toets Voltooi",
+      "youGot": "U het",
+      "correct": "korrek",
+      "outOf": "uit",
+      "tryAgain": "Probeer Weer"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Bydrae-aktiwiteit",
+    "weeklyGoals": "Weeklikse Doelwitte",
+    "howToEarnXP": "Hoe om XP te Verdien",
+    "unlocked": "Ontsluit",
+    "level": "Vlak",
+    "loading": "Laai tans",
+    "totalXP": "Totale XP",
+    "currentStreak": "Huidige Reeks",
+    "achievementsLabel": "Prestasie",
+    "noActivity": "Geen Aktiwiteit Nie",
+    "addTerm": "Voeg ’n nuwe term by",
+    "addComment": "Voeg ’n opmerking by",
+    "receiveUpvote": "Ontvang ’n stem op",
+    "dailyLoginBonus": "Daaglikse Aanmeldbonus",
+    "perUpvote": "per stem op",
+    "noGoals": "Geen Doelwitte Hierdie Week Nie",
+    "checkBackNextWeek": "Kyk weer volgende week",
+    "completed": "Voltooi",
+    "loadingWeeklyGoals": "Laai weeklikse doelwitte",
+    "progress": "vordering",
+    "loadingAchievements": "Laai prestasies",
+    "of": "van",
+    "termPioneer": {
+      "title": "Termynpionier",
+      "desc": "Voeg jou eerste 10 terme by die woordeboek"
+    },
+    "communityContributor": {
+      "title": "Gemeenskapsbydraer",
+      "desc": "Lewer 25 opmerkings oor terme"
+    },
+    "crowdFavorite": {
+      "title": "Gunsteling van die Gemeenskap",
+      "desc": "Ontvang 100 stemme op jou bydraes"
+    },
+    "multilingualMaster": {
+      "title": "Meester van Meertaligheid",
+      "desc": "Dra by tot 5 verskillende taalwoordeboeke"
+    },
+    "consistencyChampion": {
+      "title": "Kampioen van Konsekwentheid",
+      "desc": "Wees aktief vir 30 opeenvolgende dae"
+    },
+    "languageGuardian": {
+      "title": "Beskermheer van Tale",
+      "desc": "Laat 50 van jou bydraes deur kundiges bekragtig word"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Konsekwente Gebruiker",
+    "Log in on 6 different days this week": "Meld aan op 6 verskillende dae hierdie week",
+    "Streak Keeper": "Reeksbewaarder",
+    "Maintain a login streak of 3 consecutive days": "Handhaaf ’n aanmeldreeks van 3 opeenvolgende dae",
+    "Active Commenter": "Aktiewe Kommentator",
+    "Write 4 comments on terms this week": "Skryf 4 opmerkings oor terme hierdie week"
   }
-
-
 }

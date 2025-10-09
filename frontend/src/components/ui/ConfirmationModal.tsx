@@ -30,10 +30,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             className="modal-btn modal-cancel text-black"
             onClick={onClose}
           >
-            Cancel
+            {t('learningPathPage.main.cancel')}
           </button>
           <button className="modal-btn modal-confirm" onClick={onConfirm}>
-            Confirm
+            {t('learningPathPage.main.confirm')}
           </button>
         </div>
       </div>
