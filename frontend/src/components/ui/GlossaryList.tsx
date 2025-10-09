@@ -1,6 +1,7 @@
 import { Search } from 'lucide-react';
 import GlossaryCard from './GlossaryCard';
 import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Glossary {
   id: number;
@@ -29,6 +30,8 @@ export function GlossaryList({
   onView,
   loading,
 }: GlossaryListPageProps) {
+  const { t } = useTranslation();
+
   const filteredGlossaries = glossaries.filter((g) =>
     g.name.toLowerCase().includes(glossarySearch.toLowerCase()),
   );
@@ -65,7 +68,7 @@ export function GlossaryList({
           />
           <input
             type="text"
-            placeholder="Search glossaries..."
+            placeholder={t('glossaryPage2.searchGlossary')}
             value={glossarySearch}
             onChange={(e) => setGlossarySearch(e.target.value)}
             autoComplete="off"
@@ -84,9 +87,13 @@ export function GlossaryList({
 
       <div className="glossary-list">
         {loading ? (
-          <div className="glossary-list-message">Loading glossaries...</div>
+          <div className="glossary-list-message">
+            {t('glossaryPage2.loadingGlossary')}...
+          </div>
         ) : filteredGlossaries.length === 0 ? (
-          <div className="glossary-list-message">No glossaries found.</div>
+          <div className="glossary-list-message">
+            {t('glossaryPage2.glossaryError')}.
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 gap-[35px]">
             {filteredGlossaries.map((g) => (

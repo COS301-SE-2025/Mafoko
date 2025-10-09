@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookOpen, Play } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Glossary {
   id: string;
@@ -23,6 +24,8 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
   onFlashcards,
   completedPercentage = 0,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className="!bg-[var(--bg-tir)] rounded-xl p-3 sm:p-4 md:p-6 shadow-sm  cursor-default hover:shadow-md transition-all !text-theme"
@@ -67,7 +70,7 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
           }}
         >
           <BookOpen className="w-4 h-4" />
-          Flash Cards
+          {t('learningPathPage.learningGlossarylist.flashCards')}
         </button>
 
         <button
@@ -79,7 +82,7 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
           }}
         >
           <Play className="w-4 h-4" />
-          Test Knowledge
+          {t('learningPathPage.learningGlossarylist.testKnowledge')}
         </button>
       </div>
     </div>

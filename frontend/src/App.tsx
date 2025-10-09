@@ -56,6 +56,7 @@ import DashboardHelp from './pages/help/DashboardHelp.tsx';
 import HomeHelp from './pages/help/HomeHelp.tsx';
 import LearningPathHelp from './pages/help/LearningPathHelp.tsx';
 import { Toaster } from 'sonner';
+import { TermsAndConditionsPage } from './pages/TermsAndConditions.tsx';
 
 ChartJS.register(
   PieController,
@@ -150,6 +151,7 @@ function App() {
     <div className="MaritoApp">
       <Routes>
         <Route path="/Landing" element={<LandingPage />} />
+        <Route path="/terms" element={<TermsAndConditionsPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />

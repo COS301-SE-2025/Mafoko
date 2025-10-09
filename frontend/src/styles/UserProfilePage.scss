@@ -17,7 +17,7 @@ $card-dark: #3a4050;
   --profile-border: rgba(0, 0, 0, 0.1);
   --profile-shadow: rgba(0, 0, 0, 0.05);
   --profile-hover: rgba(0, 0, 0, 0.05);
-  --profile-accent: #{$accent-teal};
+  --profile-accent: #{$accent-pink};
   --profile-icon: #{$text-light};
 }
 
@@ -30,8 +30,42 @@ $card-dark: #3a4050;
   --profile-border: rgba(255, 255, 255, 0.1);
   --profile-shadow: rgba(0, 0, 0, 0.2);
   --profile-hover: rgba(255, 255, 255, 0.05);
-  --profile-accent: #{$accent-teal};
+  --profile-accent: #{$accent-pink};
   --profile-icon: #{$text-dark};
+}
+
+// SearchPage.scss
+$accent-pink: #f00a50;
+$accent-yellow: #f2d001;
+$accent-teal: #00ceaf;
+$accent-blue: #212431;
+$accent-white: #ffffff;
+$background-light: #f5f5f5;
+$background-dark: #363b4d;
+$secondary-light: #ffffff;
+$secondary-dark: #212431;
+$tertiary-light: #212431;
+$tertiary-dark: #ffffff;
+$text-light: #212431;
+$text-dark: #ffffff;
+
+/* Theme Class Definitions */
+.theme-light {
+  --bg-theme: #{$tertiary-light};
+  --text-theme: #{$text-dark};
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-dark};
+  --bg-first: #{$background-light};
+  --bg-tir: #{$secondary-light};
+}
+
+.theme-dark {
+  --bg-theme: #{$tertiary-dark};
+  --text-theme: #{$text-light};
+  --accent-color: #{$accent-pink};
+  --bg-secondary: #{$secondary-light};
+  --bg-first: #{$background-dark};
+  --bg-tir: #{$secondary-dark};
 }
 
 /* ===== MOBILE PROFILE HEADER ===== */
@@ -178,8 +212,8 @@ $card-dark: #3a4050;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--profile-card-bg);
-        color: var(--profile-secondary-text);
+        background-color: var(--profile-accent);
+        color: var(--bg-accent);
         font-size: 2.5rem;
         font-weight: 600;
       }

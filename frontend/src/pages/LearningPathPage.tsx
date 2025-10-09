@@ -25,8 +25,10 @@ import {
 } from '../components/ui/select.tsx';
 import { toast } from 'sonner';
 import { LearningPathGlossaryList } from '../components/ui/LearningPathGlossaryList.tsx';
+import { useTranslation } from 'react-i18next';
 
 const LearningPathPage: React.FC = () => {
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -378,7 +380,8 @@ const LearningPathPage: React.FC = () => {
         <div className="flex flex-row gap-5 justify-center items-center">
           <div className="relative group inline-block">
             <span className="level-badge cursor-pointer">
-              Level: {getProficiencyLevel(overallProgressPercentage)}
+              {t('learningPathPage.main.levelTitle')}:{' '}
+              {getProficiencyLevel(overallProgressPercentage)}
             </span>
 
             {/* Tooltip */}
@@ -387,7 +390,7 @@ const LearningPathPage: React.FC = () => {
               style={{ padding: '5px' }}
             >
               <div className="font-semibold mb-1 text-center">
-                Overall Progress
+                {t('learningPathPage.main.overallProgress')}
               </div>
               <div className="w-[80%] bg-gray-700 rounded-full h-2 mb-2 ">
                 <div
@@ -396,7 +399,8 @@ const LearningPathPage: React.FC = () => {
                 />
               </div>
               <div className="opacity-80 text-center">
-                {100 - overallProgressPercentage}% to next level
+                {100 - overallProgressPercentage}%{' '}
+                {t('learningPathPage.main.toNextLevel')}
               </div>
               <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--bg-tir)] rotate-45" />
             </div>
@@ -409,7 +413,9 @@ const LearningPathPage: React.FC = () => {
             }}
             type="button"
           >
-            <span className="new-path-button-text">+ New Path</span>
+            <span className="new-path-button-text">
+              + {t('learningPathPage.main.newPath')}
+            </span>
           </button>
         </div>
       );
@@ -495,16 +501,16 @@ const LearningPathPage: React.FC = () => {
             style={{ padding: '20px' }}
           >
             <h2 className="text-xl font-semibold mb-4 text-center">
-              Create a New Learning Path
+              {t('learningPathPage.main.createNewPath')}
             </h2>
 
             <div>
               <label className="font-bold !text-[15px]">
-                Learning Path Name
+                {t('learningPathPage.main.learningPathName')}
               </label>
               <input
                 type="text"
-                placeholder="Path Name"
+                placeholder={t('learningPathPage.main.learningPathName')}
                 value={modalPathName}
                 onChange={(e) => {
                   setModalPathName(e.target.value);
@@ -530,13 +536,17 @@ const LearningPathPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="font-bold">Language</label>
+              <label className="font-bold">
+                {t('learningPathPage.main.language')}
+              </label>
               <Select
                 value={modalLanguage}
                 onValueChange={(value) => void handleModalLanguageChange(value)}
               >
                 <SelectTrigger className="w-full mt-1 mb-3">
-                  <SelectValue placeholder="Select language" />
+                  <SelectValue
+                    placeholder={t('contributePlaceholder.language')}
+                  />
                 </SelectTrigger>
                 <SelectContent
                   className="max-h-60 z-[9999] !bg-[var(--bg-first)] text-theme "
@@ -556,7 +566,9 @@ const LearningPathPage: React.FC = () => {
               </Select>
             </div>
             <div>
-              <label className="font-bold">Glossaries</label>
+              <label className="font-bold">
+                {t('learningPathPage.main.glossaries')}
+              </label>
               {modalLanguage && (
                 <div
                   className="
@@ -595,7 +607,7 @@ const LearningPathPage: React.FC = () => {
                         <span>{g.name}</span>
                       </div>
                       <span className="text-sm text-gray-500">
-                        {g.words} words
+                        {g.words} {t('learningPathPage.main.words')}
                       </span>
                     </label>
                   ))}
@@ -611,14 +623,14 @@ const LearningPathPage: React.FC = () => {
                   setShowNewPathModal(false);
                 }}
               >
-                Cancel
+                {t('learningPathPage.main.cancel')}
               </button>
               <button
                 type="button"
                 className="px-4 py-2 rounded-md bg-teal-500 hover:bg-teal-600 text-white"
                 onClick={() => void handleCreatePath()}
               >
-                Create Path
+                {t('learningPathPage.main.createPath')}
               </button>
             </div>
           </div>
@@ -633,9 +645,7 @@ const LearningPathPage: React.FC = () => {
         onConfirm={() => void handleConfirmDelete()}
         title="Delete Learning Path"
       >
-        <p className="text-theme">
-          Are you sure you want to permanently delete this learning path?
-        </p>
+        <p className="text-theme">{t('learningPathPage.main.deleteMessage')}</p>
       </ConfirmationModal>
 
       <div
@@ -675,10 +685,11 @@ const LearningPathPage: React.FC = () => {
               {currentView === 'glossaries' && selectedPath?.path_name}
               {currentView === 'words' &&
                 !flashcardMode &&
-                (selectedGlossary?.name || 'Study Session')}
+                (selectedGlossary?.name ||
+                  t('learningPathPage.main.studySession'))}
               {currentView === 'words' &&
                 flashcardMode &&
-                `${selectedGlossary?.name || ''} Test`}
+                `${selectedGlossary?.name || ''} ${t('learningPathPage.main.test')}`}
             </h1>
 
             <div className="flex justify-end items-center mb-8 text-theme">

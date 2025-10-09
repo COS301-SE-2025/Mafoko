@@ -23,6 +23,7 @@ import { cachingService } from '../utils/cachingService';
 import '../styles/NewGlossary.scss';
 import { GlossaryList } from '../components/ui/GlossaryList.tsx';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface Term {
   id: number;
@@ -73,6 +74,7 @@ const GlossaryApp = () => {
   const [fromCache, setFromCache] = useState(false);
   const termsPerPage = 20;
   const exportPopupRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   // Notification state for user feedback
   const [notification, setNotification] = useState<{
@@ -541,7 +543,7 @@ const GlossaryApp = () => {
           }}
         >
           <WifiOff size={16} />
-          <span>You're offline - showing cached data</span>
+          <span>{t('glossaryPage2.offlineMessage')}</span>
         </div>
       )}
 
@@ -615,7 +617,7 @@ const GlossaryApp = () => {
                   <Search className="w-4 h-4 text-[var(--text-theme)] opacity-70 shrink-0" />
                   <input
                     type="text"
-                    placeholder="Search terms..."
+                    placeholder={t('glossaryPage2.searchPlaceholder')}
                     value={termSearch}
                     onChange={(e) => {
                       setTermSearch(e.target.value);
@@ -656,7 +658,7 @@ const GlossaryApp = () => {
                       opacity: 0.7,
                     }}
                   >
-                    Filter by Language
+                    {t('glossaryPage2.filterByLanguage')}
                   </span>
                   <button
                     type="button"
@@ -673,7 +675,9 @@ const GlossaryApp = () => {
                       textDecoration: 'underline',
                     }}
                   >
-                    {showLanguageFilter ? 'Hide' : 'Show'}
+                    {showLanguageFilter
+                      ? t('glossaryPage2.hide')
+                      : t('glossaryPage2.show')}
                   </button>
                 </div>
 
@@ -715,7 +719,7 @@ const GlossaryApp = () => {
                         transition: 'all 0.2s ease',
                       }}
                     >
-                      All Languages
+                      {t('glossaryPage2.allLanguages')}
                     </button>
                     {LANGUAGES.map((language) => (
                       <button
@@ -765,7 +769,7 @@ const GlossaryApp = () => {
                       flexWrap: 'wrap',
                     }}
                   >
-                    <span>Active filter:</span>
+                    <span>{t('glossaryPage2.activeFilter')}:</span>
                     {selectedLanguages.map((lang) => (
                       <span
                         key={lang}
@@ -795,7 +799,7 @@ const GlossaryApp = () => {
                         textDecoration: 'underline',
                       }}
                     >
-                      Clear
+                      {t('glossaryPage2.clear')}
                     </button>
                   </div>
                 )}
@@ -803,14 +807,16 @@ const GlossaryApp = () => {
 
               <div className="terms-list">
                 {loading ? (
-                  <div className="terms-list-message">Loading terms...</div>
+                  <div className="terms-list-message">
+                    {t('glossaryPage2.loadingTerms')}...
+                  </div>
                 ) : terms.length === 0 ? (
                   <div className="terms-list-message">
-                    No terms found for this glossary.
+                    {t('glossaryPage2.noTermsFound')}
                   </div>
                 ) : filteredTerms.length === 0 ? (
                   <div className="terms-list-message">
-                    No terms match your search.
+                    {t('glossaryPage2.noTermsMatch')}
                   </div>
                 ) : (
                   <div
@@ -888,7 +894,9 @@ const GlossaryApp = () => {
                   </button>
 
                   <span className="text-sm sm:text-base text-[var(--text-theme)] select-none">
-                    Page {currentPage} of {Math.ceil(totalTerms / termsPerPage)}
+                    {t('glossaryPage2.page')} {currentPage}{' '}
+                    {t('glossaryPage2.of')}{' '}
+                    {Math.ceil(totalTerms / termsPerPage)}
                   </span>
 
                   <button
@@ -1062,31 +1070,39 @@ const GlossaryApp = () => {
                 </button>
 
                 {/* Header */}
-                <div style={{ marginBottom: '1.5rem', paddingRight: '2rem' }}>
-                  <h3
-                    style={{
-                      fontSize: '1.25rem',
-                      fontWeight: 600,
-                      margin: '0 0 0.5rem 0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                    }}
-                    className="glossary-export-title"
-                  >
-                    <Download size={20} />
-                    Export Data - {selectedGlossary.name}
-                  </h3>
+                <div
+                  className=""
+                  style={{ marginBottom: '1.5rem', paddingRight: '2rem' }}
+                >
+                  <div className="flex justify-center items-center gap-8">
+                    <div>
+                      <h3
+                        style={{
+                          fontSize: '1.25rem',
+                          fontWeight: 600,
+                          margin: '0 0 0.5rem 0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                        }}
+                        className="glossary-export-title flex  text-theme justify-center items-center gap-8"
+                      >
+                        {t('glossaryPage2.exportData')} -{' '}
+                        {selectedGlossary.name}
+                      </h3>
+                    </div>
+                  </div>
+
                   <p
                     style={{
                       margin: 0,
                       fontSize: '0.9rem',
                       lineHeight: '1.4',
                     }}
-                    className="glossary-export-subtitle"
+                    className="glossary-export-subtitle text-left"
                   >
-                    Download all terms from {selectedGlossary.name} in your
-                    preferred format.
+                    {t('glossaryPage2.exportMessage')} {selectedGlossary.name}{' '}
+                    {t('glossaryPage2.exportMessage2')}
                   </p>
                 </div>
 
@@ -1148,9 +1164,8 @@ const GlossaryApp = () => {
                       <FileType size={20} />
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600 }}>CSV Format</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Spreadsheet compatible
+                      <div style={{ fontWeight: 600 }}>
+                        CSV {t('glossaryPage2.format')}
                       </div>
                     </div>
                   </button>
@@ -1208,9 +1223,8 @@ const GlossaryApp = () => {
                       <FileType size={20} />
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600 }}>JSON Format</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Developer friendly
+                      <div style={{ fontWeight: 600 }}>
+                        JSON {t('glossaryPage2.format')}
                       </div>
                     </div>
                   </button>
@@ -1268,9 +1282,8 @@ const GlossaryApp = () => {
                       <FileType size={20} />
                     </div>
                     <div>
-                      <div style={{ fontWeight: 600 }}>HTML Table</div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Web friendly
+                      <div style={{ fontWeight: 600 }}>
+                        HTML {t('glossaryPage2.format')}
                       </div>
                     </div>
                   </button>
@@ -1338,10 +1351,9 @@ const GlossaryApp = () => {
                     </div>
                     <div>
                       <div style={{ fontWeight: 600 }}>
-                        {isDownloading ? 'Generating PDF...' : 'PDF Format'}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                        Print friendly
+                        {isDownloading
+                          ? 'Generating PDF...'
+                          : `PDF ${t('glossaryPage2.format')}`}
                       </div>
                     </div>
                   </button>

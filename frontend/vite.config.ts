@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     host: true, // Exposes the server to your local network
   },
-  base: '/Marito/',
+  base: '/Mafoko/',
   plugins: [
     tailwindcss(),
     react(),
@@ -134,15 +134,15 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4 MB - ADD THIS SECTION
       },
       manifest: {
-        name: 'Marito - Multilingual Lexicons',
-        short_name: 'Marito',
+        name: 'Mafoko - Multilingual Lexicons',
+        short_name: 'Mafoko',
         description:
           'A PWA for Multilingual Lexicons, Term Banks, and Glossaries for South African Languages.',
         theme_color: '#00CEAF',
         background_color: '#ffffff', // Background color for splash screen
         display: 'standalone',
-        start_url: '/Marito/',
-        scope: '/Marito/',
+        start_url: '/Mafoko/',
+        scope: '/Mafoko/',
         icons: [
           {
             src: '/icons/DFSI_Logo_192.png',

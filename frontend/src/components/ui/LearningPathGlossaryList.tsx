@@ -4,6 +4,7 @@ import {
   GlossaryProgress,
   LearningPathGlossary,
 } from '../../types/learning.ts';
+import { useTranslation } from 'react-i18next';
 
 interface LearningPath {
   id: string;
@@ -29,6 +30,8 @@ export function LearningPathGlossaryList({
     startWithFlashcards: boolean,
   ) => Promise<void>;
 }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <div className="flex items-center mb-6">
@@ -39,7 +42,7 @@ export function LearningPathGlossaryList({
           }}
           className="text-theme hover:text-gray-900 mr-4"
         >
-          ← Back to Paths
+          ← {t('learningPathPage.learningGlossarylist.backToPaths')}
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">

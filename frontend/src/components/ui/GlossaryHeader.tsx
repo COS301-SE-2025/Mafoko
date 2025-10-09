@@ -11,7 +11,6 @@ interface GlossaryHeaderProps {
 const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
   title,
   description,
-  countText,
   onBack,
 }) => (
   <div

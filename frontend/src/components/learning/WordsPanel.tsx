@@ -7,6 +7,7 @@ import {
   ChevronFirst,
   ChevronLast,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Word {
   id: string;
@@ -34,6 +35,7 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
   knownWords,
   onBackClick,
 }) => {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
 
@@ -71,13 +73,14 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
             onClick={onBackClick}
             className="text-theme hover:text-gray-900 flex items-center gap-2 font-medium shrink-0"
           >
-            ← Back to Glossaries
+            ← {t('learningPathPage.learningGlossarylist.backToGlossaries')}
           </button>
 
           {/* Progress section */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
             <div className="text-sm text-theme text-center sm:text-left w-full sm:w-auto">
-              {knownWords.size} of {studySession.words.length} words completed
+              {knownWords.size} of {studySession.words.length}{' '}
+              {t('learningPathPage.learningGlossarylist.wordsCompleted')}
             </div>
             <div className="w-full sm:w-40 bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
@@ -93,9 +96,11 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
         {/* Content */}
         {studySession.words.length === 0 ? (
           <div className="text-center text-gray-500 py-12">
-            <div className="text-lg font-medium mb-2">No terms found</div>
+            <div className="text-lg font-medium mb-2">
+              {t('learningPathPage.learningGlossarylist.noTermsFound')}
+            </div>
             <div className="text-sm">
-              This glossary doesn't contain any terms yet.
+              {t('learningPathPage.learningGlossarylist.glossaryTermError')}
             </div>
           </div>
         ) : (
@@ -125,7 +130,9 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                           {word.term}
                         </h4>
                         <p className="text-xs text-gray-500 text-center">
-                          Tap to reveal
+                          {t(
+                            'learningPathPage.learningGlossarylist.tapToReveal',
+                          )}
                         </p>
                       </div>
 
@@ -134,7 +141,10 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                         className={`absolute inset-0 ${knownWords.has(word.id) ? 'bg-teal-500' : 'bg-zinc-700'} text-white rounded-xl p-6 shadow-md flex flex-col justify-center items-center rotate-y-180 backface-hidden`}
                       >
                         <p className="text-lg font-bold text-center">
-                          {word.english_translation || 'No translation'}
+                          {word.english_translation ||
+                            t(
+                              'learningPathPage.learningGlossarylist.noTranslation',
+                            )}
                         </p>
                         {word.definition && (
                           <p className="text-sm mt-2 text-center opacity-90 leading-relaxed">
@@ -149,12 +159,14 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                       {knownWords.has(word.id) ? (
                         <div className="flex items-center gap-2 text-teal-600 text-xs font-medium">
                           <CheckCircle2 className="w-4 h-4" />
-                          Known
+                          {t('learningPathPage.learningGlossarylist.known')}
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 text-gray-400 text-xs">
                           <Circle className="w-4 h-4" />
-                          Not learned
+                          {t(
+                            'learningPathPage.learningGlossarylist.notLearned',
+                          )}
                         </div>
                       )}
                     </div>
@@ -167,9 +179,12 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
             {totalPages > 1 && (
               <div className="pagination-controls flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
                 <div>
-                  Showing {startIndex + 1}-
-                  {Math.min(endIndex, studySession.words.length)} of{' '}
-                  {studySession.words.length} terms
+                  {t('learningPathPage.learningGlossarylist.showing')}{' '}
+                  {startIndex + 1}-
+                  {Math.min(endIndex, studySession.words.length)}{' '}
+                  {t('learningPathPage.learningGlossarylist.of')}{' '}
+                  {studySession.words.length}{' '}
+                  {t('learningPathPage.learningGlossarylist.terms')}
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -187,7 +202,9 @@ const WordsPanel: React.FC<WordsPanelProps> = ({
                     <ChevronLeft size={16} />
                   </button>
                   <span className="text-gray-700">
-                    Page {currentPage} of {totalPages}
+                    {t('learningPathPage.learningGlossarylist.page')}{' '}
+                    {currentPage}{' '}
+                    {t('learningPathPage.learningGlossarylist.of')} {totalPages}
                   </span>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}

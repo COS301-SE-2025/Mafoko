@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/RegistrationPage.css';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 import LsImage from '/LS_image.png';
 import DfsiLogo from '/DFSI_Logo.png';
 import { API_ENDPOINTS } from '../config';
@@ -119,7 +118,6 @@ const RegistrationPage: React.FC = () => {
 
       <div className="registration-right-half">
         <div className="auth-page-header">
-          <LanguageSwitcher />
           <img
             src={DfsiLogo}
             alt={t('registrationPage.dsfsiLogoAlt')}
@@ -206,12 +204,14 @@ const RegistrationPage: React.FC = () => {
               value={password}
               onChange={setPassword}
               label={t('registrationPage.passwordLabel')}
+              placeholder={t('registrationPage.passwordPlaceholder')}
             />
 
             <PasswordField
               value={confirmPassword}
               onChange={setConfirmPassword}
               label={t('registrationPage.confirmPasswordLabel')}
+              placeholder={t('registrationPage.confirmPasswordPlaceholder')}
             />
 
             <div className="form-group terms-checkbox">

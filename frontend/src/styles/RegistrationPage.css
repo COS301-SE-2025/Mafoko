@@ -171,7 +171,8 @@
     0 0 0 3px rgba(0, 206, 175, 0.25);
 }
 
-.form-group input[type='text']:focus .form-group input[type='email']:focus,
+.form-group input[type='text']:focus,
+.form-group input[type='email']:focus,
 .form-group input[type='password']:focus {
   border-color: #00ceaf;
   outline: none;
