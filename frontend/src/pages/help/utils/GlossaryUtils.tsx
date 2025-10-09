@@ -13,7 +13,7 @@ export const GlossaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '/Marito/videos/glossary/glossary-search.mp4',
+    assetLocation: '/Mafoko/videos/glossary/glossary-search.mp4',
   },
   {
     id: 'view',
@@ -26,7 +26,7 @@ export const GlossaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '/Marito/videos/glossary/glossary-view.mp4',
+    assetLocation: '/Mafoko/videos/glossary/glossary-view.mp4',
   },
   {
     id: 'translation-bank',
@@ -39,7 +39,7 @@ export const GlossaryContent: SectionProps[] = [
         </p>
       </div>
     ),
-    assetLocation: '/Marito/videos/glossary/glossary-translations.mp4',
+    assetLocation: '/Mafoko/videos/glossary/glossary-translations.mp4',
   },
   {
     id: 'exporting',
@@ -82,6 +82,6 @@ export const GlossaryContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '/Marito/videos/glossary/glossary-export.mp4',
+    assetLocation: '/Mafoko/videos/glossary/glossary-export.mp4',
   },
 ];
