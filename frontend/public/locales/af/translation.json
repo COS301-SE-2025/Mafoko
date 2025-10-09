@@ -588,49 +588,49 @@
     "howToEarnXP": "Hoe om XP te Verdien",
     "unlocked": "Ontsluit",
     "level": "Vlak",
-    "loading": "Laai tans",
+    "loading": "Laai",
     "totalXP": "Totale XP",
     "currentStreak": "Huidige Reeks",
     "achievementsLabel": "Prestasie",
-    "noActivity": "Geen Aktiwiteit Nie",
+    "noActivity": "Geen Aktiwiteit",
     "addTerm": "Voeg ’n nuwe term by",
     "addComment": "Voeg ’n opmerking by",
-    "receiveUpvote": "Ontvang ’n stem op",
-    "dailyLoginBonus": "Daaglikse Aanmeldbonus",
-    "perUpvote": "per stem op",
-    "noGoals": "Geen Doelwitte Hierdie Week Nie",
+    "receiveUpvote": "Ontvang ’n stem omhoog",
+    "dailyLoginBonus": "Daaglikse aanmeldbonus",
+    "perUpvote": "per stem omhoog",
+    "noGoals": "Geen doelwitte hierdie week nie",
     "checkBackNextWeek": "Kyk weer volgende week",
     "completed": "Voltooi",
     "loadingWeeklyGoals": "Laai weeklikse doelwitte",
     "progress": "vordering",
-    "loadingAchievements": "Laai prestasies",
+    "loadingAchievements": "Laai Prestasies",
     "of": "van",
-    "termPioneer": {
-      "title": "Termynpionier",
+    "term_pioneer": {
+      "title": "Term Pionier",
       "desc": "Voeg jou eerste 10 terme by die woordeboek"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Gemeenskapsbydraer",
       "desc": "Lewer 25 opmerkings oor terme"
     },
-    "crowdFavorite": {
-      "title": "Gunsteling van die Gemeenskap",
-      "desc": "Ontvang 100 stemme op jou bydraes"
+    "crowd_favorite": {
+      "title": "Gunsteling van die Skare",
+      "desc": "Ontvang 100 stemme omhoog vir jou bydraes"
     },
-    "multilingualMaster": {
-      "title": "Meester van Meertaligheid",
-      "desc": "Dra by tot 5 verskillende taalwoordeboeke"
+    "multilingual_master": {
+      "title": "Veeltalige Meester",
+      "desc": "Dra by tot 5 verskillende taaldatabasisse"
     },
-    "consistencyChampion": {
-      "title": "Kampioen van Konsekwentheid",
-      "desc": "Wees aktief vir 30 opeenvolgende dae"
+    "consistency_champion": {
+      "title": "Konsistensie Kampioen",
+      "desc": "Wees aktief vir 30 agtereenvolgende dae"
     },
-    "languageGuardian": {
-      "title": "Beskermheer van Tale",
+    "language_guardian": {
+      "title": "Taalbeskermer",
       "desc": "Laat 50 van jou bydraes deur kundiges bekragtig word"
     }
   },
-  "weeklyGoals": {
+"weeklyGoals": {
     "Consistent User": "Konsekwente Gebruiker",
     "Log in on 6 different days this week": "Meld aan op 6 verskillende dae hierdie week",
     "Streak Keeper": "Reeksbewaarder",

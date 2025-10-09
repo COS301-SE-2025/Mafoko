@@ -577,27 +577,27 @@
     "progress": "ku hluvuka",
     "loadingAchievements": "Yi ri eku layisheni ka switirhisiwa swa mavonelo",
     "of": "ya",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Mutumbuluxi wa Marito",
       "desc": "Engetela marito ya wena yo sungula ya 10 eka buku ya marito"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Muchumayeri wa Ndzhaka ya Vanhu",
       "desc": "Tsala swiviko swa 25 eka marito"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Loyi A Tsakelwaka Hi Vanhu",
       "desc": "Amukela mavhoti ya 100 eka leswi u swi nyikeke"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Nyikwetlembetano wa Tindzimi Tingi",
       "desc": "Humelela eka tibuku ta marito ta tindzimi ta ntlhanu to hambana"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Xipfumeri Xa Ku Tiyimisela",
       "desc": "Endla ntirho wa masiku ya 30 hi ku landelana"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Mulanguteri wa Ririmi",
       "desc": "Pfumelela mintirho ya wena ya 50 ku hlayiwa hi vatsari"
     }

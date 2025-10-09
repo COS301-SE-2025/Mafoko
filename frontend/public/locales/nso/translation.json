@@ -552,7 +552,55 @@
       "tryAgain": "Leka Gape"
     }
   },
-  "weeklyGoals": {
+  "achievements": {
+    "contributionActivity": "Umsebenzi Wokunikela",
+    "weeklyGoals": "Iinjongo Zeviki",
+    "howToEarnXP": "Indlela Yokufumana i-XP",
+    "unlocked": "Kuvuliwe",
+    "level": "Inqanaba",
+    "loading": "Kulayishwa",
+    "totalXP": "I-XP iyonke",
+    "currentStreak": "Ulandelelwano Lwangoku",
+    "achievementsLabel": "Iimpumelelo",
+    "noActivity": "Akukho Msebenzi",
+    "addTerm": "Yongeza igama elitsha",
+    "addComment": "Yongeza uluvo",
+    "receiveUpvote": "Fumana ivoti ephezulu",
+    "dailyLoginBonus": "Umvuzo Wokungena Mihla le",
+    "perUpvote": "ngevoti nganye ephezulu",
+    "noGoals": "Akukho Injongo Kule Veki",
+    "checkBackNextWeek": "Buyela kwiveki ezayo",
+    "completed": "Kugqityiwe",
+    "loadingWeeklyGoals": "Kulayishwa iinjongo zeveki",
+    "progress": "inkqubela",
+    "loadingAchievements": "Kulayishwa iimpumelelo",
+    "of": "ka",
+    "term_pioneer": {
+      "title": "Umqali Wegama",
+      "desc": "Yongeza amagama akho okuqala alishumi kwidikshinari"
+    },
+    "community_contributor": {
+      "title": "Umnikeli Woluntu",
+      "desc": "Yenza izimvo ezingama-25 kumagama"
+    },
+    "crowd_favorite": {
+      "title": "Intandokazi Yoluntu",
+      "desc": "Fumana iivoti ezili-100 eziphezulu kwimnikelo yakho"
+    },
+    "multilingual_master": {
+      "title": "Ingcaphephe Yeelwimi Ezininzi",
+      "desc": "Nikela kwiidikshinari zeelwimi ezintlanu ezahlukeneyo"
+    },
+    "consistency_champion": {
+      "title": "Iqhawe Lokungaguquki",
+      "desc": "Sebenza imihla engama-30 ilandelelana"
+    },
+    "language_guardian": {
+      "title": "Umkhuseli Wolwimi",
+      "desc": "Vumela iminikelo yakho engama-50 iqinisekiswe ziingcali"
+    }
+  },
+"weeklyGoals": {
     "Consistent User": "Modiriši yo a Tšwelago Pele",
     "Log in on 6 different days this week": "Tsena ka gare ka matšatši a tshelela a fapanego beke ye",
     "Streak Keeper": "Mohlokomedi wa Tatelano",
