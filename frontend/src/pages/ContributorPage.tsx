@@ -808,9 +808,15 @@ const ContributorPage: React.FC = () => {
                   }
                 }}
                 style={{
-                  backgroundColor: activeTab === tab.key ? '#f00a50' : 'transparent',
-                  color: activeTab === tab.key ? 'white' : (isDarkMode ? '#ffffff' : '#212431'),
-                  border: `2px solid ${activeTab === tab.key ? '#f00a50' : (isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)')}`,
+                  backgroundColor:
+                    activeTab === tab.key ? '#f00a50' : 'transparent',
+                  color:
+                    activeTab === tab.key
+                      ? 'white'
+                      : isDarkMode
+                        ? '#ffffff'
+                        : '#212431',
+                  border: `2px solid ${activeTab === tab.key ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
                   padding: '0.5rem 1rem',
                   borderRadius: '0.5rem',
                   fontSize: '0.875rem',
@@ -825,16 +831,21 @@ const ContributorPage: React.FC = () => {
           </div>
 
           {activeTab === 'submit' && (
-            <div className="form-container" style={{
-              border: '1px solid rgba(0, 206, 175, 0.3)',
-              borderRadius: '0.5rem',
-              padding: '1.5rem',
-              backgroundColor: isDarkMode ? '#232738ff' : '#ffffff',
-              maxWidth: '900px',
-              width: '100%',
-            }}>
+            <div
+              className="form-container"
+              style={{
+                border: '1px solid rgba(0, 206, 175, 0.3)',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+                backgroundColor: isDarkMode ? '#232738ff' : '#ffffff',
+                maxWidth: '900px',
+                width: '100%',
+              }}
+            >
               <div className="form-group">
-                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.termTitle')}</label>
+                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                  {t('termAdditions.termTitle')}
+                </label>
                 <input
                   type="text"
                   value={newTerm}
@@ -843,7 +854,9 @@ const ContributorPage: React.FC = () => {
                 />
               </div>
               <div className="form-group">
-                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.defTitle')}</label>
+                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                  {t('termAdditions.defTitle')}
+                </label>
                 <textarea
                   value={definition}
                   onChange={(e) => setDefinition(e.target.value)}
@@ -852,7 +865,9 @@ const ContributorPage: React.FC = () => {
                 />
               </div>
               <div className="form-group">
-                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.exampleTitle')}</label>
+                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                  {t('termAdditions.exampleTitle')}
+                </label>
                 <textarea
                   value={example}
                   onChange={(e) => setExample(e.target.value)}
@@ -862,16 +877,21 @@ const ContributorPage: React.FC = () => {
               </div>
               <div className="form-row">
                 <div className="form-group flex justify-center items-center">
-                  <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.domainTitle')}</label>
+                  <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                    {t('termAdditions.domainTitle')}
+                  </label>
                   <Select
                     value={selectedDomain}
                     onValueChange={(value) => setSelectedDomain(value)}
                   >
-                    <SelectTrigger className="w-[200px]" style={{
-                      backgroundColor: '#f00a50',
-                      color: 'white',
-                      borderColor: '#f00a50',
-                    }}>
+                    <SelectTrigger
+                      className="w-[200px]"
+                      style={{
+                        backgroundColor: '#f00a50',
+                        color: 'white',
+                        borderColor: '#f00a50',
+                      }}
+                    >
                       <SelectValue
                         placeholder={t('contributePlaceholder.domain')}
                       />
@@ -886,16 +906,21 @@ const ContributorPage: React.FC = () => {
                   </Select>
                 </div>
                 <div className="form-group flex justify-center items-center">
-                  <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.languageTitle')}</label>
+                  <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                    {t('termAdditions.languageTitle')}
+                  </label>
                   <Select
                     value={selectedLanguage}
                     onValueChange={(value) => setSelectedLanguage(value)}
                   >
-                    <SelectTrigger className="w-[200px]" style={{
-                      backgroundColor: '#f00a50',
-                      color: 'white',
-                      borderColor: '#f00a50',
-                    }}>
+                    <SelectTrigger
+                      className="w-[200px]"
+                      style={{
+                        backgroundColor: '#f00a50',
+                        color: 'white',
+                        borderColor: '#f00a50',
+                      }}
+                    >
                       <SelectValue
                         placeholder={t('contributePlaceholder.language')}
                       />
@@ -913,7 +938,9 @@ const ContributorPage: React.FC = () => {
               <div className="translations-section">
                 <h3>{t('termAdditions.extTransTitle')}</h3>
                 <div className="form-group">
-                  <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.extContent')}</label>
+                  <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                    {t('termAdditions.extContent')}
+                  </label>
                   <input
                     type="text"
                     value={translationSearchQuery}
@@ -977,16 +1004,21 @@ const ContributorPage: React.FC = () => {
             </div>
           )}
           {activeTab === 'edit' && (
-            <div className="form-container" style={{
-              border: '1px solid rgba(0, 206, 175, 0.3)',
-              borderRadius: '0.5rem',
-              padding: '1.5rem',
-              backgroundColor: isDarkMode ? '#232738ff' : '#ffffff',
-              maxWidth: '900px',
-              width: '100%',
-            }}>
+            <div
+              className="form-container"
+              style={{
+                border: '1px solid rgba(0, 206, 175, 0.3)',
+                borderRadius: '0.5rem',
+                padding: '1.5rem',
+                backgroundColor: isDarkMode ? '#232738ff' : '#ffffff',
+                maxWidth: '900px',
+                width: '100%',
+              }}
+            >
               <div className="form-group">
-                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.selectToEdit')}</label>
+                <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                  {t('termAdditions.selectToEdit')}
+                </label>
                 <input
                   type="text"
                   value={editSearchQuery}
@@ -1015,7 +1047,9 @@ const ContributorPage: React.FC = () => {
               {termToEditId && (
                 <>
                   <div className="form-group">
-                    <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.termTitle')}</label>
+                    <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                      {t('termAdditions.termTitle')}
+                    </label>
                     <input
                       type="text"
                       value={newTerm}
@@ -1024,7 +1058,9 @@ const ContributorPage: React.FC = () => {
                     />
                   </div>
                   <div className="form-group">
-                    <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.defTitle')}</label>
+                    <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                      {t('termAdditions.defTitle')}
+                    </label>
                     <textarea
                       value={definition}
                       onChange={(e) => setDefinition(e.target.value)}
@@ -1033,7 +1069,9 @@ const ContributorPage: React.FC = () => {
                     />
                   </div>
                   <div className="form-group">
-                    <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.exampleTitle')}</label>
+                    <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>
+                      {t('termAdditions.exampleTitle')}
+                    </label>
                     <textarea
                       value={example}
                       onChange={(e) => setExample(e.target.value)}
@@ -1043,7 +1081,11 @@ const ContributorPage: React.FC = () => {
                   </div>
                   <div className="form-row">
                     <div className="form-group">
-                      <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.domainTitle')}</label>
+                      <label
+                        style={{ fontSize: '1.125rem', fontWeight: '500' }}
+                      >
+                        {t('termAdditions.domainTitle')}
+                      </label>
                       <select
                         value={selectedDomain}
                         onChange={(e) => setSelectedDomain(e.target.value)}
@@ -1055,18 +1097,35 @@ const ContributorPage: React.FC = () => {
                           borderRadius: '0.375rem',
                         }}
                       >
-                        <option value="" style={{ backgroundColor: isDarkMode ? '#374151' : 'white', color: isDarkMode ? 'white' : '#212431' }}>
+                        <option
+                          value=""
+                          style={{
+                            backgroundColor: isDarkMode ? '#374151' : 'white',
+                            color: isDarkMode ? 'white' : '#212431',
+                          }}
+                        >
                           {t('contributePlaceholder.domain')}
                         </option>
                         {domains.map((d) => (
-                          <option key={d} value={d} style={{ backgroundColor: isDarkMode ? '#374151' : 'white', color: isDarkMode ? 'white' : '#212431' }}>
+                          <option
+                            key={d}
+                            value={d}
+                            style={{
+                              backgroundColor: isDarkMode ? '#374151' : 'white',
+                              color: isDarkMode ? 'white' : '#212431',
+                            }}
+                          >
                             {d}
                           </option>
                         ))}
                       </select>
                     </div>
                     <div className="form-group">
-                      <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.languageTitle')}</label>
+                      <label
+                        style={{ fontSize: '1.125rem', fontWeight: '500' }}
+                      >
+                        {t('termAdditions.languageTitle')}
+                      </label>
                       <select
                         value={selectedLanguage}
                         onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -1078,11 +1137,24 @@ const ContributorPage: React.FC = () => {
                           borderRadius: '0.375rem',
                         }}
                       >
-                        <option value="" style={{ backgroundColor: isDarkMode ? '#374151' : 'white', color: isDarkMode ? 'white' : '#212431' }}>
+                        <option
+                          value=""
+                          style={{
+                            backgroundColor: isDarkMode ? '#374151' : 'white',
+                            color: isDarkMode ? 'white' : '#212431',
+                          }}
+                        >
                           {t('contributePlaceholder.language')}
                         </option>
                         {languages.map((l) => (
-                          <option key={l} value={l} style={{ backgroundColor: isDarkMode ? '#374151' : 'white', color: isDarkMode ? 'white' : '#212431' }}>
+                          <option
+                            key={l}
+                            value={l}
+                            style={{
+                              backgroundColor: isDarkMode ? '#374151' : 'white',
+                              color: isDarkMode ? 'white' : '#212431',
+                            }}
+                          >
                             {l}
                           </option>
                         ))}
@@ -1092,7 +1164,11 @@ const ContributorPage: React.FC = () => {
                   <div className="translations-section">
                     <h3>{t('termAdditions.extTransTitle')}</h3>
                     <div className="form-group">
-                      <label style={{ fontSize: '1.125rem', fontWeight: '500' }}>{t('termAdditions.content2')}</label>
+                      <label
+                        style={{ fontSize: '1.125rem', fontWeight: '500' }}
+                      >
+                        {t('termAdditions.content2')}
+                      </label>
                       <input
                         type="text"
                         value={translationSearchQuery}

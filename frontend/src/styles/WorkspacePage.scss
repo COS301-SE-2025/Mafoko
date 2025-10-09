@@ -228,7 +228,7 @@ $text-dark: #ffffff;
   }
 
   .theme-dark & {
-  background-color: var(--page-bg);
+    background-color: var(--page-bg);
   }
 
   @media (max-width: 767px) {
@@ -2894,7 +2894,10 @@ $text-dark: #ffffff;
 
     &:focus option:checked {
       background-color: rgba(0, 206, 175, 0.15) !important;
-      background: linear-gradient(rgba(0, 206, 175, 0.15), rgba(0, 206, 175, 0.15)) !important;
+      background: linear-gradient(
+        rgba(0, 206, 175, 0.15),
+        rgba(0, 206, 175, 0.15)
+      ) !important;
     }
 
     @include custom-scrollbar(8px);
@@ -3550,7 +3553,7 @@ $text-dark: #ffffff;
       background-color: rgba(0, 206, 175, 0.05);
     }
     .theme-dark & {
-    background-color: var(--bg-first);
+      background-color: var(--bg-first);
     }
     transform: translateY(-1px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);

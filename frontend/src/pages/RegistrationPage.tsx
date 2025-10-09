@@ -40,7 +40,9 @@ const RegistrationPage: React.FC = () => {
       return;
     }
     if (!hasViewedTerms) {
-      setError('Please click and read the Terms and Conditions before accepting.');
+      setError(
+        'Please click and read the Terms and Conditions before accepting.',
+      );
       return;
     }
     if (!agreedToTerms) {

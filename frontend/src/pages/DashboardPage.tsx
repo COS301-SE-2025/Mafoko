@@ -19,7 +19,8 @@ import {
 // Animated Language Counter Component
 const AnimatedLanguageCounter: React.FC = () => {
   const { t } = useTranslation();
-  const hasSeenAnimation = localStorage.getItem('hasSeenLanguageCounter') === 'true';
+  const hasSeenAnimation =
+    localStorage.getItem('hasSeenLanguageCounter') === 'true';
   const [count, setCount] = useState(hasSeenAnimation ? 11 : 1);
   const [showText, setShowText] = useState(hasSeenAnimation);
 

@@ -211,7 +211,13 @@ const SearchPage: React.FC = () => {
           <div className="min-h-screen search-page pt-16">
             <div className="search-conent">
               <section className="p-6 space-y-4 w-full max-w-4xl mx-auto flex flex-col gap-5">
-                <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                  }}
+                >
                   <div style={{ width: '100%', maxWidth: '700px' }}>
                     <SearchBar
                       onSearch={handleSearchInput}

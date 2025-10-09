@@ -51,18 +51,18 @@ const SearchBar: FC<SearchBarProps> = ({
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
-      <Search 
-        style={{ 
-          position: 'absolute', 
-          left: '0.75rem', 
-          top: '50%', 
-          transform: 'translateY(-50%)', 
-          width: '1.25rem', 
-          height: '1.25rem', 
+      <Search
+        style={{
+          position: 'absolute',
+          left: '0.75rem',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '1.25rem',
+          height: '1.25rem',
           color: '#9ca3af',
           zIndex: 1,
-          pointerEvents: 'none'
-        }} 
+          pointerEvents: 'none',
+        }}
       />
       <Autocomplete
         freeSolo
@@ -107,8 +107,12 @@ const SearchBar: FC<SearchBarProps> = ({
             sx={{
               '& .MuiOutlinedInput-root': {
                 borderRadius: '0.5rem',
-                border: isDarkMode ? '1px solid #4b5563' : '1px solid rgba(0, 206, 175, 0.3)',
-                backgroundColor: isDarkMode ? 'rgba(71, 85, 105, 0.5)' : '#f5f5f5',
+                border: isDarkMode
+                  ? '1px solid #4b5563'
+                  : '1px solid rgba(0, 206, 175, 0.3)',
+                backgroundColor: isDarkMode
+                  ? 'rgba(71, 85, 105, 0.5)'
+                  : '#f5f5f5',
                 color: isDarkMode ? 'white' : '#111827',
                 paddingLeft: '2.5rem',
                 '& fieldset': {
@@ -121,7 +125,9 @@ const SearchBar: FC<SearchBarProps> = ({
                   border: 'none',
                 },
                 '&.Mui-focused': {
-                  border: isDarkMode ? '1px solid #4b5563' : '1px solid rgba(0, 206, 175, 0.3)',
+                  border: isDarkMode
+                    ? '1px solid #4b5563'
+                    : '1px solid rgba(0, 206, 175, 0.3)',
                 },
               },
               '& .MuiInputBase-input': {

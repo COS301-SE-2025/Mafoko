@@ -1527,7 +1527,14 @@ const WorkspacePage: React.FC = () => {
             )}
 
             {/* Header */}
-            <div className="workspace-header" style={{ flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+            <div
+              className="workspace-header"
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '1.5rem',
+              }}
+            >
               <h1
                 style={{
                   fontSize: '1.875rem',
@@ -1537,7 +1544,9 @@ const WorkspacePage: React.FC = () => {
                   textAlign: 'center',
                 }}
               >
-                {userFirstName ? `${userFirstName}'s Workspace` : 'My Workspace'}
+                {userFirstName
+                  ? `${userFirstName}'s Workspace`
+                  : 'My Workspace'}
               </h1>
               <div
                 style={{
@@ -1552,9 +1561,15 @@ const WorkspacePage: React.FC = () => {
                     setActiveTab('saved-terms');
                   }}
                   style={{
-                    backgroundColor: activeTab === 'saved-terms' ? '#f00a50' : 'transparent',
-                    color: activeTab === 'saved-terms' ? 'white' : (isDarkMode ? '#ffffff' : '#212431'),
-                    border: `2px solid ${activeTab === 'saved-terms' ? '#f00a50' : (isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)')}`,
+                    backgroundColor:
+                      activeTab === 'saved-terms' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'saved-terms'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'saved-terms' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
                     padding: '0.5rem 1.5rem',
                     borderRadius: '0.5rem',
                     fontSize: '0.875rem',
@@ -1571,9 +1586,15 @@ const WorkspacePage: React.FC = () => {
                     setActiveTab('glossaries');
                   }}
                   style={{
-                    backgroundColor: activeTab === 'glossaries' ? '#f00a50' : 'transparent',
-                    color: activeTab === 'glossaries' ? 'white' : (isDarkMode ? '#ffffff' : '#212431'),
-                    border: `2px solid ${activeTab === 'glossaries' ? '#f00a50' : (isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)')}`,
+                    backgroundColor:
+                      activeTab === 'glossaries' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'glossaries'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'glossaries' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
                     padding: '0.5rem 1.5rem',
                     borderRadius: '0.5rem',
                     fontSize: '0.875rem',
@@ -1584,15 +1605,21 @@ const WorkspacePage: React.FC = () => {
                 >
                   Saved Glossaries
                 </button>
-                      <button
-                        type="button"
+                <button
+                  type="button"
                   onClick={() => {
                     setActiveTab('collections');
                   }}
                   style={{
-                    backgroundColor: activeTab === 'collections' ? '#f00a50' : 'transparent',
-                    color: activeTab === 'collections' ? 'white' : (isDarkMode ? '#ffffff' : '#212431'),
-                    border: `2px solid ${activeTab === 'collections' ? '#f00a50' : (isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)')}`,
+                    backgroundColor:
+                      activeTab === 'collections' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'collections'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'collections' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
                     padding: '0.5rem 1.5rem',
                     borderRadius: '0.5rem',
                     fontSize: '0.875rem',
@@ -1602,8 +1629,8 @@ const WorkspacePage: React.FC = () => {
                   }}
                 >
                   My Collections
-                      </button>
-                    </div>
+                </button>
+              </div>
             </div>
 
             {/* Saved Terms Tab */}
@@ -1651,7 +1678,8 @@ const WorkspacePage: React.FC = () => {
                           background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
                         }
                       `}</style>
-                      {Object.entries(groupedTerms).filter(([groupName]) => groupName === 'All Terms')
+                      {Object.entries(groupedTerms)
+                        .filter(([groupName]) => groupName === 'All Terms')
                         .sort(([a], [b]) => {
                           // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
                           if (a === 'all') return -1;
@@ -1745,13 +1773,8 @@ const WorkspacePage: React.FC = () => {
                             {expandedGroups[groupName] && (
                               <div className="group-content">
                                 {terms.map((term) => (
-                                  <div
-                                    key={term.id}
-                                    className="term-item"
-                                  >
-                                    <div
-                                      className="term-header"
-                                    >
+                                  <div key={term.id} className="term-item">
+                                    <div className="term-header">
                                       <div className="term-info">
                                         <div className="term-title-row">
                                           <h4 className="term-title">
@@ -1943,7 +1966,9 @@ const WorkspacePage: React.FC = () => {
                             style={{
                               border: '1px solid rgba(0, 206, 175, 0.3)',
                               borderRadius: '0.5rem',
-                              backgroundColor: isDarkMode ? '#232738ff' : '#f5f5f5',
+                              backgroundColor: isDarkMode
+                                ? '#232738ff'
+                                : '#f5f5f5',
                             }}
                           >
                             <div className="flex items-start justify-between mb-3">
@@ -2015,10 +2040,12 @@ const WorkspacePage: React.FC = () => {
                                     borderRadius: '9999px',
                                   }}
                                   onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#d91748';
+                                    e.currentTarget.style.backgroundColor =
+                                      '#d91748';
                                   }}
                                   onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = '#f00a50';
+                                    e.currentTarget.style.backgroundColor =
+                                      '#f00a50';
                                   }}
                                 >
                                   View
@@ -2068,9 +2095,18 @@ const WorkspacePage: React.FC = () => {
 
             {activeTab === 'collections' && (
               <div className="tab-content">
-                <div className="workspace-actions" style={{ marginBottom: '1rem' }}>
+                <div
+                  className="workspace-actions"
+                  style={{ marginBottom: '1rem' }}
+                >
                   {isDeleteMode ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                      }}
+                    >
                       <button
                         type="button"
                         onClick={handleDeleteSelectedGroups}
@@ -2086,11 +2122,17 @@ const WorkspacePage: React.FC = () => {
                           alignItems: 'center',
                           gap: '0.5rem',
                           minHeight: '38px',
-                          opacity: selectedGroupsForDeletion.length === 0 ? 0.5 : 1,
-                          cursor: selectedGroupsForDeletion.length === 0 ? 'not-allowed' : 'pointer',
+                          opacity:
+                            selectedGroupsForDeletion.length === 0 ? 0.5 : 1,
+                          cursor:
+                            selectedGroupsForDeletion.length === 0
+                              ? 'not-allowed'
+                              : 'pointer',
                         }}
                       >
-                        <Trash2 style={{ width: '1.25rem', height: '1.25rem' }} />
+                        <Trash2
+                          style={{ width: '1.25rem', height: '1.25rem' }}
+                        />
                         Delete Selected (
                         {selectedGroupsForDeletion.length.toString()})
                       </button>
@@ -2106,9 +2148,15 @@ const WorkspacePage: React.FC = () => {
                       >
                         Cancel
                       </button>
-          </div>
+                    </div>
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                      }}
+                    >
                       <button
                         type="button"
                         className="create-new-btn"
@@ -2146,7 +2194,9 @@ const WorkspacePage: React.FC = () => {
                           justifyContent: 'center',
                         }}
                       >
-                        <Trash2 style={{ width: '1.25rem', height: '1.25rem' }} />
+                        <Trash2
+                          style={{ width: '1.25rem', height: '1.25rem' }}
+                        />
                         Delete Groups
                       </button>
                     </div>
@@ -2194,7 +2244,11 @@ const WorkspacePage: React.FC = () => {
                           background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
                         }
                       `}</style>
-                      {Object.entries(groupedTerms).filter(([groupName]) => groupName !== 'All Terms' && groupName !== 'all')
+                      {Object.entries(groupedTerms)
+                        .filter(
+                          ([groupName]) =>
+                            groupName !== 'All Terms' && groupName !== 'all',
+                        )
                         .sort(([a], [b]) => {
                           return a.localeCompare(b);
                         })
@@ -2283,13 +2337,8 @@ const WorkspacePage: React.FC = () => {
                             {expandedGroups[groupName] && (
                               <div className="group-content">
                                 {terms.map((term) => (
-                                  <div
-                                    key={term.id}
-                                    className="term-item"
-                                  >
-                                    <div
-                                      className="term-header"
-                                    >
+                                  <div key={term.id} className="term-item">
+                                    <div className="term-header">
                                       <div className="term-info">
                                         <div className="term-title-row">
                                           <h4 className="term-title">

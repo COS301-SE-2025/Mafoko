@@ -612,20 +612,24 @@ const GlossaryApp = () => {
               >
                 <div
                   className="flex w-full max-w-xl items-center gap-2 rounded-lg px-3 py-2 shadow-sm transition"
-                  style={{ 
+                  style={{
                     padding: '0.75rem 1rem',
-                    border: isDarkMode ? '1px solid #4b5563' : '1px solid rgba(0, 206, 175, 0.3)',
-                    backgroundColor: isDarkMode ? 'rgba(71, 85, 105, 0.5)' : 'white',
+                    border: isDarkMode
+                      ? '1px solid #4b5563'
+                      : '1px solid rgba(0, 206, 175, 0.3)',
+                    backgroundColor: isDarkMode
+                      ? 'rgba(71, 85, 105, 0.5)'
+                      : 'white',
                     borderRadius: '0.5rem',
                   }}
                 >
-                  <Search 
-                    className="shrink-0" 
-                    style={{ 
-                      width: '1.25rem', 
-                      height: '1.25rem', 
-                      color: '#9ca3af' 
-                    }} 
+                  <Search
+                    className="shrink-0"
+                    style={{
+                      width: '1.25rem',
+                      height: '1.25rem',
+                      color: '#9ca3af',
+                    }}
                   />
                   <input
                     type="text"

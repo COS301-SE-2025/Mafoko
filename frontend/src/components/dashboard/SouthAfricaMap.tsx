@@ -187,7 +187,8 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
     );
 
     if (!province) {
-      const randomProvince = provincesData[Math.floor(Math.random() * provincesData.length)];
+      const randomProvince =
+        provincesData[Math.floor(Math.random() * provincesData.length)];
       const factIndex = currentFactIndexRef.current[randomProvince.name] || 0;
       return {
         name: randomProvince.name,
@@ -495,12 +496,17 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      provincesData.forEach(province => {
+      provincesData.forEach((province) => {
         const currentIdx = currentFactIndexRef.current[province.name] || 0;
-        currentFactIndexRef.current[province.name] = (currentIdx + 1) % province.funFacts.length;
+        currentFactIndexRef.current[province.name] =
+          (currentIdx + 1) % province.funFacts.length;
       });
-      
-      if (chartRef.current && chartRef.current.tooltip && chartRef.current.tooltip.isHidden === false) {
+
+      if (
+        chartRef.current &&
+        chartRef.current.tooltip &&
+        chartRef.current.tooltip.isHidden === false
+      ) {
         const point = chartRef.current.hoverPoint;
         if (point) {
           chartRef.current.tooltip.refresh(point);
