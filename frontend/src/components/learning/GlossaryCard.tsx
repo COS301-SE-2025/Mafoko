@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookOpen, Play } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Glossary {
   id: string;
@@ -23,9 +24,11 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
   onFlashcards,
   completedPercentage = 0,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div
-      className="bg-white rounded-xl p-3 sm:p-4 md:p-6 shadow-sm  cursor-default hover:shadow-md transition-all"
+      className="!bg-[var(--bg-tir)] rounded-xl p-3 sm:p-4 md:p-6 shadow-sm  cursor-default hover:shadow-md transition-all !text-theme"
       style={{ padding: '10px' }}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -36,54 +39,50 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
         }
       }}
     >
-      <div className="flex items-start justify-between mb-4">
-        <span className="text-sm text-gray-500">{glossary.words} words</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-        {glossary.name}
-      </h3>
+      <div className="w-full flex flex-col items-start gap-3 px-4 py-3 text-theme">
+        {/* Title */}
+        <h3 className="text-lg font-semibold ">{glossary.name}</h3>
 
-      {/* Progress bar above the action buttons */}
-      <div className="glossary-card-progress mb-4">
-        <div className="progress-row flex items-center justify-between">
-          <div className="progress-bar w-full bg-gray-200 rounded-full h-2 mr-3 overflow-hidden">
+        {/* Progress bar container */}
+        <div className="w-full flex items-center gap-4">
+          <div className="flex-1 bg-gray-200/80 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
             <div
-              className="progress-fill h-2 rounded-full"
-              style={{
-                width: `${completedPercentage}%`,
-                background: '#00ceaf',
-              }}
+              className="h-3 bg-[#00ceaf] rounded-full transition-all duration-300"
+              style={{ width: `${completedPercentage}%` }}
             />
           </div>
-          <div className="progress-label text-sm text-gray-600">
+          <span className="text-sm font-medium text-gray-500 dark:text-zinc-400 w-12 text-right">
             {completedPercentage}%
-          </div>
+          </span>
         </div>
       </div>
 
-      <div className="glossary-card-actions flex gap-3">
+      <div
+        className="glossary-card-actions flex gap-3 justify-between items-center"
+        style={{ paddingTop: '15px' }}
+      >
         <button
           type="button"
-          className="study-btn flex items-center gap-2"
+          className=" flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white"
           onClick={(e) => {
             e.stopPropagation();
             if (onStudy) onStudy();
           }}
         >
           <BookOpen className="w-4 h-4" />
-          Study Words
+          {t('learningPathPage.learningGlossarylist.flashCards')}
         </button>
 
         <button
           type="button"
-          className="flashcard-btn flex items-center gap-2"
+          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white"
           onClick={(e) => {
             e.stopPropagation();
             if (onFlashcards) onFlashcards();
           }}
         >
           <Play className="w-4 h-4" />
-          Flashcards
+          {t('learningPathPage.learningGlossarylist.testKnowledge')}
         </button>
       </div>
     </div>

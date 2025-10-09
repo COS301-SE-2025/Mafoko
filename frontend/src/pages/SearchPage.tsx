@@ -18,7 +18,6 @@ import {
 import { Term } from '../types/terms/types.ts';
 import { useDebounce } from '../hooks/useDebounce';
 import { API_ENDPOINTS } from '../config';
-import '../styles/SearchPage.scss';
 
 const SearchPage: React.FC = () => {
   const { t } = useTranslation();
@@ -218,7 +217,7 @@ const SearchPage: React.FC = () => {
                 />
                 <div className="">
                   <div className="flex flex-wrap gap-4 items-center justify-between mt-3">
-                    <div className="flex flex-wrap gap-4 items-center">
+                    <div className="flex flex-wrap gap-4 items-center z-100">
                       <DropdownFilter
                         label={t('searchPage.language')}
                         options={LANGUAGES}

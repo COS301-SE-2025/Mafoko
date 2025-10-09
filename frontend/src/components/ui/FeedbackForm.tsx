@@ -1,5 +1,6 @@
 import { Send, Loader, AlertCircle } from 'lucide-react';
 import { FeedbackType } from '../../types/feedback';
+import { useTranslation } from 'react-i18next';
 
 interface FormData {
   name: string;
@@ -37,13 +38,15 @@ const FeedbackForm = ({
   isSubmitting = false,
   submitError = null,
 }: FeedbackFormProps) => {
+  const { t } = useTranslation();
+
   return (
     <form onSubmit={handleSubmit} className="feedback-form">
       <div className="form-fields">
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="name" className="form-label">
-              Name (Optional)
+              {t('feedbackPage.name')}
             </label>
             <input
               type="text"
@@ -52,12 +55,12 @@ const FeedbackForm = ({
               value={formData.name}
               onChange={handleInputChange}
               className="form-input"
-              placeholder="Your name"
+              placeholder={t('feedbackPage.namePlaceholder')}
             />
           </div>
           <div className="form-group">
             <label htmlFor="email" className="form-label">
-              Email (Optional)
+              {t('feedbackPage.email')}
             </label>
             <input
               type="email"
@@ -66,14 +69,14 @@ const FeedbackForm = ({
               value={formData.email}
               onChange={handleInputChange}
               className="form-input"
-              placeholder="your.email@example.com"
+              placeholder={t('feedbackPage.emailPlaceholder')}
             />
           </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="message" className="form-label">
-            Your {activeTabData.label} *
+            {t('feedbackPage.your')} {activeTabData.label} *
           </label>
           <textarea
             id="message"
@@ -85,10 +88,10 @@ const FeedbackForm = ({
             className="form-textarea"
             placeholder={
               activeTab === FeedbackType.SUGGESTION
-                ? 'Describe your suggestion in detail...'
+                ? `${t('feedbackPage.suggest')}...`
                 : activeTab === FeedbackType.COMPLAINT
-                  ? 'Please describe the issue you experienced...'
-                  : 'Tell us what made your experience great...'
+                  ? `${t('feedbackPage.issue')}...`
+                  : `${t('feedbackPage.compliment')}...`
             }
           />
         </div>
@@ -111,12 +114,12 @@ const FeedbackForm = ({
             {isSubmitting ? (
               <>
                 <Loader className="submit-icon loading" />
-                Submitting...
+                {t('feedbackPage.submiting')}...
               </>
             ) : (
               <>
                 <Send className="submit-icon" />
-                Submit {activeTabData.label}
+                {t('feedbackPage.singluarSubmit')} {activeTabData.label}
               </>
             )}
           </button>

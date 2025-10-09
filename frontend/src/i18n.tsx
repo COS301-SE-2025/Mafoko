@@ -30,8 +30,8 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath: '/Marito/locales/{{lng}}/{{ns}}.json',
-      addPath: '/Marito/locales/add/{{lng}}/{{ns}}',
+      loadPath: '/Mafoko/locales/{{lng}}/{{ns}}.json',
+      addPath: '/Mafoko/locales/add/{{lng}}/{{ns}}',
     },
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],

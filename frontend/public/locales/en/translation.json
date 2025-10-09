@@ -189,6 +189,30 @@
       "mission": "Marito works seamlessly both offline and online, empowering communities to access comprehensive language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the University of Pretoria to democratize linguistic resources and advance natural language processing research for African languages.",
       "teamCredit": "Proudly developed by Velox",
       "learnMoreDSFSI": "Learn more about DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "About Mafoko",
+      "content": "Mafoko (meaning “words” in Setswana) is a multilingual platform designed to celebrate and connect South Africa’s 11 official languages."
+    },
+    "whyMafoko": {
+      "title": "Why Mafoko exists",
+      "content": "South Africa’s languages are vibrant, expressive, and deeply tied to our identity, yet many of them remain underrepresented in the digital world. Mafoko was built to change that. It brings together words and meanings from multiple glossaries into one searchable space, making it easier than ever to explore terms, understand translations, and learn across all 11 official languages.",
+      "content2": "Whether you’re online or offline, Mafoko keeps language knowledge within reach. It also encourages collaboration, letting communities suggest updates, share insights, and help improve the quality of each glossary entry over time.",
+      "content3": "By turning scattered linguistic resources into one living, growing platform, Mafoko helps preserve our heritage while supporting inclusive education and natural language research for low-resource languages."
+    },
+    "whoMafoko": {
+      "title": "Who it’s for",
+      "content": "Students, educators, researchers, and anyone passionate about language and culture."
+    },
+    "howMafoko": {
+      "title": "How to use Mafoko",
+      "content": "You can use Mafoko to search for terms, explore different language domains, view translations, and even share your own feedback to help improve the platform.",
+      "help": "For a detailed walkthrough including short guides and video demonstrations visit the",
+      "helpLink": "Help Page"
+    },
+    "behindProject": {
+      "title": "Behind the Project",
+      "content": "Mafoko is developed for the Data Science for Social Impact (DSFSI) group at the University of Pretoria."
     }
   },
 
@@ -392,6 +416,380 @@
       "passwordUpdateError": "Failed to update password: {{message}}",
       "documentsRequired": "ID Document and CV are required for linguist application",
       "applicationError": "Failed to submit application: {{message}}"
+    }
+  },
+  "termsAndConditions": {
+    "title": "Terms and Conditions",
+    "welcome": "Welcome to Mafoko, a multilingual platform developed and operated by the Data Science for Social Impact (DSFSI) group at the University of Pretoria. By using Mafoko, you agree to these Terms and Conditions. Please read them carefully before accessing or contributing to the platform.",
+    "purposeTitle": "Purpose of Mafoko",
+    "purpose": "Mafoko (meaning “words” in Setswana) is an educational, non-commercial platform that promotes South Africa’s 11 official languages by providing access to multilingual glossaries and linguistic resources. The platform is designed to support inclusive learning, research, and collaboration across language communities.",
+    "userTitle": "User Accounts",
+    "user": "To contribute to Mafoko, such as submitting terms, voting, commenting, or applying to become a linguist, users must create an account. You agree to provide accurate and truthful information when registering and to maintain the confidentiality of your login details. DSFSI reserves the right to suspend or remove accounts that violate these Terms or submit inappropriate content.",
+    "contributionTitle": "User Contributions",
+    "contribution": "Mafoko allows users to submit terms, translations, definitions, and comments. By contributing content, you grant DSFSI a non-exclusive, royalty-free license to display, reproduce, and distribute your contributions within Mafoko for educational and research purposes.",
+    "contribution2": "All submissions must be relevant, respectful, and linguistically appropriate. Content that is discriminatory, offensive, or misleading will be removed, and repeated violations may result in account suspension.",
+    "linguistTitle": "Linguist Applications",
+    "linguist": "Users who wish to become linguists on the platform may apply by providing proof of scholarly publications (such as Google Scholar records). DSFSI reserves the right to review and verify credentials before granting linguist-level permissions.",
+    "propertyTitle": "Intellectual Property",
+    "property": "The Mafoko platform, including its design, structure, and compiled glossaries, is the intellectual property of DSFSI and the University of Pretoria. Individual terms and translations remain the property of their respective authors and contributors, but may be reused within Mafoko for educational and research purposes as outlined above.",
+    "accuracyTitle": "Accuracy and Disclaimer",
+    "accuracy": "While Mafoko aims to provide accurate and reliable linguistic information, DSFSI makes no guarantees regarding the completeness or correctness of content. The platform is offered “as is” for educational use, and DSFSI is not liable for any errors, omissions, or outcomes resulting from its use.",
+    "commercial": "Mafoko is provided free of charge for educational and research purposes. No content from the platform may be reproduced, redistributed, or used for commercial gain without prior written consent from DSFSI.",
+    "commercialTitle": "Non-Commercial Use",
+    "privaryTitle": "Privacy and Data Use",
+    "privacy": "Mafoko does not use cookies, analytics tracking, or advertising services. Account information is stored solely to enable user participation and maintain platform functionality. DSFSI does not share personal data with third parties.",
+    "change": "DSFSI may update these Terms and Conditions periodically to reflect improvements or policy changes. Continued use of Mafoko after updates indicates your acceptance of the revised terms.",
+    "changeTitle": "Changes to Terms",
+    "contactTitle": "Contact",
+    "contact": "For any questions or concerns regarding these Terms and Conditions, please contact the Data Science for Social Impact (DSFSI) group at the University of Pretoria.",
+    "email": "Email"
+  },
+  "feedbackPage": {
+    "thanks": "Thank You",
+    "your": "Your",
+    "success": "has been submitted successfully. We appreciate your feedback",
+    "redirect": "Redirecting",
+    "submit": "Submit a",
+    "description": "Share your ideas to help us improve our service.",
+    "description2": "Let us know what went wrong so we can make it right.",
+    "description3": "We'd love to hear what we're doing well",
+    "name": "Name (Optional)",
+    "namePlaceholder": "Name",
+    "email": "Email (Optional)",
+    "emailPlaceholder": "Email",
+    "suggest": "Describe your suggestion in detail",
+    "issue": "Please describe the issue you experienced",
+    "compliment": "Tell us what made your experience great",
+    "submiting": "Submitting",
+    "singluarSubmit": "Submit"
+  },
+  "feedbackTitles": {
+    "suggestions": "Suggestion",
+    "complaint": "Complaint",
+    "compliment": "Compliment"
+  },
+  "navbar": {
+    "mainNavigation": "Main Navigation",
+    "analytics": "Analytics",
+    "workspaceAndTools": "Workspace & Tools",
+    "workspace": "Workspace",
+    "learing": "Learning Paths",
+    "termAddition": "Term Additions",
+    "linguist": "Linguist",
+    "admin": "Admin",
+    "profileAndAccount": "Profile and Account",
+    "achievements": "Achievements",
+    "supportAndFeedback": "Support and Feedback",
+    "feedback": "Feedback"
+  },
+  "termAdditions": {
+    "contributionTitle": "Term Contributions",
+    "termTitle": "Term",
+    "termPlaceholder": "Enter Term",
+    "defTitle": "Definition",
+    "defPlaceholder": "Enter Definition",
+    "exampleTitle": "Example",
+    "examplePlaceholder": "Enter example usage",
+    "domainTitle": "Domain",
+    "languageTitle": "Language",
+    "extTransTitle": "Existing Translations",
+    "extContent": "Select related admin-verified terms to add as translations:",
+    "selectTrans": "Selected Translations",
+    "remove": "Remove",
+    "submitTerm": "Submit Term",
+    "selectToEdit": "Select Term to Edit",
+    "searchPlaceholder": "Search for an editable term...",
+    "selected": "Selected",
+    "content2": "Select related admin-verified terms to add as translations:",
+    "submitEdit": "Submit Edit",
+    "translation": "Translations",
+    "status": "Status",
+    "votes": "Votes",
+    "action": "Action",
+    "reviewFeedback": "Review Feedback",
+    "deleteApplication": "Delete Application",
+    "deleteContent": "Are you sure you want to delete this submission? This action cannot be undone.",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "contribute": {
+    "submit": "Submit Term",
+    "suggest": "Suggest Edit",
+    "submissions": "My Submissions",
+    "pending": "Pending Terms",
+    "rejected": "Rejected Terms"
+  },
+  "contributePlaceholder": {
+    "domain": "Select Domain",
+    "language": "Select Language"
+  },
+  "analyticsPage": {
+    "filterByLang": "Filter By Language",
+    "allLanguages": "All Languages"
+  },
+  "homePage": {
+    "connecting": "Connecting",
+    "languages": "South African languages"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "You're offline - showing cached data",
+    "searchPlaceholder": "Search terms",
+    "filterByLanguage": "Filter by Language",
+    "allLanguages": "All Languages",
+    "activeFilter": "Active Filter",
+    "clear": "Clear",
+    "loadingTerms": "Loading Terms",
+    "noTermsFound": "No terms found for this glossary.",
+    "noTermsMatch": " No terms match your search.",
+    "page": "page",
+    "of": "of",
+    "exportData": "Export Data",
+    "exportMessage": "Download all terms from",
+    "exportMessage2": "in your preferred format.",
+    "format": "Format",
+    "agriculture": "Terms covering farming, livestock, and agricultural production processes.",
+    "construction": "Terminology for construction methods, materials, and project management.",
+    "demography": "Key terms describing population characteristics and social statistics.",
+    "education": "Terms relating to learning, training, and academic systems.",
+    "energy": "Concepts and terminology related to power generation and energy systems.",
+    "environment": "Terms describing environmental conservation, ecology, and sustainability.",
+    "generalDemography": "Broader demographic statistics including age, gender, and migration.",
+    "businessEnterprises": "Concepts related to business management, entrepreneurship, and company operations.",
+    "geography": "Geospatial, regional, and mapping-related terminology.",
+    "healthVitalStats": "Definitions and data terms for health, wellbeing, and vital statistics.",
+    "householdIncome": "Concepts covering household budgets, expenses, and living standards.",
+    "housingServices": "Terminology around housing infrastructure and essential urban services.",
+    "incomeWealth": "Economic terms about income distribution, pensions, and household wealth.",
+    "industryTrade": "Terms related to manufacturing, exports, and industrial production.",
+    "labour": "Employment-related terminology including workforce, wages, and labour markets.",
+    "lawJustice": "Terms describing legal systems, rights, and justice administration.",
+    "manufacturing": "Concepts about industrial manufacturing, production processes, and supply chains.",
+    "nationalAccounts": "Core economic indicators including GDP, national income, and financial statistics.",
+    "government": "Terms covering governance structures, administration, and public institutions.",
+    "populationCensus": "Census-related terminology for population data collection and demographic analysis.",
+    "poverty": "Concepts and indicators measuring poverty, inequality, and social development.",
+    "prices": "Economic terms related to inflation, consumer prices, and purchasing power.",
+    "privateSector": "Terminology around private enterprise, investment, and corporate activity.",
+    "publicFinance": "Terms covering government budgets, taxation, and fiscal management.",
+    "scienceTech": "Scientific and technological concepts including research and innovation.",
+    "socialConditions": "Terms describing community welfare, social services, and living conditions.",
+    "statisticalProcesses": "Technical terms covering statistical standards, metadata, and data methodologies.",
+    "businessRegisters": "Concepts related to maintaining and updating national business register systems.",
+    "tourism": "Terms related to travel, leisure industries, and visitor statistics.",
+    "tourismMigration": "Terminology describing tourism flows, migration trends, and mobility statistics.",
+    "trade": "Concepts covering imports, exports, and international commerce.",
+    "transportCommunication": "Terms describing logistics, infrastructure, and communication networks.",
+    "searchGlossary": "Search glossaries",
+    "loadingGlossary": "Loading glossaries",
+    "glossaryError": "No glossaries found",
+    "bookmarkError": "Bookmark Failed",
+    "bookmarkErrorDetails": "Unexpected error occurred.",
+    "connectionError": "Bookmark operations require internet connection.",
+    "loginError": "Please log in to bookmark glossaries.",
+    "terms": "terms",
+    "hide": "Hide",
+    "show": "Show",
+    "loading": "Loading...",
+    "langSelect": "Select Language",
+    "translating": "Translating",
+    "translate": "Translate",
+    "Notranslate": "No translation available for this language"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "Are you sure you want to permanently delete this learning path?",
+      "createPath": "Create Path",
+      "cancel": "Cancel",
+      "words": "words",
+      "language": "Language",
+      "learningPathName": "Learning Path Name",
+      "createNewPath": " Create a New Learning Path",
+      "toNextLevel": "to next level",
+      "overallProgress": "Overall Progress",
+      "levelTitle": "Level",
+
+      "newPath": "New Path",
+      "confirm": "Confirm",
+      "test": "Test",
+      "studySession": "Study Session",
+      "glossaries": "Glossaries"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Learning Paths",
+      "loadingPaths": "Loading Paths",
+      "message": "You haven't created any learning paths yet. Click '+ New Path' to get started!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Back to Paths",
+      "flashCards": "Flash Cards",
+      "testKnowledge": "Test Knowledge",
+      "backToGlossaries": "Back to Glossaries",
+      "wordsCompleted": "words completed",
+      "noTermsFound": "No Terms Found",
+      "glossaryTermError": "This glossary doesn't contain any terms yet.",
+      "tapToReveal": "Tap to Reveal",
+      "known": "Known",
+      "notLearned": "Not Learned",
+      "showing": "Showing",
+      "of": "of",
+      "terms": "terms",
+      "page": "Page",
+      "noTranslation": "No Translation",
+      "exitTestKnowledge": "Exit Test Knowledge",
+      "cards": "Cards",
+      "score": "Score",
+      "translateThisWord": "Translate this word",
+      "correctAnswer": "Correct Answer",
+      "yourAnswer": "Your Answer",
+      "nextCard": "Next Card",
+      "finish": "Finish",
+      "testComplete": "Test Complete",
+      "youGot": "You got",
+      "correct": "correct",
+      "outOf": "out of",
+      "tryAgain": "Try Again"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Contribution Activity",
+    "weeklyGoals": "Weekly Goals",
+    "howToEarnXP": "How to Earn XP",
+    "unlocked": "Unlocked",
+    "level": "Level",
+    "loading": "Loading",
+    "totalXP": "Total XP",
+    "currentStreak": "Current Streak",
+    "achievementsLabel": "Achievements",
+    "noActivity": "No Activity",
+    "addTerm": "Add a new term",
+    "addComment": "Add a comment",
+    "receiveUpvote": "Receive an upvote",
+    "dailyLoginBonus": "Daily login bonus",
+    "perUpvote": "per upvote",
+    "noGoals": "No Goals This Week",
+    "checkBackNextWeek": "Check back next week",
+    "completed": "Completed",
+    "loadingWeeklyGoals": "Loading weekly goals",
+    "progress": "progress",
+    "loadingAchievements": "Loading Achievements",
+
+    "of": "of",
+    "termPioneer": {
+      "title": "Term Pioneer",
+      "desc": "Add your first 10 terms to the dictionary"
+    },
+    "communityContributor": {
+      "title": "Community Contributor",
+      "desc": "Make 25 comments on terms"
+    },
+    "crowdFavorite": {
+      "title": "Crowd Favorite",
+      "desc": "Receive 100 upvotes on your contributions"
+    },
+    "multilingualMaster": {
+      "title": "Multilingual Master",
+      "desc": "Contribute to 5 different language dictionaries"
+    },
+    "consistencyChampion": {
+      "title": "Consistency Champion",
+      "desc": "Be active for 30 consecutive days"
+    },
+    "languageGuardian": {
+      "title": "Language Guardian",
+      "desc": "Have 50 of your contributions validated by experts"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Consistent User",
+    "Log in on 6 different days this week": "Log in on 6 different days this week",
+    "Streak Keeper": "Streak Keeper",
+    "Maintain a login streak of 3 consecutive days": "Maintain a login streak of 3 consecutive days",
+    "Active Commenter": "Active Commenter",
+    "Write 4 comments on terms this week": "Write 4 comments on terms this week"
+  },
+  "termHelpPage": {
+    "back": "Back",
+    "onThisPage": "On this page",
+    "understandingTermsLink": "Understanding Terms in Marito",
+    "understandingDictionaryTitle": "Understanding the Dictionary",
+    "understandingDictionaryDescription": "The Dictionary is where you can look up multilingual term definitions across all of South Africa’s 11 official languages. It supports fast searching, filtering by language or domain, and offline access once dictionaries are downloaded.",
+
+    "dict": {
+      "overview": {
+        "title": "Understanding the Dictionary",
+        "desc": "The Dictionary is where you can look up multilingual term definitions across all of South Africa’s 11 official languages. It supports fast searching, filtering by language or domain, and offline access once dictionaries are downloaded."
+      },
+      "whatIsATerm": {
+        "title": "What is a Term?",
+        "intro": "Each term in Marito includes the following details:",
+        "termLabel": "Term:",
+        "termDesc": "The word or phrase.",
+        "languageLabel": "Language:",
+        "languageDesc": "One of South Africa’s 11 official languages.",
+        "domainLabel": "Domain:",
+        "domainDesc": "The subject area.",
+        "definitionLabel": "Definition:",
+        "definitionDesc": "A clear explanation of the term’s meaning.",
+        "relatedLabel": "Related Terms:",
+        "relatedDesc": "Links to terms with similar or connected meanings."
+      },
+      "languages": {
+        "title": "Supported Languages",
+        "desc": "Marito supports all 11 official South African languages. You can filter your searches to focus on a single language or explore terms across all of them.",
+        "af": "Afrikaans",
+        "en": "English",
+        "nd": "isiNdebele",
+        "xh": "isiXhosa",
+        "zu": "isiZulu",
+        "st": "Sesotho",
+        "nso": "Sepedi",
+        "tn": "Setswana",
+        "ss": "Siswati",
+        "ve": "Tshivenda",
+        "ts": "Xitsonga"
+      },
+      "search": {
+        "title": "Searching for Terms",
+        "howTitle": "How Searching Works",
+        "intro1": "The search functionality in Marito is designed to help you explore glossary terms quickly and efficiently across all 11 official South African languages.",
+        "intro2": "You’ll find the search bar prominently at the top of the page. As you type, Marito performs a live search, updating results in real time.",
+        "term": "Term:",
+        "termDesc": "The primary label or phrase representing a concept.",
+        "definition": "Definition:",
+        "definitionDesc": "Terms whose explanations contain your search keywords will also appear.",
+        "filters": "Filters:",
+        "filtersDesc": "If you use filters, only terms in the selected language or domain will be returned.",
+        "live": "Live Suggestions",
+        "liveDesc": "As you type, Marito may suggest completions or related terms to help you discover results faster.",
+        "sensitivity": "Search Sensitivity",
+        "sensitivityDesc": "By default, Marito performs exact or near-exact matching. You can enable fuzzy search to find results even with typos.",
+        "resultCards": "Result Cards",
+        "resultCardsDesc": "Each term card displays the term, language, domain, definition, and voting buttons. The View link opens detailed information.",
+        "combine": "You can combine search with filters and sorting to refine your experience. Offline search also works with downloaded dictionaries."
+      },
+      "filters": {
+        "title": "Filter Options",
+        "intro": "To narrow results, apply filters from the search page. Available filters include:",
+        "language": "Language:",
+        "languageDesc": "Restrict results to a single language.",
+        "domain": "Domain:",
+        "domainDesc": "Focus on subject areas like Education, Health, or Technology.",
+        "fuzzy": "Fuzzy Search:",
+        "fuzzyDesc": "Find terms even if there are typos or spelling differences."
+      },
+      "view": {
+        "title": "Viewing Terms",
+        "desc": "Click the View button on a term card to open its full definition, see related terms, and explore more details."
+      },
+      "offline": {
+        "title": "Offline Usage",
+        "desc": "Marito can be used offline by downloading glossaries in advance. Once downloaded, search and filters continue to work without internet.",
+        "howTitle": "How to Download",
+        "step1": "Go to the Glossaries page.",
+        "step2": "Select the glossaries you want to download.",
+        "step3": "Click Download to save them locally.",
+        "after": "After downloading, those glossaries remain available even offline."
+      }
     }
   }
 }

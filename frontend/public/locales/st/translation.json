@@ -1,7 +1,7 @@
 {
   "settings": {
     "title": "Ditlhophiso",
-    "subtitle": "Lokisa boiphihlelo ba hao ba Marito",
+    "subtitle": "Lokisa boiphihlelo ba hao ba Mafoko",
     "selectLanguage": "Kgetha puo eo o e ratang",
     "profile": {
       "title": "Profaele le Akhaonto",
@@ -50,19 +50,19 @@
     "orDivider": "KAPA",
     "loginWithGoogle": "Kena ka Google",
     "noAccount": "Ha o na akhaonto?",
-    "registerLink": "[ST] Register",
-    "welcomeImageAlt": "[ST] Marito Login Welcome",
+    "registerLink": "Ngodisa",
+    "welcomeImageAlt": "Mafoko Login Welcome",
     "dsfsiLogoAlt": "[ST] DSFSI Logo",
-    "errorTokenMissing": "[ST] Login successful, but no token received. Please contact support.",
-    "errorDefault": "[ST] Login failed. Please check your credentials.",
-    "errorUnexpectedFormat": "[ST] Login error (status {{status}}). Unexpected error format.",
-    "errorWithStatus": "[ST] Login failed (status {{status}}). Please try again.",
-    "errorNetwork": "[ST] An error occurred: {{message}}.",
-    "errorUnknownNetwork": "[ST] An unknown network error occurred. Please try again."
+    "errorTokenMissing": "Keno e atlehile, empa ha ho lets'oao le amohetsoeng. Ka kopo ikopanye le tšehetso",
+    "errorDefault": "Ho kena ho hlolehile. Ka kopo, hlahloba mangolo a hau.",
+    "errorUnexpectedFormat": "Phoso ea ho kena (maemo {{maemo}}). Sebopeho sa phoso se sa lebelloang.",
+    "errorWithStatus": "Ho kena ho hlolehile. Ka kopo, leka hape.",
+    "errorNetwork": "Phoso e etsahetse.",
+    "errorUnknownNetwork": "Ho hlahile bothata ba marang-rang bo sa tsejoeng. Ka kopo, leka hape."
   },
   "registrationPage": {
     "title": "QALA JWALE",
-    "subtitle": "Theha akhaonto ya hao ya Marito.",
+    "subtitle": "Theha akhaonto ya hao ya Mafoko.",
     "firstNameLabel": "Lebitso la Pele",
     "firstNamePlaceholder": "Kenya lebitso la hao la pele",
     "lastNameLabel": "Sefane",
@@ -81,7 +81,7 @@
     "createWithGoogle": "Theha Akhaonto ka Google",
     "haveAccount": "O se o na le akhaonto?",
     "loginLink": "Kena",
-    "welcomeImageAlt": "[ST] Marito Welcome",
+    "welcomeImageAlt": "Mafoko Welcome",
     "dsfsiLogoAlt": "[ST] DSFSI Logo",
     "errorPasswordsDoNotMatch": "Mantswe a lekunutu ha a tshwane.",
     "errorAgreeToTerms": "O tlamehile ho dumela melawana le dipehelo.",
@@ -101,7 +101,7 @@
     }
   },
   "dashboard": {
-    "welcome": "O amohelehile ho Marito",
+    "welcome": "O amohelehile ho Mafoko",
     "welcomeBack": "O kgutlile hape",
     "userName": "Lebitso la Mosebedisi",
     "userId": "Nomoro ya Mosebedisi",
@@ -128,10 +128,34 @@
     "noTermsAvailable": "Ha ho mantswe a fumanehang",
     "browseCategoryGlossary": "Sheba {{category}} lenane la mantswe",
     "aboutMarito": {
-      "intro": "Lentswe 'Marito' le tswa ho Xitsonga, le bolela 'mantswe' kapa 'mabitso'. Ena ke sesebeliswa sa webu se tsoelang pele se kopanyang sekgeo se mahareng sa boholo ba puo ba Afrika Borwa le phihlello ya sejwale-jwale ya dijithale. Barati ba dipuo, bafuputsi ba NLP, le ditsebi tsa dipuo ba ka sebedisa Marito jwalo ka sethala se kopaneng ho fuputsa, ho kenya letsoho, le ho boloka dinane tsa mantswe a dipuo tse ngata, dipukuntsu, le mabaka a mantswe ho dipuo tse 11 tse semmuso tsa Afrika Borwa.",
-      "mission": "Marito e sebetsa hantle kokubili inthaneteng le kantle ho inthanete, e nolofalletsa setjhaba ho fumana disebediswa tse felletseng tsa dipuo, ho fana ka maikutlo, le ho sebedisana ho haheng di-lexicons tse tiileng bakeng sa dipuo tse nang le disebediswa tse fokolang. Sethala sena ke karolo ya mosebetsi o tswellang o etswang ke DSFSI (Data Science for Social Impact) Yunibesithing ya Pretoria ho etsa hore disebediswa tsa dipuo di fumanehe setjhabeng sohle le ho tsoela pele diphuputso tsa ho sebetsana le puo ya tlhaho bakeng sa dipuo tsa Afrika.",
+      "intro": "Lentswe 'Mafoko' le tswa ho Xitsonga, le bolela 'mantswe' kapa 'mabitso'. Ena ke sesebeliswa sa webu se tsoelang pele se kopanyang sekgeo se mahareng sa boholo ba puo ba Afrika Borwa le phihlello ya sejwale-jwale ya dijithale. Barati ba dipuo, bafuputsi ba NLP, le ditsebi tsa dipuo ba ka sebedisa Mafoko jwalo ka sethala se kopaneng ho fuputsa, ho kenya letsoho, le ho boloka dinane tsa mantswe a dipuo tse ngata, dipukuntsu, le mabaka a mantswe ho dipuo tse 11 tse semmuso tsa Afrika Borwa.",
+      "mission": "Mafoko e sebetsa hantle kokubili inthaneteng le kantle ho inthanete, e nolofalletsa setjhaba ho fumana disebediswa tse felletseng tsa dipuo, ho fana ka maikutlo, le ho sebedisana ho haheng di-lexicons tse tiileng bakeng sa dipuo tse nang le disebediswa tse fokolang. Sethala sena ke karolo ya mosebetsi o tswellang o etswang ke DSFSI (Data Science for Social Impact) Yunibesithing ya Pretoria ho etsa hore disebediswa tsa dipuo di fumanehe setjhabeng sohle le ho tsoela pele diphuputso tsa ho sebetsana le puo ya tlhaho bakeng sa dipuo tsa Afrika.",
       "teamCredit": "E hahilwe ka motlotlo ke Velox",
       "learnMoreDSFSI": "Ithute haholwanyane ka DSFSI"
+    },
+    "aboutMofoko": {
+      "title": "Ka Mafoko",
+      "content": "Mafoko (a bolelang “mantsoe” ka Setswana) ke sethala sa dipuo tse ngata se reretsoeng ho keteka le ho hokahanya dipuo tse 11 tse semmuso tsa Afrika Borwa."
+    },
+    "whyMafoko": {
+      "title": "Hobaneng Mafoko e le teng",
+      "content": "Dipuo tsa Afrika Borwa ke tse matla, tse bontshang maikutlo, ebile di hokahane ka botebo le boitsebahatso ba rona, empa tse ngata di ntse di se di emelwa ka botlalo lefatsheng la dijithale. Mafoko e hahilwe ho fetola sena. E kopanya mantsoe le meelelo e tsoang ho di-glossary tse fapaneng hore e be sebaka se le seng se ka batlwang, se etsang hore ho be bonolo ho hlahloba mantsoe, ho utlwisisa phetolelo, le ho ithuta dipuo tsohle tse 11 tse semmuso.",
+      "content2": "Hore na o hokahane kapa o sa hokahana inthaneteng, Mafoko e boloka tsebo ya puo e le haufi le wena. E boetse e kgothalletsa tshebedisano ka ho dumella ditjhaba ho fana ka ditlhahiso, ho arolelana maikutlo, le ho thusa ho ntlafatsa boleng ba ntlha e nngwe le e nngwe ya glossary ha nako e ntse e feta.",
+      "content3": "Ka ho fetola mehlodi e hasaneng ya dipuo hore e be sethala se phelang, se ntseng se hola, Mafoko e thusa ho boloka lefa la rona ha e ntse e tshehetsa thuto e akaretsang le dipatlisiso tsa dipuo tsa tlhaho bakeng sa dipuo tse nang le mehlodi e fokolang."
+    },
+    "whoMafoko": {
+      "title": "E etseditswe mang",
+      "content": "Baithuti, barupeli, bafuputsi, le mang kapa mang ya nang le tjantjello ya puo le setso."
+    },
+    "howMafoko": {
+      "title": "Mokgwa wa ho sebedisa Mafoko",
+      "content": "O ka sebedisa Mafoko ho batla mantsoe, ho hlahloba mafapha a fapaneng a puo, ho sheba diphetolelo, le ho fana ka maikutlo a hao ho thusa ho ntlafatsa sethala sena.",
+      "help": "Bakeng sa tlhaloso e felletseng e kenyeletsang ditaelo tse kgutshwane le di-video tsa tlhahisoleseding, etela",
+      "helpLink": "Leqephe la Thuso"
+    },
+    "behindProject": {
+      "title": "Ka mora Morero",
+      "content": "Mafoko e hlahisitswe bakeng sa sehlopha sa Data Science for Social Impact (DSFSI) ho Yunivesithi ya Pretoria."
     }
   },
   "glossaryPage": {
@@ -293,5 +317,287 @@
       "passwordUpdateFailed": "Ho hlolehile ho ntjhafatsa password",
       "passwordUpdateError": "Ho hlolehile ho ntjhafatsa password: {{message}}"
     }
+  },
+  "termsAndConditions": {
+    "title": "Melao le Maemo",
+    "welcome": "Rea u amohela ho Mafoko, sethala sa dipuo tse ngata se hlophisitsoeng le ho tsamaisoa ke sehlopha sa Data Science for Social Impact (DSFSI) Univesithing ya Pretoria. Ka ho sebedisa Mafoko, o dumellana le Melao le Maemo ana. Ka kopo bala ka hloko pele o kena kapa o kenya letsoho sethaleng sena.",
+    "purposeTitle": "Morero wa Mafoko",
+    "purpose": "Mafoko (le bolelang “mantsoe” ka Setswana) ke sethala sa thuto se seng sa khoebo se ntlafatsang dipuo tse 11 tse semmuso tsa Afrika Borwa ka ho fana ka monyetla wa ho fumana dithesaurus tse ngata le mehlodi ya dipuo. Sethala sena se reretswe ho tshehetsa thuto e kopanetsweng, dipatlisiso, le tshebedisano har’a setjhaba sa dipuo.",
+    "userTitle": "Diakhaonto tsa Basebedisi",
+    "user": "Ho kenya letsoho ho Mafoko, jwalo ka ho kenya mantsoe, ho vouta, ho fana ka maikutlo, kapa ho etsa kopo ya ho ba setsebi sa puo, basebedisi ba tlameha ho etsa ak’haonte. O dumellana ho fana ka tlhahisoleseding e nepahetseng ha o ingodisa le ho boloka dintlha tsa hau tsa ho kena e le lekunutu. DSFSI e na le tokelo ya ho emisa kapa ho hlakola diakhaonto tse tlolang Melao ena kapa tse hlahisang diteng tse sa lokang.",
+    "contributionTitle": "Dinehelo tsa Basebedisi",
+    "contribution": "Mafoko e dumella basebedisi ho kenya mantsoe, diphetolelo, ditlhaloso, le maikutlo. Ka ho fana ka ditaba, o fa DSFSI laesense e seng ya boikgethelo, e sa lefellweng ho bontsha, ho hlahisa hape, le ho aba dinehelo tsa hao ka hare ho Mafoko bakeng sa morero wa thuto le dipatlisiso.",
+    "contribution2": "Dinehelo tsohle di lokela ho ba tse loketseng, tse hlomphehang, le tse nepahetseng ka puo. Ditaba tse kgetholang, tse nyedisang kapa tse kgelosang di tla tloswa, mme tlolo e phetoang e ka lebisa ho emisoeng ha ak’haonte.",
+    "linguistTitle": "Dikopo tsa Bahlalefi ba Dipuo",
+    "linguist": "Basebedisi ba batlang ho ba bahlalefi ba dipuo sethaleng sena ba ka etsa dikopo ka ho fana ka bopaki ba dingolwa tsa bona tsa thuto (jwaloka lirekoto tsa Google Scholar). DSFSI e na le tokelo ya ho lekola le ho netefatsa diphihlelo pele e fana ka ditokelo tsa setsebi sa puo.",
+    "propertyTitle": "Bohlale ba Thepa",
+    "property": "Sethala sa Mafoko, ho kenyeletswa moralo wa sona, sebopeho, le dithesaurus tse bokelletsweng, ke thepa ya kelello ya DSFSI le Univesithi ya Pretoria. Mantsoe le diphetolelo ka seng di dula e le thepa ya bangodi le bahlophisi ba tsona, empa di ka sebediswa hape ka hare ho Mafoko bakeng sa morero wa thuto le dipatlisiso jwalo ka ha ho hlalositswe kaholimo.",
+    "accuracyTitle": "Nepahalo le Tlhokomeliso",
+    "accuracy": "Le ha Mafoko e ikemiseditse ho fana ka tlhahisoleseding e nepahetseng le e tshepahalang ya puo, DSFSI ha e fane ka tiisetso mabapi le ho phethahala kapa ho nepahala ha ditaba. Sethala sena se fanoe “jwaloka ha se le teng” bakeng sa morero wa thuto, mme DSFSI ha e na boikarabelo bakeng sa diphoso, ho tlohellwa, kapa ditlamorao tse hlahang ho tshebediso ya sona.",
+    "commercialTitle": "Tsebediso e Seng ya Khoebo",
+    "commercial": "Mafoko e fanoe mahala bakeng sa morero wa thuto le dipatlisiso. Ditaba tse ho sethala sena ha di a lokela ho hlahiswa hape, ho abelwa hape, kapa ho sebediswa bakeng sa phaello ntle le tumello e ngotsweng esale pele ho tswa ho DSFSI.",
+    "privaryTitle": "Boikgethelo le Tshebediso ya Dintlha",
+    "privacy": "Mafoko ha e sebedise di-cookie, ho latela ditlhahlobo, kapa ditshebeletso tsa papatso. Tlhahisoleseding ya ak’haonte e bolokilwe feela ho nolofalletsa ho nka karolo ha mosebedisi le ho boloka tshebetso ya sethala. DSFSI ha e arolelane dintlha tsa botho le mekga e meng.",
+    "changeTitle": "Diphetoho ho Melao",
+    "change": "DSFSI e ka ntlafatsa Melao le Maemo ana ka nako tse fapaneng ho bontsha ntlafatso kapa diphetoho tsa maano. Ho tswela pele ho sebedisa Mafoko kamora ntlafatso ho bontsha tumello ya hao ho melao e ntjha.",
+    "contactTitle": "Iteanye le Rona",
+    "contact": "Bakeng sa dipotso kapa matshwenyeho mabapi le Melao le Maemo ana, ka kopo ikopanye le sehlopha sa Data Science for Social Impact (DSFSI) Univesithing ya Pretoria.",
+    "email": "Imeile"
+  },
+  "feedbackPage": {
+    "thanks": "Rea leboha",
+    "your": "Tsa hau",
+    "success": "e rometsoe ka katleho. Re ananela maikutlo a hau.",
+    "redirect": "E fetisetsa",
+    "submit": "Romela",
+    "description": "Arolelana mehopolo ea hau ho re thusa ho ntlafatsa tšebeletso ea rona.",
+    "description2": "Re tsebise hore na ho fositse kae hore re lokise bothata boo.",
+    "description3": "Re kopa ho tseba hore na re etsa hantle kae.",
+    "name": "Lebitso (Boikhethelo)",
+    "namePlaceholder": "Lebitso",
+    "email": "Imeile (Boikhethelo)",
+    "emailPlaceholder": "Imeile",
+    "suggest": "Hlalosa tlhahiso ea hau ka botlalo",
+    "issue": "Ka kopo hlalosa bothata boo u tobaneng le bona",
+    "compliment": "Re bolelle hore na ke eng e entse hore phihlelo ea hau e be ntle",
+    "submiting": "E romella",
+    "singluarSubmit": "Romela"
+  },
+  "feedbackTitles": {
+    "suggestions": "Tlhahiso",
+    "complaint": "Tletlebo",
+    "compliment": "Teho"
+  },
+  "navbar": {
+    "mainNavigation": "Tsamaiso e Kholo",
+    "analytics": "Tlhahlobo ea Boitsebiso",
+    "workspaceAndTools": "Sebaka sa Mosebetsi le Lisebelisoa",
+    "workspace": "Sebaka sa Mosebetsi",
+    "learing": "Mekhoa ea Thuto",
+    "termAddition": "Keketso ea Mantsoe",
+    "linguist": "Setsebi sa Puo",
+    "admin": "Molaoli",
+    "profileAndAccount": "Boitsebiso le Ak’haonte",
+    "achievements": "Lintho tse Fihletsoeng",
+    "supportAndFeedback": "Tšehetso le Maikutlo",
+    "feedback": "Maikutlo"
+  },
+  "termAdditions": {
+    "contributionTitle": "Mekhoa ea Mantsoe",
+    "termTitle": "Lentsoe",
+    "termPlaceholder": "Kenya lentsoe",
+    "defTitle": "Tlhaloso",
+    "defPlaceholder": "Kenya tlhaloso",
+    "exampleTitle": "Mohlala",
+    "examplePlaceholder": "Kenya tšebeliso ea mohlala",
+    "domainTitle": "Sebaka sa Tsebo",
+    "languageTitle": "Puo",
+    "extTransTitle": "Liphetolelo Tse Teng",
+    "extContent": "Khetha mantsoe a netefalitsoeng ke batsamaisi ho a kenya e le phetolelo:",
+    "selectTrans": "Liphetolelo Tse Khethiloeng",
+    "remove": "Tlosa",
+    "submitTerm": "Romela Lentsoe",
+    "selectToEdit": "Khetha Lentsoe ho le Hlophisa",
+    "searchPlaceholder": "Batla lentsoe le ka hlophisoang...",
+    "selected": "Le Khethiloe",
+    "content2": "Khetha mantsoe a netefalitsoeng ke batsamaisi ho a kenya e le phetolelo:",
+    "submitEdit": "Romela Phetoho",
+    "translation": "Liphetolelo",
+    "status": "Boemo",
+    "votes": "Livotu",
+    "action": "Ketso",
+    "reviewFeedback": "Hlahloba Maikutlo",
+    "deleteApplication": "Hlosa Kopo",
+    "deleteContent": "Na u tiile hore u batla ho hlakola kopo ee? Ketso ena e ke ke ea khutlisetsoa morao.",
+    "delete": "Hlosa",
+    "cancel": "Khansela"
+  },
+  "contribute": {
+    "submit": "Romela Lentsoe",
+    "suggest": "Sisinyetsa Phetoho",
+    "submissions": "Lintho Tseo Ke Li Rometseng",
+    "pending": "Mantsoe A Emetseng",
+    "rejected": "Mantsoe A Hanoeng"
+  },
+  "contributePlaceholder": {
+    "domain": "Khetha Sebaka sa Tsebo",
+    "language": "Khetha Puo"
+  },
+  "analyticsPage": {
+    "filterByLang": "Sefa ka Puo",
+    "allLanguages": "Lipuo Tsohle"
+  },
+  "homePage": {
+    "connecting": "E hokahana",
+    "languages": "Lipuo tsa Afrika Borwa"
+  },
+  "glossaryPage2": {
+    "offlineMessage": "Ha o hokahane - ho bontšoa data e bolokiloeng",
+    "searchPlaceholder": "Batla mantsoe",
+    "filterByLanguage": "Sefa ka Puo",
+    "allLanguages": "Lipuo Tsohle",
+    "activeFilter": "Sefe e Sebetsang",
+    "clear": "Hlakola",
+    "loadingTerms": "E jarisa mantsoe",
+    "noTermsFound": "Ha ho mantsoe a fumanoeng bakeng sa lethathamo lena la mantsoe.",
+    "noTermsMatch": "Ha ho mantsoe a lumellanang le patlo ea hau.",
+    "page": "leqephe",
+    "of": "la",
+    "exportData": "Romela Data Kantle",
+    "exportMessage": "Khoasolla mantsoe ’ohle a tsoang ho",
+    "exportMessage2": "ka mokhoa oo u o khethileng.",
+    "format": "Mokhoa",
+    "agriculture": "Mantsoe a akaretsang temo, temo ea liphoofolo le lits'ebetso tsa tlhahiso ea temo.",
+    "construction": "Mantsoe a sebelisoang ho mehaho, thepa ea kaho le tsamaiso ea merero.",
+    "demography": "Mantsoe a bohlokoa a hlalosang litšobotsi tsa baahi le lipalo tsa sechaba.",
+    "education": "Mantsoe a amanang le thuto, koetliso le litsamaiso tsa thuto.",
+    "energy": "Mehopolo e amanang le tlhahiso ea matla le litsamaiso tsa matla.",
+    "environment": "Mantsoe a hlalosang tšireletso ea tikoloho, tikoloho le botsitso.",
+    "generalDemography": "Lipalo tsa batho tse akaretsang lilemo, bong le ho fallela ha batho.",
+    "businessEnterprises": "Mehopolo e amanang le taolo ea likhoebo, bo-rakhoebo le ts'ebetso ea lik'hamphani.",
+    "geography": "Mantsoe a amanang le libaka, libaka tsa libaka le litšoantšo tsa mebala.",
+    "healthVitalStats": "Litlhaloso le mantsoe a amanang le bophelo bo botle, boiketlo le lipalo-palo tsa bohlokoa.",
+    "householdIncome": "Mehopolo e amanang le tekanyetso ea lelapa, litšenyehelo le maemo a bophelo.",
+    "housingServices": "Mantsoe a hlalosang mehaho ea bolulo le lits'ebeletso tsa bohlokoa tsa toropo.",
+    "incomeWealth": "Mantsoe a moruo a hlalosang kabo ea chelete e kenang, meputso le maruo a malapa.",
+    "industryTrade": "Mantsoe a amanang le tlhahiso, khoebo le indasteri ea tlhahiso.",
+    "labour": "Mantsoe a amanang le mosebetsi ho kenyeletsoa basebetsi, meputso le 'maraka oa basebetsi.",
+    "lawJustice": "Mantsoe a hlalosang tsamaiso ea molao, litokelo le tsamaiso ea toka.",
+    "manufacturing": "Mehopolo e amanang le tlhahiso ea indasteri, lits'ebetso tsa tlhahiso le liketane tsa phepelo.",
+    "nationalAccounts": "Lipontšo tsa moruo tse kholo ho kenyeletsoa GDP, chelete ea naha le lipalo tsa lichelete.",
+    "government": "Mantsoe a hlalosang sebopeho sa mmuso, tsamaiso le mekhatlo ea sechaba.",
+    "populationCensus": "Mantsoe a amanang le palo ea batho le tlhahlobo ea lipalo tsa baahi.",
+    "poverty": "Mehopolo le matšoao a lekanyang bofutsana, ho se lekane le nts'etsopele ea sechaba.",
+    "prices": "Mantsoe a moruo a amanang le inflation, litheko tsa bareki le matla a ho reka.",
+    "privateSector": "Mantsoe a hlalosang likhoebo tse ikemetseng, matsete le mesebetsi ea lik'hamphani.",
+    "publicFinance": "Mantsoe a hlalosang tekanyetso ea mmuso, lekhetho le taolo ea lichelete tsa sechaba.",
+    "scienceTech": "Mehopolo ea saense le theknoloji e kenyeletsang lipatlisiso le boqapi.",
+    "socialConditions": "Mantsoe a hlalosang boiketlo ba sechaba, litšebeletso tsa sechaba le maemo a bophelo.",
+    "statisticalProcesses": "Mantsoe a botekgeniki a hlalosang litekanyetso tsa lipalo, metadata le mekhoa ea data.",
+    "businessRegisters": "Mehopolo e amanang le ho boloka le ho nchafatsa lirekoto tsa khoebo tsa naha.",
+    "tourism": "Mantsoe a amanang le maeto, indasteri ea boikhathollo le lipalo tsa baeti.",
+    "tourismMigration": "Mantsoe a hlalosang phallo ea bohahlauli, mekhoa ea ho fallela le phallo ea batho.",
+    "trade": "Mehopolo e akaretsang khoebo, kantle ho naha le khoebo ea machaba.",
+    "transportCommunication": "Mantsoe a hlalosang lipalangoang, mehaho le marang-rang a puisano.",
+    "searchGlossary": "Batla lethathamo la mantsoe",
+    "loadingGlossary": "E jarisa lethathamo la mantsoe",
+    "glossaryError": "Ha ho lethathamo la mantsoe le fumanoeng",
+    "bookmarkError": "Ho hlolehile ho boloka letšoao",
+    "bookmarkErrorDetails": "Phoso e sa lebelloang e etsahetse.",
+    "connectionError": "Mesebetsi ea ho boloka litlhaku e hloka khokahano ea inthanete.",
+    "loginError": "Ka kopo kena ho boloka lethathamo la mantsoe.",
+    "terms": "mantsoe",
+    "hide": "Pata",
+    "show": "Bontša",
+    "loading": "E jarisa...",
+    "langSelect": "Khetha Puo",
+    "translating": "E fetolela",
+    "translate": "Fetolela",
+    "Notranslate": "Ha ho phetolelo e fumanehang bakeng sa puo ena"
+  },
+  "learningPathPage": {
+    "main": {
+      "deleteMessage": "Na o tiile hore o batla ho hlakola tsela ena ea thuto ka ho sa feleng?",
+      "createPath": "Etsa Tsela ea Thuto",
+      "cancel": "Khansela",
+      "words": "mantsoe",
+      "language": "Puo",
+      "learningPathName": "Lebitso la Tsela ea Thuto",
+      "createNewPath": "Etsa Tsela e Ncha ea Thuto",
+      "toNextLevel": "ho ea boemong bo latelang",
+      "overallProgress": "Tsoelo-pele ka Kakaretso",
+      "levelTitle": "Boemo"
+    },
+    "learningPathlist": {
+      "learningPathTitle": "Ditsela tsa Thuto",
+      "loadingPaths": "E laisa Ditsela",
+      "message": "Ha o e-s’o thehe tsela ea thuto. Tobetsa '+ Tsela e Ncha' ho qala!"
+    },
+    "learningGlossarylist": {
+      "backToPaths": "Khutlela ho Ditsela",
+      "flashCards": "Likarete tsa Thuto",
+      "testKnowledge": "Leka Tsebo",
+      "backToGlossaries": "Khutlela ho Likhoshare",
+      "wordsCompleted": "mantsoe a phethetsoeng",
+      "noTermsFound": "Ha ho Mantsoe a Fumanoeng",
+      "glossaryTermError": "Khoshare ena ha e so be le mantsoe hajoale.",
+      "tapToReveal": "Tobetsa ho Senola",
+      "known": "A Tsejoang",
+      "notLearned": "Ha a So Ithutoe",
+      "showing": "E bontša",
+      "of": "ea",
+      "terms": "mantsoe",
+      "page": "Leqephe",
+      "noTranslation": "Ha ho Phetolelo",
+      "exitTestKnowledge": "Tsoa Tekong ea Tsebo",
+      "cards": "Likarete",
+      "score": "Lintlha",
+      "translateThisWord": "Fetolela lentsoe lena",
+      "correctAnswer": "Karabo e Nepileng",
+      "yourAnswer": "Karabo ea Hao",
+      "nextCard": "Karete e Latelang",
+      "finish": "Qeta",
+      "testComplete": "Teko e Phethiloe",
+      "youGot": "O fumane",
+      "correct": "tse nepahetseng",
+      "outOf": "ho tsoa ho",
+      "tryAgain": "Leka Hape"
+    }
+  },
+  "achievements": {
+    "contributionActivity": "Mosebetsi oa Menehelo",
+    "weeklyGoals": "Lipakane tsa Beke le Beke",
+    "howToEarnXP": "Mokhoa oa ho Fumana XP",
+    "unlocked": "E Butsoe",
+    "level": "Boemo",
+    "loading": "E laisa",
+    "totalXP": "XP e Kakaretso",
+    "currentStreak": "Letoto la Hajoale",
+    "achievementsLabel": "Lintho tse Fumanweng",
+    "noActivity": "Ha ho Mosebetsi",
+    "addTerm": "Kenya lentsoe le lecha",
+    "addComment": "Kenya maikutlo",
+    "receiveUpvote": "Amohela palonyana e kaholimo",
+    "dailyLoginBonus": "Moputso oa ho kena letsatsi le leng le le leng",
+    "perUpvote": "ka palonyana e kaholimo",
+    "noGoals": "Ha ho Lipakane Beke Ena",
+    "checkBackNextWeek": "Sheba hape bekeng e tlang",
+    "completed": "E Phethiloe",
+    "loadingWeeklyGoals": "E laisa lipakane tsa beke le beke",
+    "progress": "tsoelo-pele",
+    "loadingAchievements": "E laisa lintho tse fumanoeng",
+    "of": "ea",
+    "termPioneer": {
+      "title": "Motlai oa Mantsoe",
+      "desc": "Kenya mantsoe a hao a pele a 10 bukeng ea mantsoe"
+    },
+    "communityContributor": {
+      "title": "Motšehetsi oa Sechaba",
+      "desc": "Etsa maikutlo a 25 ka mantsoe"
+    },
+    "crowdFavorite": {
+      "title": "Ea Ratoang ke Sechaba",
+      "desc": "Amohela lipalonyana tse 100 bakeng sa menehelo ea hao"
+    },
+    "multilingualMaster": {
+      "title": "Setsebi sa Dipuo Tse Fapaneng",
+      "desc": "Kenya letsoho libukeng tsa mantsoe tsa dipuo tse 5 tse fapaneng"
+    },
+    "consistencyChampion": {
+      "title": "Moetapele oa Boitelo le Tsoelo-pele",
+      "desc": "E-ba mafolofolo matsatsi a 30 a latellanang"
+    },
+    "languageGuardian": {
+      "title": "Mohlokomeli oa Puo",
+      "desc": "Lumella hore menehelo ea hao e 50 e netefatsoe ke litsebi"
+    }
+  },
+  "weeklyGoals": {
+    "Consistent User": "Mosebelisi ea Tsoelang Pele",
+    "Log in on 6 different days this week": "Kena ka hare matsatsing a tšeletseng a fapaneng bekeng ena",
+    "Streak Keeper": "Mohlokomeli oa Tatellano",
+    "Maintain a login streak of 3 consecutive days": "Boloka tatellano ea ho kena matsatsi a mararo a latellanang",
+    "Active Commenter": "Mohlahlobi ea Maqhubu",
+    "Write 4 comments on terms this week": "Ngola maikutlo a mane ka mantsoe bekeng ena"
   }
 }

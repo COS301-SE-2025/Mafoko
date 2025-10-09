@@ -8,6 +8,7 @@ import { API_ENDPOINTS } from '../config';
 import { FeedbackCreate, FeedbackType, Feedback } from '../types/feedback';
 import { addPendingFeedback } from '../utils/indexedDB';
 import '../styles/FeedbackPage.scss';
+import { useTranslation } from 'react-i18next';
 
 interface FormData {
   name: string;
@@ -25,6 +26,7 @@ interface Tab {
 }
 
 const FeedbackPage = () => {
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -198,21 +200,21 @@ const FeedbackPage = () => {
   const tabs: Tab[] = [
     {
       id: FeedbackType.SUGGESTION,
-      label: 'Suggestion',
+      label: t('feedbackTitles.suggestions'),
       icon: Lightbulb,
       color: '#FFD600',
       bg: '#FFFDE7',
     },
     {
       id: FeedbackType.COMPLAINT,
-      label: 'Complaint',
+      label: t('feedbackTitles.complaint'),
       icon: AlertCircle,
       color: '#FF5252',
       bg: '#FFEBEE',
     },
     {
       id: FeedbackType.COMPLIMENT,
-      label: 'Compliment',
+      label: t('feedbackTitles.compliment'),
       icon: Heart,
       color: '#43A047',
       bg: '#E8F5E9',
@@ -273,16 +275,18 @@ const FeedbackPage = () => {
             <div className="feedback-success-container">
               <div className="feedback-success-card">
                 <CheckCircle className="success-icon" />
-                <h2 className="success-title">Thank You!</h2>
+                <h2 className="success-title">{t('feedbackPage.thanks')}!</h2>
                 <p className="success-message">
-                  Your {activeTab} has been submitted successfully. We
-                  appreciate your feedback!
+                  {t('feedbackPage.your')} {activeTab}{' '}
+                  {t('feedbackPage.thanks')}!
                 </p>
                 <div className="success-progress">
                   <div className="progress-bar">
                     <div className="progress-fill"></div>
                   </div>
-                  <p className="progress-text">Redirecting...</p>
+                  <p className="progress-text">
+                    {t('feedbackPage.redirect')}...
+                  </p>
                 </div>
               </div>
             </div>
@@ -374,15 +378,15 @@ const FeedbackPage = () => {
               <div className="feedback-form-container">
                 <div className="form-header">
                   <h2 className={`form-title ${activeTab}`}>
-                    Submit a {activeTabData.label}
+                    {t('feedbackPage.submit')} {activeTabData.label}
                   </h2>
                   <p className="form-description">
                     {activeTab === FeedbackType.SUGGESTION &&
-                      'Share your ideas to help us improve our service.'}
+                      `${t('feedbackPage.description')}.`}
                     {activeTab === FeedbackType.COMPLAINT &&
-                      'Let us know what went wrong so we can make it right.'}
+                      `${t('feedbackPage.description2')}.`}
                     {activeTab === FeedbackType.COMPLIMENT &&
-                      "We'd love to hear what we're doing well!"}
+                      `${t('feedbackPage.description')}!`}
                   </p>
                 </div>
 

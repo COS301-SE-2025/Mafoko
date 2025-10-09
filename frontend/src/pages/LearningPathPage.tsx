@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Flashcard from '../components/learning/Flashcard';
 import WordsPanel from '../components/learning/WordsPanel';
-import GlossaryCard from '../components/learning/GlossaryCard';
 import LearningPathList from '../components/learning/LearningPathList';
 import ConfirmationModal from '../components/ui/ConfirmationModal';
-import '../styles/LearningPathPage.scss';
+
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import LeftNav from '../components/ui/LeftNav';
 import Navbar from '../components/ui/Navbar';
@@ -24,8 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select.tsx';
+import { toast } from 'sonner';
+import { LearningPathGlossaryList } from '../components/ui/LearningPathGlossaryList.tsx';
+import { useTranslation } from 'react-i18next';
 
 const LearningPathPage: React.FC = () => {
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +73,6 @@ const LearningPathPage: React.FC = () => {
   const [retryPile, setRetryPile] = useState<Word[]>([]);
 
   const [activeMenuItem, setActiveMenuItem] = useState('learning-path');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const fetchUserPaths = async () => {
@@ -99,10 +101,6 @@ const LearningPathPage: React.FC = () => {
     };
   }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
   const getProficiencyLevel = (percentage: number): string => {
     if (percentage >= 80) return 'Advanced';
     if (percentage >= 40) return 'Intermediate';
@@ -113,14 +111,6 @@ const LearningPathPage: React.FC = () => {
     learningPaths.reduce((sum, p) => sum + (p.completedPercentage || 0), 0) /
       (learningPaths.length || 1),
   );
-
-  const getProgressPercentage = (): number => {
-    if (!studySession || studySession.words.length === 0) return 0;
-    const knownCount = studySession.words.filter((word) =>
-      knownWords.has(word.id),
-    ).length;
-    return Math.round((knownCount / studySession.words.length) * 100);
-  };
 
   const handleOpenCreateModal = async () => {
     try {
@@ -168,7 +158,10 @@ const LearningPathPage: React.FC = () => {
       !modalLanguage ||
       modalSelectedGlossaries.size === 0
     ) {
-      alert('Please fill out all fields and select at least one glossary.');
+      toast('Submission Failed', {
+        description:
+          'Please fill out all fields and select at least one glossary.',
+      });
       return;
     }
     try {
@@ -365,8 +358,10 @@ const LearningPathPage: React.FC = () => {
       const isFinished =
         currentCardIndex >= (studySession?.words.length || 0) &&
         retryPile.length === 0;
+
       const indexToSave = isFinished ? 0 : currentCardIndex;
       const retryIdsToSave = isFinished ? [] : retryPile.map((w) => w.id);
+
       void learningService.updateSessionProgress(
         selectedPath.language_name,
         selectedGlossary.name,
@@ -375,337 +370,337 @@ const LearningPathPage: React.FC = () => {
       );
     }
     setFlashcardMode(false);
+    setCurrentView('glossaries');
   };
 
-  return (
-    <div
-      className={`learning-path-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
-    >
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-menu-overlay"
-          onClick={toggleMobileMenu}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') toggleMobileMenu();
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Close menu"
-        />
-      )}
-      {isMobile ? (
-        <div className="workspace-navbar-mobile bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50">
-          <Navbar />
-        </div>
-      ) : (
-        <LeftNav
-          activeItem={activeMenuItem}
-          setActiveItem={setActiveMenuItem}
-        />
-      )}
-      <div className="main-content">
-        {!isMobile && (
-          <div className="top-bar learning-path-top-bar">
-            <button
-              className="hamburger-icon"
-              onClick={toggleMobileMenu}
-              aria-label="Toggle menu"
-              aria-expanded={isMobileMenuOpen}
-              type="button"
+  // eslint-disable-next-line react-x/no-nested-component-definitions
+  function LearningPathMode() {
+    if (currentView === 'paths') {
+      return (
+        <div className="flex flex-row gap-5 justify-center items-center">
+          <div className="relative group inline-block">
+            <span className="level-badge cursor-pointer">
+              {t('learningPathPage.main.levelTitle')}:{' '}
+              {getProficiencyLevel(overallProgressPercentage)}
+            </span>
+
+            {/* Tooltip */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 mt-2 hidden group-hover:flex flex-col gap-3 items-center !bg-[var(--bg-tir)] text-theme text-xs rounded-lg shadow-lg p-3 w-40 z-50 transition-opacity duration-200"
+              style={{ padding: '5px' }}
             >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-          </div>
-        )}
-        <div className={`learning-path-content${isMobile ? ' pt-16' : ''}`}>
-          <div className="learning-path-header">
-            <div className="learning-path-header-content">
-              <div className="learning-path-title-section">
-                <h1 className="learning-path-main-title">
-                  {currentView === 'paths'}
-                  {currentView === 'glossaries' &&
-                    (selectedPath?.path_name || '')}
-                  {currentView === 'words' &&
-                    !flashcardMode &&
-                    (selectedGlossary?.name || 'Study Session')}
-                  {currentView === 'words' &&
-                    flashcardMode &&
-                    `${selectedGlossary?.name || ''} - Flashcards`}
-                </h1>
-                <p className="learning-path-subtitle">
-                  {currentView === 'paths'}
-                  {currentView === 'glossaries'}
-                  {currentView === 'words' && !flashcardMode}
-                </p>
+              <div className="font-semibold mb-1 text-center">
+                {t('learningPathPage.main.overallProgress')}
               </div>
-
-              <div className="learning-path-header-actions">
-                {currentView === 'paths' && (
-                  <>
-                    <div
-                      className="level-badge-wrapper"
-                      style={{ position: 'relative' }}
-                    >
-                      <span className="level-badge">
-                        Level: {getProficiencyLevel(overallProgressPercentage)}
-                      </span>
-                      <div className="level-tooltip">
-                        <div className="tooltip-title">Overall Progress</div>
-                        <div className="tooltip-progress">
-                          <div
-                            className="tooltip-progress-fill"
-                            style={{
-                              width: `${overallProgressPercentage.toString()}%`,
-                            }}
-                          />
-                        </div>
-                        <div className="tooltip-text">
-                          {100 - overallProgressPercentage}% to next level
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      className="new-path-button"
-                      onClick={() => {
-                        void handleOpenCreateModal();
-                      }}
-                      type="button"
-                    >
-                      <span className="new-path-button-text">+ New Path</span>
-                    </button>
-                  </>
-                )}
-
-                {currentView === 'words' && !flashcardMode && studySession ? (
-                  <div className="learning-path-progress-display">
-                    <div className="learning-path-progress-percentage">
-                      {getProgressPercentage()}%
-                    </div>
-                    <div className="learning-path-progress-label">
-                      Completed
-                    </div>
-                  </div>
-                ) : null}
-
-                {currentView === 'words' && flashcardMode && studySession && (
-                  <div className="learning-path-progress-display">
-                    <div className="learning-path-progress-percentage">
-                      Card {currentCardIndex + 1}
-                    </div>
-                    <div className="learning-path-progress-label">
-                      of {studySession.words.length.toString()}
-                    </div>
-                  </div>
-                )}
+              <div className="w-[80%] bg-gray-700 rounded-full h-2 mb-2 ">
+                <div
+                  className="bg-emerald-400 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${overallProgressPercentage.toString()}%` }}
+                />
               </div>
+              <div className="opacity-80 text-center">
+                {100 - overallProgressPercentage}%{' '}
+                {t('learningPathPage.main.toNextLevel')}
+              </div>
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--bg-tir)] rotate-45" />
             </div>
           </div>
 
-          {currentView === 'paths' && (
-            <LearningPathList
-              paths={learningPaths}
-              onPathSelect={(p) => {
-                void handleSelectPath(p);
-              }}
-              onPathDelete={handleDeletePath}
-              isLoading={isLoading}
-            />
-          )}
-
-          {currentView === 'glossaries' && selectedPath && (
-            <>
-              <div className="flex items-center mb-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentView('paths');
-                  }}
-                  className="text-gray-600 hover:text-gray-900 mr-4"
-                >
-                  ← Back to Paths
-                </button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                {selectedPath.selected_glossaries.map((g) => {
-                  const glossaryInfo = {
-                    id: g.glossary_name,
-                    name: g.glossary_name,
-                    words: glossaryWordCounts[g.glossary_name] || 0,
-                    completedPercentage: 0,
-                  };
-                  return (
-                    <GlossaryCard
-                      key={g.glossary_name}
-                      glossary={glossaryInfo}
-                      onStudy={() => {
-                        void handleGlossarySelect(glossaryInfo, false);
-                      }}
-                      onFlashcards={() => {
-                        void handleGlossarySelect(glossaryInfo, true);
-                      }}
-                      completedPercentage={
-                        selectedPath.completedPercentage || 0
-                      }
-                    />
-                  );
-                })}
-              </div>
-            </>
-          )}
-
-          {currentView === 'words' && !flashcardMode && studySession ? (
-            <WordsPanel
-              studySession={studySession}
-              knownWords={knownWords}
-              onBackClick={() => {
-                setCurrentView('glossaries');
-              }}
-            />
-          ) : null}
-
-          {flashcardMode && currentView === 'words' && studySession ? (
-            <Flashcard
-              currentCard={getCurrentCard()}
-              answerOptions={getAnswerOptions()}
-              selectedAnswer={selectedAnswer}
-              showResult={showResult}
-              currentCardIndex={currentCardIndex}
-              totalCards={studySession.words.length}
-              score={score}
-              progressPercent={
-                // eslint-disable-next-line
-                studySession
-                  ? ((currentCardIndex + 1) / studySession.words.length) * 100
-                  : 0
-              }
-              onExit={exitFlashcards}
-              onSelectAnswer={handleAnswerSelect}
-              onNext={nextCard}
-              onRetry={() => {
-                // eslint-disable-next-line
-                if (studySession) {
-                  startFlashcards(studySession.words);
-                }
-              }}
-            />
-          ) : null}
-        </div>
-
-        {showNewPathModal && (
-          <div
-            className="learning-path-modal-overlay"
-            role="dialog"
-            aria-modal="true"
+          <button
+            className="bg-teal-500 text-white hover:bg-teal-600"
+            onClick={() => {
+              void handleOpenCreateModal();
+            }}
+            type="button"
           >
-            <div
-              className={`learning-path-modal flex gap-4 flex-col text-left ${isDarkMode ? 'dark-mode' : ''}`}
-            >
-              <h2 className="modal-title text-center">
-                Create a New Learning Path
-              </h2>
+            <span className="new-path-button-text">
+              + {t('learningPathPage.main.newPath')}
+            </span>
+          </button>
+        </div>
+      );
+    } else if (currentView === 'words' && !flashcardMode && studySession) {
+      return <div className="learning-path-progress-display"></div>;
+    } else if (currentView === 'words' && flashcardMode && studySession) {
+      return <div className="learning-path-progress-display"></div>;
+    }
+  }
 
-              <label className="font-bold">Learning Path Name</label>
+  // eslint-disable-next-line react-x/no-nested-component-definitions
+  function Modes() {
+    if (currentView === 'paths') {
+      return (
+        <LearningPathList
+          paths={learningPaths}
+          onPathSelect={(p) => {
+            void handleSelectPath(p);
+          }}
+          onPathDelete={handleDeletePath}
+          isLoading={isLoading}
+        />
+      );
+    } else if (currentView === 'glossaries' && selectedPath) {
+      return (
+        <LearningPathGlossaryList
+          selectedPath={selectedPath}
+          setCurrentView={setCurrentView}
+          glossaryWordCounts={glossaryWordCounts}
+          handleGlossarySelect={handleGlossarySelect}
+        />
+      );
+    } else if (currentView === 'words' && !flashcardMode && studySession) {
+      return (
+        <WordsPanel
+          studySession={studySession}
+          knownWords={knownWords}
+          onBackClick={() => {
+            setCurrentView('glossaries');
+          }}
+        />
+      );
+    } else if (flashcardMode && currentView === 'words' && studySession) {
+      return (
+        <Flashcard
+          currentCard={getCurrentCard()}
+          answerOptions={getAnswerOptions()}
+          selectedAnswer={selectedAnswer}
+          showResult={showResult}
+          currentCardIndex={currentCardIndex}
+          totalCards={studySession.words.length}
+          score={score}
+          progressPercent={
+            // eslint-disable-next-line
+            studySession
+              ? ((currentCardIndex + 1) / studySession.words.length) * 100
+              : 0
+          }
+          onExit={exitFlashcards}
+          onSelectAnswer={handleAnswerSelect}
+          onNext={nextCard}
+          onRetry={() => {
+            // eslint-disable-next-line
+            if (studySession) {
+              startFlashcards(studySession.words);
+            }
+          }}
+        />
+      );
+    }
+  }
+
+  return (
+    <>
+      {showNewPathModal && (
+        <div
+          className="fixed inset-0 z-[9989] !bg-[var(--bg-tir)] flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className={`w-full max-w-md mx-auto rounded-xl p-6 shadow-xl border !bg-[var(--bg-first)] text-theme text-left flex flex-col gap-5`}
+            style={{ padding: '20px' }}
+          >
+            <h2 className="text-xl font-semibold mb-4 text-center">
+              {t('learningPathPage.main.createNewPath')}
+            </h2>
+
+            <div>
+              <label className="font-bold !text-[15px]">
+                {t('learningPathPage.main.learningPathName')}
+              </label>
               <input
                 type="text"
-                placeholder="Path Name (e.g. Afrikaans for Business)"
-                className="modal-input"
+                placeholder={t('learningPathPage.main.learningPathName')}
                 value={modalPathName}
                 onChange={(e) => {
                   setModalPathName(e.target.value);
                 }}
-              />
+                className="
+    w-full
+    rounded-md
+    px-3
+    py-2
+    mb-3
+    bg-transparent
+    shadow-sm
 
-              <label className="font-bold">Language</label>
+    border-zinc-500
+    focus:outline-none
+    focus:ring-0
+    focus:border-0
+    text-[var(--text-theme)]
+    placeholder:text-zinc-400
+  "
+                style={{ padding: '5px' }}
+              />
+            </div>
+
+            <div>
+              <label className="font-bold">
+                {t('learningPathPage.main.language')}
+              </label>
               <Select
                 value={modalLanguage}
-                onValueChange={(value) => {
-                  void handleModalLanguageChange(value);
-                }}
+                onValueChange={(value) => void handleModalLanguageChange(value)}
               >
-                <SelectTrigger
-                  className={`modal-select ${isDarkMode ? 'dark-mode' : ''}`}
-                >
-                  <SelectValue placeholder="-- Select language --" />
+                <SelectTrigger className="w-full mt-1 mb-3">
+                  <SelectValue
+                    placeholder={t('contributePlaceholder.language')}
+                  />
                 </SelectTrigger>
-                <SelectContent className="max-h-60">
+                <SelectContent
+                  className="max-h-60 z-[9999] !bg-[var(--bg-first)] text-theme "
+                  style={{ padding: '5px' }}
+                >
                   {availableLanguages.map((lang) => (
-                    <SelectItem key={lang.name} value={lang.name}>
+                    <SelectItem
+                      key={lang.name}
+                      value={lang.name}
+                      className="hover:bg-[var(--bg-tir)] "
+                      style={{ padding: '5px' }}
+                    >
                       {lang.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <div className="modal-glossaries">
-                <label className="modal-label">Choose glossaries</label>
-                {!modalLanguage && (
-                  <div className="modal-hint">
-                    Select a language first to see available glossaries.
-                  </div>
-                )}
-                {modalLanguage && (
-                  <div className="space-y-2 flex flex-col gap-3">
-                    {modalGlossaries.map((g) => (
-                      <label
-                        key={g.id}
-                        className="flex items-center justify-between rounded-lg border border-input bg-background px-4 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition"
-                      >
-                        <div className="flex items-center gap-3">
-                          <input
-                            type="checkbox"
-                            checked={modalSelectedGlossaries.has(g.name)}
-                            onChange={() => {
-                              handleGlossaryToggle(g.name);
-                            }}
-                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                          />
-                          <span className="font-medium">{g.name}</span>
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                          {g.words} words
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="modal-actions">
-                <button
-                  type="button"
-                  className="modal-btn modal-cancel"
-                  onClick={() => {
-                    setShowNewPathModal(false);
-                  }}
+            </div>
+            <div>
+              <label className="font-bold">
+                {t('learningPathPage.main.glossaries')}
+              </label>
+              {modalLanguage && (
+                <div
+                  className="
+      space-y-2
+      mb-4
+      max-h-40        /* limits visible height */
+      overflow-y-auto /* enables smooth scrolling */
+      pr-2            /* keeps scrollbar from overlapping content */
+      rounded-md
+      border
+      border-gray-200
+      bg-[var(--bg-tir)]
+    "
                 >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="modal-btn modal-create"
-                  onClick={() => {
-                    void handleCreatePath();
-                  }}
-                >
-                  Create Path
-                </button>
-              </div>
+                  {modalGlossaries.map((g) => (
+                    <label
+                      key={g.id}
+                      className="
+          flex items-center justify-between
+          rounded-lg
+          px-4 py-2
+          cursor-pointer
+          hover:bg-accent/10
+          transition
+        "
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={modalSelectedGlossaries.has(g.name)}
+                          onChange={() => {
+                            handleGlossaryToggle(g.name);
+                          }}
+                          className="h-4 w-4 text-primary border-gray-300 rounded accent-teal-500"
+                        />
+                        <span>{g.name}</span>
+                      </div>
+                      <span className="text-sm text-gray-500">
+                        {g.words} {t('learningPathPage.main.words')}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                type="button"
+                className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 text-black"
+                onClick={() => {
+                  setShowNewPathModal(false);
+                }}
+              >
+                {t('learningPathPage.main.cancel')}
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 rounded-md bg-teal-500 hover:bg-teal-600 text-white"
+                onClick={() => void handleCreatePath()}
+              >
+                {t('learningPathPage.main.createPath')}
+              </button>
             </div>
           </div>
+        </div>
+      )}
+
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => {
+          setIsConfirmModalOpen(false);
+        }}
+        onConfirm={() => void handleConfirmDelete()}
+        title="Delete Learning Path"
+      >
+        <p className="text-theme">{t('learningPathPage.main.deleteMessage')}</p>
+      </ConfirmationModal>
+
+      <div
+        className={`fixed inset-0 flex box-border !bg-[var(--bg-first)] z-[1] ${
+          isDarkMode ? 'theme-dark' : 'theme-light'
+        }`}
+        style={{
+          marginLeft:
+            window.innerWidth >= 1024
+              ? '300px'
+              : window.innerWidth >= 770
+                ? '300px'
+                : '0px',
+        }}
+      >
+        {/* Side nav or top nav */}
+        {isMobile ? (
+          <div className="fixed top-0 left-0 w-full z-50">
+            <Navbar />
+          </div>
+        ) : (
+          <LeftNav
+            activeItem={activeMenuItem}
+            setActiveItem={setActiveMenuItem}
+          />
         )}
 
-        <ConfirmationModal
-          isOpen={isConfirmModalOpen}
-          onClose={() => {
-            setIsConfirmModalOpen(false);
-          }}
-          onConfirm={() => {
-            void handleConfirmDelete();
-          }}
-          title="Delete Learning Path"
+        {/* Main content area */}
+        <main
+          className={`flex-1 relative z-[2] box-border overflow-y-auto h-screen !bg-[var(--bg-first)] ${
+            isMobile ? 'pt-16' : 'pl-[280px]'
+          } px-6 sm:px-10`}
         >
-          <p>Are you sure you want to permanently delete this learning path?</p>
-        </ConfirmationModal>
+          <div className="max-w-[1200px] mx-auto py-6 ">
+            <h1 className="text-2xl font-semibold mb-4 text-theme">
+              {currentView === 'paths'}
+              {currentView === 'glossaries' && selectedPath?.path_name}
+              {currentView === 'words' &&
+                !flashcardMode &&
+                (selectedGlossary?.name ||
+                  t('learningPathPage.main.studySession'))}
+              {currentView === 'words' &&
+                flashcardMode &&
+                `${selectedGlossary?.name || ''} ${t('learningPathPage.main.test')}`}
+            </h1>
+
+            <div className="flex justify-end items-center mb-8 text-theme">
+              <LearningPathMode />
+            </div>
+
+            <Modes />
+          </div>
+        </main>
       </div>
-    </div>
+    </>
   );
 };
 

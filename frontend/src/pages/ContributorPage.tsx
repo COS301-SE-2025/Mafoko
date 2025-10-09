@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface TermSchema {
   id: string;
@@ -232,6 +233,7 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
 };
 
 const ContributorPage: React.FC = () => {
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkMode();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [activeMenuItem, setActiveMenuItem] = useState('contributor-page');
@@ -775,7 +777,7 @@ const ContributorPage: React.FC = () => {
 
   return (
     <div
-      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`dashboard-container  !bg-[var(--bg-first)] ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobile ? (
         <Navbar />
@@ -787,14 +789,14 @@ const ContributorPage: React.FC = () => {
       )}
       <div className="contributor-page-container">
         <div className="contributor-page-content">
-          <h1 className="page-title">Term Contributions</h1>
+          <h1 className="page-title">{t('termAdditions.contributionTitle')}</h1>
           <div className="tabs flex flex-wrap md:flex-nowrap gap-2 md:gap-4 ">
             {[
-              { key: 'submit', label: 'Submit Term' },
-              { key: 'edit', label: 'Suggest Edit' },
-              { key: 'my', label: 'My Submissions' },
-              { key: 'pending', label: 'Pending Terms' },
-              { key: 'rejected', label: 'Rejected Terms' },
+              { key: 'submit', label: t('contribute.submit') },
+              { key: 'edit', label: t('contribute.suggest') },
+              { key: 'my', label: t('contribute.submissions') },
+              { key: 'pending', label: t('contribute.pending') },
+              { key: 'rejected', label: t('contribute.rejected') },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -821,41 +823,43 @@ const ContributorPage: React.FC = () => {
           {activeTab === 'submit' && (
             <div className="form-container">
               <div className="form-group">
-                <label>Term*</label>
+                <label>{t('termAdditions.termTitle')}</label>
                 <input
                   type="text"
                   value={newTerm}
                   onChange={(e) => setNewTerm(e.target.value)}
-                  placeholder="Enter term"
+                  placeholder={t('termAdditions.termPlaceholder')}
                 />
               </div>
               <div className="form-group">
-                <label>Definition*</label>
+                <label>{t('termAdditions.defTitle')}</label>
                 <textarea
                   value={definition}
                   onChange={(e) => setDefinition(e.target.value)}
-                  placeholder="Enter definition"
+                  placeholder={t('termAdditions.defPlaceholder')}
                   rows={3}
                 />
               </div>
               <div className="form-group">
-                <label>Example</label>
+                <label>{t('termAdditions.exampleTitle')}</label>
                 <textarea
                   value={example}
                   onChange={(e) => setExample(e.target.value)}
-                  placeholder="Enter example usage"
+                  placeholder={t('termAdditions.examplePlaceholder')}
                   rows={2}
                 />
               </div>
               <div className="form-row">
                 <div className="form-group flex justify-center items-center">
-                  <label>Domain*</label>
+                  <label>{t('termAdditions.domainTitle')}</label>
                   <Select
                     value={selectedDomain}
                     onValueChange={(value) => setSelectedDomain(value)}
                   >
                     <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Select Domain" />
+                      <SelectValue
+                        placeholder={t('contributePlaceholder.domain')}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {domains.map((d) => (
@@ -867,13 +871,15 @@ const ContributorPage: React.FC = () => {
                   </Select>
                 </div>
                 <div className="form-group flex justify-center items-center">
-                  <label>Language*</label>
+                  <label>{t('termAdditions.languageTitle')}</label>
                   <Select
                     value={selectedLanguage}
                     onValueChange={(value) => setSelectedLanguage(value)}
                   >
                     <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Select Language" />
+                      <SelectValue
+                        placeholder={t('contributePlaceholder.language')}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {languages.map((l) => (
@@ -886,11 +892,9 @@ const ContributorPage: React.FC = () => {
                 </div>
               </div>
               <div className="translations-section">
-                <h3>Existing Translations</h3>
+                <h3>{t('termAdditions.extTransTitle')}</h3>
                 <div className="form-group">
-                  <label>
-                    Select related admin-verified terms to add as translations:
-                  </label>
+                  <label>{t('termAdditions.extContent')}</label>
                   <input
                     type="text"
                     value={translationSearchQuery}
@@ -917,7 +921,7 @@ const ContributorPage: React.FC = () => {
                 </div>
                 {selectedTranslations.length > 0 && (
                   <div className="selected-translations">
-                    <h4>Selected Translations:</h4>
+                    <h4>{t('termAdditions.selectTrans')}:</h4>
                     {selectedTranslations.map((translation) => (
                       <div key={translation.id} className="translation-item">
                         <span>{`${translation.term} (${translation.language}) - ${translation.domain}`}</span>
@@ -927,7 +931,7 @@ const ContributorPage: React.FC = () => {
                           }
                           className="remove-btn"
                         >
-                          Remove
+                          {t('termAdditions.remove')}
                         </button>
                       </div>
                     ))}
@@ -944,14 +948,14 @@ const ContributorPage: React.FC = () => {
                   !selectedLanguage
                 }
               >
-                Submit Term
+                {t('termAdditions.submitTerm')}
               </button>
             </div>
           )}
           {activeTab === 'edit' && (
             <div className="form-container">
               <div className="form-group">
-                <label>Select Term to Edit*</label>
+                <label>{t('termAdditions.selectToEdit')}</label>
                 <input
                   type="text"
                   value={editSearchQuery}
@@ -959,7 +963,7 @@ const ContributorPage: React.FC = () => {
                     setEditSearchQuery(e.target.value);
                     setTermToEditId(null);
                   }}
-                  placeholder="Search for an editable term..."
+                  placeholder={t('termAdditions.searchPlaceholder')}
                 />
                 {editSearchQuery && (
                   <ul className="search-results">
@@ -973,47 +977,49 @@ const ContributorPage: React.FC = () => {
                 )}
                 {termToEditId && (
                   <div className="selected-item">
-                    Selected: {editSearchQuery}
+                    {t('termAdditions.selected')}: {editSearchQuery}
                   </div>
                 )}
               </div>
               {termToEditId && (
                 <>
                   <div className="form-group">
-                    <label>Term*</label>
+                    <label>{t('termAdditions.termTitle')}</label>
                     <input
                       type="text"
                       value={newTerm}
                       onChange={(e) => setNewTerm(e.target.value)}
-                      placeholder="Enter term"
+                      placeholder={t('termAdditions.termPlaceholder')}
                     />
                   </div>
                   <div className="form-group">
-                    <label>Definition*</label>
+                    <label>{t('termAdditions.defTitle')}</label>
                     <textarea
                       value={definition}
                       onChange={(e) => setDefinition(e.target.value)}
-                      placeholder="Enter definition"
+                      placeholder={t('termAdditions.defPlaceholder')}
                       rows={3}
                     />
                   </div>
                   <div className="form-group">
-                    <label>Example</label>
+                    <label>{t('termAdditions.exampleTitle')}</label>
                     <textarea
                       value={example}
                       onChange={(e) => setExample(e.target.value)}
-                      placeholder="Enter example usage"
+                      placeholder={t('termAdditions.examplePlaceholder')}
                       rows={2}
                     />
                   </div>
                   <div className="form-row">
                     <div className="form-group">
-                      <label>Domain*</label>
+                      <label>{t('termAdditions.domainTitle')}</label>
                       <select
                         value={selectedDomain}
                         onChange={(e) => setSelectedDomain(e.target.value)}
                       >
-                        <option value="">Select Domain</option>
+                        <option value="">
+                          {t('contributePlaceholder.domain')}
+                        </option>
                         {domains.map((d) => (
                           <option key={d} value={d}>
                             {d}
@@ -1022,12 +1028,14 @@ const ContributorPage: React.FC = () => {
                       </select>
                     </div>
                     <div className="form-group">
-                      <label>Language*</label>
+                      <label>{t('termAdditions.languageTitle')}</label>
                       <select
                         value={selectedLanguage}
                         onChange={(e) => setSelectedLanguage(e.target.value)}
                       >
-                        <option value="">Select Language</option>
+                        <option value="">
+                          {t('contributePlaceholder.language')}
+                        </option>
                         {languages.map((l) => (
                           <option key={l} value={l}>
                             {l}
@@ -1037,12 +1045,9 @@ const ContributorPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="translations-section">
-                    <h3>Existing Translations</h3>
+                    <h3>{t('termAdditions.extTransTitle')}</h3>
                     <div className="form-group">
-                      <label>
-                        Select related admin-verified terms to add as
-                        translations:
-                      </label>
+                      <label>{t('termAdditions.content2')}</label>
                       <input
                         type="text"
                         value={translationSearchQuery}
@@ -1071,7 +1076,7 @@ const ContributorPage: React.FC = () => {
                     </div>
                     {selectedTranslations.length > 0 && (
                       <div className="selected-translations">
-                        <h4>Selected Translations:</h4>
+                        <h4>{t('termAdditions.selectTrans')}:</h4>
                         {selectedTranslations.map((translation) => (
                           <div
                             key={translation.id}
@@ -1084,7 +1089,7 @@ const ContributorPage: React.FC = () => {
                               }
                               className="remove-btn"
                             >
-                              Remove
+                              {t('termAdditions.remove')}
                             </button>
                           </div>
                         ))}
@@ -1101,7 +1106,7 @@ const ContributorPage: React.FC = () => {
                       !selectedLanguage
                     }
                   >
-                    Submit Edit
+                    {t('termAdditions.submitEdit')}
                   </button>
                 </>
               )}
@@ -1116,14 +1121,14 @@ const ContributorPage: React.FC = () => {
                 <table className="terms-table">
                   <thead>
                     <tr>
-                      <th>Term</th>
-                      <th>Definition</th>
-                      <th>Domain</th>
-                      <th>Language</th>
-                      <th>Translations</th>
-                      <th>Status</th>
-                      <th>Votes</th>
-                      <th>Action</th>
+                      <th>{t('termAdditions.termTitle')}</th>
+                      <th>{t('termAdditions.defTitle')}</th>
+                      <th>{t('termAdditions.domainTitle')}</th>
+                      <th>{t('termAdditions.languageTitle')}</th>
+                      <th>{t('termAdditions.translation')}</th>
+                      <th>{t('termAdditions.status')}</th>
+                      <th>{t('termAdditions.votes')}</th>
+                      <th>{t('termAdditions.action')}</th>
                     </tr>
                   </thead>
                   <tbody>{tableContent}</tbody>
@@ -1139,12 +1144,12 @@ const ContributorPage: React.FC = () => {
                 <table className="terms-table">
                   <thead>
                     <tr>
-                      <th>Term</th>
-                      <th>Definition</th>
-                      <th>Domain</th>
-                      <th>Language</th>
-                      <th>Review Feedback</th>
-                      <th>Action</th>
+                      <th>{t('termAdditions.termTitle')}</th>
+                      <th>{t('termAdditions.defTitle')}</th>
+                      <th>{t('termAdditions.domainTitle')}</th>
+                      <th>{t('termAdditions.languageTitle')}</th>
+                      <th>{t('termAdditions.reviewFeedback')}</th>
+                      <th>{t('termAdditions.action')}</th>
                     </tr>
                   </thead>
                   <tbody>{tableContent}</tbody>
@@ -1156,11 +1161,8 @@ const ContributorPage: React.FC = () => {
       {deleteModalOpen && (
         <div className="review-modal-backdrop">
           <div className="review-modal">
-            <h2>Delete Application</h2>
-            <p>
-              Are you sure you want to delete this submission? This action
-              cannot be undone.
-            </p>
+            <h2>{t('termAdditions.deleteApplication')}</h2>
+            <p>{t('termAdditions.deleteContent')}</p>
             <div className="modal-actions">
               <button
                 onClick={() => {
@@ -1169,10 +1171,10 @@ const ContributorPage: React.FC = () => {
                 }}
                 className="cancel-btn"
               >
-                Cancel
+                {t('termAdditions.cancel')}
               </button>
               <button onClick={handleDeleteApplication} className="delete-btn">
-                Delete
+                {t('termAdditions.delete')}
               </button>
             </div>
           </div>

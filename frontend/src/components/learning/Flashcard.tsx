@@ -1,7 +1,8 @@
 import React from 'react';
-import { CheckCircle2, RotateCcw } from 'lucide-react';
 import { Word } from '../../types/learning';
 import '../../styles/FlashcardStyles.scss';
+import { RotateCcw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface FlashcardProps {
   currentCard: Word | null;
@@ -17,8 +18,6 @@ interface FlashcardProps {
   onNext: () => void;
   onRetry: () => void;
 }
-
-// 2. The local, conflicting Word interface has been removed.
 
 const Flashcard: React.FC<FlashcardProps> = ({
   currentCard,
@@ -37,124 +36,151 @@ const Flashcard: React.FC<FlashcardProps> = ({
   const isCorrect =
     selectedAnswer ===
     (currentCard?.english_translation || currentCard?.definition);
+  const { t } = useTranslation();
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-4 ">
         <button
           onClick={onExit}
-          className="text-gray-600 hover:text-gray-900 text-sm sm:text-base"
+          className="text-theme hover:text-gray-900 text-sm sm:text-base"
         >
-          ← Exit Flashcards
+          ← {t('learningPathPage.learningGlossarylist.exitTestKnowledge')}
         </button>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-          <div className="text-sm text-gray-600">
-            Card {currentCardIndex + 1} of {totalCards}
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto">
+          <div className="text-sm text-theme">
+            {t('learningPathPage.learningGlossarylist.cards')}{' '}
+            {currentCardIndex + 1}{' '}
+            {t('learningPathPage.learningGlossarylist.of')} {totalCards}
           </div>
           <div className="text-sm font-medium" style={{ color: '#00ceaf' }}>
-            Score: {score.correct}/{score.total}
+            {t('learningPathPage.learningGlossarylist.score')}: {score.correct}/
+            {score.total}
           </div>
         </div>
       </div>
 
-      {currentCardIndex < totalCards ? (
-        <div className="max-w-2xl mx-auto">
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
-            <div
-              className="h-2 rounded-full transition-all duration-300"
-              style={{
-                width: `${progressPercent}%`,
-                backgroundColor: '#00ceaf',
-              }}
-            />
-          </div>
-
-          <div className="flashcard-container">
-            <div className={`flashcard ${showResult ? 'is-flipped' : ''}`}>
-              {/* Question Side */}
-              <div className="card-face card-front">
-                <div className="card-content">
-                  <span className="card-prompt">Translate this word:</span>
-                  <h2 className="card-word">{currentCard?.term}</h2>
-
-                  <div className="answer-grid">
-                    {!showResult &&
-                      answerOptions.map((option, index) => (
-                        <button
-                          key={index}
-                          onClick={() => onSelectAnswer(option)}
-                          type="button"
-                        >
-                          {option}
-                        </button>
-                      ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Answer Side */}
-              <div className="card-face card-back">
+      <div className="flex justify-center items-center flex-col gap-10 w-full">
+        {currentCardIndex < totalCards ? (
+          <div className="max-w-2xl mx-auto !w-full">
+            <div className="w-full justify-start items-center ">
+              <div
+                className="w-full bg-gray-200 rounded-full h-3 mb-8 "
+                style={{ marginBottom: '20px' }}
+              >
                 <div
-                  className={`card-content ${isCorrect ? 'correct' : 'incorrect'}`}
-                >
-                  <div>
-                    <div className="result-label">Correct answer:</div>
-                    <div className="result-text">
-                      {currentCard?.english_translation ||
-                        currentCard?.definition}
+                  className="h-3 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${progressPercent}%`,
+                    backgroundColor: '#00ceaf',
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="flashcard-container flex flex-col gap-5 ">
+              <div className={`flashcard ${showResult ? 'is-flipped' : ''}`}>
+                {/* Question Side */}
+                <div className="card-face card-front !bg-[var(--bg-tir)] !text-theme">
+                  <div className="card-content !text-theme">
+                    <span className="card-prompt !text-theme">
+                      {t(
+                        'learningPathPage.learningGlossarylist.translateThisWord',
+                      )}
+                      :
+                    </span>
+                    <h2 className="card-word !text-theme">
+                      {currentCard?.term}
+                    </h2>
+
+                    <div className="answer-grid !text-theme">
+                      {!showResult &&
+                        answerOptions.map((option, index) => (
+                          <button
+                            key={index}
+                            onClick={() => onSelectAnswer(option)}
+                            type="button"
+                            className="!text-theme"
+                          >
+                            {option}
+                          </button>
+                        ))}
                     </div>
                   </div>
+                </div>
 
-                  <div>
-                    <div className="result-label">Your answer:</div>
-                    <div className="result-text">{selectedAnswer}</div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={onNext}
-                    className="next-button"
+                {/* Answer Side */}
+                <div className="card-face card-back">
+                  <div
+                    className={`card-content  flex flex-col gap-10 justify-between items-center" ${isCorrect ? 'correct' : 'incorrect'}`}
                   >
-                    {currentCardIndex === totalCards - 1
-                      ? 'Finish'
-                      : 'Next Card'}
-                  </button>
+                    <div>
+                      <div className="result-label text-primary">
+                        {t(
+                          'learningPathPage.learningGlossarylist.correctAnswer',
+                        )}
+                        :
+                      </div>
+                      <div className="result-text">
+                        {currentCard?.english_translation ||
+                          currentCard?.definition}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="result-label">
+                        {t('learningPathPage.learningGlossarylist.yourAnswer')}:
+                      </div>
+                      <div className="result-text">{selectedAnswer}</div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={onNext}
+                      className="next-button"
+                    >
+                      {currentCardIndex === totalCards - 1
+                        ? t('learningPathPage.learningGlossarylist.finish')
+                        : t('learningPathPage.learningGlossarylist.nextCard')}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="max-w-lg mx-auto text-center px-4">
-          <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg border border-gray-200">
-            <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">
-              🎉
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Flashcards Complete!
-            </h2>
-            <div className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
-              You got{' '}
-              <span className="font-bold text-blue-600">{score.correct}</span>{' '}
-              out of <span className="font-bold">{score.total}</span> correct
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <button
-                onClick={onRetry}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm sm:text-base"
-              >
-                <RotateCcw className="w-4 h-4" /> Try Again
-              </button>
-              <button
-                onClick={onExit}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-sm sm:text-base"
-              >
-                Back to Words
-              </button>
+        ) : (
+          <div className="max-w-lg mx-auto text-center px-4">
+            <div className="bg-[var(--bg-tir)] rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg border border-[var(--bg-first)] flex flex-col gap-5">
+              <div className="text-[1rem] mb-3 sm:mb-4">🎉</div>
+              <h2 className="text-xl sm:text-2xl font-bold text-theme mb-3 sm:mb-4">
+                {t('learningPathPage.learningGlossarylist.testComplete')}!
+              </h2>
+              <div className="text-base sm:text-lg text-theme mb-4 sm:mb-6">
+                {t('learningPathPage.learningGlossarylist.youGot')}{' '}
+                <span className="font-bold text-teal-500">{score.correct}</span>{' '}
+                {t('learningPathPage.learningGlossarylist.outOf')}{' '}
+                <span className="font-bold">{score.total}</span>{' '}
+                {t('learningPathPage.learningGlossarylist.correct')}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-5 justify-between">
+                <button
+                  onClick={onRetry}
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 text-sm sm:text-base"
+                >
+                  <RotateCcw className="w-4 h-4" />{' '}
+                  {t('learningPathPage.learningGlossarylist.tryAgain')}
+                </button>
+                <button
+                  onClick={onExit}
+                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-sm sm:text-base"
+                >
+                  {t('learningPathPage.learningGlossarylist.backToGlossaries')}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };

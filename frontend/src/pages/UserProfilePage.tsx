@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LogOut } from 'lucide-react';
 import { useDarkMode } from '../components/ui/DarkModeComponent';
 import { API_ENDPOINTS } from '../config';
 import LeftNav from '../components/ui/LeftNav';
@@ -41,15 +40,13 @@ const UserProfilePage: React.FC = () => {
     loadingProfilePicture,
     clearProfilePictureCache,
     loadProfilePicture,
-    uploadProfilePicture,
     getPendingUploadCount,
   } = useProfilePicture(profile?.id);
+
   const [error, setError] = useState('');
   const [activeMenuItem, setActiveMenuItem] = useState('profile');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [isUploadingProfilePicture, setIsUploadingProfilePicture] =
-    useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadSuccess] = useState(false);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -74,7 +71,6 @@ const UserProfilePage: React.FC = () => {
   const [updateUsernameSuccess, setUpdateUsernameSuccess] = useState(false);
   const [updateEmailSuccess, setUpdateEmailSuccess] = useState(false);
   const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState(false);
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -170,101 +166,80 @@ const UserProfilePage: React.FC = () => {
     void navigate(-1);
   };
 
-  const handleSettingsClick = () => {
-    void navigate('/settings');
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    void navigate('/');
-  };
-
-  const handleLogoutClick = () => {
-    setShowLogoutConfirmation(true);
-  };
-
-  const handleConfirmLogout = () => {
-    handleLogout();
-  };
-
-  const handleCancelLogout = () => {
-    setShowLogoutConfirmation(false);
-  };
-
   const handleToggleDropdown = () => {
     setShowEditDropdown(!showEditDropdown);
   };
 
-  const handleProfilePictureUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setError(
-        t('profile.errors.invalidImage', 'Please select a valid image file'),
-      );
-      return;
-    }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError(
-        t('profile.errors.fileTooLarge', 'File size must be less than 5MB'),
-      );
-      return;
-    }
-
-    setIsUploadingProfilePicture(true);
-    setError('');
-
-    try {
-      const result = await uploadProfilePicture(file);
-
-      if (result.success) {
-        if (result.wasQueued) {
-          // File was queued for offline upload
-          setError(
-            t(
-              'profile.offlineUpload',
-              "You are offline. Your profile picture upload has been queued and will sync when you're back online.",
-            ),
-          );
-        } else {
-          // Refresh profile data
-          const token = localStorage.getItem('accessToken');
-          if (token) {
-            const profileResponse = await fetch(API_ENDPOINTS.getMe, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json',
-              },
-            });
-
-            if (profileResponse.ok) {
-              const updatedProfile =
-                (await profileResponse.json()) as ProfileData;
-              setProfile(updatedProfile);
-            }
-          }
-
-          setUploadSuccess(true);
-          setTimeout(() => {
-            setUploadSuccess(false);
-          }, 3000);
-        }
-      } else {
-        setError(result.error || 'Failed to upload profile picture');
-      }
-    } catch (err) {
-      console.error('Error uploading profile picture:', err);
-      setError('Failed to update profile picture: ' + (err as Error).message);
-    } finally {
-      setIsUploadingProfilePicture(false);
-    }
-  };
+  // const handleProfilePictureUpload = async (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  // ) => {
+  //   const file = event.target.files?.[0];
+  //   if (!file) return;
+  //
+  //   // Validate file type
+  //   if (!file.type.startsWith('image/')) {
+  //     setError(
+  //       t('profile.errors.invalidImage', 'Please select a valid image file'),
+  //     );
+  //     return;
+  //   }
+  //
+  //   // Validate file size (max 5MB)
+  //   if (file.size > 5 * 1024 * 1024) {
+  //     setError(
+  //       t('profile.errors.fileTooLarge', 'File size must be less than 5MB'),
+  //     );
+  //     return;
+  //   }
+  //
+  //   setIsUploadingProfilePicture(true);
+  //   setError('');
+  //
+  //   try {
+  //     const result = await uploadProfilePicture(file);
+  //
+  //     if (result.success) {
+  //       if (result.wasQueued) {
+  //         // File was queued for offline upload
+  //         setError(
+  //           t(
+  //             'profile.offlineUpload',
+  //             "You are offline. Your profile picture upload has been queued and will sync when you're back online.",
+  //           ),
+  //         );
+  //       } else {
+  //         // Refresh profile data
+  //         const token = localStorage.getItem('accessToken');
+  //         if (token) {
+  //           const profileResponse = await fetch(API_ENDPOINTS.getMe, {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //               Accept: 'application/json',
+  //             },
+  //           });
+  //
+  //           if (profileResponse.ok) {
+  //             const updatedProfile =
+  //               (await profileResponse.json()) as ProfileData;
+  //             setProfile(updatedProfile);
+  //           }
+  //         }
+  //
+  //         setUploadSuccess(true);
+  //         setTimeout(() => {
+  //           setUploadSuccess(false);
+  //         }, 3000);
+  //       }
+  //     } else {
+  //       setError(result.error || 'Failed to upload profile picture');
+  //     }
+  //   } catch (err) {
+  //     console.error('Error uploading profile picture:', err);
+  //     setError('Failed to update profile picture: ' + (err as Error).message);
+  //   } finally {
+  //     setIsUploadingProfilePicture(false);
+  //   }
+  // };
 
   const handleEditUsernameClick = () => {
     setIsEditingUsername(true);
@@ -590,11 +565,7 @@ const UserProfilePage: React.FC = () => {
       )}
 
       <div className="main-content">
-        <ProfileHeader
-          isMobile={isMobile}
-          onBackClick={handleBackClick}
-          onSettingsClick={handleSettingsClick}
-        />
+        <ProfileHeader isMobile={isMobile} onBackClick={handleBackClick} />
 
         {/* Profile Content */}
         <div className="profile-content">
@@ -605,12 +576,10 @@ const UserProfilePage: React.FC = () => {
           <div className="profile-info">
             <ProfilePicture
               profilePictureUrl={profilePictureUrl}
-              isUploadingProfilePicture={isUploadingProfilePicture}
+              isUploadingProfilePicture={false}
               loadingProfilePicture={loadingProfilePicture}
               profileFirstName={profile?.first_name}
-              onProfilePictureUpload={(e) => {
-                handleProfilePictureUpload(e).catch(console.error);
-              }}
+              profileLastName={profile?.last_name}
               onProfilePictureError={() => {
                 // Use the hook's error handling method
                 if (profile?.id) {
@@ -666,6 +635,7 @@ const UserProfilePage: React.FC = () => {
                 onEditName={handleEditUsernameClick}
                 onEditEmail={handleEditEmailClick}
                 onEditPassword={handleEditPasswordClick}
+                role={profile ? profile.role : null}
               />
             )}
 
@@ -678,61 +648,7 @@ const UserProfilePage: React.FC = () => {
           </div>
 
           {/* Menu Items */}
-          <div className="profile-menu">
-            {/* Role */}
-            <div className="menu-item">
-              <span className="menu-label">{t('profile.role', 'Role')}</span>
-              <div className="menu-action-container">
-                <span className="menu-action">
-                  {profile ? profile.role : t('profile.loading', 'Loading...')}
-                </span>
-              </div>
-            </div>
-
-            {/* Logout */}
-            <div className="menu-item">
-              {showLogoutConfirmation ? (
-                <>
-                  <span className="menu-label">
-                    {t('profile.logoutConfirmation', 'Sign out?')}
-                  </span>
-                  <div className="menu-action-container">
-                    <div className="logout-buttons">
-                      <button
-                        type="button"
-                        className="dropdown-toggle"
-                        onClick={handleConfirmLogout}
-                      >
-                        {t('profile.yes', 'Yes')}
-                      </button>
-                      <button
-                        type="button"
-                        className="dropdown-toggle"
-                        onClick={handleCancelLogout}
-                      >
-                        {t('profile.no', 'No')}
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <span className="menu-label">
-                    {t('profile.logout', 'Sign out')}
-                  </span>
-                  <div className="menu-action-container">
-                    <button
-                      type="button"
-                      className="dropdown-toggle"
-                      onClick={handleLogoutClick}
-                    >
-                      <LogOut size={20} />
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
+          <div className="profile-menu">{/* Role */}</div>
         </div>
       </div>
     </div>
