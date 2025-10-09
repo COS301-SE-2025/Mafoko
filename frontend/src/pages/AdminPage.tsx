@@ -554,42 +554,48 @@ const AdminPage: React.FC = () => {
   const handleUserAction = async (
     userId: string,
     action: string,
+    currentRole: string,
   ): Promise<void> => {
-    if (action === 'promote') {
-      try {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-          console.error('No access token found');
-          return;
-        }
-
-        const response = await fetch(
-          `${API_ENDPOINTS.updateUserRole(userId)}?new_role=admin`,
-          {
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-
-        if (response.ok) {
-          const result = (await response.json()) as { message: string };
-          console.log('User promoted successfully:', result.message);
-
-          setAllUsers((prev) =>
-            prev.map((user) =>
-              user.id === userId ? { ...user, role: 'admin' } : user,
-            ),
-          );
-        } else {
-          const errorData = (await response.json()) as { message?: string };
-          console.error('Failed to promote user:', errorData);
-        }
-      } catch (error) {
-        console.error('Failed to promote user:', error);
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('No access token found');
+        return;
       }
+
+      let newRole: string;
+      if (action === 'toggle-admin') {
+        newRole = currentRole === 'admin' ? 'contributor' : 'admin';
+      } else {
+        return;
+      }
+
+      const response = await fetch(
+        `${API_ENDPOINTS.updateUserRole(userId)}?new_role=${newRole}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      if (response.ok) {
+        const result = (await response.json()) as { message: string };
+        console.log(`User role updated successfully:`, result.message);
+
+        setAllUsers((prev) =>
+          prev.map((user) =>
+            user.id === userId ? { ...user, role: newRole } : user,
+          ),
+        );
+      } else {
+        const errorData = (await response.json()) as { message?: string };
+        console.error('Failed to update user role:', errorData);
+      }
+    } catch (error) {
+      console.error('Failed to update user role:', error);
     }
   };
 
@@ -833,10 +839,7 @@ const AdminPage: React.FC = () => {
                   Loading users and applications...
                 </div>
               ) : (
-                <div
-                  className="applications-table-container"
-                  style={{ height: '400px', overflowY: 'auto' }}
-                >
+                <div className="applications-table-container">
                   {currentView === 'applications' ? (
                     <table className="applications-table">
                       <thead>
@@ -853,17 +856,19 @@ const AdminPage: React.FC = () => {
                         {displayedApplications.map((application) => (
                           <tr key={application.id} className="application-row">
                             <td className="applicant-info">
-                              <div className="applicant-avatar">
-                                <User size={20} />
-                              </div>
-                              <div className="applicant-details">
-                                <div className="applicant-name">
-                                  {application.user.first_name}{' '}
-                                  {application.user.last_name}
+                              <div>
+                                <div className="applicant-avatar">
+                                  <User size={20} />
                                 </div>
-                                <div className="applicant-email">
-                                  <Mail size={14} />
-                                  {application.user.email}
+                                <div className="applicant-details">
+                                  <div className="applicant-name">
+                                    {application.user.first_name}{' '}
+                                    {application.user.last_name}
+                                  </div>
+                                  <div className="applicant-email">
+                                    <Mail size={14} />
+                                    {application.user.email}
+                                  </div>
                                 </div>
                               </div>
                             </td>
@@ -1021,25 +1026,34 @@ const AdminPage: React.FC = () => {
                             </td>
                             <td className="actions-cell">
                               <div className="action-buttons">
-                                {user.role !== 'admin' && (
-                                  <button
-                                    type="button"
-                                    className="action-button approve-button"
-                                    onClick={() => {
-                                      void handleUserAction(user.id, 'promote');
-                                    }}
-                                    title="Give Admin Privileges"
-                                  >
-                                    <UserCheck size={16} />
-                                    Make Admin
-                                  </button>
-                                )}
-                                {user.role === 'admin' && (
-                                  <span className="admin-badge">
-                                    <Shield size={14} />
-                                    Admin
-                                  </span>
-                                )}
+                                <button
+                                  type="button"
+                                  className={`action-button ${user.role === 'admin' ? 'demote-button' : 'approve-button'}`}
+                                  onClick={() => {
+                                    void handleUserAction(
+                                      user.id,
+                                      'toggle-admin',
+                                      user.role,
+                                    );
+                                  }}
+                                  title={
+                                    user.role === 'admin'
+                                      ? 'Demote to Contributor'
+                                      : 'Promote to Admin'
+                                  }
+                                >
+                                  {user.role === 'admin' ? (
+                                    <>
+                                      <User size={16} />
+                                      Demote to Contributor
+                                    </>
+                                  ) : (
+                                    <>
+                                      <UserCheck size={16} />
+                                      Make Admin
+                                    </>
+                                  )}
+                                </button>
                               </div>
                             </td>
                           </tr>
