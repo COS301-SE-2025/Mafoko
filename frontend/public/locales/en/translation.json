@@ -674,27 +674,27 @@
     "loadingAchievements": "Loading Achievements",
 
     "of": "of",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Term Pioneer",
       "desc": "Add your first 10 terms to the dictionary"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Community Contributor",
       "desc": "Make 25 comments on terms"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Crowd Favorite",
       "desc": "Receive 100 upvotes on your contributions"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Multilingual Master",
       "desc": "Contribute to 5 different language dictionaries"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Consistency Champion",
       "desc": "Be active for 30 consecutive days"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Language Guardian",
       "desc": "Have 50 of your contributions validated by experts"
     }

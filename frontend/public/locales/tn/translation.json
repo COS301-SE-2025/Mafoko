@@ -577,27 +577,27 @@
     "progress": "tšwelopele",
     "loadingAchievements": "E laisa dikgagatso",
     "of": "ya",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Mothusi wa Mafoko",
       "desc": "Tsenya mafoko a gago a ntlha a le 10 mo bukeng ya mafoko"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Moneelo wa Setšhaba",
       "desc": "Tlhama ditlhaloso di le 25 mo mafokong"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Yo o Ratwang ke Setšhaba",
       "desc": "Amogela dipalonyana di le 100 mo meneelong ya gago"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Setsebi sa Dipuo Tse Dintsi",
       "desc": "Tlhoma letsoho mo dibukeng tsa mafoko tsa dipuo tse 5 tse di farologaneng"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Mokwaledi wa Boitlamo",
       "desc": "Nna o dira tiro malatsi a 30 a a latelanang"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Molebeli wa Dipuo",
       "desc": "Dumelela meneelo ya gago e le 50 go netefadiwa ke ditsebi"
     }
