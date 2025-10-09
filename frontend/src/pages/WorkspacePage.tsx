@@ -74,6 +74,12 @@ interface WorkspaceGroup {
   }>;
 }
 
+interface UserData {
+  firstName?: string;
+  first_name?: string;
+  [key: string]: unknown;
+}
+
 const WorkspacePage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -179,14 +185,17 @@ const WorkspacePage: React.FC = () => {
       const storedUserData = localStorage.getItem('userData');
       if (storedUserData) {
         try {
-          const userData = JSON.parse(storedUserData);
-          if (userData.firstName) {
-            setUserFirstName(userData.firstName);
-            return;
-          }
-          if (userData.first_name) {
-            setUserFirstName(userData.first_name);
-            return;
+          const parsedData: unknown = JSON.parse(storedUserData);
+          if (typeof parsedData === 'object' && parsedData !== null) {
+            const userData = parsedData as UserData;
+            if (typeof userData.firstName === 'string') {
+              setUserFirstName(userData.firstName);
+              return;
+            }
+            if (typeof userData.first_name === 'string') {
+              setUserFirstName(userData.first_name);
+              return;
+            }
           }
         } catch (error) {
           console.error('Error parsing user data:', error);
@@ -203,9 +212,12 @@ const WorkspacePage: React.FC = () => {
             },
           });
           if (response.ok) {
-            const userData = await response.json();
-            if (userData.first_name) {
-              setUserFirstName(userData.first_name);
+            const responseData: unknown = await response.json();
+            if (typeof responseData === 'object' && responseData !== null) {
+              const userData = responseData as UserData;
+              if (typeof userData.first_name === 'string') {
+                setUserFirstName(userData.first_name);
+              }
             }
           }
         } catch (error) {
