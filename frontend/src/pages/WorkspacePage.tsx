@@ -1535,6 +1535,7 @@ const WorkspacePage: React.FC = () => {
                   color: isDarkMode ? '#ffffff' : '#212431',
                   margin: 0,
                   textAlign: 'center',
+                  marginTop: window.innerWidth <= 768 ? '4rem' : '0',
                 }}
               >
                 {userFirstName ? `${userFirstName}'s Workspace` : 'My Workspace'}
@@ -1632,7 +1633,7 @@ const WorkspacePage: React.FC = () => {
                         maxHeight: '414px',
                         overflowY: 'auto',
                         scrollbarWidth: 'thin',
-                        marginTop: '-30px',
+                        marginTop: '1rem',
                       }}
                     >
                       <style>{`
@@ -1935,7 +1936,7 @@ const WorkspacePage: React.FC = () => {
                       >
                         {/* Followed Glossaries */}
                       </h3>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {bookmarkedGlossaries.map((bookmark) => (
                           <div
                             key={bookmark.id}
@@ -2068,92 +2069,92 @@ const WorkspacePage: React.FC = () => {
 
             {activeTab === 'collections' && (
               <div className="tab-content">
-                <div className="workspace-actions" style={{ marginBottom: '1rem' }}>
-                  {isDeleteMode ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <button
-                        type="button"
-                        onClick={handleDeleteSelectedGroups}
-                        disabled={selectedGroupsForDeletion.length === 0}
-                        className="create-new-btn"
-                        style={{
-                          backgroundColor: '#f00a50',
-                          borderColor: '#f00a50',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          fontSize: '0.875rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          minHeight: '38px',
-                          opacity: selectedGroupsForDeletion.length === 0 ? 0.5 : 1,
-                          cursor: selectedGroupsForDeletion.length === 0 ? 'not-allowed' : 'pointer',
-                        }}
-                      >
-                        <Trash2 style={{ width: '1.25rem', height: '1.25rem' }} />
-                        Delete Selected (
-                        {selectedGroupsForDeletion.length.toString()})
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleExitDeleteMode}
-                        className="cancel-delete-btn"
-                        style={{
-                          padding: '0.5rem 1rem',
-                          fontSize: '0.875rem',
-                          minHeight: '38px',
-                        }}
-                      >
-                        Cancel
-                      </button>
-          </div>
-                  ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <button
-                        type="button"
-                        className="create-new-btn"
-                        onClick={handleOpenNewGroupModal}
-                        style={{
-                          backgroundColor: '#f00a50',
-                          borderColor: '#f00a50',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          fontSize: '0.875rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          minWidth: '150px',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Plus style={{ width: '1.25rem', height: '1.25rem' }} />
-                        <span>New Group</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleEnterDeleteMode}
-                        className="create-new-btn"
-                        style={{
-                          backgroundColor: '#f00a50',
-                          borderColor: '#f00a50',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          fontSize: '0.875rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          minWidth: '150px',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Trash2 style={{ width: '1.25rem', height: '1.25rem' }} />
-                        Delete Groups
-                      </button>
-                    </div>
-                  )}
-                </div>
                 <div>
                   <div className="space-y-8 h-full">
+                    <div className="workspace-actions" style={{ marginBottom: '1rem', order: -1 }}>
+                      {isDeleteMode ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                          <button
+                            type="button"
+                            onClick={handleDeleteSelectedGroups}
+                            disabled={selectedGroupsForDeletion.length === 0}
+                            className="create-new-btn"
+                            style={{
+                              backgroundColor: '#f00a50',
+                              borderColor: '#f00a50',
+                              color: 'white',
+                              padding: '0.5rem 1rem',
+                              fontSize: '0.875rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem',
+                              minHeight: '38px',
+                              opacity: selectedGroupsForDeletion.length === 0 ? 0.5 : 1,
+                              cursor: selectedGroupsForDeletion.length === 0 ? 'not-allowed' : 'pointer',
+                            }}
+                          >
+                            <Trash2 style={{ width: '1.25rem', height: '1.25rem' }} />
+                            Delete Selected (
+                            {selectedGroupsForDeletion.length.toString()})
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleExitDeleteMode}
+                            className="cancel-delete-btn"
+                            style={{
+                              padding: '0.5rem 1rem',
+                              fontSize: '0.875rem',
+                              minHeight: '38px',
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                          <button
+                            type="button"
+                            className="create-new-btn"
+                            onClick={handleOpenNewGroupModal}
+                            style={{
+                              backgroundColor: '#f00a50',
+                              borderColor: '#f00a50',
+                              color: 'white',
+                              padding: '0.5rem 1rem',
+                              fontSize: '0.875rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem',
+                              minWidth: '150px',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <Plus style={{ width: '1.25rem', height: '1.25rem' }} />
+                            <span>New Group</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleEnterDeleteMode}
+                            className="create-new-btn"
+                            style={{
+                              backgroundColor: '#f00a50',
+                              borderColor: '#f00a50',
+                              color: 'white',
+                              padding: '0.5rem 1rem',
+                              fontSize: '0.875rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem',
+                              minWidth: '150px',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <Trash2 style={{ width: '1.25rem', height: '1.25rem' }} />
+                            Delete Groups
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     <div className="flex-col sm:flex-row">
                       <div className="flex-1">
                         <Search className="absolute" />
@@ -2175,20 +2176,25 @@ const WorkspacePage: React.FC = () => {
                         maxHeight: '414px',
                         overflowY: 'auto',
                         scrollbarWidth: 'thin',
-                        marginTop: '-30px',
+                        marginTop: '1rem',
                       }}
                     >
                       <style>{`
                         .saved-terms-scrollbar::-webkit-scrollbar {
                           width: 6px;
                         }
+                        @media (max-width: 768px) {
+                          .saved-terms-scrollbar::-webkit-scrollbar {
+                            width: 12px;
+                          }
+                        }
                         .saved-terms-scrollbar::-webkit-scrollbar-track {
                           background: ${isDarkMode ? '#374151' : '#f1f5f9'};
-                          border-radius: 3px;
+                          border-radius: 6px;
                         }
                         .saved-terms-scrollbar::-webkit-scrollbar-thumb {
                           background: ${isDarkMode ? '#6b7280' : '#cbd5e1'};
-                          border-radius: 3px;
+                          border-radius: 6px;
                         }
                         .saved-terms-scrollbar::-webkit-scrollbar-thumb:hover {
                           background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
