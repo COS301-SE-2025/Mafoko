@@ -849,10 +849,10 @@ const DashboardPage: React.FC = () => {
                   <p>{t('dashboard.aboutMarito.mission')}</p>*/}
 
                   <section className="about-mafoko max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left">
-                    <h2 className="!text-3xl font-bold mb-4 text-primary">
+                    <h2 className="!text-3xl font-bold mb-4 text-theme">
                       {t('dashboard.aboutMofoko.title')}
                     </h2>
-                    <p className="text-lg mb-6">
+                    <p className="text-lg mb-6 !text-theme">
                       {t('dashboard.aboutMofoko.content')}
                     </p>
 
@@ -943,7 +943,7 @@ const DashboardPage: React.FC = () => {
                                 </h3>
                               </div>
                             </div>
-                            <p className="term-definition">{term.definition}</p>
+                            <p className="term-definition !text-left">{term.definition ? term.definition : ''}</p>
                             <div className="flex w-full justify-center items-center">
                               <button
                                 type="button"

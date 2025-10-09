@@ -80,7 +80,7 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
       </div>
 
       {/* Definition */}
-      <p className="text-base leading-relaxed text-[var(--text-theme)] mb-5">
+      <p className="text-base leading-relaxed text-[var(--text-theme)] mb-5 text-left" style={{ padding:"10px", paddingTop:"20px"}}>
         {term.definition || ''}
       </p>
 

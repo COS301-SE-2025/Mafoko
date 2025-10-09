@@ -15,8 +15,6 @@ const Navbar = () => {
 
   const menuGroups = useAppMenu(userRole);
 
-  console.log(menuGroups);
-
   const toggleGroup = (id: string) => {
     setExpandedGroups((prev) => {
       const next = new Set(prev);

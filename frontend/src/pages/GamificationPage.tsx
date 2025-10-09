@@ -107,43 +107,43 @@ const GamificationPage: React.FC = () => {
     {
       id: 1,
       key: 'term_pioneer',
-      title: t('achievements.termPioneer.title'),
-      description: t('achievements.termPioneer.desc'),
+      title: t('achievements.term_pioneer.title'),
+      description: t('achievements.term_pioneer.desc'),
       category: 'achievement-1',
     },
     {
       id: 2,
       key: 'community_contributor',
-      title: t('achievements.communityContributor.title'),
-      description: t('achievements.communityContributor.desc'),
+      title: t('achievements.community_contributor.title'),
+      description: t('achievements.community_contributor.desc'),
       category: 'achievement-2',
     },
     {
       id: 3,
       key: 'crowd_favorite',
-      title: t('achievements.crowdFavorite.title'),
-      description: t('achievements.crowdFavorite.desc'),
+      title: t('achievements.crowd_favorite.title'),
+      description: t('achievements.crowd_favorite.desc'),
       category: 'achievement-3',
     },
     {
       id: 4,
       key: 'multilingual_master',
-      title: t('achievements.multilingualMaster.title'),
-      description: t('achievements.multilingualMaster.desc'),
+      title: t('achievements.multilingual_master.title'),
+      description: t('achievements.multilingual_master.desc'),
       category: 'achievement-4',
     },
     {
       id: 5,
       key: 'consistency_champion',
-      title: t('achievements.consistencyChampion.title'),
-      description: t('achievements.consistencyChampion.desc'),
+      title: t('achievements.consistency_champion.title'),
+      description: t('achievements.consistency_champion.desc'),
       category: 'achievement-1',
     },
     {
       id: 6,
       key: 'language_guardian',
-      title: t('achievements.languageGuardian.title'),
-      description: t('achievements.languageGuardian.desc'),
+      title: t('achievements.language_guardian.title'),
+      description: t('achievements.language_guardian.desc'),
       category: 'achievement-2',
     },
   ];
@@ -487,104 +487,115 @@ const GamificationPage: React.FC = () => {
 
             <div className="xp-guide-grid">
               <div className="xp-guide-item">
-                <div
-                  className="xp-guide-icon"
-                  style={{
-                    backgroundColor: 'rgba(0, 206, 175, 0.1)',
-                    color: 'var(--teal)',
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                <div className="flex flex-row gap-4 w-[90%] text-left">
+                  <div
+                    className="xp-guide-icon"
+                    style={{
+                      backgroundColor: 'rgba(0, 206, 175, 0.1)',
+                      color: 'var(--teal)',
+                    }}
                   >
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                  </svg>
-                </div>
-                <div className="xp-guide-info">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                    </svg>
+                  </div>
                   <div className="xp-guide-action">
                     {t('achievements.addTerm')}
                   </div>
-                  <div className="xp-guide-value">+100 XP</div>
+                </div>
+
+                <div className="xp-guide-info text-left  flex justify-center items-center">
+                  <div className="!font-bold !text-[18px] text-[#f00a50]">+100 XP</div>
                 </div>
               </div>
 
               <div className="xp-guide-item">
-                <div
-                  className="xp-guide-icon"
-                  style={{
-                    backgroundColor: 'rgba(240, 10, 80, 0.1)',
-                    color: 'var(--pink)',
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                <div className="flex flex-row gap-4 w-[90%] text-left">
+                  <div
+                    className="xp-guide-icon"
+                    style={{
+                      backgroundColor: 'rgba(240, 10, 80, 0.1)',
+                      color: 'var(--pink)',
+                    }}
                   >
-                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-                  </svg>
-                </div>
-                <div className="xp-guide-info">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                    </svg>
+                  </div>
                   <div className="xp-guide-action">
                     {t('achievements.addComment')}
                   </div>
-                  <div className="xp-guide-value">+10 XP</div>
+                </div>
+
+                <div className="xp-guide-info text-left  flex justify-center items-center">
+                  <div className="!font-bold !text-[18px] text-[#f00a50]">+10 XP</div>
                 </div>
               </div>
 
               <div className="xp-guide-item">
-                <div
-                  className="xp-guide-icon"
-                  style={{
-                    backgroundColor: 'rgba(242, 208, 1, 0.1)',
-                    color: 'var(--yellow)',
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                <div className="flex flex-row gap-4 w-[90%] text-left">
+                  <div
+                    className="xp-guide-icon"
+                    style={{
+                      backgroundColor: 'rgba(242, 208, 1, 0.1)',
+                      color: 'var(--yellow)',
+                    }}
                   >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                </div>
-                <div className="xp-guide-info">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                  </div>
                   <div className="xp-guide-action">
                     {t('achievements.receiveUpvote')}
                   </div>
-                  <div className="xp-guide-value">
+                </div>
+
+                <div className="xp-guide-info text-left  flex justify-center items-center">
+                  <div className="!font-bold !text-[18px] text-[#f00a50]">
                     +5 XP {t('achievements.perUpvote')}
                   </div>
                 </div>
               </div>
 
               <div className="xp-guide-item">
-                <div
-                  className="xp-guide-icon"
-                  style={{
-                    backgroundColor: 'rgba(33, 36, 49, 0.1)',
-                    color: 'var(--dark-blue)',
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                <div className="flex flex-row gap-4 w-[90%] text-left">
+                  <div
+                    className="xp-guide-icon"
+                    style={{
+                      backgroundColor: 'rgba(33, 36, 49, 0.1)',
+                      color: 'var(--dark-blue)',
+                    }}
                   >
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.58-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                  </svg>
-                </div>
-                <div className="xp-guide-info">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.58-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                    </svg>
+                  </div>
                   <div className="xp-guide-action">
                     {t('achievements.dailyLoginBonus')}
                   </div>
-                  <div className="xp-guide-value">+5 XP</div>
+                </div>
+                  <div className="xp-guide-info text-left  flex justify-center items-center">
+                    <div className="!font-bold !text-[18px] text-[#f00a50]">+5 XP</div>
                 </div>
               </div>
             </div>

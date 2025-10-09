@@ -6,6 +6,19 @@
 
 @plugin "tailwindcss-animate";
 
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+
 .cmdk-list,
 .cmdk-group,
 .cmdk-list ul,

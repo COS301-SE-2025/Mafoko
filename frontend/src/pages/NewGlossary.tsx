@@ -820,7 +820,7 @@ const GlossaryApp = () => {
                   </div>
                 ) : (
                   <div
-                    className="grid lg:grid-cols-2 md:grid-cols-1 gap-20"
+                    className="grid lg:grid-cols-1 md:grid-cols-1 gap-20"
                     style={{
                       paddingLeft: '10px',
                       paddingRight: '10px',
