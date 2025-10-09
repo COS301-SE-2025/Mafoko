@@ -833,10 +833,7 @@ const AdminPage: React.FC = () => {
                   Loading users and applications...
                 </div>
               ) : (
-                <div
-                  className="applications-table-container"
-                  style={{ height: '400px', overflowY: 'auto' }}
-                >
+                <div className="applications-table-container">
                   {currentView === 'applications' ? (
                     <table className="applications-table">
                       <thead>
