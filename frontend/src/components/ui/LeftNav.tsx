@@ -145,7 +145,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         items: [
           {
             id: 'settings',
-            label: t('navigation.settings'),
+            label: t('settings.title'),
             path: '/settings',
             icon: Settings,
           },

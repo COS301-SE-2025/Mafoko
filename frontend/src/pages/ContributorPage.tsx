@@ -947,7 +947,7 @@ const ContributorPage: React.FC = () => {
                     onChange={(e) => {
                       setTranslationSearchQuery(e.target.value);
                     }}
-                    placeholder="Search for a term..."
+                    placeholder={`${t('glossaryPage2.searchPlaceholder')}...`}
                   />
                   {translationSearchQuery && (
                     <ul className="search-results">

@@ -575,6 +575,105 @@
     "Streak Keeper": "Ugcini-layini",
     "Maintain a login streak of 3 consecutive days": "Gcina ulayini lwemihla emi-3 elandelanayo",
     "Active Commenter": "Umphenduli Osebenzayo",
-    "Write 4 comments on terms this week": "Bhala izimvo ezi-4 kumagama kule veki"
-  }
+    "Write 4 comments on terms this week": "Bhala izimvo ezi-4 kumagama kule veki",
+    "Term Creator": "Umbumbi Wezichazi",
+    "Maintain a login streak of 2 consecutive days": "Gcina uthotho lokungena ngemvume lweentsuku ezimbini ezilandelelanayo",
+    "Submit 6 new terms this week": "Ngenisa amagama amatsha amathandathu kule veki"
+  },
+  "termHelpPage": {
+    "onThisPage": "Kule Phepha",
+    "title": "Ukuqonda Isichazi-magama",
+    "intro": "I-<strong>Isichazi-magama</strong> yindawo apho unokukhangela khona iintsingiselo zamagama ngeelwimi ezininzi phakathi kweelwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika. Iseka ukukhangela ngokukhawuleza, ukuhluza ngokolwimi okanye ngokwesigaba, kunye nokusetyenziswa ngaphandle kwe-intanethi xa izichazi-magama zikhutshelwe ngaphambili.",
+
+    "overviewTitle": "Ukuqonda Isichazi-magama",
+    "overviewBody": "Isichazi-magama sikuvumela ukuba ukhangelisise iintsingiselo zamagama ngeelwimi ezininzi phakathi kweelwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika.",
+
+    "whatIsATermTitle": "Yintoni Igama?",
+    "whatIsATermBody": "Igama ngalinye kuMarito liquka ezi nkcukacha zilandelayo:",
+    "termFields": {
+      "term": "Igama: Ilizwi okanye ibinzana.",
+      "language": "Ulwimi: Olunye lweelwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika.",
+      "domain": "Icandelo: Ummandla wezifundo okanye isihloko.",
+      "definition": "Inkcazo: Ingcaciso ecacileyo yentsingiselo yegama.",
+      "related": "Amagama Ahlobene: Amakhonkco aya kwamanye amagama anentsingiselo efanayo okanye enxulumene nayo."
+    },
+
+    "languagesTitle": "Iilwimi Ezixhaswayo",
+    "languagesBody": "I-Marito ixhasa zonke iilwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika. Ungasebenzisa ukuhluza ukuze ugxile kulwimi olunye okanye uphande amagama kuwo onke.",
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgesi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Ukukhangela Amagama",
+    "searchSubheadingHow": "Indlela Yokusebenza Kokukhangela",
+    "searchBody1": "Umsebenzi wokukhangela kuMarito ukunceda ukuba ufumane amagama ngokukhawuleza kuyo yonke iilwimi ezilishumi elinanye ezisemthethweni.",
+    "searchBody2": "Xa ubhala, iMarito yenza ukukhangela okubukhoma, ibuyekeze iziphumo ngexesha langempela.",
+    "searchFields": {
+      "term": "Igama: Ileyibhile okanye ibinzana elimele ingcinga ethile.",
+      "definition": "Inkcazo: Amagama aneentsingiselo eziquka amagama okuphendla nawo aya kubonakala.",
+      "filters": "Izihluzi: Nciphisa ngokolwimi okanye ngokwesigaba."
+    },
+    "searchSubheadingLive": "Iziphakamiso Ezibukhoma",
+    "searchLiveBody": "I-Marito inokuphakamisa iziphakamiso okanye amagama ahlobene ngexesha obhala ngalo.",
+    "searchSubheadingSensitivity": "Ubuntununtunu Bokukhangela",
+    "searchSensitivityBody": "Ngokungagqibekanga, iMarito yenza ukukhangela okuqinisekileyo okanye kufutshane nokuqinisekileyo, kodwa ukukhangela okungachanekanga nako kungasebenza.",
+    "searchSubheadingResultCards": "Amakhadi Eziphumo",
+    "searchResultBody": "Amagama aboniswa kumakhadi aquka igama, ulwimi, icandelo, inkcazo, kunye namaqhosha okuvota.",
+
+    "filtersTitle": "Izinketho Zokuhluza",
+    "filtersBody": "Ukunciphisa iziphumo, sebenzisa izihluzi ezikhoyo kwiphepha lokukhangela.",
+    "filtersList": {
+      "language": "Ulwimi: Nciphisa iziphumo kulwimi olunye kuphela.",
+      "domain": "Icandelo: Gxila kwimimandla enjengeMfundo, Ezempilo, okanye Ubuchwepheshe.",
+      "fuzzy": "Ukukhangela Okungachanekanga: Fumana amagama nokuba kukho iimpazamo zokupela okanye umahluko."
+    },
+
+    "viewTitle": "Ukujonga Amagama",
+    "viewBody": "Cofa iqhosha elithi 'Jonga' kwikhadi legama ukuze uvule inkcazo epheleleyo kwaye uphande amagama ahlobene.",
+
+    "offlineTitle": "Ukusetyenziswa Ngaphandle Kwe-intanethi",
+    "offlineBody": "I-Marito ingasetyenziswa ngaphandle kwe-intanethi ngokukhuphela izichazi-magama kwangaphambili.",
+    "offlineHow": "Indlela Yokukhuphela",
+    "offlineSteps": [
+      "Yiya kwiphepha Lezichazi-magama.",
+      "Khetha izichazi-magama ofuna ukuzikhuphela.",
+      "Cofa 'Khuphela' ukuze uzigcine kwisixhobo sakho."
+    ],
+    "offlineEnd": "Emva kokukhuphela, amagama akwesichazi-magama eso aya kuhlala efumaneka nokuba awuxhunyiwanga kwi-intanethi."
+  },
+  "leaningPathHelp": {
+    "title": "Ukuqonda Izindlela Zokufunda",
+    "section1": "Isici se-Learning Path sikuvumela ukuthi ulungise uhambo lokufunda olulawulwayo lokufundela olunye lwezilimi ezisemthethweni zaseNingizimu Afrika. Ngokukhetha ulimi kanye nezinsiza ofuna ukuzisebenzisa, ungakwazi ukulandela indlela ehlelekile esikhundleni sokuhlola ngokungahleliwe.",
+    "section2": "Indlela ngayinye yokufunda ihlanganisa amagama, amathuluzi okuzilolonga, kanye nokulandela intuthuko ukuze uhlale ukhuthazekile futhi ube nokuzimisela.",
+    "section3": "Isiphequluli sakho asisekeli ilebula yevidiyo.",
+    "section4": "Ngemva kokuba ukhethe ulimi, uzocelwa ukukhetha i-glossary. I-glossary ngayinye ihlelwe ngokwesigaba (Imfundo, Ezempilo, Ubuchwepheshe) ukuze ugxile kumagama abalulekile kuwe.",
+    "section4Title": "Ukukhetha i-Glossary",
+    "section5": "Uma i-glossary yakho isilungisiwe, ungakhetha indlela ofuna ukufunda ngayo",
+    "section6": "Izivivinyo Zokuzilolonga",
+    "section7": "Phendula imibuzo ukuze uhlolisise ulwazi lwakho futhi uqiniseke ngalokho okufundile.",
+    "section8": "Amakhadi Okufunda",
+    "section9": "Sebenzisa amakhadi okufunda ukuze wakhe ukuqonda nokukhumbula amagama ngesivinini sakho.",
+    "section10": "Ukufunda Ngezivivinyo Namakhadi",
+    "section11": "Ukulandela Inqubekela Phambili Yakho",
+    "section12": "Learning Path ilandelela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa kanye nezibalo zomphakathi wakho, ukwenza kube lula ukuhlala ukhuthazekile.",
+    "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
+  },
+  "copyURL": "Kopa i-URL",
+  "related": "Amagama Ahlobene",
+  "comments": "Izimvo",
+  "reply": "Uphendula Ku",
+  "addReply": "Yongeza Impendulo",
+  "addComment": "Yongeza Izimvo",
+  "noDescription": "Akukho Inkcazelo Inikiweyo",
+  "view": "Jonga"
 }

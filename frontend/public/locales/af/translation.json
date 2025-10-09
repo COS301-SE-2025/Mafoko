@@ -29,7 +29,8 @@
     "savedTerms": "Gestoorde Terme",
     "dashboard": "Paneelbord",
     "help": "Hulp",
-    "darkMode": "Donker modus"
+    "darkMode": "Donker modus",
+    "settings": "Stellings"
   },
 
   "landingPage": {
@@ -635,6 +636,168 @@
     "Streak Keeper": "Reeksbewaarder",
     "Maintain a login streak of 3 consecutive days": "Handhaaf ’n aanmeldreeks van 3 opeenvolgende dae",
     "Active Commenter": "Aktiewe Kommentator",
-    "Write 4 comments on terms this week": "Skryf 4 opmerkings oor terme hierdie week"
-  }
+    "Write 4 comments on terms this week": "Skryf 4 opmerkings oor terme hierdie week",
+    "Term Creator": "Term Creator",
+    "Maintain a login streak of 2 consecutive days": "Maintain a login streak of 2 consecutive days",
+    "Submit 6 new terms this week": "Submit 6 new terms this week"
+  },
+  "termHelpPage": {
+    "onThisPage": "Op Hierdie Bladsy",
+    "title": "Begrip van die Woordeboek",
+    "intro": "Die <strong>Woordeboek</strong> is waar jy meertalige termdefinisies kan naslaan oor al Suid-Afrika se 11 amptelike tale. Dit ondersteun vinnige soektogte, filtrasie volgens taal of domein, en aflyn-toegang sodra woordeboeke afgelaai is.",
+
+    "overviewTitle": "Begrip van die Woordeboek",
+    "overviewBody": "Die Woordeboek stel jou in staat om meertalige termdefinisies na te slaan oor al Suid-Afrika se 11 amptelike tale.",
+
+    "whatIsATermTitle": "Wat is ’n Term?",
+    "whatIsATermBody": "Elke term in Marito bevat die volgende besonderhede:",
+    "termFields": {
+      "term": "Term: Die woord of uitdrukking.",
+      "language": "Taal: Een van Suid-Afrika se 11 amptelike tale.",
+      "domain": "Domein: Die vakgebied of onderwerp.",
+      "definition": "Definisie: ’n Duidelike verklaring van die betekenis van die term.",
+      "related": "Verwante Terme: Skakels na terme met soortgelyke of verwante betekenisse."
+    },
+
+    "languagesTitle": "Ondersteunde Tale",
+    "languagesBody": "Marito ondersteun al 11 van Suid-Afrika se amptelike tale. Jy kan jou soektogte filtreer om op ’n enkele taal te fokus of terme oor almal te verken.",
+    "languagesList": [
+      "Afrikaans",
+      "Engels",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Soek na Terme",
+    "searchSubheadingHow": "Hoe Soektogte Werk",
+    "searchBody1": "Die soekfunksie in Marito help jou om vinnig woordelys-terme oor al 11 amptelike tale te verken.",
+    "searchBody2": "Terwyl jy tik, voer Marito ’n lewendige soektog uit wat resultate in reële tyd opdateer.",
+    "searchFields": {
+      "term": "Term: Die primêre etiket of uitdrukking wat ’n konsep voorstel.",
+      "definition": "Definisie: Terme waarvan die verduidelikings jou soekwoorde bevat, sal ook verskyn.",
+      "filters": "Filters: Beperk volgens taal of domein."
+    },
+    "searchSubheadingLive": "Lewendige Voorstelle",
+    "searchLiveBody": "Marito kan moontlike aanvullings of verwante terme voorstel terwyl jy tik.",
+    "searchSubheadingSensitivity": "Soekgevoeligheid",
+    "searchSensitivityBody": "Standaard gebruik Marito presiese of byna-presiese passing, maar vae soektogte kan ook geaktiveer word.",
+    "searchSubheadingResultCards": "Resultaatkaarte",
+    "searchResultBody": "Terme word vertoon op kaarte met die termnaam, taal, domein, definisie, en stemknoppies.",
+
+    "filtersTitle": "Filteropsies",
+    "filtersBody": "Om resultate te vernou, gebruik filters vanaf die soekbladsy.",
+    "filtersList": {
+      "language": "Taal: Beperk resultate tot een taal.",
+      "domain": "Domein: Fokus op gebiede soos Onderwys, Gesondheid of Tegnologie.",
+      "fuzzy": "Vae Soek: Vind terme selfs al is daar spelfoute of verskille."
+    },
+
+    "viewTitle": "Terme Bekyk",
+    "viewBody": "Klik op die Bekyk-knoppie op ’n termkaart om die volledige definisie oop te maak en verwante terme te verken.",
+
+    "offlineTitle": "Aflyn Gebruik",
+    "offlineBody": "Marito kan aflyn gebruik word deur woordelyse vooruit af te laai.",
+    "offlineHow": "Hoe om Af te Laai",
+    "offlineSteps": [
+      "Gaan na die Woordelys-bladsy.",
+      "Kies die woordelyse wat jy wil aflaai.",
+      "Klik Aflaai om dit plaaslik te stoor."
+    ],
+    "offlineEnd": "Na aflaai bly terme in daardie woordelys beskikbaar selfs wanneer jy aflyn is."
+  },
+  "workspaceHelpPage": {
+    "title": "Begrip van die Werkruimte",
+    "intro": "Die <strong>Werkruimte</strong> laat jou toe om terme en glossariums wat jou interesseer te stoor, dit in groepe te organiseer, en daardie groepe te bestuur. Dit is ook waar jy die vordering van jou termvoorleggings kan monitor en notas oor jou werk kan hou.",
+    "groupsTitle": "Bestuur van Groepe",
+    "groupsBody": "Groepe help jou om gestoorde terme te organiseer. Jy kan nuwe groepe skep, hul name verander, of groepe uitvee wat jy nie meer nodig het nie.",
+    "groupsSteps": [
+      "Skep ’n Groep: Klik die <em>Nuwe Groep</em>-knoppie, voer ’n naam in, kies terme, en bevestig deur <em>Voeg Terme By</em> te klik.",
+      "Hernoem ’n Groep: Klik die <em>potloodikoon</em> langs die groepsnaam, verander die naam, en bevestig deur <em>Hernoem Groep</em> te klik.",
+      "Vee ’n Groep Uit: Klik die <em>uitvee-ikoon</em>, kies die groepe wat jy wil verwyder, en bevestig die aksie."
+    ],
+    "moveTitle": "Verskuiwing van Terme Tussen Groepe",
+    "moveBody": "Om ’n term na ’n ander groep te skuif, klik die <em>verskuif-ikoon</em> langs die term en kies die nuwe groep uit jou lys.",
+    "notesTitle": "Gebruik van Notas",
+    "notesBody": "Notas laat jou toe om ekstra konteks by gestoorde terme te voeg. Jy kan notas skep, wysig of uitvee direk in die Werkruimte.",
+    "notesSteps": [
+      "Voeg ’n Nota By: Klik die <em>nota-ikoon</em> langs ’n term, tik jou nota, en klik <em>Stoor</em>.",
+      "Wysig ’n Nota: Klik die <em>potloodikoon</em>, verander die teks, en klik <em>Stoor</em>.",
+      "Vee ’n Nota Uit: Gebruik die uitvee-opsie om notas te verwyder wat jy nie meer nodig het nie."
+    ],
+    "deleteTitle": "Uitvee van Terme en Glossariums",
+    "deleteBody": "Jy kan items te eniger tyd uit jou Werkruimte verwyder:",
+    "deleteSteps": [
+      "Vee ’n Term Uit: Gaan na <em>Gestoorde Terme</em>, klik die <em>uitvee-ikoon</em>, en bevestig.",
+      "Vee ’n Glossarium Uit: Gaan na <em>Gestoorde Glossariums</em>, klik die verwyder-opsie, en bevestig."
+    ]
+  },
+  "common": {
+    "back": "Terug",
+    "onThisPage": "Op hierdie bladsy"
+  },
+  "leaningPathHelp": {
+    "title": "Begrip van Leerpaaie",
+    "section1": "Die Leerpad-funksie stel jou in staat om ’n gestruktureerde leerreis vir een van Suid-Afrika se amptelike tale te ontwerp. Deur ’n taal te kies en die hulpbronne te bepaal wat jy wil bestudeer, kan jy ’n georganiseerde pad volg eerder as om lukraak te verken.",
+    "section2": "Elke leerpad kombineer woordelyste, oefengereedskap en vorderingopsporing om jou gemotiveerd en konsekwent te hou.",
+    "section3": "Jou blaaier ondersteun nie die video-element nie.",
+    "section4": "Nadat jy ’n taal gekies het, sal jy gevra word om ’n woordelys te kies. Elke woordelys is volgens domein georganiseer (Onderwys, Gesondheid, Tegnologie) sodat jy op die woordeskat kan fokus wat die meeste vir jou saak maak.",
+    "section4Title": "Kies van ’n Woordelys",
+    "section5": "Sodra jou woordelys opgestel is, kan jy kies hoe jy wil studeer",
+    "section6": "Oefentoetse",
+    "section7": "Beantwoord vrae om jou kennis te toets en te versterk wat jy geleer het.",
+    "section8": "Studiakaarte",
+    "section9": "Gebruik flitskaart-hersiening om begrip en onthou van terme in jou eie tempo te bou.",
+    "section10": "Leer met Toetse en Studiakaarte",
+    "section11": "Volg jou Vordering",
+    "section12": "Die Leerpad hou jou aktiwiteit dop sodat jy kan sien hoe ver jy gevorder het. Vordering word saam met jou gemeenskapsstatistieke vertoon, wat dit maklik maak om gemotiveerd te bly.",
+    "section13": "Kombineer Leerpaaie met weeklikse uitdagings en prestasies om kentekens te verdien terwyl jy jou taalvaardighede verbeter."
+  },
+  "helpPage2": {
+    "section1": "Aan die begin",
+    "section2": "Stap-vir-stap gids vir die skep van ’n rekening, aanmelding, en navigasie van die platform vir die eerste keer.",
+    "section3": "Gemeenskapsinteraksie",
+    "section3Desc": "Leer hoe om plasings te maak, te kommentaar lewer, en met ander in gesprek te tree deur gebruik te maak van gemeenskapsinstrumente soos stemme en besprekings.",
+
+    "dictionaryTitle": "Woordeboek",
+    "dictionaryDesc": "Soek vir terme oor verskeie tale, aktiveer vae soek, en pas jou woordeboekinstellings aan.",
+
+    "glossaryTitle": "Woordelys",
+    "glossaryDesc": "Organiseer, filtreer, en voer woordelyste uit volgens kategorie, domein of vertaalbank.",
+
+    "workspaceTitle": "Werkruimte",
+    "workspaceDesc": "Stoor en bestuur jou eie terme en woordelyste, volg indienings, en werk saam deur notas en groepe te gebruik.",
+
+    "settingsTitle": "Instellings en Aanpassing",
+    "settingsDesc": "Pas voorkeure aan soos donker/lig modus, toeganklikheidsopsies, profieldetails, en ander gebruikersinstellings.",
+
+    "homeTitle": "Tuisblad",
+    "homeDesc": "Verken die interaktiewe Suid-Afrikaanse kaart, ontdek willekeurige terme, en kry ’n oorsig van uitgeligte inhoud.",
+
+    "dashboardTitle": "Beheerpaneel",
+    "dashboardDesc": "Volg platformaktiwiteit met grafieke, sien data, en analiseer jou bydraes op een plek.",
+
+    "learningPathTitle": "Leerpaaie",
+    "learningPathDesc": "Ontwerp ’n gestruktureerde leerreis vir een van Suid-Afrika se amptelike tale.",
+
+    "feedbackTitle": "Terugvoer",
+    "feedbackDesc": "Stuur voorstelle, komplimente, of klagtes direk aan die span om die platform te verbeter.",
+
+    "faqsTitle": "Gereelde Vrae",
+    "faqsDesc": "Antwoorde op algemene vrae oor die platform."
+  },
+  "copyURL": "Kopieer URL",
+  "related": "Verwante Terme",
+  "comments": "Kommentaar",
+  "reply": "Beantwoord Aan",
+  "addReply": "Voeg ’n Antwoord By",
+  "addComment": "Voeg ’n Kommentaar By",
+  "noDescription": "Geen Beskrywing Verskaf Nie",
+  "view": "Bekyk"
 }

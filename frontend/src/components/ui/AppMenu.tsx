@@ -97,7 +97,7 @@ export const useAppMenu = (userRole: string) => {
         items: [
           {
             id: 'settings',
-            label: t('navigation.settings'),
+            label: t('settings.title'),
             path: '/settings',
             icon: Settings,
           },
