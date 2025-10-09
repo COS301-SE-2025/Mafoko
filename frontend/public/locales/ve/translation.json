@@ -574,27 +574,27 @@
     "progress": "u bvelela",
     "loadingAchievements": "I khou dzhenisa mivhuso ya vhutali",
     "of": "ya",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Muvhumbudzi wa Mafhungo",
       "desc": "Engedza mafhungo a u thoma a 10 kha burodzedzi ḽa mafhungo"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Munwe wa Tshitshavha",
       "desc": "Nwala maitele a 25 kha mafhungo"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Mutshavha Wa Funwaho",
       "desc": "Ṱanganedza mavhoti a 100 kha zwine wa ita"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Mupfumi wa Nyambo Dzinzhi",
       "desc": "Tshila kha maburodze a mafhungo a nyambo dziṱanu dzo fhambananaho"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Muhulwane wa U Dzudzanya",
       "desc": "Ita mushumo maḓuvha a 30 a tevhelanayo"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Muvhiki wa Nyambo",
       "desc": "Tendela zwine wa ita zwi 50 zwi sedzululwe nga vhaḓivhi"
     }
