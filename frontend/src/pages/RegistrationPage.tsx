@@ -26,6 +26,7 @@ const RegistrationPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [hasViewedTerms, setHasViewedTerms] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +37,10 @@ const RegistrationPage: React.FC = () => {
 
     if (password !== confirmPassword) {
       setError(t('registrationPage.errors.passwordMismatch'));
+      return;
+    }
+    if (!hasViewedTerms) {
+      setError('Please click and read the Terms and Conditions before accepting.');
       return;
     }
     if (!agreedToTerms) {
@@ -231,6 +236,9 @@ const RegistrationPage: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[12px]"
+                  onClick={() => {
+                    setHasViewedTerms(true);
+                  }}
                 >
                   {t('registrationPage.termsAndConditionsLink')}
                 </Link>
