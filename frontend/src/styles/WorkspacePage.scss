@@ -1733,7 +1733,6 @@ $text-dark: #ffffff;
 .category-tag {
   display: inline-flex;
   align-items: center;
-  vertical-align: middle;
   background-color: rgba($accent-pink, 0.12) !important;
   color: $accent-pink !important;
   //border: none !important;
@@ -1743,7 +1742,7 @@ $text-dark: #ffffff;
   border-radius: 9999px;
   //text-transform: capitalize;
   letter-spacing: 0.025em;
-  margin: 0;
+
   line-height: 1.2;
   white-space: nowrap;
   transition: all 0.2s ease;
