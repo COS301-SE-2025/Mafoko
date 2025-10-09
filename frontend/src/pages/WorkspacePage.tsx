@@ -74,6 +74,12 @@ interface WorkspaceGroup {
   }>;
 }
 
+interface UserData {
+  firstName?: string;
+  first_name?: string;
+  [key: string]: unknown;
+}
+
 const WorkspacePage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -88,8 +94,8 @@ const WorkspacePage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState('saved-terms');
   const [searchQuery, setSearchQuery] = useState('');
+  const [userFirstName, setUserFirstName] = useState<string>('');
 
-  // Notification state for user feedback
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error' | 'info';
@@ -173,6 +179,55 @@ const WorkspacePage: React.FC = () => {
       document.documentElement.classList.remove('theme-dark');
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const storedUserData = localStorage.getItem('userData');
+      if (storedUserData) {
+        try {
+          const parsedData: unknown = JSON.parse(storedUserData);
+          if (typeof parsedData === 'object' && parsedData !== null) {
+            const userData = parsedData as UserData;
+            if (typeof userData.firstName === 'string') {
+              setUserFirstName(userData.firstName);
+              return;
+            }
+            if (typeof userData.first_name === 'string') {
+              setUserFirstName(userData.first_name);
+              return;
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      }
+
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        try {
+          const response = await fetch(API_ENDPOINTS.getMe, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+            },
+          });
+          if (response.ok) {
+            const responseData: unknown = await response.json();
+            if (typeof responseData === 'object' && responseData !== null) {
+              const userData = responseData as UserData;
+              if (typeof userData.first_name === 'string') {
+                setUserFirstName(userData.first_name);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    void fetchUserData();
+  }, []);
 
   // Helper functions for user notifications
   const showNotification = (
@@ -1484,17 +1539,31 @@ const WorkspacePage: React.FC = () => {
             )}
 
             {/* Header */}
-            <div className="workspace-header">
-              {/* Navigation Tabs */}
+            <div
+              className="workspace-header"
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '1.5rem',
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: '1.875rem',
+                  fontWeight: '600',
+                  color: isDarkMode ? '#ffffff' : '#212431',
+                  margin: 0,
+                  textAlign: 'center',
+                }}
+              >
+                {userFirstName
+                  ? `${userFirstName}'s Workspace`
+                  : 'My Workspace'}
+              </h1>
               <div
                 style={{
-                  backgroundColor: isDarkMode
-                    ? '#212431ad'
-                    : 'rgba(196, 196, 196, 0.4)',
                   display: 'flex',
-                  gap: '0.25rem',
-                  padding: '0.25rem',
-                  borderRadius: '0.75rem',
+                  gap: '0.5rem',
                 }}
                 className="workspace-tabs"
               >
@@ -1503,7 +1572,23 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('saved-terms');
                   }}
-                  className={`tab-button ${activeTab === 'saved-terms' ? 'active' : ''}`}
+                  style={{
+                    backgroundColor:
+                      activeTab === 'saved-terms' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'saved-terms'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'saved-terms' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                    padding: '0.5rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
                 >
                   Saved Terms
                 </button>
@@ -1512,66 +1597,59 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('glossaries');
                   }}
-                  className={`tab-button ${activeTab === 'glossaries' ? 'active' : ''}`}
+                  style={{
+                    backgroundColor:
+                      activeTab === 'glossaries' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'glossaries'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'glossaries' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                    padding: '0.5rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
                 >
-                  Followed Glossaries
+                  Saved Glossaries
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('collections');
+                  }}
+                  style={{
+                    backgroundColor:
+                      activeTab === 'collections' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'collections'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'collections' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                    padding: '0.5rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  My Collections
                 </button>
               </div>
-
-              {activeTab === 'saved-terms' && (
-                <div className="workspace-actions">
-                  {isDeleteMode ? (
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        onClick={handleDeleteSelectedGroups}
-                        disabled={selectedGroupsForDeletion.length === 0}
-                        className={`create-new-btn ${selectedGroupsForDeletion.length === 0 ? 'disabled' : ''}`}
-                      >
-                        <Trash2 className="w-5 h-5" />
-                        Delete Selected (
-                        {selectedGroupsForDeletion.length.toString()})
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleExitDeleteMode}
-                        className="cancel-delete-btn"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        className="create-new-btn"
-                        onClick={handleOpenNewGroupModal}
-                      >
-                        <Plus className="w-5 h-5" />
-                        <span>New Group</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleEnterDeleteMode}
-                        className="create-new-btn"
-                      >
-                        <Trash2 className="icon" />
-                        Delete Groups
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Saved Terms Tab */}
             {activeTab === 'saved-terms' && (
               <div className="tab-content">
-                <div
-                  className={`${isDarkMode ? 'bg-[#292e41] border-gray-600' : 'bg-white border-gray-200'} rounded-lg shadow-sm border p-6`}
-                >
+                <div>
                   <div className="space-y-8 h-full">
-                    {/* Search and Filter */}
                     <div className="flex-col sm:flex-row">
                       <div className="flex-1">
                         <Search className="absolute" />
@@ -1587,7 +1665,6 @@ const WorkspacePage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Terms by Group */}
                     <div
                       className="space-y-6 flex-1 pr-2 saved-terms-scrollbar"
                       style={{
@@ -1614,6 +1691,7 @@ const WorkspacePage: React.FC = () => {
                         }
                       `}</style>
                       {Object.entries(groupedTerms)
+                        .filter(([groupName]) => groupName === 'All Terms')
                         .sort(([a], [b]) => {
                           // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
                           if (a === 'all') return -1;
@@ -1707,25 +1785,8 @@ const WorkspacePage: React.FC = () => {
                             {expandedGroups[groupName] && (
                               <div className="group-content">
                                 {terms.map((term) => (
-                                  <div
-                                    key={term.id}
-                                    className="term-item"
-                                    style={{
-                                      backgroundColor: isDarkMode
-                                        ? '#23273a'
-                                        : '#f3f4f6',
-                                      borderRadius: '0.5rem',
-                                      padding: '1rem',
-                                      marginBottom: '1rem',
-                                    }}
-                                  >
-                                    <div
-                                      className="term-header"
-                                      style={{
-                                        backgroundColor: 'transparent',
-                                        borderRadius: '0.5rem',
-                                      }}
-                                    >
+                                  <div key={term.id} className="term-item">
+                                    <div className="term-header">
                                       <div className="term-info">
                                         <div className="term-title-row">
                                           <h4 className="term-title">
@@ -1902,10 +1963,7 @@ const WorkspacePage: React.FC = () => {
             {activeTab === 'glossaries' && (
               <div className="tab-content">
                 <div className="space-y-6">
-                  <div
-                    className={`rounded-lg shadow-sm border ${isDarkMode ? 'border-gray-700' : 'bg-white border-gray-200'}`}
-                    style={isDarkMode ? { backgroundColor: '#292e41' } : {}}
-                  >
+                  <div>
                     <div className="p-6">
                       <h3
                         className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
@@ -1916,12 +1974,14 @@ const WorkspacePage: React.FC = () => {
                         {bookmarkedGlossaries.map((bookmark) => (
                           <div
                             key={bookmark.id}
-                            className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
-                            style={
-                              isDarkMode
-                                ? { backgroundColor: '#222535c0' }
-                                : { backgroundColor: '#f5f5f5' }
-                            }
+                            className="p-4 transition-shadow"
+                            style={{
+                              border: '1px solid rgba(0, 206, 175, 0.3)',
+                              borderRadius: '0.5rem',
+                              backgroundColor: isDarkMode
+                                ? '#232738ff'
+                                : '#f5f5f5',
+                            }}
                           >
                             <div className="flex items-start justify-between mb-3">
                               <div className="flex items-center space-x-3">
@@ -1971,12 +2031,10 @@ const WorkspacePage: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    // Handle view glossary action
                                     console.log(
                                       'View glossary:',
                                       bookmark.domain,
                                     );
-                                    // Navigate to glossary page with selected glossary
                                     void navigate('/glossary', {
                                       state: {
                                         selectedGlossaryName: bookmark.domain,
@@ -1986,10 +2044,8 @@ const WorkspacePage: React.FC = () => {
                                   className="create-new-btn"
                                   title="View glossary"
                                   style={{
-                                    backgroundColor: isDarkMode
-                                      ? '#1b1d28ff'
-                                      : '#e5e7eb', // dark blue in dark mode, grey in light mode
-                                    color: isDarkMode ? 'white' : '#363b4d',
+                                    backgroundColor: '#f00a50',
+                                    color: 'white',
                                     border: 'none',
                                     fontSize: '0.875rem',
                                     padding: '0.5rem 1rem',
@@ -1997,11 +2053,11 @@ const WorkspacePage: React.FC = () => {
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                      isDarkMode ? '#212431bd' : '#d1d5db';
+                                      '#d91748';
                                   }}
                                   onMouseLeave={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                      isDarkMode ? '#1b1d28ff' : '#e5e7eb';
+                                      '#f00a50';
                                   }}
                                 >
                                   View
@@ -2043,6 +2099,393 @@ const WorkspacePage: React.FC = () => {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'collections' && (
+              <div className="tab-content">
+                <div
+                  className="workspace-actions"
+                  style={{ marginBottom: '1rem' }}
+                >
+                  {isDeleteMode ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={handleDeleteSelectedGroups}
+                        disabled={selectedGroupsForDeletion.length === 0}
+                        className="create-new-btn"
+                        style={{
+                          backgroundColor: '#f00a50',
+                          borderColor: '#f00a50',
+                          color: 'white',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          minHeight: '38px',
+                          opacity:
+                            selectedGroupsForDeletion.length === 0 ? 0.5 : 1,
+                          cursor:
+                            selectedGroupsForDeletion.length === 0
+                              ? 'not-allowed'
+                              : 'pointer',
+                        }}
+                      >
+                        <Trash2
+                          style={{ width: '1.25rem', height: '1.25rem' }}
+                        />
+                        Delete Selected (
+                        {selectedGroupsForDeletion.length.toString()})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleExitDeleteMode}
+                        className="cancel-delete-btn"
+                        style={{
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          minHeight: '38px',
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="create-new-btn"
+                        onClick={handleOpenNewGroupModal}
+                        style={{
+                          backgroundColor: '#f00a50',
+                          borderColor: '#f00a50',
+                          color: 'white',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          minWidth: '150px',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Plus style={{ width: '1.25rem', height: '1.25rem' }} />
+                        <span>New Group</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleEnterDeleteMode}
+                        className="create-new-btn"
+                        style={{
+                          backgroundColor: '#f00a50',
+                          borderColor: '#f00a50',
+                          color: 'white',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          minWidth: '150px',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Trash2
+                          style={{ width: '1.25rem', height: '1.25rem' }}
+                        />
+                        Delete Groups
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="space-y-8 h-full">
+                    <div className="flex-col sm:flex-row">
+                      <div className="flex-1">
+                        <Search className="absolute" />
+                        <input
+                          type="text"
+                          placeholder="Search collections..."
+                          className="search-input"
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      className="space-y-6 flex-1 pr-2 saved-terms-scrollbar"
+                      style={{
+                        maxHeight: '414px',
+                        overflowY: 'auto',
+                        scrollbarWidth: 'thin',
+                        marginTop: '-30px',
+                      }}
+                    >
+                      <style>{`
+                        .saved-terms-scrollbar::-webkit-scrollbar {
+                          width: 6px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-track {
+                          background: ${isDarkMode ? '#374151' : '#f1f5f9'};
+                          border-radius: 3px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-thumb {
+                          background: ${isDarkMode ? '#6b7280' : '#cbd5e1'};
+                          border-radius: 3px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-thumb:hover {
+                          background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
+                        }
+                      `}</style>
+                      {Object.entries(groupedTerms)
+                        .filter(
+                          ([groupName]) =>
+                            groupName !== 'All Terms' && groupName !== 'all',
+                        )
+                        .sort(([a], [b]) => {
+                          return a.localeCompare(b);
+                        })
+                        .map(([groupName, terms]) => (
+                          <div
+                            key={groupName}
+                            className="workspace-group-card saved-terms-scrollbar"
+                          >
+                            <div className="group-header">
+                              <div
+                                className="group-info"
+                                onClick={() => {
+                                  if (!isDeleteMode) {
+                                    toggleGroup(groupName);
+                                  }
+                                }}
+                              >
+                                {isDeleteMode &&
+                                groupName !== 'all' &&
+                                groupName !== 'All Terms' ? (
+                                  <div className="flex items-center space-x-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedGroupsForDeletion.includes(
+                                        groupName,
+                                      )}
+                                      onChange={() => {
+                                        handleToggleGroupSelection(groupName);
+                                      }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                      }}
+                                      className="group-checkbox"
+                                    />
+                                    <FolderPlus className="group-icon" />
+                                  </div>
+                                ) : (
+                                  <FolderPlus className="group-icon" />
+                                )}
+                                <h3 className="group-title">{groupName}</h3>
+                                <span className="term-count">
+                                  {terms.length} terms
+                                </span>
+                              </div>
+                              <div className="group-actions">
+                                {!isDeleteMode && (
+                                  <>
+                                    {groupName !== 'All Terms' && (
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          const group = workspaceGroups.find(
+                                            (g) => g.name === groupName,
+                                          );
+                                          if (group) {
+                                            handleRenameGroup(
+                                              group.id,
+                                              group.name,
+                                            );
+                                          }
+                                        }}
+                                        className="group-action-btn"
+                                        title="Rename group"
+                                      >
+                                        <Edit2 className="w-4 h-4" />
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        toggleGroup(groupName);
+                                      }}
+                                    >
+                                      {expandedGroups[groupName] ? (
+                                        <ChevronUp className="chevron-icon" />
+                                      ) : (
+                                        <ChevronDown className="chevron-icon" />
+                                      )}
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {expandedGroups[groupName] && (
+                              <div className="group-content">
+                                {terms.map((term) => (
+                                  <div key={term.id} className="term-item">
+                                    <div className="term-header">
+                                      <div className="term-info">
+                                        <div className="term-title-row">
+                                          <h4 className="term-title">
+                                            {term.term}
+                                          </h4>
+                                          <div className="term-badges">
+                                            <span className="term-language-badge">
+                                              {term.language}
+                                            </span>
+                                            {term.domain && (
+                                              <span className="category-tag">
+                                                {term.domain}
+                                              </span>
+                                            )}
+                                          </div>
+                                        </div>
+                                        {term.definition && (
+                                          <p className="term-definition">
+                                            {term.definition}
+                                          </p>
+                                        )}
+
+                                        <div className="notes-section">
+                                          {editingNotes === term.id ? (
+                                            <div className="notes-editor">
+                                              <textarea
+                                                value={noteText}
+                                                onChange={(e) => {
+                                                  setNoteText(e.target.value);
+                                                }}
+                                                placeholder="Add your notes here..."
+                                                className="notes-textarea"
+                                                rows={3}
+                                              />
+                                              <div className="notes-actions">
+                                                <button
+                                                  type="button"
+                                                  onClick={() => {
+                                                    void handleSaveNote(
+                                                      term.id,
+                                                    );
+                                                  }}
+                                                  className="save-btn"
+                                                  style={{
+                                                    backgroundColor: isDarkMode
+                                                      ? undefined
+                                                      : '#00ceaf16', // pink in light mode
+                                                  }}
+                                                >
+                                                  <Save className="icon" />
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  onClick={handleCancelNote}
+                                                  className="cancel-btn"
+                                                  style={{
+                                                    backgroundColor: isDarkMode
+                                                      ? undefined
+                                                      : '#f8717148',
+                                                  }}
+                                                >
+                                                  <X className="icon" />
+                                                </button>
+                                              </div>
+                                            </div>
+                                          ) : (
+                                            <>
+                                              {term.notes && (
+                                                <div className="notes-display">
+                                                  <div className="notes-content">
+                                                    <div className="notes-text">
+                                                      <StickyNote className="sticky-note-icon" />
+                                                      <p>{term.notes}</p>
+                                                    </div>
+                                                    <button
+                                                      type="button"
+                                                      onClick={() => {
+                                                        handleAddNote(term.id);
+                                                      }}
+                                                      className="edit-note-btn"
+                                                    >
+                                                      <Edit2 className="edit-icon" />
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className="term-actions">
+                                        {!term.notes &&
+                                          editingNotes !== term.id && (
+                                            <button
+                                              onClick={() => {
+                                                handleAddNote(term.id);
+                                              }}
+                                              type="button"
+                                              className="add-note-btn"
+                                              title="Add note"
+                                            >
+                                              <StickyNote className="icon" />
+                                            </button>
+                                          )}
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            // Show re-group modal functionality
+                                          }}
+                                          className="add-note-btn"
+                                          title="Move to group"
+                                        >
+                                          <Move
+                                            style={{ color: '#00ceaf' }}
+                                            className="icon"
+                                          />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="delete-btn"
+                                          onClick={() => {
+                                            void handleDeleteTerm(term.id);
+                                          }}
+                                          title="Delete bookmark"
+                                        >
+                                          <Trash2 className="icon" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </div>

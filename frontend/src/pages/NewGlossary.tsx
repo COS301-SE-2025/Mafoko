@@ -611,10 +611,26 @@ const GlossaryApp = () => {
                 style={{ padding: '6px' }}
               >
                 <div
-                  className="flex w-full max-w-xl items-center gap-2 rounded-lg border bg-[var(--bg-tir)] px-3 py-2 shadow-sm transition focus-within:ring-2 focus-within:ring-transparent"
-                  style={{ padding: '6px' }}
+                  className="flex w-full max-w-xl items-center gap-2 rounded-lg px-3 py-2 shadow-sm transition"
+                  style={{
+                    padding: '0.75rem 1rem',
+                    border: isDarkMode
+                      ? '1px solid #4b5563'
+                      : '1px solid rgba(0, 206, 175, 0.3)',
+                    backgroundColor: isDarkMode
+                      ? 'rgba(71, 85, 105, 0.5)'
+                      : 'white',
+                    borderRadius: '0.5rem',
+                  }}
                 >
-                  <Search className="w-4 h-4 text-[var(--text-theme)] opacity-70 shrink-0" />
+                  <Search
+                    className="shrink-0"
+                    style={{
+                      width: '1.25rem',
+                      height: '1.25rem',
+                      color: '#9ca3af',
+                    }}
+                  />
                   <input
                     type="text"
                     placeholder={t('glossaryPage2.searchPlaceholder')}
@@ -622,9 +638,21 @@ const GlossaryApp = () => {
                     onChange={(e) => {
                       setTermSearch(e.target.value);
                     }}
-                    className="flex-1 bg-transparent text-[var(--text-theme)] placeholder:text-[var(--text-theme)] placeholder:opacity-50 focus:outline-none text-sm sm:text-base"
+                    className="flex-1 bg-transparent focus:outline-none"
                     autoComplete="off"
+                    style={{
+                      color: isDarkMode ? 'white' : '#111827',
+                      fontSize: '1rem',
+                      border: 'none',
+                      outline: 'none',
+                    }}
                   />
+                  <style>{`
+                    input::placeholder {
+                      color: ${isDarkMode ? '#9ca3af' : '#6b7280'};
+                      opacity: 1;
+                    }
+                  `}</style>
                 </div>
               </div>
 

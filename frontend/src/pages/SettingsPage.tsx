@@ -37,7 +37,6 @@ const appSupportedLanguages = [
 interface SettingsState {
   textSize: number;
   textSpacing: number;
-  highContrastMode: boolean;
   darkMode: boolean;
   selectedLanguage: string;
 }
@@ -145,7 +144,6 @@ const SettingsPage: React.FC = () => {
   const [settings, setSettings] = useState<SettingsState>({
     textSize: 16,
     textSpacing: 1,
-    highContrastMode: false,
     darkMode: false,
     selectedLanguage: i18n.resolvedLanguage || 'en',
   });
@@ -175,7 +173,6 @@ const SettingsPage: React.FC = () => {
             setSettings({
               textSize: cachedPrefs.preferences.textSize,
               textSpacing: cachedPrefs.preferences.textSpacing,
-              highContrastMode: cachedPrefs.preferences.highContrastMode,
               darkMode: cachedPrefs.preferences.darkMode,
               selectedLanguage: cachedPrefs.preferences.selectedLanguage,
             });
@@ -204,8 +201,7 @@ const SettingsPage: React.FC = () => {
         const newSettings = {
           textSize: serverPreferences.text_size,
           textSpacing: serverPreferences.text_spacing,
-          highContrastMode: serverPreferences.high_contrast_mode,
-          darkMode: false, // darkMode is handled separately by the DarkModeComponent
+          darkMode: false,
           selectedLanguage: serverPreferences.ui_language,
         };
 
@@ -233,7 +229,6 @@ const SettingsPage: React.FC = () => {
           setSettings({
             textSize: cachedPrefs.preferences.textSize,
             textSpacing: cachedPrefs.preferences.textSpacing,
-            highContrastMode: cachedPrefs.preferences.highContrastMode,
             darkMode: cachedPrefs.preferences.darkMode,
             selectedLanguage: cachedPrefs.preferences.selectedLanguage,
           });
@@ -269,7 +264,6 @@ const SettingsPage: React.FC = () => {
         const updateData: UserPreferencesUpdate = {
           text_size: newSettings.textSize,
           text_spacing: newSettings.textSpacing,
-          high_contrast_mode: newSettings.highContrastMode,
           ui_language: newSettings.selectedLanguage,
         };
 
@@ -300,7 +294,6 @@ const SettingsPage: React.FC = () => {
             preferences: {
               textSize: newSettings.textSize,
               textSpacing: newSettings.textSpacing,
-              highContrastMode: newSettings.highContrastMode,
               selectedLanguage: newSettings.selectedLanguage,
             },
             token,
@@ -358,13 +351,6 @@ const SettingsPage: React.FC = () => {
       '--text-spacing',
       settings.textSpacing.toString(),
     );
-
-    // Apply high contrast mode
-    if (settings.highContrastMode) {
-      document.documentElement.setAttribute('data-high-contrast-mode', 'true');
-    } else {
-      document.documentElement.removeAttribute('data-high-contrast-mode');
-    }
   }, [settings]);
 
   const handleSettingChange = useCallback(
@@ -517,13 +503,6 @@ const SettingsPage: React.FC = () => {
               icon={<Palette className="section-icon" />}
               showChevron={false}
             >
-              <ToggleSwitch
-                label={t('settings.accessibility.highContrastMode')}
-                checked={settings.highContrastMode}
-                onChange={(checked) => {
-                  handleSettingChange('highContrastMode', checked);
-                }}
-              />
               <ToggleSwitch
                 label={t('settings.accessibility.darkMode')}
                 checked={isDarkMode}

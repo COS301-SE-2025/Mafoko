@@ -9,7 +9,7 @@ export function TermsAndConditionsPage() {
       <main
         className={`flex-1 relative z-[2] box-border overflow-y-auto h-screen !bg-[var(--bg-first)]`}
       >
-        <section className="terms-and-conditions max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left bg-white mt-20 ">
+        <section className="terms-and-conditions max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left mt-20 ">
           <h2 className="!text-3xl font-bold mb-4 text-primary">
             {t('termsAndConditions.title')}
           </h2>
