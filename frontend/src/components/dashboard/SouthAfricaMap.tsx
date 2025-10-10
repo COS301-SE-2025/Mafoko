@@ -24,6 +24,7 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
   height = 700,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<any>(null);
 
   const geometries: ProvinceGeometry[] = [
     {
@@ -177,14 +178,13 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
           }
         }
 
-        // Create the chart with theme colors
+        // Create the chart with theme colors - REMOVE FIXED WIDTH/HEIGHT
         const chart = (Highcharts as any).mapChart(containerRef.current, {
           chart: {
             map: topology,
             backgroundColor: 'transparent',
-            height:
-              typeof height === 'number' ? height : parseInt(height.toString()),
-            width: typeof width === 'number' ? width : null,
+            spacing: [10, 10, 10, 10],
+            // DON'T set fixed height/width - let it be responsive
           },
 
           title: {
@@ -309,8 +309,8 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
               color: themeColors.accentTeal + '60',
               borderColor: themeColors.accentTeal,
               borderWidth: 2,
-              allAreas: true, // Show ALL areas, even without data
-              nullColor: themeColors.accentTeal + '60', // Same color for unmapped areas
+              allAreas: true,
+              nullColor: themeColors.accentTeal + '60',
             },
           ],
 
@@ -319,6 +319,8 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
           },
         });
 
+        // Store chart reference
+        chartRef.current = chart;
         (containerRef.current as any).chartInstance = chart;
 
         // FORCE GAUTENG TO WORK - Manual intervention
@@ -327,7 +329,6 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
             const series = chart.series[0];
             console.log('Map series points:', series.points);
 
-            // Find all points and log their properties
             series.points.forEach((point: any, index: number) => {
               console.log(`Point ${index}:`, {
                 name: point.name,
@@ -336,7 +337,6 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
                 properties: point.properties,
               });
 
-              // If this is Gauteng, force it to be colored and ensure tooltip works
               if (
                 point.name === 'Gauteng' ||
                 point.key === 'za-gt' ||
@@ -349,10 +349,9 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
                   color: themeColors.accentTeal + '80',
                   borderColor: themeColors.accentTeal,
                   borderWidth: 3,
-                  name: 'Gauteng', // Ensure the name is correct for tooltip
+                  name: 'Gauteng',
                 });
 
-                // Also manually set the properties for the tooltip
                 if (point.properties) {
                   point.properties.language = 'isiZulu';
                   point.properties.funFact =
@@ -392,16 +391,45 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
     };
   }, [width, height]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (chartRef.current) {
+        chartRef.current.reflow();
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      handleResize();
+    }, 150);
+
+    let resizeTimeout: NodeJS.Timeout;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener('resize', debouncedResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', debouncedResize);
+    };
+  }, []);
+
   return (
     <div
       ref={containerRef}
       className={`sa-map-container ${className}`}
       style={{
-        height: typeof height === 'number' ? `${height}px` : height,
-        width: typeof width === 'number' ? `${width}px` : width,
-        minWidth: '600px', // TODO: Adjust map width here
+        width: '100%',
+        height: '100%',
+        minHeight: '300px',
         maxWidth: '100%',
         margin: '0 auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         ...style,
       }}
     />

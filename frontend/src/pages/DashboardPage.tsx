@@ -756,7 +756,7 @@ const DashboardPage: React.FC = () => {
         />
       )}
 
-      <div className="main-content">
+      <div className="main-content dashboard-main-content">
         <div className="top-bar">
           <div className="welcome-section"></div>
           {isLoadingUserData ? (
