@@ -672,8 +672,8 @@ const AdminTermPage: React.FC = () => {
                       <th>Submitted By</th>
                       <th>Submitted At</th>
                       <th>Reviewed At</th>
-                      {activeTab === 'pending' && <th>Actions</th>}
                       <th>Status</th>
+                      {activeTab === 'pending' && <th>Actions</th>}
                     </tr>
                   </thead>
                   <tbody>
