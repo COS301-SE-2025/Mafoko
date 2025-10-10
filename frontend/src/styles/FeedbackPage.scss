@@ -89,12 +89,40 @@
       transition: all 0.2s ease;
       font-weight: 500;
       color: var(--color-text-secondary);
+      background: #f3f4f6;
 
       .tab-content {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
+        background: #f3f4f6;
+
+        &.active {
+          background: var(--color-primary-light);
+          color: var(--color-primary);
+          border-bottom: 2px solid var(--color-primary);
+          padding: 10px;
+          border-radius: 10px;
+
+          &.suggestion {
+            background: #f2d2011a;
+            color: #f2d001;
+            border-bottom-color: #f2d001;
+          }
+
+          &.complaint {
+            background: #f00a4f32;
+            color: #f00a50;
+            border-bottom-color: #f00a50;
+          }
+
+          &.compliment {
+            background: #00ceaf1d;
+            color: #00ceaf;
+            border-bottom-color: #00ceaf;
+          }
+        }
 
         .tab-icon {
           width: 1.25rem;
