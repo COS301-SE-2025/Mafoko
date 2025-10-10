@@ -1,13 +1,24 @@
 import React, { Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
 import { HelpNodeSection } from './HelpSection.tsx';
 import { GlossaryContent } from './utils/GlossaryUtils.tsx';
 
 export const GlossaryHelp: React.FC = () => {
-  const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
+
+  // Go back safely under HashRouter
+  const goBack = () => {
+    window.location.hash = '#/help';
+  };
+
+  // Smooth scroll to internal section IDs
+  const handleScrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div>
@@ -18,9 +29,7 @@ export const GlossaryHelp: React.FC = () => {
           <button
             type="button"
             className="article-theme-toggle-btn"
-            onClick={() => {
-              void navigate('/help');
-            }}
+            onClick={goBack}
           >
             Back
           </button>
@@ -35,15 +44,29 @@ export const GlossaryHelp: React.FC = () => {
                 <h2 className="article-h2">On this page</h2>
                 <ul className="text-left">
                   <li>
-                    <a href="#intro">Understanding Glossaries</a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleScrollTo('intro');
+                      }}
+                      className=" text-left hover:text-theme focus:outline-none"
+                    >
+                      Understanding Glossaries
+                    </button>
                   </li>
-                  {GlossaryContent.map((obj) => {
-                    return (
-                      <li key={`${obj.title}-${obj.id}`}>
-                        <a href={`#${obj.id}`}>{obj.title}</a>
-                      </li>
-                    );
-                  })}
+                  {GlossaryContent.map((obj) => (
+                    <li key={`${obj.title}-${obj.id}`}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleScrollTo(obj.id);
+                        }}
+                        className=" text-left hover:text-theme focus:outline-none"
+                      >
+                        {obj.title}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </aside>
 
@@ -65,19 +88,17 @@ export const GlossaryHelp: React.FC = () => {
                     </div>
                   </section>
 
-                  {GlossaryContent.map((obj) => {
-                    return (
-                      <Fragment key={`${obj.title}-${obj.id}`}>
-                        <HelpNodeSection
-                          id={obj.id}
-                          title={obj.title}
-                          content={obj.content}
-                          assetLocation={obj.assetLocation}
-                        />
-                        <br />
-                      </Fragment>
-                    );
-                  })}
+                  {GlossaryContent.map((obj) => (
+                    <Fragment key={`${obj.title}-${obj.id}`}>
+                      <HelpNodeSection
+                        id={obj.id}
+                        title={obj.title}
+                        content={obj.content}
+                        assetLocation={obj.assetLocation}
+                      />
+                      <br />
+                    </Fragment>
+                  ))}
                 </div>
               </div>
             </div>

@@ -828,5 +828,161 @@
     "section39": "Reha Sehlopha Bocha",
     "section40": "Reha Bocha",
     "section41": "Ho Rehoa Bocha"
+  },
+  "fact": "Inyaniso",
+  "provinces": {
+    "eastern_cape": {
+      "name": "Eastern Cape",
+      "language": "isiXhosa",
+      "funFacts": [
+        "Iquka izandi zokunqakraza ezikhethekileyo",
+        "Likhaya likaNelson Mandela kunye nabanye abaninzi balwela inkululeko",
+        "Linelona cala elide lolwandle eMzantsi Afrika",
+        "Laziwa njengendawo yokuqala yentshukumo yenkululeko yaseMzantsi Afrika",
+        "Lityebile ngenkcubeko nesiNtu sesiXhosa",
+        "Likhaya kunxweme oluhle nolwasendle",
+        "Umculo wesintu uquka iiharmoni ezinzima",
+        "Iphondo linobugcisa obukhethekileyo bokuhombisa ngeebhidi",
+        "Laziwa ngamahlathi alo endabuko",
+        "Linenkqubo ezintathu eziphambili zesiXhosa",
+        "Imisitho yesintu isenziwa ngokubanzi nanamhlanje"
+      ]
+    },
+    "limpopo": {
+      "name": "Limpopo",
+      "language": "Sepedi",
+      "funFacts": [
+        "Linamaqela elishumi elinesibhozo ezibizo",
+        "Lathiywa ngokuhamba koMlambo iLimpopo",
+        "Likhaya leKruger National Park",
+        "Lidume ngobutyebi bazo zonke iintlobo zezinto eziphilayo",
+        "Linenkobe endala yeebhobhobhoyi",
+        "Abathandazeli besintu badlala indima ebalulekileyo kuluntu",
+        "Lidibanisa iilwimi ezininzi zendalo",
+        "Lidume ngobugcisa beembiza nezandla",
+        "Linemiqathango yexesha lonyaka ekhethekileyo",
+        "Umculo wesintu usebenzisa izigubhu nemibane yomoya",
+        "Likhaya lendawo yezinto zakudala eMapungubwe"
+      ]
+    },
+    "kwazulu_natal": {
+      "name": "KwaZulu-Natal",
+      "language": "isiZulu",
+      "funFacts": [
+        "Lolona lwimi luthethwa kakhulu ekhaya",
+        "Lidume ngeenxweme zalo ezintle nolwandle",
+        "Likhaya lemveli lobukumkani bamaZulu",
+        "Linenkangeleko yeentaba zeDrakensberg",
+        "Umdaniso wesintu samaZulu waziwa kwihlabathi lonke",
+        "Linohlobo lwembali yamagorha",
+        "Lidume ngobugcisa bokuhombisa ngeebhidi",
+        "Iimpahla zesintu zinemibala kwaye zineentsingiselo",
+        "Likhaya leendawo ezibhalwe yi-UNESCO njengeLifa leMveli",
+        "Linenkqubo yokwakha yesintu ekhethekileyo",
+        "Lidume ngemibhiyozo yenkcubeko ephilayo"
+      ]
+    },
+    "western_cape": {
+      "name": "Western Cape",
+      "language": "Afrikaans",
+      "funFacts": [
+        "Livela kwimvelaphi yamaDatshi",
+        "Likhaya leNtaba iTable",
+        "Lidume ngemveliso yewayini esemgangathweni ophezulu",
+        "Linenkangeleko enomtsalane yonxweme",
+        "Linomoya ofana neMediterranean",
+        "Lidibanisa iinkcubeko ezahlukeneyo",
+        "Likhaya lezakhiwo zembali zamaDatshi aseKapa",
+        "Linenkqubo yezityalo ezizodwa ezifana ne-fynbos",
+        "Yindawo edumileyo kubakhenkethi",
+        "Lidume ngeentlobo ezahlukeneyo zokupheka",
+        "Linohlobo lwembali yezokuhamba ngenqanawa"
+      ]
+    },
+    "northern_cape": {
+      "name": "Northern Cape",
+      "language": "Afrikaans",
+      "funFacts": [
+        "Libonisa iinguqu ezizodwa zeendawo zalo",
+        "Lelona phondo likhulu ngokobungakanani",
+        "Lidume ngokumba iidiamond",
+        "Linenxalenye yeNt desert yaseKalahari",
+        "Lidume ngembonakalo yeentyatyambo zasehlotyeni",
+        "Likhaya leemfundo zamatye ezabhalwa nguSan",
+        "Lidume ngokubona iinkwenkwezi kakuhle ebusuku",
+        "Linenkangeleko enqabileyo yentlango",
+        "Linohlobo lwembali yokumba",
+        "Linomoya owomileyo nowomeleleyo",
+        "Likhaya leAugrabies Falls"
+      ]
+    },
+    "north_west": {
+      "name": "North West",
+      "language": "Setswana",
+      "funFacts": [
+        "Lulwimi olusemthethweni eBotswana",
+        "Lidume ngokumba ipilatinum",
+        "Likhaya leSun City resort",
+        "Linenxalenye yePilanesberg Game Reserve",
+        "Lityebile ngemveli yeTswana",
+        "Lidume ngobugcisa beembiza zesintu",
+        "Linenkqubo yomculo wesintu ekhethekileyo",
+        "Linenkangeleko entle yendalo",
+        "Lidume ngezilwanyana zasendle",
+        "Linohlobo lwemibhiyozo yenkcubeko",
+        "Ukwakhiwa kwesiNtu kukhethekile"
+      ]
+    },
+    "free_state": {
+      "name": "Free State",
+      "language": "Sesotho",
+      "funFacts": [
+        "Lidume ngeendumiso zezibongo zesintu",
+        "Laziwa njengebhaskithi yokutya yaseMzantsi Afrika",
+        "Linenkalo enkulu yezolimo",
+        "Linendawo entle emthubi negolide",
+        "Lityebile ngemizobo yamatye kaSan",
+        "Lidume ngeengubo zesintu ezinemizobo ekhethekileyo",
+        "Linenkangeleko ekhethekileyo yamawa e-sandstone",
+        "Linohlobo lwembali ebalulekileyo",
+        "Lidume ngeendawo ezivulekileyo nezibanzi",
+        "Umculo wesintu unemixholo ethambileyo",
+        "Likhaya leGolden Gate Highlands"
+      ]
+    },
+    "gauteng": {
+      "name": "Gauteng",
+      "language": "isiZulu",
+      "funFacts": [
+        "Lelona phondo linolwimi oluninzi oluthethwayo",
+        "Liziko loqoqosho lwaseMzantsi Afrika",
+        "Lelona lincinci ngokobungakanani",
+        "Lelona linabemi abaninzi",
+        "Likhaya laseJohannesburg nasePitoli",
+        "Lithetha zonke iilwimi ezisemthethweni ezi-11",
+        "Lidume ngenkcubeko yasemadolobheni",
+        "Linohlobo lwembali yokumba",
+        "Liziko lorhwebo nezezimali",
+        "Lidume ngobomi basebusuku obuphithizelayo",
+        "Lidume ngeendlela zokupheka ezahlukeneyo"
+      ]
+    },
+    "mpumalanga": {
+      "name": "Mpumalanga",
+      "language": "isiSwati",
+      "funFacts": [
+        "Isondele kulwimi lwesiZulu",
+        "Likhaya leBlyde River Canyon",
+        "Lidume ngobuhle bendalo",
+        "Linenxalenye yeLowveld",
+        "Lidume ngokulima iziqhamo ezishushu",
+        "Linohlaza olunemibono entle yeentaba",
+        "Likhaya lenxalenye yeKruger National Park",
+        "Lidume ngemilambo enamanzi awileyo",
+        "Linenkqubo ezizodwa zendalo",
+        "Lityebile ngeenkcubeko ezahlukeneyo",
+        "Imisitho yesintu iphila kakhulu"
+      ]
+    }
   }
 }

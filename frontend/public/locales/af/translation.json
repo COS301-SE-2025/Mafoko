@@ -842,5 +842,161 @@
     "section39": "Hernoem Groep",
     "section40": "Hernoem",
     "section41": "Besig om te Hernoem"
+  },
+  "fact": "Feit",
+  "provinces": {
+    "eastern_cape": {
+      "name": "Oos-Kaap",
+      "language": "isiXhosa",
+      "funFacts": [
+        "Kenmerk unieke klankklikke",
+        "Tuiste van Nelson Mandela en baie ander anti-apartheid aktiviste",
+        "Het die langste kuslyn van enige Suid-Afrikaanse provinsie",
+        "Bekend as die geboorteplek van die Suid-Afrikaanse bevrydingstryd",
+        "Ryk aan Xhosa-kulturele erfenis en tradisies",
+        "Tuiste van pragtige wilde kuslyne en strande",
+        "Tradisionele musiek toon komplekse harmonieë",
+        "Die provinsie het unieke krale- en kunstradisies",
+        "Bekend vir sy inheemse woude",
+        "Het drie hoof Xhosa-sprekende groepe",
+        "Tradisionele seremonies word steeds wyd beoefen"
+      ]
+    },
+    "limpopo": {
+      "name": "Limpopo",
+      "language": "Sepedi",
+      "funFacts": [
+        "Het agttien naamklasse",
+        "Genoem na die Limpoporivier",
+        "Tuiste van die Krugerwildtuin",
+        "Bekend vir sy ryk biodiversiteit",
+        "Het antieke kremetartbome",
+        "Tradisionele genesers speel belangrike kulturele rolle",
+        "Huisves uiteenlopende taalgemeenskappe",
+        "Bekend vir pottebakkery- en handwerktradisies",
+        "Het unieke seisoenale vieringe",
+        "Tradisionele musiek gebruik tromme en fluite",
+        "Tuiste van die Mapungubwe argeologiese terrein"
+      ]
+    },
+    "kwazulu_natal": {
+      "name": "KwaZulu-Natal",
+      "language": "isiZulu",
+      "funFacts": [
+        "Mees gesproke huistaal",
+        "Bekend vir sy pragtige kuslyne en strande",
+        "Tuiste van die Zoeloekoninkryk-erfenis",
+        "Beskik oor die Drakensberge-bergreeks",
+        "Tradisionele Zoeloe-dans is wêreldbekend",
+        "Het ’n ryk krygsgeskiedenis",
+        "Bekend vir ingewikkelde krale-ontwerpe",
+        "Tradisionele kleredrag is kleurvol en simbolies",
+        "Tuiste van UNESCO Wêrelderfenisgebiede",
+        "Beskik oor unieke tradisionele argitektuur",
+        "Het lewendige kulturele feeste"
+      ]
+    },
+    "western_cape": {
+      "name": "Wes-Kaap",
+      "language": "Afrikaans",
+      "funFacts": [
+        "Ontwikkel uit Nederlandse oorsprong",
+        "Tuiste van Tafelberg",
+        "Bekend vir wêreldklas wynproduksie",
+        "Beskik oor pragtige kuslandskappe",
+        "Het ’n Mediterreense klimaat",
+        "Bekend vir diverse kulturele invloede",
+        "Tuiste van historiese Kaaps-Hollandse argitektuur",
+        "Beskik oor unieke fynbosplantegroei",
+        "Gewilde toeristebestemming",
+        "Bekend vir sy kulinêre verskeidenheid",
+        "Het ’n ryk seevaartgeskiedenis"
+      ]
+    },
+    "northern_cape": {
+      "name": "Noord-Kaap",
+      "language": "Afrikaans",
+      "funFacts": [
+        "Toon unieke streekverskille",
+        "Grootste provinsie volgens oppervlakte",
+        "Bekend vir diamantmynbou",
+        "Beskik oor die Kalahariwoestyn",
+        "Het skouspelagtige lenteblomuitstallings",
+        "Tuiste van San-rotskuns terreine",
+        "Bekend vir sterrekyk-geleenthede",
+        "Beskik oor unieke woestynlandskappe",
+        "Het ’n ryk myn-erfenis",
+        "Bekend vir sy halfdroë klimaat",
+        "Tuiste van die Augrabies-waterval"
+      ]
+    },
+    "north_west": {
+      "name": "Noordwes",
+      "language": "Setswana",
+      "funFacts": [
+        "Amptelike taal in Botswana",
+        "Bekend vir platinum-mynbou",
+        "Tuiste van die Sun City-oord",
+        "Beskik oor die Pilanesberg Natuurreservaat",
+        "Ryk aan Tswana-kulturele tradisies",
+        "Bekend vir tradisionele pottebakkery",
+        "Het unieke tradisionele musiek",
+        "Beskik oor pragtige natuurlike landskappe",
+        "Bekend vir sy wildlewe",
+        "Het belangrike kulturele feeste",
+        "Tradisionele argitektuur is kenmerkend"
+      ]
+    },
+    "free_state": {
+      "name": "Vrystaat",
+      "language": "Sesotho",
+      "funFacts": [
+        "Bekend vir lofgedigte",
+        "Bekend as die broodmandjie van Suid-Afrika",
+        "Beskik oor uitgestrekte landbougrond",
+        "Het pragtige goue landskappe",
+        "Ryk aan San-rotskuns",
+        "Bekend vir tradisionele kombersontwerpe",
+        "Beskik oor unieke sandsteenformasies",
+        "Het belangrike historiese terreine",
+        "Bekend vir sy oop ruimtes",
+        "Tradisionele musiek is melodieus",
+        "Tuiste van die Golden Gate Hooglandpark"
+      ]
+    },
+    "gauteng": {
+      "name": "Gauteng",
+      "language": "isiZulu",
+      "funFacts": [
+        "Mees taaldiverse provinsie",
+        "Ekonomiese kern van Suid-Afrika",
+        "Kleinste provinsie volgens oppervlakte",
+        "Mees bevolkte provinsie",
+        "Tuiste van Johannesburg en Pretoria",
+        "Beskik oor 11 amptelike tale wat aktief gepraat word",
+        "Bekend vir stedelike kultuur",
+        "Het ’n ryk myn-geskiedenis",
+        "Sentrum van handel en finansies",
+        "Bekend vir lewendige naglewe",
+        "Beskik oor diverse kulinêre tonele"
+      ]
+    },
+    "mpumalanga": {
+      "name": "Mpumalanga",
+      "language": "isiSwati",
+      "funFacts": [
+        "Verwant aan die isiZulu-taal",
+        "Tuiste van die Blyderivier Canyon",
+        "Bekend vir natuurskoon",
+        "Beskik oor die Laeveld-streek",
+        "Bekend vir subtropiese vrugteboerdery",
+        "Het panoramiese berguitsigte",
+        "Tuiste van deel van die Krugerwildtuin",
+        "Bekend vir watervalle",
+        "Beskik oor unieke ekosisteme",
+        "Het ryk kulturele diversiteit",
+        "Tradisionele seremonies is lewendig"
+      ]
+    }
   }
 }

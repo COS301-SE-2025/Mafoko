@@ -171,6 +171,7 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
         <td>
           {app.reviewed_at ? new Date(app.reviewed_at).toLocaleString() : '-'}
         </td>
+        <td>{renderStatusBadge(app.status || 'PENDING_VERIFICATION')}</td>
         {activeTab === 'pending' && (
           <td className="actions">
             <button
@@ -187,7 +188,6 @@ const ApplicationRowOrCard: React.FC<AppRowProps> = ({
             </button>
           </td>
         )}
-        <td>{renderStatusBadge(app.status || 'PENDING_VERIFICATION')}</td>
       </tr>
       {expandedAppId === app.id && translations.length > 0 && (
         <tr>
@@ -503,7 +503,7 @@ const AdminTermPage: React.FC = () => {
 
   return (
     <div
-      className={`dashboard-container ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`dashboard-container !bg-[var(--bg-first)] ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobile ? (
         <Navbar />
@@ -516,16 +516,48 @@ const AdminTermPage: React.FC = () => {
       <div className="admin-page-container">
         <div className="admin-term-page-content">
           <h1 className="page-title">Admin Term Applications</h1>
-          <div className="tabs">
+          <div className="tabs flex flex-wrap md:flex-nowrap gap-2 md:gap-4">
             <button
-              className={activeTab === 'pending' ? 'active-tab' : ''}
               onClick={() => setActiveTab('pending')}
+              style={{
+                backgroundColor:
+                  activeTab === 'pending' ? '#f00a50' : 'transparent',
+                color:
+                  activeTab === 'pending'
+                    ? 'white'
+                    : isDarkMode
+                      ? '#ffffff'
+                      : '#212431',
+                border: `2px solid ${activeTab === 'pending' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                padding: '0.5rem 1rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
             >
               Pending Applications
             </button>
             <button
-              className={activeTab === 'all' ? 'active-tab' : ''}
               onClick={() => setActiveTab('all')}
+              style={{
+                backgroundColor:
+                  activeTab === 'all' ? '#f00a50' : 'transparent',
+                color:
+                  activeTab === 'all'
+                    ? 'white'
+                    : isDarkMode
+                      ? '#ffffff'
+                      : '#212431',
+                border: `2px solid ${activeTab === 'all' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                padding: '0.5rem 1rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
             >
               All Applications
             </button>

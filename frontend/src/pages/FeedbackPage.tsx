@@ -360,11 +360,15 @@ const FeedbackPage = () => {
                             type: tab.id,
                           });
                         }}
-                        className={`tab-button ${
+                        className={`tab-button  ${
                           activeTab === tab.id ? `active ${tab.id}` : ''
                         }`}
                       >
-                        <div className="tab-content">
+                        <div
+                          className={`tab-content ${
+                            activeTab === tab.id ? `active ${tab.id}` : ''
+                          }`}
+                        >
                           <Icon className="tab-icon" />
                           <span>{tab.label}</span>
                         </div>

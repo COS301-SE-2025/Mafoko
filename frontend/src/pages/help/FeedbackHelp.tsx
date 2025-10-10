@@ -1,13 +1,24 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
 import { HelpNodeSection } from './HelpSection.tsx';
 import { FeedbackContent } from './utils/FeedbackUtils.tsx';
 
 export const FeedbackHelp: React.FC = () => {
-  const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
+
+  // Navigate safely under HashRouter
+  const goBack = () => {
+    window.location.hash = '#/help';
+  };
+
+  // Smoothly scroll to sections by ID
+  const handleScrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div>
@@ -18,9 +29,7 @@ export const FeedbackHelp: React.FC = () => {
           <button
             type="button"
             className="article-theme-toggle-btn"
-            onClick={() => {
-              void navigate('/help');
-            }}
+            onClick={goBack}
           >
             Back
           </button>
@@ -35,15 +44,29 @@ export const FeedbackHelp: React.FC = () => {
                 <h2 className="article-h2">On this page</h2>
                 <ul className="text-left">
                   <li>
-                    <a href="#intro">Understanding Feedback</a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleScrollTo('intro');
+                      }}
+                      className="!text-theme text-left hover:text-theme focus:outline-none"
+                    >
+                      Understanding Feedback
+                    </button>
                   </li>
-                  {FeedbackContent.map((obj) => {
-                    return (
-                      <li key={`${obj.title}-${obj.id}`}>
-                        <a href={`#${obj.id}`}>{obj.title}</a>
-                      </li>
-                    );
-                  })}
+                  {FeedbackContent.map((obj) => (
+                    <li key={`${obj.title}-${obj.id}`}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleScrollTo(obj.id);
+                        }}
+                        className="text-theme! text-left hover:text-theme focus:outline-none"
+                      >
+                        {obj.title}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </aside>
 
@@ -69,17 +92,15 @@ export const FeedbackHelp: React.FC = () => {
                     </div>
                   </section>
 
-                  {FeedbackContent.map((obj) => {
-                    return (
-                      <HelpNodeSection
-                        key={`${obj.title}-${obj.id}`}
-                        id={obj.id}
-                        title={obj.title}
-                        content={obj.content}
-                        assetLocation={obj.assetLocation}
-                      />
-                    );
-                  })}
+                  {FeedbackContent.map((obj) => (
+                    <HelpNodeSection
+                      key={`${obj.title}-${obj.id}`}
+                      id={obj.id}
+                      title={obj.title}
+                      content={obj.content}
+                      assetLocation={obj.assetLocation}
+                    />
+                  ))}
                 </div>
               </div>
             </div>

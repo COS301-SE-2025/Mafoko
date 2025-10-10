@@ -1,13 +1,22 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../../styles/Article.scss';
 import { useDarkMode } from '../../components/ui/DarkModeComponent.tsx';
 import { HelpNodeSection } from './HelpSection.tsx';
 import { CommunityContent } from './utils/FeedbackUtils.tsx';
 
 export const CommunityHelpPage: React.FC = () => {
-  const navigate = useNavigate();
   const { isDarkMode } = useDarkMode();
+
+  const goBack = () => {
+    window.location.hash = '#/help';
+  };
+
+  const handleScrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div>
@@ -18,9 +27,7 @@ export const CommunityHelpPage: React.FC = () => {
           <button
             type="button"
             className="article-theme-toggle-btn"
-            onClick={() => {
-              void navigate('/help');
-            }}
+            onClick={goBack}
           >
             Back
           </button>
@@ -35,15 +42,29 @@ export const CommunityHelpPage: React.FC = () => {
                 <h2 className="article-h2">On this page</h2>
                 <ul className="text-left">
                   <li>
-                    <a href="#intro">Collaboration in Marito</a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleScrollTo('intro');
+                      }}
+                      className=" text-left hover:text-theme focus:outline-none"
+                    >
+                      Collaboration in Marito
+                    </button>
                   </li>
-                  {CommunityContent.map((obj) => {
-                    return (
-                      <li key={`${obj.title}-${obj.id}`}>
-                        <a href={`#${obj.id}`}>{obj.title}</a>
-                      </li>
-                    );
-                  })}
+                  {CommunityContent.map((obj) => (
+                    <li key={`${obj.title}-${obj.id}`}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleScrollTo(obj.id);
+                        }}
+                        className=" text-left hover:text-theme focus:outline-none"
+                      >
+                        {obj.title}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </aside>
 
@@ -65,17 +86,15 @@ export const CommunityHelpPage: React.FC = () => {
                     </div>
                   </section>
 
-                  {CommunityContent.map((obj) => {
-                    return (
-                      <HelpNodeSection
-                        key={`${obj.title}-${obj.id}`}
-                        id={obj.id}
-                        title={obj.title}
-                        content={obj.content}
-                        assetLocation={obj.assetLocation}
-                      />
-                    );
-                  })}
+                  {CommunityContent.map((obj) => (
+                    <HelpNodeSection
+                      key={`${obj.title}-${obj.id}`}
+                      id={obj.id}
+                      title={obj.title}
+                      content={obj.content}
+                      assetLocation={obj.assetLocation}
+                    />
+                  ))}
                 </div>
               </div>
             </div>

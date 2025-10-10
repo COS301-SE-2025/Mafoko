@@ -1341,7 +1341,7 @@ const WorkspacePage: React.FC = () => {
 
   return (
     <div
-      className={`workspace-container ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
+      className={`workspace-container  !bg-[var(--bg-first)] ${isMobileMenuOpen ? 'mobile-menu-is-open' : ''} ${isDarkMode ? 'theme-dark' : 'theme-light'}`}
     >
       {isMobileMenuOpen && (
         <div
@@ -1611,21 +1611,25 @@ const WorkspacePage: React.FC = () => {
                                 {isDeleteMode &&
                                 groupName !== 'all' &&
                                 groupName !== 'All Terms' ? (
-                                  <div className="flex items-center justify-center">
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedGroupsForDeletion.includes(
-                                        groupName,
-                                      )}
-                                      onChange={() => {
-                                        handleToggleGroupSelection(groupName);
-                                      }}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                      }}
-                                      className="group-checkbox"
-                                    />
-                                    <FolderPlus className="group-icon" />
+                                  <div className="flex items-center justify-center gap-5">
+                                    <div>
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedGroupsForDeletion.includes(
+                                          groupName,
+                                        )}
+                                        onChange={() => {
+                                          handleToggleGroupSelection(groupName);
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                        }}
+                                        className="group-checkbox"
+                                      />
+                                    </div>
+                                    <div>
+                                      <FolderPlus className="group-icon" />
+                                    </div>
                                   </div>
                                 ) : (
                                   <div className="flex items-center justify-center">
@@ -2188,7 +2192,7 @@ const WorkspacePage: React.FC = () => {
                             key={groupName}
                             className="workspace-group-card saved-terms-scrollbar "
                           >
-                            <div className="group-header flex flex-row justify-center items-center">
+                            <div className="group-header flex flex-row justify-center items-center gap-5">
                               <div
                                 className="group-info"
                                 onClick={() => {
@@ -2200,29 +2204,40 @@ const WorkspacePage: React.FC = () => {
                                 {isDeleteMode &&
                                 groupName !== 'all' &&
                                 groupName !== 'All Terms' ? (
-                                  <div className="flex items-center space-x-3">
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedGroupsForDeletion.includes(
-                                        groupName,
-                                      )}
-                                      onChange={() => {
-                                        handleToggleGroupSelection(groupName);
-                                      }}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                      }}
-                                      className="group-checkbox"
-                                    />
-                                    <FolderPlus className="group-icon" />
+                                  <div className="flex items-center justify-center space-x-3 gap-5">
+                                    <div>
+                                      {' '}
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedGroupsForDeletion.includes(
+                                          groupName,
+                                        )}
+                                        onChange={() => {
+                                          handleToggleGroupSelection(groupName);
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                        }}
+                                        className="group-checkbox"
+                                      />
+                                    </div>
+                                    <div>
+                                      <FolderPlus className="group-icon" />
+                                    </div>
                                   </div>
                                 ) : (
-                                  <FolderPlus className="group-icon" />
+                                  <div>
+                                    <FolderPlus className="group-icon" />
+                                  </div>
                                 )}
-                                <h3 className="group-title">{groupName}</h3>
-                                <span className="term-count">
-                                  {terms.length} terms
-                                </span>
+                                <div className="flex items-center justify-center">
+                                  <div className="group-title">{groupName}</div>
+                                </div>
+                                <div>
+                                  <span className="term-count">
+                                    {terms.length} terms
+                                  </span>
+                                </div>
                               </div>
                               <div className="group-actions">
                                 {!isDeleteMode && (
@@ -2300,7 +2315,7 @@ const WorkspacePage: React.FC = () => {
                                                 onChange={(e) => {
                                                   setNoteText(e.target.value);
                                                 }}
-                                                placeholder="Add your notes here..."
+                                                placeholder=""
                                                 className="notes-textarea"
                                                 rows={3}
                                               />
@@ -2370,6 +2385,11 @@ const WorkspacePage: React.FC = () => {
                                               type="button"
                                               className="add-note-btn"
                                               title="Add note"
+                                              style={{
+                                                backgroundColor: isDarkMode
+                                                  ? '#31374e'
+                                                  : '#f2d20142',
+                                              }}
                                             >
                                               <StickyNote className="icon" />
                                             </button>
@@ -2381,6 +2401,11 @@ const WorkspacePage: React.FC = () => {
                                           }}
                                           className="add-note-btn"
                                           title="Move to group"
+                                          style={{
+                                            backgroundColor: isDarkMode
+                                              ? '#31374e'
+                                              : '#00ceaf25',
+                                          }}
                                         >
                                           <Move
                                             style={{ color: '#00ceaf' }}
@@ -2389,7 +2414,7 @@ const WorkspacePage: React.FC = () => {
                                         </button>
                                         <button
                                           type="button"
-                                          className="delete-btn"
+                                          className="delete-btn !text-theme hover:!text-white"
                                           onClick={() => {
                                             void handleDeleteTerm(term.id);
                                           }}
@@ -2434,6 +2459,9 @@ const WorkspacePage: React.FC = () => {
                 <label htmlFor="groupName" className="form-label">
                   {t('workspace.section25')}
                 </label>
+                <p className="form-description text-left">
+                  {t('workspace.section26')}
+                </p>
                 <input
                   type="text"
                   id="groupName"
@@ -2453,7 +2481,6 @@ const WorkspacePage: React.FC = () => {
                   autoFocus
                 />
               </div>
-              <p className="form-description">{t('workspace.section26')}</p>
             </div>
 
             {/* Modal Footer */}
@@ -2471,7 +2498,7 @@ const WorkspacePage: React.FC = () => {
                   void handleCreateNewGroup();
                 }}
                 disabled={!newGroupName.trim()}
-                className={`create-btn ${!newGroupName.trim() ? 'disabled' : ''}`}
+                className={`create-btn !bg-teal-500 !text-white hover:!bg-teal-600 ${!newGroupName.trim() ? 'disabled' : ''}`}
               >
                 <Plus className="plus-icon" />
                 {t('workspace.section21')}
@@ -2856,7 +2883,7 @@ const WorkspacePage: React.FC = () => {
                 className="confirm-button"
                 onClick={confirmationModal.onConfirm}
               >
-                ${t('termAdditions.delete')}
+                {t('termAdditions.delete')}
               </button>
             </div>
           </div>

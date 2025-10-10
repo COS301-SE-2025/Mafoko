@@ -835,5 +835,161 @@
     "section39": "Vhidzani Tshigwada Nga Dzina Ḓiswa",
     "section40": "Vhidzani Nga Ḓiswa",
     "section41": "Hu khou vhidzwa nga ḓiswa"
+  },
+  "fact": "Iqiniso",
+  "provinces": {
+    "eastern_cape": {
+      "name": "Eastern Cape",
+      "language": "isiXhosa",
+      "funFacts": [
+        "Inezimpawu zokukhuluma ezinezimpintsha ezihlukile",
+        "Ikhaya likaNelson Mandela nabanye abaningi abalwa nobandlululo",
+        "Inogwini olude kakhulu kunazo zonke izifundazwe zaseNingizimu Afrika",
+        "Yaziwa njengendawo okwaqala kuyo umzabalazo wenkululeko waseNingizimu Afrika",
+        "Inamasiko acebile nobuciko bamaXhosa",
+        "Ikhaya lemigqa engasolwandle emihle namabhishi amahle",
+        "Umculo wendabuko unezinhlelo zokuhambisana kwezimisindo eziyinkimbinkimbi",
+        "Isifundazwe sinezindlela zobuhlalu nezobuciko ezihlukile",
+        "Yaziwa ngamahlathi ayo endabuko",
+        "Inamaqembu amathathu amakhulu akhuluma isiXhosa",
+        "Imikhosi yendabuko isasetshenziswa kabanzi"
+      ]
+    },
+    "limpopo": {
+      "name": "Limpopo",
+      "language": "Sepedi",
+      "funFacts": [
+        "Inezifundo zamagama eziyishumi nesishiyagalombili",
+        "Iqanjwe ngeMfula iLimpopo",
+        "Ikhaya leKruger National Park",
+        "Yaziwa ngobuningi bezilwane nezitshalo ezihlukahlukene",
+        "Inemithi emikhulu yamabhawubhawu yasendulo",
+        "Izangoma zendabuko zidlala indima ebalulekile emasikweni",
+        "Inemiphakathi yezilimi ehlukahlukene",
+        "Yaziwa ngobuciko bokubumba nobokwenza ngezandla",
+        "Inemikhosi yesikhathi ethile yonyaka ehlukile",
+        "Umculo wendabuko usebenzisa izigubhu nemfolozi",
+        "Ikhaya lesiza sezakhiwo zasendulo saseMapungubwe"
+      ]
+    },
+    "kwazulu_natal": {
+      "name": "KwaZulu-Natal",
+      "language": "isiZulu",
+      "funFacts": [
+        "Ulwimi olukhulunywa kakhulu ekhaya",
+        "Yaziwa ngezindawo zayo zasogwini namabhishi amahle",
+        "Ikhaya lemvelaphi yoMbuso wakwaZulu",
+        "Inezintaba zeDrakensberg",
+        "Umculo nodanso wendabuko wamaZulu udume emhlabeni wonke",
+        "Inomlando ocebile wobuqhawe",
+        "Yaziwa ngobuhlalu obuhle nobunembile",
+        "Izembatho zendabuko zinemibala futhi zinemisindo yokubeka izimpawu",
+        "Ikhaya lezindawo zeLifa Lomhlaba ze-UNESCO",
+        "Inokwakhiwa kwendabuko okuhlukile",
+        "Inemikhosi eminingi yamasiko ephilayo"
+      ]
+    },
+    "western_cape": {
+      "name": "Western Cape",
+      "language": "Afrikaans",
+      "funFacts": [
+        "Yavela ezimpandeni zesiDashi",
+        "Ikhaya leNtabazwe iTable Mountain",
+        "Yaziwa ngokukhiqizwa kwewayini elisezingeni lomhlaba",
+        "Inemibono enhle yolwandle nezindawo zasogwini",
+        "Inesimo sezulu esifana nesaseMedithera",
+        "Yaziwa ngokuxubana kwamagugu ahlukene amasiko",
+        "Ikhaya lezindlu zomlando ezakhiwe ngendlela yaseKapa",
+        "Inokuhlukahluka kwezimbali zefynbos ezikhethekile",
+        "Indawo ethandwa izivakashi",
+        "Yaziwa ngezindlela zokupheka ezihlukahlukene",
+        "Inomlando ocebile wezokuhamba olwandle"
+      ]
+    },
+    "northern_cape": {
+      "name": "Northern Cape",
+      "language": "Afrikaans",
+      "funFacts": [
+        "Inokuhlukahluka kwezindawo",
+        "Isifundazwe esikhulu kunazo zonke ngobukhulu",
+        "Yaziwa ngokumbiwa kwamadayimane",
+        "Inendawo eyingxenye yeKalahari Desert",
+        "Inezimbali ezinhle kakhulu entwasahlobo",
+        "Ikhaya lezindawo zemidwebo yamaSan emadwaleni",
+        "Yaziwa ngokubuka izinkanyezi kahle",
+        "Inamazwe anezindawo ezomileyo nezinhle",
+        "Inomlando ocebile wokumba amaminerali",
+        "Yaziwa ngesimo sezulu esomile",
+        "Ikhaya le-AuGrabies Falls"
+      ]
+    },
+    "north_west": {
+      "name": "North West",
+      "language": "Setswana",
+      "funFacts": [
+        "Ulimi olusemthethweni eBotswana",
+        "Yaziwa ngokumbiwa kweplathinamu",
+        "Ikhaya le-Sun City",
+        "Inendawo yokuvikela imvelo yasePilanesberg",
+        "Rikhile ngamasiko eTswana",
+        "Yaziwa ngokubumba kwendabuko",
+        "Inomculo wendabuko oyingqayizivele",
+        "Inemvelo enhle nemihume eminingi",
+        "Yaziwa ngezilwane zasendle",
+        "Inemikhosi ebalulekile yamasiko",
+        "Inokwakhiwa kwendabuko okuhlukile"
+      ]
+    },
+    "free_state": {
+      "name": "Free State",
+      "language": "Sesotho",
+      "funFacts": [
+        "Idume ngezinkondlo zokudumisa",
+        "Yaziwa njengebhokisi lesinkwa laseNingizimu Afrika",
+        "Inamazwe ezolimo amakhulu",
+        "Inemihlaba emihle egolide",
+        "Rikhile ngemidwebo yamaSan emadwaleni",
+        "Yaziwa ngama-comber ajwayelekile endabuko",
+        "Inamatshe ayingqayizivele anemibala yesihlabathi",
+        "Inamathafa omlando abalulekile",
+        "Yaziwa ngokuba nendawo evulekile",
+        "Umculo wendabuko unemisindo emnandi",
+        "Ikhaya leGolden Gate Highlands"
+      ]
+    },
+    "gauteng": {
+      "name": "Gauteng",
+      "language": "isiZulu",
+      "funFacts": [
+        "Isifundazwe esinezilimi eziningi kakhulu",
+        "Isikhungo sezomnotho saseNingizimu Afrika",
+        "Isifundazwe esincane kakhulu ngobukhulu",
+        "Isifundazwe esinabantu abaningi kakhulu",
+        "Ikhaya laseJohannesburg nasePitoli",
+        "Inezilimi ezingu-11 ezisemthethweni ezikhulunywa ngokusebenzayo",
+        "Yaziwa ngesiko lasemadolobheni",
+        "Inomlando ocebile wokumba amaminerali",
+        "Isikhungo sezohwebo nezezimali",
+        "Yaziwa ngempilo yasebusuku ephilayo",
+        "Inokudla okuhlukahlukene nezindawo zokudlela eziningi"
+      ]
+    },
+    "mpumalanga": {
+      "name": "Mpumalanga",
+      "language": "isiSwati",
+      "funFacts": [
+        "Ihlobene nolimi lwesiZulu",
+        "Ikhaya le-Blyde River Canyon",
+        "Yaziwa ngobuhle bemvelo",
+        "Inendawo ebizwa ngokuthi i-Lowveld",
+        "Yaziwa ngokulinywa kwezithelo eziseningizimu",
+        "Inemibono yezintaba ephakeme kakhulu",
+        "Ikhaya lengxenye yeKruger National Park",
+        "Yaziwa ngezimpophoma eziningi",
+        "Inemvelo ehlukile nezilwane eziningi",
+        "Inamasiko ahlukahlukene acebile",
+        "Imikhosi yendabuko igujwa ngokukhazimulayo"
+      ]
+    }
   }
 }
