@@ -298,11 +298,11 @@ $card-dark: #3a4050;
             margin-bottom: 1.5rem;
             top: 0;
             padding: 0;
-            margin-left: 0;
+            padding-left: 60px;
             line-height: 1.2;
-            text-align: left !important;
-            justify-content: flex-start !important;
-            width: 100%;
+            text-align: left;
+            justify-content: flex-start;
+            width: calc(100% - 60px);
             min-height: auto;
           }
 
@@ -310,14 +310,14 @@ $card-dark: #3a4050;
             font-size: 1.8rem;
             margin-top: 0;
             margin-bottom: 1.5rem;
-            margin-left: 0;
-            padding: 0;
+            padding-left: 60px;
             flex-direction: column;
             align-items: flex-start;
             gap: 0.5rem;
-            text-align: left !important;
-            justify-content: flex-start !important;
+            text-align: left;
+            justify-content: flex-start;
             line-height: 1.2;
+            width: calc(100% - 60px);
           }
 
           .connecting-text {
@@ -633,6 +633,40 @@ $card-dark: #3a4050;
           position: static;
           top: auto;
         }
+      }
+    }
+  }
+
+  @media (max-width: 560px) {
+    .content-wrapper {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .content-layout {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    .content-side {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .intro-text,
+    .about-mafoko {
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      hyphens: auto;
+
+      h2,
+      p {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
       }
     }
   }
@@ -1073,5 +1107,30 @@ $card-dark: #3a4050;
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ===== MAP CENTERING FIX ===== */
+@media (max-width: 768px) {
+  .map-container {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+
+    svg {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      display: block !important;
+    }
+  }
+}
+/* ===== PAGE-SPECIFIC OVERRIDE ===== */
+.dashboard-main-content {
+  .top-bar {
+    @media (max-width: 768px) {
+      display: none !important;
+    }
   }
 }
