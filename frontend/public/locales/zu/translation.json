@@ -572,51 +572,51 @@
     }
   },
   "achievements": {
-    "contributionActivity": "Umsebenzi Wokufaka Igalelo",
-    "weeklyGoals": "Izinhloso Zamasonto Onke",
-    "howToEarnXP": "Indlela Yokuzuza i-XP",
+    "contributionActivity": "Umsebenzi Wokunikela",
+    "weeklyGoals": "Izinhloso Zamasonto",
+    "howToEarnXP": "Indlela Yokuthola i-XP",
     "unlocked": "Kuvuliwe",
     "level": "Izinga",
-    "loading": "Ilayisha",
-    "totalXP": "I-XP Ephelele",
+    "loading": "Kulayishwa",
+    "totalXP": "XP Ephelele",
     "currentStreak": "Uchungechunge Lwamanje",
-    "achievementsLabel": "Izinqubekelaphambili",
-    "noActivity": "Ayikho Imisebenzi",
-    "addTerm": "Nezela igama elisha",
-    "addComment": "Nezela ukuphawula",
-    "receiveUpvote": "Thola ivoti elikhuphukayo",
-    "dailyLoginBonus": "Ibhonasi yokungena nsuku zonke",
-    "perUpvote": "ngamunye ovotelwe phezulu",
-    "noGoals": "Azikho Izinhloso Zalesi Sonto",
-    "checkBackNextWeek": "Buyela ngesonto elizayo",
-    "completed": "Kuqediwe",
-    "loadingWeeklyGoals": "Ilayisha izinhloso zamasonto onke",
+    "achievementsLabel": "Izimpumelelo",
+    "noActivity": "Akukho msebenzi",
+    "addTerm": "Faka igama elisha",
+    "addComment": "Faka amazwana",
+    "receiveUpvote": "Thola ukuvotelwa phezulu",
+    "dailyLoginBonus": "Umklomelo wokungena nsuku zonke",
+    "perUpvote": "ngokuvota phezulu ngakunye",
+    "noGoals": "Azikho izinhloso kuleli sonto",
+    "checkBackNextWeek": "Buyela emuva ngesonto elizayo",
+    "completed": "Kuphothuliwe",
+    "loadingWeeklyGoals": "Kulayishwa izinhloso zamasonto",
     "progress": "inqubekelaphambili",
-    "loadingAchievements": "Ilayisha izinqubekelaphambili",
-    "of": "kuka",
-    "termPioneer": {
-      "title": "Umqalisi Wamagama",
-      "desc": "Nezela amagama akho ayi-10 okuqala kwisichazamazwi"
+    "loadingAchievements": "Kulayishwa izimpumelelo",
+    "of": "kwa",
+    "term_pioneer": {
+      "title": "Umsunguli Wamagama",
+      "desc": "Faka amagama akho okuqala ayi-10 esichazamazwini"
     },
-    "communityContributor": {
-      "title": "Umfaki Wegalelo Lomphakathi",
-      "desc": "Yenza ukuphawula okungu-25 emagameni"
+    "community_contributor": {
+      "title": "Umnikeli Womphakathi",
+      "desc": "Bhala amazwana angu-25 kumagama"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Intandokazi Yomphakathi",
-      "desc": "Thola amavoti ayi-100 emagalelweni akho"
+      "desc": "Thola ukuvotelwa phezulu oku-100 eminikelo yakho"
     },
-    "multilingualMaster": {
-      "title": "Ingcweti Yolwimi Oluningi",
-      "desc": "Faka isandla kwizichazamazwi zolimi ezi-5 ezahlukene"
+    "multilingual_master": {
+      "title": "Ingilosi Yezilimi Eziningi",
+      "desc": "Nikela kuzichazamazwi zezilimi ezi-5 ezihlukene"
     },
-    "consistencyChampion": {
-      "title": "Inchampiyoni Yokuzinza",
-      "desc": "Hlala usebenzile izinsuku ezingama-30 zilandelana"
+    "consistency_champion": {
+      "title": "Impumelelo Yokungaguquki",
+      "desc": "Sebenza izinsuku ezingama-30 zilandelana"
     },
-    "languageGuardian": {
-      "title": "Umlondolozi Wolimi",
-      "desc": "Vumela ukuthi iminikelo yakho engama-50 iqinisekiswe ngochwepheshe"
+    "language_guardian": {
+      "title": "Umlondolozi Wezilimi",
+      "desc": "Amagalelo akho angama-50 aqinisekiswe ngongoti"
     }
   },
   "weeklyGoals": {
@@ -625,6 +625,235 @@
     "Streak Keeper": "Umgcini Wochungechunge",
     "Maintain a login streak of 3 consecutive days": "Gada uchungechunge lokungena ezinsukwini ezi-3 ezilandelanayo",
     "Active Commenter": "Umuntu Osebenzayo Kwimibono",
-    "Write 4 comments on terms this week": "Bhadi imibono emi-4 kumagama kuleli sonto"
+    "Write 4 comments on terms this week": "Bhadi imibono emi-4 kumagama kuleli sonto",
+    "Term Creator": "Moqapi oa Mantsoe",
+    "Maintain a login streak of 2 consecutive days": "Boloka tatellano ea ho kena matsatsi a mabeli a latellanang",
+    "Submit 6 new terms this week": "Kenya mantsoe a macha a tšeletseng bekeng ena"
+  },
+  "termHelpPage": {
+    "onThisPage": "Kule Khasi",
+    "title": "Ukuqonda Isichazamazwi",
+    "intro": "I-<strong>Isichazamazwi</strong> yindawo ongakwazi khona ukubheka izincazelo zamagama ngezilimi eziningi phakathi kwezilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika. Isiza sixhasa ukusesha okusheshayo, ukuhlunga ngokolimi noma isigaba, kanye nokufinyelela ngaphandle kwe-inthanethi uma izichazamazwi sezilandiwe.",
+
+    "overviewTitle": "Ukuqonda Isichazamazwi",
+    "overviewBody": "Isichazamazwi sikuvumela ukuthi ubheke izincazelo zamagama ngezilimi eziningi phakathi kwezilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika.",
+
+    "whatIsATermTitle": "Iyini Igama?",
+    "whatIsATermBody": "Igama ngalinye kuMarito liqukethe imininingwane elandelayo:",
+    "termFields": {
+      "term": "Igama: Igama noma ibinzana.",
+      "language": "Ulimi: Olunye lwezilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika.",
+      "domain": "Isigaba: Umkhakha wezifundo noma isihloko.",
+      "definition": "Incazelo: Ukuchazwa okusobala kwencazelo yegama.",
+      "related": "Amagama Ahlobene: Izixhumanisi zamagama anencazelo efanayo noma ehlobene."
+    },
+
+    "languagesTitle": "Izilimi Ezisekelwayo",
+    "languagesBody": "I-Marito isekela zonke izilimi eziyishumi nanye ezisemthethweni zaseNingizimu Afrika. Ungasebenzisa ukuhlunga ukuze ugxile kolunye ulimi noma uhlole amagama kuwo wonke umlando wezilimi.",
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgisi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Ukusesha Amagama",
+    "searchSubheadingHow": "Indlela Ukusesha Okusebenza Ngayo",
+    "searchBody1": "Umsebenzi wokusesha kuMarito ukusiza ukuthi uthole amagama ngokushesha kuzo zonke izilimi eziyishumi nanye ezisemthethweni.",
+    "searchBody2": "Ngesikhathi ubhala, iMarito yenza usesho oluphila, ibuyekeze imiphumela ngesikhathi sangempela.",
+    "searchFields": {
+      "term": "Igama: Isihloko noma ibinzana elimelela umqondo othile.",
+      "definition": "Incazelo: Amagama anezincazelo ezihambisana namagama owafakile nawo azokhonjiswa.",
+      "filters": "Izihlungi: Khetha ulimi noma isigaba ukuze ufinyelele imiphumela ethile."
+    },
+    "searchSubheadingLive": "Iziphakamiso Ezibukhoma",
+    "searchLiveBody": "I-Marito ingaphakamisa amagama ahlobene noma ukugcwaliseka okungenzeka ngesikhathi ubhala.",
+    "searchSubheadingSensitivity": "Ukuzwela Kokuqhathanisa",
+    "searchSensitivityBody": "Ngokujwayelekile, iMarito yenza usesho olunembile noma oluseduze, kodwa ungakwazi futhi ukuvumela usesho olungaqondile (fuzzy search).",
+    "searchSubheadingResultCards": "Amakhadi Emiphumela",
+    "searchResultBody": "Amagama aboniswa kumakhadi aqukethe igama, ulimi, isigaba, incazelo, kanye nezinkinobho zokuvota.",
+
+    "filtersTitle": "Izinketho Zokuhlunga",
+    "filtersBody": "Ukuze unciphise imiphumela, sebenzisa izihlungi ezitholakala ekhasini lokusesha.",
+    "filtersList": {
+      "language": "Ulimi: Nciphisa imiphumela kulimi olulodwa kuphela.",
+      "domain": "Isigaba: Gxila emikhakheni enjengeMfundo, Impilo, noma Ubuchwepheshe.",
+      "fuzzy": "Ukusesha Okungaqondile: Thola amagama ngisho noma kunephutha lokupela noma umehluko."
+    },
+
+    "viewTitle": "Ukubuka Amagama",
+    "viewBody": "Chofoza inkinobho ethi 'Buka' kukhadi legama ukuze uvule incazelo ephelele futhi uhlole amagama ahlobene.",
+
+    "offlineTitle": "Ukusebenzisa Ngaphandle Kwe-inthanethi",
+    "offlineBody": "I-Marito ingasetshenziswa ngaphandle kwe-inthanethi uma izichazamazwi sezilandiwe kusengaphambili.",
+    "offlineHow": "Indlela Yokulanda",
+    "offlineSteps": [
+      "Vakashela ikhasi Lezichazamazwi.",
+      "Khetha izichazamazwi ofuna ukuzilanda.",
+      "Chofoza inkinobho ethi 'Landa' ukuze uzigcine kudivayisi yakho."
+    ],
+    "offlineEnd": "Ngemuva kokulanda, amagama akuleso sichazamazwi azohlale etholakala ngisho noma ungekho ku-inthanethi."
+  },
+  "workspaceHelpPage": {
+    "title": "Ukuqonda i-Workspace",
+    "intro": "I-<strong>Workspace</strong> ikuvumela ukuthi ugcine amagama nezichazamazwi onentshisekelo kuzo, uwahlele abe amaqembu, futhi uphathe la maqembu. Kuyindawo lapho ungakwazi khona nokulandela inqubekelaphambili yokuthumela kwakho amagama nokugcina amanothi omsebenzi wakho.",
+    "groupsTitle": "Ukuphatha Amaqembu",
+    "groupsBody": "Amaqembu asiza ukuhlela amagama agciniwe. Ungakwazi ukudala amaqembu amasha, ukuwaguqula amagama, noma ukususa lawo ongawasadingi.",
+    "groupsSteps": [
+      "Dala Iqembu: Chofoza inkinobho ethi <em>Iqembu Elisha</em>, faka igama, khetha amagama, bese uqinisekisa ngokuchofoza <em>Engeza Amagama</em>.",
+      "Guqula Igama Leqembu: Chofoza <em>isithonjana sepensela</em> eduze kwegama leqembu, ulungise igama, bese uqinisekisa ngokuchofoza <em>Guqula Igama Leqembu</em>.",
+      "Susa Iqembu: Chofoza <em>isithonjana sokususa</em>, khetha amaqembu ofuna ukuwasusa, bese uqinisekisa."
+    ],
+    "moveTitle": "Ukuhambisa Amagama Phakathi Kwamaqembu",
+    "moveBody": "Ukuhambisa igama kwezinye izigaba, chofoza <em>isithonjana sokuhambisa</em> eduze kwegama bese ukhetha iqembu elisha ohlwini lwakho.",
+    "notesTitle": "Ukusebenzisa Amanothi",
+    "notesBody": "Amanothi akuvumela ukwengeza umongo owengeziwe emagameni agciniwe. Ungadala, ulungise, noma ususe amanothi ngaphakathi ku-Workspace.",
+    "notesSteps": [
+      "Engeza Inothi: Chofoza <em>isithonjana senothi</em> eduze kwegama, bhala inothi lakho, bese uchofoza <em>Londoloza</em>.",
+      "Lungisa Inothi: Chofoza <em>isithonjana sepensela</em>, guqula umbhalo, bese uchofoza <em>Londoloza</em>.",
+      "Susa Inothi: Sebenzisa inketho yokususa ukuze ususe amanothi ongawasadingi."
+    ],
+    "deleteTitle": "Ukususa Amagama Nezichazamazwi",
+    "deleteBody": "Ungasusa izinto ku-Workspace yakho noma nini:",
+    "deleteSteps": [
+      "Susa Igama: Iya ku-<em>Amagama Agciniwe</em>, chofoza <em>isithonjana sokususa</em>, bese uqinisekisa.",
+      "Susa Isichazamazwi: Iya ku-<em>Izichazamazwi Ezigciniwe</em>, chofoza inketho yokususa, bese uqinisekisa."
+    ]
+  },
+  "common": {
+    "back": "Emuva",
+    "onThisPage": "Kuleli khasi"
+  },
+  "settingsHelpPage": {
+    "title": "Izilungiselelo Nokwenza Ngokwezifiso",
+    "intro": "Sebenzisa ikhasi le-<strong>Izilungiselelo</strong> ukuze ulungise okuthandayo — okuhlanganisa itimu, imininingwane yephrofayela, nokufinyeleleka — ukuze udale isipiliyoni esingcono kakhulu kuwe.",
+    "onThisPage": "Kuleli khasi",
+    "modesTitle": "Ukushintsha Phakathi Kwe-Light ne-Dark Mode",
+    "modesBody": "I-Mafoko ikuvumela ukuthi ushintshe ngokushesha phakathi kwe-<strong>Light Mode</strong> ne-<strong>Dark Mode</strong> ukuze ilingane nendlela othanda ukubona ngayo nesimo sakho. Lesi sici sitholakala kuzo zonke amakhasi futhi sibuyekeza isikhombimsebenzisi ngokushesha ngaphandle kokuphazamisa umsebenzi wakho.",
+    "modesSteps": [
+      "Thola Inkinobho Yokushintsha: Bheka isithonjana selanga/inyanga ekhoneni elingezansi kwesobunxele se-sidebar.",
+      "Shintsha Imodi: Chofoza isithonjana ukuze ushintshe ngokushesha phakathi kwe-Light ne-Dark Mode."
+    ],
+    "profileTitle": "Ukuvuselela Iphrofayela Yakho",
+    "profileBody": "Ungavuselela <strong>igama lakho</strong>, <strong>i-imeyili</strong>, noma <strong>iphasiwedi</strong> noma nini kusukela kuzilungiselelo zephrofayela yakho. Ukushintsha ngakunye kudinga ukuqinisekiswa ngenxa yezokuphepha.",
+    "profileSteps": [
+      "Vuselela Igama: Chofoza <em>Lungisa Igama</em>, faka igama lakho elisha, uqinisekise ngephasiwedi yakho, bese uchofoza <em>Gcina</em>.",
+      "Vuselela I-imeyili: Chofoza <em>Lungisa I-imeyili</em>, faka ikheli lakho elisha, uqinisekise ngephasiwedi yakho, bese uchofoza <em>Gcina</em>.",
+      "Vuselela Iphasiwedi: Chofoza <em>Lungisa Iphasiwedi</em>, faka iphasiwedi entsha, uqinisekise bese uchofoza <em>Gcina</em>."
+    ],
+    "accessibilityTitle": "Izilungiselelo Zokufinyeleleka",
+    "accessibilityBody": "I-Mafoko inikeza izinketho ezahlukene zokufinyeleleka ukuze wenze uhlelo luhambisane nezidingo zakho. Ungashintsha <strong>ulimi</strong>, <strong>usayizi wombhalo</strong>, <strong>isikhala</strong>, kanye <strong>nokuhlukana kombala</strong> ngqo kusuka kumenyu yezilungiselelo.",
+    "accessibilitySteps": [
+      "Shintsha Ulimi Lohlelo: Vula i-drop-down yolimi bese ukhetha ulimi oluthandayo.",
+      "Vula Imodi Yokuhlukana Okukhulu Kwemibala: Chofoza <em>i-toggle ye-High Contrast</em> ukuze ushintshe umbala."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Ukuqonda Izindlela Zokufunda",
+    "section1": "Isici se-Learning Path sikuvumela ukuthi udale uhambo oluqondisiwe lokufunda olunye lwezilimi ezisemthethweni zaseNingizimu Afrika. Ngokukhetha ulimi nokukhetha izinsiza ofuna ukuzifunda, ungathatha indlela ehlelekile kunokuhlola ngokungahleliwe.",
+    "section2": "Yonke indlela yokufunda ihlanganisa ama-glossary, amathuluzi okuzilolonga, nokulandela inqubekela phambili ukuze ikusize uhlale ugqugquzelwe futhi uzinze.",
+    "section3": "Isiphequluli sakho asisekeli ithegi yevidiyo.",
+    "section4": "Ngemva kokukhetha ulimi, uzocelwa ukuthi ukhethe i-glossary. I-glossary ngayinye ihlelwe ngokuya ngedomeyini (Imfundo, Ezempilo, Ubuchwepheshe) ukuze ukwazi ukugxila kulamagama abaluleke kakhulu kuwe.",
+    "section4Title": "Ukukhetha i-Glossary",
+    "section5": "Uma i-glossary yakho isilungisiwe, ungakhetha indlela ofuna ukufunda ngayo",
+    "section6": "Izivivinyo Zokuzilolonga",
+    "section7": "Phendula imibuzo ukuze uhlolisise ulwazi lwakho futhi uqiniseke ngakho okwazile ukukufunda.",
+    "section8": "Amakhadi Okufunda",
+    "section9": "Sebenzisa ukuhlola ngendlela yamakhadi ukuze wakhe ukuqaphela nokukhumbula amagama ngesivinini sakho.",
+    "section10": "Ukufunda Ngezivivinyo Namakhadi",
+    "section11": "Ukulandela Inqubekela Phambili Yakho",
+    "section12": "I-Learning Path ilandela umsebenzi wakho ukuze ubone ukuthi usuhambe kangakanani. Inqubekela phambili ikhombiswa eduze kwezibalo zomphakathi wakho, okwenza kube lula ukuhlala ukhuthazekile.",
+    "section13": "Hlanganisa Izindlela Zokufunda nezinselelo zamasonto kanye nezindondo ukuze uthole amabheji njengoba uthuthukisa amakhono akho olimi."
+  },
+  "helpPage2": {
+    "section1": "Ukuqala",
+    "section2": "Umhlahlandlela wesinyathelo ngesinyathelo wokudala i-akhawunti, ukungena ngemvume, nokuzulazula endaweni yokuqala.",
+    "section3": "Ukusebenzisana Komphakathi",
+    "section3Desc": "Funda ukuthi ungabhala kanjani, uphawule, futhi usebenzisane nabanye usebenzisa amathuluzi omphakathi afana nokuvota nokuxoxa.",
+
+    "dictionaryTitle": "Isichazamazwi",
+    "dictionaryDesc": "Sesha amagama ezilimini ezahlukene, uvule usesho olungacacile, futhi ulungise izilungiselelo zesichazamazwi sakho.",
+
+    "glossaryTitle": "I-Glossary",
+    "glossaryDesc": "Hlela, hlunga, futhi uthumele ama-glossary ngokuya ngesigaba, isizinda, noma ibhange lezinguqulo.",
+
+    "workspaceTitle": "Indawo Yokusebenza",
+    "workspaceDesc": "Gcina futhi uphathe amagama namaglossary akho, landela izethulo, futhi usebenzisane usebenzisa amanothi namaqembu.",
+
+    "settingsTitle": "Izilungiselelo Nokwenza Ngokwezifiso",
+    "settingsDesc": "Lungisa izintandokazi ezifana nemodi emnyama/nemhlophe, izinketho zokufinyeleleka, imininingwane yephrofayela, nezinye izilungiselelo zomsebenzisi.",
+
+    "homeTitle": "Ikhasi Lasekhaya",
+    "homeDesc": "Hlola imephu esebenzisanayo yaseNingizimu Afrika, thola amagama ahlukahlukene, futhi uthole isifinyezo sokuqukethwe okufakiwe.",
+
+    "dashboardTitle": "Ideshibhodi",
+    "dashboardDesc": "Landela umsebenzi wepulatifomu ngamashadi, bheka idatha, futhi uhlaziye iminikelo yakho endaweni eyodwa.",
+
+    "learningPathTitle": "Izindlela Zokufunda",
+    "learningPathDesc": "Dizayina uhambo oluqondisiwe lokufunda olunye lwezilimi ezisemthethweni zaseNingizimu Afrika.",
+
+    "feedbackTitle": "Impendulo",
+    "feedbackDesc": "Thumela iziphakamiso, izincomo, noma izikhalo ngqo eqenjini ukusiza ukuthuthukisa ipulatifomu.",
+
+    "faqsTitle": "Imibuzo Ejwayelekile",
+    "faqsDesc": "Izimpendulo zemibuzo evamile mayelana nepulatifomu."
+  },
+  "copyURL": "Kopisha i-URL",
+  "related": "Amagama Ahambisanayo",
+  "comments": "Amazwana",
+  "reply": "Ukuphendula Ku",
+  "addReply": "Faka Impendulo",
+  "addComment": "Faka Amazwana",
+  "noDescription": "Akukho Incazelo Enikeziwe",
+  "view": "Buka",
+  "workspace": {
+    "section1": "Awukho ku-inthanethi. Inothi lakho ligciniwe futhi lizohambisana uma usuqinisekile ku-inthanethi futhi.",
+    "section2": "Yehlulekile ukulondoloza amanothi. Sicela uzame futhi.",
+    "section3": "Sicela ungene ngemvume ukuze ususe izibekisi.",
+    "section4": "Yehlulekile ukususa igama. Sicela uzame futhi.",
+    "section5": "Sicela ungene ngemvume ukuze ususe amaqembu.",
+    "section6": "Kususwe Ngokuphumelelayo",
+    "section7": "Yehlulekile ukususa amaqembu. Sicela uzame futhi.",
+    "section8": "Susa Amaqembu",
+    "section9": "Uqinisekile ukuthi ufuna ukususa",
+    "section10": "Lokhu kuzohambisa wonke amagama avela kula maqembu kuya kuqembu \"Wonke Amagama\".",
+    "section11": "Sicela ufake igama leqembu",
+    "section12": "Iqembu elinegama elifanayo selikhona",
+    "section13": "Sicela ungene ngemvume ukuze udale amaqembu.",
+    "section14": "Ngena ngemvume",
+    "section15": "Isikhala somsebenzi",
+    "section16": "Isikhala Sami Somsebenzi",
+    "section17": "Amagama alondoloziwe",
+    "section18": "Izichazamazwi Ezilondoloziwe",
+    "section19": "Iziqoqo Zami",
+    "section20": "Susa Okukhethiwe",
+    "section21": "Iqembu Elisha",
+    "section22": "Susa Amaqembu",
+    "section23": "Sesha Iziqoqo...",
+    "section24": "Dala Iqembu Elisha",
+    "section25": "Igama Leqembu",
+    "section26": "Dala iqembu elisha ukuze uhlele amagama akho agciniwe.",
+    "section27": "Khetha Amagama Ofuna Ukuwangeza Kuqembu",
+    "section28": "Khetha amagama ofuna ukuwangeza eqenjini lakho elisha. Ungakhetha amaningi.",
+    "section29": "Azikho izibekisi ezitholakalayo. Bukmarka amagama kuqala ukuze uwengeze kumaqembu.",
+    "section30": "Engeza",
+    "section31": "Kuyengezwa...",
+    "section32": "Amagama",
+    "section33": "Hambisa Igama Kuqembu",
+    "section34": "Hambisa",
+    "section35": "kusuka",
+    "section36": "kuya eqenjini elihlukile.",
+    "section37": "Susa emaqenjini athile",
+    "section38": "Okwamanje",
+    "section39": "Qamba Kabusha Iqembu",
+    "section40": "Qamba Kabusha",
+    "section41": "Kuyaqanjwa kabusha"
   }
 }

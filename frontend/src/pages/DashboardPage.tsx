@@ -19,14 +19,19 @@ import {
 // Animated Language Counter Component
 const AnimatedLanguageCounter: React.FC = () => {
   const { t } = useTranslation();
-  const [count, setCount] = useState(1);
-  const [showText, setShowText] = useState(false);
+  const hasSeenAnimation =
+    localStorage.getItem('hasSeenLanguageCounter') === 'true';
+  const [count, setCount] = useState(hasSeenAnimation ? 11 : 1);
+  const [showText, setShowText] = useState(hasSeenAnimation);
 
   useEffect(() => {
+    if (hasSeenAnimation) {
+      return;
+    }
+
     let interval: NodeJS.Timeout;
     let textTimer: NodeJS.Timeout;
 
-    // Start counting animation after a short delay
     const timer = setTimeout(() => {
       let currentCount = 1;
       interval = setInterval(() => {
@@ -34,12 +39,12 @@ const AnimatedLanguageCounter: React.FC = () => {
         currentCount += 1;
         if (currentCount > 11) {
           clearInterval(interval);
-          // Show the rest of the text after counting is done
           textTimer = setTimeout(() => {
             setShowText(true);
+            localStorage.setItem('hasSeenLanguageCounter', 'true');
           }, 300);
         }
-      }, 250); // Count every 250ms
+      }, 250);
     }, 500);
 
     return () => {
@@ -47,7 +52,7 @@ const AnimatedLanguageCounter: React.FC = () => {
       clearInterval(interval);
       clearTimeout(textTimer);
     };
-  }, []);
+  }, [hasSeenAnimation]);
 
   return (
     <div className="animated-title">
@@ -849,10 +854,10 @@ const DashboardPage: React.FC = () => {
                   <p>{t('dashboard.aboutMarito.mission')}</p>*/}
 
                   <section className="about-mafoko max-w-4xl mx-auto px-4 sm:px-6 py-10 text-[var(--text-theme)] leading-relaxed text-left">
-                    <h2 className="!text-3xl font-bold mb-4 text-primary">
+                    <h2 className="!text-3xl font-bold mb-4 text-theme">
                       {t('dashboard.aboutMofoko.title')}
                     </h2>
-                    <p className="text-lg mb-6">
+                    <p className="text-lg mb-6 !text-theme">
                       {t('dashboard.aboutMofoko.content')}
                     </p>
 
@@ -943,7 +948,9 @@ const DashboardPage: React.FC = () => {
                                 </h3>
                               </div>
                             </div>
-                            <p className="term-definition">{term.definition}</p>
+                            <p className="term-definition !text-left">
+                              {term.definition ? term.definition : ''}
+                            </p>
                             <div className="flex w-full justify-center items-center">
                               <button
                                 type="button"

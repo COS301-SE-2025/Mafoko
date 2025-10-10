@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../../styles/LeftNav.scss';
@@ -129,6 +129,10 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
                   path: '/admin/terms',
                   icon: Shield,
                 },
+              ]
+            : []),
+          ...(userRole === 'linguist'
+            ? [
                 {
                   id: 'linguist-page',
                   label: t('navbar.linguist'),
@@ -145,7 +149,7 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         items: [
           {
             id: 'settings',
-            label: t('navigation.settings'),
+            label: t('settings.title'),
             path: '/settings',
             icon: Settings,
           },

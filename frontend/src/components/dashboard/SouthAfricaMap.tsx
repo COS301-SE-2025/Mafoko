@@ -2,12 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts/highmaps';
 import { topology } from '../data/MapTopology';
 
-interface ProvinceGeometry {
-  properties: {
-    name: string;
-    language: string;
-    funFact: string;
-  };
+interface ProvinceData {
+  name: string;
+  language: string;
+  funFacts: string[];
 }
 
 interface SouthAfricaMapProps {
@@ -24,85 +22,187 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
   height = 700,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const currentFactIndexRef = useRef<{ [key: string]: number }>({});
   const chartRef = useRef<any>(null);
 
-  const geometries: ProvinceGeometry[] = [
+  const provincesData: ProvinceData[] = [
     {
-      properties: {
-        name: 'Eastern Cape',
-        language: 'isiXhosa',
-        funFact: 'Features distinctive click sounds',
-      },
+      name: 'Eastern Cape',
+      language: 'isiXhosa',
+      funFacts: [
+        'Features distinctive click sounds',
+        'Home to Nelson Mandela and many other anti-apartheid activists',
+        'Has the longest coastline of any South African province',
+        'Known as the birthplace of South African liberation struggle',
+        'Rich in Xhosa cultural heritage and traditions',
+        'Home to beautiful wild coastlines and beaches',
+        'Traditional music features complex harmonies',
+        'The province has unique beadwork traditions',
+        'Known for its indigenous forests',
+        'Has three main Xhosa-speaking groups',
+        'Traditional ceremonies are still widely practiced',
+      ],
     },
     {
-      properties: {
-        name: 'Limpopo',
-        language: 'Sepedi',
-        funFact: 'Has eighteen noun classes',
-      },
+      name: 'Limpopo',
+      language: 'Sepedi',
+      funFacts: [
+        'Has eighteen noun classes',
+        'Named after the Limpopo River',
+        'Home to the Kruger National Park',
+        'Known for its rich biodiversity',
+        'Has ancient baobab trees',
+        'Traditional healers play important cultural roles',
+        'Features diverse linguistic communities',
+        'Known for pottery and craft traditions',
+        'Has unique seasonal celebrations',
+        'Traditional music uses drums and flutes',
+        'Home to the Mapungubwe archaeological site',
+      ],
     },
     {
-      properties: {
-        name: 'KwaZulu-Natal',
-        language: 'isiZulu',
-        funFact: 'Most spoken home language',
-      },
+      name: 'KwaZulu-Natal',
+      language: 'isiZulu',
+      funFacts: [
+        'Most spoken home language',
+        'Known for its beautiful coastline and beaches',
+        'Home to the Zulu Kingdom heritage',
+        'Features the Drakensberg mountain range',
+        'Traditional Zulu dancing is world-renowned',
+        'Has a rich warrior history',
+        'Known for intricate beadwork',
+        'Traditional attire is colorful and symbolic',
+        'Home to UNESCO World Heritage sites',
+        'Features unique traditional architecture',
+        'Has vibrant cultural festivals',
+      ],
     },
     {
-      properties: {
-        name: 'Western Cape',
-        language: 'Afrikaans',
-        funFact: 'Evolved from Dutch origins',
-      },
+      name: 'Western Cape',
+      language: 'Afrikaans',
+      funFacts: [
+        'Evolved from Dutch origins',
+        'Home to Table Mountain',
+        'Known for world-class wine production',
+        'Features stunning coastal scenery',
+        'Has a Mediterranean climate',
+        'Known for diverse cultural influences',
+        'Home to historical Cape Dutch architecture',
+        'Features unique fynbos vegetation',
+        'Popular tourist destination',
+        'Known for its culinary diversity',
+        'Has rich maritime history',
+      ],
     },
     {
-      properties: {
-        name: 'Northern Cape',
-        language: 'Afrikaans',
-        funFact: 'Shows unique regional variations',
-      },
+      name: 'Northern Cape',
+      language: 'Afrikaans',
+      funFacts: [
+        'Shows unique regional variations',
+        'Largest province by area',
+        'Known for diamond mining',
+        'Features the Kalahari Desert',
+        'Has spectacular spring flower displays',
+        'Home to San rock art sites',
+        'Known for stargazing opportunities',
+        'Features unique desert landscapes',
+        'Has rich mining heritage',
+        'Known for its semi-arid climate',
+        'Home to the Augrabies Falls',
+      ],
     },
     {
-      properties: {
-        name: 'North West',
-        language: 'Setswana',
-        funFact: 'Official language in Botswana',
-      },
+      name: 'North West',
+      language: 'Setswana',
+      funFacts: [
+        'Official language in Botswana',
+        'Known for platinum mining',
+        'Home to Sun City resort',
+        'Features the Pilanesberg Game Reserve',
+        'Rich in Tswana cultural traditions',
+        'Known for traditional pottery',
+        'Has unique traditional music',
+        'Features beautiful natural landscapes',
+        'Known for its wildlife',
+        'Has important cultural festivals',
+        'Traditional architecture is distinctive',
+      ],
     },
     {
-      properties: {
-        name: 'Free State',
-        language: 'Sesotho',
-        funFact: 'Famous for praise poems',
-      },
+      name: 'Free State',
+      language: 'Sesotho',
+      funFacts: [
+        'Famous for praise poems',
+        'Known as the breadbasket of South Africa',
+        'Features vast agricultural lands',
+        'Has beautiful golden landscapes',
+        'Rich in San rock art',
+        'Known for traditional blanket designs',
+        'Features unique sandstone formations',
+        'Has important historical sites',
+        'Known for its open spaces',
+        'Traditional music is melodic',
+        'Home to the Golden Gate Highlands',
+      ],
     },
     {
-      properties: {
-        name: 'Gauteng',
-        language: 'isiZulu',
-        funFact: 'Most linguistically diverse province',
-      },
+      name: 'Gauteng',
+      language: 'isiZulu',
+      funFacts: [
+        'Most linguistically diverse province',
+        'Economic hub of South Africa',
+        'Smallest province by area',
+        'Most populous province',
+        'Home to Johannesburg and Pretoria',
+        'Features 11 official languages actively spoken',
+        'Known for urban culture',
+        'Has rich mining history',
+        'Center of commerce and finance',
+        'Known for vibrant nightlife',
+        'Features diverse culinary scene',
+      ],
     },
     {
-      properties: {
-        name: 'Mpumalanga',
-        language: 'isiSwati',
-        funFact: 'Related to isiZulu language',
-      },
+      name: 'Mpumalanga',
+      language: 'isiSwati',
+      funFacts: [
+        'Related to isiZulu language',
+        'Home to the Blyde River Canyon',
+        'Known for scenic beauty',
+        'Features the Lowveld region',
+        'Known for subtropical fruit farming',
+        'Has panoramic mountain views',
+        'Home to part of Kruger National Park',
+        'Known for waterfalls',
+        'Features unique ecosystems',
+        'Has rich cultural diversity',
+        'Traditional ceremonies are vibrant',
+      ],
     },
   ];
 
-  // Function to get facts
   const getProvinceFact = (provinceName: string) => {
-    let province = geometries.find(
-      (geo) => geo.properties.name.toLowerCase() === provinceName.toLowerCase(),
+    const province = provincesData.find(
+      (p) => p.name.toLowerCase() === provinceName.toLowerCase(),
     );
 
     if (!province) {
-      province = geometries[Math.floor(Math.random() * geometries.length)];
+      const randomProvince =
+        provincesData[Math.floor(Math.random() * provincesData.length)];
+      const factIndex = currentFactIndexRef.current[randomProvince.name] || 0;
+      return {
+        name: randomProvince.name,
+        language: randomProvince.language,
+        funFact: randomProvince.funFacts[factIndex],
+      };
     }
 
-    return province.properties;
+    const factIndex = currentFactIndexRef.current[province.name] || 0;
+    return {
+      name: province.name,
+      language: province.language,
+      funFact: province.funFacts[factIndex],
+    };
   };
 
   // Get CSS custom properties for theming
@@ -391,6 +491,7 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
     };
   }, [width, height]);
 
+  // Resize handler for responsive map
   useEffect(() => {
     const handleResize = () => {
       if (chartRef.current) {
@@ -415,6 +516,30 @@ const SouthAfricaMap: React.FC<SouthAfricaMapProps> = ({
       clearTimeout(resizeTimeout);
       window.removeEventListener('resize', debouncedResize);
     };
+  }, []);
+
+  // Rotating fun facts
+  useEffect(() => {
+    const interval = setInterval(() => {
+      provincesData.forEach((province) => {
+        const currentIdx = currentFactIndexRef.current[province.name] || 0;
+        currentFactIndexRef.current[province.name] =
+          (currentIdx + 1) % province.funFacts.length;
+      });
+
+      if (
+        chartRef.current &&
+        chartRef.current.tooltip &&
+        chartRef.current.tooltip.isHidden === false
+      ) {
+        const point = chartRef.current.hoverPoint;
+        if (point) {
+          chartRef.current.tooltip.refresh(point);
+        }
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (

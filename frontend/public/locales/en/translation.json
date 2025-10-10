@@ -1,10 +1,10 @@
 {
-  "appTitle": "Marito",
+  "appTitle": "Mafoko",
   "loading": "Loading...",
 
   "settings": {
     "title": "Settings",
-    "subtitle": "Customize your Marito experience",
+    "subtitle": "Customize your Mafoko experience",
     "selectLanguage": "Select your preferred language",
     "profile": {
       "title": "Profile & Account",
@@ -26,10 +26,10 @@
   },
 
   "landingPage": {
-    "greeting": "Welcome to Marito PWA!",
+    "greeting": "Welcome to Mafoko PWA!",
     "registerButton": "Register",
     "loginButton": "Login",
-    "footerText": "Marito Project"
+    "footerText": "Mafoko Project"
   },
 
   "loginPage": {
@@ -46,7 +46,7 @@
     "loginWithGoogle": "Login with Google",
     "noAccount": "Don't have an account?",
     "registerLink": "Register",
-    "welcomeImageAlt": "Marito Login Welcome",
+    "welcomeImageAlt": "Mafoko Login Welcome",
     "dsfsiLogoAlt": "DSFSI Logo",
     "errorTokenMissing": "Login successful, but no token received. Please contact support.",
     "errorDefault": "Login failed. Please check your credentials.",
@@ -58,7 +58,7 @@
 
   "registrationPage": {
     "title": "GET STARTED NOW",
-    "subtitle": "Create your Marito account.",
+    "subtitle": "Create your Mafoko account.",
     "firstNameLabel": "First Name",
     "firstNamePlaceholder": "Enter your first name",
     "lastNameLabel": "Last Name",
@@ -77,7 +77,7 @@
     "createWithGoogle": "Create Account with Google",
     "haveAccount": "Already have an account?",
     "loginLink": "Login",
-    "welcomeImageAlt": "Marito Welcome",
+    "welcomeImageAlt": "Mafoko Welcome",
     "dsfsiLogoAlt": "DSFSI Logo",
     "errorPasswordsDoNotMatch": "Passwords do not match.",
     "errorAgreeToTerms": "You must agree to the terms and conditions.",
@@ -158,7 +158,7 @@
   },
 
   "dashboard": {
-    "welcome": "Welcome to Marito",
+    "welcome": "Welcome to Mafoko",
     "welcomeBack": "Welcome back",
     "userName": "User Name",
     "userId": "User ID",
@@ -185,8 +185,8 @@
     "noTermsAvailable": "No terms available",
     "browseCategoryGlossary": "Browse {{category}} glossary",
     "aboutMarito": {
-      "intro": "The term 'Marito' originates from Xitsonga, translating to 'words' or 'names'. This is a progressive web application that bridges the gap between South Africa's rich linguistic heritage and modern digital accessibility. Language enthusiasts, NLP researchers, and linguists can use Marito as a unified platform to explore, contribute to, and preserve multilingual glossaries, dictionaries, and terminology banks across 11 of South Africa's official languages.",
-      "mission": "Marito works seamlessly both offline and online, empowering communities to access comprehensive language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the University of Pretoria to democratize linguistic resources and advance natural language processing research for African languages.",
+      "intro": "The term 'Mafoko' originates from Xitsonga, translating to 'words' or 'names'. This is a progressive web application that bridges the gap between South Africa's rich linguistic heritage and modern digital accessibility. Language enthusiasts, NLP researchers, and linguists can use Marito as a unified platform to explore, contribute to, and preserve multilingual glossaries, dictionaries, and terminology banks across 11 of South Africa's official languages.",
+      "mission": "Mafoko works seamlessly both offline and online, empowering communities to access comprehensive language resources, submit feedback, and collaborate on robust lexicons for low-resource languages. This platform is part of an ongoing initiative by DSFSI (Data Science for Social Impact) at the University of Pretoria to democratize linguistic resources and advance natural language processing research for African languages.",
       "teamCredit": "Proudly developed by Velox",
       "learnMoreDSFSI": "Learn more about DSFSI"
     },
@@ -674,27 +674,27 @@
     "loadingAchievements": "Loading Achievements",
 
     "of": "of",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Term Pioneer",
       "desc": "Add your first 10 terms to the dictionary"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Community Contributor",
       "desc": "Make 25 comments on terms"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Crowd Favorite",
       "desc": "Receive 100 upvotes on your contributions"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Multilingual Master",
       "desc": "Contribute to 5 different language dictionaries"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Consistency Champion",
       "desc": "Be active for 30 consecutive days"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Language Guardian",
       "desc": "Have 50 of your contributions validated by experts"
     }
@@ -705,91 +705,242 @@
     "Streak Keeper": "Streak Keeper",
     "Maintain a login streak of 3 consecutive days": "Maintain a login streak of 3 consecutive days",
     "Active Commenter": "Active Commenter",
-    "Write 4 comments on terms this week": "Write 4 comments on terms this week"
+    "Write 4 comments on terms this week": "Write 4 comments on terms this week",
+    "Term Creator": "Term Creator",
+    "Maintain a login streak of 2 consecutive days": "Maintain a login streak of 2 consecutive days",
+    "Submit 6 new terms this week": "Submit 6 new terms this week"
   },
   "termHelpPage": {
-    "back": "Back",
-    "onThisPage": "On this page",
-    "understandingTermsLink": "Understanding Terms in Marito",
-    "understandingDictionaryTitle": "Understanding the Dictionary",
-    "understandingDictionaryDescription": "The Dictionary is where you can look up multilingual term definitions across all of South Africa’s 11 official languages. It supports fast searching, filtering by language or domain, and offline access once dictionaries are downloaded.",
+    "onThisPage": "On This Page",
+    "title": "Understanding the Dictionary",
+    "intro": "The <strong>Dictionary</strong> is where you can look up multilingual term definitions across all of South Africa’s 11 official languages. It supports fast searching, filtering by language or domain, and offline access once dictionaries are downloaded.",
 
-    "dict": {
-      "overview": {
-        "title": "Understanding the Dictionary",
-        "desc": "The Dictionary is where you can look up multilingual term definitions across all of South Africa’s 11 official languages. It supports fast searching, filtering by language or domain, and offline access once dictionaries are downloaded."
-      },
-      "whatIsATerm": {
-        "title": "What is a Term?",
-        "intro": "Each term in Marito includes the following details:",
-        "termLabel": "Term:",
-        "termDesc": "The word or phrase.",
-        "languageLabel": "Language:",
-        "languageDesc": "One of South Africa’s 11 official languages.",
-        "domainLabel": "Domain:",
-        "domainDesc": "The subject area.",
-        "definitionLabel": "Definition:",
-        "definitionDesc": "A clear explanation of the term’s meaning.",
-        "relatedLabel": "Related Terms:",
-        "relatedDesc": "Links to terms with similar or connected meanings."
-      },
-      "languages": {
-        "title": "Supported Languages",
-        "desc": "Marito supports all 11 official South African languages. You can filter your searches to focus on a single language or explore terms across all of them.",
-        "af": "Afrikaans",
-        "en": "English",
-        "nd": "isiNdebele",
-        "xh": "isiXhosa",
-        "zu": "isiZulu",
-        "st": "Sesotho",
-        "nso": "Sepedi",
-        "tn": "Setswana",
-        "ss": "Siswati",
-        "ve": "Tshivenda",
-        "ts": "Xitsonga"
-      },
-      "search": {
-        "title": "Searching for Terms",
-        "howTitle": "How Searching Works",
-        "intro1": "The search functionality in Marito is designed to help you explore glossary terms quickly and efficiently across all 11 official South African languages.",
-        "intro2": "You’ll find the search bar prominently at the top of the page. As you type, Marito performs a live search, updating results in real time.",
-        "term": "Term:",
-        "termDesc": "The primary label or phrase representing a concept.",
-        "definition": "Definition:",
-        "definitionDesc": "Terms whose explanations contain your search keywords will also appear.",
-        "filters": "Filters:",
-        "filtersDesc": "If you use filters, only terms in the selected language or domain will be returned.",
-        "live": "Live Suggestions",
-        "liveDesc": "As you type, Marito may suggest completions or related terms to help you discover results faster.",
-        "sensitivity": "Search Sensitivity",
-        "sensitivityDesc": "By default, Marito performs exact or near-exact matching. You can enable fuzzy search to find results even with typos.",
-        "resultCards": "Result Cards",
-        "resultCardsDesc": "Each term card displays the term, language, domain, definition, and voting buttons. The View link opens detailed information.",
-        "combine": "You can combine search with filters and sorting to refine your experience. Offline search also works with downloaded dictionaries."
-      },
-      "filters": {
-        "title": "Filter Options",
-        "intro": "To narrow results, apply filters from the search page. Available filters include:",
-        "language": "Language:",
-        "languageDesc": "Restrict results to a single language.",
-        "domain": "Domain:",
-        "domainDesc": "Focus on subject areas like Education, Health, or Technology.",
-        "fuzzy": "Fuzzy Search:",
-        "fuzzyDesc": "Find terms even if there are typos or spelling differences."
-      },
-      "view": {
-        "title": "Viewing Terms",
-        "desc": "Click the View button on a term card to open its full definition, see related terms, and explore more details."
-      },
-      "offline": {
-        "title": "Offline Usage",
-        "desc": "Marito can be used offline by downloading glossaries in advance. Once downloaded, search and filters continue to work without internet.",
-        "howTitle": "How to Download",
-        "step1": "Go to the Glossaries page.",
-        "step2": "Select the glossaries you want to download.",
-        "step3": "Click Download to save them locally.",
-        "after": "After downloading, those glossaries remain available even offline."
-      }
-    }
+    "overviewTitle": "Understanding the Dictionary",
+    "overviewBody": "The Dictionary allows you to look up multilingual term definitions across all of South Africa’s 11 official languages.",
+
+    "whatIsATermTitle": "What is a Term?",
+    "whatIsATermBody": "Each term in Mafoko includes the following details:",
+    "termFields": {
+      "term": "Term: The word or phrase.",
+      "language": "Language: One of South Africa’s 11 official languages.",
+      "domain": "Domain: The subject area.",
+      "definition": "Definition: A clear explanation of the term’s meaning.",
+      "related": "Related Terms: Links to terms with similar or connected meanings."
+    },
+
+    "languagesTitle": "Supported Languages",
+    "languagesBody": "Mafoko supports all 11 official South African languages. You can filter your searches to focus on a single language or explore terms across all of them.",
+    "languagesList": [
+      "Afrikaans",
+      "English",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Searching for Terms",
+    "searchSubheadingHow": "How Searching Works",
+    "searchBody1": "The search functionality in Mafoko helps you explore glossary terms quickly across all 11 official languages.",
+    "searchBody2": "As you type, Mafoko performs a live search, updating results in real-time.",
+    "searchFields": {
+      "term": "Term: The primary label or phrase representing a concept.",
+      "definition": "Definition: Terms whose explanations contain your search keywords will also appear.",
+      "filters": "Filters: Restrict by language or domain."
+    },
+    "searchSubheadingLive": "Live Suggestions",
+    "searchLiveBody": "Mafoko may suggest possible completions or related terms as you type.",
+    "searchSubheadingSensitivity": "Search Sensitivity",
+    "searchSensitivityBody": "By default, Mafoko performs exact or near-exact matching, but fuzzy search can also be enabled.",
+    "searchSubheadingResultCards": "Result Cards",
+    "searchResultBody": "Terms are shown in cards with term name, language, domain, definition, and voting buttons.",
+
+    "filtersTitle": "Filter Options",
+    "filtersBody": "To narrow results, apply filters from the search page.",
+    "filtersList": {
+      "language": "Language: Restrict results to a single language.",
+      "domain": "Domain: Focus on areas like Education, Health, or Technology.",
+      "fuzzy": "Fuzzy Search: Find terms even if there are typos or spelling differences."
+    },
+
+    "viewTitle": "Viewing Terms",
+    "viewBody": "Click the View button on a term card to open its full definition and explore related terms.",
+
+    "offlineTitle": "Offline Usage",
+    "offlineBody": "Mafoko can be used offline by downloading glossaries in advance.",
+    "offlineHow": "How to Download",
+    "offlineSteps": [
+      "Go to the Glossaries page.",
+      "Select the glossaries you want to download.",
+      "Click Download to save them locally."
+    ],
+    "offlineEnd": "After downloading, terms in that glossary remain available even offline."
+  },
+  "workspaceHelpPage": {
+    "title": "Understanding the Workspace",
+    "intro": "The <strong>Workspace</strong> allows you to save terms and glossaries you’re interested in, organize them into groups, and manage those groups. It’s also where you can track the progress of your term submissions and keep notes related to your work.",
+
+    "groupsTitle": "Managing Groups",
+    "groupsBody": "Groups help you organize saved terms. You can create new groups, rename them, or delete groups you no longer need.",
+    "groupsSteps": [
+      "Create a Group: Click the <em>New Group</em> button, enter a name, select terms, and confirm by clicking <em>Add Terms</em>.",
+      "Rename a Group: Click the <em>pencil icon</em> next to the group name, update the name, and confirm by clicking <em>Rename Group</em>.",
+      "Delete a Group: Click the <em>delete group icon</em>, select the groups you want to remove, and confirm the action."
+    ],
+
+    "moveTitle": "Moving Terms Between Groups",
+    "moveBody": "To move a term to a different group, click the <em>move icon</em> next to the term and select the new group from your list.",
+
+    "notesTitle": "Using Notes",
+    "notesBody": "Notes let you add extra context to saved terms. You can create, edit, or delete notes directly in the Workspace.",
+    "notesSteps": [
+      "Add a Note: Click the <em>note icon</em> next to a term, type your note, and click <em>Save</em>.",
+      "Edit a Note: Click the <em>pencil icon</em>, update the text, and confirm by clicking <em>Save</em>.",
+      "Delete a Note: Use the delete option to remove notes you no longer need."
+    ],
+
+    "deleteTitle": "Deleting Terms and Glossaries",
+    "deleteBody": "You can remove items from your Workspace at any time:",
+    "deleteSteps": [
+      "Delete a Term: Go to <em>Saved Terms</em>, click the <em>delete icon</em>, and confirm.",
+      "Delete a Glossary: Go to <em>Saved Glossaries</em>, click the remove option, and confirm."
+    ]
+  },
+  "common": {
+    "back": "Back",
+    "onThisPage": "On this page"
+  },
+  "settingsHelpPage": {
+    "title": "Settings & Customization",
+    "intro": "Use the <strong>Settings</strong> page to adjust your preferences — including theme, profile details, and accessibility — to create the best experience for you.",
+    "onThisPage": "On this page",
+
+    "modesTitle": "Switching Between Light and Dark Mode",
+    "modesBody": "Mafoko lets you quickly toggle between <strong>light mode</strong> and <strong>dark mode</strong> to match your visual preference and environment. This feature is available on every page and updates the interface instantly without disrupting your workflow.",
+    "modesSteps": [
+      "Find the Toggle: Look for the sun/moon icon at the bottom-left corner of the sidebar.",
+      "Switch Modes: Click the icon to instantly change between Light and Dark Mode."
+    ],
+
+    "profileTitle": "Updating Your Profile",
+    "profileBody": "You can update your <strong>name</strong>, <strong>email</strong>, or <strong>password</strong> at any time from your profile settings. Each change requires confirmation for security purposes.",
+    "profileSteps": [
+      "Update Name: Click <em>Edit Name</em>, enter your new name, confirm with your password, and click <em>Save</em>.",
+      "Update Email: Click <em>Edit Email</em>, provide your new address, confirm with your password, and click <em>Save</em>.",
+      "Update Password: Click <em>Edit Password</em>, type your new password, confirm it, and click <em>Save</em>."
+    ],
+
+    "accessibilityTitle": "Accessibility Settings",
+    "accessibilityBody": "Mafoko provides a range of accessibility options so you can tailor the app to your needs. You can adjust the <strong>language</strong>, <strong>text size</strong>, <strong>spacing</strong>, and <strong>colour contrast</strong> directly from the settings menu.",
+    "accessibilitySteps": [
+      "Change App Language: Open the language drop-down and select your preferred language.",
+      "Enable High Contrast Mode: Click the <em>High Contrast toggle</em> to switch to a high-contrast colour scheme."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Understanding Learning Paths",
+    "section1": "The Learning Path feature lets you design a guided journey for learning one of South Africa’s official languages. By selecting a language and choosing the resources you want to study, you can follow a structured path rather than exploring at random.",
+    "section2": "Each learning path combines glossaries, practice tools, and progress tracking to help you stay motivated and consistent.",
+    "section3": "Your browser does not support the video tag.",
+    "section4": "After choosing a language, you’ll be prompted to pick a glossary. Each glossary is organized by domain (Education, Health, Technology) so you can focus on the vocabulary that matters most to you.",
+    "section4Title": "Selecting a Glossary",
+    "section5": "Once your glossary is set, you can choose how you want to study",
+    "section6": "Practice Tests",
+    "section7": "Answer questions to test your knowledge and reinforce what you’ve learned.",
+    "section8": "Study Cards",
+    "section9": "Use flashcard-style review to build recognition and recall of terms at your own pace.",
+    "section10": "Learning with Tests and Study Cards",
+    "section11": "Tracking Your Progress",
+    "section12": "The Learning Path tracks your activity so you can see how far you’ve come. Progress is displayed alongside your community stats, making it easy to stay motivated.",
+    "section13": "Combine Learning Paths with weekly challenges and achievements to earn badges while improving your language skills."
+  },
+  "helpPage2": {
+    "section1": "Getting Started",
+    "section2": "Step-by-step guide for creating an account, signing in, and navigating the platform for the first time.",
+    "section3": "Community Interaction",
+    "section3Desc": "Learn how to post, comment, and engage with others using the community tools like upvotes and discussions.",
+
+    "dictionaryTitle": "Dictionary",
+    "dictionaryDesc": "Search for terms across multiple languages, enable fuzzy search, and adjust your dictionary settings.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Organize, filter, and export glossaries by category, domain, or translation bank.",
+
+    "workspaceTitle": "Workspace",
+    "workspaceDesc": "Save and manage your own terms and glossaries, track submissions, and collaborate using notes and groups.",
+
+    "settingsTitle": "Settings and Customization",
+    "settingsDesc": "Adjust preferences like dark/light mode, accessibility options, profile details, and other user settings.",
+
+    "homeTitle": "Home Page",
+    "homeDesc": "Explore the interactive South African map, discover random terms, and get an overview of featured content.",
+
+    "dashboardTitle": "Dashboard",
+    "dashboardDesc": "Track application activity with graphs, view platform data, and analyze your contributions in one place.",
+
+    "learningPathTitle": "Learning Paths",
+    "learningPathDesc": "Design a guided journey for learning one of South Africa’s official languages.",
+
+    "feedbackTitle": "Feedback",
+    "feedbackDesc": "Send suggestions, compliments, or complaints directly to the team to help improve the platform.",
+
+    "faqsTitle": "FAQs",
+    "faqsDesc": "Answers to common questions about the platform."
+  },
+  "copyURL": "Copy URL",
+  "related": "Related Terms",
+  "comments": "Comments",
+  "reply": "Replying To",
+  "addReply": "Add a Reply",
+  "addComment": "Add a Comment",
+  "noDescription": "No Description Provided",
+  "view": "View",
+  "workspace": {
+    "section1": "You are offline. Your note has been saved and will sync when you're back online.",
+    "section2": "Failed to save notes. Please try again.",
+    "section3": "Please log in to delete bookmarks.",
+    "section4": "Failed to delete term. Please try again.",
+    "section5": "Please log in to delete groups.",
+    "section6": "Successfully Deleted",
+    "section7": "Failed to delete groups. Please try again.",
+    "section8": "Delete Groups",
+    "section9": "Are you sure you want to delete",
+    "section10": "This will move all terms from these groups to \"All Terms\" group.",
+    "section11": "Please enter a group name",
+    "section12": "A group with this name already exists",
+    "section13": "Please log in to create groups.",
+    "section14": "Login",
+    "section15": "Workspace",
+    "section16": "My Workspace",
+    "section17": "Saved terms",
+    "section18": "Saved Glossaries",
+    "section19": "My Collections",
+    "section20": "Delete Selected",
+    "section21": "New Group",
+    "section22": "Delete Groups",
+    "section23": "Search Collections...",
+    "section24": "Create New Group",
+    "section25": "Group Name",
+    "section26": "Create a new group to organize your saved terms.",
+    "section27": "Select Terms to Add to Group",
+    "section28": "Select the terms you want to add to your new group. You can select multiple terms.",
+    "section29": "No bookmarked terms available. Bookmark some terms first to add them to groups.",
+    "section30": "Add",
+    "section31": "Adding...",
+    "section32": "Terms",
+    "section33": "Move Term to Group",
+    "section34": "Move",
+    "section35": "from",
+    "section36": "to a different group.",
+    "section37": "Remove from specific groups",
+    "section38": "Current",
+    "section39": "Rename Group",
+    "section40": "Rename",
+    "section41": "Renaming"
   }
 }

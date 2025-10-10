@@ -545,51 +545,51 @@
     }
   },
   "achievements": {
-    "contributionActivity": "Mosebetsi oa Menehelo",
+    "contributionActivity": "Mosebetsi oa Kabelo",
     "weeklyGoals": "Lipakane tsa Beke le Beke",
     "howToEarnXP": "Mokhoa oa ho Fumana XP",
     "unlocked": "E Butsoe",
     "level": "Boemo",
-    "loading": "E laisa",
-    "totalXP": "XP e Kakaretso",
-    "currentStreak": "Letoto la Hajoale",
-    "achievementsLabel": "Lintho tse Fumanweng",
+    "loading": "E a jarisoa",
+    "totalXP": "XP e Felletseng",
+    "currentStreak": "Tatellano ea Hajoale",
+    "achievementsLabel": "Liphihlello",
     "noActivity": "Ha ho Mosebetsi",
     "addTerm": "Kenya lentsoe le lecha",
     "addComment": "Kenya maikutlo",
-    "receiveUpvote": "Amohela palonyana e kaholimo",
+    "receiveUpvote": "Fumana voutu e phahameng",
     "dailyLoginBonus": "Moputso oa ho kena letsatsi le leng le le leng",
-    "perUpvote": "ka palonyana e kaholimo",
-    "noGoals": "Ha ho Lipakane Beke Ena",
-    "checkBackNextWeek": "Sheba hape bekeng e tlang",
-    "completed": "E Phethiloe",
-    "loadingWeeklyGoals": "E laisa lipakane tsa beke le beke",
-    "progress": "tsoelo-pele",
-    "loadingAchievements": "E laisa lintho tse fumanoeng",
+    "perUpvote": "ka voutu e ’ngoe le e ’ngoe",
+    "noGoals": "Ha ho Lipakane Beke ena",
+    "checkBackNextWeek": "Sheba hape beke e tlang",
+    "completed": "E Felile",
+    "loadingWeeklyGoals": "E jarisa lipakane tsa beke le beke",
+    "progress": "ts'ebetso",
+    "loadingAchievements": "E jarisa liphihlello",
     "of": "ea",
-    "termPioneer": {
-      "title": "Motlai oa Mantsoe",
+    "term_pioneer": {
+      "title": "Moetapele oa Mantsoe",
       "desc": "Kenya mantsoe a hao a pele a 10 bukeng ea mantsoe"
     },
-    "communityContributor": {
-      "title": "Motšehetsi oa Sechaba",
-      "desc": "Etsa maikutlo a 25 ka mantsoe"
+    "community_contributor": {
+      "title": "Monehelo oa Sechaba",
+      "desc": "Ngola maikutlo a 25 ho mantsoe"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Ea Ratoang ke Sechaba",
-      "desc": "Amohela lipalonyana tse 100 bakeng sa menehelo ea hao"
+      "desc": "Fumana livoutu tse 100 holim’a menehelo ea hao"
     },
-    "multilingualMaster": {
-      "title": "Setsebi sa Dipuo Tse Fapaneng",
-      "desc": "Kenya letsoho libukeng tsa mantsoe tsa dipuo tse 5 tse fapaneng"
+    "multilingual_master": {
+      "title": "Setsebi sa Lipuo Tse Fapaneng",
+      "desc": "Ena menehelo ho dibuka tsa dipuo tse hlano tse fapaneng"
     },
-    "consistencyChampion": {
-      "title": "Moetapele oa Boitelo le Tsoelo-pele",
-      "desc": "E-ba mafolofolo matsatsi a 30 a latellanang"
+    "consistency_champion": {
+      "title": "Moahloli oa Botsitso",
+      "desc": "Eba mafolofolo matsatsi a 30 a latellanang"
     },
-    "languageGuardian": {
+    "language_guardian": {
       "title": "Mohlokomeli oa Puo",
-      "desc": "Lumella hore menehelo ea hao e 50 e netefatsoe ke litsebi"
+      "desc": "Etsa hore menehelo ea hao e 50 e tiisoe ke litsebi"
     }
   },
   "weeklyGoals": {
@@ -598,6 +598,235 @@
     "Streak Keeper": "Mohlokomeli oa Tatellano",
     "Maintain a login streak of 3 consecutive days": "Boloka tatellano ea ho kena matsatsi a mararo a latellanang",
     "Active Commenter": "Mohlahlobi ea Maqhubu",
-    "Write 4 comments on terms this week": "Ngola maikutlo a mane ka mantsoe bekeng ena"
+    "Write 4 comments on terms this week": "Ngola maikutlo a mane ka mantsoe bekeng ena",
+    "Term Creator": "Moqapi oa Mantsoe",
+    "Maintain a login streak of 2 consecutive days": "Boloka tatellano ea ho kena matsatsi a mabeli a latellanang",
+    "Submit 6 new terms this week": "Kenya mantsoe a macha a tšeletseng bekeng ena"
+  },
+  "termHelpPage": {
+    "onThisPage": "Kule Phepha",
+    "title": "Ukuqonda Isichazi-magama",
+    "intro": "I-<strong>Isichazi-magama</strong> yindawo apho unokukhangela khona iintsingiselo zamagama ngeelwimi ezininzi phakathi kweelwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika. Iseka ukukhangela ngokukhawuleza, ukuhluza ngokolwimi okanye ngokwesigaba, kunye nokusetyenziswa ngaphandle kwe-intanethi xa izichazi-magama zikhutshelwe ngaphambili.",
+
+    "overviewTitle": "Ukuqonda Isichazi-magama",
+    "overviewBody": "Isichazi-magama sikuvumela ukuba ukhangelisise iintsingiselo zamagama ngeelwimi ezininzi phakathi kweelwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika.",
+
+    "whatIsATermTitle": "Yintoni Igama?",
+    "whatIsATermBody": "Igama ngalinye kuMarito liquka ezi nkcukacha zilandelayo:",
+    "termFields": {
+      "term": "Igama: Ilizwi okanye ibinzana.",
+      "language": "Ulwimi: Olunye lweelwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika.",
+      "domain": "Icandelo: Ummandla wezifundo okanye isihloko.",
+      "definition": "Inkcazo: Ingcaciso ecacileyo yentsingiselo yegama.",
+      "related": "Amagama Ahlobene: Amakhonkco aya kwamanye amagama anentsingiselo efanayo okanye enxulumene nayo."
+    },
+
+    "languagesTitle": "Iilwimi Ezixhaswayo",
+    "languagesBody": "I-Marito ixhasa zonke iilwimi ezilishumi elinanye ezisemthethweni zaseMzantsi Afrika. Ungasebenzisa ukuhluza ukuze ugxile kulwimi olunye okanye uphande amagama kuwo onke.",
+    "languagesList": [
+      "Afrikaans",
+      "IsiNgesi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Ukukhangela Amagama",
+    "searchSubheadingHow": "Indlela Yokusebenza Kokukhangela",
+    "searchBody1": "Umsebenzi wokukhangela kuMarito ukunceda ukuba ufumane amagama ngokukhawuleza kuyo yonke iilwimi ezilishumi elinanye ezisemthethweni.",
+    "searchBody2": "Xa ubhala, iMarito yenza ukukhangela okubukhoma, ibuyekeze iziphumo ngexesha langempela.",
+    "searchFields": {
+      "term": "Igama: Ileyibhile okanye ibinzana elimele ingcinga ethile.",
+      "definition": "Inkcazo: Amagama aneentsingiselo eziquka amagama okuphendla nawo aya kubonakala.",
+      "filters": "Izihluzi: Nciphisa ngokolwimi okanye ngokwesigaba."
+    },
+    "searchSubheadingLive": "Iziphakamiso Ezibukhoma",
+    "searchLiveBody": "I-Marito inokuphakamisa iziphakamiso okanye amagama ahlobene ngexesha obhala ngalo.",
+    "searchSubheadingSensitivity": "Ubuntununtunu Bokukhangela",
+    "searchSensitivityBody": "Ngokungagqibekanga, iMarito yenza ukukhangela okuqinisekileyo okanye kufutshane nokuqinisekileyo, kodwa ukukhangela okungachanekanga nako kungasebenza.",
+    "searchSubheadingResultCards": "Amakhadi Eziphumo",
+    "searchResultBody": "Amagama aboniswa kumakhadi aquka igama, ulwimi, icandelo, inkcazo, kunye namaqhosha okuvota.",
+
+    "filtersTitle": "Izinketho Zokuhluza",
+    "filtersBody": "Ukunciphisa iziphumo, sebenzisa izihluzi ezikhoyo kwiphepha lokukhangela.",
+    "filtersList": {
+      "language": "Ulwimi: Nciphisa iziphumo kulwimi olunye kuphela.",
+      "domain": "Icandelo: Gxila kwimimandla enjengeMfundo, Ezempilo, okanye Ubuchwepheshe.",
+      "fuzzy": "Ukukhangela Okungachanekanga: Fumana amagama nokuba kukho iimpazamo zokupela okanye umahluko."
+    },
+
+    "viewTitle": "Ukujonga Amagama",
+    "viewBody": "Cofa iqhosha elithi 'Jonga' kwikhadi legama ukuze uvule inkcazo epheleleyo kwaye uphande amagama ahlobene.",
+
+    "offlineTitle": "Ukusetyenziswa Ngaphandle Kwe-intanethi",
+    "offlineBody": "I-Marito ingasetyenziswa ngaphandle kwe-intanethi ngokukhuphela izichazi-magama kwangaphambili.",
+    "offlineHow": "Indlela Yokukhuphela",
+    "offlineSteps": [
+      "Yiya kwiphepha Lezichazi-magama.",
+      "Khetha izichazi-magama ofuna ukuzikhuphela.",
+      "Cofa 'Khuphela' ukuze uzigcine kwisixhobo sakho."
+    ],
+    "offlineEnd": "Emva kokukhuphela, amagama akwesichazi-magama eso aya kuhlala efumaneka nokuba awuxhunyiwanga kwi-intanethi."
+  },
+  "workspaceHelpPage": {
+    "title": "Ho Utloisisa Workspace",
+    "intro": "<strong>Workspace</strong> e u lumella ho boloka mantsoe le likhatiso tseo u nang le thahasello ho tsona, ho li hlophisa ka lihlopha, le ho laola lihlopha tseo. Ke moo u ka latelang tsoelo-pele ea likopo tsa hau tsa mantsoe le ho boloka lintlha tsa mosebetsi oa hau.",
+    "groupsTitle": "Ho Laola Lihlopha",
+    "groupsBody": "Lihlopha li thusa ho hlophisa mantsoe a bolokiloeng. U ka etsa lihlopha tse ncha, ua li reha mabitso a macha, kapa ua hlakola tseo u sa li hlokeng.",
+    "groupsSteps": [
+      "Etsa Sehlopha: Tobetsa konopo ea <em>Sehlopha se Secha</em>, kenya lebitso, khetha mantsoe, ebe u netefatsa ka ho tobetsa <em>Kenya Mantsoe</em>.",
+      "Reha Sehlopha Lebitso bocha: Tobetsa <em>letšoao la pentšele</em> pela lebitso la sehlopha, fetola lebitso, ebe u tobetsa <em>Reha Sehlopha Lebitso bocha</em>.",
+      "Hlakola Sehlopha: Tobetsa <em>letšoao la ho hlakola</em>, khetha lihlopha tseo u batlang ho li tlosa, ebe u netefatsa ketso."
+    ],
+    "moveTitle": "Ho Fetisetsa Mantsoe Pakeng tsa Lihlopha",
+    "moveBody": "Ho fetisetsa lentsoe sehlopheng se seng, tobetsa <em>letšoao la ho fetisetsa</em> pela lentsoe ebe u khetha sehlopha se secha.",
+    "notesTitle": "Ho Sebelisa Lintlha",
+    "notesBody": "Lintlha li lumella ho eketsa tlhaiso-leseling e eketsehileng mantsoeng a bolokiloeng. U ka etsa, fetola kapa hlakola lintlha ka kotloloho ho Workspace.",
+    "notesSteps": [
+      "Eketsa Tlhahisoleseling: Tobetsa <em>letšoao la lintlha</em> pela lentsoe, ngola tlhaiso-leseling, ebe u tobetsa <em>Boloka</em>.",
+      "Fetola Tlhahisoleseling: Tobetsa <em>letšoao la pentšele</em>, fetola mongolo, ebe u tobetsa <em>Boloka</em>.",
+      "Hlakola Tlhahisoleseling: Sebelisa khetho ea ho hlakola ho tlosa lintlha tse sa hlokahaleng."
+    ],
+    "deleteTitle": "Ho Hlakola Mantsoe le Likhasetso",
+    "deleteBody": "U ka tlosa lintho ka Workspace neng kapa neng:",
+    "deleteSteps": [
+      "Hlakola Lentsoe: Eya ho <em>Mantsoe a Bolokiloeng</em>, tobetsa <em>letšoao la ho hlakola</em>, ebe u netefatsa.",
+      "Hlakola Lethathamo: Eya ho <em>Lethathamo le Bolokiloeng</em>, tobetsa khetho ea ho tlosa, ebe u netefatsa."
+    ]
+  },
+  "common": {
+    "back": "Khutlela morao",
+    "onThisPage": "Leqepheng lena"
+  },
+  "settingsHelpPage": {
+    "title": "Dipehelo le Boikamahanyo",
+    "intro": "Sebelisa leqephe la <strong>Dipehelo</strong> ho fetola dikgetho tsa hao — ho kenyeletsa sehlooho, dintlha tsa profaele, le phihlello — ho etsa boiphihlelo bo botle ka ho fetisisa bakeng sa hao.",
+    "onThisPage": "Leqepheng lena",
+    "modesTitle": "Ho Fetola Pakeng tsa Mokhoa o Khanyang le o Monyenyane",
+    "modesBody": "Mafoko e o dumella ho fetola kapele pakeng tsa <strong>mokhoa o khanyang</strong> le <strong>mokhoa o lefifi</strong> ho latela seo o se ratang le tikoloho ya hao. Tshebetso ena e fumaneha maqephe ohle mme e ntlafatsa sebopeho hang-hang ntle le ho sitisa mosebetsi wa hao.",
+    "modesSteps": [
+      "Fumana Konopo: Batla letshwao la letsatsi/khoeli hukung e ka tlase le letsohong le letshoto.",
+      "Fetola Mokhoa: Tobetsa letshwao ho fetola hang-hang pakeng tsa Mokhoa o Khanyang le o Lefifi."
+    ],
+    "profileTitle": "Ho Ntlafatsa Profaele ya Hao",
+    "profileBody": "O ka ntlafatsa <strong>lebitso</strong>, <strong>imeile</strong>, kapa <strong>phasewete</strong> neng kapa neng ho tloha diphehong tsa profaele ya hao. Phetoho e nngwe le e nngwe e hloka netefatso bakeng sa tshireletso.",
+    "profileSteps": [
+      "Ntlafatsa Lebitso: Tobetsa <em>Fetola Lebitso</em>, kenya lebitso le letjha, netefatsa ka phasewete ya hao, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Imeile: Tobetsa <em>Fetola Imeile</em>, kenya aterese e ntjha, netefatsa ka phasewete, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Phasewete: Tobetsa <em>Fetola Phasewete</em>, kenya phasewete e ntjha, netefatsa, mme o tobetse <em>Boloka</em>."
+    ],
+    "accessibilityTitle": "Dipehelo tsa Phihlello",
+    "accessibilityBody": "Mafoko e fana ka dikgetho tse fapaneng tsa phihlello hore o ka ikamahanya le lenaneo ho latela ditlhoko tsa hao. O ka fetola <strong>puo</strong>, <strong>boholo ba mongolo</strong>, <strong>sebaka</strong>, le <strong>phapang ya mebala</strong> ka ho toba ho menu ya dipehelo.",
+    "accessibilitySteps": [
+      "Fetola Puo ya Lenaneo: Bula lenane la ho theoha mme o kgethe puo eo o e ratang.",
+      "Bulela Mokgwa wa Phapang e Phahameng: Tobetsa <em>High Contrast toggle</em> ho fetola mokgwa wa mebala e pharalletseng."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Ho Utloisisa Tsela ea Thuto",
+    "section1": "Tshebetso ya Learning Path e o dumella ho rala leeto le hlophisitsoeng la ho ithuta puo e nngwe ya semmuso ya Afrika Borwa. Ka ho kgetha puo le ho khetha mehlodi eo o batlang ho e ithuta, o ka latela tsela e hlophisitsoeng ho ena le ho hlahloba ka mokhoa o sa reroang.",
+    "section2": "Tsela e nngwe le e nngwe ya ho ithuta e kopanya di-glossary, lisebelisoa tsa boikoetliso, le ho latela tsoelo-pele ho o thusa hore o lule o tsitsitse le o khothalletswa.",
+    "section3": "Sebatli sa hao ha se sebetse thegi ya video.",
+    "section4": "Ka mora ho kgetha puo, o tla kopuwa ho khetha glossary. Glossary e nngwe le e nngwe e hlophisitsoe ho ya ka domain (Thuto, Bophelo, Theknoloji) e le hore o tsepamise maikutlo hodima mantswe a nang le bohlokwa ho wena.",
+    "section4Title": "Ho Khetha Glossary",
+    "section5": "Hang ha glossary ya hao e se e lokile, o ka kgetha kamoo o batlang ho ithuta ka teng",
+    "section6": "Ditekolo tsa Boikoetliso",
+    "section7": "Araba dipotso ho leka tsebo ya hao le ho matlafatsa se o ithutileng sona.",
+    "section8": "Likarete tsa Thuto",
+    "section9": "Sebelisa tlhahlobo ya mokhoa wa karete ho aha kutlwisiso le ho hopola mantswe ka lebelo la hao.",
+    "section10": "Ho Ithuta ka Ditekolo le Likarete",
+    "section11": "Ho Latela Tsoelo-pele ya Hao",
+    "section12": "Tsela ya Thuto e latela mesebetsi ya hao hore o bone hore na o fihletse kae. Tsoelo-pele e bontshwa hammoho le dipalo tsa setjhaba, ho etsa hore ho be bonolo ho dula o khothalletswa.",
+    "section13": "Kopanya Ditsela tsa Thuto le diphephetso tsa beke le beke le dikhau ho fumana mabheji ha o ntse o ntlafatsa bokgoni ba hao ba puo."
+  },
+  "helpPage2": {
+    "section1": "Ho Qala",
+    "section2": "Tataiso ea mohato ka mohato bakeng sa ho etsa ak’haonte, ho kena, le ho tsamaisa sethala lekhetlo la pele.",
+    "section3": "Tšebelisano ea Sechaba",
+    "section3Desc": "Ithute ho beha litaba, ho fana ka maikutlo, le ho sebelisana le ba bang ka lisebelisoa tsa sechaba tse kang likhetho le lipuisano.",
+
+    "dictionaryTitle": "Bukantswe",
+    "dictionaryDesc": "Batla mantsoe a lipuo tse fapaneng, bulela patlo e sa hlakang, ’me u hlophise litlhophiso tsa bukantswe ea hau.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Hlophisa, sefa, le ho romela li-glossary ka sehlopha, lefapha, kapa polokelo ea phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mosebetsi",
+    "workspaceDesc": "Boloka le ho tsamaisa mantsoe le li-glossary tsa hao, latela likopo, le sebelisana u sebelisa lintlha le lihlopha.",
+
+    "settingsTitle": "Litlhophiso le Boikhethelo",
+    "settingsDesc": "Fetola likhetho tse kang mokhoa o lefifi/kapa o khanyang, likhetho tsa phihlello, lintlha tsa profaele, le litlhophiso tse ling tsa mosebelisi.",
+
+    "homeTitle": "Leqephe la Lapeng",
+    "homeDesc": "Hlahloba ’mapa o sebelisanang oa Afrika Borwa, fumana mantsoe a sa tloaelehang, ’me u fumane kakaretso ea litaba tse khethehileng.",
+
+    "dashboardTitle": "Boto ea Tsamaiso",
+    "dashboardDesc": "Latela ts'ebetso ea sethala ka litšoantšo, sheba data, ’me u hlahlobe menehelo ea hau sebakeng se le seng.",
+
+    "learningPathTitle": "Litsela tsa Thuto",
+    "learningPathDesc": "Rala leeto le hlophisitsoeng la ho ithuta e ’ngoe ea lipuo tsa semmuso tsa Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela litlhahiso, litlotla, kapa litletlebo ho sehlopha ka kotloloho ho thusa ho ntlafatsa sethala.",
+
+    "faqsTitle": "Lipotso Tse Botsoang Hangata",
+    "faqsDesc": "Likarabo tsa lipotso tse tloaelehileng mabapi le sethala."
+  },
+  "copyURL": "Kopitsa URL",
+  "related": "Mantsoe a Amanang",
+  "comments": "Maikutlo",
+  "reply": "Ho Arabela Ho",
+  "addReply": "Kenya Karabo",
+  "addComment": "Kenya Maikutlo",
+  "noDescription": "Ha ho Tlhaloso e Fanoeng",
+  "view": "Sheba",
+  "workspace": {
+    "section1": "Ha u hokahane le inthanete. Tlhokomeliso ea hau e bolokiloe 'me e tla hokahana ha u khutlela inthaneteng.",
+    "section2": "E hlolehile ho boloka lintlha. Ka kopo leka hape.",
+    "section3": "Ka kopo kena ho hlakola li-bookmark.",
+    "section4": "E hlolehile ho hlakola lentsoe. Ka kopo leka hape.",
+    "section5": "Ka kopo kena ho hlakola lihlopha.",
+    "section6": "E Hlakiwe ka Katleho",
+    "section7": "E hlolehile ho hlakola lihlopha. Ka kopo leka hape.",
+    "section8": "Hlakola Lihlopha",
+    "section9": "Na u tiile hore u batla ho hlakola",
+    "section10": "Sena se tla fetisetsa mantsoe 'ohle a lihlopha tsena ho sehlopha sa \"Mantsoe ’Ohle\".",
+    "section11": "Ka kopo kenya lebitso la sehlopha",
+    "section12": "Sehlopha se nang le lebitso lena se se se ntse se le teng",
+    "section13": "Ka kopo kena ho theha lihlopha.",
+    "section14": "Kena",
+    "section15": "Sebaka sa Mosebetsi",
+    "section16": "Sebaka sa ka sa Mosebetsi",
+    "section17": "Mantsoe a Bolokiloeng",
+    "section18": "Mantsoe a Thesaurus a Bolokiloeng",
+    "section19": "Liqoqo tsa Ka",
+    "section20": "Hlakola Tse Khethiloeng",
+    "section21": "Sehlopha se Secha",
+    "section22": "Hlakola Lihlopha",
+    "section23": "Batla Liqoqo...",
+    "section24": "Theha Sehlopha se Secha",
+    "section25": "Lebitso la Sehlopha",
+    "section26": "Theha sehlopha se secha ho hlophisa mantsoe a hau a bolokiloeng.",
+    "section27": "Khetha Mantsoe a ho Kenyelletsa Sehlopheng",
+    "section28": "Khetha mantsoe ao u batlang ho a kenya sehlopheng sa hau se secha. U ka khetha a mangata.",
+    "section29": "Ha ho mantsoe a bookmark a fumanehang. Etsa bookmark pele ho kenya lihlopha.",
+    "section30": "Kenya",
+    "section31": "E Kenyelletsoa...",
+    "section32": "Mantsoe",
+    "section33": "Fetisetsa Lentsoe Sehlopheng",
+    "section34": "Fetisetsa",
+    "section35": "ho tloha",
+    "section36": "ho ea sehlopheng se fapaneng.",
+    "section37": "Tlosa ho lihlopha tse itseng",
+    "section38": "Hajoale",
+    "section39": "Reha Sehlopha Bocha",
+    "section40": "Reha Bocha",
+    "section41": "Ho Rehoa Bocha"
   }
 }

@@ -43,6 +43,7 @@ import {
   PendingVote,
   addPendingVote,
 } from '../utils/indexedDB.ts';
+import { useTranslation } from 'react-i18next';
 
 const formatStatus = (status: string): string => {
   if (!status) return '';
@@ -109,6 +110,7 @@ export const TermDetailPage: React.FC = () => {
     name,
     id: termId,
   } = useParams<{ language: string; name: string; id: string }>();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [term, setTerm] = useState<Term | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -676,7 +678,7 @@ export const TermDetailPage: React.FC = () => {
           >
             <div className="term-main-content min-h-0 min-w-0">
               {isLoading ? (
-                <p>Loading...</p>
+                <p>{t('loading', { defaultValue: 'Loading' })}...</p>
               ) : error ? (
                 <p className="error-message">{error}</p>
               ) : term ? (
@@ -687,7 +689,7 @@ export const TermDetailPage: React.FC = () => {
                       className="bg-theme rounded-md text-sm mb-4 text-theme justify-start h-10 w-20"
                       onClick={() => navigate(`/search`)}
                     >
-                      Back
+                      {t('common.back', { defaultValue: 'Back' })}
                     </button>
                     <div className="flex flex-row items-center gap-2">
                       <ArrowUp
@@ -712,7 +714,7 @@ export const TermDetailPage: React.FC = () => {
                               )
                             }
                           >
-                            Copy URL
+                            {t('copyURL', { defaultValue: 'Copy URL' })}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -772,17 +774,24 @@ export const TermDetailPage: React.FC = () => {
                       <CardContent className="space-y-6">
                         <section>
                           <h3 className="font-semibold text-2xl mb-2">
-                            Description
+                            {t('termAdditions.defTitle', {
+                              defaultValue: 'Description',
+                            })}
                           </h3>
                           <p className="text-sm leading-relaxed">
-                            {term.definition || 'No description provided'}
+                            {term.definition ||
+                              t('noDescription', {
+                                defaultValue: 'No Description Provided',
+                              })}
                           </p>
                         </section>
                         <section>
                           {relatedTerms.length > 0 && (
                             <div>
                               <h3 className="font-semibold text-2xl mb-2">
-                                Related Terms
+                                {t('related', {
+                                  defaultValue: 'Related Terms',
+                                })}
                               </h3>
                               <div className="flex flex-wrap gap-2 text-3xl">
                                 {relatedTerms.map((relatedTerm) => (
@@ -810,7 +819,9 @@ export const TermDetailPage: React.FC = () => {
                         </section>
                         <section className="comments-section">
                           <div className="comments-header">
-                            <h3 className="section-title">Comments</h3>
+                            <h3 className="section-title">
+                              {t('comments', { defaultValue: 'Comments' })}
+                            </h3>
                             <span className="comment-count">
                               {comments.length}
                             </span>
@@ -833,12 +844,19 @@ export const TermDetailPage: React.FC = () => {
                           <div className="add-comment">
                             {replyingToCommentId && (
                               <div className="replying-to-info">
-                                <span>Replying to {replyingToUser}</span>
+                                <span>
+                                  {t('reply', {
+                                    defaultValue: 'Replying' + ' To',
+                                  })}{' '}
+                                  {replyingToUser}
+                                </span>
                                 <button
                                   onClick={() => setReplyingToCommentId(null)}
                                   className="cancel-reply-btn"
                                 >
-                                  Cancel
+                                  {t('common.cancel', {
+                                    defaultValue: 'Cancel',
+                                  })}
                                 </button>
                               </div>
                             )}
@@ -849,8 +867,12 @@ export const TermDetailPage: React.FC = () => {
                               onChange={(e) => setNewComment(e.target.value)}
                               placeholder={
                                 replyingToCommentId
-                                  ? 'Add a reply...'
-                                  : 'Add a comment....'
+                                  ? t('addReply', {
+                                      defaultValue: 'Add' + ' a Reply',
+                                    })
+                                  : t('addComment', {
+                                      defaultValue: 'Add a' + ' Comment',
+                                    })
                               }
                             />
                             <button
@@ -871,7 +893,12 @@ export const TermDetailPage: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <p>Term not found.</p>
+                <p>
+                  {t('learningGlossarylist.noTermsFound', {
+                    defaultValue: 'No Terms Found',
+                  })}
+                  .
+                </p>
               )}
             </div>
           </div>

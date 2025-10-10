@@ -25,7 +25,7 @@ export const SettingsContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '/Marito/videos/settings/mode-change.mp4',
+    assetLocation: '/Mafoko/videos/settings/mode-change.mp4',
   },
   {
     id: 'profile-update',
@@ -33,10 +33,9 @@ export const SettingsContent: SectionProps[] = [
     content: (
       <div>
         <p>
-          You can update your <strong>name</strong>, <strong>email</strong>,{' '}
-          <strong>profile picture</strong>, or <strong>password</strong> at any
-          time from your profile settings. Each change requires confirmation for
-          security purposes.
+          You can update your <strong>name</strong>, <strong>email</strong>, or{' '}
+          <strong>password</strong> at any time from your profile settings. Each
+          change requires confirmation for security purposes.
         </p>
 
         <ol className="list-decimal list-inside space-y-2 mt-4">
@@ -53,14 +52,10 @@ export const SettingsContent: SectionProps[] = [
             <strong>Update Password:</strong> Click <em>Edit Password</em>, type
             your new password, confirm it, and click <em>Save</em>.
           </li>
-          <li>
-            <strong>Update Profile Picture:</strong> Choose a new image and
-            upload it through the profile editor.
-          </li>
         </ol>
       </div>
     ),
-    assetLocation: '/Marito/videos/settings/update-name.mp4',
+    assetLocation: '/Mafoko/videos/settings/update-name.mp4',
   },
   {
     id: 'accessibility',
@@ -80,10 +75,6 @@ export const SettingsContent: SectionProps[] = [
             and select your preferred language.
           </li>
           <li>
-            <strong>Adjust Text Size & Spacing:</strong> Drag the scrollbar
-            until the text size and spacing match your preference.
-          </li>
-          <li>
             <strong>Enable High Contrast Mode:</strong> Click the
             <em> High Contrast toggle</em> to switch to a high-contrast colour
             scheme.
@@ -91,6 +82,6 @@ export const SettingsContent: SectionProps[] = [
         </ol>
       </div>
     ),
-    assetLocation: '/Marito/videos/settings/accessibility.mp4',
+    assetLocation: '/Mafoko/videos/settings/accessibility.mp4',
   },
 ];

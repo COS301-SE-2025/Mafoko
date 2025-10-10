@@ -168,9 +168,7 @@ registerRoute(
 
 registerRoute(
   ({ url, request }) =>
-    request.method === 'GET' &&
-    (url.pathname === '/api/v1/glossary/random' ||
-      url.pathname === '/api/v1/auth/me/profile-picture'),
+    request.method === 'GET' && url.pathname === '/api/v1/glossary/random',
   new NetworkFirst({
     cacheName: 'api-misc',
     networkTimeoutSeconds: 5,

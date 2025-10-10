@@ -33,6 +33,7 @@ import {
 } from '../utils/indexedDB';
 
 import '../styles/WorkspacePage.scss';
+import { useTranslation } from 'react-i18next';
 
 // Type definitions for workspace components
 interface BookmarkedTerm {
@@ -74,8 +75,15 @@ interface WorkspaceGroup {
   }>;
 }
 
+interface UserData {
+  firstName?: string;
+  first_name?: string;
+  [key: string]: unknown;
+}
+
 const WorkspacePage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // For navigation integration
   const [activeMenuItem, setActiveMenuItem] = useState('workspace');
@@ -88,8 +96,8 @@ const WorkspacePage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState('saved-terms');
   const [searchQuery, setSearchQuery] = useState('');
+  const [userFirstName, setUserFirstName] = useState<string>('');
 
-  // Notification state for user feedback
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error' | 'info';
@@ -174,6 +182,55 @@ const WorkspacePage: React.FC = () => {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const storedUserData = localStorage.getItem('userData');
+      if (storedUserData) {
+        try {
+          const parsedData: unknown = JSON.parse(storedUserData);
+          if (typeof parsedData === 'object' && parsedData !== null) {
+            const userData = parsedData as UserData;
+            if (typeof userData.firstName === 'string') {
+              setUserFirstName(userData.firstName);
+              return;
+            }
+            if (typeof userData.first_name === 'string') {
+              setUserFirstName(userData.first_name);
+              return;
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      }
+
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        try {
+          const response = await fetch(API_ENDPOINTS.getMe, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+            },
+          });
+          if (response.ok) {
+            const responseData: unknown = await response.json();
+            if (typeof responseData === 'object' && responseData !== null) {
+              const userData = responseData as UserData;
+              if (typeof userData.first_name === 'string') {
+                setUserFirstName(userData.first_name);
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    void fetchUserData();
+  }, []);
+
   // Helper functions for user notifications
   const showNotification = (
     message: string,
@@ -241,12 +298,6 @@ const WorkspacePage: React.FC = () => {
 
   // Load workspace data on component mount
   useEffect(() => {
-    console.log('[DEBUG INIT] Component mounted, loading workspace data');
-    console.log(
-      '[DEBUG AUTH] Current token:',
-      localStorage.getItem('accessToken') ? 'Token exists' : 'No token found',
-    );
-
     // Check if bookmarks have changed since last workspace load
     const lastBookmarkChange = localStorage.getItem('bookmarksChanged');
     const lastWorkspaceLoad = localStorage.getItem('workspaceLastLoaded');
@@ -255,9 +306,11 @@ const WorkspacePage: React.FC = () => {
       lastBookmarkChange &&
       (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
     ) {
-      console.log(
-        '[DEBUG INIT] Bookmarks changed since last load, will refresh',
-      );
+      //nothing
+      console.log('   ');
+      {
+        /* */
+      }
     }
 
     void loadWorkspaceData();
@@ -267,10 +320,6 @@ const WorkspacePage: React.FC = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        console.log(
-          '[DEBUG REFRESH] Page became visible, checking for bookmark changes',
-        );
-
         // Check if bookmarks have changed since last visit
         const lastBookmarkChange = localStorage.getItem('bookmarksChanged');
         const lastWorkspaceLoad = localStorage.getItem('workspaceLastLoaded');
@@ -279,9 +328,6 @@ const WorkspacePage: React.FC = () => {
           lastBookmarkChange &&
           (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
         ) {
-          console.log(
-            '[DEBUG REFRESH] Bookmarks changed, refreshing workspace data',
-          );
           void loadWorkspaceData();
           localStorage.setItem('workspaceLastLoaded', Date.now().toString());
         }
@@ -293,10 +339,6 @@ const WorkspacePage: React.FC = () => {
 
     // Also add a focus listener as a backup
     const handleFocus = () => {
-      console.log(
-        '[DEBUG REFRESH] Window focused, checking for bookmark changes',
-      );
-
       // Check if bookmarks have changed since last visit
       const lastBookmarkChange = localStorage.getItem('bookmarksChanged');
       const lastWorkspaceLoad = localStorage.getItem('workspaceLastLoaded');
@@ -305,9 +347,6 @@ const WorkspacePage: React.FC = () => {
         lastBookmarkChange &&
         (!lastWorkspaceLoad || lastBookmarkChange > lastWorkspaceLoad)
       ) {
-        console.log(
-          '[DEBUG REFRESH] Bookmarks changed, refreshing workspace data',
-        );
         void loadWorkspaceData();
         localStorage.setItem('workspaceLastLoaded', Date.now().toString());
       }
@@ -318,40 +357,15 @@ const WorkspacePage: React.FC = () => {
     const handleBookmarkChange = (
       event: CustomEvent<{ action?: string; name?: string }>,
     ) => {
-      console.log(
-        '🚨 [NUCLEAR WORKSPACE DEBUG] BOOKMARK CHANGE EVENT RECEIVED!',
-      );
-      console.log('🚨 [NUCLEAR WORKSPACE DEBUG] Event detail:', event.detail);
-      console.log('🚨 [NUCLEAR WORKSPACE DEBUG] Event type:', event.type);
-      console.log(
-        '🚨 [NUCLEAR WORKSPACE DEBUG] Current time:',
-        new Date().toISOString(),
-      );
-
-      const action = event.detail.action ?? 'unknown';
-      const name = event.detail.name ?? 'unknown';
-      console.log(
-        `WORKSPACE: Received bookmark change event! Action: ${action}, Name: ${name}`,
-      );
-
-      console.log(
-        '🔄 [NUCLEAR WORKSPACE DEBUG] About to reload workspace data...',
-      );
       void loadWorkspaceData();
+      console.log(event);
 
       const timestamp = Date.now().toString();
       localStorage.setItem('workspaceLastLoaded', timestamp);
-      console.log(
-        '💾 [NUCLEAR WORKSPACE DEBUG] Set workspaceLastLoaded to:',
-        timestamp,
-      );
     };
     window.addEventListener(
       'bookmarkChanged',
       handleBookmarkChange as EventListener,
-    );
-    console.log(
-      '👂 [NUCLEAR WORKSPACE DEBUG] Added bookmark change event listener!',
     );
 
     return () => {
@@ -366,20 +380,12 @@ const WorkspacePage: React.FC = () => {
 
   // Function to load all workspace data with offline support
   const loadWorkspaceData = useCallback(async (): Promise<void> => {
-    console.log('🔄 [NUCLEAR WORKSPACE DEBUG] loadWorkspaceData() CALLED!');
-    console.log(
-      '🔄 [NUCLEAR WORKSPACE DEBUG] Current time:',
-      new Date().toISOString(),
-    );
-
     setLoading(true);
     setError(null);
 
     const token = localStorage.getItem('accessToken');
-    console.log('🔑 [NUCLEAR WORKSPACE DEBUG] Token exists:', !!token);
 
     if (!token) {
-      console.log('❌ [NUCLEAR WORKSPACE DEBUG] No token found!');
       setError('Please log in to access your workspace.');
       setLoading(false);
       return;
@@ -387,20 +393,17 @@ const WorkspacePage: React.FC = () => {
 
     // If offline, try to load cached data
     if (!navigator.onLine) {
-      console.log('📱 [WORKSPACE DEBUG] Offline mode - loading cached data');
       try {
         const cachedBookmarks = await getCachedBookmarks();
         const cachedGroups = await getCachedWorkspaceGroups();
         const cachedStats = await getCachedGlossaryStats();
 
         if (cachedBookmarks) {
-          console.log('✅ [WORKSPACE DEBUG] Using cached bookmarks');
           setSavedTerms(cachedBookmarks.bookmarkedTerms);
           setBookmarkedGlossaries(cachedBookmarks.bookmarkedGlossaries);
         }
 
         if (cachedGroups) {
-          console.log('✅ [WORKSPACE DEBUG] Using cached groups');
           setWorkspaceGroups(cachedGroups.groups);
           const groupNames = [
             'all',
@@ -431,27 +434,12 @@ const WorkspacePage: React.FC = () => {
     }
 
     try {
-      console.log('📡 [NUCLEAR WORKSPACE DEBUG] About to fetch bookmarks...');
-      console.log(
-        '📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks URL:',
-        API_ENDPOINTS.getBookmarks,
-      );
-
       // Fetch bookmarks (terms and glossaries)
       const bookmarksResponse = await fetch(API_ENDPOINTS.getBookmarks, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(
-        '📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks response status:',
-        bookmarksResponse.status,
-      );
-      console.log(
-        '📡 [NUCLEAR WORKSPACE DEBUG] Bookmarks response ok:',
-        bookmarksResponse.ok,
-      );
 
       if (!bookmarksResponse.ok) {
         throw new Error(
@@ -463,25 +451,9 @@ const WorkspacePage: React.FC = () => {
         terms?: BookmarkedTerm[];
         glossaries?: BookmarkedGlossary[];
       };
-      console.log(
-        '📊 [NUCLEAR WORKSPACE DEBUG] Bookmarks data received:',
-        bookmarksData,
-      );
-      console.log(
-        '📊 [NUCLEAR WORKSPACE DEBUG] Terms count:',
-        (bookmarksData.terms?.length || 0).toString(),
-      );
-      console.log(
-        '📊 [NUCLEAR WORKSPACE DEBUG] Glossaries count:',
-        (bookmarksData.glossaries?.length || 0).toString(),
-      );
 
       setSavedTerms(bookmarksData.terms || []);
       setBookmarkedGlossaries(bookmarksData.glossaries || []);
-
-      console.log(
-        '✅ [NUCLEAR WORKSPACE DEBUG] Successfully updated workspace state!',
-      );
 
       // Fetch workspace groups
       const groupsResponse = await fetch(API_ENDPOINTS.getUserGroups, {
@@ -495,14 +467,6 @@ const WorkspacePage: React.FC = () => {
       }
 
       const groupsData = (await groupsResponse.json()) as WorkspaceGroup[];
-      console.log(
-        '📊 [NUCLEAR WORKSPACE DEBUG] Groups data received:',
-        groupsData,
-      );
-      console.log(
-        '📊 [NUCLEAR WORKSPACE DEBUG] Groups count:',
-        groupsData.length.toString(),
-      );
 
       setWorkspaceGroups(groupsData);
 
@@ -547,13 +511,11 @@ const WorkspacePage: React.FC = () => {
         const cachedStats = await getCachedGlossaryStats();
 
         if (cachedBookmarks) {
-          console.log('✅ [WORKSPACE DEBUG] Using cached bookmarks (fallback)');
           setSavedTerms(cachedBookmarks.bookmarkedTerms);
           setBookmarkedGlossaries(cachedBookmarks.bookmarkedGlossaries);
         }
 
         if (cachedGroups) {
-          console.log('✅ [WORKSPACE DEBUG] Using cached groups (fallback)');
           setWorkspaceGroups(cachedGroups.groups);
           const groupNames = [
             'all',
@@ -564,7 +526,6 @@ const WorkspacePage: React.FC = () => {
         }
 
         if (cachedStats) {
-          console.log('✅ [WORKSPACE DEBUG] Using cached stats (fallback)');
           setGlossaryStats(cachedStats.stats);
         }
 
@@ -589,7 +550,6 @@ const WorkspacePage: React.FC = () => {
       if (!navigator.onLine) {
         const cachedStats = await getCachedGlossaryStats();
         if (cachedStats) {
-          console.log('✅ Using cached glossary stats (offline)');
           setGlossaryStats(cachedStats.stats);
           return;
         }
@@ -602,7 +562,6 @@ const WorkspacePage: React.FC = () => {
         // Try cached data as fallback
         const cachedStats = await getCachedGlossaryStats();
         if (cachedStats) {
-          console.log('✅ Using cached glossary stats (fallback)');
           setGlossaryStats(cachedStats.stats);
         }
         return;
@@ -624,7 +583,6 @@ const WorkspacePage: React.FC = () => {
       });
 
       setGlossaryStats(statsMap);
-      console.log('✅ Glossary stats loaded successfully:', statsMap);
 
       // Cache the fresh data
       const statsCache: GlossaryStatsCache = {
@@ -675,8 +633,8 @@ const WorkspacePage: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          bookmark_id: bookmarkId, // This is already the correct bookmark ID
-          notes: noteText.trim(), // Changed back to 'notes' as per the correct schema
+          bookmark_id: bookmarkId,
+          notes: noteText.trim(),
           bookmark_type: 'term',
         }),
       });
@@ -761,11 +719,9 @@ const WorkspacePage: React.FC = () => {
           }
         }
 
-        setError(
-          "You are offline. Your note has been saved and will sync when you're back online.",
-        );
+        setError(t('workspace.section1'));
       } else {
-        setError('Failed to save notes. Please try again.');
+        setError(t('workspace.section2'));
       }
     }
   };
@@ -779,7 +735,7 @@ const WorkspacePage: React.FC = () => {
   const handleDeleteTerm = async (bookmarkId: string) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      setError('Please log in to delete bookmarks.');
+      setError(t('workspace.section3'));
       return;
     }
 
@@ -814,7 +770,7 @@ const WorkspacePage: React.FC = () => {
       console.log('Term bookmark deleted successfully');
     } catch (error) {
       console.error('Failed to delete term bookmark:', error);
-      setError('Failed to delete term. Please try again.');
+      setError(t('workspace.section4'));
     }
   };
 
@@ -822,14 +778,11 @@ const WorkspacePage: React.FC = () => {
   const handleDeleteGlossary = async (domain: string) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      setError('Please log in to delete bookmarks.');
+      setError(t('workspace.section3'));
       return;
     }
 
     try {
-      console.log('=== STARTING GLOSSARY DELETION ===');
-      console.log('Attempting to delete glossary with domain:', domain);
-
       // Find the glossary to confirm it exists
       const glossaryToDelete = bookmarkedGlossaries.find(
         (glossary) => glossary.domain === domain,
@@ -838,8 +791,6 @@ const WorkspacePage: React.FC = () => {
         console.error('Glossary not found in local state. Domain:', domain);
         return;
       }
-
-      console.log('Found glossary to delete:', glossaryToDelete);
 
       // Call the API to delete the bookmark
       const response = await fetch(API_ENDPOINTS.unbookmarkGlossary(domain), {
@@ -852,8 +803,6 @@ const WorkspacePage: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to delete glossary bookmark');
       }
-
-      console.log('API call completed successfully');
 
       // Remove the glossary from local state
       setBookmarkedGlossaries((prevGlossaries) =>
@@ -869,8 +818,6 @@ const WorkspacePage: React.FC = () => {
           detail: { type: 'glossary', action: 'unbookmark', name: domain },
         }),
       );
-
-      console.log('=== GLOSSARY DELETION COMPLETED ===');
     } catch (error) {
       console.error('=== GLOSSARY DELETION FAILED ===');
       console.error('Failed to delete glossary bookmark:', error);
@@ -908,7 +855,7 @@ const WorkspacePage: React.FC = () => {
 
         const token = localStorage.getItem('accessToken');
         if (!token) {
-          showError('Please log in to delete groups.');
+          showError(t('workspace.section5'));
           return;
         }
 
@@ -938,22 +885,22 @@ const WorkspacePage: React.FC = () => {
         // Refresh workspace data to reflect the changes
         await loadWorkspaceData();
         showSuccess(
-          `Successfully deleted ${selectedGroupsForDeletion.length.toString()} group(s)!`,
+          `${t('workspace.section6')} ${selectedGroupsForDeletion.length.toString()}`,
         );
 
         // Exit delete mode
         handleExitDeleteMode();
       } catch (error) {
         console.error('Failed to delete groups:', error);
-        showError('Failed to delete groups. Please try again.');
+        showError(t('workspace.section7'));
       } finally {
         setLoading(false);
       }
     };
 
     showConfirmation(
-      'Delete Groups',
-      `Are you sure you want to delete ${selectedGroupsForDeletion.length.toString()} group(s)? This will move all terms from these groups to "All Terms" group.`,
+      t('workspace.section8'),
+      `${t('workspace.section9')} ${selectedGroupsForDeletion.length.toString()}? ${t('workspace.section10')}`,
       () => {
         void deleteAction();
       },
@@ -975,19 +922,19 @@ const WorkspacePage: React.FC = () => {
     const trimmedName = newGroupName.trim();
 
     if (!trimmedName) {
-      showError('Please enter a group name');
+      showError(t('workspace.section11'));
       return;
     }
 
     // Check if group name already exists
     if (workspaceGroups.some((group) => group.name === trimmedName)) {
-      showError('A group with this name already exists');
+      showError(t('workspace.section12'));
       return;
     }
 
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      showError('Please log in to create groups.');
+      showError(t('workspace.section13'));
       return;
     }
 
@@ -1421,7 +1368,7 @@ const WorkspacePage: React.FC = () => {
         />
       )}
 
-      <div className="main-content">
+      <div className="main-content !bg-[var(--bg-first)]">
         {!isMobile && (
           <div className="top-bar workspace-top-bar">
             <button
@@ -1436,8 +1383,10 @@ const WorkspacePage: React.FC = () => {
           </div>
         )}
 
-        <div className={`workspace-content ${isMobile ? 'pt-16' : ''}`}>
-          <div className="workspace-content-wrapper">
+        <div
+          className={`workspace-content !bg-[var(--bg-first)] ${isMobile ? 'pt-16' : ''}`}
+        >
+          <div className="workspace-content-wrapper !bg-[var(--bg-first)]">
             {/* Error Display */}
             {error && (
               <div
@@ -1462,7 +1411,7 @@ const WorkspacePage: React.FC = () => {
                         fontWeight: 'bold',
                       }}
                     >
-                      Go to Login
+                      {t('workspace.section14')}
                     </a>
                   </div>
                 )}
@@ -1484,17 +1433,31 @@ const WorkspacePage: React.FC = () => {
             )}
 
             {/* Header */}
-            <div className="workspace-header">
-              {/* Navigation Tabs */}
+            <div
+              className="workspace-header"
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '1.5rem',
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: '1.875rem',
+                  fontWeight: '600',
+                  color: isDarkMode ? '#ffffff' : '#212431',
+                  margin: 0,
+                  textAlign: 'center',
+                }}
+              >
+                {userFirstName
+                  ? `${userFirstName}'s ${t('workspace.section15')}`
+                  : t('workspace.section16')}
+              </h1>
               <div
                 style={{
-                  backgroundColor: isDarkMode
-                    ? '#212431ad'
-                    : 'rgba(196, 196, 196, 0.4)',
                   display: 'flex',
-                  gap: '0.25rem',
-                  padding: '0.25rem',
-                  borderRadius: '0.75rem',
+                  gap: '0.5rem',
                 }}
                 className="workspace-tabs"
               >
@@ -1503,81 +1466,90 @@ const WorkspacePage: React.FC = () => {
                   onClick={() => {
                     setActiveTab('saved-terms');
                   }}
-                  className={`tab-button ${activeTab === 'saved-terms' ? 'active' : ''}`}
+                  style={{
+                    backgroundColor:
+                      activeTab === 'saved-terms' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'saved-terms'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'saved-terms' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                    padding: '0.5rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
                 >
-                  Saved Terms
+                  {t('workspace.section17')}
                 </button>
                 <button
                   type="button"
                   onClick={() => {
                     setActiveTab('glossaries');
                   }}
-                  className={`tab-button ${activeTab === 'glossaries' ? 'active' : ''}`}
+                  style={{
+                    backgroundColor:
+                      activeTab === 'glossaries' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'glossaries'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'glossaries' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                    padding: '0.5rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
                 >
-                  Followed Glossaries
+                  {t('workspace.section18')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('collections');
+                  }}
+                  style={{
+                    backgroundColor:
+                      activeTab === 'collections' ? '#f00a50' : 'transparent',
+                    color:
+                      activeTab === 'collections'
+                        ? 'white'
+                        : isDarkMode
+                          ? '#ffffff'
+                          : '#212431',
+                    border: `2px solid ${activeTab === 'collections' ? '#f00a50' : isDarkMode ? '#4b5563' : 'rgba(240, 10, 80, 0.3)'}`,
+                    padding: '0.5rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {t('workspace.section19')}
                 </button>
               </div>
-
-              {activeTab === 'saved-terms' && (
-                <div className="workspace-actions">
-                  {isDeleteMode ? (
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        onClick={handleDeleteSelectedGroups}
-                        disabled={selectedGroupsForDeletion.length === 0}
-                        className={`create-new-btn ${selectedGroupsForDeletion.length === 0 ? 'disabled' : ''}`}
-                      >
-                        <Trash2 className="w-5 h-5" />
-                        Delete Selected (
-                        {selectedGroupsForDeletion.length.toString()})
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleExitDeleteMode}
-                        className="cancel-delete-btn"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        className="create-new-btn"
-                        onClick={handleOpenNewGroupModal}
-                      >
-                        <Plus className="w-5 h-5" />
-                        <span>New Group</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleEnterDeleteMode}
-                        className="create-new-btn"
-                      >
-                        <Trash2 className="icon" />
-                        Delete Groups
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Saved Terms Tab */}
             {activeTab === 'saved-terms' && (
-              <div className="tab-content">
-                <div
-                  className={`${isDarkMode ? 'bg-[#292e41] border-gray-600' : 'bg-white border-gray-200'} rounded-lg shadow-sm border p-6`}
-                >
+              <div className="tab-content !bg-[var(--bg-first)]">
+                <div>
                   <div className="space-y-8 h-full">
-                    {/* Search and Filter */}
                     <div className="flex-col sm:flex-row">
                       <div className="flex-1">
                         <Search className="absolute" />
                         <input
                           type="text"
-                          placeholder="Search terms..."
+                          placeholder={t('glossaryPage2.searchPlaceholder')}
                           className="search-input"
                           value={searchQuery}
                           onChange={(e) => {
@@ -1587,7 +1559,6 @@ const WorkspacePage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Terms by Group */}
                     <div
                       className="space-y-6 flex-1 pr-2 saved-terms-scrollbar"
                       style={{
@@ -1614,6 +1585,7 @@ const WorkspacePage: React.FC = () => {
                         }
                       `}</style>
                       {Object.entries(groupedTerms)
+                        .filter(([groupName]) => groupName === 'All Terms')
                         .sort(([a], [b]) => {
                           // Keep 'all' and 'All Terms' at the beginning, sort the rest alphabetically
                           if (a === 'all') return -1;
@@ -1627,7 +1599,7 @@ const WorkspacePage: React.FC = () => {
                             key={groupName}
                             className="workspace-group-card saved-terms-scrollbar"
                           >
-                            <div className="group-header">
+                            <div className="group-header !flex !justify-center !items-center">
                               <div
                                 className="group-info"
                                 onClick={() => {
@@ -1639,7 +1611,7 @@ const WorkspacePage: React.FC = () => {
                                 {isDeleteMode &&
                                 groupName !== 'all' &&
                                 groupName !== 'All Terms' ? (
-                                  <div className="flex items-center space-x-3">
+                                  <div className="flex items-center justify-center">
                                     <input
                                       type="checkbox"
                                       checked={selectedGroupsForDeletion.includes(
@@ -1656,14 +1628,24 @@ const WorkspacePage: React.FC = () => {
                                     <FolderPlus className="group-icon" />
                                   </div>
                                 ) : (
-                                  <FolderPlus className="group-icon" />
+                                  <div className="flex items-center justify-center">
+                                    <FolderPlus className="group-icon" />
+                                  </div>
                                 )}
-                                <h3 className="group-title">{groupName}</h3>
-                                <span className="term-count">
-                                  {terms.length} terms
-                                </span>
+
+                                <div className="flex items-center justify-center">
+                                  <div className="font-bold text-[16px]">
+                                    {groupName}
+                                  </div>
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  <span className="term-count">
+                                    {terms.length} {t('glossaryPage2.terms')}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="group-actions">
+
+                              <div className="group-actions flex items-center space-x-2">
                                 {!isDeleteMode && (
                                   <>
                                     {groupName !== 'All Terms' && (
@@ -1707,38 +1689,33 @@ const WorkspacePage: React.FC = () => {
                             {expandedGroups[groupName] && (
                               <div className="group-content">
                                 {terms.map((term) => (
-                                  <div
-                                    key={term.id}
-                                    className="term-item"
-                                    style={{
-                                      backgroundColor: isDarkMode
-                                        ? '#23273a'
-                                        : '#f3f4f6',
-                                      borderRadius: '0.5rem',
-                                      padding: '1rem',
-                                      marginBottom: '1rem',
-                                    }}
-                                  >
-                                    <div
-                                      className="term-header"
-                                      style={{
-                                        backgroundColor: 'transparent',
-                                        borderRadius: '0.5rem',
-                                      }}
-                                    >
+                                  <div key={term.id} className="term-item">
+                                    <div className="term-header">
                                       <div className="term-info">
                                         <div className="term-title-row">
-                                          <h4 className="term-title">
-                                            {term.term}
-                                          </h4>
-                                          <div className="term-badges">
-                                            <span className="term-language-badge">
-                                              {term.language}
-                                            </span>
+                                          <div>
+                                            {' '}
+                                            <h4 className="term-title flex flex-row justify-center items-center">
+                                              {term.term}
+                                            </h4>
+                                          </div>
+                                          <div className="flex felx-row !justify-center !items-center gap-5 w-[350px]">
+                                            <div className="flex justify-center items-center">
+                                              <div>
+                                                <span className="term-language-badge">
+                                                  {term.language}
+                                                </span>
+                                              </div>
+                                            </div>
+
                                             {term.domain && (
-                                              <span className="category-tag">
-                                                {term.domain}
-                                              </span>
+                                              <div className="flex justify-center items-center">
+                                                <div>
+                                                  <span className="category-tag">
+                                                    {term.domain}
+                                                  </span>
+                                                </div>
+                                              </div>
                                             )}
                                           </div>
                                         </div>
@@ -1900,12 +1877,9 @@ const WorkspacePage: React.FC = () => {
 
             {/* Glossaries Tab */}
             {activeTab === 'glossaries' && (
-              <div className="tab-content">
+              <div className="tab-content !bg-[var(--bg-first)]">
                 <div className="space-y-6">
-                  <div
-                    className={`rounded-lg shadow-sm border ${isDarkMode ? 'border-gray-700' : 'bg-white border-gray-200'}`}
-                    style={isDarkMode ? { backgroundColor: '#292e41' } : {}}
-                  >
+                  <div>
                     <div className="p-6">
                       <h3
                         className={`text-lg font-medium mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
@@ -1916,37 +1890,44 @@ const WorkspacePage: React.FC = () => {
                         {bookmarkedGlossaries.map((bookmark) => (
                           <div
                             key={bookmark.id}
-                            className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}
-                            style={
-                              isDarkMode
-                                ? { backgroundColor: '#222535c0' }
-                                : { backgroundColor: '#f5f5f5' }
-                            }
+                            className="p-4 transition-shadow !w-[400px] !bg-[var(--bg-tir)]"
+                            style={{
+                              border: '1px solid rgba(0, 206, 175, 0.3)',
+                              borderRadius: '0.5rem',
+                            }}
                           >
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex items-center space-x-3">
-                                <BookOpen
-                                  className="w-5 h-5"
-                                  style={{ color: '#00ceaf' }}
-                                />
+                            <div
+                              className="flex items-center gap-8 justify-between mb-3 "
+                              style={{ paddingBottom: '30px' }}
+                            >
+                              <div className="flex items-center justify-center gap-5 space-x-3">
                                 <div>
-                                  <h4
-                                    className={`text-lg font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
+                                  <BookOpen
+                                    className="w-6 h-6"
+                                    style={{ color: '#00ceaf' }}
+                                  />
+                                </div>
+                                <div className="items-center justify-center flex">
+                                  <div
+                                    className={`text-lg font-bold !text-[18px] text-theme ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
                                   >
                                     {bookmark.domain}
-                                  </h4>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <span className="term-count-badge">
-                                  {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-                                  {(glossaryStats[bookmark.domain] &&
-                                  glossaryStats[bookmark.domain].term_count > 0
-                                    ? glossaryStats[bookmark.domain].term_count
-                                    : bookmark.term_count) || 0}{' '}
-                                  terms
-                                </span>
-                                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                              <div className="flex items-center space-x-2 gap-5">
+                                <div>
+                                  <span className="term-count-badge">
+                                    {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
+                                    {(glossaryStats[bookmark.domain] &&
+                                    glossaryStats[bookmark.domain].term_count >
+                                      0
+                                      ? glossaryStats[bookmark.domain]
+                                          .term_count
+                                      : bookmark.term_count) || 0}{' '}
+                                    {t('glossaryPage2.terms')}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                             {/* Date removed as requested */}
@@ -1971,12 +1952,6 @@ const WorkspacePage: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    // Handle view glossary action
-                                    console.log(
-                                      'View glossary:',
-                                      bookmark.domain,
-                                    );
-                                    // Navigate to glossary page with selected glossary
                                     void navigate('/glossary', {
                                       state: {
                                         selectedGlossaryName: bookmark.domain,
@@ -1986,10 +1961,8 @@ const WorkspacePage: React.FC = () => {
                                   className="create-new-btn"
                                   title="View glossary"
                                   style={{
-                                    backgroundColor: isDarkMode
-                                      ? '#1b1d28ff'
-                                      : '#e5e7eb', // dark blue in dark mode, grey in light mode
-                                    color: isDarkMode ? 'white' : '#363b4d',
+                                    backgroundColor: '#f00a50',
+                                    color: 'white',
                                     border: 'none',
                                     fontSize: '0.875rem',
                                     padding: '0.5rem 1rem',
@@ -1997,14 +1970,14 @@ const WorkspacePage: React.FC = () => {
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                      isDarkMode ? '#212431bd' : '#d1d5db';
+                                      '#d91748';
                                   }}
                                   onMouseLeave={(e) => {
                                     e.currentTarget.style.backgroundColor =
-                                      isDarkMode ? '#1b1d28ff' : '#e5e7eb';
+                                      '#f00a50';
                                   }}
                                 >
-                                  View
+                                  {t('view')}
                                 </button>
                                 <button
                                   type="button"
@@ -2048,6 +2021,395 @@ const WorkspacePage: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {activeTab === 'collections' && (
+              <div className="tab-content !bg-[var(--bg-first)]">
+                <div
+                  className="workspace-actions !bg-[var(--bg-first)]"
+                  style={{ marginBottom: '1rem' }}
+                >
+                  {isDeleteMode ? (
+                    <div
+                      className="!bg-[var(--bg-first)]"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={handleDeleteSelectedGroups}
+                        disabled={selectedGroupsForDeletion.length === 0}
+                        className="create-new-btn"
+                        style={{
+                          backgroundColor: '#f00a50',
+                          borderColor: '#f00a50',
+                          color: 'white',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          minHeight: '38px',
+                          opacity:
+                            selectedGroupsForDeletion.length === 0 ? 0.5 : 1,
+                          cursor:
+                            selectedGroupsForDeletion.length === 0
+                              ? 'not-allowed'
+                              : 'pointer',
+                        }}
+                      >
+                        <Trash2
+                          style={{ width: '1.25rem', height: '1.25rem' }}
+                        />
+                        {t('workspace.section20')} (
+                        {selectedGroupsForDeletion.length.toString()})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleExitDeleteMode}
+                        className="cancel-delete-btn"
+                        style={{
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          minHeight: '38px',
+                        }}
+                      >
+                        {t('profile.forms.cancel')}
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className=""
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="create-new-btn"
+                        onClick={handleOpenNewGroupModal}
+                        style={{
+                          backgroundColor: '#f00a50',
+                          borderColor: '#f00a50',
+                          color: 'white',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          minWidth: '150px',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Plus style={{ width: '1.25rem', height: '1.25rem' }} />
+                        <span>{t('workspace.section21')} </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleEnterDeleteMode}
+                        className="create-new-btn"
+                        style={{
+                          backgroundColor: '#f00a50',
+                          borderColor: '#f00a50',
+                          color: 'white',
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.875rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          minWidth: '150px',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Trash2
+                          style={{ width: '1.25rem', height: '1.25rem' }}
+                        />
+                        {t('workspace.section22')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="space-y-8 h-full !bg-[var(--bg-first)]">
+                    <div className="flex-col sm:flex-row">
+                      <div className="flex-1">
+                        <Search className="absolute" />
+                        <input
+                          type="text"
+                          placeholder={t('workspace.section23')}
+                          className="search-input"
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      className="space-y-6 flex-1 pr-2 saved-terms-scrollbar !bg-[var(--bg-first)]"
+                      style={{
+                        maxHeight: '414px',
+                        overflowY: 'auto',
+                        scrollbarWidth: 'thin',
+                        marginTop: '-30px',
+                      }}
+                    >
+                      <style>{`
+                        .saved-terms-scrollbar::-webkit-scrollbar {
+                          width: 6px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-track {
+                          background: ${isDarkMode ? '#374151' : '#f1f5f9'};
+                          border-radius: 3px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-thumb {
+                          background: ${isDarkMode ? '#6b7280' : '#cbd5e1'};
+                          border-radius: 3px;
+                        }
+                        .saved-terms-scrollbar::-webkit-scrollbar-thumb:hover {
+                          background: ${isDarkMode ? '#9ca3af' : '#94a3b8'};
+                        }
+                      `}</style>
+                      {Object.entries(groupedTerms)
+                        .filter(
+                          ([groupName]) =>
+                            groupName !== 'All Terms' && groupName !== 'all',
+                        )
+                        .sort(([a], [b]) => {
+                          return a.localeCompare(b);
+                        })
+                        .map(([groupName, terms]) => (
+                          <div
+                            key={groupName}
+                            className="workspace-group-card saved-terms-scrollbar "
+                          >
+                            <div className="group-header flex flex-row justify-center items-center">
+                              <div
+                                className="group-info"
+                                onClick={() => {
+                                  if (!isDeleteMode) {
+                                    toggleGroup(groupName);
+                                  }
+                                }}
+                              >
+                                {isDeleteMode &&
+                                groupName !== 'all' &&
+                                groupName !== 'All Terms' ? (
+                                  <div className="flex items-center space-x-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedGroupsForDeletion.includes(
+                                        groupName,
+                                      )}
+                                      onChange={() => {
+                                        handleToggleGroupSelection(groupName);
+                                      }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                      }}
+                                      className="group-checkbox"
+                                    />
+                                    <FolderPlus className="group-icon" />
+                                  </div>
+                                ) : (
+                                  <FolderPlus className="group-icon" />
+                                )}
+                                <h3 className="group-title">{groupName}</h3>
+                                <span className="term-count">
+                                  {terms.length} terms
+                                </span>
+                              </div>
+                              <div className="group-actions">
+                                {!isDeleteMode && (
+                                  <>
+                                    {groupName !== 'All Terms' && (
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          const group = workspaceGroups.find(
+                                            (g) => g.name === groupName,
+                                          );
+                                          if (group) {
+                                            handleRenameGroup(
+                                              group.id,
+                                              group.name,
+                                            );
+                                          }
+                                        }}
+                                        className="group-action-btn"
+                                        title="Rename group"
+                                      >
+                                        <Edit2 className="w-4 h-4" />
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        toggleGroup(groupName);
+                                      }}
+                                    >
+                                      {expandedGroups[groupName] ? (
+                                        <ChevronUp className="chevron-icon" />
+                                      ) : (
+                                        <ChevronDown className="chevron-icon" />
+                                      )}
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {expandedGroups[groupName] && (
+                              <div className="group-content">
+                                {terms.map((term) => (
+                                  <div key={term.id} className="term-item">
+                                    <div className="term-header">
+                                      <div className="term-info">
+                                        <div className="term-title-row">
+                                          <h4 className="term-title">
+                                            {term.term}
+                                          </h4>
+                                          <div className="term-badges">
+                                            <span className="term-language-badge">
+                                              {term.language}
+                                            </span>
+                                            {term.domain && (
+                                              <span className="category-tag">
+                                                {term.domain}
+                                              </span>
+                                            )}
+                                          </div>
+                                        </div>
+                                        {term.definition && (
+                                          <p className="term-definition">
+                                            {term.definition}
+                                          </p>
+                                        )}
+
+                                        <div className="notes-section">
+                                          {editingNotes === term.id ? (
+                                            <div className="notes-editor">
+                                              <textarea
+                                                value={noteText}
+                                                onChange={(e) => {
+                                                  setNoteText(e.target.value);
+                                                }}
+                                                placeholder="Add your notes here..."
+                                                className="notes-textarea"
+                                                rows={3}
+                                              />
+                                              <div className="notes-actions">
+                                                <button
+                                                  type="button"
+                                                  onClick={() => {
+                                                    void handleSaveNote(
+                                                      term.id,
+                                                    );
+                                                  }}
+                                                  className="save-btn"
+                                                  style={{
+                                                    backgroundColor: isDarkMode
+                                                      ? undefined
+                                                      : '#00ceaf16', // pink in light mode
+                                                  }}
+                                                >
+                                                  <Save className="icon" />
+                                                </button>
+                                                <button
+                                                  type="button"
+                                                  onClick={handleCancelNote}
+                                                  className="cancel-btn"
+                                                  style={{
+                                                    backgroundColor: isDarkMode
+                                                      ? undefined
+                                                      : '#f8717148',
+                                                  }}
+                                                >
+                                                  <X className="icon" />
+                                                </button>
+                                              </div>
+                                            </div>
+                                          ) : (
+                                            <>
+                                              {term.notes && (
+                                                <div className="notes-display">
+                                                  <div className="notes-content">
+                                                    <div className="notes-text">
+                                                      <StickyNote className="sticky-note-icon" />
+                                                      <p>{term.notes}</p>
+                                                    </div>
+                                                    <button
+                                                      type="button"
+                                                      onClick={() => {
+                                                        handleAddNote(term.id);
+                                                      }}
+                                                      className="edit-note-btn"
+                                                    >
+                                                      <Edit2 className="edit-icon" />
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className="term-actions">
+                                        {!term.notes &&
+                                          editingNotes !== term.id && (
+                                            <button
+                                              onClick={() => {
+                                                handleAddNote(term.id);
+                                              }}
+                                              type="button"
+                                              className="add-note-btn"
+                                              title="Add note"
+                                            >
+                                              <StickyNote className="icon" />
+                                            </button>
+                                          )}
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            // Show re-group modal functionality
+                                          }}
+                                          className="add-note-btn"
+                                          title="Move to group"
+                                        >
+                                          <Move
+                                            style={{ color: '#00ceaf' }}
+                                            className="icon"
+                                          />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="delete-btn"
+                                          onClick={() => {
+                                            void handleDeleteTerm(term.id);
+                                          }}
+                                          title="Delete bookmark"
+                                        >
+                                          <Trash2 className="icon" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -2058,7 +2420,7 @@ const WorkspacePage: React.FC = () => {
           <div className="modal-container">
             {/* Modal Header */}
             <div className="modal-header">
-              <h3 className="modal-title">Create New Group</h3>
+              <h3 className="modal-title">{t('workspace.section24')}</h3>
               <button
                 type="button"
                 onClick={handleCloseNewGroupModal}
@@ -2070,7 +2432,7 @@ const WorkspacePage: React.FC = () => {
             <div className="modal-body">
               <div className="form-group">
                 <label htmlFor="groupName" className="form-label">
-                  Group Name
+                  {t('workspace.section25')}
                 </label>
                 <input
                   type="text"
@@ -2086,14 +2448,12 @@ const WorkspacePage: React.FC = () => {
                       handleCloseNewGroupModal();
                     }
                   }}
-                  placeholder="Enter group name..."
+                  placeholder={t('workspace.section25')}
                   className="form-input"
                   autoFocus
                 />
               </div>
-              <p className="form-description">
-                Create a new group to organize your saved terms.
-              </p>
+              <p className="form-description">{t('workspace.section26')}</p>
             </div>
 
             {/* Modal Footer */}
@@ -2103,7 +2463,7 @@ const WorkspacePage: React.FC = () => {
                 onClick={handleCloseNewGroupModal}
                 className="cancel-btn"
               >
-                Cancel
+                {t('profile.forms.cancel')}
               </button>
               <button
                 type="button"
@@ -2114,7 +2474,7 @@ const WorkspacePage: React.FC = () => {
                 className={`create-btn ${!newGroupName.trim() ? 'disabled' : ''}`}
               >
                 <Plus className="plus-icon" />
-                Create Group
+                {t('workspace.section21')}
               </button>
             </div>
           </div>
@@ -2127,7 +2487,7 @@ const WorkspacePage: React.FC = () => {
           <div className="modal-container" style={{ maxWidth: '600px' }}>
             {/* Modal Header */}
             <div className="modal-header">
-              <h3 className="modal-title">Select Terms to Add to Group</h3>
+              <h3 className="modal-title">{t('workspace.section27')}</h3>
               <button
                 type="button"
                 onClick={handleCloseTermSelectionModal}
@@ -2137,10 +2497,7 @@ const WorkspacePage: React.FC = () => {
               </button>
             </div>
             <div className="modal-body">
-              <p className="form-description">
-                Select the terms you want to add to your new group. You can
-                select multiple terms.
-              </p>
+              <p className="form-description">{t('workspace.section28')}</p>
 
               {/* Terms List with improved scrollbar */}
               <div
@@ -2201,7 +2558,8 @@ const WorkspacePage: React.FC = () => {
                             marginTop: '0.25rem',
                           }}
                         >
-                          Domain: {term.domain} | Language: {term.language}
+                          {t('searchPage.domain')}: {term.domain} |{' '}
+                          {t('searchPage.language')}: {term.language}
                         </div>
                       </div>
                     </div>
@@ -2214,8 +2572,7 @@ const WorkspacePage: React.FC = () => {
                       color: '#6b7280',
                     }}
                   >
-                    No bookmarked terms available. Bookmark some terms first to
-                    add them to groups.
+                    {t('workspace.section29')}
                   </div>
                 )}
               </div>
@@ -2241,7 +2598,7 @@ const WorkspacePage: React.FC = () => {
                 onClick={handleCloseTermSelectionModal}
                 className="cancel-btn"
               >
-                Cancel
+                {t('profile.forms.cancel')}
               </button>
               <button
                 type="button"
@@ -2253,8 +2610,8 @@ const WorkspacePage: React.FC = () => {
               >
                 <Plus className="plus-icon" />
                 {loading
-                  ? 'Adding...'
-                  : `Add ${selectedTermIds.length.toString()} Term(s)`}
+                  ? t('workspace.section31')
+                  : `${t('workspace.section30')} ${selectedTermIds.length.toString()} ${t('workspace.section32')}`}
               </button>
             </div>
           </div>
@@ -2267,7 +2624,7 @@ const WorkspacePage: React.FC = () => {
           <div className="modal-container" style={{ maxWidth: '500px' }}>
             {/* Modal Header */}
             <div className="modal-header">
-              <h3 className="modal-title">Move Term to Group</h3>
+              <h3 className="modal-title">{t('workspace.section33')}</h3>
               <button
                 type="button"
                 onClick={handleCloseMoveTermModal}
@@ -2278,8 +2635,9 @@ const WorkspacePage: React.FC = () => {
             </div>
             <div className="modal-body">
               <p className="form-description">
-                Move "{termToMove.termName}" from "{termToMove.currentGroup}" to
-                a different group.
+                {t('workspace.section34')} "{termToMove.termName}"{' '}
+                {t('workspace.section35')} "{termToMove.currentGroup}"{' '}
+                {t('workspace.section36')}
               </p>
 
               {/* Groups List */}
@@ -2294,9 +2652,8 @@ const WorkspacePage: React.FC = () => {
                   padding: '0.5rem',
                 }}
               >
-                {/* All Terms option */}
                 <div
-                  className={`group-option ${termToMove.currentGroup === 'All Terms' ? 'disabled' : ''}`}
+                  className={`group-option justify-center items-center flex${termToMove.currentGroup === 'All Terms' ? 'disabled' : ''}`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -2327,12 +2684,12 @@ const WorkspacePage: React.FC = () => {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: '600' }}>All Terms</div>
                     <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                      Remove from specific groups
+                      {t('workspace.section37')}
                     </div>
                   </div>
                   {termToMove.currentGroup === 'All Terms' && (
                     <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                      Current
+                      {t('workspace.section38')}
                     </span>
                   )}
                 </div>
@@ -2377,7 +2734,7 @@ const WorkspacePage: React.FC = () => {
                     </div>
                     {termToMove.currentGroup === group.name && (
                       <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                        Current
+                        {t('workspace.section38')}
                       </span>
                     )}
                   </div>
@@ -2392,7 +2749,7 @@ const WorkspacePage: React.FC = () => {
                 onClick={handleCloseMoveTermModal}
                 className="cancel-btn"
               >
-                Cancel
+                {t('profile.forms.cancel')}
               </button>
             </div>
           </div>
@@ -2407,7 +2764,7 @@ const WorkspacePage: React.FC = () => {
             <div className="modal-header">
               <h3 className="modal-title">
                 <Edit2 className="w-5 h-5 inline mr-2" />
-                Rename Group
+                {t('workspace.section39')}
               </h3>
               <button
                 type="button"
@@ -2420,7 +2777,7 @@ const WorkspacePage: React.FC = () => {
             <div className="modal-body">
               <div className="form-group">
                 <label htmlFor="renameGroupName" className="form-label">
-                  Group Name
+                  {t('workspace.section25')}
                 </label>
                 <input
                   type="text"
@@ -2442,7 +2799,7 @@ const WorkspacePage: React.FC = () => {
                 />
               </div>
               <p className="form-description">
-                Rename "{groupToRename.currentName}" to a new name.
+                {t('workspace.section40')} "{groupToRename.currentName}".
               </p>
             </div>
 
@@ -2453,7 +2810,7 @@ const WorkspacePage: React.FC = () => {
                 onClick={handleCloseRenameGroupModal}
                 className="cancel-btn"
               >
-                Cancel
+                {t('profile.forms.cancel')}
               </button>
               <button
                 type="button"
@@ -2464,7 +2821,9 @@ const WorkspacePage: React.FC = () => {
                 className={`create-btn ${!newGroupNameForRename.trim() || loading ? 'disabled' : ''}`}
               >
                 <Edit2 className="plus-icon" />
-                {loading ? 'Renaming...' : 'Rename Group'}
+                {loading
+                  ? `${t('workspace.section41')}...`
+                  : t('workspace.section40')}
               </button>
             </div>
           </div>
@@ -2490,14 +2849,14 @@ const WorkspacePage: React.FC = () => {
                 className="cancel-button"
                 onClick={confirmationModal.onCancel}
               >
-                Cancel
+                {t('profile.forms.cancel')}
               </button>
               <button
                 type="button"
                 className="confirm-button"
                 onClick={confirmationModal.onConfirm}
               >
-                Delete
+                ${t('termAdditions.delete')}
               </button>
             </div>
           </div>

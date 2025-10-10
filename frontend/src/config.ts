@@ -78,6 +78,7 @@ interface APIEndpoints {
   suggest: string;
   getAllTermsForOffline: string;
   descriptiveAnalytics: string;
+  languageNetwork: string;
   categoryFrequency: (language?: string) => string;
   languageCoverage: string;
   popularTerms: (limit?: number, domain?: string, language?: string) => string;
@@ -281,6 +282,10 @@ export const API_ENDPOINTS: APIEndpoints = {
   languageCoverage: endpoint(
     ANALYTICS_SERVICE_URL,
     '/api/v1/analytics/descriptive/language-coverage',
+  ),
+  languageNetwork: endpoint(
+    ANALYTICS_SERVICE_URL,
+    '/api/v1/analytics/advanced/language-network',
   ),
   popularTerms: (limit?: number, domain?: string, language?: string) => {
     const params = new URLSearchParams();

@@ -1,7 +1,7 @@
 {
   "settings": {
     "title": "Tinhlelo",
-    "subtitle": "Lungisa indlela yakho yekusebentisa i-Marito",
+    "subtitle": "Lungisa indlela yakho yekusebentisa i-Mafoko",
     "selectLanguage": "Khetsa lulwimi lolufunako",
     "profile": {
       "title": "Iphrofayili ne-Akhawunti",
@@ -51,7 +51,7 @@
     "loginWithGoogle": "Ngena nge-Google",
     "noAccount": "Awunayo i-akhawunti?",
     "registerLink": "Bhalisa",
-    "welcomeImageAlt": "Kwemukela Kungena ku-Marito",
+    "welcomeImageAlt": "Kwemukela Kungena ku-Mafoko",
     "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
     "errorTokenMissing": "Ungene ngemphumelelo, kodvwa kute ithokheni letfolakele. Ngicela utsintse lusito.",
     "errorDefault": "Kungena kuhlulekile. Ngicela uhlole imininingwane yakho.",
@@ -62,7 +62,7 @@
   },
   "registrationPage": {
     "title": "CALA MANJE",
-    "subtitle": "Yakha i-akhawunti yakho ye-Marito.",
+    "subtitle": "Yakha i-akhawunti yakho ye-Mafoko.",
     "firstNameLabel": "Ligama Lekucala",
     "firstNamePlaceholder": "Faka ligama lakho lekucala",
     "lastNameLabel": "Sibongo",
@@ -81,7 +81,7 @@
     "createWithGoogle": "Yakha I-akhawunti nge-Google",
     "haveAccount": "Sewuvele unayo i-akhawunti?",
     "loginLink": "Ngena",
-    "welcomeImageAlt": "Kwemukela ku-Marito",
+    "welcomeImageAlt": "Kwemukela ku-Mafoko",
     "dsfsiLogoAlt": "Luphawu lwe-DSFSI",
     "errorPasswordsDoNotMatch": "Emaphasiwedi awahambelani.",
     "errorAgreeToTerms": "Kufanele uvume imigomo nemibandzela.",
@@ -105,7 +105,7 @@
     }
   },
   "dashboard": {
-    "welcome": "Wemukelekile ku-Marito",
+    "welcome": "Wemukelekile ku-Mafoko",
     "welcomeBack": "Wemukelekile futsi",
     "userName": "Ligama Lemsebentisi",
     "userId": "Inombolo Yemsebentisi",
@@ -122,17 +122,17 @@
     "communityActivity": "Imisebenti Yemmango",
     "hideActivity": "Fihla Imisebenti",
     "viewAllActivity": "Buka Yonkhe Imisebenti",
-    "title": "Hlanganani hi Marito",
+    "title": "Hlanganani hi Mafoko",
     "loadingProfile": "Yi loda profayili...",
     "goToProfile": "Ya eka tluka ra profayili",
-    "discoverRandomTerms": "Kuma Marito ya Khombo",
+    "discoverRandomTerms": "Kuma Mafoko ya Khombo",
     "getNewTerms": "Kuma marito mantshwa ya khombo",
     "loadingTerms": "Yi loda marito...",
     "noTermsAvailable": "Ku hava marito lama kumekaka",
     "browseCategoryGlossary": "Languta {{category}} nxaxamelo wa marito",
     "aboutMarito": {
-      "intro": "Rito 'Marito' ri huma eka Xitsonga, ri vula 'marito' kumbe 'mavito'. Lexi i xikumiwa xa webu lexi ya emahlweni lexi hlanganisaka ndhawu ya le xikarhi ka ndhavuko wa ririmi wa Afrika Dzonga na ku fikelela ka xidijitali xa sweswi. Vatiwa va tindzimi, valavi va NLP, na vutivi bya tindzimi va nga tirhisa Marito tanihi pulatifomo yo hlanganisiwa ku lavisisa, ku hoxa matshalatshala, na ku hlayisa swinyorwa swa marito ya tindzimi to hambana, mabuku ya marito, na mabenge ya marito eka tindzimi ta 11 ta ximfumo ta Afrika Dzonga.",
-      "mission": "Marito yi tirha kahle hinkwako eka inthanete na handle ka inthanete, yi nyika matimba vaaki ku fikelela switirhisiwa swa tindzimi swo fela, ku nyika mavonelo, na ku tirhisana ku aka ma-lexicons yo tiya eka tindzimi leti nga na switirhisiwa swintsongo. Pulatifomo leyi i xiphemu xa ntirho lowu ya emahlweni lowu endliwaka hi DSFSI (Data Science for Social Impact) eka Yunivesiti ya Pretoria ku endla leswaku switirhisiwa swa tindzimi swi fikeleleka vaaki hinkwavo na ku susa emahlweni dylondzo ya ku tirhisa ririmi ra ntumbuluko eka tindzimi ta Afrika.",
+      "intro": "Rito 'Mafoko' ri huma eka Xitsonga, ri vula 'marito' kumbe 'mavito'. Lexi i xikumiwa xa webu lexi ya emahlweni lexi hlanganisaka ndhawu ya le xikarhi ka ndhavuko wa ririmi wa Afrika Dzonga na ku fikelela ka xidijitali xa sweswi. Vatiwa va tindzimi, valavi va NLP, na vutivi bya tindzimi va nga tirhisa Marito tanihi pulatifomo yo hlanganisiwa ku lavisisa, ku hoxa matshalatshala, na ku hlayisa swinyorwa swa marito ya tindzimi to hambana, mabuku ya marito, na mabenge ya marito eka tindzimi ta 11 ta ximfumo ta Afrika Dzonga.",
+      "mission": "Mafoko yi tirha kahle hinkwako eka inthanete na handle ka inthanete, yi nyika matimba vaaki ku fikelela switirhisiwa swa tindzimi swo fela, ku nyika mavonelo, na ku tirhisana ku aka ma-lexicons yo tiya eka tindzimi leti nga na switirhisiwa swintsongo. Pulatifomo leyi i xiphemu xa ntirho lowu ya emahlweni lowu endliwaka hi DSFSI (Data Science for Social Impact) eka Yunivesiti ya Pretoria ku endla leswaku switirhisiwa swa tindzimi swi fikeleleka vaaki hinkwavo na ku susa emahlweni dylondzo ya ku tirhisa ririmi ra ntumbuluko eka tindzimi ta Afrika.",
       "teamCredit": "Yi akiwe hi ku tinyungubyisa hi Velox",
       "learnMoreDSFSI": "Dyondza swo tala hi DSFSI"
     },
@@ -576,27 +576,27 @@
     "progress": "kuqhubeka",
     "loadingAchievements": "Iyafaka timphumelelo",
     "of": "ya",
-    "termPioneer": {
+    "term_pioneer": {
       "title": "Umphayona Wamagama",
       "desc": "Faka emagama akho lali-10 ekucaleni kuhlobo lwamagama"
     },
-    "communityContributor": {
+    "community_contributor": {
       "title": "Umnikeli Wemphakatsi",
       "desc": "Bhala emavi langema-25 etimphakatsini tamagama"
     },
-    "crowdFavorite": {
+    "crowd_favorite": {
       "title": "Loyintandokati Yemphakatsi",
       "desc": "Yemukela emavoti langema-100 ekunikeleni kwakho"
     },
-    "multilingualMaster": {
+    "multilingual_master": {
       "title": "Ingcweti Yemalulwimi Lamanyenti",
       "desc": "Nikela kumabhuku emagama emalulwimi lamahlanu lehlukene"
     },
-    "consistencyChampion": {
+    "consistency_champion": {
       "title": "Inchampiyoni Yekuchubeka",
       "desc": "Sebenta emalanga langema-30 elandelanayo ngaphandle kwekuhluleka"
     },
-    "languageGuardian": {
+    "language-guardian": {
       "title": "Umlondvoloti Welulwimi",
       "desc": "Vumela kunikelwa kwakho lokungema-50 kuhlolwe bachwepheshe"
     }
@@ -607,6 +607,235 @@
     "Streak Keeper": "Umlondvoloti Wechungechunge",
     "Maintain a login streak of 3 consecutive days": "Gcina uchungechunge lwekungenela ngemvume etinsukwini letintsatfu letilandzelanayo",
     "Active Commenter": "Umphawuli Losebentako",
-    "Write 4 comments on terms this week": "Bhala emavi lamane ngemagama kuleliviki"
+    "Write 4 comments on terms this week": "Bhala emavi lamane ngemagama kuleliviki",
+    "Term Creator": "Umakhi Wamagama",
+    "Maintain a login streak of 2 consecutive days": "Gcina uchungechunge lwekungenela ngemvume etinsukwini letimbili letilandzelanayo",
+    "Submit 6 new terms this week": "Tfumela emagama lamasha lasitfupha kuleliviki"
+  },
+  "termHelpPage": {
+    "onThisPage": "Kule likhasi",
+    "title": "Kwekucondzisa Incwadzi Yemagama",
+    "intro": "I-<strong>Incwadzi Yemagama</strong> yindawo lapho ungaphenya khona tincazelo temagama ngemilomo leminyenti kulimi lolungemashumi lanyenti nanye lolusemtsetfweni eNingizimu Afrika. Ivumela kuphenya ngekushesha, kukhetsa ngelulwimi noma ngendzawo, kanye nekusebenta ngaphandle kwe-inthanethi uma incwadzi yemagama seyilandiwe ngaphambili.",
+
+    "overviewTitle": "Kwekucondzisa Incwadzi Yemagama",
+    "overviewBody": "Incwadzi yemagama ivumela umsebenti wekufuna tincazelo temagama ngemilomo leminyenti kululwimi lolusemtsetfweni eNingizimu Afrika.",
+
+    "whatIsATermTitle": "Lisho Lisho Linjani?",
+    "whatIsATermBody": "Lisho ngalinye eMarito lihlanganisa lemininingwane lelandzelako:",
+    "termFields": {
+      "term": "Lisho: Ligama noma lihumusho.",
+      "language": "Lulwimi: Lolunye lwekulimi lolungemashumi lanyenti nanye lolusemtsetfweni eNingizimu Afrika.",
+      "domain": "Indzawo: Sifundvo noma umkhakha walesihloko.",
+      "definition": "Inchazelo: Incazelo lecacile yencenye yelisho.",
+      "related": "Tisho Letihlobene: Tixhumanisi netisho letinekwahlobana noma letihlobene nencenye."
+    },
+
+    "languagesTitle": "Tilwimi Letisekelwako",
+    "languagesBody": "Marito isekela tonkhe tilwimi letilishumi nanye letisemthethweni eNingizimu Afrika. Ungasebentisa kukhetsa kuhlunga ngekulwimi linye noma uphenye tonkhe tilwimi.",
+    "languagesList": [
+      "Afrikaans",
+      "Sisingisi",
+      "isiNdebele",
+      "isiXhosa",
+      "isiZulu",
+      "Sesotho",
+      "Sepedi",
+      "Setswana",
+      "Siswati",
+      "Tshivenda",
+      "Xitsonga"
+    ],
+
+    "searchTitle": "Kuphenya Tisho",
+    "searchSubheadingHow": "Kusebenta Kwendlela Yekuphenya",
+    "searchBody1": "Umsebenti wekuphenya eMarito usita kufuna tisho ngemalulwimi onkhe lalishumi nanye lolusemtsetfweni eNingizimu Afrika.",
+    "searchBody2": "Ngesikhatsi ubhala, Marito iyaphenya ngalesikhatsi, ibuyisele imiphumela ngesikhathi sangempela.",
+    "searchFields": {
+      "term": "Lisho: Ligama noma lihumusho lelimelela umqondo lothile.",
+      "definition": "Inchazelo: Tisho letineinchazelo letihlanganisa emagama lofunako nato titawe kubonakala.",
+      "filters": "Kuhluza: Khetsa ngelulwimi noma ngendzawo."
+    },
+    "searchSubheadingLive": "Timphakamiso Ngesikhatsi Sangempela",
+    "searchLiveBody": "Marito ingaphakamisa tisho letihlobene noma tiphakamiso ngesikhatsi ubhala.",
+    "searchSubheadingSensitivity": "Kusondzela Kwekuphenya",
+    "searchSensitivityBody": "Ngokuvamile, Marito iyaphenya ngendlela lenembile noma lecishe inembile, kodvwa ungase uvumele kuphenya lokungemakhaza (fuzzy search).",
+    "searchSubheadingResultCards": "Emakhadi Emiphumela",
+    "searchResultBody": "Tisho tiboniswa emakhadini lakhombisa ligama, lulwimi, indzawo, inchazelo, kanye netinhlavu tekukhetsa.",
+
+    "filtersTitle": "Kukhetsa Tekuhluza",
+    "filtersBody": "Kunciphisa imiphumela, sebenzisa tihluzi letisemkhatsini wekhasi lekuphenya.",
+    "filtersList": {
+      "language": "Lulwimi: Nciphisa imiphumela kululwimi lunye kuphela.",
+      "domain": "Indzawo: Gxila emitfombeni lefanako njengeMfundo, Lendzawo yeTheknoloji noma Tembilo.",
+      "fuzzy": "Kuphenya Lokungemakhaza: Tfuna tisho noma kukhona tiphoso tekupela noma kwehlukana."
+    },
+
+    "viewTitle": "Kubonisisa Tisho",
+    "viewBody": "Cindzetela inkinobho ye-'Buka' ekhadi lelisho kuvula inchazelo lenkhulu bese uphenya tisho letihlobene.",
+
+    "offlineTitle": "Kusebenta Ngaphandle Kwe-Inthanethi",
+    "offlineBody": "Marito ingasetjentiswa ngaphandle kwe-inthanethi uma incwadzi yemagama seyilandiwe ngaphambili.",
+    "offlineHow": "Indlela Yekulandza",
+    "offlineSteps": [
+      "Hamba ekhasini leDikishinari.",
+      "Khetsa tinkhwadzi temagama lotifuna kutilandza.",
+      "Cindzetela 'Landza' kuwatigcina esisetjentisweni sakho."
+    ],
+    "offlineEnd": "Ngemva kwekulandza, tisho letikuleso sicelo temagama titawuhlala tikhona ngisho nawungaxhunyiwe kwi-inthanethi."
+  },
+  "workspaceHelpPage": {
+    "title": "Go tlhaloganya Workspace",
+    "intro": "<strong>Workspace</strong> e go letla go boloka mafoko le diglosari tse o nang le kgatlhego mo go tsone, go di rulaganya mo ditlhopheng, le go laola ditlhopha tseo. Ke kwa o ka salang morago ka teng kgatelopele ya ditlhahiso tsa gago tsa mafoko le go boloka dikwalo tsa gago tsa tiro.",
+    "groupsTitle": "Go Laola Ditlhopha",
+    "groupsBody": "Ditlhopha di thusa go rulaganya mafoko a a bolokilweng. O ka dira ditlhopha tse disha, wa di reetsa maina a mangwe, kgotsa wa phimola tse o sa di tlhokeng.",
+    "groupsSteps": [
+      "Dira Setlhopha: Tobetsa konopo ya <em>Setlhopha se Sesha</em>, tsenya leina, tlhopha mafoko, mme o netefatse ka go tobetsa <em>Oketsa Mafoko</em>.",
+      "Tlotla Setlhopha: Tobetsa <em>letshwao la pentšele</em> fa thoko ga leina la setlhopha, fetola leina, mme o netefatse ka go tobetsa <em>Fetola Leina</em>.",
+      "Phimola Setlhopha: Tobetsa <em>letshwao la go phimola</em>, tlhopha ditlhopha tse o batlang go di tima, mme o netefatse."
+    ],
+    "moveTitle": "Go Fetisetsa Mafoko Gare ga Ditlhopha",
+    "moveBody": "Go fetisetsa lefoko go setlhopha se sengwe, tobetsa <em>letshwao la go fetisetsa</em> fa thoko ga lefoko mme o tlhophe setlhopha se sesha.",
+    "notesTitle": "Go Dirisa Dikwalo",
+    "notesBody": "Dikwalo di go letla go oketsa bokao mo mafokong a a bolokilweng. O ka dira, fetola, kgotsa phimola dikwalo mo Workspace.",
+    "notesSteps": [
+      "Oketsa Lokwalo: Tobetsa <em>letshwao la lokwalo</em> fa thoko ga lefoko, kwala lokwalo, mme o tobetsa <em>Boloka</em>.",
+      "Fetola Lokwalo: Tobetsa <em>letshwao la pentšele</em>, fetola mafoko, mme o tobetsa <em>Boloka</em>.",
+      "Phimola Lokwalo: Dirisa kgetho ya go phimola go tima dikwalo tse di sa tlhokegang."
+    ],
+    "deleteTitle": "Go Phimola Mafoko le Diglosari",
+    "deleteBody": "O ka tima dilo mo Workspace nako nngwe le nngwe:",
+    "deleteSteps": [
+      "Phimola Lefoko: Eya mo <em>Mafokong a a Bolokilweng</em>, tobetsa <em>letshwao la go phimola</em>, mme o netefatse.",
+      "Phimola Glosari: Eya mo <em>Diglosaring tse di Bolokilweng</em>, tobetsa kgetho ya go tima, mme o netefatse."
+    ]
+  },
+  "common": {
+    "back": "Morago",
+    "onThisPage": "Mo tsebeng e"
+  },
+  "settingsHelpPage": {
+    "title": "Dipehelo le Boikamahanyo",
+    "intro": "Sebelisa leqephe la <strong>Dipehelo</strong> ho fetola dikgetho tsa hao — ho kenyeletsa sehlooho, dintlha tsa profaele, le phihlello — ho etsa boiphihlelo bo botle ka ho fetisisa bakeng sa hao.",
+    "onThisPage": "Leqepheng lena",
+    "modesTitle": "Ho Fetola Pakeng tsa Mokhoa o Khanyang le o Monyenyane",
+    "modesBody": "Mafoko e o dumella ho fetola kapele pakeng tsa <strong>mokhoa o khanyang</strong> le <strong>mokhoa o lefifi</strong> ho latela seo o se ratang le tikoloho ya hao. Tshebetso ena e fumaneha maqephe ohle mme e ntlafatsa sebopeho hang-hang ntle le ho sitisa mosebetsi wa hao.",
+    "modesSteps": [
+      "Fumana Konopo: Batla letshwao la letsatsi/khoeli hukung e ka tlase le letsohong le letshoto.",
+      "Fetola Mokhoa: Tobetsa letshwao ho fetola hang-hang pakeng tsa Mokhoa o Khanyang le o Lefifi."
+    ],
+    "profileTitle": "Ho Ntlafatsa Profaele ya Hao",
+    "profileBody": "O ka ntlafatsa <strong>lebitso</strong>, <strong>imeile</strong>, kapa <strong>phasewete</strong> neng kapa neng ho tloha diphehong tsa profaele ya hao. Phetoho e nngwe le e nngwe e hloka netefatso bakeng sa tshireletso.",
+    "profileSteps": [
+      "Ntlafatsa Lebitso: Tobetsa <em>Fetola Lebitso</em>, kenya lebitso le letjha, netefatsa ka phasewete ya hao, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Imeile: Tobetsa <em>Fetola Imeile</em>, kenya aterese e ntjha, netefatsa ka phasewete, mme o tobetse <em>Boloka</em>.",
+      "Ntlafatsa Phasewete: Tobetsa <em>Fetola Phasewete</em>, kenya phasewete e ntjha, netefatsa, mme o tobetse <em>Boloka</em>."
+    ],
+    "accessibilityTitle": "Dipehelo tsa Phihlello",
+    "accessibilityBody": "Mafoko e fana ka dikgetho tse fapaneng tsa phihlello hore o ka ikamahanya le lenaneo ho latela ditlhoko tsa hao. O ka fetola <strong>puo</strong>, <strong>boholo ba mongolo</strong>, <strong>sebaka</strong>, le <strong>phapang ya mebala</strong> ka ho toba ho menu ya dipehelo.",
+    "accessibilitySteps": [
+      "Fetola Puo ya Lenaneo: Bula lenane la ho theoha mme o kgethe puo eo o e ratang.",
+      "Bulela Mokgwa wa Phapang e Phahameng: Tobetsa <em>High Contrast toggle</em> ho fetola mokgwa wa mebala e pharalletseng."
+    ]
+  },
+  "leaningPathHelp": {
+    "title": "Kwatiwa Kwemgudu WeMfundo",
+    "section1": "Lusito lwe-Learning Path lukuvumela kutsi wakhe umgudu lowuhlelwe kahle wekufundza lulwimi lolusemthethweni lwaseNingizimu Afrika. Ngokukhetsa lulwimi naletinsita lofuna kutifundza, ungacondza indlela lehlukanisiwe kunekuhlola ngendlela lengahlelekile.",
+    "section2": "Umugudu ngulowo nalowo wemfundvo uhlangene nemagama, tisebenti tekucinisekisa, kanye nekulandzela inqubekela phambili kutsi uhlale ukhutsatekile futsi ulinganise kahle.",
+    "section3": "Siphiko sakho sekubuka asisekeli lelabeli levidiyo.",
+    "section4": "Ngemva kwekutsi ukhetse lulwimi, utawucelwa kutsi ukhetse i-glossary. I-glossary ngayinye ihlelwe ngedomeyini (Imfundvo, Timpilo, Theknoloji) kutsi ugxile emagameni abaluleke kakhulu kuwe.",
+    "section4Title": "Kukhetsa I-Glossary",
+    "section5": "Uma i-glossary yakho isisethiwe, ungakhetsa indlela lofuna kufundza ngayo",
+    "section6": "Tivivinyo Tekuzilolongela",
+    "section7": "Phendvula imibuto kutsi uhlolisise lwati lwakho futsi uqinisekise lokufundzile.",
+    "section8": "Emakhadi EkuFundza",
+    "section9": "Sebentisa emakhadi kufundza nekukhumbula emagama ngesivinini sakho.",
+    "section10": "Kufundza Ngetivivinyo Nemakhadi",
+    "section11": "Kulandzela Inqubekela Phambili Yakho",
+    "section12": "Learning Path ilandzela umsebenti wakho kutsi ubone kutsi sewuhambe kangakanani. Inqubekela phambili iboniswa kanye nemaphesenti emphakatsi wakho, kwenta kube lula kutsi uhlale ukhutsatekile.",
+    "section13": "Hlanganisa emgudu wemfundvo netinselelo temaviki kanye netincomo kutsi utfole tibheji ngenkathi uthuthukisa lwati lwakho lwemilomo."
+  },
+  "helpPage2": {
+    "section1": "Go Thoma",
+    "section2": "Tataiso ya mohato ka mohato ya go hlama akhaonto, go tsena, le go sepela ka setšhaba lekgetlo la mathomo.",
+    "section3": "Tšhomišano ya Setšhaba",
+    "section3Desc": "Ithute ka go romela, go tlogela ditlhaloso, le go šoma mmogo le ba bangwe o šomiša didiriswa tša setšhaba tša bjalo ka go fa ditlhopho le dipoledišano.",
+
+    "dictionaryTitle": "Pukuntšu",
+    "dictionaryDesc": "Nyaka mantšu ka dipuo tše di fapanego, bulela patlo e e sa nepahalago, gomme o fetole dipeakanyo tša pukuntšu ya gago.",
+
+    "glossaryTitle": "Glossary",
+    "glossaryDesc": "Rulaganya, hlopha, le go romela di-glossary ka sehlopha, lefapha, goba polokelo ya phetolelo.",
+
+    "workspaceTitle": "Sebaka sa Mošomo",
+    "workspaceDesc": "Boloka le go laola mantšu le di-glossary tša gago, latela dikgopelo, gomme o šome mmogo o šomiša dingwalo le dihlopha.",
+
+    "settingsTitle": "Dipeakanyo le Go Ikgethela",
+    "settingsDesc": "Fetola dikgetho tša bjalo ka mokgwa wa lesedi/kapa wa lefifi, dikgetho tša phihlelelo, dintlha tša profaele, le dipeakanyo tše dingwe tša modirisi.",
+
+    "homeTitle": "Letlakala la Lehae",
+    "homeDesc": "Hlahloba mmepe wa Afrika Borwa o šomago, hwetša mantšu a a sa tlwaelegago, gomme o bone kakaretšo ya dikateng tše di kgethegilego.",
+
+    "dashboardTitle": "Boto ya Tshekatsheko",
+    "dashboardDesc": "Latela mešomo ya sethala ka digarafi, lebelela data, gomme o hlahlobe meneelo ya gago lefelong le tee.",
+
+    "learningPathTitle": "Ditsela tša Thuto",
+    "learningPathDesc": "Aga leeto le le rulagantšwego la go ithuta e nngwe ya dipuo tša semmušo tša Afrika Borwa.",
+
+    "feedbackTitle": "Maikutlo",
+    "feedbackDesc": "Romela ditlhahiso, thoriso, goba ditletlebo go sehlopha go thuša go kaonafatša sethala.",
+
+    "faqsTitle": "Dipotšišo tše di Botšišwago Gantši",
+    "faqsDesc": "Dikarabo tša dipotšišo tše di tlwaelegilego ka ga sethala."
+  },
+  "copyURL": "Kopisha URL",
+  "related": "Emagama Lahlobene",
+  "comments": "Timphendvulo",
+  "reply": "Kuphendvula Ku",
+  "addReply": "Faka Imphendvulo",
+  "addComment": "Faka Sikhulumiswano",
+  "noDescription": "Akukho Incazelo Leniketwe",
+  "view": "Buka",
+  "workspace": {
+    "section1": "Awukho ku-inthanethi. Inothi lakho ligciniwe futsi liyawuhlanganiswa uma sewubuyile ku-inthanethi.",
+    "section2": "Kwehlulekile kugcina tibhali. Sicela uphindze uzame.",
+    "section3": "Sicela ungene ngemvume kutsi ususe tibukimaka.",
+    "section4": "Kwehlulekile kususa ligama. Sicela uzame futsi.",
+    "section5": "Sicela ungene ngemvume kutsi ususe emaqembu.",
+    "section6": "Kususwe Ngempumelelo",
+    "section7": "Kwehlulekile kususa emaqembu. Sicela uzame futsi.",
+    "section8": "Susa Emaqembu",
+    "section9": "Ucinisekile kutsi ufuna kususa",
+    "section10": "Lokhu kutawudlulisela onkhe emagama kulamaqembu kuya ku \"Onkhe Emagama\".",
+    "section11": "Sicela ufake libito leliqembu",
+    "section12": "Iqembu lelinelibito lelifanayo selivele likhona",
+    "section13": "Sicela ungene ngemvume kutsi wakhe emaqembu.",
+    "section14": "Ngena",
+    "section15": "Indzawo Yemsebenti",
+    "section16": "Indzawo Yami Yemsebenti",
+    "section17": "Emagama Lagcinwe",
+    "section18": "EmaGlossary Lagcinwe",
+    "section19": "Tiqoqo Tami",
+    "section20": "Susa Lokukhetsekile",
+    "section21": "Iqembu Lisha",
+    "section22": "Susa Emaqembu",
+    "section23": "Sesha Tiqoqo...",
+    "section24": "Yakha Iqembu Lisha",
+    "section25": "Libito Leliqembu",
+    "section26": "Yakha iqembu lelisha kutsi uhlele emagama lagcinwe.",
+    "section27": "Khetsa emagama lofuna kuwafaka eqenjini.",
+    "section28": "Ungakhetsa lamanye lamagama.",
+    "section29": "Awekho emagama labekwe. Bukmarka emagama kuqala.",
+    "section30": "Faka",
+    "section31": "Kuyafakwa...",
+    "section32": "Emagama",
+    "section33": "Susa Ligama Kuqembu",
+    "section34": "Hambisa",
+    "section35": "kusuka",
+    "section36": "kuya eqenjini lehlukile.",
+    "section37": "Susa emaqenjini lamanye",
+    "section38": "Kamanje",
+    "section39": "Rebha Iqembu",
+    "section40": "Rebha",
+    "section41": "Kuyarebhwa"
   }
 }

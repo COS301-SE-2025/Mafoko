@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
 import ForceGraph3D from '3d-force-graph';
+import { API_ENDPOINTS } from '../../config';
 
 interface NetworkNode {
   id: string;
@@ -101,9 +102,8 @@ const LanguageNetwork = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8003/api/v1/analytics/advanced/language-network',
-        );
+        // Use the endpoint from your config file
+        const response = await fetch(API_ENDPOINTS.languageNetwork);
         const data = await response.json();
         setNetworkData(data);
       } catch (error) {
