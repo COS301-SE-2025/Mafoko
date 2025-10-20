@@ -1,164 +1,546 @@
-\documentclass[12pt]{article}
-\usepackage[a4paper, margin=1in]{geometry}
-\usepackage{titlesec}
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
-\usepackage{graphicx}
 \usepackage{enumitem}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{ragged2e}
-\usepackage{float}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
 
-\titleformat{\section}[block]{\large\bfseries}{\thesection.}{0.5em}{}
-\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
-
-% Code listing style
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{codepurple},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codegreen},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Testing Policy - Marito},
+    pdfpagemode=FullScreen,
 }
 
-\lstset{style=mystyle}
+% Code listing setup
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10}
+}
 
-\title{Testing Policy Documentation\\\large\textbf{Marito Multilingual Terminology PWA}}
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Marito Testing Policy}
+\lhead{Team Velox}
+\rfoot{Page \thepage}
+
+\title{\textbf{Testing Policy Documentation} \\ Marito Multilingual Terminology PWA}
 \author{Team Name: Velox}
-\date{September 7, 2025}
+\date{October 20, 2025 \\ Version 2.0}
 
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
+\newpage
+
 \tableofcontents
 \newpage
 
 \section{Introduction}
-This document outlines the testing policy and procedures for the Marito project. It describes our approach to testing, tools used, and the processes we follow to ensure high-quality software delivery.
+This document outlines the comprehensive testing policy and procedures for the Marito project. It describes our approach to testing, tools used, actual test implementations, continuous integration setup, and provides direct access to all testing artifacts including test suites, CI/CD pipelines, and testing reports.
+
+\subsection{Document Purpose}
+This policy serves as a central hub for all testing-related resources, providing:
+\begin{itemize}
+    \item Direct links to testing tools and frameworks
+    \item Access to actual test implementations in the codebase
+    \item CI/CD pipeline configurations and execution reports
+    \item Testing coverage reports and quality metrics
+    \item Testing standards and best practices
+\end{itemize}
 
 \section{Testing Framework}
 
 \subsection{Testing Levels}
-\begin{itemize}
-    \item \textbf{Unit Testing}: Testing individual components and functions
-    \item \textbf{Integration Testing}: Testing interactions between components
-    \item \textbf{End-to-End Testing}: Testing complete user workflows
-    \item \textbf{Performance Testing}: Testing system performance under load
-\end{itemize}
+\begin{description}[style=nextline]
+    \item[Unit Testing] Testing individual components and functions in isolation
+    \item[Integration Testing] Testing interactions between components and services
+    \item[End-to-End Testing] Testing complete user workflows and scenarios
+    \item[Performance Testing] Testing system performance under load conditions
+    \item[API Testing] Testing RESTful API endpoints for correctness and reliability
+\end{description}
 
 \section{Testing Tools}
 
-\subsection{Frontend Testing}
-\begin{itemize}
-    \item \textbf{Vitest}: Primary testing framework for React components
-    \item \textbf{React Testing Library}: For testing React components in a user-centric way
-    \item \textbf{Cypress}: For end-to-end testing
-\end{itemize}
+This section provides direct links to the official documentation and repositories of all testing tools used in the Marito project.
 
-\subsection{Backend Testing}
-\begin{itemize}
-    \item \textbf{Pytest}: Primary testing framework for Python services
-    \item \textbf{Coverage.py}: For measuring code coverage
-    \item \textbf{Locust}: For load testing
-\end{itemize}
+\subsection{Frontend Testing Tools}
 
-\section{Continuous Integration}
+\begin{description}[style=nextline]
+    \item[Vitest] Primary testing framework for React components \\
+    \textbf{Official Documentation:} \url{https://vitest.dev/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/vitest-dev/vitest} \\
+    \textbf{Purpose:} Fast unit test runner with native ESM support
+    
+    \item[React Testing Library] For testing React components in a user-centric way \\
+    \textbf{Official Documentation:} \url{https://testing-library.com/react} \\
+    \textbf{GitHub Repository:} \url{https://github.com/testing-library/react-testing-library} \\
+    \textbf{Purpose:} Component testing with focus on user behavior
+    
+    \item[Cypress] For end-to-end testing \\
+    \textbf{Official Documentation:} \url{https://www.cypress.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/cypress-io/cypress} \\
+    \textbf{Purpose:} E2E testing of user workflows
+\end{description}
+
+\subsection{Backend Testing Tools}
+
+\begin{description}[style=nextline]
+    \item[Pytest] Primary testing framework for Python services \\
+    \textbf{Official Documentation:} \url{https://docs.pytest.org/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/pytest-dev/pytest} \\
+    \textbf{Purpose:} Python unit and integration testing
+    
+    \item[Coverage.py] For measuring code coverage \\
+    \textbf{Official Documentation:} \url{https://coverage.readthedocs.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/nedbat/coveragepy} \\
+    \textbf{Purpose:} Code coverage measurement and reporting
+    
+    \item[Locust] For load and performance testing \\
+    \textbf{Official Documentation:} \url{https://locust.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/locustio/locust} \\
+    \textbf{Purpose:} Distributed load testing of web services
+    
+    \item[Pytest-asyncio] For testing async Python code \\
+    \textbf{Official Documentation:} \url{https://pytest-asyncio.readthedocs.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/pytest-dev/pytest-asyncio} \\
+    \textbf{Purpose:} Async/await support for pytest
+\end{description}
+
+\subsection{Code Quality Tools}
+
+\begin{description}[style=nextline]
+    \item[Ruff] Fast Python linter \\
+    \textbf{Official Documentation:} \url{https://docs.astral.sh/ruff/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/astral-sh/ruff}
+    
+    \item[Black] Python code formatter \\
+    \textbf{Official Documentation:} \url{https://black.readthedocs.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/psf/black}
+    
+    \item[MyPy] Static type checker for Python \\
+    \textbf{Official Documentation:} \url{https://mypy.readthedocs.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/python/mypy}
+    
+    \item[ESLint] JavaScript/TypeScript linter \\
+    \textbf{Official Documentation:} \url{https://eslint.org/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/eslint/eslint}
+    
+    \item[Prettier] Code formatter for frontend \\
+    \textbf{Official Documentation:} \url{https://prettier.io/} \\
+    \textbf{GitHub Repository:} \url{https://github.com/prettier/prettier}
+\end{description}
+
+\section{Continuous Integration \& Deployment}
 
 \subsection{GitHub Actions}
-We use GitHub Actions as our CI/CD platform instead of Travis CI for the following reasons:
+
+We use GitHub Actions as our CI/CD platform for the following reasons:
 \begin{itemize}
     \item Native integration with GitHub repositories
     \item More generous free tier for open-source projects
     \item Better support for matrix builds and parallel testing
     \item Faster build times and more concurrent jobs
-    \item Built-in secret management
+    \item Built-in secret management and artifact storage
+\end{itemize}
+
+\subsection{CI/CD Pipeline Links}
+
+\subsubsection{Workflow Configurations}
+Direct links to workflow configuration files in the repository:
+
+\begin{itemize}
+    \item \textbf{Main CI/CD Pipeline:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/.github/workflows/actions.yml}
+    
+    \item \textbf{Backend Service Deployment:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/.github/workflows/DeployServices.yml}
+    
+    \item \textbf{Frontend Deployment:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/.github/workflows/deployFront.yml}
+    
+    \item \textbf{Database Migrations:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/.github/workflows/run-migrations.yml}
+\end{itemize}
+
+\subsubsection{Pipeline Execution Reports}
+View live pipeline runs, test results, and build status:
+
+\begin{itemize}
+    \item \textbf{All Workflow Runs:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/actions}
+    
+    \item \textbf{CI/CD Pipeline Runs:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/actions/workflows/actions.yml}
+    
+    \item \textbf{Deployment Pipeline Runs:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/actions/workflows/DeployServices.yml}
 \end{itemize}
 
 \section{Testing Procedure}
 
 \subsection{Local Testing}
-\begin{enumerate}
-    \item Developers must write tests for new features
-    \item All tests must pass locally before committing
-    \item Run \texttt{npm test} for frontend tests
-    \item Run \texttt{pytest} for backend tests
-\end{enumerate}
+
+\subsubsection{Frontend Tests}
+To run frontend tests locally:
+
+\begin{lstlisting}[language=bash]
+cd frontend
+npm install
+npm test                    # Run all tests
+npm run test:coverage       # Run with coverage report
+npm run test:ui            # Run with Vitest UI
+\end{lstlisting}
+
+\subsubsection{Backend Tests}
+To run backend tests locally:
+
+\begin{lstlisting}[language=bash]
+cd backend
+
+# Run tests for a specific service
+cd auth-service
+pytest                      # Run all tests
+pytest --cov=app           # Run with coverage
+pytest -v                  # Verbose output
+pytest -k "test_login"     # Run specific test
+
+# Run tests for all services
+cd backend
+bash run_tests.sh          # Linux/Mac
+bash run_tests_linux.sh    # Linux
+\end{lstlisting}
 
 \subsection{Automated Testing}
+
+The CI/CD pipeline automatically:
 \begin{enumerate}
-    \item Tests run automatically on pull requests
-    \item Code coverage reports are generated
-    \item Performance tests run nightly
-    \item Security scanning is performed on dependencies
+    \item Runs on every push to main, master, or develop branches
+    \item Runs on all pull requests targeting these branches
+    \item Executes linting checks (Ruff, ESLint, Prettier)
+    \item Performs type checking (MyPy for backend)
+    \item Runs all unit and integration tests
+    \item Generates code coverage reports
+    \item Fails the build if any tests fail or coverage drops below threshold
 \end{enumerate}
 
 \section{Test Repository Structure}
 
+This section provides direct links to test files and directories in the codebase.
+
 \subsection{Frontend Tests}
+
+\subsubsection{Test Directory Structure}
 Tests are located in the \texttt{frontend/Tests} directory:
-\begin{lstlisting}[frame=single]
+
+\begin{lstlisting}
 frontend/
   Tests/
-    components/
-    pages/
-    utils/
-    e2e/
+    components/           # Component unit tests
+    pages/               # Page component tests
+    utils/               # Utility function tests
+    integration/         # Integration tests
+    e2e/                 # End-to-end tests
 \end{lstlisting}
 
+\subsubsection{Frontend Test Files}
+Direct links to frontend test implementations:
+
+\begin{itemize}
+    \item \textbf{Admin Page Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/AdminPage.test.tsx}
+    
+    \item \textbf{Feedback Hub Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/FeedbackHub.test.tsx}
+    
+    \item \textbf{Feedback Page Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/FeedbackPage.test.tsx}
+    
+    \item \textbf{Landing Page Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/LandingPage.test.tsx}
+    
+    \item \textbf{New Glossary Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/NewGlossary.test.tsx}
+    
+    \item \textbf{Search Page Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/SearchPage.test.tsx}
+    
+    \item \textbf{User Profile Page Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/UserProfilePage.test.tsx}
+    
+    \item \textbf{Workspace Page Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/WorkspacePage.test.tsx}
+\end{itemize}
+
+\subsubsection{Frontend Integration Tests}
+
+\begin{itemize}
+    \item \textbf{New Glossary API Integration:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/integration/NewGlossary.api.test.tsx}
+    
+    \item \textbf{Workspace API Integration:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/Tests/integration/WorkspacePage.api.test.tsx}
+\end{itemize}
+
 \subsection{Backend Tests}
-Each service has its own tests directory:
-\begin{lstlisting}[frame=single]
+
+\subsubsection{Test Directory Structure}
+Each microservice has its own test directory:
+
+\begin{lstlisting}
 backend/
   service-name/
-    tests/
-      unit/
-      integration/
-      e2e/
+    app/
+      tests/
+        test_*.py          # Test files
+        conftest.py        # Pytest configuration
+        __init__.py
 \end{lstlisting}
+
+\subsubsection{Backend Test Files by Service}
+
+\paragraph{Authentication Service Tests}
+\begin{itemize}
+    \item \textbf{Auth Endpoints Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/auth-service/app/tests/test_auth.py}
+    
+    \item \textbf{Admin Functions Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/auth-service/app/tests/test_admin.py}
+\end{itemize}
+
+\paragraph{Search Service Tests}
+\begin{itemize}
+    \item \textbf{Search Functionality Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/search-service/app/tests/test_search.py}
+    
+    \item \textbf{Autocomplete/Suggest Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/search-service/app/tests/test_suggest.py}
+    
+    \item \textbf{CRUD Operations Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/search-service/app/tests/test_crud_search.py}
+\end{itemize}
+
+\paragraph{Analytics Service Tests}
+\begin{itemize}
+    \item \textbf{Analytics Unit Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/analytics-service/app/tests/test_analytics_unit.py}
+    
+    \item \textbf{Analytics CI Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/analytics-service/app/tests/test_analytics_ci.py}
+\end{itemize}
+
+\paragraph{Feedback Service Tests}
+\begin{itemize}
+    \item \textbf{Feedback API Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/feedback-service/app/tests/test_feedback_api.py}
+    
+    \item \textbf{Feedback CRUD Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/feedback-service/app/tests/test_feedback_crud.py}
+    
+    \item \textbf{RBAC Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/feedback-service/app/tests/test_rbac.py}
+\end{itemize}
+
+\paragraph{Glossary Service Tests}
+\begin{itemize}
+    \item \textbf{Glossary API Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/glossary-service/app/tests/test_glossary.py}
+    
+    \item \textbf{Unit Functions Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/glossary-service/app/tests/test_unit_functions.py}
+    
+    \item \textbf{Glossary Integration Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/glossary-service/app/tests/test_glossary_integration.py}
+\end{itemize}
+
+\paragraph{Vote Service Tests}
+\begin{itemize}
+    \item \textbf{Vote Endpoint Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/vote-service/app/tests/test_vote_endpoint.py}
+\end{itemize}
+
+\paragraph{Workspace Service Tests}
+\begin{itemize}
+    \item \textbf{Main Workspace Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/workspace-service/app/tests/test_main.py}
+    
+    \item \textbf{Bookmarks Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/workspace-service/app/tests/test_bookmarks.py}
+    
+    \item \textbf{Groups Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/workspace-service/app/tests/test_groups.py}
+    
+    \item \textbf{Notes Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/workspace-service/app/tests/test_notes.py}
+    
+    \item \textbf{Workspace Integration Tests:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/workspace-service/app/tests/test_workspace_integration.py}
+\end{itemize}
+
+\section{Testing Reports \& Coverage}
+
+\subsection{Generating Coverage Reports}
+
+\subsubsection{Frontend Coverage}
+Generate frontend test coverage reports:
+
+\begin{lstlisting}[language=bash]
+cd frontend
+npm run test:coverage
+# Coverage report will be generated in frontend/coverage/
+# Open frontend/coverage/index.html in a browser
+\end{lstlisting}
+
+\subsubsection{Backend Coverage}
+Generate backend test coverage reports:
+
+\begin{lstlisting}[language=bash]
+cd backend/auth-service
+pytest --cov=app --cov-report=html
+# Coverage report will be generated in htmlcov/
+# Open htmlcov/index.html in a browser
+
+# For all services combined
+cd backend
+pytest --cov=. --cov-report=html --cov-report=term
+\end{lstlisting}
+
+\subsection{Coverage Report Storage}
+
+Coverage reports are stored in the following locations:
+
+\begin{itemize}
+    \item \textbf{Frontend Coverage:} \texttt{frontend/coverage/}
+    \item \textbf{Backend Coverage (per service):} \texttt{backend/[service-name]/htmlcov/}
+    \item \textbf{CI/CD Artifacts:} Available in GitHub Actions workflow run artifacts
+\end{itemize}
+
+\textbf{Note:} Coverage HTML reports are gitignored and must be generated locally or downloaded from CI/CD artifacts.
+
+\subsection{Accessing CI/CD Test Reports}
+
+To view test results from CI/CD pipeline runs:
+
+\begin{enumerate}
+    \item Navigate to \url{https://github.com/COS301-SE-2025/Marito/actions}
+    \item Click on any workflow run
+    \item Expand the test execution steps to view:
+    \begin{itemize}
+        \item Test pass/fail status
+        \item Test execution logs
+        \item Coverage percentages
+        \item Linting and type checking results
+    \end{itemize}
+    \item Download artifacts (if any) for detailed HTML coverage reports
+\end{enumerate}
+
+\subsection{Test Report Archive}
+
+Historical test reports and quality metrics are maintained in:
+
+\begin{itemize}
+    \item \textbf{Documentation Reports Directory:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/tree/main/Documentation/reports}
+    
+    \item \textbf{GitHub Actions History:} \\
+    Accessible through the Actions tab for the last 90 days of runs
+\end{itemize}
 
 \section{Testing Standards}
 
 \subsection{Coverage Requirements}
+
 \begin{itemize}
-    \item Minimum 80\% code coverage for new features
-    \item Critical paths must have 100\% coverage
-    \item Integration tests for all API endpoints
-    \item E2E tests for main user workflows
+    \item \textbf{Minimum Code Coverage:} 80\% for new features
+    \item \textbf{Critical Paths:} 100\% coverage required
+    \item \textbf{API Endpoints:} Integration tests for all endpoints
+    \item \textbf{User Workflows:} E2E tests for main user workflows
+    \item \textbf{Edge Cases:} Explicit tests for error handling and edge cases
 \end{itemize}
 
 \subsection{Testing Best Practices}
+
+\subsubsection{General Principles}
 \begin{itemize}
-    \item Write tests before implementation (TDD)
-    \item Keep tests focused and atomic
-    \item Use meaningful test descriptions
-    \item Mock external dependencies
+    \item Write tests before or alongside implementation (TDD/BDD)
+    \item Keep tests focused, atomic, and independent
+    \item Use meaningful and descriptive test names
+    \item Mock external dependencies and services
     \item Follow AAA pattern (Arrange-Act-Assert)
+    \item Ensure tests are deterministic and repeatable
+    \item Clean up test data and resources after execution
 \end{itemize}
 
-\section{Git Repository}
-All test cases and reports can be found in our GitHub repository:
+\subsubsection{Frontend Testing Best Practices}
 \begin{itemize}
-    \item Repository: \url{https://github.com/COS301-SE-2025/Marito}
-    \item Test Documentation: \texttt{/Documentation/Testing Policy/}
-    \item CI/CD Workflows: \texttt{/.github/workflows/}
+    \item Test user interactions, not implementation details
+    \item Use accessibility queries (getByRole, getByLabelText)
+    \item Avoid testing internal component state directly
+    \item Test error states and loading states
+    \item Mock API calls consistently
+\end{itemize}
+
+\subsubsection{Backend Testing Best Practices}
+\begin{itemize}
+    \item Use fixtures for common test setup
+    \item Test both success and failure scenarios
+    \item Validate request/response schemas
+    \item Test authentication and authorization
+    \item Test database transactions and rollbacks
+    \item Use async test support for async endpoints
+\end{itemize}
+
+\subsection{Test Naming Conventions}
+
+\begin{description}[style=nextline]
+    \item[Frontend] \texttt{ComponentName.test.tsx} or \texttt{functionName.test.ts}
+    \item[Backend] \texttt{test\_feature\_name.py}
+    \item[Integration] \texttt{test\_feature\_integration.py}
+    \item[E2E] \texttt{test\_workflow\_e2e.py}
+\end{description}
+
+\subsection{Pull Request Requirements}
+
+Before merging any pull request:
+\begin{enumerate}
+    \item All tests must pass in CI/CD pipeline
+    \item Code coverage must meet minimum thresholds
+    \item No linting or type checking errors
+    \item All new features must include tests
+    \item Test descriptions must be clear and meaningful
+    \item Complex logic must have unit tests
+\end{enumerate}
+
+\section{Testing Tool Configuration Files}
+
+Direct links to testing configuration files:
+
+\begin{itemize}
+    \item \textbf{Frontend Test Config (Jest):} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/jest.config.js}
+    
+    \item \textbf{Frontend Vite Config:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/vite.config.ts}
+    
+    \item \textbf{Backend Pytest Config:} \\
+    Configuration in \texttt{pyproject.toml} files per service
+    
+    \item \textbf{MyPy Configuration:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/backend/mypy.ini}
+    
+    \item \textbf{ESLint Configuration:} \\
+    \url{https://github.com/COS301-SE-2025/Marito/blob/main/frontend/eslint.config.js}
 \end{itemize}
 
 \end{document}
+
