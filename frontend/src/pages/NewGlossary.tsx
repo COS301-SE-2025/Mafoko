@@ -24,6 +24,8 @@ import '../styles/NewGlossary.scss';
 import { GlossaryList } from '../components/ui/GlossaryList.tsx';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { canBookmark } from '../utils/userUtils';
+import { useUser } from '../hooks/useUser';
 
 interface Term {
   id: number;
@@ -75,6 +77,7 @@ const GlossaryApp = () => {
   const termsPerPage = 20;
   const exportPopupRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const { user } = useUser();
 
   // Notification state for user feedback
   const [notification, setNotification] = useState<{
@@ -346,6 +349,14 @@ const GlossaryApp = () => {
 
     if (!token) {
       showError('Please log in to bookmark glossaries.');
+      return false;
+    }
+
+    // Check if user can bookmark (not a guest)
+    if (!canBookmark(user)) {
+      showError(
+        'Please register to bookmark glossaries. Guests cannot save bookmarks.',
+      );
       return false;
     }
 
@@ -969,38 +980,41 @@ const GlossaryApp = () => {
                   zIndex: 1000,
                 }}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    void handleBookmarkGlossary();
-                  }}
-                  style={{
-                    backgroundColor: '#f2d001',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: 60,
-                    height: 60,
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(242, 208, 1, 0.3)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  title={
-                    bookmarkedCategory ? 'Bookmarked!' : 'Bookmark Category'
-                  }
-                >
-                  <Bookmark
-                    size={28}
-                    strokeWidth={2.5}
-                    color="#fff"
-                    fill={bookmarkedCategory ? '#fff' : 'none'}
-                  />
-                </button>
+                {/* Only show bookmark button for authenticated users (not guests) */}
+                {canBookmark(user) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void handleBookmarkGlossary();
+                    }}
+                    style={{
+                      backgroundColor: '#f2d001',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: 60,
+                      height: 60,
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(242, 208, 1, 0.3)',
+                      transition: 'all 0.2s ease',
+                    }}
+                    title={
+                      bookmarkedCategory ? 'Bookmarked!' : 'Bookmark Category'
+                    }
+                  >
+                    <Bookmark
+                      size={28}
+                      strokeWidth={2.5}
+                      color="#fff"
+                      fill={bookmarkedCategory ? '#fff' : 'none'}
+                    />
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => {

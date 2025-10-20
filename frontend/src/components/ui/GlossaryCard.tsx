@@ -6,6 +6,8 @@ import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import { cachingService } from '../../utils/cachingService';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { canBookmark } from '../../utils/userUtils';
+import { useUser } from '../../hooks/useUser';
 
 interface Glossary {
   name: string;
@@ -38,6 +40,7 @@ export default function GlossaryCard({
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const [loading, setLoading] = useState(false);
   const networkStatus = useNetworkStatus();
+  const { user } = useUser();
 
   const handleBookmarkToggle = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -50,6 +53,15 @@ export default function GlossaryCard({
     if (!token) {
       toast(t('glossaryPage2.bookmarkError'), {
         description: t('glossaryPage2.loginError'),
+      });
+      return;
+    }
+
+    // Check if user can bookmark (not a guest)
+    if (!canBookmark(user)) {
+      toast('Bookmark not allowed', {
+        description:
+          'Please register to bookmark glossaries. Guests cannot save bookmarks.',
       });
       return;
     }
@@ -156,31 +168,34 @@ export default function GlossaryCard({
             </p>
           </div>
 
-          <button
-            onClick={handleBookmarkToggle}
-            disabled={loading}
-            className={`
-              w-[50] h-[50] flex items-center justify-center rounded-full
-              ${
-                isBookmarked
-                  ? 'bg-yellow-400 hover:bg-yellow-300'
-                  : 'bg-teal-400 hover:bg-teal-300'
-              }
-              transition-colors
-            `}
-            title={isBookmarked ? 'Unbookmark glossary' : 'Bookmark glossary'}
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 text-white animate-spin " />
-            ) : (
-              <Bookmark
-                className=" text-white"
-                size={20}
-                fill={isBookmarked ? '#fff' : 'none'}
-                strokeWidth={2.3}
-              />
-            )}
-          </button>
+          {/* Only show bookmark button for authenticated users (not guests) */}
+          {canBookmark(user) && (
+            <button
+              onClick={handleBookmarkToggle}
+              disabled={loading}
+              className={`
+                w-[50] h-[50] flex items-center justify-center rounded-full
+                ${
+                  isBookmarked
+                    ? 'bg-yellow-400 hover:bg-yellow-300'
+                    : 'bg-teal-400 hover:bg-teal-300'
+                }
+                transition-colors
+              `}
+              title={isBookmarked ? 'Unbookmark glossary' : 'Bookmark glossary'}
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 text-white animate-spin " />
+              ) : (
+                <Bookmark
+                  className=" text-white"
+                  size={20}
+                  fill={isBookmarked ? '#fff' : 'none'}
+                  strokeWidth={2.3}
+                />
+              )}
+            </button>
+          )}
         </div>
 
         <p

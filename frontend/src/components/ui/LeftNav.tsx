@@ -8,6 +8,14 @@ import {
   useProfilePicture,
   handleProfilePictureError,
 } from '../../hooks/useProfilePicture';
+import {
+  isGuestUser,
+  canAccessWorkspace,
+  canAccessLearningPaths,
+  canAccessProfile,
+  canAccessAdmin,
+  UserRoleType,
+} from '../../utils/userUtils';
 
 import {
   Settings,
@@ -37,7 +45,7 @@ interface UserProfileApiResponse {
   first_name: string;
   last_name: string;
   email?: string;
-  role: 'contributor' | 'linguist' | 'admin';
+  role: 'contributor' | 'linguist' | 'admin' | 'guest';
 }
 
 interface UserData {
@@ -90,12 +98,17 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
         id: 'workspace-tools',
         label: t('navbar.workspaceAndTools'),
         items: [
-          {
-            id: 'workspace',
-            label: t('navbar.workspace'),
-            path: '/workspace',
-            icon: Briefcase,
-          },
+          // Workspace - only for authenticated users (not guests)
+          ...(userRole !== 'guest'
+            ? [
+                {
+                  id: 'workspace',
+                  label: t('navbar.workspace'),
+                  path: '/workspace',
+                  icon: Briefcase,
+                },
+              ]
+            : []),
           {
             id: 'glossary',
             label: t('navigation.glossary'),
@@ -108,12 +121,17 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             path: '/search',
             icon: Search,
           },
-          {
-            id: 'learning-path',
-            label: t('navbar.learing'),
-            path: '/learning-path',
-            icon: BookOpen,
-          },
+          // Learning path - only for authenticated users (not guests)
+          ...(userRole !== 'guest'
+            ? [
+                {
+                  id: 'learning-path',
+                  label: t('navbar.learing'),
+                  path: '/learning-path',
+                  icon: BookOpen,
+                },
+              ]
+            : []),
           {
             id: 'contributor-page',
             label: t('navbar.termAddition'),
@@ -143,24 +161,29 @@ const LeftNav: React.FC<LeftNavProps> = ({ activeItem, setActiveItem }) => {
             : []),
         ],
       },
-      {
-        id: 'profile-account',
-        label: t('navbar.profileAndAccount'),
-        items: [
-          {
-            id: 'settings',
-            label: t('settings.title'),
-            path: '/settings',
-            icon: Settings,
-          },
-          {
-            id: 'achievements',
-            label: t('navbar.achievements'),
-            path: '/achievements',
-            icon: Trophy,
-          },
-        ],
-      },
+      // Profile and Account - only for authenticated users (not guests)
+      ...(userRole !== 'guest'
+        ? [
+            {
+              id: 'profile-account',
+              label: t('navbar.profileAndAccount'),
+              items: [
+                {
+                  id: 'settings',
+                  label: t('settings.title'),
+                  path: '/settings',
+                  icon: Settings,
+                },
+                {
+                  id: 'achievements',
+                  label: t('navbar.achievements'),
+                  path: '/achievements',
+                  icon: Trophy,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         id: 'support-feedback',
         label: t('navbar.supportAndFeedback'),

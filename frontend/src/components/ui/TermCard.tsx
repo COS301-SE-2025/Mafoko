@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { LanguageColorMap } from '../../types/search/types.ts';
 import { GamificationService } from '../../utils/gamification';
 import { useTranslation } from 'react-i18next';
+import { canBookmark } from '../../utils/userUtils';
+import { useUser } from '../../hooks/useUser';
 
 interface VoteApiResponse {
   term_id: string;
@@ -47,6 +49,7 @@ const TermCard: React.FC<TermCardProps> = ({
   const [downvotes, setDownvotes] = useState(initialDownvotes);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
+  const { user } = useUser();
 
   const safeDomain = domain || '';
   const safeDefinition = definition || '';
@@ -141,6 +144,14 @@ const TermCard: React.FC<TermCardProps> = ({
     const token = localStorage.getItem('accessToken');
     if (!token) return;
 
+    // Check if user can bookmark (not a guest)
+    if (!canBookmark(user)) {
+      console.log(
+        'Guests cannot bookmark terms. Please register to save bookmarks.',
+      );
+      return;
+    }
+
     const wasBookmarked = isBookmarked;
     setIsBookmarked(!wasBookmarked);
 
@@ -211,17 +222,20 @@ const TermCard: React.FC<TermCardProps> = ({
             <ThumbsDown size={20} className="icon" />
             <span className="count down">{downvotes}</span>
           </button>
-          <button
-            type="button"
-            className={`social-button ${isBookmarked ? 'bookmarked' : ''}`}
-            onClick={handleBookmark}
-            aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
-          >
-            <Bookmark
-              size={20}
-              className={`icon ${isBookmarked ? 'bookmarked' : ''}`}
-            />
-          </button>
+          {/* Only show bookmark button for authenticated users (not guests) */}
+          {canBookmark(user) && (
+            <button
+              type="button"
+              className={`social-button ${isBookmarked ? 'bookmarked' : ''}`}
+              onClick={handleBookmark}
+              aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+            >
+              <Bookmark
+                size={20}
+                className={`icon ${isBookmarked ? 'bookmarked' : ''}`}
+              />
+            </button>
+          )}
           <button type="button" className="social-button" aria-label="Share">
             <Share2 size={20} className="icon share" />
           </button>

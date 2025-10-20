@@ -5,7 +5,12 @@ from typing import List, Optional, Union, Dict, Any
 from uuid import UUID
 
 from mavito_common.models.user import User as UserModel
-from mavito_common.schemas.user import UserCreate, UserUpdate, UserCreateGoogle
+from mavito_common.schemas.user import (
+    UserCreate,
+    UserUpdate,
+    UserCreateGoogle,
+    UserCreateGuest,
+)
 from mavito_common.core.security import get_password_hash, verify_password
 from mavito_common.core.exceptions import InvalidPasswordError
 
@@ -33,28 +38,50 @@ class CRUDUser:
         return result.scalars().first()
 
     async def create_user(
-        self, db: AsyncSession, *, obj_in: Union[UserCreate, UserCreateGoogle]
+        self,
+        db: AsyncSession,
+        *,
+        obj_in: Union[UserCreate, UserCreateGoogle, UserCreateGuest],
     ) -> UserModel:
-        user_data = obj_in.model_dump(exclude={"password"})
-        user_data["email"] = user_data["email"].lower()
-
-        if isinstance(obj_in, UserCreate):
-            if not obj_in.password:
-                raise InvalidPasswordError("Password must be provided for new users.")
-            if len(obj_in.password) < 8:
-                raise InvalidPasswordError(
-                    "Password must be at least 8 characters long."
-                )
-            if not any(char.isdigit() for char in obj_in.password):
-                raise InvalidPasswordError("Password must contain at least one number.")
-            if not any(char.isupper() for char in obj_in.password):
-                raise InvalidPasswordError(
-                    "Password must contain at least one uppercase letter."
-                )
-
-            user_data["password_hash"] = get_password_hash(obj_in.password)
+        if isinstance(obj_in, UserCreateGuest):
+            # For guest users, generate a unique email and minimal data
+            guest_id = str(uuid.uuid4())[:8]
+            user_data = {
+                "first_name": obj_in.first_name,
+                "last_name": obj_in.last_name,
+                "email": f"guest_{guest_id}@mavito.app",  # Unique guest email
+                "role": obj_in.role,
+                "is_verified": obj_in.is_verified,
+                "is_active": obj_in.is_active,
+                "password_hash": get_password_hash(
+                    str(uuid.uuid4())
+                ),  # Random password
+            }
         else:
-            user_data["password_hash"] = get_password_hash(str(uuid.uuid4()))
+            user_data = obj_in.model_dump(exclude={"password"})
+            user_data["email"] = user_data["email"].lower()
+
+            if isinstance(obj_in, UserCreate):
+                if not obj_in.password:
+                    raise InvalidPasswordError(
+                        "Password must be provided for new users."
+                    )
+                if len(obj_in.password) < 8:
+                    raise InvalidPasswordError(
+                        "Password must be at least 8 characters long."
+                    )
+                if not any(char.isdigit() for char in obj_in.password):
+                    raise InvalidPasswordError(
+                        "Password must contain at least one number."
+                    )
+                if not any(char.isupper() for char in obj_in.password):
+                    raise InvalidPasswordError(
+                        "Password must contain at least one uppercase letter."
+                    )
+
+                user_data["password_hash"] = get_password_hash(obj_in.password)
+            else:  # UserCreateGoogle
+                user_data["password_hash"] = get_password_hash(str(uuid.uuid4()))
 
         db_obj = UserModel(**user_data)
         db.add(db_obj)
