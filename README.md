@@ -18,8 +18,6 @@
 - 🎥 [Final Demo Video](https://drive.google.com/file/d/1sf9poe1Lbx5xu8wa276xoXN3M_qmfhNw/view?usp=sharing)
 
 ---
-
----
 ## Demo 4 Documentation
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
@@ -101,6 +99,7 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>
   </a>
 </p>
+
 
 
 
