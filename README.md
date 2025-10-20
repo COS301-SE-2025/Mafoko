@@ -13,6 +13,13 @@
 **Mafoko** is a progressive web application (PWA) developed for the COS 301 Capstone project at the University of Pretoria. It serves as a unified platform for accessing, browsing, and contributing to multilingual glossaries, dictionaries, and terminology banks. Designed with an offline-first approach and scalable architecture, Marito aims to support South Africa’s low-resource languages and empower linguistic research, NLP development, and language preservation.
 
 ---
+## Demo Video
+
+- 🎥 [Final Demo Video](https://drive.google.com/file/d/1sf9poe1Lbx5xu8wa276xoXN3M_qmfhNw/view?usp=sharing)
+
+---
+
+---
 ## Demo 4 Documentation
 
 *  [Project Board](https://github.com/orgs/COS301-SE-2025/projects/112)
@@ -94,6 +101,7 @@ This structure ensures clean separation between environments, supports parallel 
     <img src="https://img.shields.io/uptimerobot/status/m788123456-123456789abcdef" alt="Uptime Robot"/>
   </a>
 </p>
+
 
 
 
