@@ -30,6 +30,17 @@ class UserCreateGoogle(UserBase):
     is_verified: bool = True  # Google-verified users are automatically verified
 
 
+class UserCreateGuest(BaseModel):
+    """Schema for creating a temporary guest user."""
+
+    first_name: str = "Guest"
+    last_name: str = "User"
+    role: UserRole = UserRole.guest
+    is_verified: bool = False
+    is_active: bool = True
+    model_config = ConfigDict(from_attributes=True)
+
+
 # Properties to receive via API on update
 class UserUpdate(BaseModel):  # Defined independently for clarity on updatable fields
     email: Optional[EmailStr] = None

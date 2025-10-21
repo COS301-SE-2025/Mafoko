@@ -51,6 +51,7 @@ interface APIEndpoints {
   login: string;
   register: string;
   loginWithGoogle: string;
+  guestLogin: string;
   getMe: string;
   updateMe: string;
   updateProfile: string;
@@ -181,6 +182,7 @@ export const API_ENDPOINTS: APIEndpoints = {
   register: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/register'),
   login: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/login'),
   loginWithGoogle: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/google-login'),
+  guestLogin: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/guest-login'),
   getMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
   updateMe: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),
   updateProfile: endpoint(AUTH_SERVICE_URL, '/api/v1/auth/me'),

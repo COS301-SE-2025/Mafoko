@@ -14,6 +14,7 @@ from mavito_common.schemas.user import (
     UserUpdate,
     UserProfilePictureUpdate,
     UserCreateGoogle,
+    UserCreateGuest,
     ForgotPasswordRequest,
     ForgotPasswordResponse,
     ResetPasswordRequest,
@@ -331,6 +332,38 @@ async def google_login(google_token: GoogleToken, db: AsyncSession = Depends(get
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred",
+        )
+
+
+@router.post("/guest-login", response_model=Token)
+async def guest_login(db: AsyncSession = Depends(get_db)):
+    """
+    Create a temporary guest user and return an access token.
+    Guest users can access most features but cannot save personal data.
+    """
+    try:
+        guest_user_data = UserCreateGuest()
+
+        # Create the guest user in the database
+        new_guest_user = await crud_user.create_user(db, obj_in=guest_user_data)
+
+        # Update last_login timestamp
+        await crud_user.set_last_login(db, user=new_guest_user)
+
+        # Create access token for guest
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": new_guest_user.email},
+            expires_delta=access_token_expires,
+        )
+
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    except Exception as e:
+        print(f"Error creating guest user: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not create guest session. Please try again.",
         )
 
 

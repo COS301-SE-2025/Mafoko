@@ -407,7 +407,23 @@ const LearningPathPage: React.FC = () => {
           </div>
 
           <button
-            className="bg-teal-500 text-white hover:bg-teal-600"
+            style={{
+              backgroundColor: '#ff0a4d',
+              color: 'white',
+              borderRadius: '4px',
+              padding: '8px 16px',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#e0063f';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#ff0a4d';
+            }}
             onClick={() => {
               void handleOpenCreateModal();
             }}
