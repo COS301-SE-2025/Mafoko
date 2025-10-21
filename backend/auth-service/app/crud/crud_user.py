@@ -49,7 +49,7 @@ class CRUDUser:
             user_data = {
                 "first_name": obj_in.first_name,
                 "last_name": obj_in.last_name,
-                "email": f"guest_{guest_id}@mavito.app",  # Unique guest email
+                "email": f"guest_{guest_id}@mafoko.app",  # Unique guest email
                 "role": obj_in.role,
                 "is_verified": obj_in.is_verified,
                 "is_active": obj_in.is_active,
