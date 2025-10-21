@@ -59,7 +59,10 @@ class CRUDUser:
             }
         else:
             user_data = obj_in.model_dump(exclude={"password"})
-            user_data["email"] = user_data["email"].lower()
+            # Ensure email is a string before calling lower()
+            email = user_data.get("email")
+            if email is not None and isinstance(email, str):
+                user_data["email"] = email.lower()
 
             if isinstance(obj_in, UserCreate):
                 if not obj_in.password:
