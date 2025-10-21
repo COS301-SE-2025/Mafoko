@@ -72,8 +72,18 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
           {term.term}
         </h3>
         <span
-          className="px-3 py-1 text-sm font-medium rounded-full  text-primary border border-teal-700 bg-teal-400 border-teal"
-          style={{ padding: '6px 10px' }}
+          style={{
+            display: 'inline-block',
+            background: '#f2d20119',
+            color: '#f2d001',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            padding: '0.25em 1em',
+            borderRadius: '999px',
+            margin: '0.25rem 0',
+            boxShadow: '0 1px 4px #f2d2018a',
+            border: '1px solid #f2d001',
+          }}
         >
           {term.language || 'Unknown'}
         </span>
@@ -124,16 +134,39 @@ const GlossaryTermCard: React.FC<GlossaryTermCardProps> = ({ term }) => {
         <button
           onClick={handleTranslate}
           disabled={!selectedLang || loading}
-          className="flex items-center gap-2 bg-[#F00A50] text-white rounded-full px-5 py-2 font-semibold text-sm hover:bg-[#e00a48] transition disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            backgroundColor: '#ff0a4d',
+            color: 'white',
+            borderRadius: '999px',
+            padding: '10px 16px',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            border: 'none',
+            cursor: !selectedLang || loading ? 'not-allowed' : 'pointer',
+            opacity: !selectedLang || loading ? 0.6 : 1,
+            transition: 'all 0.2s ease',
+            boxShadow: '0 2px 6px rgba(255, 10, 77, 0.4)',
+          }}
+          onMouseOver={(e) => {
+            if (!loading && selectedLang)
+              e.currentTarget.style.backgroundColor = '#e00040';
+          }}
+          onMouseOut={(e) => {
+            if (!loading && selectedLang)
+              e.currentTarget.style.backgroundColor = '#ff0a4d';
+          }}
         >
           {loading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
               {t('glossaryPage2.translating')}...
             </>
           ) : (
             <>
-              <Languages className="w-4 h-4" />
+              <Languages className="w-5 h-5" />
               {t('glossaryPage2.translate')}
             </>
           )}
