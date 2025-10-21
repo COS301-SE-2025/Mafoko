@@ -57,6 +57,36 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleGuestLogin = async () => {
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch(API_ENDPOINTS.guestLogin, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = (await response.json()) as LoginResponse;
+
+      if (response.ok) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userData');
+        localStorage.setItem('accessToken', data.access_token);
+        await navigate('/dashboard');
+      } else {
+        console.error('Guest login failed:', data.detail);
+        setErrorMessage(data.detail || 'Guest login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Network or other error during guest login:', error);
+      setErrorMessage(
+        'Network error. Please check your connection and try again.',
+      );
+    }
+  };
+
   return (
     <div className="login-page-full-container">
       {/* Left Half - Image */}
@@ -130,6 +160,18 @@ const LoginPage: React.FC = () => {
               {t('loginPage.loginButton')}
             </button>
           </form>
+          <div className="guest-login-section">
+            <p className="guest-login-divider">
+              {t('loginPage.orContinueAs', 'Or continue as')}
+            </p>
+            <button
+              type="button"
+              className="login-button secondary guest-button"
+              onClick={() => void handleGuestLogin()}
+            >
+              {t('loginPage.continueAsGuest', 'Continue as Guest')}
+            </button>
+          </div>
           <p className="register-link-prompt">
             {t('loginPage.noAccount')}{' '}
             <Link to="/register">{t('loginPage.registerLink')}</Link>

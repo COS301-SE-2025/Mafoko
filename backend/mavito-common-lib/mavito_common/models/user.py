@@ -29,6 +29,7 @@ class UserRole(str, enum.Enum):
     linguist = "linguist"
     contributor = "contributor"
     admin = "admin"
+    guest = "guest"
 
 
 class User(Base):

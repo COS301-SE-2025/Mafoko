@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useDarkMode } from './DarkModeComponent';
 import { useAppMenu } from './AppMenu';
+import { API_ENDPOINTS } from '../../config';
 import '../../styles/Navbar.scss';
 
 const Navbar = () => {
@@ -11,7 +12,35 @@ const Navbar = () => {
   const { t, ready } = useTranslation();
   const [isMainNavbarOpen, setIsMainNavbarOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
-  const [userRole] = useState('contributor');
+  const [userRole, setUserRole] = useState('contributor');
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setUserRole('guest');
+        return;
+      }
+
+      try {
+        const response = await fetch(API_ENDPOINTS.getMe, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setUserRole(userData.role || 'contributor');
+        } else {
+          setUserRole('guest');
+        }
+      } catch (error) {
+        console.error('Error fetching user role in Navbar:', error);
+        setUserRole('guest');
+      }
+    };
+
+    void fetchUserRole();
+  }, []);
 
   const menuGroups = useAppMenu(userRole);
 

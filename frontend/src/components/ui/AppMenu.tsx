@@ -43,12 +43,17 @@ export const useAppMenu = (userRole: string) => {
         id: 'workspace-tools',
         label: t('navbar.workspaceAndTools'),
         items: [
-          {
-            id: 'workspace',
-            label: t('navbar.workspace'),
-            path: '/workspace',
-            icon: Briefcase,
-          },
+          // Workspace - only for authenticated users (not guests)
+          ...(userRole !== 'guest'
+            ? [
+                {
+                  id: 'workspace',
+                  label: t('navbar.workspace'),
+                  path: '/workspace',
+                  icon: Briefcase,
+                },
+              ]
+            : []),
           {
             id: 'glossary',
             label: t('navigation.glossary'),
@@ -61,12 +66,17 @@ export const useAppMenu = (userRole: string) => {
             path: '/search',
             icon: Search,
           },
-          {
-            id: 'learning-path',
-            label: t('navbar.learing'),
-            path: '/learning-path',
-            icon: BookOpen,
-          },
+          // Learning path - only for authenticated users (not guests)
+          ...(userRole !== 'guest'
+            ? [
+                {
+                  id: 'learning-path',
+                  label: t('navbar.learing'),
+                  path: '/learning-path',
+                  icon: BookOpen,
+                },
+              ]
+            : []),
           {
             id: 'contributor-page',
             label: t('navbar.termAddition'),
@@ -91,24 +101,29 @@ export const useAppMenu = (userRole: string) => {
             : []),
         ],
       },
-      {
-        id: 'profile-account',
-        label: t('navbar.profileAndAccount'),
-        items: [
-          {
-            id: 'settings',
-            label: t('settings.title'),
-            path: '/settings',
-            icon: Settings,
-          },
-          {
-            id: 'achievements',
-            label: t('navbar.achievements'),
-            path: '/achievements',
-            icon: Trophy,
-          },
-        ],
-      },
+      // Profile and Account - only for authenticated users (not guests)
+      ...(userRole !== 'guest'
+        ? [
+            {
+              id: 'profile-account',
+              label: t('navbar.profileAndAccount'),
+              items: [
+                {
+                  id: 'settings',
+                  label: t('settings.title'),
+                  path: '/settings',
+                  icon: Settings,
+                },
+                {
+                  id: 'achievements',
+                  label: t('navbar.achievements'),
+                  path: '/achievements',
+                  icon: Trophy,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         id: 'support-feedback',
         label: t('navbar.supportAndFeedback'),

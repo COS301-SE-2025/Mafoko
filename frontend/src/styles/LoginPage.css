@@ -362,3 +362,48 @@
   margin-top: 4px;
   line-height: 1.4;
 }
+
+/* Guest Login Styles */
+.guest-login-section {
+  width: 100%;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.guest-login-divider {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.guest-login-divider::before,
+.guest-login-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.guest-login-divider::before {
+  left: 0;
+}
+
+.guest-login-divider::after {
+  right: 0;
+}
+
+.guest-button {
+  background-color: #f8f9fa !important;
+  border: 2px solid #00a79d !important;
+  color: #00a79d !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.guest-button:hover {
+  background-color: #00a79d !important;
+  color: white !important;
+}
