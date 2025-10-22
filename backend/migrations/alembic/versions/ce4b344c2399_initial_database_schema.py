@@ -1,6 +1,6 @@
 """Initial database schema
 
-Revision ID: ce4b344c2399_fixed
+Revision ID: ce4b344c2399
 Revises:
 Create Date: 2025-07-06 08:11:38.777854
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "ce4b344c2399_fixed"
+revision: str = "ce4b344c2399"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
