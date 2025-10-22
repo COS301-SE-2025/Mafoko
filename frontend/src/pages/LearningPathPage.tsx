@@ -508,13 +508,22 @@ const LearningPathPage: React.FC = () => {
     <>
       {showNewPathModal && (
         <div
-          className="fixed inset-0 z-[9989] !bg-[var(--bg-tir)] flex items-center justify-center"
+          className="fixed inset-0 z-[9989] flex items-center justify-center"
+          style={{
+            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
           role="dialog"
           aria-modal="true"
         >
           <div
-            className={`w-full max-w-md mx-auto rounded-xl p-6 shadow-xl border !bg-[var(--bg-first)] text-theme text-left flex flex-col gap-5`}
-            style={{ padding: '20px' }}
+            className={`w-full max-w-md mx-auto rounded-xl p-6 shadow-2xl border !bg-[var(--bg-first)] text-theme text-left flex flex-col gap-5`}
+            style={{
+              padding: '20px',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              zIndex: 9999,
+            }}
           >
             <h2 className="text-xl font-semibold mb-4 text-center">
               {t('learningPathPage.main.createNewPath')}
@@ -643,7 +652,22 @@ const LearningPathPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                className="px-4 py-2 rounded-md bg-teal-500 hover:bg-teal-600 text-white"
+                style={{
+                  backgroundColor: '#f00a50',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#d80047';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f00a50';
+                }}
                 onClick={() => void handleCreatePath()}
               >
                 {t('learningPathPage.main.createPath')}

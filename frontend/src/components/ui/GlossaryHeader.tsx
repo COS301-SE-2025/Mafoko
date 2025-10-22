@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface GlossaryHeaderProps {
   title: string;
@@ -28,32 +28,8 @@ const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
         flexWrap: 'wrap',
       }}
     >
-      {/* Back Button */}
-      <button
-        type="button"
-        onClick={onBack}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'var(--return-button-bg)',
-          border: '1px solid var(--glossary-border-color)',
-          borderRadius: '8px',
-          padding: '8px',
-          minWidth: '36px',
-          minHeight: '36px',
-          cursor: 'pointer',
-          transition: 'opacity 0.2s ease',
-        }}
-      >
-        <ArrowLeft
-          style={{
-            width: '22px',
-            height: '22px',
-            color: 'var(--return-button-icon)',
-          }}
-        />
-      </button>
+      {/* Placeholder div on the left for symmetry */}
+      <div style={{ width: '36px', height: '36px' }} />
 
       {/* Title and Count inline */}
       <div
@@ -73,7 +49,43 @@ const GlossaryHeader: React.FC<GlossaryHeaderProps> = ({
         </h1>
       </div>
 
-      <div style={{ width: '36px', height: '36px' }} />
+      {/* Exit Button - On the right */}
+      <button
+        type="button"
+        onClick={onBack}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'var(--return-button-bg)',
+          border: '1px solid var(--glossary-border-color)',
+          borderRadius: '50%', // Make it circular
+          padding: '8px',
+          minWidth: '36px',
+          minHeight: '36px',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 82, 82, 0.1)'; // Subtle red on hover
+          e.currentTarget.style.borderColor = 'rgba(255, 82, 82, 0.3)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.backgroundColor = 'var(--return-button-bg)';
+          e.currentTarget.style.borderColor = 'var(--glossary-border-color)';
+        }}
+      >
+        <X
+          style={{
+            width: '22px',
+            height: '22px',
+            strokeWidth: 2.5,
+            color: 'var(--return-button-icon)',
+          }}
+        />
+      </button>
     </div>
 
     {/* Description below */}

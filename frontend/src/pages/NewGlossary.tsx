@@ -288,6 +288,51 @@ const GlossaryApp = () => {
     setCurrentPage(1);
   }, [selectedGlossary, debouncedTermSearch, selectedLanguages]);
 
+  // Function to fetch all bookmark data
+  const fetchBookmarkData = useCallback(async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setBookmarkedCategory(false);
+      setBookmarkedGlossaries([]);
+      return;
+    }
+
+    try {
+      // Use caching service to fetch user's bookmarks
+      const response = await cachingService.getBookmarks(token);
+      const bookmarksData = response.data as {
+        glossaries?: Array<{ domain: string }>;
+      };
+
+      const bookmarkedGlossariesData = bookmarksData.glossaries || [];
+
+      // Extract glossary names into a simple array
+      const bookmarkedGlossaryNames: string[] = bookmarkedGlossariesData.map(
+        (bookmark: { domain: string }) => bookmark.domain,
+      );
+
+      // Log for debugging
+      console.log('Bookmarked glossaries:', bookmarkedGlossaryNames);
+
+      setBookmarkedGlossaries(bookmarkedGlossaryNames);
+
+      // Update selected glossary bookmark status if one is selected
+      if (selectedGlossary) {
+        const isCurrentGlossaryBookmarked = bookmarkedGlossaryNames.includes(
+          selectedGlossary.name,
+        );
+        setBookmarkedCategory(isCurrentGlossaryBookmarked);
+      }
+    } catch (error) {
+      console.error('Error checking bookmark status:', error);
+      setBookmarkedCategory(false);
+
+      if (networkStatus.isOffline) {
+        showInfo('Bookmark status not available offline');
+      }
+    }
+  }, [selectedGlossary, networkStatus.isOffline, showInfo]);
+
   // Check if selected glossary is bookmarked when it changes
   useEffect(() => {
     if (!selectedGlossary) {
@@ -295,46 +340,35 @@ const GlossaryApp = () => {
       return;
     }
 
-    const checkBookmarkStatus = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        setBookmarkedCategory(false);
-        return;
-      }
+    void fetchBookmarkData();
+  }, [selectedGlossary, fetchBookmarkData]);
 
-      try {
-        // Use caching service to fetch user's bookmarks
-        const response = await cachingService.getBookmarks(token);
-        const bookmarksData = response.data as {
-          glossaries?: Array<{ domain: string }>;
-        };
+  // Listen for bookmark change events
+  useEffect(() => {
+    // Function to handle bookmark changes
+    const handleBookmarkChange = () => {
+      void fetchBookmarkData();
+    };
 
-        const bookmarkedGlossariesData = bookmarksData.glossaries || [];
-
-        // Extract glossary names into a simple array
-        const bookmarkedGlossaryNames: string[] = bookmarkedGlossariesData.map(
-          (bookmark: { domain: string }) => bookmark.domain,
-        );
-        setBookmarkedGlossaries(bookmarkedGlossaryNames);
-
-        // Check if current glossary is in the bookmarked glossaries
-        const isCurrentGlossaryBookmarked = bookmarkedGlossaryNames.includes(
-          selectedGlossary.name,
-        );
-
-        setBookmarkedCategory(isCurrentGlossaryBookmarked);
-      } catch (error) {
-        console.error('Error checking bookmark status:', error);
-        setBookmarkedCategory(false);
-
-        if (networkStatus.isOffline) {
-          showInfo('Bookmark status not available offline');
-        }
+    // Listen for local storage changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'bookmarksChanged') {
+        void fetchBookmarkData();
       }
     };
 
-    void checkBookmarkStatus();
-  }, [selectedGlossary, networkStatus.isOffline, showInfo]);
+    // Listen for custom bookmarkChanged event
+    window.addEventListener('bookmarkChanged', handleBookmarkChange);
+    window.addEventListener('storage', handleStorageChange);
+
+    // Initial fetch
+    void fetchBookmarkData();
+
+    return () => {
+      window.removeEventListener('bookmarkChanged', handleBookmarkChange);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [fetchBookmarkData]);
 
   // Reusable bookmark handler that both buttons can use
   const handleBookmarkGlossary = async (
@@ -370,31 +404,115 @@ const GlossaryApp = () => {
       // Check current bookmark status for this specific glossary
       const currentlyBookmarked = bookmarkedGlossaries.includes(glossary.name);
 
-      // Update UI optimistically
-      if (selectedGlossary?.name === glossary.name) {
-        setBookmarkedCategory(!currentlyBookmarked);
-      }
+      // Don't update UI optimistically, wait for response first
+      // to avoid conflict issues
 
       let success = false;
       if (currentlyBookmarked) {
         // Unbookmark the glossary
-        success = await cachingService.unbookmarkGlossary(token, glossary.name);
-        if (success) {
-          showSuccess(`Unbookmarked ${glossary.name}!`);
+        const response = await fetch(
+          API_ENDPOINTS.unbookmarkGlossary(glossary.name),
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({}),
+          },
+        );
+
+        // Handle the response
+        if (response.status === 409) {
+          // Handle 409 conflict - the glossary is already not bookmarked
+          console.log(`Glossary ${glossary.name} is already not bookmarked`);
+          success = true;
+
+          // Refresh bookmark state to match server state
+          if (selectedGlossary?.name === glossary.name) {
+            setBookmarkedCategory(false);
+          }
+
+          // Update bookmarked glossaries list
           setBookmarkedGlossaries((prev) =>
             prev.filter((name) => name !== glossary.name),
+          );
+
+          showInfo(`${glossary.name} is not bookmarked`);
+        } else if (response.ok) {
+          success = true;
+          // Update local state after successful API call
+          showSuccess(`Unbookmarked ${glossary.name}!`);
+
+          if (selectedGlossary?.name === glossary.name) {
+            setBookmarkedCategory(false);
+          }
+
+          setBookmarkedGlossaries((prev) =>
+            prev.filter((name) => name !== glossary.name),
+          );
+
+          // Update cache
+          await cachingService.unbookmarkGlossary(token, glossary.name);
+        } else {
+          showError(
+            `Failed to unbookmark ${glossary.name}: ${response.statusText}`,
           );
         }
       } else {
         // Bookmark the glossary
-        success = await cachingService.bookmarkGlossary(
-          token,
-          glossary.name,
-          glossary.description,
-        );
-        if (success) {
+        const response = await fetch(API_ENDPOINTS.bookmarkGlossary, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            domain: glossary.name,
+            description: glossary.description || '',
+          }),
+        });
+
+        // Handle the response
+        if (response.status === 409) {
+          // Handle 409 conflict - the glossary is already bookmarked
+          console.log(`Glossary ${glossary.name} is already bookmarked`);
+          success = true;
+
+          // Refresh bookmark state to match server state
+          if (selectedGlossary?.name === glossary.name) {
+            setBookmarkedCategory(true);
+          }
+
+          // Update bookmarked glossaries list if needed
+          if (!bookmarkedGlossaries.includes(glossary.name)) {
+            setBookmarkedGlossaries((prev) => [...prev, glossary.name]);
+          }
+
+          showInfo(`${glossary.name} is already bookmarked`);
+        } else if (response.ok) {
+          success = true;
+          // Update local state after successful API call
           showSuccess(`Bookmarked ${glossary.name}!`);
-          setBookmarkedGlossaries((prev) => [...prev, glossary.name]);
+
+          if (selectedGlossary?.name === glossary.name) {
+            setBookmarkedCategory(true);
+          }
+
+          setBookmarkedGlossaries((prev) =>
+            prev.includes(glossary.name) ? prev : [...prev, glossary.name],
+          );
+
+          // Update cache
+          await cachingService.bookmarkGlossary(
+            token,
+            glossary.name,
+            glossary.description,
+          );
+        } else {
+          showError(
+            `Failed to bookmark ${glossary.name}: ${response.statusText}`,
+          );
         }
       }
 
@@ -412,24 +530,16 @@ const GlossaryApp = () => {
             },
           }),
         );
-      } else {
-        // Revert optimistic update on failure
-        if (selectedGlossary?.name === glossary.name) {
-          setBookmarkedCategory(currentlyBookmarked);
-        }
       }
 
       return success;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_error) {
+    } catch (error) {
+      console.error('Bookmark operation failed:', error);
+
       toast('Failed to bookmark', {
-        description: '',
+        description: 'There was an error processing your request',
       });
 
-      // Revert optimistic update on failure
-      if (selectedGlossary?.name === glossary.name) {
-        setBookmarkedCategory(bookmarkedCategory);
-      }
       return false;
     }
   };
@@ -1006,6 +1116,14 @@ const GlossaryApp = () => {
                     title={
                       bookmarkedCategory ? 'Bookmarked!' : 'Bookmark Category'
                     }
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.backgroundColor = '#d9bb01';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.backgroundColor = '#f2d001';
+                    }}
                   >
                     <Bookmark
                       size={28}
