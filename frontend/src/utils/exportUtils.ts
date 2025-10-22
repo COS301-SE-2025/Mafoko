@@ -230,8 +230,8 @@ export const generateHTMLTable = async (
   const formattedCategoryName = categoryName || '';
 
   const title = categoryName
-    ? 'Marito Glossary: ' + categoryName
-    : 'Marito Glossary';
+    ? 'Mafoko Glossary: ' + categoryName
+    : 'Mafoko Glossary';
   const subtitle = categoryName
     ? 'Terms in ' + formattedCategoryName + ' category'
     : 'Complete Glossary';
@@ -420,7 +420,7 @@ export const generatePDF = async (
       ? `${categoryName.toLowerCase().replace(/\s+/g, '-')}-`
       : '';
 
-    const filename = `marito-glossary-${categoryPrefix}${timestamp}.pdf`;
+    const filename = `mafoko-glossary-${categoryPrefix}${timestamp}.pdf`;
     progressBar.style.width = '20%';
 
     try {
@@ -757,8 +757,8 @@ export const generatePDF = async (
         pdf.setFontSize(18);
         pdf.setFont('helvetica', 'bold');
         const title = categoryName
-          ? `Marito Glossary: ${formattedCatName}`
-          : 'Marito Glossary';
+          ? `Mafoko Glossary: ${formattedCatName}`
+          : 'Mafoko Glossary';
 
         // Handle long titles
         const maxWidth = pageWidth - margin * 2;
@@ -947,8 +947,8 @@ export const generatePDF = async (
         // Use full category name (no truncation)
         const formattedCatName = categoryName || '';
         const title = categoryName
-          ? `Marito Glossary: ${formattedCatName}`
-          : 'Marito Glossary';
+          ? `Mafoko Glossary: ${formattedCatName}`
+          : 'Mafoko Glossary';
 
         // Handle long titles
         const maxWidth = pageWidth - margin * 2;
@@ -1082,8 +1082,8 @@ export const generatePDF = async (
       // Add a title
       pdf.setFontSize(16);
       const title = categoryName
-        ? `Marito Glossary: ${formattedCatName}`
-        : 'Marito Glossary';
+        ? `Mafoko Glossary: ${formattedCatName}`
+        : 'Mafoko Glossary';
 
       // Handle long titles
       const maxWidth = pageWidth - margin * 2;
@@ -1216,7 +1216,7 @@ export const downloadData = async (
       const generatePDFAfterDelay = async (): Promise<void> => {
         try {
           // Create PDF filename
-          const pdfFilename = `marito-glossary-${categoryPrefix}${timestamp}.pdf`;
+          const pdfFilename = `mafoko-glossary-${categoryPrefix}${timestamp}.pdf`;
 
           // Import jsPDF directly
           const { jsPDF } = await import('jspdf');
@@ -1267,8 +1267,8 @@ export const downloadData = async (
           // Calculate max width for title to avoid overlapping with logo
           const maxTitleWidth = pageWidth - margin - margin - 25; // Allow space for logo
           const title = categoryName
-            ? `Marito Glossary: ${formattedCategoryName}`
-            : 'Marito Glossary';
+            ? `Mafoko Glossary: ${formattedCategoryName}`
+            : 'Mafoko Glossary';
 
           // Handle long titles by splitting into multiple lines if needed
           const titleLines = pdf.splitTextToSize(
@@ -1505,7 +1505,7 @@ export const downloadData = async (
             );
 
             // Add "Generated with Marito Glossary" text at the bottom
-            pdf.text('Generated with Marito Glossary', margin, pageHeight - 10);
+            pdf.text('Generated with Mafoko Glossary', margin, pageHeight - 10);
           }
 
           // Update message before saving
@@ -1555,11 +1555,11 @@ export const downloadData = async (
 
   if (format === 'csv') {
     content = generateCSV(data);
-    filename = `marito-glossary-${categoryPrefix}${timestamp}.csv`;
+    filename = `mafoko-glossary-${categoryPrefix}${timestamp}.csv`;
     mimeType = 'text/csv';
   } else if (format === 'html') {
     content = await generateHTMLTable(data, categoryName);
-    filename = `marito-glossary-${categoryPrefix}${timestamp}.html`;
+    filename = `mafoko-glossary-${categoryPrefix}${timestamp}.html`;
     mimeType = 'text/html';
   } else {
     // For JSON, include only the required fields and iso_lang
@@ -1578,7 +1578,7 @@ export const downloadData = async (
       };
     });
     content = JSON.stringify(cleanedData, null, 2);
-    filename = `marito-glossary-${categoryPrefix}${timestamp}.json`;
+    filename = `mafoko-glossary-${categoryPrefix}${timestamp}.json`;
     mimeType = 'application/json';
   }
 
