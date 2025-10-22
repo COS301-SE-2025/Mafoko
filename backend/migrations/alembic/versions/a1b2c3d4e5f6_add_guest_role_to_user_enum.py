@@ -1,7 +1,7 @@
 """Add guest role to user enum
 
 Revision ID: a1b2c3d4e5f6
-Revises: fbe53acc59ce
+Revises: cae0f7e9844d
 Create Date: 2025-01-27 10:00:00.000000
 
 """
@@ -12,7 +12,7 @@ from alembic import op
 
 
 revision: str = "a1b2c3d4e5f6"
-down_revision: Union[str, Sequence[str], None] = "fbe53acc59ce"
+down_revision: Union[str, Sequence[str], None] = "cae0f7e9844d"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
