@@ -19,6 +19,7 @@ export default tseslint.config(
       'src/components/legacy/**',
       'src/components/charts/**',
       'src/components/learning/GlossaryCard.tsx',
+      'src/components/ui/TermCard.tsx',
       'src/components/ui/GlossaryCard.tsx',
       'src/pages/AdminTermPage.tsx',
       'src/pages/ContributorPage.tsx',
