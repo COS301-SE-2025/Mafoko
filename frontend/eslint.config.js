@@ -30,6 +30,7 @@ export default tseslint.config(
       'src/sw.ts',
       'src/utils/syncManager.ts',
       'src/utils/cacheUpdater.ts',
+      'src/utils/exportUtils.ts',
     ],
   },
 
