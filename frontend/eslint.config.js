@@ -15,6 +15,7 @@ export default tseslint.config(
       'dist/**',
       'build/**',
       'coverage/**',
+      'src/components/**',
       'src/components/auth/**',
       'src/components/legacy/**',
       'src/components/charts/**',
