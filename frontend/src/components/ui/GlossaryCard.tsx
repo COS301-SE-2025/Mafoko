@@ -111,6 +111,11 @@ export default function GlossaryCard({
   const networkStatus = useNetworkStatus();
   const { user } = useUser();
 
+  // Update isBookmarked state when initialBookmarked prop changes
+  useEffect(() => {
+    setIsBookmarked(initialBookmarked);
+  }, [initialBookmarked]);
+
   // DOM node for portal rendering
   const [portalNode, setPortalNode] = useState<HTMLElement | null>(null);
 

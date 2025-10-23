@@ -58,12 +58,35 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
       </div>
 
       <div
-        className="glossary-card-actions flex gap-3 justify-between items-center"
-        style={{ paddingTop: '15px' }}
+        className="glossary-card-actions flex justify-center items-center"
+        style={{
+          paddingTop: '20px',
+          gap: '30px',
+        }}
       >
         <button
           type="button"
-          className=" flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            backgroundColor: '#00ceaf',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            fontWeight: 600,
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            minWidth: '120px',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = '#00b69d';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = '#00ceaf';
+          }}
           onClick={(e) => {
             e.stopPropagation();
             if (onStudy) onStudy();
@@ -75,7 +98,27 @@ const GlossaryCard: React.FC<GlossaryCardProps> = ({
 
         <button
           type="button"
-          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            backgroundColor: '#f2d001',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            fontWeight: 600,
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            minWidth: '120px',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = '#d9bb01';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = '#f2d001';
+          }}
           onClick={(e) => {
             e.stopPropagation();
             if (onFlashcards) onFlashcards();

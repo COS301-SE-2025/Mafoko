@@ -230,8 +230,8 @@ export const generateHTMLTable = async (
   const formattedCategoryName = categoryName || '';
 
   const title = categoryName
-    ? 'Marito Glossary: ' + categoryName
-    : 'Marito Glossary';
+    ? 'Mafoko Glossary: ' + categoryName
+    : 'Mafoko Glossary';
   const subtitle = categoryName
     ? 'Terms in ' + formattedCategoryName + ' category'
     : 'Complete Glossary';
@@ -298,121 +298,6 @@ export const generatePDF = async (
   categoryName?: string | null,
 ): Promise<void> => {
   try {
-    // Create a modal overlay to prevent interactions and provide feedback
-    const overlayId = 'pdf-generation-overlay';
-    let overlay = document.getElementById(overlayId);
-
-    // Create the overlay if it doesn't exist
-    if (!overlay) {
-      // Get theme variables from CSS
-      const isDarkMode =
-        document.documentElement.classList.contains('theme-dark');
-      const accentColor = '#f00a50'; // Primary pink accent color
-      const backgroundColor = isDarkMode ? '#363b4d' : '#ffffff';
-      const textColor = isDarkMode ? '#ffffff' : '#212431';
-      const borderColor = isDarkMode ? '#4a5568' : '#d1d5db';
-
-      overlay = document.createElement('div');
-      overlay.id = overlayId;
-      overlay.style.position = 'fixed';
-      overlay.style.top = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.backgroundColor = 'rgba(33, 36, 49, 0.85)'; // Dark blue background with opacity
-      overlay.style.zIndex = '9999';
-      overlay.style.display = 'flex';
-      overlay.style.flexDirection = 'column';
-      overlay.style.alignItems = 'center';
-      overlay.style.justifyContent = 'center';
-      overlay.style.color = textColor;
-      overlay.style.fontSize = '16px';
-
-      // Create a modal container that matches the glossary card style
-      const modalContainer = document.createElement('div');
-      modalContainer.style.backgroundColor = backgroundColor;
-      modalContainer.style.borderRadius = '12px';
-      modalContainer.style.padding = '30px';
-      modalContainer.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.2)';
-      modalContainer.style.display = 'flex';
-      modalContainer.style.flexDirection = 'column';
-      modalContainer.style.alignItems = 'center';
-      modalContainer.style.justifyContent = 'center';
-      modalContainer.style.maxWidth = '500px';
-      modalContainer.style.width = '90%';
-
-      // Create a header with the app's accent color
-      const header = document.createElement('div');
-      header.textContent = 'Generating PDF';
-      header.style.color = accentColor;
-      header.style.fontSize = '22px';
-      header.style.fontWeight = '600';
-      header.style.marginBottom = '20px';
-      header.style.width = '100%';
-      header.style.textAlign = 'center';
-
-      const spinner = document.createElement('div');
-      spinner.style.width = '50px';
-      spinner.style.height = '50px';
-      spinner.style.border = `5px solid ${borderColor}`;
-      spinner.style.borderTop = `5px solid ${accentColor}`; // Pink accent color
-      spinner.style.borderRadius = '50%';
-      spinner.style.marginBottom = '25px';
-      spinner.style.animation = 'spin 1s linear infinite';
-
-      const style = document.createElement('style');
-      style.textContent =
-        '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
-      document.head.appendChild(style);
-
-      const message = document.createElement('div');
-      message.id = 'pdf-generation-message';
-      message.style.textAlign = 'center';
-      message.style.maxWidth = '100%';
-      message.style.padding = '0 20px';
-      message.style.marginBottom = '20px';
-      message.style.fontSize = '16px';
-      message.style.color = textColor;
-
-      const progressContainer = document.createElement('div');
-      progressContainer.style.width = '100%';
-      progressContainer.style.height = '8px';
-      progressContainer.style.backgroundColor = borderColor;
-      progressContainer.style.borderRadius = '4px';
-      progressContainer.style.overflow = 'hidden';
-      progressContainer.style.marginTop = '10px';
-
-      const progressBar = document.createElement('div');
-      progressBar.id = 'pdf-generation-progress';
-      progressBar.style.width = '0%';
-      progressBar.style.height = '100%';
-      progressBar.style.backgroundColor = accentColor; // Pink accent color
-      progressBar.style.transition = 'width 0.3s ease';
-
-      progressContainer.appendChild(progressBar);
-
-      // Assemble the modal
-      modalContainer.appendChild(header);
-      modalContainer.appendChild(spinner);
-      modalContainer.appendChild(message);
-      modalContainer.appendChild(progressContainer);
-
-      overlay.appendChild(modalContainer);
-      document.body.appendChild(overlay);
-    }
-
-    // Get references to the message and progress bar
-    const message = document.getElementById('pdf-generation-message');
-    const progressBar = document.getElementById('pdf-generation-progress');
-
-    if (!message || !progressBar) {
-      throw new Error('Failed to create UI elements');
-    }
-
-    // Show initial message
-    message.textContent = `Preparing PDF with ${String(data.length)} terms, please wait...`;
-    progressBar.style.width = '10%';
-
     // Generate the HTML content
     const htmlContent = await generateHTMLTable(data, categoryName);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -420,16 +305,9 @@ export const generatePDF = async (
       ? `${categoryName.toLowerCase().replace(/\s+/g, '-')}-`
       : '';
 
-    const filename = `marito-glossary-${categoryPrefix}${timestamp}.pdf`;
-    progressBar.style.width = '20%';
+    const filename = `mafoko-glossary-${categoryPrefix}${timestamp}.pdf`;
 
     try {
-      // Update message
-      message.textContent = 'Rendering content...';
-
-      // Determine if this is a large dataset (affects rendering strategy)
-      const isLargeDataset = data.length > 100;
-
       // Create an off-screen iframe to render the content properly
       const iframe = document.createElement('iframe');
       iframe.style.width = '800px';
@@ -441,7 +319,6 @@ export const generatePDF = async (
 
       // Append iframe to body
       document.body.appendChild(iframe);
-      progressBar.style.width = '30%';
 
       // Wait for iframe to load
       await new Promise<void>((resolve) => {
@@ -453,18 +330,12 @@ export const generatePDF = async (
         const doc = iframe.contentWindow?.document;
         if (doc) {
           doc.open();
-          // Replace document.write with a safer alternative
           doc.documentElement.innerHTML = htmlContent;
           doc.close();
         } else {
-          // If iframe document is not available, resolve anyway
           resolve();
         }
       });
-
-      // Update message
-      message.textContent = 'Generating PDF...';
-      progressBar.style.width = '40%';
 
       // Get the document from the iframe
       const iframeDoc = iframe.contentWindow?.document;
@@ -475,9 +346,9 @@ export const generatePDF = async (
       // Import libraries dynamically
       const { jsPDF } = await import('jspdf');
       const html2canvas = (await import('html2canvas')).default;
-      progressBar.style.width = '50%';
 
-      // Process in smaller chunks for large datasets to avoid memory issues
+      // Determine if this is a large dataset (affects rendering strategy)
+      const isLargeDataset = data.length > 100;
 
       // Create PDF with compression
       const pdf = new jsPDF({
@@ -493,9 +364,6 @@ export const generatePDF = async (
       const margin = 10; // margin in mm
       const usableWidth = pageWidth - 2 * margin;
 
-      // Process the table in chunks to avoid memory issues
-      message.textContent = 'Processing content in chunks...';
-
       // Get the table element from the iframe
       const tableElement = iframeDoc.querySelector('table');
       if (!tableElement) {
@@ -503,7 +371,6 @@ export const generatePDF = async (
       }
 
       // Get the header row for consistent table formatting
-      // Specifically target the first row that contains th elements for better reliability
       const headerRow = tableElement.querySelector('tr:first-child');
       if (!headerRow) {
         throw new Error('Could not find header row in table');
@@ -513,7 +380,7 @@ export const generatePDF = async (
       const headerCells = headerRow.querySelectorAll('th');
       headerCells.forEach((cell) => {
         if (cell instanceof HTMLElement) {
-          cell.style.backgroundColor = '#2d3748'; // Match table style
+          cell.style.backgroundColor = '#2d3748';
           cell.style.color = 'white';
           cell.style.fontWeight = 'bold';
           cell.style.padding = '16px 20px';
@@ -640,14 +507,8 @@ export const generatePDF = async (
           // Move position for next row
           yPosition += rowHeight;
 
-          // Update progress
-          const progress = Math.min(90, 50 + (i / (rows.length - 1)) * 40);
-          progressBar.style.width = `${String(progress)}%`;
-          message.textContent = `Creating PDF - Page ${String(currentPage)}, Term ${String(i)} of ${String(rows.length - 1)}`;
-
-          // Give the browser a chance to update the UI and free memory
+          // Give the browser a chance to free memory
           if (i % (isLargeDataset ? 5 : 10) === 0) {
-            // For large datasets, free memory more frequently by allowing garbage collection
             await new Promise((resolve) =>
               setTimeout(resolve, isLargeDataset ? 30 : 10),
             );
@@ -658,9 +519,6 @@ export const generatePDF = async (
           continue;
         }
       }
-
-      progressBar.style.width = '95%';
-      message.textContent = 'Saving PDF...';
 
       // Add footer with page numbers
       const totalPages = pdf.getNumberOfPages();
@@ -676,64 +534,16 @@ export const generatePDF = async (
         );
       }
 
-      // Save the PDF with a small delay to allow UI updates
-      setTimeout(() => {
-        pdf.save(filename);
+      // Save the PDF
+      pdf.save(filename);
 
-        // Clean up
-        document.body.removeChild(iframe);
-
-        // Update success message
-        message.textContent = 'PDF downloaded successfully!';
-        progressBar.style.width = '100%';
-
-        // Update header to indicate success
-        const header = overlay.querySelector(
-          'div:first-child',
-        ) as HTMLDivElement;
-        header.textContent = 'Export Complete';
-        header.style.color = '#00ceaf'; // Use teal accent for success          // Remove the overlay after a delay
-        setTimeout(() => {
-          if (document.body.contains(overlay)) {
-            document.body.removeChild(overlay);
-          }
-        }, 2000);
-      }, 200);
+      // Clean up
+      document.body.removeChild(iframe);
     } catch (error) {
       console.error('Error in PDF generation:', error);
 
-      // Get references again to ensure they exist
-      const message = document.getElementById('pdf-generation-message');
-      const progressBar = document.getElementById('pdf-generation-progress');
-      const overlay = document.getElementById('pdf-generation-overlay');
-
-      // Update the header text to indicate error
-      if (overlay) {
-        const header = overlay.querySelector(
-          'div:first-child',
-        ) as HTMLDivElement;
-        header.textContent = 'PDF Generation Failed';
-        header.style.color = '#f00a50'; // Error color
-      }
-
-      if (message) {
-        message.textContent =
-          'Failed to generate PDF. Trying alternative method...';
-      }
-
-      // Set progressBar styles
-      if (progressBar) {
-        progressBar.style.width = '50%';
-        progressBar.style.backgroundColor = '#f00a50'; // Use project's accent color for error
-      }
-
       // Fallback method using simpler approach with jsPDF directly
       try {
-        // Update the message
-        if (message) {
-          message.textContent = 'Trying alternative PDF generation method...';
-        }
-
         // Import jsPDF
         const { jsPDF } = await import('jspdf');
 
@@ -757,8 +567,8 @@ export const generatePDF = async (
         pdf.setFontSize(18);
         pdf.setFont('helvetica', 'bold');
         const title = categoryName
-          ? `Marito Glossary: ${formattedCatName}`
-          : 'Marito Glossary';
+          ? `Mafoko Glossary: ${formattedCatName}`
+          : 'Mafoko Glossary';
 
         // Handle long titles
         const maxWidth = pageWidth - margin * 2;
@@ -798,15 +608,6 @@ export const generatePDF = async (
 
         // Add data rows
         for (let i = 0; i < data.length; i++) {
-          // Update progress
-          if (progressBar && i % 5 === 0) {
-            const progress = Math.min(95, 50 + (i / data.length) * 45);
-            progressBar.style.width = `${String(progress)}%`;
-            if (message) {
-              message.textContent = `Processing term ${String(i + 1)} of ${String(data.length)}...`;
-            }
-          }
-
           const term = data[i];
 
           // Check if we need a new page
@@ -868,293 +669,61 @@ export const generatePDF = async (
 
         // Save the PDF
         pdf.save(filename);
-
-        if (message) {
-          const successIcon = '✓';
-          message.innerHTML = `<span style="color:#00ceaf; font-weight: bold; margin-right:6px;">${successIcon}</span> PDF generated successfully`;
-        }
-
-        if (progressBar) {
-          progressBar.style.width = '100%';
-          progressBar.style.backgroundColor = '#00ceaf';
-        }
-
-        if (progressBar) {
-          progressBar.style.width = '100%';
-          progressBar.style.backgroundColor = '#00ceaf'; // Use project's teal accent for fallback success
-        }
-
-        // Update header for success
-        const header = overlay?.querySelector(
-          'div:first-child',
-        ) as HTMLDivElement;
-        header.textContent = 'PDF Generated Successfully';
-        header.style.color = '#00ceaf'; // Success color
-
-        // Remove the overlay after 5 seconds
-        setTimeout(() => {
-          if (overlay && document.body.contains(overlay)) {
-            document.body.removeChild(overlay);
-          }
-        }, 5000);
       } catch (fallbackError) {
         console.error('Fallback download failed:', fallbackError);
 
-        if (message) {
-          message.textContent = 'Export failed. Please try again later.';
-        }
+        // Try a super simplified approach for very large datasets
+        try {
+          const { jsPDF } = await import('jspdf');
+          const pdf = new jsPDF();
 
-        // Remove the overlay after 5 seconds
-        setTimeout(() => {
-          if (overlay && document.body.contains(overlay)) {
-            document.body.removeChild(overlay);
-          }
-        }, 5000);
-      }
-    }
+          // Add a title
+          pdf.setFontSize(16);
+          const title = categoryName
+            ? `Mafoko Glossary: ${categoryName}`
+            : 'Mafoko Glossary';
 
-    // For large datasets that still fail, try another approach
-    if (data.length > 100) {
-      console.warn('Large dataset detected, trying simplified approach');
+          pdf.text(title, 10, 10);
+          pdf.text(`Generated: ${new Date().toLocaleString()}`, 10, 20);
 
-      // Show user feedback
-      message.textContent =
-        'Using simplified PDF generation for large dataset...';
+          // Process terms in the simplest manner possible
+          let y = 30;
+          for (const term of data) {
+            // Check if we need a new page
+            if (y > 270) {
+              pdf.addPage();
+              y = 10;
+            }
 
-      try {
-        // Create a more basic PDF with just text (no styling) for better performance
-        const { jsPDF } = await import('jspdf');
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4',
-          compress: true,
-        });
-
-        // Set up dimensions
-        const pageWidth = 210;
-        const pageHeight = 297;
-        const margin = 20;
-
-        // Set font size and line height
-        pdf.setFontSize(12);
-        let y = margin + 25;
-
-        // Add title
-        pdf.setFontSize(18);
-        pdf.setFont('helvetica', 'bold');
-
-        // Use full category name (no truncation)
-        const formattedCatName = categoryName || '';
-        const title = categoryName
-          ? `Marito Glossary: ${formattedCatName}`
-          : 'Marito Glossary';
-
-        // Handle long titles
-        const maxWidth = pageWidth - margin * 2;
-        const splitTitle = pdf.splitTextToSize(title, maxWidth) as string[];
-        pdf.text(splitTitle, margin, y);
-        y += 10;
-
-        // Add export date - adjust position based on title height
-        const titleOffset = splitTitle.length > 1 ? splitTitle.length * 8 : 10;
-        pdf.setFontSize(10);
-        pdf.setFont('helvetica', 'italic');
-        pdf.text(
-          `Export generated on: ${new Date().toLocaleString()}`,
-          margin,
-          y + titleOffset,
-        );
-        y += titleOffset + 15;
-
-        // Add column headers with background color simulation
-        pdf.setFillColor(45, 55, 72); // #2d3748 - match the table header color
-        pdf.rect(margin, y - 6, pageWidth - margin * 2, 8, 'F');
-
-        pdf.setTextColor(255, 255, 255); // White text for header
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(12);
-        pdf.text('Term', margin + 5, y - 2);
-        pdf.text('Definition', pageWidth / 2, y - 2);
-        pdf.setTextColor(0, 0, 0); // Reset text color for content
-        y += 10;
-
-        // Add data rows
-        pdf.setFont('helvetica', 'normal');
-        for (let i = 0; i < data.length; i++) {
-          const term = data[i];
-
-          // Check if we need a new page
-          if (y > pageHeight - margin) {
-            pdf.addPage();
-            y = margin;
-
-            // Add column headers to new page with background color
-            pdf.setFillColor(45, 55, 72); // #2d3748 - match the table header color
-            pdf.rect(margin, y - 6, pageWidth - margin * 2, 8, 'F');
-
-            pdf.setTextColor(255, 255, 255); // White text for header
+            // Add term (bold)
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Term', margin + 5, y - 2);
-            pdf.text('Definition', margin + pageWidth * 0.3, y - 2);
-            pdf.text('Language', margin + pageWidth * 0.7, y - 2);
-            pdf.setTextColor(0, 0, 0); // Reset text color for content
-            y += 10;
+            pdf.text(`${term.term}:`, 10, y);
+            y += 7;
+
+            // Add definition (normal)
             pdf.setFont('helvetica', 'normal');
+            const lines = pdf.splitTextToSize(term.definition, 180);
+            pdf.text(lines, 10, y);
+            y += lines.length * 7 + 5;
           }
 
-          // Add term, definition and language
-          pdf.text(term.term.substring(0, 30), margin, y);
-
-          // Split definition into multiple lines if needed
-          const definition = term.definition;
-          const maxWidth = pageWidth * 0.35;
-          const splitText = pdf.splitTextToSize(
-            definition,
-            maxWidth,
-          ) as string[];
-          const lines = splitText.length;
-
-          if (lines <= 1) {
-            pdf.text(definition, margin + pageWidth * 0.3, y);
-            // Add language
-            if (term.language) {
-              pdf.text(term.language, margin + pageWidth * 0.7, y);
-            }
-            y += 8;
-          } else {
-            // Handle multiline text
-            pdf.text(splitText, margin + pageWidth * 0.3, y);
-            // Add language
-            if (term.language) {
-              pdf.text(term.language, margin + pageWidth * 0.7, y);
-            }
-            y += lines * 5 + 3;
-          }
-
-          // Update progress
-          if (i % 10 === 0) {
-            progressBar.style.width = `${String(Math.min(95, 50 + (i / data.length) * 45))}%`;
-            message.textContent = `Processing term ${String(i + 1)} of ${String(data.length)}...`;
-          }
+          // Save the PDF
+          pdf.save(filename);
+        } catch (finalError) {
+          console.error('Final PDF fallback failed:', finalError);
+          // Let user know it failed
+          alert(
+            'PDF generation failed. Please try a different export format or with fewer terms.',
+          );
         }
-
-        // Save the PDF
-        pdf.save(filename);
-
-        // Show success message
-        message.textContent = 'PDF downloaded successfully!';
-        progressBar.style.width = '100%';
-
-        // Remove overlay after delay
-        setTimeout(() => {
-          const overlay = document.getElementById('pdf-generation-overlay');
-          if (overlay && document.body.contains(overlay)) {
-            document.body.removeChild(overlay);
-          }
-        }, 2000);
-
-        return; // Exit the function here
-      } catch (fallbackError) {
-        console.error('Simplified PDF generation failed:', fallbackError);
-        // Continue to HTML fallback
       }
-    }
-
-    // If all PDF generation methods have failed, use one last attempt with a simplified jsPDF approach
-    console.warn('PDF generation methods failed, using final fallback method');
-
-    try {
-      message.textContent = 'Using final fallback PDF method...';
-
-      // Import jsPDF directly
-      const { jsPDF } = await import('jspdf');
-
-      // Create a very simple PDF with minimal formatting
-      const pdf = new jsPDF();
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const margin = 10;
-      let y = margin;
-
-      // Use full category name (no truncation)
-      const formattedCatName = categoryName || '';
-
-      // Add a title
-      pdf.setFontSize(16);
-      const title = categoryName
-        ? `Marito Glossary: ${formattedCatName}`
-        : 'Marito Glossary';
-
-      // Handle long titles
-      const maxWidth = pageWidth - margin * 2;
-      const splitTitle = pdf.splitTextToSize(title, maxWidth) as string[];
-      pdf.text(splitTitle, margin, y);
-      y += splitTitle.length > 1 ? splitTitle.length * 7 : 10;
-
-      // Add timestamp
-      pdf.setFontSize(10);
-      pdf.text(`Generated: ${new Date().toLocaleString()}`, margin, y);
-      y += 15;
-
-      // Add content with minimal formatting
-      pdf.setFontSize(12);
-
-      // Process terms in a simplified manner
-      for (const term of data) {
-        // Check if we need a new page
-        if (y > 270) {
-          pdf.addPage();
-          y = margin;
-        }
-
-        // Add term (bold)
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(`${term.term}:`, margin, y);
-        y += 7;
-
-        // Add definition (normal)
-        pdf.setFont('helvetica', 'normal');
-
-        // Handle text wrapping manually
-        const maxWidth = pageWidth - margin * 2;
-        const lines = pdf.splitTextToSize(
-          term.definition,
-          maxWidth,
-        ) as string[];
-
-        // Add each line
-        pdf.text(lines, margin, y);
-        y += lines.length * 7 + 7; // Add spacing after definition
-      }
-
-      // Save the PDF
-      pdf.save(filename);
-
-      message.textContent = 'PDF saved successfully!';
-
-      progressBar.style.width = '100%';
-      progressBar.style.backgroundColor = '#00ceaf';
-
-      return;
-    } catch (finalError) {
-      console.error('Final PDF fallback failed:', finalError);
-
-      // Show error message, but don't download HTML as fallback
-      message.textContent =
-        'PDF generation failed. Please try again or use a different export format.';
-
-      // Give user time to see the error message
-      await new Promise((resolve) => setTimeout(resolve, 3000));
     }
   } catch (error: unknown) {
     console.error('PDF generation failed:', error);
-    // Remove loading toast if it exists
-    const loadingToast = document.querySelector(
-      'div[style*="position: fixed"][style*="bottom: 20px"]',
+    // Let user know it failed
+    alert(
+      'PDF generation failed. Please try a different export format or with fewer terms.',
     );
-    if (loadingToast && loadingToast.parentNode) {
-      loadingToast.parentNode.removeChild(loadingToast);
-    }
     throw error; // Re-throw for caller to handle
   }
 };
@@ -1178,45 +747,16 @@ export const downloadData = async (
   // For PDF format, handle the download using a simple direct approach
   if (format === 'pdf') {
     try {
-      // First, create a loading overlay to show progress
-      const loadingOverlay = document.createElement('div');
-      loadingOverlay.style.position = 'fixed';
-      loadingOverlay.style.top = '0';
-      loadingOverlay.style.left = '0';
-      loadingOverlay.style.width = '100%';
-      loadingOverlay.style.height = '100%';
-      loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-      loadingOverlay.style.display = 'flex';
-      loadingOverlay.style.alignItems = 'center';
-      loadingOverlay.style.justifyContent = 'center';
-      loadingOverlay.style.zIndex = '9999';
-
-      const messageBox = document.createElement('div');
-      messageBox.style.backgroundColor = '#fff';
-      messageBox.style.padding = '20px';
-      messageBox.style.borderRadius = '8px';
-      messageBox.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
-      messageBox.style.textAlign = 'center';
-      messageBox.style.maxWidth = '80%';
-
-      const loadingMessage = document.createElement('div');
-      loadingMessage.textContent = 'Generating PDF file...';
-      loadingMessage.style.marginBottom = '15px';
-      loadingMessage.style.fontSize = '18px';
-      loadingMessage.style.fontWeight = 'bold';
-
-      messageBox.appendChild(loadingMessage);
-      loadingOverlay.appendChild(messageBox);
-      document.body.appendChild(loadingOverlay);
+      // No loading overlay, we'll generate the PDF silently
 
       // Update the message
-      loadingMessage.textContent = 'Generating PDF...';
+      // loadingMessage.textContent = 'Generating PDF...';
 
       // Using an intermediate async function to avoid no-misused-promises error
       const generatePDFAfterDelay = async (): Promise<void> => {
         try {
           // Create PDF filename
-          const pdfFilename = `marito-glossary-${categoryPrefix}${timestamp}.pdf`;
+          const pdfFilename = `mafoko-glossary-${categoryPrefix}${timestamp}.pdf`;
 
           // Import jsPDF directly
           const { jsPDF } = await import('jspdf');
@@ -1267,8 +807,8 @@ export const downloadData = async (
           // Calculate max width for title to avoid overlapping with logo
           const maxTitleWidth = pageWidth - margin - margin - 25; // Allow space for logo
           const title = categoryName
-            ? `Marito Glossary: ${formattedCategoryName}`
-            : 'Marito Glossary';
+            ? `Mafoko Glossary: ${formattedCategoryName}`
+            : 'Mafoko Glossary';
 
           // Handle long titles by splitting into multiple lines if needed
           const titleLines = pdf.splitTextToSize(
@@ -1369,7 +909,7 @@ export const downloadData = async (
           for (let i = 0; i < data.length; i++) {
             // Update progress message every 10 items
             if (i % 10 === 0) {
-              loadingMessage.textContent = `Processing terms... (${String(i)}/${String(data.length)})`;
+              // loadingMessage.textContent = `Processing terms... (${String(i)}/${String(data.length)})`;
             }
 
             const term = data[i];
@@ -1505,32 +1045,32 @@ export const downloadData = async (
             );
 
             // Add "Generated with Marito Glossary" text at the bottom
-            pdf.text('Generated with Marito Glossary', margin, pageHeight - 10);
+            pdf.text('Generated with Mafoko Glossary', margin, pageHeight - 10);
           }
 
           // Update message before saving
-          loadingMessage.textContent = 'PDF ready! Downloading now...';
+          // loadingMessage.textContent = 'PDF ready! Downloading now...';
 
           // Save the PDF directly
           pdf.save(pdfFilename);
 
           // Display success message
-          loadingMessage.textContent = 'PDF file downloaded successfully!';
-          loadingMessage.style.color = '#00ceaf';
+          //// loadingMessage.textContent = 'PDF file downloaded successfully!';
+          // loadingMessage.style.color = '#00ceaf';
 
           // Remove the overlay after a delay
           setTimeout(() => {
-            document.body.removeChild(loadingOverlay);
+            // document.body.removeChild(loadingOverlay);
           }, 2000);
         } catch (pdfError) {
           console.error('Error generating PDF:', pdfError);
-          loadingMessage.textContent =
-            'PDF generation failed. Please try again or use a different export format.';
-          loadingMessage.style.color = '#f00a50';
+          //loadingMessage.textContent =
+          ('PDF generation failed. Please try again or use a different export format.');
+          //loadingMessage.style.color = '#f00a50';
 
           // Remove the overlay after a delay
           setTimeout(() => {
-            document.body.removeChild(loadingOverlay);
+            // document.body.removeChild(loadingOverlay);
           }, 3000);
         } finally {
           // No URL objects to clean up since we're not creating any blob URLs
@@ -1555,11 +1095,11 @@ export const downloadData = async (
 
   if (format === 'csv') {
     content = generateCSV(data);
-    filename = `marito-glossary-${categoryPrefix}${timestamp}.csv`;
+    filename = `mafoko-glossary-${categoryPrefix}${timestamp}.csv`;
     mimeType = 'text/csv';
   } else if (format === 'html') {
     content = await generateHTMLTable(data, categoryName);
-    filename = `marito-glossary-${categoryPrefix}${timestamp}.html`;
+    filename = `mafoko-glossary-${categoryPrefix}${timestamp}.html`;
     mimeType = 'text/html';
   } else {
     // For JSON, include only the required fields and iso_lang
@@ -1578,7 +1118,7 @@ export const downloadData = async (
       };
     });
     content = JSON.stringify(cleanedData, null, 2);
-    filename = `marito-glossary-${categoryPrefix}${timestamp}.json`;
+    filename = `mafoko-glossary-${categoryPrefix}${timestamp}.json`;
     mimeType = 'application/json';
   }
 

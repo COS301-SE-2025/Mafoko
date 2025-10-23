@@ -1,6 +1,7 @@
 import React from 'react';
 import { Word } from '../../types/learning';
 import '../../styles/FlashcardStyles.scss';
+import '../../styles/LearningPathPage.scss';
 import { RotateCcw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -71,7 +72,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 <div
                   className="h-3 rounded-full transition-all duration-300"
                   style={{
-                    width: `${progressPercent}%`,
+                    width: `${progressPercent.toString()}%`,
                     backgroundColor: '#00ceaf',
                   }}
                 />
@@ -81,7 +82,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
             <div className="flashcard-container flex flex-col gap-5 ">
               <div className={`flashcard ${showResult ? 'is-flipped' : ''}`}>
                 {/* Question Side */}
-                <div className="card-face card-front !bg-[var(--bg-tir)] !text-theme">
+                <div className="card-face card-front !bg-[var(--bg-tir)] !text-theme h-auto">
                   <div className="card-content !text-theme">
                     <span className="card-prompt !text-theme">
                       {t(
@@ -98,9 +99,11 @@ const Flashcard: React.FC<FlashcardProps> = ({
                         answerOptions.map((option, index) => (
                           <button
                             key={index}
-                            onClick={() => onSelectAnswer(option)}
+                            onClick={() => {
+                              onSelectAnswer(option);
+                            }}
                             type="button"
-                            className="!text-theme"
+                            className="answer-option !text-theme"
                           >
                             {option}
                           </button>
