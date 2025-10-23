@@ -501,7 +501,12 @@ $text-dark: #ffffff;
         border: 1px solid var(--border-color);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         margin-bottom: 1.5rem;
-
+        height: auto;             
+        min-height: 20rem;
+        @media (max-width: 480px) {
+          padding: 1rem; 
+          min-height: 15rem;
+        }
         .card-prompt {
           font-size: 0.875rem;
           color: var(--text-color-secondary);
@@ -512,6 +517,14 @@ $text-dark: #ffffff;
           font-size: 2rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
+          word-break: break-word;
+          white-space: normal;       /* Allow text to wrap to new lines */
+          overflow-wrap: break-word; /* Handle standard word breaking */
+          height: auto;
+            @media (max-width: 480px) {
+              font-size: 1.5rem;
+              min-height: 15rem; 
+            }
         }
       }
 
@@ -520,8 +533,13 @@ $text-dark: #ffffff;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
         margin-bottom: 1.5rem;
+        @media (max-width: 480px) { // <-- ADD THIS BLOCK
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            min-height: 15rem;
+          }
 
-        .answer-option {
+.answer-option {
           padding: 1rem;
           border-radius: 0.75rem;
           border: 2px solid var(--border-color);
@@ -530,6 +548,14 @@ $text-dark: #ffffff;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
+          white-space: normal;       
+          height: auto;              
+          min-height: 4rem;         
+          word-break: break-word;    
+          overflow-wrap: break-word; 
+          padding-top: 0.75rem;
+          padding-bottom: 0.75rem;
+
 
           &:hover {
             border-color: #3b82f6;

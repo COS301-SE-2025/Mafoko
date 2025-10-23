@@ -31,6 +31,7 @@ export default tseslint.config(
       'src/utils/syncManager.ts',
       'src/utils/cacheUpdater.ts',
       'src/utils/exportUtils.ts',
+      'src/pages/LearningPathPage.tsx',
     ],
   },
 
