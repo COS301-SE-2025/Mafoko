@@ -35,7 +35,7 @@ const LearningPathPage: React.FC = () => {
   const [currentView, setCurrentView] = useState<
     'paths' | 'glossaries' | 'words'
   >('paths');
-
+  const [originalSessionWords, setOriginalSessionWords] = useState<Word[]>([]);
   const [selectedPath, setSelectedPath] = useState<LearningPath | null>(null);
   const [selectedGlossary, setSelectedGlossary] =
     useState<GlossaryProgress | null>(null);
@@ -231,21 +231,45 @@ const LearningPathPage: React.FC = () => {
         ),
         learningService.getRandomTerms(selectedPath.language_name),
       ]);
-      setStudySession(sessionData);
+
+      setOriginalSessionWords(sessionData.words);
       setDistractorTerms(randomTerms);
       setKnownWords(new Set(sessionData.knownWordIds));
 
-      const initialRetryPile = sessionData.words.filter((w) =>
-        // eslint-disable-next-line
-        (sessionData.retryPileIds || []).includes(w.id),
-      );
+      const savedRetryPileIds = sessionData.retryPileIds || [];
+      const savedLastIndex = sessionData.lastCardIndex || 0;
 
       if (startWithFlashcards) {
-        startFlashcards(
-          sessionData.words,
-          sessionData.lastCardIndex || 0,
-          initialRetryPile,
+        const initialRetryDeck = sessionData.words.filter((w) =>
+          savedRetryPileIds.includes(w.id),
         );
+
+        if (initialRetryDeck.length > 0) {
+          // User's SAVED STATE is a retry session.
+          // Load the retry deck.
+          setStudySession({ ...sessionData, words: initialRetryDeck });
+          setRetryPile([]);
+
+          // Use saved index, but cap it at the deck length
+          const startIndex =
+            savedLastIndex < initialRetryDeck.length ? savedLastIndex : 0;
+
+          startFlashcards(initialRetryDeck, startIndex, []);
+        } else {
+          // User's SAVED STATE is a main session.
+          // Load the full deck.
+          setStudySession(sessionData);
+          setRetryPile([]);
+
+          // Use saved index, but cap it at the deck length
+          const startIndex =
+            savedLastIndex < sessionData.words.length ? savedLastIndex : 0;
+
+          startFlashcards(sessionData.words, startIndex, []);
+        }
+      } else {
+        // User just wants to see the WordsPanel
+        setStudySession(sessionData);
       }
     } catch (error) {
       console.error(
@@ -314,26 +338,49 @@ const LearningPathPage: React.FC = () => {
 
   const nextCard = () => {
     const newIndex = currentCardIndex + 1;
+
     if (studySession && newIndex >= studySession.words.length) {
+      // Finished the current deck
       if (retryPile.length > 0) {
+        // 1. START A NEW RETRY SESSION
         const reviewSession = { ...studySession, words: retryPile };
         setStudySession(reviewSession);
         setRetryPile([]);
         setCurrentCardIndex(0);
-        setSelectedAnswer(null);
-        setShowResult(false);
-        return;
+
+        // 2. SAVE THIS NEW STATE
+        // We are now at index 0 of the new retry pile.
+        if (selectedPath && selectedGlossary) {
+          const retryIdsToSave = retryPile.map((w) => w.id);
+          void learningService.updateSessionProgress(
+            selectedPath.language_name,
+            selectedGlossary.name.trim(),
+            0, // We are at the start of the new pile
+            retryIdsToSave, // This is the new deck
+          );
+        }
       } else {
+        // 2. FINISHED EVERYTHING
+        // Reset progress in DB to 0.
         if (selectedPath && selectedGlossary) {
           void learningService.updateSessionProgress(
             selectedPath.language_name,
-            selectedGlossary.name,
+            selectedGlossary.name.trim(),
             0,
             [],
           );
         }
       }
+
+      // Reset card state for both cases (finish or start retry)
+      setSelectedAnswer(null);
+      setShowResult(false);
+      // We return here because we don't want to increment index
+      // (either we're done, or we've reset to 0)
+      return;
     }
+
+    // Just go to the next card
     setSelectedAnswer(null);
     setShowResult(false);
     setCurrentCardIndex(newIndex);
@@ -354,21 +401,59 @@ const LearningPathPage: React.FC = () => {
   };
 
   const exitFlashcards = () => {
-    if (selectedPath && selectedGlossary) {
-      const isFinished =
-        currentCardIndex >= (studySession?.words.length || 0) &&
-        retryPile.length === 0;
-
-      const indexToSave = isFinished ? 0 : currentCardIndex;
-      const retryIdsToSave = isFinished ? [] : retryPile.map((w) => w.id);
-
-      void learningService.updateSessionProgress(
-        selectedPath.language_name,
-        selectedGlossary.name,
-        indexToSave,
-        retryIdsToSave,
-      );
+    if (
+      !selectedPath ||
+      !selectedGlossary ||
+      !studySession ||
+      !originalSessionWords
+    ) {
+      setFlashcardMode(false);
+      setCurrentView('glossaries');
+      return;
     }
+
+    const currentDeck = studySession.words;
+    const isFullDeck = currentDeck.length === originalSessionWords.length;
+
+    const isFinished =
+      currentCardIndex >= (currentDeck.length || 0) && retryPile.length === 0;
+
+    let indexToSave: number;
+    let retryIdsToSave: string[];
+
+    if (isFinished) {
+      // User finished everything. Reset.
+      indexToSave = 0;
+      retryIdsToSave = [];
+    } else {
+      if (isFullDeck) {
+        // User is in the MAIN deck and has NOT finished.
+        // Save their index in the MAIN deck.
+        // Save an EMPTY retry pile so they resume here.
+        indexToSave = currentCardIndex;
+        retryIdsToSave = []; // <-- THIS IS THE KEY FIX
+      } else {
+        // User is in a RETRY deck and has NOT finished.
+        // Save their index in THIS retry deck.
+        // Save the words they still need to retry.
+        indexToSave = currentCardIndex;
+        const remainingWordsInDeck = currentDeck
+          .slice(currentCardIndex)
+          .map((w) => w.id);
+        const newRetryWords = retryPile.map((w) => w.id);
+        retryIdsToSave = [
+          ...new Set([...remainingWordsInDeck, ...newRetryWords]),
+        ];
+      }
+    }
+
+    void learningService.updateSessionProgress(
+      selectedPath.language_name,
+      selectedGlossary.name.trim(),
+      indexToSave,
+      retryIdsToSave,
+    );
+
     setFlashcardMode(false);
     setCurrentView('glossaries');
   };
@@ -494,9 +579,16 @@ const LearningPathPage: React.FC = () => {
           onSelectAnswer={handleAnswerSelect}
           onNext={nextCard}
           onRetry={() => {
-            // eslint-disable-next-line
-            if (studySession) {
-              startFlashcards(studySession.words);
+            if (studySession && selectedPath && selectedGlossary) {
+              setStudySession({ ...studySession, words: originalSessionWords });
+
+              startFlashcards(originalSessionWords, 0, []);
+              void learningService.updateSessionProgress(
+                selectedPath.language_name,
+                selectedGlossary.name.trim(),
+                0,
+                [],
+              );
             }
           }}
         />
@@ -508,13 +600,22 @@ const LearningPathPage: React.FC = () => {
     <>
       {showNewPathModal && (
         <div
-          className="fixed inset-0 z-[9989] !bg-[var(--bg-tir)] flex items-center justify-center"
+          className="fixed inset-0 z-[9989] flex items-center justify-center"
+          style={{
+            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
           role="dialog"
           aria-modal="true"
         >
           <div
-            className={`w-full max-w-md mx-auto rounded-xl p-6 shadow-xl border !bg-[var(--bg-first)] text-theme text-left flex flex-col gap-5`}
-            style={{ padding: '20px' }}
+            className={`w-full max-w-md mx-auto rounded-xl p-6 shadow-2xl border !bg-[var(--bg-first)] text-theme text-left flex flex-col gap-5`}
+            style={{
+              padding: '20px',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              zIndex: 9999,
+            }}
           >
             <h2 className="text-xl font-semibold mb-4 text-center">
               {t('learningPathPage.main.createNewPath')}
@@ -643,7 +744,22 @@ const LearningPathPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                className="px-4 py-2 rounded-md bg-teal-500 hover:bg-teal-600 text-white"
+                style={{
+                  backgroundColor: '#f00a50',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#d80047';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f00a50';
+                }}
                 onClick={() => void handleCreatePath()}
               >
                 {t('learningPathPage.main.createPath')}
@@ -693,9 +809,9 @@ const LearningPathPage: React.FC = () => {
         <main
           className={`flex-1 relative z-[2] box-border overflow-y-auto h-screen !bg-[var(--bg-first)] ${
             isMobile ? 'pt-16' : 'pl-[280px]'
-          } px-6 sm:px-10`}
+          }`}
         >
-          <div className="max-w-[1200px] mx-auto py-6 ">
+          <div className="max-w-[1200px] mx-auto pt-8 pb-6 px-4 sm:px-8">
             <h1 className="text-2xl font-semibold mb-4 text-theme">
               {currentView === 'paths'}
               {currentView === 'glossaries' && selectedPath?.path_name}

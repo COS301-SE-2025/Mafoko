@@ -621,8 +621,8 @@
     },
     "learningGlossarylist": {
       "backToPaths": "Back to Paths",
-      "flashCards": "Flash Cards",
-      "testKnowledge": "Test Knowledge",
+      "flashCards": "Study",
+      "testKnowledge": "Quiz Mode",
       "backToGlossaries": "Back to Glossaries",
       "wordsCompleted": "words completed",
       "noTermsFound": "No Terms Found",

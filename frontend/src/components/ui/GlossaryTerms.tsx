@@ -45,7 +45,7 @@ export default function GlossaryTermsPage({
       <GlossaryHeader
         title={glossary.name}
         description={glossary.description}
-        countText={`${filteredTerms.length} terms`}
+        countText={`${String(filteredTerms.length)} terms`}
         onBack={onBack}
       />
 
@@ -57,7 +57,9 @@ export default function GlossaryTermsPage({
         <input
           type="text"
           value={termSearch}
-          onChange={(e) => setTermSearch(e.target.value)}
+          onChange={(e) => {
+            setTermSearch(e.target.value);
+          }}
           placeholder="Search terms..."
           className="w-full border rounded-md pl-7 pr-3 py-2 text-sm"
         />
