@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../styles/ConfirmationModal.scss';
-
+import { useTranslation } from 'react-i18next';
 interface ConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -16,6 +16,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   title,
   children,
 }) => {
+  const { t } = useTranslation();
   if (!isOpen) {
     return null;
   }
